@@ -132,7 +132,7 @@ assert(
   `Dải phân vị của chương trình n=0 năm phải mở rộng x1.6 để phản ánh bất định cao (Độ rộng: ${((newCandidate?.cutoffP90 ?? 0) - (newCandidate?.cutoffP10 ?? 0)).toFixed(1)}đ)`
 );
 assert(
-  Boolean(newCandidate?.whyThisOptionVi.includes("n=0 năm dữ liệu")),
+  Boolean(newCandidate?.whyThisOptionVi.includes("chưa có năm điểm chuẩn nào")),
   "Giải thích data-grounded phải nêu rõ lưu ý n=0 năm dữ liệu lịch sử"
 );
 

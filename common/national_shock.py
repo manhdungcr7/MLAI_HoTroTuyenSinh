@@ -29,8 +29,14 @@ def compute_year_deltas(cutoff_panel: pd.DataFrame) -> pd.DataFrame:
     """Trả về DataFrame long-format: mỗi dòng là một cặp năm liên tiếp của
     cùng (trường, ngành, tổ hợp) với delta điểm."""
     df = cutoff_panel.copy()
-    df["major_label"] = df["label"].str.split(" / ").str[0]
+    if "major_label" not in df.columns:
+        df["major_label"] = df["label"].str.split(" / ").str[0]
     key_cols = ["school_code", "major_label", "combinations"]
+    # Chênh lệch giữa hai phương thức khác nhau không phải "biến động điểm chuẩn":
+    # khi đã gắn phương thức thì chỉ so cùng phương thức, và bỏ dòng chưa rõ phương thức.
+    if "admission_method" in df.columns:
+        df = df[df["admission_method"] != "UNKNOWN"]
+        key_cols = key_cols + ["admission_method"]
 
     # Trung bình nếu có nhiều dòng trùng khóa trong cùng năm (vd 2 PDF chồng
     # nhau đã báo qua cross_doc_conflict — lấy trung bình cho bước này).
@@ -75,7 +81,14 @@ def estimate_national_shock(cutoff_panel: pd.DataFrame) -> dict:
         },
         "overall_std": round(overall_std, 3),
         "overall_median": round(float(by_year["median"].median()), 3),
-        "idio_std_overall": round(float(residual["idio"].std()), 3) if len(residual) > 3 else 0.8,
+        # Phân phối nhiễu có đuôi dày (phần lớn đuôi là lỗi bóc tách PDF), nên độ lệch
+        # chuẩn thổi phồng dải dự báo. Dải hiển thị là P10–P90, vì vậy quy đổi khoảng
+        # phân vị 10–90 của nhiễu về thang σ chuẩn: σ = (q90 − q10) / (2 × 1.2816).
+        "idio_std_overall": (
+            round(float((residual["idio"].quantile(0.9) - residual["idio"].quantile(0.1)) / 2.5631), 3)
+            if len(residual) > 10 else 0.8
+        ),
+        "idio_std_raw": round(float(residual["idio"].std()), 3) if len(residual) > 3 else None,
         "n_pairs": int(len(deltas)),
         "n_year_points": n_year_points,
         "warning": (

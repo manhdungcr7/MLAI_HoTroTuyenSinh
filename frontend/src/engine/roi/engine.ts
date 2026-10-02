@@ -12,27 +12,30 @@ import {
 import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { calculateCompositeScore } from "@/engine/scoring/composite";
 import { calculateAdmitProbability, REACH_MAX_PROB } from "@/engine/admissions/probability";
+import { scoreForProgram } from "@/engine/scoring/method-score";
 
 export function calculateSubjectRoiList(
   profile: StudentProfile,
   target: TargetProgram,
   programs: TargetProgram[]
 ): SubjectRoiMetric[] {
-  const activeSubs = COMBINATION_SUBJECTS[profile.activeCombination] || ["toan", "ly", "anh"];
+  // Môn của tổ hợp em dùng để xét ngành mục tiêu; không có tổ hợp hợp lệ thì không tính đòn bẩy.
+  const targetScore = scoreForProgram(profile, target);
+  const combo = targetScore?.combo ?? profile.activeCombination;
+  const activeSubs = COMBINATION_SUBJECTS[combo] ?? [];
   const roiResults: SubjectRoiMetric[] = [];
+  if (activeSubs.length === 0) return roiResults;
 
-  const baseComposite = calculateCompositeScore(
-    profile.examScores,
-    profile.altScores,
-    profile.priority,
-    profile.activeCombination
-  );
+  const baseComposite = targetScore?.score ?? calculateCompositeScore(profile.examScores, profile.altScores, profile.priority, combo);
 
-  // Điểm tốt nhất của học sinh trên các tổ hợp mà chương trình chấp nhận
-  const bestScoreFor = (scores: ExamScores, p: TargetProgram) =>
-    Math.max(0, ...p.combinations.map((c) => calculateCompositeScore(scores, profile.altScores, profile.priority, c)));
-  const countWithinReach = (scores: ExamScores) =>
-    programs.filter((p) => calculateAdmitProbability(bestScoreFor(scores, p), p.forecastP50) >= REACH_MAX_PROB).length;
+  // Đếm số ngành trong tầm với theo đúng phương thức của từng ngành (đổi điểm thi chỉ ảnh hưởng ngành xét điểm thi).
+  const countWithinReach = (scores: ExamScores) => {
+    const simulated = { ...profile, examScores: scores };
+    return programs.filter((p) => {
+      const ms = scoreForProgram(simulated, p);
+      return ms !== null && calculateAdmitProbability(ms.score, p.forecastP50) >= REACH_MAX_PROB;
+    }).length;
+  };
 
   const baseEligibleCount = countWithinReach(profile.examScores);
 
@@ -43,12 +46,8 @@ export function calculateSubjectRoiList(
     const simScore = Math.min(10.0, currScore + delta);
 
     const simExamScores = { ...profile.examScores, [subKey]: simScore };
-    const simComposite = calculateCompositeScore(
-      simExamScores,
-      profile.altScores,
-      profile.priority,
-      profile.activeCombination
-    );
+    const simComposite = scoreForProgram({ ...profile, examScores: simExamScores }, target)?.score
+      ?? calculateCompositeScore(simExamScores, profile.altScores, profile.priority, combo);
 
     const simEligibleCount = countWithinReach(simExamScores);
 

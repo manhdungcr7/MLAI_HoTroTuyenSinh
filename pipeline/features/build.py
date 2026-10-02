@@ -95,7 +95,8 @@ def build_forecasts(programs: pd.DataFrame, cutoff_panel: pd.DataFrame) -> pd.Da
 
 def run() -> pd.DataFrame:
     programs = pd.read_parquet(config.PROCESSED / "programs.parquet")
-    cutoff_panel = pd.read_parquet(config.INTERIM / "cutoff_panel_raw.parquet")
+    from pipeline.clean.reconcile import prepare_cutoff_rows
+    cutoff_panel = prepare_cutoff_rows(pd.read_parquet(config.INTERIM / "cutoff_panel_raw.parquet"))
 
     result = build_forecasts(programs, cutoff_panel)
     result.to_parquet(config.PROCESSED / "programs.parquet", index=False)

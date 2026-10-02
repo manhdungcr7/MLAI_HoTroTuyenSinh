@@ -42,6 +42,8 @@ import {
   classifyRole,
 } from "@/engine/admissions/probability";
 import { calculateTotalPriorityBonus, convertIeltsToEnglishScore } from "@/engine/admissions/priority";
+import { scoreForProgram } from "@/engine/scoring/method-score";
+import { COMBINATION_SUBJECTS } from "@/data/universities/combinations";
 
 // ============================================================================
 // 1. DATA TYPES & INTERFACES
@@ -158,22 +160,7 @@ export interface RecommendationEngineResult {
 /**
  * Danh mục các môn thi của từng tổ hợp phổ biến
  */
-export const COMBO_SUBJECT_MAP: Record<string, (keyof ExamScores)[]> = {
-  A00: ["toan", "ly", "hoa"],
-  A01: ["toan", "ly", "anh"],
-  A02: ["toan", "ly", "sinh"],
-  B00: ["toan", "hoa", "sinh"],
-  C00: ["van", "su", "dia"],
-  C01: ["van", "toan", "ly"],
-  C03: ["van", "toan", "su"],
-  D01: ["toan", "van", "anh"],
-  D07: ["toan", "hoa", "anh"],
-  D08: ["toan", "sinh", "anh"],
-  D09: ["toan", "su", "anh"],
-  D10: ["toan", "dia", "anh"],
-  D14: ["van", "su", "anh"],
-  D15: ["van", "dia", "anh"],
-};
+export const COMBO_SUBJECT_MAP = COMBINATION_SUBJECTS as Record<string, (keyof ExamScores)[]>;
 
 /**
  * Tính điểm ưu tiên khu vực và đối tượng theo chuẩn Bộ GD&ĐT:
@@ -225,7 +212,7 @@ export function findBestCombinationForProgram(
   let bestBonus = 0;
   const comboScores: Record<string, number> = {};
 
-  const combosToTest = programCombos.length > 0 ? programCombos : ["A00", "A01", "D01"];
+  const combosToTest = programCombos;
 
   for (const combo of combosToTest) {
     const subjects = COMBO_SUBJECT_MAP[combo.toUpperCase()];
@@ -272,17 +259,13 @@ export function evaluateProgram(
   const activeTargetId = options.targetProgramId || profile.targetProgram?.programId;
 
   // --- YẾU TỐ 6 & 7: TỔ HỢP TỐI ƯU & PHƯƠNG THỨC XÉT TUYỂN ---
-  const combos = p.combinations && p.combinations.length > 0 ? p.combinations : ["A00", "A01", "D01"];
-  const comboAnalysis = findBestCombinationForProgram(
-    profile.examScores,
-    profile.altScores,
-    profile.priority,
-    combos
-  );
-  const userScore = comboAnalysis.bestScore;
-  const rawScore = comboAnalysis.rawScore;
-  const priorityBonus = comboAnalysis.bonus;
-  const bestCombo = comboAnalysis.bestCombo;
+  // Điểm theo đúng phương thức của ngưỡng điểm (thi THPT / học bạ); null = không tính được.
+  const methodScore = scoreForProgram(profile, p);
+  const combos = p.combinations && p.combinations.length > 0 ? p.combinations : (methodScore ? [methodScore.combo] : []);
+  const userScore = methodScore?.score ?? 0;
+  const rawScore = methodScore?.rawScore ?? 0;
+  const priorityBonus = methodScore?.bonus ?? 0;
+  const bestCombo = methodScore?.combo ?? profile.activeCombination ?? "";
 
   // --- YẾU TỐ 1 & 2: ĐIỂM SỐ, LỊCH SỬ ĐIỂM CHUẨN & BIẾN ĐỘNG (VOLATILITY) ---
   const p50 = p.forecastP50 || p.latestScore || 24.0;
@@ -570,7 +553,7 @@ export function evaluateProgram(
 
   // 11. AI Resilience Fit
   // aiExposure / leverageScore hiện là ước lượng theo nhóm ngành, chưa có nguồn → không dùng để chấm điểm
-  const aiResilienceFit = Math.round((1.0 - (p.aiExposure || 0.3)) * 50 + (p.leverageScore || 7.0) * 5);
+  const aiResilienceFit = 0;
 
   // 12. Policy Fit (Ưu tiên)
   let policyFit = 70;
@@ -682,8 +665,8 @@ export function evaluateProgram(
     employmentRate: p.employmentRate ?? null,
     latestYear: (p as ProgramCatalogItem).latestYear,
     yearsOfData,
-    aiExposure: p.aiExposure || 0.35,
-    leverageScore: p.leverageScore || 7.5,
+    aiExposure: p.aiExposure ?? 0,
+    leverageScore: p.leverageScore ?? 0,
     yearlyTrendDelta: yearlyDelta,
     trendStatus,
     breakdown,
@@ -692,7 +675,7 @@ export function evaluateProgram(
     allTags,
     dataPassport: p.dataPassport || `Đề án tuyển sinh ${p.schoolCode}`,
     actionAdviceVi,
-    region: p.region || "bac",
+    region: p.region ?? "bac",
     province: schoolProvince,
   };
 }

@@ -1,42 +1,42 @@
 {
-  "generatedAt": "2026-09-27T14:18:10.408939+00:00",
+  "generatedAt": "2026-10-02T14:30:21.573032+00:00",
   "modelVersion": "2026.1-prod",
   "healthStatus": "healthy",
   "isDriftDetected": false,
   "driftDetails": [],
   "activeRollbackTarget": "naive_holdout_conservative",
-  "sampleSize": 409,
+  "sampleSize": 760,
   "trainPeriod": "<= 2024",
   "testPeriod": "2025 (điểm chuẩn thật)",
   "trainParameters": {
-    "nationalShockStd": 2.028,
-    "nationalMedianTrend": 0.3,
-    "nHistoricalTransitions": 720,
+    "nationalShockStd": 0.819,
+    "nationalMedianTrend": 0.0,
+    "nHistoricalTransitions": 2319,
     "groupTrendsCount": 12
   },
   "metrics": {
     "naiveBaseline": {
       "label": "Giữ nguyên điểm năm trước",
-      "mae": 1.763,
-      "rmse": 2.387,
-      "n": 409
+      "mae": 1.806,
+      "rmse": 2.603,
+      "n": 760
     },
     "trendBaseline": {
       "label": "Cộng xu hướng tuyến tính quốc gia",
-      "mae": 1.787,
-      "rmse": 2.415,
-      "n": 409
+      "mae": 1.806,
+      "rmse": 2.603,
+      "n": 760
     },
     "ourModel": {
-      "label": "Hierarchical Group Pooling & Bất định (Hệ thống Nguyện Vọng)",
-      "mae": 1.897,
-      "rmse": 2.514,
-      "coverageP10P90Pct": 89.0,
-      "meanBandWidth": 7.95,
-      "n": 409
+      "label": "Hierarchical Group Pooling & Bất định (Nguyện Vọng AI)",
+      "mae": 1.958,
+      "rmse": 2.735,
+      "coverageP10P90Pct": 77.5,
+      "meanBandWidth": 5.62,
+      "n": 760
     }
   },
-  "brierScore": 0.2023,
+  "brierScore": 0.1972,
   "calibrationMethod": "Định chuẩn xác suất tại 5 mức z-score kiểm định quyết định (-2.0đ đến +2.0đ) đối chiếu với 426 kết quả xét tuyển thực tế (tổng cộng 2.130 phép thử xác suất).",
   "calibrationCurve": [
     {
@@ -47,51 +47,51 @@
     },
     {
       "bin": "10%-20%",
-      "predictedProb": 0.15,
-      "observedFreq": 0.15,
-      "count": 0
+      "predictedProb": 0.125,
+      "observedFreq": 0.257,
+      "count": 136
     },
     {
       "bin": "20%-30%",
-      "predictedProb": 0.269,
-      "observedFreq": 0.262,
-      "count": 408
+      "predictedProb": 0.22,
+      "observedFreq": 0.267,
+      "count": 760
     },
     {
       "bin": "30%-40%",
-      "predictedProb": 0.379,
-      "observedFreq": 0.384,
-      "count": 409
+      "predictedProb": 0.341,
+      "observedFreq": 0.359,
+      "count": 624
     },
     {
       "bin": "40%-50%",
-      "predictedProb": 0.417,
-      "observedFreq": 0.0,
-      "count": 1
+      "predictedProb": 0.45,
+      "observedFreq": 0.45,
+      "count": 0
     },
     {
       "bin": "50%-60%",
       "predictedProb": 0.5,
-      "observedFreq": 0.615,
-      "count": 410
+      "observedFreq": 0.605,
+      "count": 760
     },
     {
       "bin": "60%-70%",
-      "predictedProb": 0.621,
-      "observedFreq": 0.77,
-      "count": 409
+      "predictedProb": 0.659,
+      "observedFreq": 0.739,
+      "count": 624
     },
     {
       "bin": "70%-80%",
-      "predictedProb": 0.731,
-      "observedFreq": 0.875,
-      "count": 408
+      "predictedProb": 0.78,
+      "observedFreq": 0.847,
+      "count": 760
     },
     {
       "bin": "80%-90%",
-      "predictedProb": 0.85,
-      "observedFreq": 0.85,
-      "count": 0
+      "predictedProb": 0.875,
+      "observedFreq": 0.904,
+      "count": 136
     },
     {
       "bin": "90%-100%",
@@ -101,5 +101,5 @@
     }
   ],
   "baselineInsight": "Quan sát thực chứng 2025: Sau các năm điểm chuẩn tăng nóng (2022-2023), điểm chuẩn 2025 có xu hướng đi ngang hoặc hạ nhiệt ở nhiều nhóm ngành. Do đó, mô hình giữ nguyên điểm (Naive) có sai số điểm đơn lẻ thấp hơn (MAE 1.763) so với việc ngoại suy tăng trưởng (Trend MAE 1.789, Hierarchical MAE 1.920). Điều này minh chứng: Điểm dự báo đơn lẻ (Point Forecast) rất mong manh trước biến động đề thi; giá trị thực sự của Trí tuệ Quyết định là định lượng Dải bất định P10–P90 (bao phủ 86.2% kết quả thật) và bảo vệ danh mục thí sinh bằng Gauss-Hermite thay vì 'đoán một con số'.",
-  "limitationsVi": "Backtest được thực hiện nghiêm ngặt trên 409 chương trình có dữ liệu thực tế 2025 và ít nhất một năm trước đó. Toàn bộ tham số xu hướng và độ lệch chuẩn chỉ được ước lượng từ dữ liệu <= 2024 (chống rò rỉ dữ liệu kiểm định). Giới hạn: hiện chỉ kiểm định được trên 1 cặp năm (2024-2025)."
+  "limitationsVi": "Backtest được thực hiện nghiêm ngặt trên 760 chương trình có dữ liệu thực tế 2025 và ít nhất một năm trước đó. Toàn bộ tham số xu hướng và độ lệch chuẩn chỉ được ước lượng từ dữ liệu <= 2024 (chống rò rỉ dữ liệu kiểm định). Giới hạn: hiện chỉ kiểm định được trên 1 cặp năm (2024-2025)."
 }

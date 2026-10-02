@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 from collections.abc import Mapping
 from datetime import datetime, timezone
@@ -235,13 +236,116 @@ def current_manifest_path() -> Path:
     return OUTPUT / "manifest.json"
 
 
+
+# Phương thức có ngưỡng điểm so sánh được với điểm của học sinh (thang 30).
+# UNKNOWN/UU_TIEN/RIENG/KHAC không đưa lên web: không có ngưỡng điểm dùng được.
+CATALOG_METHODS = {"THPT", "HOC_BA", "DGNL_HN", "DGNL_HCM", "DGNL_SP", "DGTD", "DGNL_KHAC",
+                   "NANG_KHIEU", "KET_HOP"}
+
+
+def _missing(value: Any) -> bool:
+    return value is None or (isinstance(value, float) and math.isnan(value))
+
+
+def _num(value: Any, digits: int = 2) -> float | None:
+    return None if _missing(value) else round(float(value), digits)
+
+
+def _text(value: Any) -> str | None:
+    if _missing(value):
+        return None
+    s = str(value).strip()
+    return s if s and s.lower() != "nan" else None
+
+
+def _with_method_columns(frame: pd.DataFrame) -> pd.DataFrame:
+    """Dữ liệu cũ chưa tách phương thức được coi là điểm thi THPT."""
+    if "admission_method" not in frame.columns:
+        frame = frame.assign(admission_method="THPT")
+    if "major_key" not in frame.columns:
+        frame = frame.assign(major_key=frame["program_key"])
+    if "method_inferred" not in frame.columns:
+        frame = frame.assign(method_inferred=False)
+    return frame
+
+
+def build_frontend_catalog(frame: pd.DataFrame, references: dict[str, str] | None = None) -> list[dict[str, Any]]:
+    """Catalog mà web nạp trực tiếp. Mỗi dòng là một (trường, ngành, phương thức)."""
+    frame = _with_method_columns(frame)
+    items: list[dict[str, Any]] = []
+    for row in frame[frame["admission_method"].isin(CATALOG_METHODS)].to_dict(orient="records"):
+        cutoffs = {k: round(float(v), 2) for k, v in json.loads(row["cutoff_by_year_json"]).items()}
+        if not cutoffs:
+            continue
+        combos = sorted(set(re.findall(r"\b[A-Z]\d{2}\b", (_text(row.get("combinations_seen")) or "").upper())))
+        tuition_m = None if _missing(row.get("tuition_min_mvnd")) else row.get("tuition_min_mvnd")
+        employment = None if _missing(row.get("employment_rate_pct")) else row.get("employment_rate_pct")
+        items.append({
+            "programId": row["program_key"],
+            "programKey": row["program_key"],
+            "majorKey": row["major_key"],
+            "schoolCode": row["school_code"],
+            "schoolName": _text(row.get("school_name")) or row["school_code"],
+            "majorName": row["major_label"],
+            "majorLabel": row["major_label"],
+            "majorGroup": _text(row.get("major_group")) or "other",
+            "admissionMethod": row["admission_method"],
+            "methodInferred": bool(row.get("method_inferred")),
+            "combinations": combos,
+            "combinationsVerified": bool(combos),
+            "cutoffs": cutoffs,
+            "latestYear": int(row["latest_year"]) if pd.notna(row.get("latest_year")) else None,
+            "latestScore": _num(row.get("latest_score")),
+            "forecastP10": _num(row.get("forecast_p10")),
+            "forecastP50": _num(row.get("forecast_p50")),
+            "forecastP90": _num(row.get("forecast_p90")),
+            "betaProgram": _num(row.get("beta_program"), 3),
+            "idioStd": _num(row.get("idio_std"), 3),
+            # Chỉ giá trị đo được từ văn bản; không có thì null để giao diện nói "chưa có dữ liệu".
+            "tuitionVnd": int(round(float(tuition_m) * 1_000_000)) if tuition_m is not None and pd.notna(tuition_m) else None,
+            "employmentRate": _num(employment, 1) if employment is not None and pd.notna(employment) else None,
+            "dataQuality": _text(row.get("data_quality")),
+            "yearsOfData": int(row.get("n_years") or len(cutoffs)),
+            "schoolProvince": _text(row.get("school_province")),
+            "region": _text(row.get("region")),
+            "sourceTier": _text(row.get("source_tier")) or "official_pdf",
+            "sourceUrl": _text(row.get("source_url")),
+            "dataPassport": _text(row.get("source_doc")) or (references or {}).get(row["program_key"]),
+        })
+    items.sort(key=lambda x: (x["schoolCode"], x["majorName"], x["admissionMethod"]))
+    return items
+
+
+def build_school_methods(frame: pd.DataFrame) -> dict[str, list[str]]:
+    """Các phương thức mỗi trường thực sự công bố trong đề án (kể cả tuyển thẳng/riêng)."""
+    frame = _with_method_columns(frame)
+    known = frame[frame["admission_method"] != "UNKNOWN"]
+    return {
+        school: sorted(set(group["admission_method"]))
+        for school, group in known.groupby("school_code")
+    }
+
+
+def export_frontend_catalog(frame: pd.DataFrame, references: dict[str, str] | None = None) -> int:
+    items = build_frontend_catalog(frame, references)
+    atomic_write(CATALOG_PATH, json.dumps(items, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode("utf-8"))
+    # Cùng thư mục với catalog để mọi nơi thay CATALOG_PATH (vd test) cũng thay luôn file này.
+    atomic_write(CATALOG_PATH.parent / "school-methods.json",
+                 json.dumps(build_school_methods(frame), ensure_ascii=False, indent=1).encode("utf-8"))
+    return len(items)
+
+
 def export_admissions() -> dict[str, Any]:
     parquet_path = PROCESSED / "programs.parquet"
     if not parquet_path.is_file():
         raise FileNotFoundError(f"Missing validated dataset: {parquet_path}")
 
     frame = pd.read_parquet(parquet_path)
-    raw, manifest = build_snapshot(frame, load_source_references())
+    # Trích dẫn nguồn đã có trong catalog cũ phải đọc trước khi ghi đè catalog mới.
+    references = load_source_references() if CATALOG_PATH.is_file() else {}
+    n_catalog = export_frontend_catalog(frame, references)
+    print(f"publish: catalog web {n_catalog} chương trình-phương thức → {CATALOG_PATH.name}")
+    raw, manifest = build_snapshot(frame, references)
     dataset = manifest["datasets"]["admissions"]
     digest = dataset["sha256"]
     validate_snapshot(raw, digest, dataset["recordCount"])

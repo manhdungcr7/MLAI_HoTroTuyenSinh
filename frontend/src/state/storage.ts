@@ -528,7 +528,7 @@ export class LocalStorageEngine {
   }
 
   static deleteProfile(profileId: string): { activeId: string; activeState: PersistentAppState } {
-    let registry = this.getRegistry();
+    const registry = this.getRegistry();
     registry.profiles = registry.profiles.filter((p) => p.id !== profileId);
 
     if (registry.profiles.length === 0) {

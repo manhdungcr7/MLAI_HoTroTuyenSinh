@@ -17,9 +17,8 @@ import {
   IDIO_STD,
   classifyRole,
 } from "@/engine/admissions/probability";
-import { calculateCompositeScore } from "@/engine/scoring/composite";
 import { PortfolioValidationResult } from "@/engine/decision/types";
-import { calculateRawExamCombinationScore } from "@/engine/scoring/composite";
+import { scoreForProgram, METHOD_LABELS_VI } from "@/engine/scoring/method-score";
 import { computeLocationUtility } from "@/engine/geo/distance";
 
 /**
@@ -49,29 +48,18 @@ export function buildCandidateOptions(
     groupMedians[grp] = scores[Math.floor(scores.length / 2)];
   }
 
-  return programs
+  const candidates = programs
     .filter((p) =>
       !excludedSchools.has(p.schoolCode.trim().toUpperCase()) &&
       !excludedGroups.has(p.majorGroup.trim().toLowerCase()) &&
-      !(budget > 0 && p.tuitionVnd != null && p.tuitionVnd > budget) &&
-      Array.isArray(p.combinations) && p.combinations.length > 0
+      !(budget > 0 && p.tuitionVnd != null && p.tuitionVnd > budget)
     )
-    .map((p) => {
-      let bestCombo: string | undefined;
-      let bestScore = 0;
-
-      for (const c of p.combinations) {
-        const rawExamTotal = calculateRawExamCombinationScore(profile.examScores, c);
-        if (profile.graduationYear != null && profile.graduationYear >= 2026 &&
-          profile.minimumScoreException !== true && (rawExamTotal === null || rawExamTotal < 15)) continue;
-        const s = calculateCompositeScore(profile.examScores, profile.altScores, profile.priority, c);
-        if (s > bestScore) {
-          bestScore = s;
-          bestCombo = c;
-        }
-      }
-
-      if (!bestCombo || bestScore <= 0) return null;
+    .map((p): CandidateOption | null => {
+      const ms = scoreForProgram(profile, p);
+      if (!ms || ms.score <= 0) return null;
+      const bestScore = ms.score;
+      const bestCombo = ms.combo;
+      const method = ms.method;
 
       const yearsOfData = (p as TargetProgram & { yearsOfData?: number }).yearsOfData ?? countCutoffYears(p);
 
@@ -96,37 +84,36 @@ export function buildCandidateOptions(
 
       const admitProb = calculateAdmitProbability(bestScore, p50);
       const gap = Number((bestScore - p50).toFixed(2));
-
       const role: Role = classifyRole(admitProb);
-      const gapText = gap >= 0 ? `cao hơn ${gap}đ` : `thấp hơn ${Math.abs(gap)}đ`;
+      const methodVi = METHOD_LABELS_VI[method];
 
-      // 1. Dòng 1: Năng lực & Dải phân vị điểm chuẩn thật
-      let line1 = `Năng lực: Điểm xét tuyển ${bestScore.toFixed(2)}đ (${gap >= 0 ? "+" + gap : gap}đ so với P50 ${p50}đ), xác suất đỗ ước tính ${(admitProb * 100).toFixed(0)}% trong dải bất định [${p10} - ${p90}]đ.`;
+      // 1. Năng lực theo đúng phương thức của ngưỡng điểm
+      let line1 = `${methodVi}: điểm của em ${bestScore.toFixed(2)}đ (tổ hợp ${bestCombo}), ${gap >= 0 ? "cao hơn" : "thấp hơn"} điểm chuẩn tham chiếu ${p50}đ là ${Math.abs(gap).toFixed(2)}đ; khả năng đỗ ước tính ${(admitProb * 100).toFixed(0)}% (dải điểm chuẩn thường dao động ${p10}–${p90}đ).`;
       if (yearsOfData === 0) {
-        line1 += ` (Lưu ý: Chương trình mới n=0 năm dữ liệu, P50 neo theo trung vị nhóm ngành kèm dải bất định mở rộng x1.6).`;
+        line1 += " Chương trình chưa có năm điểm chuẩn nào, mức tham chiếu lấy theo trung vị nhóm ngành nên độ bất định cao.";
+      }
+      if (ms.usedIeltsConversion) {
+        line1 += " Môn Tiếng Anh đang tính theo điểm quy đổi IELTS (bảng phổ biến, mỗi trường quy đổi khác — kiểm tra đề án).";
       }
 
-      // 2. Dòng 2: Học phí & Vị trí địa lý thực chứng
-      const tuitionMvnd = p.tuitionVnd ? `${(p.tuitionVnd / 1_000_000).toFixed(0)} tr/năm` : "Theo quy chế chung";
+      // 2. Điều kiện học tập: chỉ nêu số liệu có nguồn
+      const tuitionText = p.tuitionVnd ? `${(p.tuitionVnd / 1_000_000).toFixed(0)} triệu/năm` : "chưa có số liệu học phí xác thực";
       const budgetPct = (p.tuitionVnd && profile.annualBudgetVnd > 0) ? ` (${Math.round((p.tuitionVnd / profile.annualBudgetVnd) * 100)}% ngân sách)` : "";
-      const locText = p.province || "Cả nước";
-      const line2 = `Điều kiện: Học phí ${tuitionMvnd}${budgetPct}, tại ${locText}${p.employmentRate ? `, tỷ lệ có việc làm ${p.employmentRate}%` : ""}.`;
+      const locText = p.province || "chưa rõ tỉnh/thành";
+      const line2 = `Điều kiện: học phí ${tuitionText}${budgetPct}; trường ở ${locText}${p.employmentRate ? `; tỷ lệ có việc làm ${p.employmentRate}%` : ""}.`;
 
-      // 3. Dòng 3: Vai trò chiến lược danh mục & Rủi ro
-      let line3 = "";
-      if (role === "an_toan") {
-        line3 = "Chiến lược: Nguyện vọng An toàn chốt chặn, bảo hiểm danh mục giảm nguy cơ trượt trắng.";
-      } else if (role === "vua_tam") {
-        line3 = "Chiến lược: Nguyện vọng Vừa tầm trọng tâm, xác suất cân bằng lý tưởng theo kỳ vọng.";
-      } else {
-        line3 = "Chiến lược: Nguyện vọng Thử sức nâng tầm, ưu tiên đặt NV1-NV3 để thử vận may mà không rủi ro.";
+      // 3. Vai trò trong danh mục
+      let line3 = role === "an_toan"
+        ? "Vai trò: nguyện vọng An toàn, giữ chỗ để không trượt hết."
+        : role === "vua_tam"
+          ? "Vai trò: nguyện vọng Phù hợp, khả năng đỗ cân bằng."
+          : "Vai trò: nguyện vọng Thử sức, nên đặt ở các thứ tự đầu.";
+      if (ms.comboUnverified) {
+        line3 += ` Đề án không ghi tổ hợp cạnh điểm chuẩn: hệ thống tính theo tổ hợp ${bestCombo} của em — hãy kiểm tra trường có xét tổ hợp này không.`;
       }
-
-      if ((p as TargetProgram & { combinationsVerified?: boolean }).combinationsVerified === false) {
-        line3 += " (Lưu ý: Cần kiểm tra đề án chính thức của trường về tổ hợp xét tuyển).";
+      if (p.methodInferred) {
+        line3 += " Đề án không ghi rõ phương thức của mức điểm này; hệ thống coi là điểm thi THPT.";
       }
-
-      const whyThisOptionVi = `${line1}\n${line2}\n${line3}`;
 
       return {
         programId: p.programId,
@@ -139,7 +126,7 @@ export function buildCandidateOptions(
         cutoffP10: p10,
         cutoffP90: p90,
         yearsOfData,
-        combinationsVerified: (p as TargetProgram & { combinationsVerified?: boolean }).combinationsVerified ?? true,
+        combinationsVerified: !ms.comboUnverified,
         userScore: Number(bestScore.toFixed(2)),
         gap,
         admitProbability: Number(admitProb.toFixed(3)),
@@ -147,17 +134,34 @@ export function buildCandidateOptions(
         employmentRate: p.employmentRate,
         aiExposure: p.aiExposure,
         role,
-        whyThisOptionVi,
+        whyThisOptionVi: `${line1}
+${line2}
+${line3}`,
         dataPassportUrl: p.dataPassport,
-        region: p.region || (["QSB", "QSC", "KSA", "UEH"].includes(p.schoolCode) ? "nam" : ["DDK", "DUT"].includes(p.schoolCode) ? "trung" : "bac"),
-        province: p.province || (["QSB", "QSC", "KSA", "UEH"].includes(p.schoolCode) ? "TP.HCM" : ["DDK", "DUT"].includes(p.schoolCode) ? "Đà Nẵng" : "Hà Nội"),
+        region: p.region,
+        province: p.province,
+        admissionMethod: method,
+        methodInferred: p.methodInferred,
+        majorKey: p.majorKey,
+        sourceTier: p.sourceTier,
       };
     })
-    .filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== null)
-    .filter((candidate, index, all) => all.findIndex((item) => item.programId === candidate.programId) === index);
+    .filter((candidate): candidate is CandidateOption => candidate !== null);
+
+  // Một ngành chỉ đăng ký một nguyện vọng; trường xét mọi phương thức em có và lấy kết quả tốt nhất.
+  // Nên khi một ngành có nhiều phương thức, giữ phương thức cho khả năng đỗ cao nhất.
+  const bestByMajor = new Map<string, CandidateOption>();
+  for (const c of candidates) {
+    const key = c.majorKey || c.programId;
+    const prev = bestByMajor.get(key);
+    if (!prev || c.admitProbability > prev.admitProbability) bestByMajor.set(key, c);
+  }
+  return [...bestByMajor.values()];
 }
 
 function countCutoffYears(p: TargetProgram): number {
+  const cutoffs = (p as TargetProgram & { cutoffs?: Record<string, number> }).cutoffs;
+  if (cutoffs) return Object.keys(cutoffs).length;
   return [p.cutoff2021, p.cutoff2022, p.cutoff2023, p.cutoff2024].filter((v) => typeof v === "number" && v > 0).length;
 }
 

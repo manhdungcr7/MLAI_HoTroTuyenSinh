@@ -91,6 +91,7 @@ def run_backtest() -> dict:
     # Thu thập tất cả các bước nhảy năm-năm từ toàn bộ tập dữ liệu <= 2024
     group_deltas: dict[str, list[float]] = {}
     all_deltas: list[float] = []
+    delta_years: list[int] = []
 
     for _, row in df.iterrows():
         c_json = row.get("cutoff_by_year_json")
@@ -112,9 +113,20 @@ def run_backtest() -> dict:
                 d = hist[y2] - hist[y1]
                 group_deltas.setdefault(mg, []).append(d)
                 all_deltas.append(d)
+                delta_years.append(y2)
 
     train_national_trend = float(np.median(all_deltas)) if all_deltas else 0.0
-    train_shock_std = float(np.std(all_deltas)) if len(all_deltas) > 1 else 1.29
+    # Tách biến động thành cú sốc chung theo năm và nhiễu riêng từng chương trình,
+    # cùng cách ước lượng với sản phẩm (common/national_shock.py) nhưng chỉ trên ≤2024.
+    # std của toàn bộ delta đã gồm cả nhiễu riêng, cộng thêm idio lần nữa là đếm hai lần.
+    dd = pd.DataFrame({"year": delta_years, "delta": all_deltas})
+    year_median = dd.groupby("year")["delta"].transform("median")
+    medians_by_year = dd.groupby("year")["delta"].median()
+    train_shock_std = float(medians_by_year.std()) if len(medians_by_year) >= 2 else 1.0
+    if not np.isfinite(train_shock_std) or train_shock_std <= 0:
+        train_shock_std = 0.8
+    resid = dd["delta"] - year_median
+    train_idio_std = float((resid.quantile(0.9) - resid.quantile(0.1)) / 2.5631) if len(resid) > 10 else 0.8
     group_median_trends = {
         mg: float(np.median(ds)) for mg, ds in group_deltas.items() if len(ds) >= 3
     }
@@ -155,7 +167,7 @@ def run_backtest() -> dict:
 
         pred_p50 = float(np.clip(r["latest_hist_score"] + shrunken_trend * dt, 12.0, 30.0))
         mult = 1.4 if r["n_hist_years"] <= 1 else 1.0
-        sigma_i = float(np.sqrt(dt) * np.sqrt(train_shock_std**2 + r["idio_std"]**2) * mult)
+        sigma_i = float(np.sqrt(dt) * np.sqrt(train_shock_std**2 + train_idio_std**2) * mult)
 
         p10 = float(max(0.0, pred_p50 - Z90 * sigma_i))
         p90 = float(min(30.0, pred_p50 + Z90 * sigma_i))
@@ -255,6 +267,7 @@ def run_backtest() -> dict:
         "testPeriod": "2025 (điểm chuẩn thật)",
         "trainParameters": {
             "nationalShockStd": round(train_shock_std, 3),
+            "idioStd": round(train_idio_std, 3),
             "nationalMedianTrend": round(train_national_trend, 3),
             "nHistoricalTransitions": len(all_deltas),
             "groupTrendsCount": len(group_median_trends),

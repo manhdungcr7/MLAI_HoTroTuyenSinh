@@ -2,24 +2,25 @@
   "by_year": {
     "2023": {
       "median_delta": 0.0,
-      "std_delta": 4.762,
-      "n_programs": 401
+      "std_delta": 2.597,
+      "n_programs": 310
     },
     "2024": {
-      "median_delta": 0.87,
-      "std_delta": 2.218,
-      "n_programs": 72
+      "median_delta": 0.8,
+      "std_delta": 2.112,
+      "n_programs": 41
     },
     "2025": {
-      "median_delta": -1.82,
-      "std_delta": 2.47,
-      "n_programs": 43
+      "median_delta": -2.486,
+      "std_delta": 2.05,
+      "n_programs": 34
     }
   },
-  "overall_std": 1.373,
+  "overall_std": 1.714,
   "overall_median": 0.0,
-  "idio_std_overall": 4.339,
-  "n_pairs": 516,
+  "idio_std_overall": 1.494,
+  "idio_std_raw": 2.511,
+  "n_pairs": 385,
   "n_year_points": 3,
   "warning": "Ước lượng dựa trên 3 cặp năm liên tiếp — số lượng nhỏ, độ tin cậy của chính ước lượng độ lệch chuẩn còn hạn chế."
 }

@@ -20,6 +20,7 @@ import numpy as np
 import pandas as pd
 
 from pipeline import config
+from pipeline.clean.methods import THPT, UNKNOWN, normalize_method
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -54,9 +55,11 @@ def load_panels() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     return cutoff, tuition, employment
 
 
-def summarise_cutoff_history(cutoff: pd.DataFrame) -> pd.DataFrame:
-    """One row per (school, major-label) with the year->score history as a dict.
-    Áp dụng bộ lọc điểm hợp lệ [12.0, 30.0] và giải quyết mâu thuẫn ưu tiên tài liệu mới nhất.
+def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
+    """Lọc biên điểm, chuẩn hoá nhãn ngành và gắn phương thức cho từng dòng điểm chuẩn.
+
+    Dùng chung cho reconcile và các bước ước lượng thống kê, để chuỗi điểm của một
+    chương trình luôn thuộc đúng một phương thức xét tuyển.
     """
     cutoff = cutoff.copy()
 
@@ -68,9 +71,32 @@ def summarise_cutoff_history(cutoff: pd.DataFrame) -> pd.DataFrame:
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^[-+•*]\s*", "", regex=True)
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^\d{3,8}(?:_\d+)?\s+", "", regex=True)
 
-    cutoff["program_key"] = cutoff.apply(
+    cutoff["major_key"] = cutoff.apply(
         lambda r: build_program_key(r["school_code"], r["major_label"], r["combinations"]), axis=1
     )
+
+    # 3. Gắn phương thức xét tuyển. Một dòng không ghi phương thức chỉ được suy là
+    #    điểm thi THPT khi cả nhóm (trường, ngành, năm, đề án) không có dòng nào ghi rõ
+    #    phương thức — tức đề án chỉ công bố một ngưỡng. Nếu nhóm đã có phương thức
+    #    tường minh thì dòng trống là của một phương thức khác chưa rõ → giữ UNKNOWN.
+    cutoff["admission_method"] = [
+        normalize_method(m, lab) for m, lab in zip(cutoff["method"], cutoff["label"])
+    ]
+    explicit = cutoff["admission_method"] != UNKNOWN
+    grp = [cutoff["major_key"], cutoff["cutoff_year"], cutoff["source_year_doc"].fillna(-1)]
+    group_has_explicit = explicit.groupby(grp).transform("any")
+    infer_mask = ~explicit & ~group_has_explicit
+    cutoff.loc[infer_mask, "admission_method"] = THPT
+    cutoff["method_inferred"] = infer_mask
+    cutoff["program_key"] = cutoff["major_key"] + "::" + cutoff["admission_method"]
+    return cutoff
+
+
+def summarise_cutoff_history(cutoff: pd.DataFrame) -> pd.DataFrame:
+    """Một dòng cho mỗi (trường, ngành, phương thức) với lịch sử điểm theo năm.
+    Khi nhiều tài liệu cho cùng một năm, ưu tiên đề án mới nhất.
+    """
+    cutoff = prepare_cutoff_rows(cutoff)
 
     def agg_group(g: pd.DataFrame) -> pd.Series:
         by_year = {}
@@ -103,6 +129,9 @@ def summarise_cutoff_history(cutoff: pd.DataFrame) -> pd.DataFrame:
 
         return pd.Series({
             "school_code": g["school_code"].iloc[0],
+            "major_key": g["major_key"].iloc[0],
+            "admission_method": g["admission_method"].iloc[0],
+            "method_inferred": bool(g["method_inferred"].all()),
             "major_label": g["major_label"].iloc[0],
             "combinations_seen": ",".join(combos) if combos else None,
             "cutoff_by_year_json": json.dumps({str(y): v for y, v in by_year.items()}, ensure_ascii=False),
@@ -230,8 +259,8 @@ def run() -> pd.DataFrame:
         t_agg = tuition.groupby("program_key").agg(
             tuition_min_mvnd=("tuition_min_mvnd", "median"),
             tuition_max_mvnd=("tuition_max_mvnd", "median"),
-        ).reset_index()
-        programs = programs.merge(t_agg, on="program_key", how="left")
+        ).reset_index().rename(columns={"program_key": "major_key"})
+        programs = programs.merge(t_agg, on="major_key", how="left")
     else:
         programs["tuition_min_mvnd"] = np.nan
         programs["tuition_max_mvnd"] = np.nan
@@ -242,8 +271,8 @@ def run() -> pd.DataFrame:
             lambda r: build_program_key(r["school_code"], r["major_name"], None), axis=1)
         e_agg = employment.groupby("program_key").agg(
             employment_rate_pct=("employment_rate_pct", "median"),
-        ).reset_index()
-        programs = programs.merge(e_agg, on="program_key", how="left")
+        ).reset_index().rename(columns={"program_key": "major_key"})
+        programs = programs.merge(e_agg, on="major_key", how="left")
     else:
         programs["employment_rate_pct"] = np.nan
 

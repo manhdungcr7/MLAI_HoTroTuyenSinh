@@ -9,8 +9,17 @@ export interface ExamScores {
   sinh?: number | null;
   su?: number | null;
   dia?: number | null;
+  /** GDKT&PL (thay GDCD từ chương trình GDPT 2018); giữ khóa cũ để tương thích dữ liệu đã lưu. */
   gdcd?: number | null;
+  tin?: number | null;
+  cncn?: number | null;
+  cnnn?: number | null;
 }
+
+/** Phương thức xét tuyển, khớp `pipeline/clean/methods.py`. */
+export type AdmissionMethod =
+  | "THPT" | "HOC_BA" | "DGNL_HN" | "DGNL_HCM" | "DGNL_SP" | "DGTD" | "DGNL_KHAC"
+  | "NANG_KHIEU" | "KET_HOP" | "UU_TIEN" | "RIENG" | "KHAC";
 
 export interface AlternativeScores {
   hoc_ba_gpa?: number | null;
@@ -187,7 +196,10 @@ export interface StudentProfile {
   minimumScoreException?: boolean | null;
   highSchool: string;
   homeProvince: string;
+  /** Điểm thi tốt nghiệp THPT (hoặc điểm dự kiến/thi thử trước kỳ thi). */
   examScores: ExamScores;
+  /** Điểm trung bình môn học bạ (thang 10) dùng cho phương thức xét học bạ. */
+  hocBaScores?: ExamScores;
   altScores: AlternativeScores;
   priority: Priority;
   annualBudgetVnd: number;
@@ -234,6 +246,14 @@ export interface TargetProgram {
   combinations: string[];
   region?: "bac" | "trung" | "nam";
   province?: string;
+  /** Phương thức của ngưỡng điểm này; thiếu = điểm thi THPT. */
+  admissionMethod?: AdmissionMethod;
+  /** true khi đề án không ghi phương thức và hệ thống suy luận là điểm thi THPT. */
+  methodInferred?: boolean;
+  /** Khóa (trường, ngành) chung cho mọi phương thức của cùng một ngành. */
+  majorKey?: string;
+  sourceTier?: "official_pdf" | "aggregator_verified";
+  sourceUrl?: string | null;
 }
 
 export interface GapMetric {
@@ -289,6 +309,10 @@ export interface CandidateOption {
   dataPassportUrl: string;
   region?: "bac" | "trung" | "nam";
   province?: string;
+  admissionMethod?: AdmissionMethod;
+  methodInferred?: boolean;
+  majorKey?: string;
+  sourceTier?: "official_pdf" | "aggregator_verified";
 }
 
 export interface StudyPlanSlot {
