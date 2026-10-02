@@ -333,10 +333,11 @@ export default function ProfilePage() {
                   Tỉnh / Thành phố
                 </label>
                 <select
-                  value={profile.homeProvince || "Hà Nội"}
+                  value={profile.homeProvince || ""}
                   onChange={(e) => updateProfile({ homeProvince: e.target.value })}
                   className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-bold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
                 >
+                  <option value="">Chưa chọn</option>
                   {PROVINCES.map((prov) => (
                     <option key={prov} value={prov}>
                       {prov}

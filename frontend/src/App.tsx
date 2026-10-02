@@ -6,6 +6,7 @@ import { DatasetFreshnessProvider } from "@/state/dataset-freshness";
 
 // Lazy-load các trang Domain của ứng dụng
 const DashboardPage = lazy(() => import("@/pages/overview/page"));
+const StartPage = lazy(() => import("@/pages/start/page"));
 const ProfilePage = lazy(() => import("@/pages/profile/page"));
 const ProfileGoalPage = lazy(() => import("@/pages/profile/goal/page"));
 const AnalysisPage = lazy(() => import("@/pages/analysis/page"));
@@ -25,6 +26,8 @@ function AppContent() {
   const renderActiveRoute = () => {
     switch (pathname) {
       case "/":
+      case "/start":
+        return <StartPage />;
       case "/dashboard":
         return <DashboardPage />;
       case "/profile":
@@ -56,7 +59,7 @@ function AppContent() {
       case "/verify":
         return <VerifyPage />;
       default:
-        return <DashboardPage />;
+        return <StartPage />;
     }
   };
 

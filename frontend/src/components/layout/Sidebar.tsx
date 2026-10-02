@@ -10,6 +10,7 @@ import {
   CalendarDays,
   ShieldCheck,
   FileCheck,
+  Search,
   X,
 } from "lucide-react";
 import { StudentProfile, TargetProgram, GapMetric } from "@/engine/types";
@@ -27,10 +28,16 @@ export interface NavItem {
 // Đây là nguồn tên trang duy nhất — Topbar đọc tiêu đề từ đây (getNavTitle).
 export const MAIN_NAV_ITEMS: NavItem[] = [
   {
+    href: "/start",
+    label: "Tìm ngành cho em",
+    icon: Search,
+    matchPaths: ["/", "/start"],
+  },
+  {
     href: "/dashboard",
     label: "Tổng quan",
     icon: LayoutDashboard,
-    matchPaths: ["/", "/dashboard"],
+    matchPaths: ["/dashboard"],
   },
   {
     href: "/profile",

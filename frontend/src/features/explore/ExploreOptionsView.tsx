@@ -270,7 +270,8 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
             return eB - eA;
           }
           default:
-            return b.admitProbability - a.admitProbability || b.cutoffP50 - a.cutoffP50;
+            // Làm tròn 1% để các ngành cùng ~99% xếp theo điểm chuẩn cao hơn (ngành tốt hơn) lên trước.
+            return Math.round(b.admitProbability * 100) - Math.round(a.admitProbability * 100) || b.cutoffP50 - a.cutoffP50;
         }
       });
   }, [allPrograms, filters, profile.homeProvince, profile.annualBudgetVnd, profile.interestMajorGroups]);
