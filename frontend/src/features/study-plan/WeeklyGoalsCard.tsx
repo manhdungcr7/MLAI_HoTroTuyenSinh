@@ -191,9 +191,6 @@ export default function WeeklyGoalsCard() {
                 <p className="text-xs font-bold text-slate-800">
                   Chưa có nhiệm vụ học tập nào trong tuần này
                 </p>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  Bấm &quot;Nạp nhiệm vụ gợi ý&quot; để thêm 3 mục tiêu trọng tâm theo tổ hợp môn của bạn.
-                </p>
               </div>
               <button
                 type="button"

@@ -101,85 +101,63 @@ export default function VerifyPage() {
         {/* 4 TIÊU CHÍ BẮT BUỘC THEO QUY CHẾ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           {/* Tiêu chí 1: Điểm sàn đại học */}
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800">
-                1. Điểm sàn xét tuyển đại học (&ge; 15.0đ)
-              </span>
-              <span
-                className={`text-[11px] font-black px-2 py-0.5 rounded-full ${
-                  isFloorPassed
-                    ? "bg-emerald-100 text-emerald-800"
-                    : "bg-rose-100 text-rose-800"
-                }`}
-              >
-                {isFloorPassed ? `ĐẠT (${currentScore.toFixed(2)}đ)` : `KHÔNG ĐẠT (${currentScore.toFixed(2)}đ)`}
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-600 leading-relaxed">
-              Theo quy định của Bộ GD&ĐT, thí sinh phải đạt tổng điểm 3 môn tối thiểu 15.0 điểm để đủ điều kiện đăng ký xét tuyển đại học.
-            </p>
+          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800">
+              1. Điểm sàn xét tuyển đại học (&ge; 15.0đ)
+            </span>
+            <span
+              className={`text-xs font-black px-2.5 py-1 rounded-full ${
+                isFloorPassed
+                  ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                  : "bg-rose-100 text-rose-800 border border-rose-200"
+              }`}
+            >
+              {isFloorPassed ? `ĐẠT (${currentScore.toFixed(2)}đ)` : `KHÔNG ĐẠT (${currentScore.toFixed(2)}đ)`}
+            </span>
           </div>
 
           {/* Tiêu chí 2: Công thức điểm ưu tiên TT06 */}
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800">
-                2. Điểm ưu tiên khu vực & đối tượng
-              </span>
-              <span className="text-[11px] font-mono font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
-                +{actualPriority.toFixed(2)}đ
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-600 leading-relaxed">
-              {currentScore >= 22.5
-                ? `Đã áp dụng giảm tuyến tính TT06: P = P₀ × [(30 − ${currentScore.toFixed(1)}) / 7.5], tối đa không quá 3.0đ.`
-                : "Tổng điểm dưới 22.5đ được cộng trọn vẹn điểm ưu tiên theo quy định."}
-            </p>
+          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800">
+              2. Điểm ưu tiên khu vực & đối tượng
+            </span>
+            <span className="text-xs font-mono font-black text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+              +{actualPriority.toFixed(2)}đ
+            </span>
           </div>
 
           {/* Tiêu chí 3: Ngành Sư phạm */}
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800">
-                3. Quy định nguyện vọng khối Sư phạm
-              </span>
-              <span
-                className={`text-[11px] font-black px-2 py-0.5 rounded-full ${
-                  teacherViolations.length === 0
-                    ? "bg-emerald-100 text-emerald-800"
-                    : "bg-rose-100 text-rose-800"
-                }`}
-              >
-                {teacherViolations.length === 0 ? "HỢP LỆ" : `VI PHẠM (NV ${teacherViolations.map((t) => t.rank).join(", ")})`}
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-600 leading-relaxed">
-              Các ngành đào tạo giáo viên chỉ được xét tuyển nếu đặt từ NV 1 đến NV 5.
-            </p>
+          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800">
+              3. Quy định nguyện vọng khối Sư phạm
+            </span>
+            <span
+              className={`text-xs font-black px-2.5 py-1 rounded-full ${
+                teacherViolations.length === 0
+                  ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                  : "bg-rose-100 text-rose-800 border border-rose-200"
+              }`}
+            >
+              {teacherViolations.length === 0 ? "HỢP LỆ" : `VI PHẠM (NV ${teacherViolations.map((t) => t.rank).join(", ")})`}
+            </span>
           </div>
 
           {/* Tiêu chí 4: Lưới an toàn */}
-          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-800">
-                4. Lưới an toàn chống trượt toàn bộ
-              </span>
-              <span
-                className={`text-[11px] font-black px-2 py-0.5 rounded-full ${
-                  tt06Audit.safetyCount > 0
-                    ? "bg-emerald-100 text-emerald-800"
-                    : "bg-amber-100 text-amber-800"
-                }`}
-              >
-                {tt06Audit.safetyCount > 0
-                  ? `AN TOÀN (${tt06Audit.safetyCount} NV)`
-                  : "CHƯA CÓ NV AN TOÀN"}
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-600 leading-relaxed">
-              Cần tối thiểu 1–2 nguyện vọng ở tầng An toàn để kiểm soát nguy cơ trượt toàn bộ xuống dưới 5%.
-            </p>
+          <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-800">
+              4. Lưới an toàn chống trượt toàn bộ
+            </span>
+            <span
+              className={`text-xs font-black px-2.5 py-1 rounded-full ${
+                tt06Audit.safetyCount > 0
+                  ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                  : "bg-amber-100 text-amber-800 border border-amber-200"
+              }`}
+            >
+              {tt06Audit.safetyCount > 0
+                ? `AN TOÀN (${tt06Audit.safetyCount} NV)`
+                : "CHƯA CÓ NV AN TOÀN"}
+            </span>
           </div>
         </div>
 
@@ -206,7 +184,7 @@ export default function VerifyPage() {
         )}
       </section>
 
-      {/* 2. KIỂM CHỨNG THUẬT TOÁN RỦI RO & ĐỘ NHẠY ĐIỂM SỐ */}
+      {/* 2. KIỂM CHỨNG THỬ NGHIỆM BIẾN ĐỘNG ĐIỂM THI */}
       <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
@@ -215,7 +193,7 @@ export default function VerifyPage() {
             </div>
             <div>
               <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                Kiểm chứng thuật toán Gauss-Hermite & Phân tích độ nhạy
+                Thử nghiệm biến động điểm thi
               </h3>
             </div>
           </div>
@@ -229,7 +207,7 @@ export default function VerifyPage() {
         <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/30 space-y-3">
           <div className="flex items-center justify-between flex-wrap gap-2 text-xs">
             <span className="font-bold text-indigo-950">
-              Thử nghiệm độ bền vững danh mục khi điểm thi thực tế thay đổi:
+              Biến động điểm thực tế:
             </span>
             <div className="flex items-center gap-1.5">
               {[-1.0, -0.5, 0, +0.5, +1.0].map((delta) => (

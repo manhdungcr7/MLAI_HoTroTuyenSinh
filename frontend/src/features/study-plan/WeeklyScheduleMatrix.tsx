@@ -275,10 +275,7 @@ export default function WeeklyScheduleMatrix() {
       </div>
 
       {/* FOOTER ĐIỀU CHỈNH LỊCH */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2 border-t border-slate-100">
-        <p className="text-xs text-slate-500 font-medium">
-          Lịch học tự động sắp xếp theo môn trọng tâm. Bạn có thể nhấn <strong>Chỉnh sửa lịch</strong> để thay đổi từng ca học theo nhu cầu.
-        </p>
+      <div className="flex items-center justify-end pt-2 border-t border-slate-100">
 
         <button
           type="button"

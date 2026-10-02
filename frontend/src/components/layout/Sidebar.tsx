@@ -84,7 +84,7 @@ const SUB_PAGE_TITLES: Record<string, string> = {
   "/simulation": "Nếu điểm thay đổi thì sao?",
   "/comparison": "So sánh lựa chọn",
   "/compare": "So sánh lựa chọn",
-  "/verify": "Kiểm chứng / Verify",
+  "/verify": "Kiểm chứng",
 };
 
 export function getNavTitle(pathname: string): string {

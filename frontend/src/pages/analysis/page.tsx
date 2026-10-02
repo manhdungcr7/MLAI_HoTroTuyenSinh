@@ -306,16 +306,13 @@ export default function AnalysisPage() {
           <div className="space-y-3">
             {/* Thẻ 1: Môn ưu tiên số 1 (Tính toán thật từ SSOT) */}
             {topRoi && (
-              <div className="p-3.5 rounded-xl border border-indigo-200 bg-indigo-50/60 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="p-3.5 rounded-xl border border-indigo-200 bg-indigo-50/60 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
                   <TrendingUp className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="font-bold text-xs sm:text-sm text-indigo-950">
                     {topRoi.subjectVi} +0.5đ → mở thêm {topRoi.unlockedOptionsCount} lựa chọn
-                  </p>
-                  <p className="text-[11px] text-indigo-900/80 mt-0.5 leading-relaxed">
-                    Tăng 0.5 điểm môn {topRoi.subjectVi} giúp thu hẹp {topRoi.gapReduction.toFixed(1)}đ khoảng cách với trường mục tiêu và có thêm {topRoi.unlockedOptionsCount} ngành trong vùng an toàn.
                   </p>
                 </div>
               </div>
@@ -323,16 +320,13 @@ export default function AnalysisPage() {
 
             {/* Thẻ 2: Môn ưu tiên số 2 */}
             {secondRoi && (
-              <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/60 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/60 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
                   <Target className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="font-bold text-xs sm:text-sm text-blue-950">
                     {secondRoi.subjectVi} +0.5đ → tăng tỷ lệ trúng tuyển
-                  </p>
-                  <p className="text-[11px] text-blue-900/80 mt-0.5 leading-relaxed">
-                    Môn {secondRoi.subjectVi} mở thêm {secondRoi.unlockedOptionsCount} ngành xét tuyển và củng cố vững chắc điểm số xét tuyển của bạn.
                   </p>
                 </div>
               </div>
@@ -340,16 +334,13 @@ export default function AnalysisPage() {
 
             {/* Thẻ 3: Môn đang giữ phong độ tốt nhất */}
             {bestCurrentSubject && (
-              <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/60 flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/60 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="font-bold text-xs sm:text-sm text-emerald-950">
                     {bestCurrentSubject.label} ({bestCurrentSubject.score.toFixed(1)}đ) giữ vững phong độ
-                  </p>
-                  <p className="text-[11px] text-emerald-900/80 mt-0.5 leading-relaxed">
-                    Môn này đang có điểm số tốt nhất trong tổ hợp, hãy duy trì để làm trụ cột an toàn cho toàn bộ danh mục nguyện vọng.
                   </p>
                 </div>
               </div>
