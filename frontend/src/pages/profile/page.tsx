@@ -204,9 +204,6 @@ export default function ProfilePage() {
                 <span className="text-sm font-bold text-slate-400">Chưa nhập điểm</span>
               )}
             </p>
-            <p className="text-[11px] text-slate-400 truncate mt-0.5">
-              {currentTotal > 0 ? "3 môn tổ hợp + điểm ưu tiên TT06" : "Nhập 3 môn ở bảng bên dưới"}
-            </p>
           </div>
         </div>
 
