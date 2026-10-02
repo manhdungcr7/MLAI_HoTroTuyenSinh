@@ -40,6 +40,12 @@ function getRouteTitle(pathname: string): { title: string; subTitle?: string } {
   return { title: getNavTitle(pathname) };
 }
 
+function formatGradeLabel(grade?: string): string {
+  if (!grade?.trim()) return "Chưa cập nhật lớp";
+  const trimmed = grade.trim();
+  return /^lớp\s/i.test(trimmed) ? trimmed : `Lớp ${trimmed}`;
+}
+
 export function Topbar({
   onToggleMobileMenu,
   title: propTitle,
@@ -64,33 +70,32 @@ export function Topbar({
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
 
-  // Tạo danh sách thông báo và nhắc nhở thông minh dựa trên dữ liệu thật
+  // Tạo danh sách thông báo và nhắc nhở tinh gọn
   const notifications = useMemo(() => {
     const list = [];
 
     // 1. Nhắc nhở khoảng cách điểm chuẩn mục tiêu
     if (target) {
       const rawGap = gapAnalysis?.rawGap ?? 0;
-      const currentScore = gapAnalysis?.currentCompositeScore ?? 0;
       if (rawGap < 0) {
         list.push({
           id: "notif-target-gap",
           type: "warning",
-          title: `Thiếu ${Math.abs(rawGap).toFixed(2)}đ so với mục tiêu ${target.schoolCode}`,
-          message: `Điểm hiện tại (${currentScore.toFixed(2)}đ) cần cải thiện thêm ${Math.abs(rawGap).toFixed(2)} điểm để đạt ngưỡng tham chiếu P50 ngành ${target.majorName}.`,
+          title: `Mục tiêu ${target.schoolCode}: Thiếu ${Math.abs(rawGap).toFixed(2)}đ`,
+          message: `Ngành ${target.majorName}`,
           link: "#/analysis",
-          linkText: "Xem môn ưu tiên bứt phá",
-          time: "Gợi ý thông minh",
+          linkText: "Xem môn bứt phá",
+          time: "Gợi ý",
         });
       } else {
         list.push({
           id: "notif-target-safe",
           type: "success",
-          title: `Đạt ngưỡng an toàn mục tiêu (+${rawGap.toFixed(2)}đ)`,
-          message: `Điểm thi của bạn (${currentScore.toFixed(2)}đ) vượt ngưỡng tham chiếu P50 ngành ${target.majorName} (${target.schoolCode}).`,
+          title: `Mục tiêu ${target.schoolCode}: Đạt ngưỡng (+${rawGap.toFixed(2)}đ)`,
+          message: `Ngành ${target.majorName}`,
           link: "#/portfolio",
-          linkText: "Xếp danh mục nguyện vọng",
-          time: "Gợi ý thông minh",
+          linkText: "Xếp nguyện vọng",
+          time: "Mục tiêu",
         });
       }
     } else {
@@ -98,9 +103,9 @@ export function Topbar({
         id: "notif-target-missing",
         type: "info",
         title: "Chưa chọn trường mục tiêu",
-        message: "Hãy chọn 1 trường đại học mơ ước ở trang Hồ sơ để AI tính toán chính xác bạn cần bao nhiêu điểm.",
+        message: "Chọn trường mơ ước để xác định điểm cần đạt",
         link: "#/profile",
-        linkText: "Chọn trường mục tiêu ngay",
+        linkText: "Chọn trường ngay",
         time: "Nhắc nhở",
       });
     }
@@ -110,30 +115,30 @@ export function Topbar({
       list.push({
         id: "notif-wishlist-empty",
         type: "warning",
-        title: "Danh mục xét tuyển: Chưa chọn nguyện vọng nào (0/15)",
-        message: "Bạn chưa đưa ngành nào vào danh mục xét tuyển 15 NV. Hãy khám phá và lưu tối thiểu 8–15 NV để bảo vệ cơ hội đỗ.",
+        title: "Danh mục: Chưa chọn nguyện vọng nào",
+        message: "Thêm các ngành phù hợp để bảo vệ cơ hội đỗ",
         link: "#/options",
-        linkText: "Khám phá ngành phù hợp",
+        linkText: "Khám phá trường",
         time: "Chiến lược",
       });
     } else if (wishlistCount < 6) {
       list.push({
         id: "notif-wishlist-thin",
         type: "info",
-        title: `Danh mục đang có ${wishlistCount}/15 nguyện vọng`,
-        message: "Nên phân bổ tối thiểu 8-10 nguyện vọng (chia đều Thử sức - Phù hợp - An toàn) để tránh nguy cơ trượt tất cả.",
+        title: `Danh mục: Đang có ${wishlistCount}/15 nguyện vọng`,
+        message: "Nên thêm nguyện vọng để tránh nguy cơ trượt hết",
         link: "#/portfolio",
-        linkText: "Tối ưu cơ cấu 3 tầng",
+        linkText: "Tối ưu 3 tầng",
         time: "Chiến lược",
       });
     } else {
       list.push({
         id: "notif-wishlist-good",
         type: "success",
-        title: `Đã cơ cấu ${wishlistCount}/15 nguyện vọng`,
-        message: "Danh mục của bạn đã có độ dày tương đối tốt. Kiểm tra phân tầng xác suất để chốt phương án cuối cùng.",
+        title: `Danh mục: Đã cơ cấu ${wishlistCount}/15 nguyện vọng`,
+        message: "Đạt số lượng tối ưu theo khuyến nghị",
         link: "#/portfolio",
-        linkText: "Kiểm tra danh mục",
+        linkText: "Xem danh mục",
         time: "Chiến lược",
       });
     }
@@ -142,10 +147,10 @@ export function Topbar({
     list.push({
       id: "notif-tt06",
       type: "system",
-      title: "Lưu ý Quy chế tuyển sinh TT06/2026",
-      message: "Từ 22.5 điểm trở lên, điểm ưu tiên giảm tuyến tính. Thí sinh phải đạt điểm sàn xét tuyển đại học tối thiểu 15.0 điểm.",
+      title: "Quy chế Tuyển sinh TT06/2026",
+      message: "Điểm sàn đại học ≥ 15.0đ · Sư phạm NV 1–5",
       link: "#/verify",
-      linkText: "Xem thẩm định quy chế TT06",
+      linkText: "Xem kiểm chứng",
       time: "Bộ GD&ĐT",
     });
 
@@ -265,39 +270,8 @@ export function Topbar({
             className="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full border border-slate-200 bg-white hover:bg-slate-50 transition cursor-pointer shadow-2xs"
           >
             {/* Avatar tròn học sinh */}
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shrink-0 border border-slate-200 shadow-2xs">
-              <svg
-                viewBox="0 0 36 36"
-                className="w-full h-full text-white"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="18" cy="18" r="18" fill="#3B82F6" />
-                {/* Tóc */}
-                <path
-                  d="M10 14C10 9.58172 13.5817 6 18 6C22.4183 6 26 9.58172 26 14C26 14.5 25.8 15.5 25.5 16C24 15 22 14.5 18 14.5C14 14.5 12 15 10.5 16C10.2 15.5 10 14.5 10 14Z"
-                  fill="#0F172A"
-                />
-                {/* Khuôn mặt */}
-                <circle cx="18" cy="17" r="6" fill="#FED7AA" />
-                {/* Mắt */}
-                <circle cx="16" cy="16.5" r="0.75" fill="#0F172A" />
-                <circle cx="20" cy="16.5" r="0.75" fill="#0F172A" />
-                {/* Miệng cười */}
-                <path
-                  d="M16.5 19.5C17 20.2 19 20.2 19.5 19.5"
-                  stroke="#0F172A"
-                  strokeWidth="0.8"
-                  strokeLinecap="round"
-                />
-                {/* Áo học sinh */}
-                <path
-                  d="M8 32C8 26.4772 12.4772 22 18 22C23.5228 22 28 26.4772 28 32V36H8V32Z"
-                  fill="#1E40AF"
-                />
-                {/* Cổ áo trắng */}
-                <path d="M15 22L18 25L21 22H15Z" fill="#FFFFFF" />
-              </svg>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shrink-0 shadow-2xs text-white">
+              <User className="w-4 h-4 stroke-[2.2]" />
             </div>
 
             {/* Thông tin tên và lớp */}
@@ -306,9 +280,7 @@ export function Topbar({
                 {profile?.name?.trim() ? profile.name : "Hồ sơ của bạn"}
               </div>
               <div className="text-[10px] font-semibold text-slate-500 leading-none mt-0.5">
-                {profile?.grade?.trim()
-                  ? (/^lớp\s/i.test(profile.grade) ? profile.grade : `Lớp ${profile.grade}`)
-                  : "Chưa cập nhật lớp"}
+                {formatGradeLabel(profile?.grade)}
               </div>
             </div>
 
@@ -341,9 +313,8 @@ export function Topbar({
                     {profile?.name?.trim() ? profile.name : "Hồ sơ chưa đặt tên"}
                   </div>
                   <div className="text-xs text-slate-500 mt-0.5">
-                    {profile?.highSchool
-                      ? `${profile.grade ? profile.grade + " • " : ""}${profile.highSchool}`
-                      : "Chưa cập nhật trường THPT"}
+                    {formatGradeLabel(profile?.grade)}
+                    {profile?.highSchool ? ` • ${profile.highSchool}` : ""}
                   </div>
 
                   <div className="mt-2 flex items-center gap-1.5 flex-wrap">
@@ -398,7 +369,7 @@ export function Topbar({
                             )}
                           </div>
                           <div className="text-[10px] text-slate-500 truncate mt-0.5">
-                            {p.grade ? `Lớp ${p.grade}` : "Lớp chưa rõ"}
+                            {formatGradeLabel(p.grade)}
                             {p.highSchool ? ` • ${p.highSchool}` : ""}
                             {p.activeCombination ? ` • Khối ${p.activeCombination}` : ""}
                           </div>
@@ -478,7 +449,7 @@ export function Topbar({
                     className="w-full flex items-center gap-2 rounded-xl p-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    <span>Thoát / Đăng xuất hồ sơ này</span>
+                    <span>Đăng xuất hồ sơ này</span>
                   </button>
                 </div>
               </div>
