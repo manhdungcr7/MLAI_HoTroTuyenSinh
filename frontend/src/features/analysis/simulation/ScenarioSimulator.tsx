@@ -117,23 +117,33 @@ export function ScenarioSimulator() {
         {subjects.map((s) => {
           const delta = scenario.scoreDeltas[s] ?? 0;
           const base = profile.examScores[s] as number;
+          const currentSimulatedScore = Math.min(10, Math.max(0, Number((base + delta).toFixed(2))));
+          const diff = Number((currentSimulatedScore - base).toFixed(2));
           return (
             <div key={s} className="space-y-1.5">
               <label htmlFor={`delta-${s}`} className="flex items-center justify-between text-sm">
                 <span className="font-semibold text-slate-700">{SUBJECT_LABELS_VI[s] || s}</span>
                 <span className="tabular-nums text-slate-600">
-                  {base} → <strong className="text-slate-900">{Math.min(10, Math.max(0, base + delta)).toFixed(2)}</strong>
+                  {base} → <strong className="text-slate-900">{currentSimulatedScore.toFixed(2)}</strong>
+                  {diff !== 0 && (
+                    <span className={`ml-1 text-xs font-bold ${diff > 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                      ({diff > 0 ? `+${diff.toFixed(2)}` : diff.toFixed(2)})
+                    </span>
+                  )}
                 </span>
               </label>
               <input
                 id={`delta-${s}`}
                 type="range"
-                min={-2}
-                max={2}
+                min={0}
+                max={10}
                 step={0.25}
-                value={delta}
-                onChange={(e) => setDelta(s, Number(e.target.value))}
-                className="w-full accent-blue-600 min-h-[28px]"
+                value={currentSimulatedScore}
+                onChange={(e) => {
+                  const newScore = Number(e.target.value);
+                  setDelta(s, Number((newScore - base).toFixed(2)));
+                }}
+                className="w-full accent-blue-600 min-h-[28px] cursor-pointer"
               />
             </div>
           );
