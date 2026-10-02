@@ -48,41 +48,8 @@ export default function SubjectRoiPage() {
       });
     }
 
-    // Fallback nếu chưa có dữ liệu tính toán
-    const scores = profile?.examScores || {};
-    return [
-      {
-        rank: 1,
-        subjectKey: "anh",
-        subjectName: "Tiếng Anh",
-        currentScore: scores.anh ?? 7.5,
-        simulatedScore: Math.min(10, Number(((scores.anh ?? 7.5) + 1).toFixed(1))),
-        impactOptions: 12,
-        priority: "Cao",
-        iconType: "book",
-      },
-      {
-        rank: 2,
-        subjectKey: "toan",
-        subjectName: "Toán",
-        currentScore: scores.toan ?? 8.2,
-        simulatedScore: Math.min(10, Number(((scores.toan ?? 8.2) + 1).toFixed(1))),
-        impactOptions: 8,
-        priority: "Trung bình",
-        iconType: "sigma",
-      },
-      {
-        rank: 3,
-        subjectKey: "ly",
-        subjectName: "Vật lý",
-        currentScore: scores.ly ?? 8.0,
-        simulatedScore: Math.min(10, Number(((scores.ly ?? 8.0) + 1).toFixed(1))),
-        impactOptions: 6,
-        priority: "Trung bình",
-        iconType: "atom-orange",
-      },
-    ];
-  }, [subjectRoiList, profile?.examScores]);
+    return [];
+  }, [subjectRoiList]);
 
   // Dữ liệu thanh bar ngang biểu thị số lựa chọn mới mở ra
   const leverageBarsData: SubjectLeverageItem[] = useMemo(() => {
@@ -103,26 +70,7 @@ export default function SubjectRoiPage() {
       }));
     }
 
-    return [
-      {
-        subjectName: "Tiếng Anh",
-        optionsAdded: 12,
-        barColor: "bg-gradient-to-r from-purple-500 to-indigo-600",
-        percentage: 85,
-      },
-      {
-        subjectName: "Toán",
-        optionsAdded: 8,
-        barColor: "bg-blue-500",
-        percentage: 58,
-      },
-      {
-        subjectName: "Vật lý",
-        optionsAdded: 6,
-        barColor: "bg-sky-400",
-        percentage: 42,
-      },
-    ];
+    return [];
   }, [subjectRoiList]);
 
   // 3 Thẻ Kết luận nhanh cá nhân hóa theo từng môn
@@ -171,32 +119,7 @@ export default function SubjectRoiPage() {
       return list;
     }
 
-    return [
-      {
-        id: 1,
-        badgeNumber: 1,
-        badgeBgColor: "bg-emerald-500",
-        title: "Ưu tiên Tiếng Anh",
-        description:
-          "Tăng điểm Tiếng Anh mang lại nhiều lựa chọn ngành/trường mới nhất. (Dư địa tăng còn nhiều, tăng 1đ mở 12 ngành)",
-      },
-      {
-        id: 2,
-        badgeNumber: 2,
-        badgeBgColor: "bg-blue-600",
-        title: "Giữ ổn định Toán",
-        description:
-          "Toán đang ở mức cao, tiếp tục duy trì để đảm bảo lợi thế cạnh tranh cốt lõi.",
-      },
-      {
-        id: 3,
-        badgeNumber: 3,
-        badgeBgColor: "bg-purple-600",
-        title: "Vật lý vẫn quan trọng",
-        description:
-          "Tăng điểm Vật lý giúp mở thêm lựa chọn ở các nhóm ngành kỹ thuật và công nghệ.",
-      },
-    ];
+    return [];
   }, [subjectRoiList]);
 
   return (
@@ -220,11 +143,26 @@ export default function SubjectRoiPage() {
         </div>
       </div>
 
+      {!topSubject ? (
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-2xs">
+          <p className="text-base font-extrabold text-slate-900">Chưa đủ dữ liệu để xếp hạng môn</p>
+          <p className="mt-2 text-sm text-slate-600">
+            {!target
+              ? "Hãy chọn ngành mục tiêu để biết môn nào giúp em tiến gần mục tiêu nhất."
+              : "Hãy nhập điểm thi (hoặc điểm dự kiến) các môn trong tổ hợp xét tuyển của ngành mục tiêu."}
+          </p>
+          <div className="mt-4 flex justify-center gap-2">
+            <Link href="/profile" className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Nhập điểm</Link>
+            <Link href="/profile/goal" className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold">Chọn mục tiêu</Link>
+          </div>
+        </div>
+      ) : (
+      <>
       {/* 2. HERO BANNER NỔI BẬT */}
       <HeroLeverageBanner
-        topSubjectName={topSubject?.subjectVi || "Tiếng Anh"}
-        unlockedCount={topSubject?.unlockedOptionsCount || 12}
-        deltaPoint={topSubject?.deltaScore || 1}
+        topSubjectName={topSubject.subjectVi}
+        unlockedCount={topSubject.unlockedOptionsCount}
+        deltaPoint={topSubject.deltaScore}
       />
 
       {/* 3. LƯỚI NỘI DUNG 2 CỘT CHUẨN REFERENCE IMAGE 5 */}
@@ -247,6 +185,8 @@ export default function SubjectRoiPage() {
           <DeepDiveActionCard />
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 }

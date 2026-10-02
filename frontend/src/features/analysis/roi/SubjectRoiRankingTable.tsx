@@ -17,51 +17,8 @@ interface SubjectRoiRankingTableProps {
   className?: string;
 }
 
-const DEFAULT_ROWS: SubjectRoiRowData[] = [
-  {
-    rank: 1,
-    subjectKey: "anh",
-    subjectName: "Tiếng Anh",
-    currentScore: 7.5,
-    simulatedScore: 8.5,
-    impactOptions: 12,
-    priority: "Cao",
-    iconType: "sigma",
-  },
-  {
-    rank: 2,
-    subjectKey: "toan",
-    subjectName: "Toán",
-    currentScore: 8.2,
-    simulatedScore: 9.2,
-    impactOptions: 8,
-    priority: "Trung bình",
-    iconType: "atom-orange",
-  },
-  {
-    rank: 3,
-    subjectKey: "ly",
-    subjectName: "Vật lý",
-    currentScore: 7.0,
-    simulatedScore: 8.0,
-    impactOptions: 6,
-    priority: "Trung bình",
-    iconType: "atom-yellow",
-  },
-  {
-    rank: 4,
-    subjectKey: "van",
-    subjectName: "Ngữ văn",
-    currentScore: 6.8,
-    simulatedScore: 7.8,
-    impactOptions: 3,
-    priority: "Thấp",
-    iconType: "book",
-  },
-];
-
 export const SubjectRoiRankingTable: React.FC<SubjectRoiRankingTableProps> = ({
-  data = DEFAULT_ROWS,
+  data = [],
   className = "",
 }) => {
   const getRankBadgeStyle = (rank: number) => {

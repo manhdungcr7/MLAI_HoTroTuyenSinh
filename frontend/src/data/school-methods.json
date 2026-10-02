@@ -32,7 +32,6 @@
  ],
  "DBL": [
   "DGNL_KHAC",
-  "HOC_BA",
   "NANG_KHIEU",
   "THPT"
  ],
@@ -76,41 +75,12 @@
  "DFA": [
   "THPT"
  ],
- "DHC": [
-  "HOC_BA",
-  "KET_HOP",
-  "THPT"
- ],
- "DHD": [
-  "HOC_BA",
-  "KET_HOP",
-  "THPT"
- ],
- "DHK": [
-  "HOC_BA",
-  "KET_HOP",
-  "THPT"
- ],
- "DHL": [
-  "HOC_BA",
-  "KET_HOP",
-  "THPT"
- ],
- "DHN": [
-  "HOC_BA",
-  "KET_HOP",
-  "THPT"
- ],
  "DHS": [
   "DGNL_KHAC",
   "HOC_BA",
   "NANG_KHIEU",
   "THPT",
   "UU_TIEN"
- ],
- "DHT": [
-  "HOC_BA",
-  "THPT"
  ],
  "DHY": [
   "THPT"
@@ -165,7 +135,6 @@
   "THPT"
  ],
  "DTF": [
-  "HOC_BA",
   "THPT"
  ],
  "DTL": [
@@ -214,9 +183,6 @@
   "THPT"
  ],
  "HCB": [
-  "THPT"
- ],
- "HCH": [
   "THPT"
  ],
  "HCN": [

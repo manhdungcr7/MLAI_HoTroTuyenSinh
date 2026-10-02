@@ -5,7 +5,9 @@ import { OptionsFilterBar } from "@/features/explore/OptionsFilterBar";
 import { OptionCard } from "@/features/explore/OptionCard";
 import { ActiveCriteriaBar } from "@/features/explore/ActiveCriteriaBar";
 import { ProgramDetailModal } from "@/features/explore/ProgramDetailModal";
-import { OptionsFilterState, INITIAL_OPTIONS_FILTER, ProgramDisplayItem } from "@/features/explore/types";
+import { OptionsFilterState, ProgramDisplayItem, filtersFromProfile } from "@/features/explore/types";
+import { DECISION_PROGRAM_POOL } from "@/data/catalog";
+import { scoreForProgram, SCORABLE_METHODS, programMethod } from "@/engine/scoring/method-score";
 import { CandidateOption, Role } from "@/engine/types";
 import { formatTuitionPerYear, isWithinBudget } from "@/lib/format";
 import {
@@ -48,7 +50,6 @@ function getUniversityImage(schoolCode: string): string {
 
 const PAGE_SIZE = 24;
 const ROLE_LABEL: Record<Role, string> = { an_toan: "An toàn", vua_tam: "Phù hợp", mao_hiem: "Thử sức" };
-const ROLE_ORDER: Record<Role, number> = { vua_tam: 0, an_toan: 1, mao_hiem: 2 };
 
 export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsViewProps) {
   const {
@@ -67,7 +68,7 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
     clearCompareRecommendations,
   } = useDecision();
 
-  const [filters, setFilters] = useState<OptionsFilterState>(INITIAL_OPTIONS_FILTER);
+  const [filters, setFilters] = useState<OptionsFilterState>(() => filtersFromProfile(profile));
   const [selectedProgram, setSelectedProgram] = useState<ProgramDisplayItem | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showCompareModal, setShowCompareModal] = useState<boolean>(false);
@@ -111,7 +112,7 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
   };
 
   const handleResetFilters = () => {
-    setFilters(INITIAL_OPTIONS_FILTER);
+    setFilters(filtersFromProfile(profile));
     setVisibleCount(PAGE_SIZE);
   };
 
@@ -125,68 +126,75 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
     return map;
   }, [wishlist]);
 
-  // Danh sách hiển thị = kết quả tính từ hồ sơ (không trộn dữ liệu mẫu).
-  // Sắp xếp: Phù hợp → An toàn → Thử sức; trong nhóm, đúng nhóm ngành quan tâm trước, đề án chính thức trước, rồi điểm chuẩn cao trước
+  // Danh sách = mỗi ngành của mỗi trường mà em tính được điểm, với phương thức có lợi nhất cho em.
   const allPrograms = useMemo<ProgramDisplayItem[]>(() => {
-    const targetGroup = target?.majorGroup ?? profile.interestMajorGroups?.[0];
-    return [...candidates]
-      .sort((a, b) => {
-        const roleDiff = ROLE_ORDER[a.role] - ROLE_ORDER[b.role];
-        if (roleDiff !== 0) return roleDiff;
+    return candidates.map((c) => {
+      const regionLabelMap = { bac: "Miền Bắc", trung: "Miền Trung", nam: "Miền Nam" } as const;
+      const regionText = c.province || (c.region ? regionLabelMap[c.region] : "Chưa rõ địa điểm");
+      const matchLevel = c.role === "an_toan" ? "an_toan" : c.role === "mao_hiem" ? "can_co_gang" : "kha_phu_hop";
+      const badgeStyle =
+        c.role === "an_toan"
+          ? { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" }
+          : c.role === "mao_hiem"
+          ? { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" }
+          : { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" };
+      const low = c.cutoffP10 ?? c.cutoffP50;
+      const high = c.cutoffP90 ?? c.cutoffP50;
 
-        const targetGroupDiff = Number(b.majorGroup === targetGroup) - Number(a.majorGroup === targetGroup);
-        if (targetGroupDiff !== 0) return targetGroupDiff;
+      return {
+        id: c.programId,
+        programId: c.programId,
+        schoolCode: c.schoolCode,
+        schoolName: c.schoolName,
+        majorName: c.majorName,
+        majorGroup: c.majorGroup,
+        combination: c.combination,
+        region: c.region ?? null,
+        regionLabel: regionText,
+        province: c.province ?? "",
+        tuitionDisplay: formatTuitionPerYear(c.tuitionVnd),
+        tuitionVnd: c.tuitionVnd,
+        cutoffDisplay: low === high ? `${c.cutoffP50} điểm` : `${low.toFixed(1)} – ${high.toFixed(1)} điểm`,
+        cutoffP50: c.cutoffP50,
+        yearsOfData: c.yearsOfData,
+        matchLevel,
+        matchLabel: ROLE_LABEL[c.role],
+        badgeStyle,
+        imageSrc: getUniversityImage(c.schoolCode),
+        dataPassportUrl: c.dataPassportUrl,
+        employmentRate: c.employmentRate,
+        aiExposure: c.aiExposure,
+        whyThisOptionVi: c.whyThisOptionVi,
+        userScore: c.userScore,
+        admitProbability: c.admitProbability,
+        role: c.role,
+        sourceTier: c.sourceTier ?? "official_pdf",
+        admissionMethod: c.admissionMethod ?? "THPT",
+        methodInferred: Boolean(c.methodInferred),
+        combinationsVerified: c.combinationsVerified !== false,
+      } satisfies ProgramDisplayItem;
+    });
+  }, [candidates]);
 
-        const aIsOfficial = ((a as any).sourceTier || (a as any).source_tier) !== "aggregator_verified";
-        const bIsOfficial = ((b as any).sourceTier || (b as any).source_tier) !== "aggregator_verified";
-        if (aIsOfficial !== bIsOfficial) return bIsOfficial ? 1 : -1;
-
-        return b.cutoffP50 - a.cutoffP50;
-      })
-      .map((c) => {
-        const regionKey = c.region === "nam" ? "tphcm" : c.region === "trung" ? "mientrung" : "hanoi";
-        const regionText =
-          c.province || (c.region === "nam" ? "TP. Hồ Chí Minh" : c.region === "trung" ? "Miền Trung" : "Hà Nội");
-        const matchLevel = c.role === "an_toan" ? "an_toan" : c.role === "mao_hiem" ? "can_co_gang" : "kha_phu_hop";
-        const badgeStyle =
-          c.role === "an_toan"
-            ? { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" }
-            : c.role === "mao_hiem"
-            ? { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" }
-            : { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" };
-        const low = c.cutoffP10 ?? c.cutoffP50;
-        const high = c.cutoffP90 ?? c.cutoffP50;
-
-        return {
-          id: c.programId,
-          programId: c.programId,
-          schoolCode: c.schoolCode,
-          schoolName: c.schoolName,
-          majorName: c.majorName,
-          majorGroup: c.majorGroup,
-          combination: c.combination,
-          region: regionKey,
-          regionLabel: regionText,
-          tuitionDisplay: formatTuitionPerYear(c.tuitionVnd),
-          tuitionVnd: c.tuitionVnd,
-          cutoffDisplay: low === high ? `${c.cutoffP50} điểm` : `${low.toFixed(1)} – ${high.toFixed(1)} điểm`,
-          cutoffP50: c.cutoffP50,
-          yearsOfData: c.yearsOfData,
-          matchLevel,
-          matchLabel: ROLE_LABEL[c.role],
-          badgeStyle,
-          imageSrc: getUniversityImage(c.schoolCode),
-          dataPassportUrl: c.dataPassportUrl,
-          employmentRate: c.employmentRate,
-          aiExposure: c.aiExposure,
-          whyThisOptionVi: c.whyThisOptionVi,
-          userScore: c.userScore,
-          admitProbability: c.admitProbability,
-          role: c.role,
-          sourceTier: ((c as any).sourceTier || (c as any).source_tier || "official_pdf") as "official_pdf" | "aggregator_verified",
-        } satisfies ProgramDisplayItem;
-      });
-  }, [candidates, target?.majorGroup, profile.interestMajorGroups]);
+  // Ngành có ngưỡng điểm nhưng chưa tính được cho em (thiếu điểm học bạ / thiếu môn / cần năng khiếu).
+  const notComputable = useMemo(() => {
+    const computed = new Set(candidates.map((c) => c.majorKey || c.programId));
+    const missing = { hocBa: 0, thpt: 0, other: 0 };
+    const seen = new Set<string>();
+    for (const p of DECISION_PROGRAM_POOL) {
+      const key = p.majorKey || p.programId;
+      if (computed.has(key) || seen.has(key)) continue;
+      const method = programMethod(p);
+      if (!SCORABLE_METHODS.includes(method) || p.requiresAptitude) {
+        missing.other += 1;
+      } else if (!scoreForProgram(profile, p)) {
+        if (method === "HOC_BA") missing.hocBa += 1;
+        else missing.thpt += 1;
+      } else continue;
+      seen.add(key);
+    }
+    return missing;
+  }, [candidates, profile]);
 
   // Bộ lọc đa chiều 5 tiêu chuẩn & tìm kiếm từ khóa
   const filteredPrograms = useMemo(() => {
@@ -203,21 +211,33 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
           }
         }
 
-        // 1. Khu vực
-        if (filters.region !== "all" && item.region !== filters.region) {
+        // 1. Khu vực: vùng của trường, hoặc cùng tỉnh với nhà em
+        if (filters.region === "home") {
+          if (!profile.homeProvince || item.province !== profile.homeProvince) return false;
+        } else if (filters.region !== "all" && item.region !== filters.region) {
           return false;
         }
 
-        // 2. Học phí
+        // 2. Học phí (học phí chưa xác thực không bị loại; thẻ ghi rõ "chưa có dữ liệu")
         if (filters.tuition !== "all") {
-          // Học phí chưa xác thực không bị loại (thẻ hiển thị rõ "Chưa có dữ liệu")
-          if (filters.tuition === "under_20" && !isWithinBudget(item.tuitionVnd, 20_000_000, 1)) return false;
-          if (filters.tuition === "under_40" && !isWithinBudget(item.tuitionVnd, 40_000_000, 1)) return false;
-          if (filters.tuition === "under_60" && !isWithinBudget(item.tuitionVnd, 60_000_000, 1)) return false;
+          const cap =
+            filters.tuition === "budget" ? profile.annualBudgetVnd
+            : filters.tuition === "under_20" ? 20_000_000
+            : filters.tuition === "under_40" ? 40_000_000
+            : 60_000_000;
+          if (cap > 0 && !isWithinBudget(item.tuitionVnd, cap, 1)) return false;
         }
 
-        // 3. Nhóm ngành
-        if (filters.majorGroup !== "all" && item.majorGroup !== filters.majorGroup) {
+        // 3. Nhóm ngành: một nhóm cụ thể, hoặc các nhóm em quan tâm trong hồ sơ
+        if (filters.majorGroup === "interest") {
+          const groups = profile.interestMajorGroups ?? [];
+          if (groups.length > 0 && !groups.includes(item.majorGroup)) return false;
+        } else if (filters.majorGroup !== "all" && item.majorGroup !== filters.majorGroup) {
+          return false;
+        }
+
+        // 3b. Phương thức xét tuyển
+        if (filters.method !== "all" && item.admissionMethod !== filters.method) {
           return false;
         }
 
@@ -239,8 +259,6 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
             return b.cutoffP50 - a.cutoffP50;
           case "cutoff_asc":
             return a.cutoffP50 - b.cutoffP50;
-          case "admit_prob":
-            return b.admitProbability - a.admitProbability;
           case "tuition_asc": {
             const tA = a.tuitionVnd ?? 999_000_000;
             const tB = b.tuitionVnd ?? 999_000_000;
@@ -251,12 +269,11 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
             const eB = b.employmentRate ?? 0;
             return eB - eA;
           }
-          case "utility":
           default:
-            return 0; // Giữ nguyên thứ tự ưu tiên
+            return b.admitProbability - a.admitProbability || b.cutoffP50 - a.cutoffP50;
         }
       });
-  }, [allPrograms, filters]);
+  }, [allPrograms, filters, profile.homeProvince, profile.annualBudgetVnd, profile.interestMajorGroups]);
 
   // Bookmark 2 chiều với wishlist của DecisionContext
   const handleToggleWishlist = (item: ProgramDisplayItem) => {
@@ -292,8 +309,11 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
         role: item.role,
         whyThisOptionVi: item.whyThisOptionVi,
         dataPassportUrl: item.dataPassportUrl,
-        region: item.region === "tphcm" ? "nam" : item.region === "mientrung" ? "trung" : "bac",
-        province: item.regionLabel,
+        region: item.region ?? undefined,
+        province: item.province || undefined,
+        admissionMethod: item.admissionMethod,
+        methodInferred: item.methodInferred,
+        sourceTier: item.sourceTier,
       };
 
       const success = addWishlistItem(candOption);
@@ -305,6 +325,10 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
   };
 
   const visiblePrograms = filteredPrograms.slice(0, visibleCount);
+  const availableCombinations = useMemo(
+    () => Array.from(new Set(allPrograms.map((p) => p.combination).filter(Boolean))).sort(),
+    [allPrograms],
+  );
   const hasScores = candidates.length > 0;
 
   return (
@@ -337,8 +361,22 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
           filters={filters}
           onChange={handleFilterChange}
           totalMatches={filteredPrograms.length}
+          availableCombinations={availableCombinations}
+          homeProvince={profile.homeProvince}
+          annualBudgetVnd={profile.annualBudgetVnd}
+          interestCount={profile.interestMajorGroups?.length ?? 0}
         />
       </section>
+
+      {hasScores && notComputable.hocBa + notComputable.thpt + notComputable.other > 0 && (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/70 px-4 py-3 text-xs text-amber-900 leading-relaxed">
+          <span className="font-extrabold">Chưa tính được xác suất cho một số ngành:</span>{" "}
+          {notComputable.hocBa > 0 && <>{notComputable.hocBa} ngành xét học bạ (em chưa nhập điểm học bạ đủ môn của tổ hợp); </>}
+          {notComputable.thpt > 0 && <>{notComputable.thpt} ngành xét điểm thi (em chưa có đủ điểm các môn của tổ hợp ngành đó); </>}
+          {notComputable.other > 0 && <>{notComputable.other} ngành chỉ có điểm chuẩn theo phương thức khác (ĐGNL, năng khiếu, kết hợp…) hệ thống chưa quy đổi được.</>}{" "}
+          <Link href="/profile" className="font-bold text-blue-700 underline">Bổ sung điểm trong hồ sơ</Link>
+        </div>
+      )}
 
       {/* 4. LƯỚI THẺ CHƯƠNG TRÌNH: RESPONSIVE 1 COL (<900px), 2 COLS (900-1359px), 3 COLS (>=1360px) */}
       {!hasScores ? (
@@ -347,7 +385,7 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
             Nhập điểm để xem những ngành phù hợp với bạn
           </h3>
           <p className="text-xs text-slate-500 leading-relaxed text-pretty max-w-md mx-auto">
-            Hệ thống cần đủ điểm 3 môn của ít nhất một tổ hợp để so sánh với điểm chuẩn các năm trước.
+            Hệ thống cần đủ điểm 3 môn của ít nhất một tổ hợp (điểm thi hoặc điểm học bạ) để so sánh với điểm chuẩn các năm trước theo đúng phương thức.
           </p>
           <Link
             href="/profile"
@@ -431,6 +469,8 @@ export function ExploreOptionsView({ onNavigateToPortfolio }: ExploreOptionsView
         filters={filters}
         onResetFilters={handleResetFilters}
         portfolioHref="/portfolio"
+        homeProvince={profile.homeProvince}
+        annualBudgetVnd={profile.annualBudgetVnd}
       />
 
       {/* 6. FLOATING COMPARE DOCK */}

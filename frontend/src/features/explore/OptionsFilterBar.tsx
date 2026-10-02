@@ -9,6 +9,7 @@ import {
   ListFilter,
   Star,
   ChevronDown,
+  FileCheck2,
 } from "lucide-react";
 import {
   OptionsFilterState,
@@ -17,19 +18,32 @@ import {
   MajorGroupFilter,
   CombinationFilter,
   MatchFilter,
+  MethodFilter,
 } from "@/features/explore/types";
+import { MAJOR_GROUPS } from "@/engine/types";
+import { combinationLabel } from "@/data/universities/combinations";
 
 interface OptionsFilterBarProps {
   filters: OptionsFilterState;
   onChange: (updates: Partial<OptionsFilterState>) => void;
   totalMatches: number;
+  /** Tổ hợp xuất hiện trong danh sách hiện tại (để không gợi ý tổ hợp vô nghĩa). */
+  availableCombinations: string[];
+  homeProvince?: string;
+  annualBudgetVnd?: number;
+  interestCount?: number;
 }
 
 export function OptionsFilterBar({
   filters,
   onChange,
   totalMatches,
+  availableCombinations,
+  homeProvince,
+  annualBudgetVnd = 0,
+  interestCount = 0,
 }: OptionsFilterBarProps) {
+  const budgetMillions = Math.round(annualBudgetVnd / 1_000_000);
   return (
     <div className="rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-xs space-y-3">
       {/* HÀNG TRÊN: TÌM KIẾM + SẮP XẾP + TỔNG KẾT QUẢ */}
@@ -68,12 +82,11 @@ export function OptionsFilterBar({
                 aria-label="Sắp xếp kết quả"
                 className="appearance-none bg-transparent pr-5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none cursor-pointer"
               >
-                <option value="utility">Độ phù hợp tối ưu</option>
+                <option value="admit_prob">Xác suất đỗ: Cao → Thấp</option>
                 <option value="cutoff_desc">Điểm chuẩn: Cao → Thấp</option>
                 <option value="cutoff_asc">Điểm chuẩn: Thấp → Cao</option>
-                <option value="admit_prob">Khả năng đỗ cao nhất</option>
                 <option value="tuition_asc">Học phí: Thấp → Cao</option>
-                <option value="employment_desc">Tỷ lệ việc làm cao nhất</option>
+                <option value="employment_desc">Tỷ lệ việc làm (nếu có dữ liệu)</option>
               </select>
               <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
             </div>
@@ -86,13 +99,13 @@ export function OptionsFilterBar({
             {totalMatches}
           </span>
           <span className="text-xs font-bold text-slate-700 leading-none whitespace-nowrap">
-            phương án
+            ngành thỏa điều kiện
           </span>
         </div>
       </div>
 
-      {/* HÀNG DƯỚI: 5 BỘ LỌC ĐA CHIỀU */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5">
+      {/* HÀNG DƯỚI: 6 BỘ LỌC RÀNG BUỘC */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
         {/* 1. KHU VỰC */}
         <div className="relative rounded-xl border border-slate-200/90 bg-slate-50/70 p-2 sm:p-2.5 transition-colors hover:border-slate-300 focus-within:border-blue-600 focus-within:bg-white focus-within:ring-1 focus-within:ring-blue-600 min-w-0">
           <label className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
@@ -106,10 +119,11 @@ export function OptionsFilterBar({
               aria-label="Lọc theo khu vực"
               className="w-full appearance-none bg-transparent pr-5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none cursor-pointer"
             >
-              <option value="all">Tất cả</option>
-              <option value="hanoi">Hà Nội</option>
-              <option value="tphcm">TP.HCM</option>
-              <option value="mientrung">Miền Trung</option>
+              <option value="all">Cả nước</option>
+              <option value="bac">Miền Bắc</option>
+              <option value="trung">Miền Trung</option>
+              <option value="nam">Miền Nam</option>
+              {homeProvince && <option value="home">Cùng tỉnh nhà ({homeProvince})</option>}
             </select>
             <ChevronDown className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
           </div>
@@ -129,6 +143,7 @@ export function OptionsFilterBar({
               className="w-full appearance-none bg-transparent pr-5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none cursor-pointer"
             >
               <option value="all">Tất cả</option>
+              {budgetMillions > 0 && <option value="budget">Trong ngân sách (&le; {budgetMillions} triệu)</option>}
               <option value="under_20">&le; 20 triệu/năm</option>
               <option value="under_40">&le; 40 triệu/năm</option>
               <option value="under_60">&le; 60 triệu/năm</option>
@@ -151,12 +166,32 @@ export function OptionsFilterBar({
               className="w-full appearance-none bg-transparent pr-5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none cursor-pointer"
             >
               <option value="all">Tất cả</option>
-              <option value="cntt">CNTT &amp; AI</option>
-              <option value="kinh_te">Kinh tế &amp; Quản trị</option>
-              <option value="ky_thuat">Kỹ thuật &amp; Công nghệ</option>
-              <option value="y_duoc">Y Dược</option>
-              <option value="luat">Luật</option>
-              <option value="ngon_ngu">Ngôn ngữ</option>
+              {interestCount > 0 && <option value="interest">Ngành em quan tâm ({interestCount} nhóm)</option>}
+              {MAJOR_GROUPS.map((g) => (
+                <option key={g.value} value={g.value}>{g.label}</option>
+              ))}
+              <option value="other">Nhóm khác</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          </div>
+        </div>
+
+        {/* PHƯƠNG THỨC */}
+        <div className="relative rounded-xl border border-slate-200/90 bg-slate-50/70 p-2 sm:p-2.5 transition-colors hover:border-slate-300 focus-within:border-blue-600 focus-within:bg-white focus-within:ring-1 focus-within:ring-blue-600 min-w-0">
+          <label className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+            <FileCheck2 className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+            <span className="truncate">Phương thức</span>
+          </label>
+          <div className="relative mt-1">
+            <select
+              value={filters.method}
+              onChange={(e) => onChange({ method: e.target.value as MethodFilter })}
+              aria-label="Lọc theo phương thức xét tuyển"
+              className="w-full appearance-none bg-transparent pr-5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none cursor-pointer"
+            >
+              <option value="all">Phương thức tốt nhất</option>
+              <option value="THPT">Điểm thi tốt nghiệp THPT</option>
+              <option value="HOC_BA">Học bạ</option>
             </select>
             <ChevronDown className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
           </div>
@@ -176,19 +211,16 @@ export function OptionsFilterBar({
               className="w-full appearance-none bg-transparent pr-5 text-xs sm:text-sm font-bold text-slate-900 focus:outline-none cursor-pointer"
             >
               <option value="all">Tất cả</option>
-              <option value="A00">A00 (Toán, Lý, Hóa)</option>
-              <option value="A01">A01 (Toán, Lý, Anh)</option>
-              <option value="D01">D01 (Toán, Văn, Anh)</option>
-              <option value="D07">D07 (Toán, Hóa, Anh)</option>
-              <option value="B00">B00 (Toán, Hóa, Sinh)</option>
-              <option value="C00">C00 (Văn, Sử, Địa)</option>
+              {availableCombinations.map((code) => (
+                <option key={code} value={code}>{combinationLabel(code)}</option>
+              ))}
             </select>
             <ChevronDown className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
           </div>
         </div>
 
         {/* 5. MỨC ĐỘ PHÙ HỢP */}
-        <div className="relative rounded-xl border border-slate-200/90 bg-slate-50/70 p-2 sm:p-2.5 transition-colors hover:border-slate-300 focus-within:border-blue-600 focus-within:bg-white focus-within:ring-1 focus-within:ring-blue-600 min-w-0 col-span-2 sm:col-span-1">
+        <div className="relative rounded-xl border border-slate-200/90 bg-slate-50/70 p-2 sm:p-2.5 transition-colors hover:border-slate-300 focus-within:border-blue-600 focus-within:bg-white focus-within:ring-1 focus-within:ring-blue-600 min-w-0">
           <label className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
             <Star className="h-3.5 w-3.5 text-blue-600 shrink-0" />
             <span className="truncate">Mức độ</span>

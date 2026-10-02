@@ -20,6 +20,7 @@ import {
 import { useDecision } from "@/state/DecisionContext";
 import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { ExamScores } from "@/engine/types";
+import { scoreForProgram, METHOD_LABELS_VI } from "@/engine/scoring/method-score";
 
 function getSubjectIcon(subKey: string) {
   switch (subKey) {
@@ -65,24 +66,27 @@ function getSubjectColors(subKey: string) {
 export default function AnalysisPage() {
   const { profile, target, gapAnalysis, subjectRoiList } = useDecision();
 
-  const activeCombo = profile.activeCombination || "A00";
-  const comboSubjects = (COMBINATION_SUBJECTS[activeCombo] || ["toan", "ly", "hoa"]) as (keyof ExamScores)[];
+  // Tổ hợp dùng để xét ngành mục tiêu (theo phương thức của ngành), không phải tổ hợp mặc định.
+  const targetMethodScore = target ? scoreForProgram(profile, target) : null;
+  const activeCombo = targetMethodScore?.combo || profile.activeCombination || "";
+  const comboSubjects = (COMBINATION_SUBJECTS[activeCombo] || []) as (keyof ExamScores)[];
+  const scoreSource = targetMethodScore?.method === "HOC_BA" ? profile.hocBaScores : profile.examScores;
 
   const [selectedQuickSub, setSelectedQuickSub] = useState<keyof ExamScores>(comboSubjects[0] || "toan");
 
   const currentQuickSub = comboSubjects.includes(selectedQuickSub) ? selectedQuickSub : comboSubjects[0];
 
-  const rawSum = comboSubjects.reduce((acc, sub) => acc + (profile.examScores?.[sub] ?? 0), 0);
-  const currentScore = gapAnalysis.currentCompositeScore > 0 ? gapAnalysis.currentCompositeScore : rawSum;
-  const targetScore = target?.forecastP50 || target?.cutoff2024 || 25.0;
-  const rawGap = targetScore - currentScore;
-  const gapScore = Math.max(0, rawGap);
-  const isSafe = currentScore >= targetScore && currentScore > 0;
+  // Một nguồn số duy nhất: gapAnalysis (cùng hàm với Tổng quan, Khoảng cách, Danh mục).
+  const currentScore = gapAnalysis.currentCompositeScore;
+  const targetScore = gapAnalysis.p50;
+  const gapScore = Math.max(0, -gapAnalysis.rawGap);
+  const isSafe = currentScore > 0 && gapAnalysis.rawGap >= 0;
+  const ready = Boolean(target) && currentScore > 0 && targetScore > 0;
 
   // Lấy dữ liệu phân tích ROI thực tế cho môn đang chọn
   const activeRoiItem = subjectRoiList.find((s) => s.subject === currentQuickSub) || subjectRoiList[0];
-  const quickSimDelta = activeRoiItem?.unlockedOptionsCount ?? 4;
-  const quickGapReduction = activeRoiItem?.gapReduction ?? 0.5;
+  const quickSimDelta = activeRoiItem?.unlockedOptionsCount ?? 0;
+  const quickGapReduction = activeRoiItem?.gapReduction ?? 0;
 
   // Lấy top môn ưu tiên từ SSOT
   const topRoi = subjectRoiList[0];
@@ -92,9 +96,10 @@ export default function AnalysisPage() {
   const sortedByCurrentScore = [...comboSubjects]
     .map((sub) => ({
       sub,
-      score: profile.examScores?.[sub] ?? 0,
+      score: scoreSource?.[sub] ?? 0,
       label: SUBJECT_LABELS_VI[sub] || sub,
     }))
+    .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score);
   const bestCurrentSubject = sortedByCurrentScore[0];
 
@@ -126,6 +131,21 @@ export default function AnalysisPage() {
         </Link>
       </div>
 
+      {!ready ? (
+        <section className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-2xs">
+          <p className="text-base font-extrabold text-slate-900">Chưa đủ dữ liệu để phân tích</p>
+          <p className="mt-2 text-sm text-slate-600">
+            {!target
+              ? "Hãy chọn ngành mục tiêu để xem em đang cách điểm chuẩn bao xa."
+              : "Hãy nhập điểm các môn trong tổ hợp xét tuyển của ngành mục tiêu (điểm thi hoặc học bạ, tùy phương thức)."}
+          </p>
+          <div className="mt-4 flex justify-center gap-2">
+            <Link href="/profile" className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Nhập hồ sơ</Link>
+            <Link href="/profile/goal" className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold">Chọn mục tiêu</Link>
+          </div>
+        </section>
+      ) : (
+      <>
       {/* 1. HEADER CARD: BỨC TRANH NĂNG LỰC VÀ MỤC TIÊU */}
       <section className="rounded-2xl border border-blue-200 bg-blue-50/50 p-6 sm:p-7 space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
@@ -174,7 +194,7 @@ export default function AnalysisPage() {
                   Điểm ({activeCombo})
                 </p>
                 <p className="text-lg font-black text-blue-700 leading-tight">
-                  {currentScore.toFixed(1)} <span className="text-xs font-normal text-slate-500">/ 30</span>
+                  {currentScore.toFixed(2)} <span className="text-xs font-normal text-slate-500">/ 30</span>
                 </p>
               </div>
             </div>
@@ -187,7 +207,7 @@ export default function AnalysisPage() {
               <div>
                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Mục tiêu P50</p>
                 <p className="text-lg font-black text-indigo-700 leading-tight">
-                  {targetScore.toFixed(1)} <span className="text-xs font-normal text-slate-500">/ 30</span>
+                  {targetScore.toFixed(2)} <span className="text-xs font-normal text-slate-500">/ 30</span>
                 </p>
               </div>
             </div>
@@ -208,7 +228,7 @@ export default function AnalysisPage() {
                     isSafe ? "text-emerald-700" : "text-rose-700"
                   }`}
                 >
-                  {isSafe ? "An toàn" : `-${gapScore.toFixed(1)}đ`}
+                  {isSafe ? "An toàn" : `-${gapScore.toFixed(2)}đ`}
                 </p>
               </div>
             </div>
@@ -239,12 +259,10 @@ export default function AnalysisPage() {
           {/* Danh sách các môn trong tổ hợp thực tế */}
           <div className="space-y-4 py-1">
             {comboSubjects.map((subKey) => {
-              const score = profile.examScores?.[subKey] ?? 0;
+              const score = scoreSource?.[subKey] ?? 0;
               const subLabel = SUBJECT_LABELS_VI[subKey] || subKey;
               const colors = getSubjectColors(subKey);
-
-              // Khoảng cách ước tính cho từng môn (chia đều khoảng cách cần đạt)
-              const neededForSubject = Math.max(0, gapScore / comboSubjects.length);
+              const roi = subjectRoiList.find((r) => r.subject === subKey);
 
               return (
                 <div key={subKey} className="flex items-center gap-3">
@@ -263,22 +281,22 @@ export default function AnalysisPage() {
                   <span className="font-black text-xs text-slate-700 w-14 text-right">
                     {score.toFixed(1)} / 10
                   </span>
-                  {isSafe || neededForSubject === 0 ? (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-                      Đang an toàn
+                  {roi ? (
+                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shrink-0" title="Số ngành thêm vào tầm với nếu môn này tăng 0,5 điểm">
+                      +0,5đ → +{roi.unlockedOptionsCount} ngành
                     </span>
-                  ) : (
-                    <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 shrink-0">
-                      Cần +{neededForSubject.toFixed(1)}đ
-                    </span>
-                  )}
+                  ) : null}
                 </div>
               );
             })}
           </div>
 
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-            <span>Tổ hợp đang chọn: <strong>{activeCombo}</strong></span>
+            <span>
+              Tổ hợp xét ngành mục tiêu: <strong>{activeCombo}</strong>
+              {targetMethodScore ? ` · ${METHOD_LABELS_VI[targetMethodScore.method]}` : ""}
+              {isSafe ? " · đang cao hơn điểm chuẩn tham chiếu" : gapScore > 0 ? ` · còn thiếu ${gapScore.toFixed(2)}đ` : ""}
+            </span>
             <Link href="/profile" className="text-blue-600 hover:text-blue-800 font-bold">
               Đổi tổ hợp môn →
             </Link>
@@ -422,6 +440,8 @@ export default function AnalysisPage() {
           </div>
         </div>
       </section>
+      </>
+      )}
     </div>
   );
 }

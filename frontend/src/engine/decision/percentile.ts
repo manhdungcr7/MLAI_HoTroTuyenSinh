@@ -770,25 +770,3 @@ export function hsaToThpt(hsaScore: number, combo = 'A00'): number {
   return 20.0;
 }
 
-/**
- * Quy đổi điểm thi ĐGNL ĐHQG-HCM (V-ACT, thang 1200) sang điểm THPT theo phân vị
- * Công bố tham khảo ĐHQG-HCM (tương đương chuẩn 2026)
- */
-export function vactToThpt(vactScore: number): number {
-  if (vactScore <= 0) return 0;
-  if (vactScore >= 1100) return 29.0;
-  if (vactScore <= 500) return 16.0;
-
-  // Điểm V-ACT 850/1200 tương đương 25.8 THPT; 600/1200 tương đương 18.5 THPT; 1100 tương đương 29.0
-  if (vactScore >= 850) {
-    const ratio = (vactScore - 850) / (1100 - 850);
-    return Number((25.8 + ratio * (29.0 - 25.8)).toFixed(2));
-  } else if (vactScore >= 600) {
-    const ratio = (vactScore - 600) / (850 - 600);
-    return Number((18.5 + ratio * (25.8 - 18.5)).toFixed(2));
-  } else {
-    const ratio = (vactScore - 500) / (600 - 500);
-    return Number((16.0 + ratio * (18.5 - 16.0)).toFixed(2));
-  }
-}
-

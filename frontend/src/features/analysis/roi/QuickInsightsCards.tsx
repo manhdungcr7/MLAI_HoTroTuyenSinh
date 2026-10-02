@@ -14,32 +14,8 @@ interface QuickInsightsCardsProps {
   className?: string;
 }
 
-const DEFAULT_INSIGHTS: InsightCardItem[] = [
-  {
-    id: 1,
-    badgeNumber: 1,
-    badgeBgColor: "bg-emerald-500",
-    title: "Ưu tiên Tiếng Anh",
-    description: "Tăng điểm Tiếng Anh mang lại nhiều lựa chọn ngành/trường mới nhất.",
-  },
-  {
-    id: 2,
-    badgeNumber: 2,
-    badgeBgColor: "bg-blue-600",
-    title: "Giữ ổn định Toán",
-    description: "Toán đang ở mức tốt, tiếp tục duy trì để đảm bảo lợi thế cạnh tranh.",
-  },
-  {
-    id: 3,
-    badgeNumber: 3,
-    badgeBgColor: "bg-purple-600",
-    title: "Vật lý vẫn quan trọng",
-    description: "Tăng điểm Vật lý giúp mở thêm lựa chọn ở các nhóm ngành kỹ thuật, công nghệ.",
-  },
-];
-
 export const QuickInsightsCards: React.FC<QuickInsightsCardsProps> = ({
-  insights = DEFAULT_INSIGHTS,
+  insights = [],
   className = "",
 }) => {
   return (

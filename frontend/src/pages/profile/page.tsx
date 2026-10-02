@@ -30,7 +30,7 @@ import {
 import Link from "@/components/navigation/HashLink";
 import { useDecision } from "@/state/DecisionContext";
 import { DECISION_PROGRAM_POOL, ProgramCatalogItem } from "@/data/catalog";
-import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
+import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI, combinationLabel } from "@/data/universities/combinations";
 import { PROVINCES, PriorityArea, PriorityObject, ExamScores } from "@/engine/types";
 
 // Icon đại diện cho từng môn học
@@ -59,6 +59,10 @@ const SUBJECT_COLORS: Record<string, string> = {
   gdcd: "bg-indigo-50 text-indigo-600",
 };
 
+/** Các môn của chương trình GDPT 2018 có trong tổ hợp xét tuyển. */
+const ALL_SUBJECTS = ["toan", "van", "anh", "ly", "hoa", "sinh", "su", "dia", "gdcd", "tin", "cncn", "cnnn"];
+const COMBO_OPTIONS = Object.keys(COMBINATION_SUBJECTS).sort();
+
 export default function ProfilePage() {
   const {
     profile,
@@ -77,6 +81,18 @@ export default function ProfilePage() {
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const [showAltScores, setShowAltScores] = useState(true);
   const [showAchievements, setShowAchievements] = useState(true);
+  const [showHocBa, setShowHocBa] = useState(true);
+
+  const updateHocBaScore = (subject: keyof ExamScores, raw: string) => {
+    const value = raw === "" ? null : parseFloat(raw);
+    if (value !== null && (!Number.isFinite(value) || value < 0 || value > 10)) return;
+    updateProfile({
+      hocBaScores: {
+        ...(profile.hocBaScores ?? {}),
+        [subject]: value === null ? null : Math.round(value * 100) / 100,
+      },
+    });
+  };
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -87,7 +103,7 @@ export default function ProfilePage() {
     showToast("Đã lưu hồ sơ học tập và đồng bộ thành công!");
   };
 
-  // Danh sách các trường đại học duy nhất từ toàn bộ Catalog 115 trường
+  // Danh sách các trường đại học duy nhất từ toàn bộ catalog
   const universityList = useMemo(() => {
     const map = new Map<string, { code: string; name: string }>();
     for (const prog of DECISION_PROGRAM_POOL) {
@@ -136,7 +152,7 @@ export default function ProfilePage() {
   const activeComboSubjects = COMBINATION_SUBJECTS[activeCombo] || ["toan", "ly", "hoa"];
 
   // Các môn thi khác (ngoài tổ hợp)
-  const allOtherSubjects = (["toan", "van", "anh", "ly", "hoa", "sinh", "su", "dia", "gdcd"] as (keyof ExamScores)[])
+  const allOtherSubjects = (ALL_SUBJECTS as (keyof ExamScores)[])
     .filter((s) => !activeComboSubjects.includes(s));
 
   // Tính điểm ưu tiên theo Quy chế TT06/2026 của Bộ GD&ĐT
@@ -349,16 +365,9 @@ export default function ProfilePage() {
                 onChange={(e) => updateProfile({ activeCombination: e.target.value })}
                 className="font-black text-blue-700 text-xs sm:text-sm bg-white border border-blue-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer shadow-2xs"
               >
-                <option value="A00">A00 (Toán, Lý, Hóa)</option>
-                <option value="A01">A01 (Toán, Lý, Anh)</option>
-                <option value="B00">B00 (Toán, Hóa, Sinh)</option>
-                <option value="C00">C00 (Văn, Sử, Địa)</option>
-                <option value="D01">D01 (Toán, Văn, Anh)</option>
-                <option value="D07">D07 (Toán, Hóa, Anh)</option>
-                <option value="C01">C01 (Văn, Toán, Lý)</option>
-                <option value="D08">D08 (Toán, Sinh, Anh)</option>
-                <option value="D09">D09 (Toán, Sử, Anh)</option>
-                <option value="D10">D10 (Toán, Địa, Anh)</option>
+                {COMBO_OPTIONS.map((code) => (
+                  <option key={code} value={code}>{combinationLabel(code)}</option>
+                ))}
               </select>
             </div>
 
@@ -423,7 +432,7 @@ export default function ProfilePage() {
                 <span>
                   {showAllSubjects
                     ? "Thu gọn các môn khác"
-                    : "Nhập thêm điểm các môn thi khác (nếu có)"}
+                    : "Nhập thêm điểm các môn khác (để hệ thống tính được nhiều tổ hợp, nhiều ngành hơn)"}
                 </span>
               </button>
 
@@ -475,6 +484,60 @@ export default function ProfilePage() {
               )}
             </div>
 
+            {/* PHẦN: ĐIỂM HỌC BẠ THEO MÔN (PHƯƠNG THỨC XÉT HỌC BẠ) */}
+            <div className="pt-3 border-t border-slate-100 space-y-3">
+              <button
+                type="button"
+                onClick={() => setShowHocBa((prev) => !prev)}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-emerald-50/80 to-teal-50/50 border border-emerald-200/80 hover:border-emerald-300 transition cursor-pointer text-left"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                    <BookOpen className="w-4.5 h-4.5" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-extrabold text-slate-900">Điểm học bạ theo môn</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">Xét học bạ</span>
+                  </div>
+                </div>
+                {showHocBa ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+              </button>
+
+              {showHocBa && (
+                <div className="space-y-3 p-3.5 rounded-xl border border-emerald-100 bg-emerald-50/20 animate-in fade-in duration-150">
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    Nhập điểm trung bình môn em dùng để xét học bạ (thường là TB cả năm lớp 12, hoặc TB 3 năm tùy trường).
+                    Hệ thống cộng 3 môn của tổ hợp rồi so với điểm chuẩn xét học bạ các năm trước. Mỗi trường có công thức
+                    riêng, nên đây là ước lượng — hãy đối chiếu đề án của trường trước khi nộp.
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {ALL_SUBJECTS.map((subKey) => {
+                      const value = profile.hocBaScores?.[subKey as keyof ExamScores];
+                      return (
+                        <label
+                          key={subKey}
+                          className="flex items-center justify-between gap-2 p-2 rounded-lg border border-slate-200 bg-white"
+                        >
+                          <span className="text-xs font-semibold text-slate-800 truncate">{SUBJECT_LABELS_VI[subKey] || subKey}</span>
+                          <input
+                            type="number"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                            placeholder="–"
+                            aria-label={`Điểm học bạ ${SUBJECT_LABELS_VI[subKey] || subKey}`}
+                            value={value !== undefined && value !== null ? value : ""}
+                            onChange={(e) => updateHocBaScore(subKey as keyof ExamScores, e.target.value)}
+                            className="w-16 text-right font-black text-slate-900 text-xs bg-slate-50 border border-slate-200 rounded-md px-1.5 py-1 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                          />
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* PHẦN: CHỨNG CHỈ NGOẠI NGỮ & KỲ THI ĐGNL / ĐGTD (XÉT KẾT HỢP) */}
             <div className="pt-3 border-t border-slate-100 space-y-3">
               <button
@@ -504,6 +567,11 @@ export default function ProfilePage() {
 
               {showAltScores && (
                 <div className="space-y-3 p-3.5 rounded-xl border border-sky-100 bg-sky-50/20 animate-in fade-in duration-150">
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    <span className="font-bold text-slate-800">Lưu ý:</span> hiện hệ thống chỉ dùng <b>IELTS</b> (quy đổi thay môn Tiếng Anh
+                    khi tính điểm xét tuyển). Các điểm còn lại được lưu để em theo dõi, nhưng <b>chưa được dùng để tính xác suất đỗ</b>
+                    vì dữ liệu điểm chuẩn theo các phương thức ĐGNL / ĐGTD / chứng chỉ quốc tế chưa đủ tin cậy để quy đổi.
+                  </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {/* IELTS */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
@@ -659,27 +727,6 @@ export default function ProfilePage() {
                       </div>
                     </div>
 
-                    {/* Học bạ GPA */}
-                    <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-black text-slate-900">Điểm học bạ THPT (GPA)</span>
-                        <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Thang 10</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <input
-                          type="number"
-                          min="0"
-                          max="10"
-                          step="0.05"
-                          placeholder="0.0"
-                          value={altScores.hoc_ba_gpa ?? ""}
-                          onChange={(e) =>
-                            updateAltScore("hoc_ba_gpa", e.target.value === "" ? null : parseFloat(e.target.value))
-                          }
-                          className="w-20 text-right font-black text-slate-900 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                        />
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}
@@ -714,6 +761,10 @@ export default function ProfilePage() {
 
               {showAchievements && (
                 <div className="space-y-3 p-3.5 rounded-xl border border-amber-100 bg-amber-50/20 animate-in fade-in duration-150">
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    Thành tích được lưu để em đối chiếu với điều kiện tuyển thẳng / ưu tiên xét tuyển trong đề án từng trường.
+                    Hệ thống <b>chưa cộng điểm thưởng</b> vào xác suất đỗ, vì mức cộng khác nhau giữa các trường.
+                  </p>
                   <div className="space-y-2.5">
                     {/* HSG Quốc gia */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">

@@ -11,56 +11,61 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { OptionsFilterState } from "@/features/explore/types";
+import { MAJOR_GROUPS } from "@/engine/types";
 
 interface ActiveCriteriaBarProps {
   filters: OptionsFilterState;
   onResetFilters: () => void;
   portfolioHref?: string;
+  homeProvince?: string;
+  annualBudgetVnd?: number;
 }
 
 export function ActiveCriteriaBar({
   filters,
   onResetFilters,
   portfolioHref = "/portfolio",
+  homeProvince,
+  annualBudgetVnd = 0,
 }: ActiveCriteriaBarProps) {
   // Nhãn hiển thị thân thiện
   const regionText = {
-    all: "Tất cả",
-    hanoi: "Hà Nội",
-    tphcm: "TP.HCM",
-    mientrung: "Miền Trung",
+    all: "Cả nước",
+    bac: "Miền Bắc",
+    trung: "Miền Trung",
+    nam: "Miền Nam",
+    home: `Cùng tỉnh (${homeProvince ?? "chưa khai"})`,
   }[filters.region];
 
   const tuitionText = {
     all: "Tất cả",
+    budget: `\u2264 ${Math.round(annualBudgetVnd / 1_000_000)} triệu (ngân sách của em)`,
     under_20: "\u2264 20 triệu",
     under_40: "\u2264 40 triệu",
     under_60: "\u2264 60 triệu",
   }[filters.tuition];
 
-  const majorText = {
-    all: "Tất cả",
-    cntt: "CNTT & AI",
-    kinh_te: "Kinh tế",
-    ky_thuat: "Kỹ thuật",
-    y_duoc: "Y Dược",
-    luat: "Luật",
-    ngon_ngu: "Ngôn ngữ",
-  }[filters.majorGroup] || "Tất cả";
+  const majorText =
+    filters.majorGroup === "all" ? "Tất cả"
+    : filters.majorGroup === "interest" ? "Nhóm em quan tâm"
+    : MAJOR_GROUPS.find((g) => g.value === filters.majorGroup)?.label ?? "Nhóm khác";
+
+  const methodText = { all: "Tốt nhất cho em", THPT: "Điểm thi THPT", HOC_BA: "Học bạ" }[filters.method];
 
   const comboText = filters.combination === "all" ? "Tất cả" : filters.combination;
 
   const matchText = {
     all: "Tất cả",
-    kha_phu_hop: "Phù hợp (Target)",
-    an_toan: "An toàn (Safety)",
-    can_co_gang: "Thử sức (Reach)",
+    kha_phu_hop: "Vừa tầm",
+    an_toan: "An toàn",
+    can_co_gang: "Thử sức",
   }[filters.matchLevel];
 
   const isCustomized =
     filters.region !== "all" ||
     filters.tuition !== "all" ||
     filters.majorGroup !== "all" ||
+    filters.method !== "all" ||
     filters.combination !== "all" ||
     filters.matchLevel !== "all";
 
@@ -77,7 +82,7 @@ export function ActiveCriteriaBar({
               Tiêu chí đang áp dụng
             </h4>
             <p className="text-xs text-slate-500">
-              Các gợi ý phía trên được lọc theo những tiêu chí sau:
+              Danh sách được lọc theo ràng buộc của em và xếp theo xác suất đỗ:
             </p>
           </div>
         </div>
@@ -103,6 +108,13 @@ export function ActiveCriteriaBar({
             <BookOpen className="h-3.5 w-3.5 text-blue-600 shrink-0" />
             <span className="text-slate-500">Ngành:</span>
             <span className="font-bold text-slate-900">{majorText}</span>
+          </div>
+
+          {/* PHƯƠNG THỨC */}
+          <div className="flex items-center gap-1.5 rounded-xl border border-slate-200/90 bg-slate-50 px-3 py-1.5 font-medium text-slate-700">
+            <Settings2 className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+            <span className="text-slate-500">Phương thức:</span>
+            <span className="font-bold text-slate-900">{methodText}</span>
           </div>
 
           {/* TỔ HỢP */}

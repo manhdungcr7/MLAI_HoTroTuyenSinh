@@ -55,6 +55,58 @@ def load_panels() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     return cutoff, tuition, employment
 
 
+_SUBJECT_WORD = (
+    r"(?:Toán|Ngữ văn|Văn|Vật lí|Vật lý|Lý|Hóa học|Hoá học|Hóa|Hoá|Sinh học|Sinh|Lịch sử|Sử|"
+    r"Địa lí|Địa lý|Địa|Tiếng Anh|Anh|GDCD|GDKT&PL|Tin học|Tin)"
+)
+_COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*")
+_CODE_ONLY = re.compile(r"\s*(?:[A-Z]\d{2}|PT\s*\d+|[A-Z]{2,4}|[\d\s,.;:\-–_/()]*)\s*")
+_NOT_REGULAR = re.compile(r"liên thông|văn bằng\s*(?:2|hai)|VB2", re.IGNORECASE)
+
+
+def is_garbage_major_label(label: object) -> bool:
+    """Nhãn ngành không phải tên ngành (mảnh câu PDF, điểm số, mã tổ hợp, danh sách môn)
+    hoặc chương trình không tuyển học sinh lớp 12 (liên thông, văn bằng 2)."""
+    if not isinstance(label, str):
+        return True
+    text = label.strip()
+    if len(text) < 3 or not any(ch.isalpha() for ch in text):
+        return True
+    if text[0].islower():  # mảnh câu bị ngắt dòng từ PDF
+        return True
+    if _CODE_ONLY.fullmatch(text) or _COMBO_LIKE.fullmatch(text):
+        return True
+    return bool(_NOT_REGULAR.search(text))
+
+
+def drop_cross_school_copies(
+    cutoff: pd.DataFrame, min_rows: int = 5, min_share: float = 0.5
+) -> pd.DataFrame:
+    """Loại các dòng điểm bị gán cho nhiều trường (vd. đề án chung của ĐH Huế gán cho mọi
+    trường thành viên). Hai trường cùng năm có >= `min_rows` dòng trùng khít (ngành, điểm)
+    và phần trùng chiếm >= `min_share` khối nhỏ hơn được coi là cùng một tài liệu bị sao chép;
+    không xác định được trường sở hữu nên bỏ các dòng trùng ở cả hai trường.
+    """
+    if cutoff.empty:
+        return cutoff
+    sig = cutoff["major_label"].map(_normalize) + "|" + cutoff["score"].round(2).astype(str)
+    drop = pd.Series(False, index=cutoff.index)
+    for _, block in cutoff.groupby("cutoff_year"):
+        sets = {
+            school: set(sig.loc[rows.index])
+            for school, rows in block.groupby("school_code")
+        }
+        schools = sorted(sets)
+        for i, a in enumerate(schools):
+            for b in schools[i + 1:]:
+                common = sets[a] & sets[b]
+                smaller = min(len(sets[a]), len(sets[b]))
+                if len(common) >= min_rows and len(common) >= min_share * smaller:
+                    in_pair = block["school_code"].isin([a, b]) & sig.loc[block.index].isin(common)
+                    drop.loc[in_pair[in_pair].index] = True
+    return cutoff[~drop].copy()
+
+
 def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
     """Lọc biên điểm, chuẩn hoá nhãn ngành và gắn phương thức cho từng dòng điểm chuẩn.
 
@@ -63,13 +115,17 @@ def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
     """
     cutoff = cutoff.copy()
 
-    # 1. Chặn biên điểm chuẩn THPT hợp lệ (12.0 đến 30.0)
-    cutoff = cutoff[(cutoff["score"] >= 12.0) & (cutoff["score"] <= 30.0)].copy()
+    # 1. Chặn biên điểm chuẩn hợp lệ trên thang 30. Đúng 30.0 gần như luôn là giá trị
+    #    giữ chỗ / quy đổi thang 40 nhầm, không phải điểm chuẩn thật → loại.
+    cutoff = cutoff[(cutoff["score"] >= 12.0) & (cutoff["score"] < 29.95)].copy()
 
     # 2. Chuẩn hóa nhãn ngành và tách nhãn phụ
     cutoff["major_label"] = cutoff["label"].str.split(" / ").str[0].str.strip()
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^[-+•*]\s*", "", regex=True)
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^\d{3,8}(?:_\d+)?\s+", "", regex=True)
+
+    cutoff = cutoff[~cutoff["major_label"].map(is_garbage_major_label)].copy()
+    cutoff = drop_cross_school_copies(cutoff)
 
     cutoff["major_key"] = cutoff.apply(
         lambda r: build_program_key(r["school_code"], r["major_label"], r["combinations"]), axis=1

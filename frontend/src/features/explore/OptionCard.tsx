@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { ProgramDisplayItem } from "@/features/explore/types";
 import { formatProbability } from "@/lib/format";
+import { METHOD_SHORT_VI } from "@/engine/scoring/method-score";
 
 interface OptionCardProps {
   item: ProgramDisplayItem;
@@ -151,6 +152,20 @@ export function OptionCard({
               </span>
             </div>
 
+            {/* METHOD + COMBO */}
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                <Check className="h-3.5 w-3.5 text-indigo-600" />
+              </div>
+              <span className="font-medium text-slate-800 break-words">
+                <span className="text-slate-400 font-normal">Xét theo:</span>{" "}
+                <span className="font-bold">{METHOD_SHORT_VI[item.admissionMethod] ?? item.admissionMethod}</span>
+                {item.combination && <> · {item.combination}</>}
+                {item.methodInferred && <span className="text-slate-500 italic"> (phương thức suy ra)</span>}
+                {!item.combinationsVerified && <span className="text-amber-700 italic"> (tổ hợp chưa xác thực)</span>}
+              </span>
+            </div>
+
             {/* CUTOFF SCORE */}
             <div className="flex items-center gap-2 min-w-0">
               <div className="w-4 h-4 flex items-center justify-center shrink-0">
@@ -166,7 +181,7 @@ export function OptionCard({
           {typeof item.admitProbability === "number" && (
             <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-1.5 font-bold">
-                <span className="text-slate-500 font-medium text-[11px]">Khả năng đỗ:</span>
+                <span className="text-slate-500 font-medium text-[11px] whitespace-nowrap">Xác suất đỗ:</span>
                 <span
                   className={
                     item.admitProbability >= 0.8
@@ -176,7 +191,7 @@ export function OptionCard({
                       : "text-amber-700"
                   }
                 >
-                  {formatProbability(item.admitProbability)}
+                  <span className="text-base whitespace-nowrap">{formatProbability(item.admitProbability)}</span>
                 </span>
               </div>
               {typeof item.userScore === "number" && typeof item.cutoffP50 === "number" && (
@@ -188,8 +203,8 @@ export function OptionCard({
                   }`}
                 >
                   {item.userScore >= item.cutoffP50
-                    ? `Dư +${(item.userScore - item.cutoffP50).toFixed(1)}đ`
-                    : `Thiếu ${(item.cutoffP50 - item.userScore).toFixed(1)}đ`}
+                    ? `Em ${item.userScore.toFixed(2)}đ · dư ${(item.userScore - item.cutoffP50).toFixed(2)}đ`
+                    : `Em ${item.userScore.toFixed(2)}đ · thiếu ${(item.cutoffP50 - item.userScore).toFixed(2)}đ`}
                 </span>
               )}
             </div>

@@ -3,7 +3,6 @@ import {
   percentileToScore,
   equateCutoff,
   hsaToThpt,
-  vactToThpt,
   OFFICIAL_PERCENTILES_2026,
   HSA_EQUATING_CHECKPOINTS,
 } from "../src/engine/decision/percentile";
@@ -63,19 +62,6 @@ assert(hsa85 > 22.75 && hsa85 < 24.49, `HSA 85 should interpolate between 22.75 
 assert(hsaToThpt(0) === 0, "HSA 0 should equate to 0");
 assert(hsaToThpt(130) === 30.0, "HSA 130 should clamp to 30.0");
 console.log("  PASS: HSA conversions match official threshold table and interpolate continuously");
-
-// 5. Test V-ACT (ĐHQG-HCM) Equivalence
-console.log("\n[Test 5] V-ACT (ĐHQG-HCM) Equivalence to THPT");
-const vact850 = vactToThpt(850);
-assert(Math.abs(vact850 - 25.8) < 0.01, `V-ACT 850 should equate to 25.8 THPT, got ${vact850}`);
-
-const vact950 = vactToThpt(950);
-assert(vact950 > 25.8 && vact950 < 29.0, `V-ACT 950 should be between 25.8 and 29.0, got ${vact950}`);
-
-// Boundary checks
-assert(vactToThpt(0) === 0, "V-ACT 0 should equate to 0");
-assert(vactToThpt(1150) === 29.0, "V-ACT 1150 should clamp to 29.0");
-console.log("  PASS: V-ACT conversions match official threshold table and interpolate continuously");
 
 // 6. Test Official Tables Presence & Fallback Safety
 console.log("\n[Test 6] Official Tables Presence & Fallback Safety");

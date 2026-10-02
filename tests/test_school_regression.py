@@ -27,6 +27,11 @@ FROZEN_SCHOOL_SET = {
     "TTU", "TYS", "VHH", "XDA", "XDT", "YDS", "YHB"
 }
 
+# Trường có toàn bộ dòng điểm là bản sao từ tài liệu của trường khác (đề án chung ĐH Huế
+# gán cho mọi trường thành viên; HCH trùng khít HCS). `drop_cross_school_copies` loại các
+# dòng này vì không xác định được trường sở hữu. Chỉ bỏ khỏi danh sách khi có dữ liệu riêng.
+EXCLUDED_COPIED_SOURCE = {"DHC", "DHD", "DHK", "DHL", "DHN", "DHT", "HCH"}
+
 # The 7 key sensitive schools that were previously recovered or audited
 SENSITIVE_TARGETS = ["C19", "C25", "DQB", "DTN", "DVL", "C23", "CSS"]
 
@@ -51,12 +56,12 @@ def _parse_history(raw_val: str | dict | None) -> dict:
 def test_frozen_schools_no_regression(programs_df: pd.DataFrame):
     """Ensure no school from the 77 frozen set ever drops out of programs.parquet."""
     current_schools = set(programs_df["school_code"].unique())
-    missing = FROZEN_SCHOOL_SET - current_schools
+    missing = FROZEN_SCHOOL_SET - EXCLUDED_COPIED_SOURCE - current_schools
     assert not missing, (
         f"REGRESSION DETECTED! {len(missing)} schools dropped out of programs.parquet: "
         f"{sorted(missing)}"
     )
-    assert len(current_schools) >= len(FROZEN_SCHOOL_SET), (
+    assert len(current_schools) >= len(FROZEN_SCHOOL_SET - EXCLUDED_COPIED_SOURCE), (
         f"Total schools ({len(current_schools)}) is less than frozen benchmark ({len(FROZEN_SCHOOL_SET)})"
     )
 

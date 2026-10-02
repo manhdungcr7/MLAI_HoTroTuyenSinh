@@ -1,19 +1,26 @@
-import { Role } from "@/engine/types";
+import { AdmissionMethod, Role, StudentProfile } from "@/engine/types";
+import { VIETNAM_PROVINCES } from "@/engine/geo/distance";
 
-export type RegionFilter = "all" | "hanoi" | "tphcm" | "mientrung";
-export type TuitionFilter = "all" | "under_20" | "under_40" | "under_60";
-export type MajorGroupFilter = "all" | "cntt" | "kinh_te" | "ky_thuat" | "y_duoc" | "luat" | "ngon_ngu";
-export type CombinationFilter = "all" | "A00" | "A01" | "D01" | "D07" | "B00" | "C00";
+/** Khu vực trường: theo vùng, hoặc cùng tỉnh với nhà em. */
+export type RegionFilter = "all" | "bac" | "trung" | "nam" | "home";
+/** Học phí: theo ngân sách trong hồ sơ hoặc mức trần cố định (triệu/năm). */
+export type TuitionFilter = "all" | "budget" | "under_20" | "under_40" | "under_60";
+/** Nhóm ngành: "interest" = các nhóm ngành em đã chọn trong hồ sơ. */
+export type MajorGroupFilter = string;
+export type MethodFilter = "all" | "THPT" | "HOC_BA";
+export type CombinationFilter = string;
 export type MatchFilter = "all" | "kha_phu_hop" | "an_toan" | "can_co_gang";
+export type SortKey = "admit_prob" | "cutoff_desc" | "cutoff_asc" | "tuition_asc" | "employment_desc";
 
 export interface OptionsFilterState {
   searchQuery: string;
   region: RegionFilter;
   tuition: TuitionFilter;
   majorGroup: MajorGroupFilter;
+  method: MethodFilter;
   combination: CombinationFilter;
   matchLevel: MatchFilter;
-  sortBy: "utility" | "admit_prob" | "cutoff_desc" | "cutoff_asc" | "tuition_asc" | "employment_desc";
+  sortBy: SortKey;
 }
 
 export const INITIAL_OPTIONS_FILTER: OptionsFilterState = {
@@ -21,10 +28,32 @@ export const INITIAL_OPTIONS_FILTER: OptionsFilterState = {
   region: "all",
   tuition: "all",
   majorGroup: "all",
+  method: "all",
   combination: "all",
   matchLevel: "all",
-  sortBy: "utility",
+  sortBy: "admit_prob",
 };
+
+export function regionOfProvince(province: string | null | undefined): "bac" | "trung" | "nam" | null {
+  if (!province) return null;
+  return VIETNAM_PROVINCES[province]?.region ?? null;
+}
+
+/**
+ * Bộ lọc khởi tạo từ ràng buộc em đã khai trong hồ sơ, để danh sách ngay từ đầu là
+ * "các ngành thỏa điều kiện của em, xếp theo khả năng đỗ".
+ */
+export function filtersFromProfile(profile: StudentProfile): OptionsFilterState {
+  let region: RegionFilter = "all";
+  if (profile.relocationWillingness === "chi_tinh_nha" && profile.homeProvince) region = "home";
+  else if (profile.relocationWillingness === "trong_vung") region = regionOfProvince(profile.homeProvince) ?? "all";
+  return {
+    ...INITIAL_OPTIONS_FILTER,
+    region,
+    tuition: profile.annualBudgetVnd > 0 ? "budget" : "all",
+    majorGroup: (profile.interestMajorGroups?.length ?? 0) > 0 ? "interest" : "all",
+  };
+}
 
 export interface ProgramDisplayItem {
   id: string;
@@ -34,8 +63,9 @@ export interface ProgramDisplayItem {
   majorName: string;
   majorGroup: string;
   combination: string;
-  region: "hanoi" | "tphcm" | "mientrung";
+  region: "bac" | "trung" | "nam" | null;
   regionLabel: string;
+  province: string;
   tuitionDisplay: string;
   tuitionVnd: number | null;
   cutoffDisplay: string;
@@ -57,4 +87,7 @@ export interface ProgramDisplayItem {
   admitProbability: number;
   role: Role;
   sourceTier?: "official_pdf" | "aggregator_verified";
+  admissionMethod: AdmissionMethod;
+  methodInferred: boolean;
+  combinationsVerified: boolean;
 }

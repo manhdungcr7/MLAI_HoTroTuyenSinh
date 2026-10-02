@@ -13,35 +13,8 @@ interface SubjectLeverageBarsProps {
   className?: string;
 }
 
-const DEFAULT_LEVERAGE_ITEMS: SubjectLeverageItem[] = [
-  {
-    subjectName: "Tiếng Anh",
-    optionsAdded: 12,
-    barColor: "bg-gradient-to-r from-purple-500 to-indigo-600",
-    percentage: 85,
-  },
-  {
-    subjectName: "Toán",
-    optionsAdded: 8,
-    barColor: "bg-blue-500",
-    percentage: 58,
-  },
-  {
-    subjectName: "Vật lý",
-    optionsAdded: 6,
-    barColor: "bg-sky-400",
-    percentage: 42,
-  },
-  {
-    subjectName: "Ngữ văn",
-    optionsAdded: 3,
-    barColor: "bg-emerald-400",
-    percentage: 22,
-  },
-];
-
 export const SubjectLeverageBars: React.FC<SubjectLeverageBarsProps> = ({
-  items = DEFAULT_LEVERAGE_ITEMS,
+  items = [],
   className = "",
 }) => {
   return (
