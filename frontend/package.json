@@ -1,0 +1,38 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "data:publish": "cd .. && python -m pipeline.publish",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx tests/test_decision_quality.ts && tsx tests/test_recommendation_engine.ts && tsx tests/test_storage_engine.ts && tsx tests/test_ai_decision_engine.ts && tsx tests/test_study_plan.ts && tsx tests/test_math_invariants_and_mc.ts && tsx tests/test_commercial_ai_robustness.ts && tsx tests/test_percentile_equating.ts && tsx tests/test_closed_loop_feedback.ts"
+  },
+  "dependencies": {
+    "lucide-react": "1.48.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.12.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.1",
+    "vite": "^8.3.1",
+    "vite-plugin-devtools-json": "^1.1.0"
+  }
+}

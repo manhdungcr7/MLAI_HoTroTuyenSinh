@@ -1,0 +1,18 @@
+{
+  "session_id": "sess-test-2026-fixture",
+  "pseudo_user_id": "usr-pseudo-999",
+  "event_name": "view_recommendation_item",
+  "page_route": "/tu-van",
+  "entity_id": "BKA::7480201",
+  "dwell_time_ms": 4200,
+  "payload": {
+    "rank_clicked": 1,
+    "source_component": "WishlistCard",
+    "filter_mode": "balanced"
+  },
+  "shown_candidates": [
+    "BKA::7480201",
+    "UET::7480201",
+    "NEU::7340101"
+  ]
+}

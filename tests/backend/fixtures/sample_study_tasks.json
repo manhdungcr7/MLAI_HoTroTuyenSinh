@@ -1,0 +1,24 @@
+[
+  {
+    "id": "task-fixture-01",
+    "title": "Chữa 5 câu vận dụng cao Hàm số đề thi thử Chuyên KHTN",
+    "subject": "toan",
+    "progressText": "3/5",
+    "weight": 2,
+    "completed": false,
+    "skipped": false,
+    "scheduledDate": "2026-09-20",
+    "note": "Lưu ý bài toán tương giao đồ thị chứa tham số m"
+  },
+  {
+    "id": "task-fixture-02",
+    "title": "Luyện 3 bài đọc hiểu IELTS Reading Academic Cam 18",
+    "subject": "anh",
+    "progressText": "3/3",
+    "weight": 1,
+    "completed": true,
+    "skipped": false,
+    "scheduledDate": "2026-09-21",
+    "note": "Band ước tính 7.5"
+  }
+]

@@ -1,0 +1,58 @@
+{
+  "version": "4.1.0",
+  "profile": {
+    "name": "Trần Tuấn Anh",
+    "grade": "12A2",
+    "province": "Hà Nội",
+    "activeCombination": "A00",
+    "examScores": {
+      "toan": 8.8,
+      "ly": 8.2,
+      "hoa": 8.0,
+      "van": 7.0,
+      "anh": 8.5
+    },
+    "altScores": {
+      "hoc_ba_gpa": 8.8,
+      "ielts": 7.0
+    },
+    "priorityArea": "KV2",
+    "priorityObject": "none",
+    "annualBudgetVnd": 50000000
+  },
+  "primaryTarget": {
+    "programId": "BKA::7480201",
+    "schoolCode": "BKA",
+    "majorName": "Khoa học máy tính",
+    "targetScore": 27.5
+  },
+  "wishlist": [
+    {
+      "rank": 1,
+      "school_code": "BKA",
+      "major_label": "Khoa học máy tính",
+      "combination": "A00",
+      "role": "mao_hiem",
+      "admit_prob": 0.45,
+      "forecast_p50": 27.8
+    },
+    {
+      "rank": 2,
+      "school_code": "UET",
+      "major_label": "Công nghệ thông tin",
+      "combination": "A00",
+      "role": "vua_tam",
+      "admit_prob": 0.72,
+      "forecast_p50": 27.2
+    },
+    {
+      "rank": 3,
+      "school_code": "FPT",
+      "major_label": "Kỹ thuật phần mềm",
+      "combination": "A00",
+      "role": "an_toan",
+      "admit_prob": 0.96,
+      "forecast_p50": 21.0
+    }
+  ]
+}

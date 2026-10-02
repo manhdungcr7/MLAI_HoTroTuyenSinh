@@ -1,0 +1,24 @@
+[
+  {
+    "testName": "Thi thử Khảo sát Chất lượng Sở GD&ĐT Hà Nội",
+    "testDate": "2026-04-10",
+    "reliabilityTier": "tier_2_provincial_highschool",
+    "scores": {
+      "toan": 8.4,
+      "ly": 8.0,
+      "hoa": 7.6,
+      "van": 7.25,
+      "anh": 8.2
+    },
+    "note": "Đề tương đối sát cấu trúc đề minh họa Bộ GD&ĐT 2026"
+  },
+  {
+    "testName": "Đánh giá Tư duy ĐHBK Hà Nội Đợt 1",
+    "testDate": "2026-03-22",
+    "reliabilityTier": "tier_1_standardized",
+    "scores": {
+      "dgtd_bk": 72.5
+    },
+    "note": "Phần Tư duy Toán học làm tốt, phần Tư duy Khoa học cần tăng tốc"
+  }
+]

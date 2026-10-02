@@ -1,0 +1,50 @@
+# Environments
+.env
+.env.local
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data — dữ liệu thô (PDF đề án tuyển sinh, hàng GB) và file trung gian
+# KHÔNG commit — tái tạo bằng pipeline (xem README). Chỉ commit hai artefact
+# CUỐI CÙNG, nhỏ, cần thiết để ứng dụng chạy ngay sau khi clone mà không phải
+# chạy lại toàn bộ pipeline cào (~40+ phút, gọi hàng trăm request ra ngoài):
+#   data/processed/programs.parquet     (~120 KB)
+#   data/processed/national_shock.json  (~1 KB)
+data/raw/*
+data/interim/*
+data/processed/*
+!data/processed/programs.parquet
+!data/processed/national_shock.json
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+
+# Node
+node_modules/
+dist/
+build/
+.DS_Store
+
+# Editor / scratch
+*.tmp
+req_tmp.json
+resp_tmp.json
+*.db
+.playwright-cli/
+scratch/
+*.png
+!frontend/public/documents/official_tables/*.png
+
+
+# Pipeline run logs
+artifacts/

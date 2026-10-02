@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "university": "Đại học Bách Khoa Hà Nội",
+  "school_code": "BKA",
+  "data": [
+    {
+      "major_code": "7480201",
+      "major_name": "Khoa học Máy tính (IT1)",
+      "admission_year": 2024,
+      "cutoff_score": 28.53,
+      "combinations": ["A00", "A01"],
+      "quota": 300,
+      "tuition_min_mvnd": 30.0,
+      "employment_rate": 0.98
+    },
+    {
+      "major_code": "7480102",
+      "major_name": "Kỹ thuật Máy tính (IT2)",
+      "admission_year": 2024,
+      "cutoff_score": 28.22,
+      "combinations": ["A00", "A01"],
+      "quota": 250,
+      "tuition_min_mvnd": 30.0,
+      "employment_rate": 0.97
+    },
+    {
+      "major_code": "7520216",
+      "major_name": "Kỹ thuật Điều khiển & Tự động hóa (EE2)",
+      "admission_year": 2024,
+      "cutoff_score": 27.57,
+      "combinations": ["A00", "A01"],
+      "quota": 400,
+      "tuition_min_mvnd": 30.0,
+      "employment_rate": 0.95
+    },
+    {
+      "major_code": "7340120",
+      "major_name": "Kinh doanh Quốc tế",
+      "admission_year": 2024,
+      "cutoff_score": 28.02,
+      "combinations": ["A00", "A01", "D01"],
+      "quota": 180,
+      "tuition_min_mvnd": 25.0,
+      "employment_rate": 0.96
+    }
+  ]
+}

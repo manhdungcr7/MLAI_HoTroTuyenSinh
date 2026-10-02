@@ -1,0 +1,420 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Surface & Canvas: Light Mode Only (#F8FAFC canvas, #FFFFFF card) */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card-background: #ffffff;
+  --card-border: #e2e8f0;
+  --surface-muted: #f1f5f9;
+  
+  /* Text Contrast Hierarchy (WCAG AAA / AA Compliance) */
+  --text-primary: #0f172a;    /* Slate 900 - Headings & High-contrast numbers (15.8:1) */
+  --text-body: #334155;       /* Slate 700 - Main reading text & labels (9.6:1) */
+  --text-muted: #475569;      /* Slate 600 - Secondary text & descriptions (7.1:1) */
+  --text-caption: #64748b;    /* Slate 500 - Captions, metadata & hints (4.6:1) */
+
+  /* Primary Brand: Deep Blue / Electric Blue */
+  --brand-primary: #2563eb;   /* Blue 600 */
+  --brand-deep: #1d4ed8;      /* Blue 700 */
+  --brand-dark: #1e40af;      /* Blue 800 */
+  --brand-light: #eff6ff;     /* Blue 50 */
+  --brand-border: #bfdbfe;    /* Blue 200 */
+  
+  /* Accent: Violet / Indigo */
+  --accent-indigo: #4f46e5;   /* Indigo 600 */
+  --accent-violet: #6366f1;   /* Indigo 500 */
+  --accent-dark: #4338ca;     /* Indigo 700 */
+  --accent-light: #eef2ff;    /* Indigo 50 */
+  --accent-border: #c7d2fe;   /* Indigo 200 */
+
+  /* Portfolio Risk Tiers (Modern Portfolio Theory) */
+  --reach-bg: #fff1f2;        /* Rose 50 */
+  --reach-border: #fecdd3;    /* Rose 200 */
+  --reach-text: #be123c;      /* Rose 700 */
+
+  --target-bg: #eff6ff;       /* Blue 50 */
+  --target-border: #bfdbfe;   /* Blue 200 */
+  --target-text: #1d4ed8;     /* Blue 700 */
+
+  --safety-bg: #f0fdf4;       /* Emerald 50 */
+  --safety-border: #bbf7d0;   /* Emerald 200 */
+  --safety-text: #15803d;     /* Emerald 700 */
+
+  /* Status Colors */
+  --success-bg: #f0fdf4;
+  --success-border: #bbf7d0;
+  --success-text: #15803d;
+
+  --warning-bg: #fffbeb;
+  --warning-border: #fde68a;
+  --warning-text: #b45309;
+
+  --danger-bg: #fff1f2;
+  --danger-border: #fecdd3;
+  --danger-text: #be123c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card-background);
+  --color-border: var(--card-border);
+  --font-sans: 'Plus Jakarta Sans', var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* =========================================================================
+   CẤU HÌNH LAYOUT CHUẨN TOÀN MÀN HÌNH (RESPONSIVE VIEWPORT ARCHITECTURE)
+   ========================================================================= */
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Chống co giật khung hình khi thanh cuộn xuất hiện */
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+/* Chống rớt chữ đơn lẻ trên tiêu đề và mô tả */
+h1, h2, h3, h4, h5, h6, p, .text-pretty {
+  text-wrap: pretty;
+}
+
+/* Các lớp cấu trúc layout chuẩn phân tầng hệ thống */
+.app-shell {
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  overflow: hidden;
+}
+
+.sidebar-shell {
+  flex: 0 0 250px;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  height: 100dvh;
+}
+
+.main-shell {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+.page-content {
+  width: 100%;
+  max-width: none !important;
+}
+
+/* Đảm bảo chữ số liệu hiển thị cân đối thẳng hàng */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================================
+   3. NGUYÊN TẮC VÀNG: TUYỆT ĐỐI KHÔNG GLASSMORPHISM
+   ========================================================================= */
+/* Cấm backdrop-blur che mờ chữ hoặc gây đục giao diện */
+*, *::before, *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.no-glass,
+.backdrop-blur,
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Ép toàn bộ form controls luôn dùng chữ đậm nét #0F172A, chống chữ mờ nhạt */
+input, select, textarea {
+  color: #0f172a !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* =========================================================================
+   4. CHUẨN HÓA RANGE SLIDER (TOUCH TARGET >= 44PX, THUMB 20PX)
+   ========================================================================= */
+input[type="range"] {
+  height: 32px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+/* Webkit Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+  transition: background-color 0.15s ease;
+}
+
+/* Webkit Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.25), 0 1px 2px -1px rgba(15, 23, 42, 0.1);
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background-color: #1d4ed8;
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.15);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+  background-color: #1e40af;
+  box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.2);
+}
+
+/* Firefox Track */
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+}
+
+/* Firefox Thumb */
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.25);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  background-color: #1d4ed8;
+}
+
+/* =========================================================================
+   5. SCROLLBAR TINH GỌN (COMPACT SCROLLBAR CHO MÀN HÌNH LAPTOP 125%)
+   ========================================================================= */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* =========================================================================
+   6. DESIGN SYSTEM HELPER CLASSES (REUSABLE UTILITIES)
+   ========================================================================= */
+/* Thẻ nền trắng chuẩn Mockup tham chiếu */
+.ui-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem; /* rounded-2xl (16px) */
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ui-card-interactive {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.ui-card-interactive:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Thẻ 3 Băng Rủi Ro */
+.ui-card-reach {
+  background-color: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 1rem;
+}
+
+.ui-card-target {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 1rem;
+}
+
+.ui-card-safety {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 1rem;
+}
+
+/* Badges 3 Băng */
+.badge-reach {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #be123c;
+  background-color: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 9999px;
+}
+
+.badge-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 9999px;
+}
+
+.badge-safety {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #15803d;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 9999px;
+}
+
+/* Badge Điểm nhấn AI / Holland */
+.badge-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4f46e5;
+  background-color: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 9999px;
+}
+
+/* Density KPI Chip */
+.density-kpi-chip {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+}
+
+/* =========================================================================
+   7. TỐI ƯU HÓA IN ẤN BÁO CÁO PHỤ HUYNH & EXPORT A4 (PRINT STYLES)
+   ========================================================================= */
+@media print {
+  html,
+  body,
+  #root,
+  .app-shell,
+  .main-shell,
+  .page-viewport,
+  .page-content {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10.5pt !important;
+    line-height: 1.4 !important;
+  }
+
+  .print\:hidden,
+  aside,
+  header,
+  nav,
+  button:not(.allow-print) {
+    display: none !important;
+  }
+
+  .print\:block {
+    display: block !important;
+  }
+
+  .page-break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .shadow-2xs, .shadow-xs, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl {
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 14mm 14mm 14mm;
+  }
+}
