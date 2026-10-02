@@ -489,17 +489,12 @@ export default function ProfilePage() {
                   <div className="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
                     <Sparkles className="w-4.5 h-4.5" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-extrabold text-slate-900">
-                        Chứng chỉ Quốc tế & ĐGNL / ĐGTD
-                      </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-800">
-                        Phương thức riêng
-                      </span>
-                    </div>
-                    <span className="text-[11px] text-slate-500 block mt-0.5">
-                      IELTS, TOEIC, SAT, HSA (Hà Nội), V-ACT (TP.HCM), TSA (Bách Khoa), Học bạ
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-extrabold text-slate-900">
+                      Chứng chỉ Quốc tế & ĐGNL / ĐGTD
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-800">
+                      Phương thức riêng
                     </span>
                   </div>
                 </div>
@@ -515,12 +510,9 @@ export default function ProfilePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {/* IELTS */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">IELTS Academic</span>
-                          <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.2 rounded">Thang 9.0</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">≥ 4.0: Miễn thi tốt nghiệp</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">IELTS Academic</span>
+                        <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded">Thang 9.0</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -540,12 +532,9 @@ export default function ProfilePage() {
 
                     {/* TOEIC */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">TOEIC 4 kỹ năng</span>
-                          <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.2 rounded">Thang 990</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Nghe & Đọc</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">TOEIC 4 kỹ năng</span>
+                        <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded">Thang 990</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -565,12 +554,9 @@ export default function ProfilePage() {
 
                     {/* SAT */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">SAT Digital</span>
-                          <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.2 rounded">Thang 1600</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Chứng chỉ chuẩn hóa Mỹ</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">SAT Digital</span>
+                        <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">Thang 1600</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -590,12 +576,9 @@ export default function ProfilePage() {
 
                     {/* ACT */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">ACT Composite</span>
-                          <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.2 rounded">Thang 36</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Chứng chỉ chuẩn hóa quốc tế</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">ACT Composite</span>
+                        <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">Thang 36</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -615,11 +598,9 @@ export default function ProfilePage() {
 
                     {/* HSA (ĐHQGHN) */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">ĐGNL ĐHQG Hà Nội (HSA)</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Thang điểm 150</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">ĐGNL ĐHQG Hà Nội (HSA)</span>
+                        <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">Thang 150</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -639,11 +620,9 @@ export default function ProfilePage() {
 
                     {/* V-ACT (ĐHQG TP.HCM) */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">ĐGNL ĐHQG TP.HCM</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Thang điểm 1200</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">ĐGNL ĐHQG TP.HCM</span>
+                        <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">Thang 1200</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -663,11 +642,9 @@ export default function ProfilePage() {
 
                     {/* TSA (ĐH Bách Khoa) */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">ĐGTD Bách Khoa (TSA)</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Thang điểm 100</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">ĐGTD Bách Khoa (TSA)</span>
+                        <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">Thang 100</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -687,11 +664,9 @@ export default function ProfilePage() {
 
                     {/* Học bạ GPA */}
                     <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-slate-900">Điểm học bạ THPT (GPA)</span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">Trung bình 3 năm THPT (thang 10)</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-black text-slate-900">Điểm học bạ THPT (GPA)</span>
+                        <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Thang 10</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <input
@@ -724,17 +699,12 @@ export default function ProfilePage() {
                   <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
                     <Trophy className="w-4.5 h-4.5" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-extrabold text-slate-900">
-                        Giải thưởng Học sinh Giỏi & Cuộc thi KHKT
-                      </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
-                        Tuyển thẳng & Điểm cộng
-                      </span>
-                    </div>
-                    <span className="text-[11px] text-slate-500 block mt-0.5">
-                      HSG Quốc gia, HSG Tỉnh/Thành phố, Cuộc thi Khoa học Kỹ thuật
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-extrabold text-slate-900">
+                      Giải thưởng Học sinh Giỏi & Cuộc thi KHKT
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
+                      Tuyển thẳng & Điểm cộng
                     </span>
                   </div>
                 </div>
@@ -750,12 +720,9 @@ export default function ProfilePage() {
                   <div className="space-y-2.5">
                     {/* HSG Quốc gia */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
-                      <div>
-                        <span className="text-xs font-black text-slate-900 block">
-                          Học sinh giỏi Quốc gia (HSG QG)
-                        </span>
-                        <span className="text-[10px] text-slate-400">Kỳ thi chọn HSG quốc gia của Bộ GD&ĐT</span>
-                      </div>
+                      <span className="text-xs font-black text-slate-900">
+                        Học sinh giỏi Quốc gia (HSG QG)
+                      </span>
                       <select
                         value={altScores.hsg_quoc_gia || "none"}
                         onChange={(e) =>
@@ -764,21 +731,18 @@ export default function ProfilePage() {
                         className="font-bold text-slate-800 text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-amber-500 focus:outline-none cursor-pointer"
                       >
                         <option value="none">Không đạt giải</option>
-                        <option value="nhat">Giải Nhất Quốc gia (Tuyển thẳng mọi ngành)</option>
-                        <option value="nhi">Giải Nhì Quốc gia (Tuyển thẳng / Điểm cộng tối đa)</option>
-                        <option value="ba">Giải Ba Quốc gia (Tuyển thẳng / Điểm cộng cao)</option>
-                        <option value="khuyen_khich">Giải Khuyến khích Quốc gia (Cộng điểm thưởng)</option>
+                        <option value="nhat">Giải Nhất Quốc gia (Tuyển thẳng)</option>
+                        <option value="nhi">Giải Nhì Quốc gia (Tuyển thẳng / Điểm cộng)</option>
+                        <option value="ba">Giải Ba Quốc gia (Điểm cộng)</option>
+                        <option value="khuyen_khich">Giải Khuyến khích (Cộng điểm)</option>
                       </select>
                     </div>
 
                     {/* HSG Tỉnh / Thành phố */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
-                      <div>
-                        <span className="text-xs font-black text-slate-900 block">
-                          Học sinh giỏi cấp Tỉnh / Thành phố
-                        </span>
-                        <span className="text-[10px] text-slate-400">Kỳ thi HSG lớp 12 cấp Tỉnh / TP trực thuộc TW</span>
-                      </div>
+                      <span className="text-xs font-black text-slate-900">
+                        Học sinh giỏi cấp Tỉnh / Thành phố
+                      </span>
                       <select
                         value={altScores.hsg_tinh || "none"}
                         onChange={(e) =>
@@ -787,21 +751,18 @@ export default function ProfilePage() {
                         className="font-bold text-slate-800 text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-amber-500 focus:outline-none cursor-pointer"
                       >
                         <option value="none">Không đạt giải</option>
-                        <option value="nhat">Giải Nhất cấp Tỉnh / Thành phố</option>
-                        <option value="nhi">Giải Nhì cấp Tỉnh / Thành phố</option>
-                        <option value="ba">Giải Ba cấp Tỉnh / Thành phố</option>
-                        <option value="khuyen_khich">Giải Khuyến khích cấp Tỉnh / Thành phố</option>
+                        <option value="nhat">Giải Nhất cấp Tỉnh / TP</option>
+                        <option value="nhi">Giải Nhì cấp Tỉnh / TP</option>
+                        <option value="ba">Giải Ba cấp Tỉnh / TP</option>
+                        <option value="khuyen_khich">Giải Khuyến khích</option>
                       </select>
                     </div>
 
                     {/* Cuộc thi KHKT */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
-                      <div>
-                        <span className="text-xs font-black text-slate-900 block">
-                          Cuộc thi Khoa học Kỹ thuật (KHKT)
-                        </span>
-                        <span className="text-[10px] text-slate-400">Cuộc thi KHKT dành cho học sinh trung học</span>
-                      </div>
+                      <span className="text-xs font-black text-slate-900">
+                        Cuộc thi Khoa học Kỹ thuật (KHKT)
+                      </span>
                       <select
                         value={altScores.khoa_hoc_ky_thuat || "none"}
                         onChange={(e) =>
@@ -810,9 +771,9 @@ export default function ProfilePage() {
                         className="font-bold text-slate-800 text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-amber-500 focus:outline-none cursor-pointer"
                       >
                         <option value="none">Không tham gia / Không đạt giải</option>
-                        <option value="qg_nhat_nhi_ba">Giải Nhất / Nhì / Ba cấp Quốc gia (Tuyển thẳng ngành liên quan)</option>
-                        <option value="qg_tu">Giải Tư cấp Quốc gia (Cộng điểm ưu tiên)</option>
-                        <option value="tinh_nhat_nhi">Giải Nhất / Nhì cấp Tỉnh / Thành phố</option>
+                        <option value="qg_nhat_nhi_ba">Giải Nhất / Nhì / Ba Quốc gia</option>
+                        <option value="qg_tu">Giải Tư Quốc gia</option>
+                        <option value="tinh_nhat_nhi">Giải Nhất / Nhì Tỉnh / TP</option>
                       </select>
                     </div>
                   </div>
@@ -832,10 +793,7 @@ export default function ProfilePage() {
                   <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
                     <MapPin className="w-4.5 h-4.5" />
                   </div>
-                  <div>
-                    <span className="font-bold text-slate-800 text-sm block">Khu vực ưu tiên</span>
-                    <span className="text-[11px] text-slate-500">Căn cứ nơi học THPT</span>
-                  </div>
+                  <span className="font-bold text-slate-800 text-sm">Khu vực ưu tiên</span>
                 </div>
 
                 <select
@@ -858,10 +816,7 @@ export default function ProfilePage() {
                   <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
                     <Users className="w-4.5 h-4.5" />
                   </div>
-                  <div>
-                    <span className="font-bold text-slate-800 text-sm block">Đối tượng chính sách</span>
-                    <span className="text-[11px] text-slate-500">Ưu tiên theo quy định Nhà nước</span>
-                  </div>
+                  <span className="font-bold text-slate-800 text-sm">Đối tượng chính sách</span>
                 </div>
 
                 <select
@@ -884,11 +839,6 @@ export default function ProfilePage() {
                 <span className="font-medium">
                   Điểm ưu tiên áp dụng:{" "}
                   <strong>+{actualPriority.toFixed(2)}đ</strong>
-                  {currentTotal >= 22.5 && rawPriority > 0 && (
-                    <span className="text-[11px] text-blue-600 block sm:inline sm:ml-1">
-                      (Đã áp dụng giảm tuyến tính TT06 khi tổng điểm ≥ 22.5đ)
-                    </span>
-                  )}
                 </span>
                 <span className="font-bold text-[11px] bg-blue-100/70 px-2 py-0.5 rounded text-blue-800">
                   Chuẩn TT06
@@ -948,26 +898,18 @@ export default function ProfilePage() {
 
               {/* Thông tin mốc chuẩn tham chiếu */}
               {target && (
-                <div className="p-3.5 rounded-xl bg-purple-50/50 border border-purple-100 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-purple-700 font-medium">Điểm chuẩn tham chiếu (P50):</span>
-                    <span className="font-black text-purple-900 text-sm">
-                      {target.forecastP50 ? `${target.forecastP50.toFixed(2)}đ` : "—"}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-purple-600">
-                    <span>Mã trường / Mã ngành:</span>
-                    <span className="font-bold">
-                      {target.schoolCode} / {(target as any).majorCode || target.programId || "—"}
-                    </span>
-                  </div>
+                <div className="p-3.5 rounded-xl bg-purple-50/50 border border-purple-100 flex items-center justify-between text-xs">
+                  <span className="text-purple-700 font-bold">Điểm chuẩn tham chiếu (P50):</span>
+                  <span className="font-black text-purple-900 text-sm">
+                    {target.forecastP50 ? `${target.forecastP50.toFixed(2)}đ` : "—"}
+                  </span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Card 2: Ảnh hưởng gần đây (Môn ưu tiên bứt phá điểm số) */}
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-5 shadow-2xs space-y-2">
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-5 shadow-2xs space-y-3">
             <div className="flex items-center gap-2 text-emerald-800">
               <TrendingUp className="w-5 h-5 text-emerald-600 shrink-0" />
               <p className="font-extrabold text-sm text-emerald-950">
@@ -976,19 +918,16 @@ export default function ProfilePage() {
                   : "Môn trọng tâm bứt phá điểm số"}
               </p>
             </div>
-            <p className="text-xs text-emerald-900/90 leading-relaxed">
-              {topRoi ? (
-                <>
-                  Nếu cải thiện thêm 0.5 điểm môn <strong>{topRoi.subjectVi}</strong>, bạn sẽ thu hẹp{" "}
-                  <strong>{topRoi.gapReduction.toFixed(2)}đ</strong> khoảng cách và mở rộng thêm{" "}
-                  <strong>{topRoi.unlockedOptionsCount} nguyện vọng</strong> trong vùng an toàn.
-                </>
-              ) : (
-                <>
-                  Hãy nhập điểm thi và chọn trường mục tiêu để AI tính toán chính xác môn học nào bạn nên tập trung cải thiện để mang lại hiệu quả đỗ cao nhất.
-                </>
-              )}
-            </p>
+            {topRoi && (
+              <div className="flex items-center gap-2 flex-wrap text-xs font-bold pt-0.5">
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-100/90 text-emerald-800 border border-emerald-200">
+                  Thu hẹp: +{topRoi.gapReduction.toFixed(2)}đ
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-100/90 text-emerald-800 border border-emerald-200">
+                  Mở thêm: {topRoi.unlockedOptionsCount} NV an toàn
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
