@@ -1,0 +1,47 @@
+{
+  "schoolCode": "PKA",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0616/thong-tin-tuyen-sinh-dai-hoc-phenikaa-nam-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học chính quy năm 2026 – Trường Đại học Phenikaa",
+    "sha256": "07c619d79fef7aa3dd82fe29062836917f3413f8f60ff39e218c7bd7b438693b",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 6.4.2–6.4.3: điểm xét = tổng 3 môn (thi THPT, hoặc trung bình cả năm lớp 10, 11, 12 với học bạ) + điểm cộng + ưu tiên; điểm khuyến khích 1,5 (thang 30) cho chứng chỉ IELTS từ 5,0 trở lên (Bảng 2). Chưa mã hóa chứng chỉ khác và SAT/ACT."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.0,
+            "points": 1.5
+          }
+        ]
+      }
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.0,
+            "points": 1.5
+          }
+        ]
+      }
+    }
+  }
+}

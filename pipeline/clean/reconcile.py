@@ -190,6 +190,22 @@ def drop_cross_school_copies(
     return cutoff[~drop].copy()
 
 
+def fill_combinations_from_documents(programs: pd.DataFrame) -> pd.DataFrame:
+    """Chương trình lấy từ đề án chính thức nhưng bảng điểm không ghi tổ hợp: lấy từ bảng chỉ tiêu cùng văn bản (tên ngành khớp chính xác)."""
+    from pipeline.clean.doc_combos import lookup
+
+    programs = programs.copy()
+    missing = programs["combinations_seen"].isna() | (programs["combinations_seen"] == "")
+    filled = 0
+    for idx in programs.index[missing]:
+        combos = lookup(str(programs.at[idx, "school_code"]), str(programs.at[idx, "major_label"]))
+        if combos:
+            programs.at[idx, "combinations_seen"] = ",".join(combos)
+            filled += 1
+    print(f"reconcile: bổ sung tổ hợp từ bảng chỉ tiêu trong đề án cho {filled}/{int(missing.sum())} chương trình thiếu tổ hợp")
+    return programs
+
+
 def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
     """Lọc biên điểm, chuẩn hoá nhãn ngành và gắn phương thức cho từng dòng điểm chuẩn.
 
@@ -469,6 +485,7 @@ def run() -> pd.DataFrame:
 
     # ---- Gắn cờ combinations_verified và nguồn tham chiếu URL ----
     # Nếu combinations_seen có dữ liệu thật từ đề án và không phải rỗng -> Verified
+    programs = fill_combinations_from_documents(programs)
     programs["combinations_verified"] = programs["combinations_seen"].notna() & (programs["combinations_seen"] != "")
 
     sources_json_path = MANUAL_DIR / "university_sources.json"

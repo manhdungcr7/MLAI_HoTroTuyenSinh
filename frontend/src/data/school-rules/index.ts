@@ -12,10 +12,12 @@ import GHA from "./GHA.json";
 import GSA from "./GSA.json";
 import GTA from "./GTA.json";
 import HHK from "./HHK.json";
+import IUH from "./IUH.json";
 import KHA from "./KHA.json";
 import NHF from "./NHF.json";
 import NHH from "./NHH.json";
 import NTH from "./NTH.json";
+import PKA from "./PKA.json";
 import SPD from "./SPD.json";
 import SPH from "./SPH.json";
 import TCT from "./TCT.json";
@@ -30,6 +32,6 @@ import YDS from "./YDS.json";
  * File này được sinh bởi scripts/build_rules_index.py; thêm trường bằng cách tạo <MÃ TRƯỜNG>.json rồi chạy script.
  * Trường chưa có trong danh sách dùng công thức mặc định và được ghi rõ là "công thức chung".
  */
-export const SCHOOL_RULES = [DBL, DCT, DDP, DDT, DHY, DKK, DPQ, DQN, DTL, GHA, GSA, GTA, HHK, KHA, NHF, NHH, NTH, SPD, SPH, TCT, TDV, TLA, TTN, XDT, YDS] as unknown as SchoolRule[];
+export const SCHOOL_RULES = [DBL, DCT, DDP, DDT, DHY, DKK, DPQ, DQN, DTL, GHA, GSA, GTA, HHK, IUH, KHA, NHF, NHH, NTH, PKA, SPD, SPH, TCT, TDV, TLA, TTN, XDT, YDS] as unknown as SchoolRule[];
 
 registerSchoolRules(SCHOOL_RULES);
