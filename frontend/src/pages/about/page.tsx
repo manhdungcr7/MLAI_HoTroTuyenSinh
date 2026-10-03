@@ -10,23 +10,25 @@ const STEPS = [
   "Chọn phương thức có lợi nhất cho em ở mỗi ngành và xếp theo xác suất đỗ.",
 ];
 
+interface Holdout {
+  year: number;
+  n: number;
+  mae?: number;
+  coverageP10P90Pct?: number;
+  calibrationGap?: number;
+}
 interface Backtest {
-  sampleSize: number;
-  testPeriod: string;
-  metrics: {
-    naiveBaseline: { mae: number };
-    ourModel: { mae: number; coverageP10P90Pct: number };
-  };
+  holdouts: Holdout[];
 }
 
-/** Kết quả kiểm chứng dự báo điểm chuẩn trên năm đã biết; null nếu chưa có hoặc không tải được. */
+/** Kết quả kiểm định dự báo điểm chuẩn trên các năm đã biết; null nếu chưa có hoặc không tải được. */
 function useBacktest(): Backtest | null {
   const [data, setData] = useState<Backtest | null>(null);
   useEffect(() => {
     let active = true;
     fetch("/data/backtest.json")
       .then((r) => (r.ok ? r.json() : null))
-      .then((j) => { if (active && j?.metrics?.ourModel) setData(j as Backtest); })
+      .then((j) => { if (active && Array.isArray(j?.holdouts)) setData(j as Backtest); })
       .catch(() => undefined);
     return () => { active = false; };
   }, []);
@@ -66,14 +68,25 @@ export default function AboutPage() {
         ))}
       </section>
 
-      {backtest && (
+      {backtest && backtest.holdouts.some((h) => h.mae !== undefined) && (
         <section className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-          <h2 className="text-base font-extrabold text-slate-900">Dự báo đã được thử thế nào?</h2>
-          <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">
-            Dùng dữ liệu đến 2024 để dự báo điểm chuẩn {backtest.testPeriod.split(" ")[0]} của {backtest.sampleSize} ngành rồi so với điểm thật:
-            sai số trung bình {backtest.metrics.ourModel.mae.toFixed(1)} điểm (cách đơn giản là giữ nguyên điểm năm trước sai {backtest.metrics.naiveBaseline.mae.toFixed(1)} điểm).
-            Khoảng dự báo 10–90% chứa điểm thật ở {backtest.metrics.ourModel.coverageP10P90Pct.toFixed(0)}% số ngành.
-          </p>
+          <h2 className="text-base font-extrabold text-slate-900">Đã thử trên năm đã biết</h2>
+          <table className="mt-2 w-full text-left text-sm font-semibold text-slate-700">
+            <thead className="text-xs text-slate-500">
+              <tr><th className="py-1">Năm</th><th>Ngành</th><th>Sai số</th><th>Khoảng chứa</th><th>Xác suất lệch</th></tr>
+            </thead>
+            <tbody>
+              {backtest.holdouts.filter((h) => h.mae !== undefined).map((h) => (
+                <tr key={h.year} className="border-t border-slate-100">
+                  <td className="py-2">{h.year}</td>
+                  <td>{h.n}</td>
+                  <td>{h.mae!.toFixed(1)} điểm</td>
+                  <td>{h.coverageP10P90Pct !== undefined ? `${h.coverageP10P90Pct.toFixed(0)}%` : "–"}</td>
+                  <td>{h.calibrationGap !== undefined ? `${(h.calibrationGap * 100).toFixed(1)}%` : "–"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
       )}
 

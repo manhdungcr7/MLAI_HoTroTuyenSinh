@@ -3,6 +3,20 @@
  * Đảm bảo: File < 350 lines, Zero UI dependencies, Pure Math & Deterministic.
  */
 
+/** Năm tuyển sinh cần dự báo; dữ liệu càng cũ so với năm này thì độ bất định càng lớn. */
+export const FORECAST_YEAR = 2026;
+/** Chương trình chỉ có 1 năm dữ liệu dao động mạnh hơn (đo trên hai năm giữ lại: 1.14 và 1.47 lần). */
+export const THIN_DATA_MULTIPLIER = 1.3;
+
+/**
+ * Hệ số nhân độ bất định của một chương trình: căn bậc hai số năm kể từ dữ liệu gần nhất (độ lệch tích lũy
+ * như bước ngẫu nhiên) và hệ số cho chương trình chỉ có 1 năm dữ liệu. Cùng công thức với pipeline/features/build.py.
+ */
+export function sigmaScaleFor(latestYear: number | undefined | null, yearsOfData: number | undefined | null): number {
+  const age = Math.max(1, FORECAST_YEAR - (latestYear ?? FORECAST_YEAR - 1));
+  return Math.sqrt(age) * ((yearsOfData ?? 0) <= 1 ? THIN_DATA_MULTIPLIER : 1);
+}
+
 export const DEFAULT_NATIONAL_SHOCK_STD = 1.29; // Cú sốc đề thi khó/dễ toàn quốc (mặc định)
 export const DEFAULT_IDIO_STD = 1.28;           // Nhiễu riêng của từng trường đại học (mặc định)
 
@@ -83,7 +97,8 @@ export function calculateAdmitProbability(
   forecastP50: number,
   beta = 1.0,
   shockStd = getActiveNationalShockStd(),
-  idioStd = getActiveIdioStd()
+  idioStd = getActiveIdioStd(),
+  sigmaScale = 1.0
 ): number {
   if (typeof userScore !== "number" || !Number.isFinite(userScore) ||
       typeof forecastP50 !== "number" || !Number.isFinite(forecastP50)) {
@@ -95,7 +110,8 @@ export function calculateAdmitProbability(
   const safeIdio = Number.isFinite(idioStd) && idioStd > 0 ? idioStd : DEFAULT_IDIO_STD;
 
   const variance = safeBeta * safeBeta * safeShock * safeShock + safeIdio * safeIdio;
-  const sigma = Math.sqrt(Math.max(0.01, variance));
+  const safeScale = Number.isFinite(sigmaScale) && sigmaScale > 0 ? sigmaScale : 1.0;
+  const sigma = Math.sqrt(Math.max(0.01, variance)) * safeScale;
   const z = (userScore - forecastP50) / sigma;
   return normalCDF(z);
 }
@@ -105,7 +121,7 @@ export function calculateAdmitProbability(
  * Hoàn toàn xác định (không lấy mẫu ngẫu nhiên)
  */
 export function calculatePortfolioFailAll(
-  wishlist: { userScore: number; forecastP50: number; beta?: number }[],
+  wishlist: { userScore: number; forecastP50: number; beta?: number; sigmaScale?: number }[],
   shockStd = getActiveNationalShockStd(),
   idioStd = getActiveIdioStd()
 ): number {
@@ -133,7 +149,11 @@ export function calculatePortfolioFailAll(
     for (const w of validWishlist) {
       const beta = Number.isFinite(w.beta) && (w.beta ?? 0) > 0 ? (w.beta as number) : 1.0;
       const conditionalCutoff = w.forecastP50 + sqrt2 * beta * safeShock * x_m;
-      const z_cond = (w.userScore - conditionalCutoff) / safeIdio;
+      // Độ bất định riêng của chương trình khớp với xác suất từng nguyện vọng: σ_i² = (β·shock)² + idio_i².
+      const scale = Number.isFinite(w.sigmaScale) && (w.sigmaScale ?? 0) > 0 ? (w.sigmaScale as number) : 1.0;
+      const sigmaI2 = scale * scale * (beta * beta * safeShock * safeShock + safeIdio * safeIdio);
+      const idioI = Math.sqrt(Math.max(0.01, sigmaI2 - beta * beta * safeShock * safeShock));
+      const z_cond = (w.userScore - conditionalCutoff) / idioI;
       const p_admit_cond = normalCDF(z_cond);
       jointSurvivalAtNode *= Math.max(0.0, Math.min(1.0, 1.0 - p_admit_cond));
     }

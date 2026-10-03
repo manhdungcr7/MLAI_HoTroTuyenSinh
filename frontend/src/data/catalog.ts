@@ -18,8 +18,6 @@ export interface ProgramCatalogItem extends TargetProgram {
   latestYear?: number;
   latestScore?: number;
   yearlyTrendDelta: number;
-  betaProgram: number;
-  idioStd: number;
   dataQuality: string;
   schoolProvince: string;
   /** Số năm có điểm chuẩn hợp lệ */
@@ -122,8 +120,6 @@ function toCatalogItem(item: RawCatalogItem): ProgramCatalogItem | null {
     yearlyTrendDelta: 0,
     tuitionVnd: typeof item.tuitionVnd === "number" ? item.tuitionVnd : null,
     employmentRate: typeof item.employmentRate === "number" ? item.employmentRate : null,
-    betaProgram: round(item.betaProgram || 1.0, 3),
-    idioStd: round(item.idioStd || 1.28, 3),
     dataQuality: years.length >= 3 ? "day_du" : years.length === 1 ? "chi_1_nam" : "thieu_mot_phan",
     yearsOfData: years.length,
     dataPassport: item.dataPassport || "Đề án tuyển sinh",

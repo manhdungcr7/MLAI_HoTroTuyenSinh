@@ -156,6 +156,8 @@ export interface CandidateOption {
   /** "school": điểm tính theo quy tắc riêng của trường đã kiểm chứng; "default": công thức chung. */
   ruleOrigin?: "school" | "default";
   ruleSource?: string;
+  /** Hệ số nhân độ bất định theo độ cũ và độ mỏng của dữ liệu (xem sigmaScaleFor). */
+  sigmaScale?: number;
 }
 
 export interface WishlistItem {
@@ -183,12 +185,14 @@ export interface WishlistItem {
   admission_method?: AdmissionMethod;
   method_inferred?: boolean;
   combinations_verified?: boolean;
+  sigma_scale?: number;
 }
 
 export interface GapMetric {
   targetProgram: TargetProgram;
   currentCompositeScore: number;
   rawGap: number; // điểm của em - điểm chuẩn dự kiến (>0 là dư, <0 là thiếu)
+  admitProbability: number;
   gapStatus: "thach_thuc" | "vua_tam" | "an_toan";
   statusLabelVi: string;
   statusColor: string;

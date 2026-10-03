@@ -8,7 +8,6 @@ import { runGapAnalysis } from "@/engine/gap/engine";
 import { calculateSubjectRoiList } from "@/engine/roi/engine";
 import { scoreForProgram, METHOD_SHORT_VI } from "@/engine/scoring/method-score";
 import { formatProbability } from "@/lib/format";
-import { calculateAdmitProbability } from "@/engine/admissions/probability";
 
 export default function ImprovePage() {
   const { profile, target, setTarget } = useApp();
@@ -19,8 +18,7 @@ export default function ImprovePage() {
     if (!ms) return { kind: "no-score" as const };
     const gap = runGapAnalysis(target, profile);
     const roi = calculateSubjectRoiList(profile, target, DECISION_PROGRAM_POOL).slice(0, 3);
-    const prob = calculateAdmitProbability(ms.score, gap.p50);
-    return { kind: "ok" as const, ms, gap, roi, prob };
+    return { kind: "ok" as const, ms, gap, roi, prob: gap.admitProbability };
   }, [target, profile]);
 
   if (!target) {

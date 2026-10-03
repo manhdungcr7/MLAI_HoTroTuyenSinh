@@ -27,6 +27,8 @@ PROVINCE_REGIONS: dict[str, str] = _RULES["provinceRegions"]
 
 DEFAULT_CATALOG_PATH = ROOT / "frontend" / "src" / "data" / "programs-catalog.json"
 
+FORECAST_YEAR = 2026
+THIN_DATA_MULTIPLIER = 1.3
 DEFAULT_NATIONAL_SHOCK_STD = 1.29
 DEFAULT_IDIO_STD = 1.28
 SAFE_MIN_PROB = 0.8
@@ -84,19 +86,27 @@ def normal_cdf(z: float) -> float:
     return cdf if z >= 0 else 1.0 - cdf
 
 
+def sigma_scale_for(latest_year: int | None, years_of_data: int | None, forecast_year: int = FORECAST_YEAR) -> float:
+    """Hệ số nhân độ bất định: căn số năm kể từ dữ liệu gần nhất, và hệ số cho chương trình chỉ có 1 năm dữ liệu."""
+    age = max(1, forecast_year - (latest_year if latest_year is not None else forecast_year - 1))
+    return math.sqrt(age) * (THIN_DATA_MULTIPLIER if (years_of_data or 0) <= 1 else 1.0)
+
+
 def admit_probability(
     user_score: float,
     forecast_p50: float,
     beta: float = 1.0,
     shock_std: float = DEFAULT_NATIONAL_SHOCK_STD,
     idio_std: float = DEFAULT_IDIO_STD,
+    sigma_scale: float = 1.0,
 ) -> float:
     if not (math.isfinite(user_score) and math.isfinite(forecast_p50)):
         return 0.5
     beta = beta if math.isfinite(beta) and beta > 0 else 1.0
     shock = shock_std if math.isfinite(shock_std) and shock_std > 0 else DEFAULT_NATIONAL_SHOCK_STD
     idio = idio_std if math.isfinite(idio_std) and idio_std > 0 else DEFAULT_IDIO_STD
-    sigma = math.sqrt(max(0.01, beta * beta * shock * shock + idio * idio))
+    scale = sigma_scale if math.isfinite(sigma_scale) and sigma_scale > 0 else 1.0
+    sigma = math.sqrt(max(0.01, beta * beta * shock * shock + idio * idio)) * scale
     return normal_cdf((user_score - forecast_p50) / sigma)
 
 
@@ -137,7 +147,10 @@ def portfolio_fail_all(
         for w in valid:
             beta = w.get("beta") or 1.0
             cutoff = w["forecastP50"] + math.sqrt(2) * beta * shock * x
-            p = normal_cdf((w["userScore"] - cutoff) / idio)
+            scale = w.get("sigmaScale") or 1.0
+            sigma_i2 = scale * scale * (beta * beta * shock * shock + idio * idio)
+            idio_i = math.sqrt(max(0.01, sigma_i2 - beta * beta * shock * shock))
+            p = normal_cdf((w["userScore"] - cutoff) / idio_i)
             survive *= max(0.0, min(1.0, 1.0 - p))
         total += w_m * survive
     return max(0.0, min(1.0, total / math.sqrt(math.pi)))
@@ -482,7 +495,7 @@ def normalize_catalog_item(item: Mapping[str, Any]) -> dict[str, Any] | None:
         "forecastP90": js_to_fixed(min(30.0, p90), 2),
         "tuitionVnd": _num(item.get("tuitionVnd")),
         "employmentRate": _num(item.get("employmentRate")),
-        "betaProgram": js_to_fixed(item.get("betaProgram") or 1.0, 3),
+        "latestYear": years[-1],
         "yearsOfData": len(years),
         "sourceTier": "aggregator_verified" if item.get("sourceTier") == "aggregator_verified" else "official_pdf",
         "sourceUrl": item.get("sourceUrl"),
@@ -540,7 +553,8 @@ def build_candidates(
             half = max(1.0, ((p90 if p90 is not None else p50 + 1.5) - (p10 if p10 is not None else p50 - 1.5)) / 2)
             p10 = max(12.0, js_to_fixed(p50 - half * 1.6, 2))
             p90 = min(30.0, js_to_fixed(p50 + half * 1.6, 2))
-        prob = admit_probability(ms["score"], p50, shock_std=shock_std, idio_std=idio_std)
+        sigma_scale = sigma_scale_for(p["latestYear"], years)
+        prob = admit_probability(ms["score"], p50, shock_std=shock_std, idio_std=idio_std, sigma_scale=sigma_scale)
         candidates.append({
             "programId": p["programId"],
             "majorKey": p["majorKey"],
@@ -567,6 +581,7 @@ def build_candidates(
             "sourceTier": p["sourceTier"],
             "sourceUrl": p["sourceUrl"],
             "usedIeltsConversion": ms["usedIeltsConversion"],
+            "sigmaScale": sigma_scale,
             "ruleOrigin": ms["ruleOrigin"],
             "ruleSource": (ms["ruleSource"] or {}).get("url") if ms["ruleSource"] else None,
         })
@@ -687,7 +702,7 @@ def suggest_portfolio(matched: list[dict[str, Any]], has_interest: bool, size: i
 
 def portfolio_summary(items: list[dict[str, Any]], shock_std: float, idio_std: float) -> dict[str, Any]:
     p_fail = portfolio_fail_all(
-        [{"userScore": c["userScore"], "forecastP50": c["cutoffP50"]} for c in items], shock_std, idio_std
+        [{"userScore": c["userScore"], "forecastP50": c["cutoffP50"], "sigmaScale": c["sigmaScale"]} for c in items], shock_std, idio_std
     ) if items else 1.0
     counts = {"an_toan": 0, "vua_tam": 0, "mao_hiem": 0}
     for c in items:

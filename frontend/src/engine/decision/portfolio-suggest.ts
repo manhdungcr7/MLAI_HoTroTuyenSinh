@@ -33,6 +33,7 @@ export function candidateToWishlistItem(option: CandidateOption, rank: number): 
     admission_method: option.admissionMethod,
     method_inferred: option.methodInferred,
     combinations_verified: option.combinationsVerified,
+    sigma_scale: option.sigmaScale,
   };
 }
 

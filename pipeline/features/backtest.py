@@ -1,19 +1,18 @@
-"""Backtest module for admissions cutoff forecast and profile-level probabilities.
+"""Kiểm định dự báo trên các năm đã biết, bằng đúng quy tắc đang chạy thật.
 
-Chạy kiểm định dự báo trên dữ liệu thực chứng 2025:
-- Tập huấn luyện (Train): toàn bộ dữ liệu lịch sử <= 2024 (chống rò rỉ 100%)
-- Tập kiểm tra (Test): 426 chương trình có điểm chuẩn thực tế 2025
-- So sánh 3 baseline thực chất:
-  1. Naive Baseline (Giữ nguyên điểm năm gần nhất, giả định trend = 0)
-  2. Trend Baseline (Cộng xu hướng tuyến tính toàn quốc ước lượng từ <= 2024)
-  3. Our Model (Hierarchical Group Pooling + Empirical Bayes Shrinkage + Dải bất định P10-P90)
-- Đo lường MAE, RMSE, Coverage P10-P90, Brier Score và Calibration Curve.
-- Xuất kết quả ra `frontend/public/data/backtest.json`.
+Quy tắc dự báo: điểm chuẩn năm tới = điểm chuẩn thật của năm gần nhất (xem pipeline/features/build.py).
+Với mỗi năm giữ lại T (2024, 2025):
+  - chỉ dùng dữ liệu các năm < T để dự báo và để ước lượng độ bất định (không rò rỉ),
+  - đo sai số (MAE, RMSE) và độ phủ của khoảng dự báo 10–90% so với điểm chuẩn thật năm T,
+  - đo độ chuẩn của xác suất đỗ: với học sinh giả định có điểm bằng dự báo + một mức lệch, so xác suất ứng dụng
+    đưa ra (cùng hàm common.admission_core.admit_probability) với tỷ lệ thực tế có điểm chuẩn thấp hơn.
+Kết quả ghi ở frontend/public/data/backtest.json và hiển thị ở trang "Cách tính".
 """
 
 from __future__ import annotations
 
 import json
+import math
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,315 +22,131 @@ import pandas as pd
 from scipy import stats
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from common import admission_core as core  # noqa: E402
+from common.national_shock import estimate_national_shock  # noqa: E402
+from pipeline.features.build import THIN_DATA_MULTIPLIER, forecast_band  # noqa: E402
+
 PROCESSED = ROOT / "data" / "processed"
 OUTPUT_JSON = ROOT / "frontend" / "public" / "data" / "backtest.json"
-OUTPUT_HISTORY_DIR = ROOT / "frontend" / "public" / "data" / "backtest_history"
-MODEL_VERSION = "2026.1-prod"
+HOLDOUT_YEARS = (2024, 2025)
+OFFSETS = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
+Z90 = float(stats.norm.ppf(0.90))
+MODEL_VERSION = "2026.2-diem-nam-gan-nhat"
 
-Z90 = float(stats.norm.ppf(0.90))  # ≈ 1.2816
 
+def _histories(df: pd.DataFrame) -> list[dict[int, float]]:
+    out = []
+    for raw in df["cutoff_by_year_json"]:
+        try:
+            cutoffs = {int(k): float(v) for k, v in json.loads(raw).items() if 12.0 <= float(v) <= 30.0}
+        except (TypeError, ValueError):
+            continue
+        if cutoffs:
+            out.append(cutoffs)
+    return out
+
+
+def _train_panel(histories: list[dict[int, float]], before: int) -> pd.DataFrame:
+    rows = [
+        {"school_code": "x", "major_label": str(i), "combinations": "", "cutoff_year": y, "score": s}
+        for i, h in enumerate(histories)
+        for y, s in h.items()
+        if y < before
+    ]
+    return pd.DataFrame(rows)
+
+
+def evaluate_holdout(histories: list[dict[int, float]], test_year: int) -> dict:
+    records = []
+    for h in histories:
+        past = [y for y in h if y < test_year]
+        if test_year in h and past:
+            last = max(past)
+            records.append((h[last], h[test_year], test_year - last, len(past), last))
+    if len(records) < 30:
+        return {"year": test_year, "n": len(records), "note": "Chưa đủ chương trình để kiểm định"}
+
+    last_score = np.array([r[0] for r in records])
+    actual = np.array([r[1] for r in records])
+    gap = np.array([r[2] for r in records])
+    n_hist = np.array([r[3] for r in records])
+    latest = [r[4] for r in records]
+    err = actual - last_score
+
+    result: dict = {
+        "year": test_year,
+        "n": len(records),
+        "mae": round(float(np.mean(np.abs(err))), 3),
+        "rmse": round(float(np.sqrt(np.mean(err**2))), 3),
+        "meanError": round(float(np.mean(err)), 3),
+    }
+
+    shock = estimate_national_shock(_train_panel(histories, test_year))
+    shock_std, idio_std = shock.get("overall_std"), shock.get("idio_std_overall")
+    if shock_std is None or idio_std is None or not (math.isfinite(shock_std) and math.isfinite(idio_std)):
+        result["note"] = "Dữ liệu trước năm này chưa đủ để ước lượng độ bất định, chỉ báo sai số"
+        return result
+
+    sigma = forecast_band(gap, n_hist <= 1, shock_std, idio_std)
+    inside = (actual >= last_score - Z90 * sigma) & (actual <= last_score + Z90 * sigma)
+    result.update({
+        "shockStd": round(float(shock_std), 3),
+        "idioStd": round(float(idio_std), 3),
+        "coverageP10P90Pct": round(float(inside.mean() * 100), 1),
+        "meanBandWidth": round(float(np.mean(2 * Z90 * sigma)), 2),
+    })
+
+    # Độ chuẩn của xác suất đỗ: học sinh giả định có điểm = dự báo + mức lệch.
+    scales = [
+        core.sigma_scale_for(latest[i], int(n_hist[i]), forecast_year=test_year) for i in range(len(records))
+    ]
+    curve, squared = [], []
+    for off in OFFSETS:
+        predicted = np.array([
+            core.admit_probability(last_score[i] + off, last_score[i], shock_std=shock_std, idio_std=idio_std, sigma_scale=scales[i])
+            for i in range(len(records))
+        ])
+        observed = (actual <= last_score + off).astype(float)
+        curve.append({"offset": off, "predicted": round(float(predicted.mean()), 3), "observed": round(float(observed.mean()), 3)})
+        squared.append((predicted - observed) ** 2)
+    result["calibration"] = curve
+    result["brierScore"] = round(float(np.mean(np.concatenate(squared))), 4)
+    result["calibrationGap"] = round(float(np.mean([abs(c["predicted"] - c["observed"]) for c in curve])), 3)
+    return result
 
 
 def run_backtest() -> dict:
     programs_path = PROCESSED / "programs.parquet"
     if not programs_path.is_file():
         raise FileNotFoundError(f"Missing {programs_path}")
+    histories = _histories(pd.read_parquet(programs_path))
 
-    df = pd.read_parquet(programs_path)
-
-    # 1. Thu thập dữ liệu có điểm thật 2025 và có điểm trước 2025
-    records = []
-    for _, row in df.iterrows():
-        cutoff_json = row.get("cutoff_by_year_json")
-        if not cutoff_json or not isinstance(cutoff_json, str):
-            continue
-        try:
-            cutoffs = json.loads(cutoff_json)
-        except Exception:
-            continue
-
-        if not isinstance(cutoffs, dict) or "2025" not in cutoffs:
-            continue
-
-        actual_2025 = float(cutoffs["2025"])
-        if not (12.0 <= actual_2025 <= 30.0):
-            continue
-
-        # Các năm <= 2024 hợp lệ
-        historical = {int(k): float(v) for k, v in cutoffs.items() if k != "2025" and 12.0 <= float(v) <= 30.0}
-        if not historical:
-            continue
-
-        latest_hist_year = max(historical.keys())
-        latest_hist_score = historical[latest_hist_year]
-        n_hist_years = len(historical)
-
-        mg = row.get("major_group")
-        if not mg or not isinstance(mg, str):
-            mg = "other"
-
-        records.append({
-            "program_key": row.get("program_key", ""),
-            "school_code": row.get("school_code", ""),
-            "major_label": row.get("major_label", ""),
-            "major_group": mg,
-            "actual_2025": actual_2025,
-            "latest_hist_year": latest_hist_year,
-            "latest_hist_score": latest_hist_score,
-            "n_hist_years": n_hist_years,
-            "historical": historical,
-            "idio_std": float(row.get("idio_std") or 1.2),
-        })
-
-    sample_size = len(records)
-    if sample_size == 0:
-        raise ValueError("No matching records found for 2025 backtest!")
-
-    # 2. Ước lượng xu hướng nhóm ngành và toàn quốc CHỈ DỰA TRÊN dữ liệu <= 2024 (chống rò rỉ)
-    # Thu thập tất cả các bước nhảy năm-năm từ toàn bộ tập dữ liệu <= 2024
-    group_deltas: dict[str, list[float]] = {}
-    all_deltas: list[float] = []
-    delta_years: list[int] = []
-
-    for _, row in df.iterrows():
-        c_json = row.get("cutoff_by_year_json")
-        if not c_json or not isinstance(c_json, str):
-            continue
-        try:
-            cutoffs = json.loads(c_json)
-        except Exception:
-            continue
-        hist = {int(k): float(v) for k, v in cutoffs.items() if k != "2025" and 12.0 <= float(v) <= 30.0}
-        if len(hist) < 2:
-            continue
-        mg = row.get("major_group")
-        if not mg or not isinstance(mg, str):
-            mg = "other"
-        years = sorted(hist.keys())
-        for y1, y2 in zip(years[:-1], years[1:]):
-            if y2 - y1 == 1:
-                d = hist[y2] - hist[y1]
-                group_deltas.setdefault(mg, []).append(d)
-                all_deltas.append(d)
-                delta_years.append(y2)
-
-    train_national_trend = float(np.median(all_deltas)) if all_deltas else 0.0
-    # Tách biến động thành cú sốc chung theo năm và nhiễu riêng từng chương trình,
-    # cùng cách ước lượng với sản phẩm (common/national_shock.py) nhưng chỉ trên ≤2024.
-    # std của toàn bộ delta đã gồm cả nhiễu riêng, cộng thêm idio lần nữa là đếm hai lần.
-    dd = pd.DataFrame({"year": delta_years, "delta": all_deltas})
-    year_median = dd.groupby("year")["delta"].transform("median")
-    medians_by_year = dd.groupby("year")["delta"].median()
-    train_shock_std = float(medians_by_year.std()) if len(medians_by_year) >= 2 else 1.0
-    if not np.isfinite(train_shock_std) or train_shock_std <= 0:
-        train_shock_std = 0.8
-    resid = dd["delta"] - year_median
-    train_idio_std = float((resid.quantile(0.9) - resid.quantile(0.1)) / 2.5631) if len(resid) > 10 else 0.8
-    group_median_trends = {
-        mg: float(np.median(ds)) for mg, ds in group_deltas.items() if len(ds) >= 3
-    }
-
-    # 3. Đánh giá 3 baseline dự báo điểm chuẩn 2025 trên 426 chương trình
-    y_true = np.array([r["actual_2025"] for r in records])
-
-    # Model 1: Naive (Giữ nguyên điểm năm trước, giả định không đổi)
-    y_naive = np.array([r["latest_hist_score"] for r in records])
-
-    # Model 2: Trend (Cộng xu hướng tuyến tính toàn quốc ước lượng từ <= 2024)
-    y_trend = np.array([
-        float(np.clip(r["latest_hist_score"] + train_national_trend * (2025 - r["latest_hist_year"]), 12.0, 30.0))
-        for r in records
-    ])
-
-    # Model 3: Our Model (Hierarchical Group Pooling + Empirical Bayes Shrinkage + Bất định P10-P90)
-    y_model = []
-    p10_list = []
-    p90_list = []
-    sigmas = []
-
-    for r in records:
-        dt = 2025 - r["latest_hist_year"]
-        mg = r["major_group"]
-        grp_trend = group_median_trends.get(mg, train_national_trend)
-        h = r["historical"]
-
-        if len(h) >= 2:
-            years = sorted(h.keys())
-            loc_deltas = [h[y2] - h[y1] for y1, y2 in zip(years[:-1], years[1:]) if y2 - y1 == 1]
-            loc_trend = float(np.median(loc_deltas)) if loc_deltas else grp_trend
-            # Co ngót Empirical Bayes: trọng số theo số năm quan sát
-            w = len(loc_deltas) / (len(loc_deltas) + 2.0)
-            shrunken_trend = w * loc_trend + (1.0 - w) * grp_trend
-        else:
-            shrunken_trend = grp_trend
-
-        pred_p50 = float(np.clip(r["latest_hist_score"] + shrunken_trend * dt, 12.0, 30.0))
-        mult = 1.4 if r["n_hist_years"] <= 1 else 1.0
-        sigma_i = float(np.sqrt(dt) * np.sqrt(train_shock_std**2 + train_idio_std**2) * mult)
-
-        p10 = float(max(0.0, pred_p50 - Z90 * sigma_i))
-        p90 = float(min(30.0, pred_p50 + Z90 * sigma_i))
-
-        y_model.append(pred_p50)
-        p10_list.append(p10)
-        p90_list.append(p90)
-        sigmas.append(sigma_i)
-
-    y_model = np.array(y_model)
-    p10_arr = np.array(p10_list)
-    p90_arr = np.array(p90_list)
-
-    # Metrics
-    mae_naive = float(np.mean(np.abs(y_true - y_naive)))
-    rmse_naive = float(np.sqrt(np.mean((y_true - y_naive) ** 2)))
-
-    mae_trend = float(np.mean(np.abs(y_true - y_trend)))
-    rmse_trend = float(np.sqrt(np.mean((y_true - y_trend) ** 2)))
-
-    mae_model = float(np.mean(np.abs(y_true - y_model)))
-    rmse_model = float(np.sqrt(np.mean((y_true - y_model) ** 2)))
-
-    # Coverage P10-P90
-    in_band = (y_true >= p10_arr) & (y_true <= p90_arr)
-    coverage = float(np.mean(in_band))
-    mean_band_width = float(np.mean(p90_arr - p10_arr))
-
-    # 4. Profile-level simulation & Calibration Curve
-    # Định chuẩn xác suất tại 5 mức z-score kiểm định quyết định (-2.0đ đến +2.0đ so với dự báo)
-    # đối chiếu với 426 kết quả xét tuyển thực tế (tổng cộng 2.130 phép thử xác suất)
-    score_offsets = [-2.0, -1.0, 0.0, +1.0, +2.0]
-    pred_probs = []
-    actual_outcomes = []
-
-    for i in range(sample_size):
-        for off in score_offsets:
-            test_score = y_model[i] + off
-            z = off / sigmas[i]
-            p_admit = float(stats.norm.cdf(z))
-            outcome = 1.0 if test_score >= y_true[i] else 0.0
-
-            pred_probs.append(p_admit)
-            actual_outcomes.append(outcome)
-
-    pred_probs = np.array(pred_probs)
-    actual_outcomes = np.array(actual_outcomes)
-
-    # Brier Score = mean((pred - actual)^2)
-    brier_score = float(np.mean((pred_probs - actual_outcomes) ** 2))
-
-    # Calibration Bins (10 bins: 0-0.1, 0.1-0.2, ...)
-    bins = np.linspace(0.0, 1.0, 11)
-    calibration_points = []
-    for b_low, b_high in zip(bins[:-1], bins[1:]):
-        mask = (pred_probs >= b_low) & (pred_probs < b_high) if b_high < 1.0 else (pred_probs >= b_low) & (pred_probs <= b_high)
-        n_in_bin = int(np.sum(mask))
-        if n_in_bin > 0:
-            avg_pred = float(np.mean(pred_probs[mask]))
-            avg_actual = float(np.mean(actual_outcomes[mask]))
-        else:
-            avg_pred = float((b_low + b_high) / 2)
-            avg_actual = float((b_low + b_high) / 2)
-
-        calibration_points.append({
-            "bin": f"{int(b_low * 100)}%-{int(b_high * 100)}%",
-            "predictedProb": round(avg_pred, 3),
-            "observedFreq": round(avg_actual, 3),
-            "count": n_in_bin,
-        })
-
-    # Kiểm định trôi dạt mô hình (Automated Model Drift Triggers)
-    drift_details: list[str] = []
-    is_drift_detected = False
-
-    if coverage < 0.65 or coverage > 0.90:
-        is_drift_detected = True
-        drift_details.append(f"Coverage P10-P90 ({coverage * 100:.1f}%) nằm ngoài khoảng mục tiêu [65%, 90%].")
-
-    if mae_model > 1.30 * mae_naive:
-        is_drift_detected = True
-        drift_details.append(f"MAE mô hình ({mae_model:.3f}) vượt quá 1.3x Naive baseline ({mae_naive:.3f}).")
-
-    if brier_score > 0.25:
-        is_drift_detected = True
-        drift_details.append(f"Brier score ({brier_score:.4f}) vượt ngưỡng cảnh báo 0.25.")
-
-    backtest_data = {
+    holdouts = [evaluate_holdout(histories, y) for y in HOLDOUT_YEARS]
+    payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "modelVersion": MODEL_VERSION,
-        "healthStatus": "drift_alert" if is_drift_detected else "healthy",
-        "isDriftDetected": is_drift_detected,
-        "driftDetails": drift_details,
-        "activeRollbackTarget": "naive_holdout_conservative",
-        "sampleSize": sample_size,
-        "trainPeriod": "<= 2024",
-        "testPeriod": "2025 (điểm chuẩn thật)",
-        "trainParameters": {
-            "nationalShockStd": round(train_shock_std, 3),
-            "idioStd": round(train_idio_std, 3),
-            "nationalMedianTrend": round(train_national_trend, 3),
-            "nHistoricalTransitions": len(all_deltas),
-            "groupTrendsCount": len(group_median_trends),
-        },
-        "metrics": {
-            "naiveBaseline": {
-                "label": "Giữ nguyên điểm năm trước",
-                "mae": round(mae_naive, 3),
-                "rmse": round(rmse_naive, 3),
-                "n": sample_size,
-            },
-            "trendBaseline": {
-                "label": "Cộng xu hướng tuyến tính quốc gia",
-                "mae": round(mae_trend, 3),
-                "rmse": round(rmse_trend, 3),
-                "n": sample_size,
-            },
-            "ourModel": {
-                "label": "Hierarchical Group Pooling & Bất định (Nguyện Vọng AI)",
-                "mae": round(mae_model, 3),
-                "rmse": round(rmse_model, 3),
-                "coverageP10P90Pct": round(coverage * 100, 1),
-                "meanBandWidth": round(mean_band_width, 2),
-                "n": sample_size,
-            },
-        },
-        "brierScore": round(brier_score, 4),
-        "calibrationMethod": "Định chuẩn xác suất tại 5 mức z-score kiểm định quyết định (-2.0đ đến +2.0đ) đối chiếu với 426 kết quả xét tuyển thực tế (tổng cộng 2.130 phép thử xác suất).",
-        "calibrationCurve": calibration_points,
-        "baselineInsight": (
-            "Quan sát thực chứng 2025: Sau các năm điểm chuẩn tăng nóng (2022-2023), điểm chuẩn 2025 có xu hướng đi ngang hoặc hạ nhiệt ở nhiều nhóm ngành. "
-            "Do đó, mô hình giữ nguyên điểm (Naive) có sai số điểm đơn lẻ thấp hơn (MAE 1.763) so với việc ngoại suy tăng trưởng (Trend MAE 1.789, Hierarchical MAE 1.920). "
-            "Điều này minh chứng: Điểm dự báo đơn lẻ (Point Forecast) rất mong manh trước biến động đề thi; giá trị thực sự của Trí tuệ Quyết định là định lượng Dải bất định P10–P90 (bao phủ 86.2% kết quả thật) "
-            "và bảo vệ danh mục thí sinh bằng Gauss-Hermite thay vì 'đoán một con số'."
-        ),
-        "limitationsVi": (
-            f"Backtest được thực hiện nghiêm ngặt trên {sample_size} chương trình có dữ liệu thực tế 2025 "
-            "và ít nhất một năm trước đó. Toàn bộ tham số xu hướng và độ lệch chuẩn chỉ được ước lượng từ "
-            "dữ liệu <= 2024 (chống rò rỉ dữ liệu kiểm định). Giới hạn: hiện chỉ kiểm định được trên 1 cặp năm (2024-2025)."
-        ),
+        "forecastRule": "Điểm chuẩn năm tới = điểm chuẩn thật của năm gần nhất; khoảng dự báo và xác suất đỗ dùng độ bất định đo từ dữ liệu.",
+        "thinDataMultiplier": THIN_DATA_MULTIPLIER,
+        "holdouts": holdouts,
+        "limitationsVi": [
+            "Chỉ có vài năm dữ liệu liên tiếp nên ước lượng cú sốc chung giữa các năm còn rất thô.",
+            "Chưa có cách nào thử được cho sai số thấp hơn việc giữ nguyên điểm năm trước; phần còn lại là cú sốc chung của từng năm, không dự đoán trước được.",
+            "Mỗi năm giữ lại được kiểm định riêng: năm 2024 chưa đủ dữ liệu trước đó để ước lượng độ bất định.",
+        ],
     }
-
     OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_JSON.write_text(json.dumps(backtest_data, indent=2, ensure_ascii=False), encoding="utf-8")
+    OUTPUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    print("[OK] Backtest hoàn tất")
+    for h in holdouts:
+        extra = f" | phủ {h['coverageP10P90Pct']}% | Brier {h['brierScore']}" if "coverageP10P90Pct" in h else f" | {h.get('note', '')}"
+        print(f"   {h['year']}: n={h['n']} MAE={h.get('mae')} RMSE={h.get('rmse')}{extra}")
+    return payload
 
-    # Lưu trữ vào Living Backtest History
-    OUTPUT_HISTORY_DIR.mkdir(parents=True, exist_ok=True)
-    history_file = OUTPUT_HISTORY_DIR / "backtest_2025.json"
-    history_file.write_text(json.dumps(backtest_data, indent=2, ensure_ascii=False), encoding="utf-8")
 
+if __name__ == "__main__":
     try:
         sys.stdout.reconfigure(encoding="utf-8")
     except Exception:
         pass
-
-    print(f"[OK] Backtest completed successfully for N={sample_size} programs!")
-    print(f"   Model Version: {MODEL_VERSION} | Status: {backtest_data['healthStatus']}")
-    print(f"   MAE: Naive={mae_naive:.3f} | Trend={mae_trend:.3f} | Our Model={mae_model:.3f}")
-    print(f"   Coverage P10-P90: {coverage * 100:.1f}% (Band width: {mean_band_width:.2f})")
-    print(f"   Brier Score: {brier_score:.4f}")
-    print(f"   Exported to {OUTPUT_JSON} and {history_file}")
-    return backtest_data
-
-
-
-if __name__ == "__main__":
     run_backtest()

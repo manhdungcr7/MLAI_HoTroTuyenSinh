@@ -10,7 +10,7 @@ import {
   ExamScores,
 } from "@/engine/types";
 import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
-import { calculateAdmitProbability, REACH_MAX_PROB } from "@/engine/admissions/probability";
+import { calculateAdmitProbability, REACH_MAX_PROB, sigmaScaleFor } from "@/engine/admissions/probability";
 import { scoreForProgram } from "@/engine/scoring/method-score";
 
 export function calculateSubjectRoiList(
@@ -32,7 +32,9 @@ export function calculateSubjectRoiList(
     const simulated = { ...profile, examScores: scores };
     return programs.filter((p) => {
       const ms = scoreForProgram(simulated, p);
-      return ms !== null && calculateAdmitProbability(ms.score, p.forecastP50) >= REACH_MAX_PROB;
+      if (ms === null) return false;
+      const meta = p as TargetProgram & { latestYear?: number; yearsOfData?: number };
+      return calculateAdmitProbability(ms.score, p.forecastP50, 1.0, undefined, undefined, sigmaScaleFor(meta.latestYear, meta.yearsOfData)) >= REACH_MAX_PROB;
     }).length;
   };
 

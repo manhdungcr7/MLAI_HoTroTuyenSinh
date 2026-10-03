@@ -39,9 +39,6 @@ ADMISSIONS_FIELDS = [
     "forecast_p50",
     "forecast_p10",
     "forecast_p90",
-    "percentile_rank",
-    "beta_program",
-    "idio_std",
 ]
 
 
@@ -116,8 +113,6 @@ def load_university_sources() -> dict[str, dict[str, Any]]:
 
 
 def build_snapshot(frame: pd.DataFrame, references: dict[str, str]) -> tuple[bytes, dict[str, Any]]:
-    if "percentile_rank" not in frame.columns:
-        frame = frame.assign(percentile_rank=50.0)
     missing = sorted(set(ADMISSIONS_FIELDS) - set(frame.columns))
     if missing:
         raise ValueError(f"Admissions schema mismatch; missing fields: {missing}")
@@ -299,8 +294,6 @@ def build_frontend_catalog(frame: pd.DataFrame, references: dict[str, str] | Non
             "forecastP10": _num(row.get("forecast_p10")),
             "forecastP50": _num(row.get("forecast_p50")),
             "forecastP90": _num(row.get("forecast_p90")),
-            "betaProgram": _num(row.get("beta_program"), 3),
-            "idioStd": _num(row.get("idio_std"), 3),
             # Chỉ giá trị đo được từ văn bản; không có thì null để giao diện nói "chưa có dữ liệu".
             "tuitionVnd": int(round(float(tuition_m) * 1_000_000)) if tuition_m is not None and pd.notna(tuition_m) else None,
             "employmentRate": _num(employment, 1) if employment is not None and pd.notna(employment) else None,
@@ -343,13 +336,6 @@ def export_admissions() -> dict[str, Any]:
     atomic_write(sidecar_path, canonical_json(manifest))
     # Publish the pointer last. A failed export leaves the previous manifest intact.
     atomic_write(current_manifest_path(), canonical_json(manifest))
-    # Tự động đồng bộ mô hình ML benchmark với snapshot dữ liệu mới
-    try:
-        from pipeline.models.train_ml import run_training_pipeline
-        run_training_pipeline()
-    except Exception as exc:
-        print(f"Warning: ML training benchmark sync skipped: {exc}")
-
     return manifest
 
 

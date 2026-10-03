@@ -1,19 +1,17 @@
-"""Sinh dự báo điểm chuẩn (forecast_p10/p50/p90) cho mỗi chương trình.
+"""Dự báo điểm chuẩn năm tới cho mỗi chương trình.
 
-QUYẾT ĐỊNH THIẾT KẾ QUAN TRỌNG — vì sao KHÔNG dùng LightGBM ở quy mô dữ liệu
-hiện tại: 58 trường thật, đa số chỉ có 2-3 năm liền kề. Huấn luyện một mô hình
-học máy trên tập nhỏ như vậy có nguy cơ overfitting cao và không thể backtest
-đáng tin cậy (tập test sẽ chỉ còn vài chục dòng cho một năm). Bản Gemini cũ
-"backtest thành công" bằng dữ liệu giả — tại đây, với dữ liệu thật, một đường
-cơ sở thống kê ĐƠN GIẢN NHƯNG TRUNG THỰC (điểm năm gần nhất + xu hướng toàn
-quốc thật + biên bất định thật) đáng tin hơn một mô hình phức tạp không kiểm
-chứng được. Khi kho dữ liệu đủ lớn (nhiều mùa tuyển sinh hơn), nâng cấp lên
-LightGBM Quantile là bước hợp lý — không phải bây giờ.
+QUY TẮC DỰ BÁO (đã được kiểm chứng bằng backtest, xem pipeline/features/backtest.py):
+    forecast_p50 = điểm chuẩn thật của năm gần nhất có dữ liệu
 
-Công thức:
-    forecast_p50 = điểm(năm gần nhất) + xu_hướng_toàn_quốc_trung_vị × số_năm_ngoại_suy
-    độ rộng biên = sqrt(số_năm_ngoại_suy) × sqrt(shock_std² + idio_std²)
-    forecast_p10/p90 = p50 ∓ 1.28 × độ rộng biên   (xấp xỉ phân vị 10/90 của phân phối chuẩn)
+Vì sao đơn giản như vậy: thử trên hai năm giữ lại (2024 và 2025) với dữ liệu hiện có, không cách nào
+sai số trung bình thấp hơn "giữ nguyên điểm năm trước": cộng xu hướng toàn quốc, co về trung bình nhóm
+ngành, trung bình hai năm gần nhất hay quy đổi bách phân vị đều không tốt hơn (hoặc tốt ở năm này
+nhưng kém ở năm kia). Phần biến động còn lại là cú sốc chung của từng năm (đề dễ/khó) và nhiễu riêng
+từng chương trình; hai thứ này được đo từ dữ liệu (common/national_shock.py) và đi vào độ rộng
+của khoảng dự báo và vào công thức xác suất đỗ, không được giấu đi.
+
+    độ rộng biên = sqrt(số_năm_từ_dữ_liệu_gần_nhất) × sqrt(shock_std² + idio_std²) × hệ_số_dữ_liệu_mỏng
+    forecast_p10/p90 = p50 ∓ 1.2816 × độ rộng biên
 """
 
 from __future__ import annotations
@@ -31,63 +29,35 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from common.national_shock import estimate_national_shock  # noqa: E402
-from common.percentile import score_to_percentile, percentile_to_score  # noqa: E402
 from pipeline import config  # noqa: E402
 
 FORECAST_YEAR = 2026
 Z90 = float(stats.norm.ppf(0.90))  # ≈1.2816
+# Chương trình chỉ có 1 năm dữ liệu dao động mạnh hơn: đo trên hai năm giữ lại, độ lệch chuẩn sai số
+# gấp 1.14 lần (2025) và 1.47 lần (2024) so với chương trình có từ 2 năm; lấy mức giữa.
+THIN_DATA_MULTIPLIER = 1.3
+
+
+def forecast_band(years_since_data: pd.Series | np.ndarray, thin: pd.Series | np.ndarray, shock_std: float, idio_std: float):
+    """Độ rộng biên (1 độ lệch chuẩn) theo số năm kể từ dữ liệu gần nhất và độ mỏng của dữ liệu."""
+    sigma = np.sqrt(np.maximum(1, years_since_data)) * np.sqrt(shock_std**2 + idio_std**2)
+    return sigma * np.where(thin, THIN_DATA_MULTIPLIER, 1.0)
 
 
 def build_forecasts(programs: pd.DataFrame, cutoff_panel: pd.DataFrame) -> pd.DataFrame:
     shock = estimate_national_shock(cutoff_panel)
-    trend = shock["overall_median"]
     shock_std = shock["overall_std"]
     idio_std = shock.get("idio_std_overall", shock_std)
 
     df = programs.copy()
-    df["years_extrapolated"] = FORECAST_YEAR - df["latest_year"].fillna(FORECAST_YEAR - 1)
-    df["years_extrapolated"] = df["years_extrapolated"].clip(lower=1)
+    df["years_extrapolated"] = (FORECAST_YEAR - df["latest_year"].fillna(FORECAST_YEAR - 1)).clip(lower=1)
+    df["forecast_p50"] = df["latest_score"].astype(float).clip(lower=5.0, upper=30.0)
 
-    # Quy đổi bách phân vị theo chuẩn Thông tư 06/2026/TT-BGDĐT (cấm bắc cầu điểm thô)
-    def compute_percentile_info(row):
-        score = row["latest_score"]
-        year = row["latest_year"]
-        combo = str(row.get("combinations_seen") or "A00").split(",")[0].strip()
-        if pd.isna(score) or pd.isna(year):
-            return pd.Series({"percentile_rank": 50.0, "equated_score": score if pd.notna(score) else 22.0})
-        p = score_to_percentile(float(score), int(year), combo)
-        s_eq = percentile_to_score(p, FORECAST_YEAR, combo)
-        return pd.Series({"percentile_rank": p, "equated_score": s_eq})
-
-    pct_res = df.apply(compute_percentile_info, axis=1)
-    df["percentile_rank"] = pct_res["percentile_rank"]
-
-    # Ngoại suy P50: lấy gốc từ điểm đã quy đổi tương đương bách phân vị sang năm 2026
-    df["forecast_p50"] = pct_res["equated_score"] + trend * (df["years_extrapolated"] - 1).clip(lower=0)
-    df["forecast_p50"] = df["forecast_p50"].clip(lower=5.0, upper=30.0)
-
-    band_width = np.sqrt(df["years_extrapolated"]) * np.sqrt(shock_std**2 + idio_std**2)
-    df["forecast_p10"] = (df["forecast_p50"] - Z90 * band_width).clip(lower=0.0)
-    df["forecast_p90"] = (df["forecast_p50"] + Z90 * band_width).clip(upper=30.0)
-
-    # Chỉ 1 năm dữ liệu -> không có xu hướng riêng của chương trình đó, biên
-    # phải rộng hơn nữa để phản ánh đúng mức bất định (bản cũ coi mọi chương
-    # trình như nhau bất kể có 1 năm hay 5 năm dữ liệu).
-    thin = df["n_years"] <= 1
-    df.loc[thin, "forecast_p10"] = (df.loc[thin, "forecast_p50"] - 1.5 * Z90 * band_width[thin]).clip(lower=0.0)
-    df.loc[thin, "forecast_p90"] = (df.loc[thin, "forecast_p50"] + 1.5 * Z90 * band_width[thin]).clip(upper=30.0)
-
-    # beta_program: chương trình có điểm chuẩn cao (cạnh tranh gắt) thường
-    # nhạy hơn với cú sốc toàn quốc (điểm cao sát nhau, một chút biến động đề
-    # thi đẩy thứ hạng thay đổi nhiều); chương trình điểm sàn thấp thường ít
-    # nhạy hơn (đã dư chỉ tiêu, ít cạnh tranh). Hệ số 1.0 ở mức trung vị điểm
-    # toàn quốc (~22), tăng/giảm tuyến tính quanh đó — ước lượng hợp lý, không
-    # phải số đo, nhưng có cơ sở logic rõ ràng chứ không phải random.uniform.
-    df["beta_program"] = (1.0 + (df["forecast_p50"] - 22.0) / 15.0).clip(lower=0.3, upper=2.0)
-    df["idio_std"] = idio_std
+    sigma = forecast_band(df["years_extrapolated"].to_numpy(), (df["n_years"] <= 1).to_numpy(), shock_std, idio_std)
+    df["forecast_p10"] = (df["forecast_p50"] - Z90 * sigma).clip(lower=0.0)
+    df["forecast_p90"] = (df["forecast_p50"] + Z90 * sigma).clip(upper=30.0)
 
     df.attrs["national_shock"] = shock
     return df
@@ -102,17 +72,12 @@ def run() -> pd.DataFrame:
     result.to_parquet(config.PROCESSED / "programs.parquet", index=False)
 
     shock = result.attrs["national_shock"]
-    # Parquet drops DataFrame.attrs on save/load, so the shock estimate the
-    # API needs at request time (national_shock_std, idio_std for
-    # simulate.run_monte_carlo) is persisted separately rather than
-    # recomputed from the raw panel on every server start.
+    # Parquet bỏ DataFrame.attrs khi lưu, nên ước lượng cú sốc được lưu riêng cho API và frontend.
     (config.PROCESSED / "national_shock.json").write_text(
         json.dumps(shock, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"features/build: dự báo cho {len(result):,} chương trình, "
-          f"xu hướng toàn quốc trung vị={shock['overall_median']:+.2f}/năm, "
-          f"độ lệch chuẩn cú sốc={shock['overall_std']}")
-    print(f"features/build: forecast_p50 trung vị={result['forecast_p50'].median():.2f}, "
-          f"biên p10-p90 trung vị={( result['forecast_p90']-result['forecast_p10']).median():.2f} điểm")
+    print(f"features/build: dự báo cho {len(result):,} chương trình bằng điểm năm gần nhất; "
+          f"độ lệch chuẩn cú sốc chung={shock['overall_std']}, nhiễu riêng={shock['idio_std_overall']}")
+    print(f"features/build: biên p10-p90 trung vị={(result['forecast_p90'] - result['forecast_p10']).median():.2f} điểm")
     if shock.get("warning"):
         print(f"  [!] {shock['warning']}")
     return result

@@ -20,7 +20,8 @@ STAGES = [
     ("Phân tích học phí + việc làm", "pipeline.clean.build_tuition_employment_panel", "run"),
     ("Ghép panel -> programs.parquet", "pipeline.clean.reconcile", "run"),
     ("Sinh dự báo điểm chuẩn", "pipeline.features.build", "run"),
-    ("Huấn luyện Machine Learning & Đánh giá Benchmark", "pipeline.models.train_ml", "run_training_pipeline"),
+    ("Kiểm định dự báo trên các năm đã biết (backtest)", "pipeline.features.backtest", "run_backtest"),
+    ("Xuất catalog và snapshot dữ liệu", "pipeline.publish", "main"),
 ]
 
 

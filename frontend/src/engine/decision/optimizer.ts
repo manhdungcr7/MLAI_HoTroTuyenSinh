@@ -7,6 +7,7 @@ import {
   calculateAdmitProbability,
   calculatePortfolioFailAll,
   classifyRole,
+  sigmaScaleFor,
 } from "@/engine/admissions/probability";
 import { scoreForProgram } from "@/engine/scoring/method-score";
 
@@ -70,7 +71,8 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
       p90 = Math.min(30, round2(p50 + halfSpan * 1.6));
     }
 
-    const prob = calculateAdmitProbability(ms.score, p50);
+    const sigmaScale = sigmaScaleFor((p as TargetProgram & { latestYear?: number }).latestYear, yearsOfData);
+    const prob = calculateAdmitProbability(ms.score, p50, 1.0, undefined, undefined, sigmaScale);
     const role: Role = classifyRole(prob);
     candidates.push({
       programId: p.programId,
@@ -99,6 +101,7 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
       sourceTier: p.sourceTier,
       ruleOrigin: ms.ruleOrigin,
       ruleSource: ms.ruleSource?.url,
+      sigmaScale,
     });
   }
 
@@ -118,6 +121,7 @@ export function calculateWishlistFailAll(items: WishlistItem[]): number {
     items.map((w) => ({
       userScore: w.user_score ?? (w.forecast_p50 ? w.forecast_p50 + (w.admit_prob > 0.5 ? 0.8 : -0.8) : 22.0),
       forecastP50: w.forecast_p50 ?? 22.0,
+      sigmaScale: w.sigma_scale,
     })),
   );
 }

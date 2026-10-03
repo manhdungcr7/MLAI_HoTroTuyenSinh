@@ -25,7 +25,7 @@ def test_parquet_schema_and_non_null_primary_keys():
     required_columns = [
         "program_key", "school_code", "major_label", "combinations_seen",
         "cutoff_by_year_json", "forecast_p10", "forecast_p50", "forecast_p90",
-        "beta_program", "idio_std", "data_quality"
+        "data_quality"
     ]
     for col in required_columns:
         assert col in df.columns, f"Thiếu cột bắt buộc: {col}"
@@ -57,16 +57,13 @@ def test_parquet_quantile_monotonicity():
     )
 
 
-def test_parquet_statistical_parameters_positivity():
-    """Tham số nhạy cảm thị trường (beta_program) và phương sai riêng (idio_std) phải luôn dương."""
+def test_parquet_forecast_is_latest_real_score_and_band_is_valid():
+    """Dự báo p50 đúng bằng điểm chuẩn thật gần nhất; biên p10 <= p50 <= p90 và nằm trong thang điểm."""
     df = pd.read_parquet(PARQUET_PATH)
-
-    assert (df["beta_program"] > 0).all(), "Phát hiện beta_program <= 0"
-    assert (df["idio_std"] > 0).all(), "Phát hiện idio_std <= 0"
-
-    # Kiểm tra giới hạn hợp lý
-    assert (df["beta_program"] <= 5.0).all(), "beta_program quá lớn bất thường"
-    assert (df["idio_std"] <= 5.0).all(), "idio_std quá lớn bất thường"
+    assert ((df["forecast_p50"] - df["latest_score"]).abs() < 1e-9).all(), "forecast_p50 phải bằng điểm năm gần nhất"
+    assert (df["forecast_p10"] <= df["forecast_p50"]).all() and (df["forecast_p50"] <= df["forecast_p90"]).all()
+    assert df["forecast_p10"].min() >= 0 and df["forecast_p90"].max() <= 30
+    assert (df["years_extrapolated"] >= 1).all()
 
 
 def test_parquet_cutoff_by_year_json_validity():

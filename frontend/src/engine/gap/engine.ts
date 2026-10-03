@@ -5,7 +5,7 @@
  */
 
 import { TargetProgram, StudentProfile, GapMetric } from "@/engine/types";
-import { calculateAdmitProbability } from "@/engine/admissions/probability";
+import { calculateAdmitProbability, sigmaScaleFor } from "@/engine/admissions/probability";
 import { scoreForProgram } from "@/engine/scoring/method-score";
 
 function realCutoffs(target: TargetProgram): { year: string; score: number }[] {
@@ -28,7 +28,8 @@ export function runGapAnalysis(target: TargetProgram, profile: StudentProfile): 
   // Không có dự báo và không có năm nào → không bịa mức tham chiếu; giữ 0 để giao diện báo thiếu dữ liệu.
   const p50 = target.forecastP50 || latest || 0;
   const rawGap = Number((compositeScore - p50).toFixed(2));
-  const admitProb = compositeScore > 0 && p50 > 0 ? calculateAdmitProbability(compositeScore, p50) : 0;
+  const sigmaScale = sigmaScaleFor(history.length ? Number(history[history.length - 1].year) : undefined, history.length);
+  const admitProb = compositeScore > 0 && p50 > 0 ? calculateAdmitProbability(compositeScore, p50, 1.0, undefined, undefined, sigmaScale) : 0;
 
   let gapStatus: "thach_thuc" | "vua_tam" | "an_toan";
   let statusLabelVi: string;
@@ -63,6 +64,7 @@ export function runGapAnalysis(target: TargetProgram, profile: StudentProfile): 
     targetProgram: target,
     currentCompositeScore: Number(compositeScore.toFixed(2)),
     rawGap,
+    admitProbability: admitProb,
     gapStatus,
     statusLabelVi,
     statusColor,
