@@ -24,7 +24,7 @@ const GROUP_LABEL = new Map(MAJOR_GROUPS.map((g) => [g.value, g.label]));
 
 const stepForMissing = (label: string): StepId => (/học bạ/i.test(label) ? "hocba" : /ĐGNL|ĐGTD/.test(label) ? "cert" : "exam");
 
-/** Xếp theo đúng phần trăm hiển thị (giảm dần); từ 99% trở lên hiển thị chung là "trên 99%" nên xếp theo điểm chuẩn (trường tốt hơn lên trước). */
+/** Xếp theo đúng phần trăm hiển thị (tăng dần); từ 99% trở lên hiển thị chung là "trên 99%" nên xếp theo điểm chuẩn (trường tốt hơn lên trước). */
 const band = (p: number) => Math.min(99, Math.round(p * 100));
 
 export default function ResultsPage() {
@@ -52,7 +52,7 @@ export default function ResultsPage() {
   const ranked = useMemo(() => {
     return matched
       .filter((c) => (tab === "all" || c.role === tab) && (group === "all" || c.majorGroup === group) && (!query.trim() || matchesQuery(`${c.schoolName} ${c.schoolCode} ${c.majorName}`, query)))
-      .sort((a, b) => band(b.admitProbability) - band(a.admitProbability) || b.cutoffP50 - a.cutoffP50 || b.admitProbability - a.admitProbability);
+      .sort((a, b) => band(a.admitProbability) - band(b.admitProbability) || b.cutoffP50 - a.cutoffP50 || a.admitProbability - b.admitProbability);
   }, [matched, tab, group, query]);
 
   const favorites = useMemo(() => new Set(profile.favoriteProgramIds ?? []), [profile.favoriteProgramIds]);
