@@ -7,7 +7,7 @@
 
 Nguyện Vọng AI là **lớp ra quyết định** đi cùng học sinh lớp 12 từ lúc đặt mục tiêu tới lúc nộp nguyện vọng: em đang ở đâu, thiếu bao nhiêu, nên dồn sức vào môn nào, chọn trường nào, xếp 15 nguyện vọng ra sao để không trượt hết — và tự tính lại toàn bộ mỗi khi có điểm thi thử mới.
 
-Luồng: **Tổng quan → Hồ sơ của em → Phân tích năng lực → Khám phá trường → Xếp nguyện vọng → Kế hoạch học → Cách tính.**
+Luồng: **Tìm ngành cho em** (nhập điểm thi + học bạ và điều kiện → danh sách ngành xếp theo xác suất đỗ) → **Khám phá trường** (lọc, so sánh) → **Xếp nguyện vọng** (tối đa 15, kèm xác suất không đỗ nguyện vọng nào) → **Cải thiện điểm** và **Kế hoạch học** (phần mở rộng) → **Cách tính** / **Kiểm chứng**.
 
 ## Tài liệu
 
@@ -34,6 +34,24 @@ cd frontend
 npm ci
 npm run dev        # http://localhost:3030
 ```
+
+## API tư vấn (backend)
+
+```powershell
+pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --port 8000
+```
+
+| Endpoint | Việc |
+|---|---|
+| `POST /api/advisor/search` | Hồ sơ → mọi ngành thỏa ràng buộc, xếp theo xác suất đỗ (phương thức tốt nhất cho học sinh), có lọc và phân trang |
+| `POST /api/advisor/portfolio` | Đề xuất hoặc đánh giá danh sách tối đa 15 nguyện vọng, kèm xác suất không đỗ nguyện vọng nào |
+| `GET /api/advisor/methods` | Phương thức xét tuyển hệ thống hiểu và phương thức nào đã tính được |
+| `GET /api/advisor/programs/{id}` | Chi tiết một chương trình và lịch sử điểm chuẩn |
+
+Lõi tính ở `common/admission_core.py` được đối chiếu tự động với engine TypeScript
+(`tests/backend/test_admission_core_parity.py`): đổi công thức ở một bên thì phải đổi cả bên kia.
+Bảng dùng chung (tổ hợp, vùng của tỉnh) xuất từ TypeScript bằng `scripts/export_shared_rules.ts`.
 
 ## Cập nhật dữ liệu
 

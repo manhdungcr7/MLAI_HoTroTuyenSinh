@@ -41,7 +41,7 @@ function getRouteTitle(pathname: string): { title: string; subTitle?: string } {
 }
 
 function formatGradeLabel(grade?: string): string {
-  if (!grade?.trim()) return "Chưa cập nhật lớp";
+  if (!grade?.trim()) return "Học sinh lớp 12";
   const trimmed = grade.trim();
   return /^lớp\s/i.test(trimmed) ? trimmed : `Lớp ${trimmed}`;
 }

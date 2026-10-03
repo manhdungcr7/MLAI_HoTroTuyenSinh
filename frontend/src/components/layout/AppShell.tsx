@@ -3,6 +3,7 @@ import { usePathname } from "@/routes";
 import { useDecision } from "@/state/DecisionContext";
 import { Sidebar, DOMAIN_NAV_ITEMS } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
+import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { QuickSimModal } from "@/components/layout/QuickSimModal";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -79,11 +80,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           style={{ scrollbarGutter: "stable" }}
         >
           {/* Page Content: width 100%, max-w-none */}
-          <main className="page-content w-full max-w-none p-4 sm:p-6 lg:p-8 space-y-6">
+          <main className="page-content w-full max-w-none p-4 pb-24 sm:p-6 sm:pb-24 md:pb-8 lg:p-8 space-y-6">
             {children}
           </main>
         </div>
       </div>
+
+      <MobileTabBar wishlistCount={wishlist.length} />
 
       {/* Quick Mock Test Simulation Modal */}
       <QuickSimModal

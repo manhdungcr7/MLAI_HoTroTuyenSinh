@@ -60,7 +60,7 @@ _SUBJECT_WORD = (
     r"Địa lí|Địa lý|Địa|Tiếng Anh|Anh|GDCD|GDKT\s*&\s*PL|GD\s*Công dân|Giáo dục công dân|"
     r"Giáo dục kinh tế và pháp luật|Công nghệ|Khoa học tự nhiên|Khoa học xã hội|KHTN|KHXH|Tin học|Tin)"
 )
-_COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*")
+_COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*(?:\(\s*[A-Z]\d{{2}}\s*\))?\s*")
 _CODE_ONLY = re.compile(r"\s*(?:[A-Z]\d{2}|PT\s*\d+|[A-Z]{2,4}|[\d\s,.;:\-–_/()]*)\s*")
 _NOT_REGULAR = re.compile(r"liên thông|văn bằng\s*(?:2|hai)|VB2", re.IGNORECASE)
 

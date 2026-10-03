@@ -1,43 +1,43 @@
 {
-  "generatedAt": "2026-10-02T16:43:53.047580+00:00",
+  "generatedAt": "2026-10-03T00:19:36.940141+00:00",
   "modelVersion": "2026.1-prod",
   "healthStatus": "healthy",
   "isDriftDetected": false,
   "driftDetails": [],
   "activeRollbackTarget": "naive_holdout_conservative",
-  "sampleSize": 667,
+  "sampleSize": 661,
   "trainPeriod": "<= 2024",
   "testPeriod": "2025 (điểm chuẩn thật)",
   "trainParameters": {
     "nationalShockStd": 1.069,
     "idioStd": 1.366,
     "nationalMedianTrend": 0.23,
-    "nHistoricalTransitions": 1311,
+    "nHistoricalTransitions": 1307,
     "groupTrendsCount": 12
   },
   "metrics": {
     "naiveBaseline": {
       "label": "Giữ nguyên điểm năm trước",
-      "mae": 1.707,
-      "rmse": 2.425,
-      "n": 667
+      "mae": 1.709,
+      "rmse": 2.43,
+      "n": 661
     },
     "trendBaseline": {
       "label": "Cộng xu hướng tuyến tính quốc gia",
-      "mae": 1.715,
-      "rmse": 2.423,
-      "n": 667
+      "mae": 1.717,
+      "rmse": 2.427,
+      "n": 661
     },
     "ourModel": {
       "label": "Hierarchical Group Pooling & Bất định (Nguyện Vọng AI)",
-      "mae": 1.821,
-      "rmse": 2.539,
-      "coverageP10P90Pct": 77.7,
-      "meanBandWidth": 5.63,
-      "n": 667
+      "mae": 1.822,
+      "rmse": 2.543,
+      "coverageP10P90Pct": 77.5,
+      "meanBandWidth": 5.62,
+      "n": 661
     }
   },
-  "brierScore": 0.1906,
+  "brierScore": 0.1905,
   "calibrationMethod": "Định chuẩn xác suất tại 5 mức z-score kiểm định quyết định (-2.0đ đến +2.0đ) đối chiếu với 426 kết quả xét tuyển thực tế (tổng cộng 2.130 phép thử xác suất).",
   "calibrationCurve": [
     {
@@ -49,20 +49,20 @@
     {
       "bin": "10%-20%",
       "predictedProb": 0.124,
-      "observedFreq": 0.234,
-      "count": 128
+      "observedFreq": 0.236,
+      "count": 127
     },
     {
       "bin": "20%-30%",
       "predictedProb": 0.22,
-      "observedFreq": 0.25,
-      "count": 667
+      "observedFreq": 0.247,
+      "count": 661
     },
     {
       "bin": "30%-40%",
       "predictedProb": 0.34,
-      "observedFreq": 0.336,
-      "count": 539
+      "observedFreq": 0.335,
+      "count": 534
     },
     {
       "bin": "40%-50%",
@@ -73,26 +73,26 @@
     {
       "bin": "50%-60%",
       "predictedProb": 0.5,
-      "observedFreq": 0.613,
-      "count": 667
+      "observedFreq": 0.614,
+      "count": 661
     },
     {
       "bin": "60%-70%",
       "predictedProb": 0.66,
       "observedFreq": 0.753,
-      "count": 539
+      "count": 534
     },
     {
       "bin": "70%-80%",
       "predictedProb": 0.78,
-      "observedFreq": 0.859,
-      "count": 667
+      "observedFreq": 0.856,
+      "count": 661
     },
     {
       "bin": "80%-90%",
       "predictedProb": 0.876,
-      "observedFreq": 0.922,
-      "count": 128
+      "observedFreq": 0.921,
+      "count": 127
     },
     {
       "bin": "90%-100%",
@@ -102,5 +102,5 @@
     }
   ],
   "baselineInsight": "Quan sát thực chứng 2025: Sau các năm điểm chuẩn tăng nóng (2022-2023), điểm chuẩn 2025 có xu hướng đi ngang hoặc hạ nhiệt ở nhiều nhóm ngành. Do đó, mô hình giữ nguyên điểm (Naive) có sai số điểm đơn lẻ thấp hơn (MAE 1.763) so với việc ngoại suy tăng trưởng (Trend MAE 1.789, Hierarchical MAE 1.920). Điều này minh chứng: Điểm dự báo đơn lẻ (Point Forecast) rất mong manh trước biến động đề thi; giá trị thực sự của Trí tuệ Quyết định là định lượng Dải bất định P10–P90 (bao phủ 86.2% kết quả thật) và bảo vệ danh mục thí sinh bằng Gauss-Hermite thay vì 'đoán một con số'.",
-  "limitationsVi": "Backtest được thực hiện nghiêm ngặt trên 667 chương trình có dữ liệu thực tế 2025 và ít nhất một năm trước đó. Toàn bộ tham số xu hướng và độ lệch chuẩn chỉ được ước lượng từ dữ liệu <= 2024 (chống rò rỉ dữ liệu kiểm định). Giới hạn: hiện chỉ kiểm định được trên 1 cặp năm (2024-2025)."
+  "limitationsVi": "Backtest được thực hiện nghiêm ngặt trên 661 chương trình có dữ liệu thực tế 2025 và ít nhất một năm trước đó. Toàn bộ tham số xu hướng và độ lệch chuẩn chỉ được ước lượng từ dữ liệu <= 2024 (chống rò rỉ dữ liệu kiểm định). Giới hạn: hiện chỉ kiểm định được trên 1 cặp năm (2024-2025)."
 }

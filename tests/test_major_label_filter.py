@@ -22,7 +22,7 @@ def test_keeps_real_major_names(label):
 
 @pytest.mark.parametrize(
     "label",
-    ["Ngữ văn, Địa lý, GD Công dân", "Toán, Công nghệ, Tiếng Anh", "Ngữ văn, Lịch sử, Giáo dục công dân"],
+    ["Ngữ văn, Địa lý, GD Công dân", "Toán, Công nghệ, Tiếng Anh", "Ngữ văn, Lịch sử, Giáo dục công dân", "Toán, Ngữ văn, Tin học (X02)"],
 )
 def test_rejects_subject_lists_with_new_curriculum_names(label):
     assert is_garbage_major_label(label)
