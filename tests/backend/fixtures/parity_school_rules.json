@@ -1,378 +1,429 @@
 {
- "rules": [
-  {
-   "schoolCode": "BKA",
-   "year": 2026,
-   "source": {
-    "url": "https://example.test/fixture-bka",
-    "verifiedAt": "2026-10-03",
-    "verifiedBy": "test-fixture"
-   },
-   "methods": {
-    "THPT": {
-     "priority": "standard",
-     "components": [
-      {
-       "source": "exam_combo",
-       "weight": 1,
-       "subjectWeights": {
-        "toan": 2
-       }
-      }
-     ],
-     "certBonus": {
-      "ielts": [
-       {
-        "min": 5.5,
-        "points": 1
-       },
-       {
-        "min": 6.5,
-        "points": 2
-       }
-      ]
-     },
-     "bonusCap": 3,
-     "minExamComboTotal": 18
-    }
-   }
-  },
-  {
-   "schoolCode": "QHI",
-   "year": 2026,
-   "source": {
-    "url": "https://example.test/fixture-qhi",
-    "verifiedAt": "2026-10-03",
-    "verifiedBy": "test-fixture"
-   },
-   "methods": {
-    "HOC_BA": {
-     "priority": "none",
-     "components": [
-      {
-       "source": "hocba_combo",
-       "weight": 1,
-       "grades": [
-        11,
-        12
-       ]
-      }
-     ]
-    }
-   }
-  },
-  {
-   "schoolCode": "ZZ1",
-   "year": 2026,
-   "source": {
-    "url": "https://example.test/fixture-zz1",
-    "verifiedAt": "2026-10-03",
-    "verifiedBy": "test-fixture"
-   },
-   "methods": {
-    "DGNL_HCM": {
-     "priority": "standard",
-     "components": [
-      {
-       "source": "dgnl_hcm",
-       "weight": 0.55
+  "rules": [
+    {
+      "schoolCode": "BKA",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-bka",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
       },
-      {
-       "source": "exam_combo",
-       "weight": 0.35
-      },
-      {
-       "source": "hocba_combo",
-       "weight": 0.1
+      "methods": {
+        "THPT": {
+          "priority": "standard",
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1,
+              "subjectWeights": {
+                "toan": 2
+              }
+            }
+          ],
+          "certBonus": {
+            "ielts": [
+              {
+                "min": 5.5,
+                "points": 1
+              },
+              {
+                "min": 6.5,
+                "points": 2
+              }
+            ]
+          },
+          "bonusCap": 3,
+          "minExamComboTotal": 18
+        }
       }
-     ]
-    }
-   }
-  },
-  {
-   "schoolCode": "ZZ2",
-   "year": 2026,
-   "source": {
-    "url": "https://example.test/fixture-zz2",
-    "verifiedAt": "2026-10-03",
-    "verifiedBy": "test-fixture"
-   },
-   "methods": {
-    "THPT": {
-     "priority": "none",
-     "components": [
-      {
-       "source": "exam_combo",
-       "weight": 1
-      }
-     ],
-     "ieltsToEnglish": [
-      {
-       "min": 5.0,
-       "score": 8.0
-      },
-      {
-       "min": 6.0,
-       "score": 9.0
-      },
-      {
-       "min": 7.0,
-       "score": 10
-      }
-     ]
     },
-    "HOC_BA": {
-     "priority": "none",
-     "components": [
-      {
-       "source": "hocba_combo",
-       "weight": 1
+    {
+      "schoolCode": "QHI",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-qhi",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
+      },
+      "methods": {
+        "HOC_BA": {
+          "priority": "none",
+          "components": [
+            {
+              "source": "hocba_combo",
+              "weight": 1,
+              "grades": [
+                11,
+                12
+              ]
+            }
+          ]
+        }
       }
-     ],
-     "minHocBaComboTotal": 25
+    },
+    {
+      "schoolCode": "ZZ1",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-zz1",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
+      },
+      "methods": {
+        "DGNL_HCM": {
+          "priority": "standard",
+          "components": [
+            {
+              "source": "dgnl_hcm",
+              "weight": 0.55
+            },
+            {
+              "source": "exam_combo",
+              "weight": 0.35
+            },
+            {
+              "source": "hocba_combo",
+              "weight": 0.1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schoolCode": "ZZ2",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-zz2",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
+      },
+      "methods": {
+        "THPT": {
+          "priority": "none",
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1
+            }
+          ],
+          "ieltsToEnglish": [
+            {
+              "min": 5.0,
+              "score": 8.0
+            },
+            {
+              "min": 6.0,
+              "score": 9.0
+            },
+            {
+              "min": 7.0,
+              "score": 10
+            }
+          ]
+        },
+        "HOC_BA": {
+          "priority": "none",
+          "components": [
+            {
+              "source": "hocba_combo",
+              "weight": 1
+            }
+          ],
+          "minHocBaComboTotal": 25
+        }
+      }
+    },
+    {
+      "schoolCode": "ZZ3",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-zz3",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
+      },
+      "methods": {
+        "HOC_BA": {
+          "priority": "standard",
+          "scoreFactor": 0.8333333333333334,
+          "minHocBaComboTotal": 18,
+          "components": [
+            {
+              "source": "hocba_combo",
+              "weight": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schoolCode": "ZZ4",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-zz4",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
+      },
+      "methods": {
+        "THPT": {
+          "priority": "none",
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1
+            }
+          ],
+          "allowedCombinations": [
+            "A01",
+            "D01"
+          ],
+          "certBonus": {
+            "ielts": [
+              {
+                "min": 5.5,
+                "points": 0.25
+              },
+              {
+                "min": 6.5,
+                "points": 0.75
+              }
+            ],
+            "excludedMajorGroups": [
+              "su_pham"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "schoolCode": "ZZ9",
+      "year": 2026,
+      "source": {
+        "url": "https://example.test/fixture-zz9",
+        "verifiedAt": "2026-10-03",
+        "verifiedBy": "test-fixture"
+      },
+      "methods": {
+        "THPT": {
+          "priority": "standard",
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1,
+              "subjectWeights": {
+                "toan": 2
+              }
+            }
+          ],
+          "majorGroupOverrides": {
+            "ngon_ngu": {
+              "components": [
+                {
+                  "source": "exam_combo",
+                  "weight": 1
+                }
+              ]
+            }
+          }
+        }
+      }
     }
-   }
-  },
-  {
-   "schoolCode": "ZZ3",
-   "year": 2026,
-   "source": {
-    "url": "https://example.test/fixture-zz3",
-    "verifiedAt": "2026-10-03",
-    "verifiedBy": "test-fixture"
-   },
-   "methods": {
-    "HOC_BA": {
-     "priority": "standard",
-     "scoreFactor": 0.8333333333333334,
-     "minHocBaComboTotal": 18,
-     "components": [
-      {
-       "source": "hocba_combo",
-       "weight": 1
-      }
-     ]
-    }
-   }
-  },
-  {
-   "schoolCode": "ZZ4",
-   "year": 2026,
-   "source": {
-    "url": "https://example.test/fixture-zz4",
-    "verifiedAt": "2026-10-03",
-    "verifiedBy": "test-fixture"
-   },
-   "methods": {
-    "THPT": {
-     "priority": "none",
-     "components": [
-      {
-       "source": "exam_combo",
-       "weight": 1
-      }
-     ],
-     "allowedCombinations": [
-      "A01",
-      "D01"
-     ],
-     "certBonus": {
-      "ielts": [
-       {
-        "min": 5.5,
-        "points": 0.25
-       },
-       {
-        "min": 6.5,
-        "points": 0.75
-       }
+  ],
+  "programs": [
+    {
+      "schoolCode": "ZZ1",
+      "admissionMethod": "DGNL_HCM",
+      "combinations": [
+        "A00",
+        "A01"
       ],
-      "excludedMajorGroups": [
-       "su_pham"
-      ]
-     }
-    }
-   }
-  }
- ],
- "programs": [
-  {
-   "schoolCode": "ZZ1",
-   "admissionMethod": "DGNL_HCM",
-   "combinations": [
-    "A00",
-    "A01"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "ZZ1",
-   "admissionMethod": "DGNL_HCM",
-   "combinations": [],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "BKA",
-   "admissionMethod": "THPT",
-   "combinations": [
-    "A00",
-    "A01"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "QHI",
-   "admissionMethod": "HOC_BA",
-   "combinations": [
-    "A00"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "QHI",
-   "admissionMethod": "THPT",
-   "combinations": [
-    "A00"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "NOP",
-   "admissionMethod": "DGNL_HCM",
-   "combinations": [
-    "A00"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "ZZ2",
-   "admissionMethod": "THPT",
-   "combinations": [
-    "D01"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "ZZ2",
-   "admissionMethod": "HOC_BA",
-   "combinations": [
-    "A00"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "ZZ3",
-   "admissionMethod": "HOC_BA",
-   "combinations": [
-    "A00"
-   ],
-   "requiresAptitude": false
-  },
-  {
-   "schoolCode": "ZZ4",
-   "admissionMethod": "THPT",
-   "combinations": [],
-   "requiresAptitude": false,
-   "majorGroup": "kinh_te"
-  },
-  {
-   "schoolCode": "ZZ4",
-   "admissionMethod": "THPT",
-   "combinations": [],
-   "requiresAptitude": false,
-   "majorGroup": "su_pham"
-  }
- ],
- "profiles": [
-  {
-   "examScores": {
-    "toan": 9,
-    "ly": 8,
-    "hoa": 8.5,
-    "anh": 7
-   },
-   "hocBaScores": {
-    "toan": 8.5,
-    "ly": 8,
-    "hoa": 8
-   },
-   "hocBaGrades": {
-    "11": {
-     "toan": 8,
-     "ly": 8,
-     "hoa": 8
+      "requiresAptitude": false
     },
-    "12": {
-     "toan": 9,
-     "ly": 8.5,
-     "hoa": 8.2
+    {
+      "schoolCode": "ZZ1",
+      "admissionMethod": "DGNL_HCM",
+      "combinations": [],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "BKA",
+      "admissionMethod": "THPT",
+      "combinations": [
+        "A00",
+        "A01"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "QHI",
+      "admissionMethod": "HOC_BA",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "QHI",
+      "admissionMethod": "THPT",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "NOP",
+      "admissionMethod": "DGNL_HCM",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "ZZ2",
+      "admissionMethod": "THPT",
+      "combinations": [
+        "D01"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "ZZ2",
+      "admissionMethod": "HOC_BA",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "ZZ3",
+      "admissionMethod": "HOC_BA",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false
+    },
+    {
+      "schoolCode": "ZZ4",
+      "admissionMethod": "THPT",
+      "combinations": [],
+      "requiresAptitude": false,
+      "majorGroup": "kinh_te"
+    },
+    {
+      "schoolCode": "ZZ4",
+      "admissionMethod": "THPT",
+      "combinations": [],
+      "requiresAptitude": false,
+      "majorGroup": "su_pham"
+    },
+    {
+      "schoolCode": "ZZ9",
+      "admissionMethod": "THPT",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false,
+      "majorGroup": "kinh_te"
+    },
+    {
+      "schoolCode": "ZZ9",
+      "admissionMethod": "THPT",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false,
+      "majorGroup": "ngon_ngu"
     }
-   },
-   "altScores": {
-    "ielts": 6.5,
-    "dgnl_hcm": 900
-   },
-   "activeCombination": "A00",
-   "priority": {
-    "area": "KV2",
-    "object": "none"
-   },
-   "graduationYear": 2026
-  },
-  {
-   "examScores": {
-    "toan": 6,
-    "ly": 6,
-    "hoa": 5.5
-   },
-   "altScores": {},
-   "activeCombination": "A00",
-   "priority": {
-    "area": "KV3",
-    "object": "none"
-   },
-   "graduationYear": 2027
-  },
-  {
-   "examScores": {
-    "toan": 9,
-    "ly": 8,
-    "hoa": 8.5
-   },
-   "hocBaScores": {
-    "toan": 8,
-    "ly": 8,
-    "hoa": 8
-   },
-   "altScores": {
-    "dgnl_hcm": 1300
-   },
-   "activeCombination": "A00",
-   "priority": {
-    "area": "KV1",
-    "object": "uu_tien_1"
-   }
-  },
-  {
-   "examScores": {
-    "toan": 7,
-    "van": 6,
-    "anh": 4
-   },
-   "hocBaScores": {
-    "toan": 8,
-    "ly": 8,
-    "hoa": 8
-   },
-   "altScores": {
-    "ielts": 6.5
-   },
-   "activeCombination": "D01",
-   "priority": {
-    "area": "KV3",
-    "object": "none"
-   },
-   "graduationYear": 2027
-  }
- ]
+  ],
+  "profiles": [
+    {
+      "examScores": {
+        "toan": 9,
+        "ly": 8,
+        "hoa": 8.5,
+        "anh": 7
+      },
+      "hocBaScores": {
+        "toan": 8.5,
+        "ly": 8,
+        "hoa": 8
+      },
+      "hocBaGrades": {
+        "11": {
+          "toan": 8,
+          "ly": 8,
+          "hoa": 8
+        },
+        "12": {
+          "toan": 9,
+          "ly": 8.5,
+          "hoa": 8.2
+        }
+      },
+      "altScores": {
+        "ielts": 6.5,
+        "dgnl_hcm": 900
+      },
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV2",
+        "object": "none"
+      },
+      "graduationYear": 2026
+    },
+    {
+      "examScores": {
+        "toan": 6,
+        "ly": 6,
+        "hoa": 5.5
+      },
+      "altScores": {},
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV3",
+        "object": "none"
+      },
+      "graduationYear": 2027
+    },
+    {
+      "examScores": {
+        "toan": 9,
+        "ly": 8,
+        "hoa": 8.5
+      },
+      "hocBaScores": {
+        "toan": 8,
+        "ly": 8,
+        "hoa": 8
+      },
+      "altScores": {
+        "dgnl_hcm": 1300
+      },
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV1",
+        "object": "uu_tien_1"
+      }
+    },
+    {
+      "examScores": {
+        "toan": 7,
+        "van": 6,
+        "anh": 4
+      },
+      "hocBaScores": {
+        "toan": 8,
+        "ly": 8,
+        "hoa": 8
+      },
+      "altScores": {
+        "ielts": 6.5
+      },
+      "activeCombination": "D01",
+      "priority": {
+        "area": "KV3",
+        "object": "none"
+      },
+      "graduationYear": 2027
+    }
+  ]
 }

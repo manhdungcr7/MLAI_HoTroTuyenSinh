@@ -73,3 +73,19 @@ def test_invalid_rule_is_rejected_by_registry():
     bad = copy.deepcopy(_rule({"THPT": {"priority": "standard", "components": [{"source": "exam_combo", "weight": 1}], "allowedCombinations": ["xyz"]}}))
     with pytest.raises(ValueError):
         core.register_school_rules([bad])
+
+
+def test_shipped_gha_rule_doubles_math_except_language_majors():
+    """GHA mục 2.1: (Toán×2 + 2 môn)×3/4 trừ Ngôn ngữ Anh (không hệ số); mục 5.3: IELTS 6.5 cộng 1,25."""
+    core.register_school_rules(core.load_school_rules())
+    base = {"schoolCode": "GHA", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False}
+    general = core.score_for_program(PROFILE, {**base, "majorGroup": "kinh_te"})
+    language = core.score_for_program(PROFILE, {**base, "majorGroup": "ngon_ngu"})
+    assert general["rawScore"] == pytest.approx(21.75) and general["score"] == pytest.approx(23.0)
+    assert language["rawScore"] == pytest.approx(21.0) and language["score"] == pytest.approx(22.25)
+
+
+def test_major_group_override_is_validated_like_a_method():
+    broken = _rule({"THPT": {"priority": "standard", "components": [{"source": "exam_combo", "weight": 1}],
+                             "majorGroupOverrides": {"ngon_ngu": {"components": [{"source": "exam_combo", "weight": 0.5}]}}}})
+    assert any("ngon_ngu" in p for p in core.validate_school_rule(broken))

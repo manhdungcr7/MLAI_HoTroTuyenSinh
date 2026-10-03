@@ -64,6 +64,11 @@ export interface MethodRule {
   minHocBaComboTotal?: number;
   /** "standard": ưu tiên khu vực/đối tượng theo quy chế; "none": trường không cộng ưu tiên cho phương thức này. */
   priority: "standard" | "none";
+  /**
+   * Ngoại lệ theo nhóm ngành (majorGroup) khi trường tính khác cho một vài ngành, ví dụ ngành Ngôn ngữ không nhân
+   * hệ số Toán. Các trường khai báo ở đây ghi đè lên quy tắc chung của phương thức, chỉ với nhóm ngành đó.
+   */
+  majorGroupOverrides?: Record<string, Partial<Omit<MethodRule, "majorGroupOverrides">>>;
 }
 
 export interface RuleSource {
@@ -118,10 +123,14 @@ export function listSchoolRules(): SchoolRule[] {
 export function resolveMethodRule(
   schoolCode: string,
   method: AdmissionMethod,
+  majorGroup?: string,
 ): { rule: MethodRule; origin: RuleOrigin; source?: RuleSource } | null {
   const school = getSchoolRule(schoolCode);
   const own = school?.methods[method];
-  if (own) return { rule: own, origin: "school", source: school?.source };
+  if (own) {
+    const override = majorGroup ? own.majorGroupOverrides?.[majorGroup] : undefined;
+    return { rule: override ? { ...own, ...override, majorGroupOverrides: undefined } : own, origin: "school", source: school?.source };
+  }
   const fallback = DEFAULT_RULES[method];
   return fallback ? { rule: fallback, origin: "default" } : null;
 }
@@ -140,9 +149,19 @@ export function validateSchoolRule(rule: SchoolRule): string[] {
   if (methods.length === 0) problems.push("chưa có phương thức nào");
   for (const [method, m] of methods) {
     if (!m) continue;
+    problems.push(...validateMethodRule(method, m));
+    for (const [group, override] of Object.entries(m.majorGroupOverrides ?? {})) {
+      problems.push(...validateMethodRule(`${method}[${group}]`, { ...m, ...override, majorGroupOverrides: undefined }));
+    }
+  }
+  return problems;
+}
+
+function validateMethodRule(method: string, m: MethodRule): string[] {
+  const problems: string[] = [];
     if (m.unsupportedReason !== undefined) {
       if (!m.unsupportedReason.trim()) problems.push(`${method}: lý do không tính được không được để trống`);
-      continue;
+      return problems;
     }
     if (!m.components?.length) problems.push(`${method}: thiếu thành phần điểm`);
     const total = (m.components ?? []).reduce((s, c) => s + c.weight, 0);
@@ -162,6 +181,5 @@ export function validateSchoolRule(rule: SchoolRule): string[] {
     if (m.priority !== "standard" && m.priority !== "none") problems.push(`${method}: priority phải là standard hoặc none`);
     if (m.bonusCap !== undefined && !(m.bonusCap >= 0 && m.bonusCap <= 3)) problems.push(`${method}: trần điểm cộng phải trong [0, 3]`);
     if (m.minExamComboTotal !== undefined && !(m.minExamComboTotal >= 0 && m.minExamComboTotal <= 30)) problems.push(`${method}: ngưỡng tổng điểm thi phải trong [0, 30]`);
-  }
   return problems;
 }

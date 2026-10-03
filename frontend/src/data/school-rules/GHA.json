@@ -1,0 +1,105 @@
+{
+  "schoolCode": "GHA",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0610/414-thong-tin-ts-dai-hoc-chinh-quy-2026-cap-nhat.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Giao thông vận tải (trụ sở Hà Nội)",
+    "sha256": "d673d1a303eef102163cb62f6ec46ff1c5434a187fa8cc8cacdfd0eeba6e7af0",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.1–2.2: điểm xét tuyển = (Toán×2 + hai môn còn lại)×3/4, riêng Ngôn ngữ Anh không nhân hệ số; mục 5.3: điểm cộng IELTS 5.0→0.5 … ≥7.0→1.5. Chưa mã hóa điều kiện học bạ (không môn nào dưới 5,5 mỗi năm, thi Toán ≥5)."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1,
+          "subjectWeights": {
+            "toan": 2
+          }
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.0,
+            "points": 0.5
+          },
+          {
+            "min": 5.5,
+            "points": 0.75
+          },
+          {
+            "min": 6.0,
+            "points": 1.0
+          },
+          {
+            "min": 6.5,
+            "points": 1.25
+          },
+          {
+            "min": 7.0,
+            "points": 1.5
+          }
+        ]
+      },
+      "majorGroupOverrides": {
+        "ngon_ngu": {
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1
+            }
+          ]
+        }
+      }
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1,
+          "subjectWeights": {
+            "toan": 2
+          }
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.0,
+            "points": 0.5
+          },
+          {
+            "min": 5.5,
+            "points": 0.75
+          },
+          {
+            "min": 6.0,
+            "points": 1.0
+          },
+          {
+            "min": 6.5,
+            "points": 1.25
+          },
+          {
+            "min": 7.0,
+            "points": 1.5
+          }
+        ]
+      },
+      "majorGroupOverrides": {
+        "ngon_ngu": {
+          "components": [
+            {
+              "source": "hocba_combo",
+              "weight": 1
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -138,7 +138,7 @@ interface Evaluation {
 
 function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnverified = false): Evaluation {
   const method = programMethod(program);
-  const resolved = resolveMethodRule(program.schoolCode, method);
+  const resolved = resolveMethodRule(program.schoolCode, method, (program as TargetProgram).majorGroup);
   if (!resolved) return { score: null, missing: [], options: [] };
   // Ngành có thi năng khiếu: điểm văn hoá không phản ánh điểm xét tuyển.
   if ((program as TargetProgram & { requiresAptitude?: boolean }).requiresAptitude) return { score: null, missing: [], options: [] };

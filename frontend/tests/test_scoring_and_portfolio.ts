@@ -149,3 +149,11 @@ assert(dirty.target?.programId === "t1" && dirty.profile.interestMajorGroups?.jo
 assert(sanitize(null).wishlist.length === 0 && sanitize("rác").profile.activeCombination === "", "Dữ liệu hỏng trả về hồ sơ trống");
 
 console.log("\n🎉 TẤT CẢ KIỂM THỬ QUY TẮC TRƯỜNG, ĐỀ XUẤT VÀ LƯU TRỮ ĐÃ ĐẠT.");
+
+// ---- Ngoại lệ theo nhóm ngành: Toán nhân 2 trừ nhóm ngôn ngữ ----
+// Hồ sơ 0 (A00: 9 + 8 + 8.5): Toán x2 → (18 + 8 + 8.5)/40·30 = 25.875; ngôn ngữ không hệ số → 25.5 (ưu tiên KV2 cộng thêm 0.15)
+clearSchoolRules();
+registerSchoolRules(fixture.rules);
+const zz9Math = scoreForProgram(profile(0), program(fixture.programs.length - 2));
+const zz9Language = scoreForProgram(profile(0), program(fixture.programs.length - 1));
+assert(near(zz9Math?.rawScore, 25.88) && near(zz9Language?.rawScore, 25.5), "Ngoại lệ theo nhóm ngành: ngành ngôn ngữ không nhân hệ số Toán, các ngành khác vẫn nhân");

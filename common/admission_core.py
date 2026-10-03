@@ -202,6 +202,51 @@ _SOURCES = ("exam_combo", "hocba_combo", "dgnl_hcm", "dgnl_hn", "dgtd_bk")
 _SCHOOL_RULES: dict[str, dict[str, Any]] = {}
 
 
+def _validate_method_rule(method: str, m: Mapping[str, Any]) -> list[str]:
+    problems: list[str] = []
+    if "unsupportedReason" in m:
+        if not str(m["unsupportedReason"]).strip():
+            problems.append(f"{method}: lý do không tính được không được để trống")
+        return problems
+    comps = m.get("components") or []
+    if not comps:
+        problems.append(f"{method}: thiếu thành phần điểm")
+    total = sum(c.get("weight", 0) for c in comps)
+    if comps and abs(total - 1) > 1e-9:
+        problems.append(f"{method}: tổng tỷ trọng các thành phần phải bằng 1 (đang {total})")
+    for c in comps:
+        if c.get("source") not in _SOURCES:
+            problems.append(f"{method}: nguồn điểm không hợp lệ \"{c.get('source')}\"")
+        if not (0 < c.get("weight", 0) <= 1):
+            problems.append(f"{method}: tỷ trọng phải trong (0, 1]")
+        if c.get("grades") and c.get("source") != "hocba_combo":
+            problems.append(f"{method}: chỉ học bạ mới chọn lớp")
+        if c.get("subjectWeights") and c.get("source") not in COMBO_SOURCES:
+            problems.append(f"{method}: hệ số môn chỉ dùng cho tổ hợp môn")
+        if any(not (w > 0) for w in (c.get("subjectWeights") or {}).values()):
+            problems.append(f"{method}: hệ số môn phải dương")
+    for t in m.get("ieltsToEnglish", []):
+        if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("score", -1) <= 10):
+            problems.append(f"{method}: bảng quy đổi IELTS sang điểm Tiếng Anh không hợp lệ")
+    for code in m.get("allowedCombinations", []):
+        if not re.fullmatch(r"[A-Z]\d{2}", str(code)):
+            problems.append(f"{method}: mã tổ hợp không hợp lệ \"{code}\"")
+    if "scoreFactor" in m and not (0 < m["scoreFactor"] <= 3):
+        problems.append(f"{method}: hệ số quy đổi phải trong (0, 3]")
+    if "minHocBaComboTotal" in m and not (0 <= m["minHocBaComboTotal"] <= 30):
+        problems.append(f"{method}: ngưỡng tổng điểm học bạ phải trong [0, 30]")
+    for t in (m.get("certBonus") or {}).get("ielts", []):
+        if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("points", -1) <= 3):
+            problems.append(f"{method}: bảng điểm cộng IELTS không hợp lệ")
+    if m.get("priority") not in ("standard", "none"):
+        problems.append(f"{method}: priority phải là standard hoặc none")
+    if "bonusCap" in m and not (0 <= m["bonusCap"] <= 3):
+        problems.append(f"{method}: trần điểm cộng phải trong [0, 3]")
+    if "minExamComboTotal" in m and not (0 <= m["minExamComboTotal"] <= 30):
+        problems.append(f"{method}: ngưỡng tổng điểm thi phải trong [0, 30]")
+    return problems
+
+
 def validate_school_rule(rule: Mapping[str, Any]) -> list[str]:
     problems: list[str] = []
     if not re.fullmatch(r"[A-Z0-9]{2,5}", str(rule.get("schoolCode", ""))):
@@ -220,46 +265,10 @@ def validate_school_rule(rule: Mapping[str, Any]) -> list[str]:
     if not methods:
         problems.append("chưa có phương thức nào")
     for method, m in methods.items():
-        if "unsupportedReason" in m:
-            if not str(m["unsupportedReason"]).strip():
-                problems.append(f"{method}: lý do không tính được không được để trống")
-            continue
-        comps = m.get("components") or []
-        if not comps:
-            problems.append(f"{method}: thiếu thành phần điểm")
-        total = sum(c.get("weight", 0) for c in comps)
-        if comps and abs(total - 1) > 1e-9:
-            problems.append(f"{method}: tổng tỷ trọng các thành phần phải bằng 1 (đang {total})")
-        for c in comps:
-            if c.get("source") not in _SOURCES:
-                problems.append(f"{method}: nguồn điểm không hợp lệ \"{c.get('source')}\"")
-            if not (0 < c.get("weight", 0) <= 1):
-                problems.append(f"{method}: tỷ trọng phải trong (0, 1]")
-            if c.get("grades") and c.get("source") != "hocba_combo":
-                problems.append(f"{method}: chỉ học bạ mới chọn lớp")
-            if c.get("subjectWeights") and c.get("source") not in COMBO_SOURCES:
-                problems.append(f"{method}: hệ số môn chỉ dùng cho tổ hợp môn")
-            if any(not (w > 0) for w in (c.get("subjectWeights") or {}).values()):
-                problems.append(f"{method}: hệ số môn phải dương")
-        for t in m.get("ieltsToEnglish", []):
-            if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("score", -1) <= 10):
-                problems.append(f"{method}: bảng quy đổi IELTS sang điểm Tiếng Anh không hợp lệ")
-        for code in m.get("allowedCombinations", []):
-            if not re.fullmatch(r"[A-Z]\d{2}", str(code)):
-                problems.append(f"{method}: mã tổ hợp không hợp lệ \"{code}\"")
-        if "scoreFactor" in m and not (0 < m["scoreFactor"] <= 3):
-            problems.append(f"{method}: hệ số quy đổi phải trong (0, 3]")
-        if "minHocBaComboTotal" in m and not (0 <= m["minHocBaComboTotal"] <= 30):
-            problems.append(f"{method}: ngưỡng tổng điểm học bạ phải trong [0, 30]")
-        for t in (m.get("certBonus") or {}).get("ielts", []):
-            if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("points", -1) <= 3):
-                problems.append(f"{method}: bảng điểm cộng IELTS không hợp lệ")
-        if m.get("priority") not in ("standard", "none"):
-            problems.append(f"{method}: priority phải là standard hoặc none")
-        if "bonusCap" in m and not (0 <= m["bonusCap"] <= 3):
-            problems.append(f"{method}: trần điểm cộng phải trong [0, 3]")
-        if "minExamComboTotal" in m and not (0 <= m["minExamComboTotal"] <= 30):
-            problems.append(f"{method}: ngưỡng tổng điểm thi phải trong [0, 30]")
+        problems.extend(_validate_method_rule(method, m))
+        for group, override in (m.get("majorGroupOverrides") or {}).items():
+            merged = {**{k: v for k, v in m.items() if k != "majorGroupOverrides"}, **override}
+            problems.extend(_validate_method_rule(f"{method}[{group}]", merged))
     return problems
 
 
@@ -285,10 +294,13 @@ def load_school_rules(directory: Path | str | None = None) -> list[dict[str, Any
     return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(folder.glob("*.json"))]
 
 
-def resolve_method_rule(school_code: str, method: str):
+def resolve_method_rule(school_code: str, method: str, major_group: str | None = None):
     school = _SCHOOL_RULES.get(school_code.upper())
     own = (school or {}).get("methods", {}).get(method)
     if own:
+        override = (own.get("majorGroupOverrides") or {}).get(major_group) if major_group else None
+        if override:
+            own = {**{k: v for k, v in own.items() if k != "majorGroupOverrides"}, **override}
         return own, "school", (school or {}).get("source")
     fallback = DEFAULT_RULES.get(method)
     return (fallback, "default", None) if fallback else None
@@ -401,7 +413,7 @@ def _score_combo(profile, rule, combo, needs, major_group=None):
 def _evaluate(profile: Mapping[str, Any], program: Mapping[str, Any], explore_unverified: bool):
     """(điểm tốt nhất theo quy tắc của trường, các đầu vào còn thiếu)."""
     method = program_method(program)
-    resolved = resolve_method_rule(program["schoolCode"], method)
+    resolved = resolve_method_rule(program["schoolCode"], method, program.get("majorGroup"))
     if resolved is None or program.get("requiresAptitude"):
         return None, [], []
     rule, origin, source = resolved
