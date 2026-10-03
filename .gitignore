@@ -24,8 +24,10 @@ data/raw/*
 !data/raw/*.json
 !data/raw/*.csv
 !data/raw/*.txt
-data/raw/deans/*/*
+!data/raw/deans/
+data/raw/deans/*
 !data/raw/deans/*/
+data/raw/deans/*/*
 !data/raw/deans/DBL/2026.pdf
 !data/raw/deans/DCT/2026.pdf
 !data/raw/deans/DDP/2026.pdf
