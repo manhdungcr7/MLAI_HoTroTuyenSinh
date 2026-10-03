@@ -41,3 +41,37 @@ def test_rows_from_multi_school_documents_are_dropped():
     })
     kept = drop_multi_school_documents(frame)
     assert list(kept["score"]) == [21.0, 22.0, 23.0]
+
+
+def test_repair_and_reject_broken_pdf_labels():
+    from pipeline.clean.reconcile import is_garbage_major_label, repair_major_label
+
+    assert repair_major_label("Khoa học dữ liệu và Trí tuệ n hân tạo") == "Khoa học dữ liệu và Trí tuệ nhân tạo"
+    assert repair_major_label("Kỹ thuật y sinh") == "Kỹ thuật y sinh"
+    assert repair_major_label("Vật lý y khoa") == "Vật lý y khoa"
+    assert is_garbage_major_label("Công nghê ̣ky ̃thuâṭ ô tô") is True
+    assert is_garbage_major_label("Kỹ thuật hình ảnh y học (kết") is True
+    assert is_garbage_major_label("Kỹ thuật ô tô") is False
+
+
+def test_trailing_combo_lists_are_stripped_and_non_majors_rejected():
+    from pipeline.clean.reconcile import is_garbage_major_label, repair_major_label
+
+    assert repair_major_label("Công nghệ sinh học Tổ hợp 1: A00 Tổ hợp 2: A02 Tổ hợp 3: B00") == "Công nghệ sinh học"
+    assert repair_major_label("Kế toán (Tổ hợp xét tuyển: A00, A01, D01, D07, X01, X25)") == "Kế toán"
+    assert repair_major_label("Công nghệ thông tin Toán, Vật lí, Hóa học; Toán, Vật lí, Tiếng Anh.") == "Công nghệ thông tin"
+    for junk in ["1. Toán + Sinh học + Hóa học 2. Toán + Hóa học + Vật lý", "Lĩnh vực Nghệ thuật:", "Mã tổ hợp: B08",
+                 "36 ngành (61 CTĐT/chuyên ngành)", "Khối ngành III - Kinh doanh quốc tế - Quản trị kinh doanh", "Tuyển sinh riêng (Thang điểm 300)"]:
+        assert is_garbage_major_label(junk), junk
+    assert not is_garbage_major_label("Kỹ thuật xây dựng (chuyên ngành: Xây dựng dân dụng)")
+
+
+def test_dash_and_code_artifacts_are_tidied():
+    from pipeline.clean.reconcile import repair_major_label
+
+    assert repair_major_label("- - Công nghệ thông tin") == "Công nghệ thông tin"
+    assert repair_major_label("Công nghệ thông tin - - Công nghệ thông tin") == "Công nghệ thông tin"
+    assert repair_major_label("Công nghệ thông tin - 7480201 - - Công nghệ thông tin") == "Công nghệ thông tin"
+    assert repair_major_label("Kế toán - 7340301") == "Kế toán"
+    assert repair_major_label("Tài chính - Ngân hàng") == "Tài chính - Ngân hàng"
+    assert repair_major_label("Kế toán doanh nghiệp (Theo định hướng ACCA) - 7340301 - Kế toán") == "Kế toán doanh nghiệp (Theo định hướng ACCA) - Kế toán"

@@ -73,8 +73,8 @@ export function PortfolioBuilder() {
   if (candidates.length === 0) {
     return (
       <div className="space-y-5 py-10 text-center">
-        <h1 className="text-3xl font-black text-slate-900">Chưa có nguyện vọng</h1>
-        <Link href="/start" className="inline-flex h-14 items-center gap-2 rounded-2xl bg-blue-600 px-8 text-base font-black text-white hover:bg-blue-700">
+        <h1 className="text-3xl font-bold text-slate-900">Chưa có nguyện vọng</h1>
+        <Link href="/start" className="inline-flex h-14 items-center gap-2 rounded-2xl bg-blue-600 px-8 text-base font-bold text-white hover:bg-blue-700">
           Nhập điểm <ArrowRight className="h-5 w-5" />
         </Link>
       </div>
@@ -85,12 +85,12 @@ export function PortfolioBuilder() {
     <div className="space-y-5">
       {toast && <div className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white shadow-xl">{toast}</div>}
 
-      <h1 className="text-3xl font-black tracking-tight text-slate-900">Nguyện vọng của em</h1>
+      <h1 className="text-2xl font-semibold text-slate-900">Nguyện vọng của bạn</h1>
 
       <section className="rounded-3xl border border-slate-200 bg-white p-5 text-center shadow-xs">
-        <p className={`text-5xl font-black ${v.cls}`}>{items.length ? formatProbability(passAny) : "–"}</p>
+        <p className={`text-5xl font-bold ${v.cls}`}>{items.length ? formatProbability(passAny) : "–"}</p>
         <p className="mt-1 text-sm font-bold text-slate-500">có ít nhất một nguyện vọng đỗ</p>
-        {items.length > 0 && <p className={`mt-2 text-base font-extrabold ${v.cls}`}>{v.text}</p>}
+        {items.length > 0 && <p className={`mt-2 text-base font-semibold ${v.cls}`}>{v.text}</p>}
       </section>
 
       {(warnings.length > 0 || stale) && (
@@ -108,7 +108,7 @@ export function PortfolioBuilder() {
       )}
 
       {isSuggestion && items.length > 0 && (
-        <button type="button" onClick={() => { setWishlist(items.map((w, i) => ({ ...w, rank: i + 1 }))); say("Đã lưu danh sách"); }} className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 text-base font-black text-white shadow-lg shadow-blue-600/20 hover:bg-blue-700 cursor-pointer">
+        <button type="button" onClick={() => { setWishlist(items.map((w, i) => ({ ...w, rank: i + 1 }))); say("Đã lưu danh sách"); }} className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 text-base font-bold text-white shadow-lg shadow-blue-600/20 hover:bg-blue-700 cursor-pointer">
           <Sparkles className="h-5 w-5" /> Dùng danh sách đề xuất này
         </button>
       )}
@@ -116,13 +116,13 @@ export function PortfolioBuilder() {
       <ol className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200 bg-white">
         {rows.map(({ item: w, stale: rowStale }, i) => (
           <li key={`${w.program_id ?? w.school_code}-${i}`} className="flex items-center gap-3 px-3 py-3 sm:px-4">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-xs font-black text-white">{i + 1}</span>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-xs font-bold text-white">{i + 1}</span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-extrabold text-slate-900">{w.major_label}</p>
+              <p className="truncate text-sm font-semibold text-slate-900">{w.major_label}</p>
               <p className="truncate text-xs text-slate-500">{w.school_name ?? w.school_code} · {METHOD_SHORT_VI[w.admission_method ?? "THPT"]}{w.combinations_seen ? ` ${w.combinations_seen}` : ""}</p>
             </div>
             <div className="shrink-0 text-right">
-              <p className="whitespace-nowrap text-base font-black text-slate-900">{formatProbability(w.admit_prob)}{rowStale ? "*" : ""}</p>
+              <p className="whitespace-nowrap text-base font-bold text-slate-900">{formatProbability(w.admit_prob)}{rowStale ? "*" : ""}</p>
               <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-bold ${TIER[w.role].cls}`}>{TIER[w.role].label}</span>
             </div>
             <div className="flex shrink-0 flex-col gap-1 print:hidden sm:flex-row">
@@ -143,7 +143,7 @@ export function PortfolioBuilder() {
 
       {!isSuggestion && (
         <button type="button" onClick={() => { setWishlist(suggestedItems); say("Đã đề xuất lại"); }} className="flex w-full items-center justify-center gap-1.5 py-2 text-sm font-bold text-blue-700 underline cursor-pointer print:hidden">
-          <Sparkles className="h-4 w-4" /> Đề xuất lại từ điều kiện của em
+          <Sparkles className="h-4 w-4" /> Đề xuất lại từ điều kiện của bạn
         </button>
       )}
     </div>

@@ -70,8 +70,8 @@ export default function ResultsPage() {
   if (candidates.length === 0) {
     return (
       <div className="space-y-5 py-10 text-center">
-        <h1 className="text-3xl font-black text-slate-900">Chưa có kết quả</h1>
-        <Link href="/start" className="inline-flex h-14 items-center gap-2 rounded-2xl bg-blue-600 px-8 text-base font-black text-white hover:bg-blue-700">
+        <h1 className="text-3xl font-bold text-slate-900">Chưa có kết quả</h1>
+        <Link href="/start" className="inline-flex h-14 items-center gap-2 rounded-2xl bg-blue-600 px-8 text-base font-bold text-white hover:bg-blue-700">
           Nhập điểm <ArrowRight className="h-5 w-5" />
         </Link>
       </div>
@@ -80,7 +80,7 @@ export default function ResultsPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-3xl font-black tracking-tight text-slate-900">{counts.all} ngành phù hợp</h1>
+      <h1 className="text-2xl font-semibold text-slate-900">{counts.all} ngành phù hợp</h1>
 
       <div className="relative">
         <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
@@ -112,7 +112,7 @@ export default function ResultsPage() {
         <button
           type="button"
           onClick={() => { requestStep(stepForMissing(missing.label)); router.push("/start"); }}
-          className="flex w-full items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 px-4 py-3 text-left text-sm font-extrabold text-blue-800 hover:bg-blue-100 cursor-pointer"
+          className="flex w-full items-center justify-between gap-3 rounded-2xl border-2 border-dashed border-blue-300 bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-800 hover:bg-blue-100 cursor-pointer"
         >
           <span>Thêm {missing.label.toLowerCase()} để xem thêm {missing.count} ngành</span>
           <ArrowRight className="h-5 w-5 shrink-0" />
@@ -121,8 +121,8 @@ export default function ResultsPage() {
 
       {matched.length === 0 ? (
         <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 text-center">
-          <p className="text-lg font-extrabold text-slate-900">Không có ngành nào thỏa điều kiện</p>
-          <button type="button" onClick={() => { requestStep("place"); router.push("/start"); }} className="h-12 rounded-2xl bg-blue-600 px-6 text-sm font-black text-white hover:bg-blue-700 cursor-pointer">Sửa điều kiện</button>
+          <p className="text-lg font-semibold text-slate-900">Không có ngành nào thỏa điều kiện</p>
+          <button type="button" onClick={() => { requestStep("place"); router.push("/start"); }} className="h-12 rounded-2xl bg-blue-600 px-6 text-sm font-bold text-white hover:bg-blue-700 cursor-pointer">Sửa điều kiện</button>
         </div>
       ) : (
         <div className="space-y-3">
@@ -140,7 +140,7 @@ export default function ResultsPage() {
 
       <div className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+56px)] z-20 px-4 md:static md:p-0">
         <div className="mx-auto max-w-3xl">
-          <Link href="/portfolio" className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 text-base font-black text-white shadow-xl transition hover:bg-blue-600">
+          <Link href="/portfolio" className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 text-base font-bold text-white shadow-xl transition hover:bg-blue-600">
             Xếp nguyện vọng {wishlist.length > 0 && `(${wishlist.length})`} <ArrowRight className="h-5 w-5" />
           </Link>
         </div>

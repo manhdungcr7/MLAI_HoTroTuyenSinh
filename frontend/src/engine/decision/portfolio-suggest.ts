@@ -5,7 +5,7 @@ const SAFE_MIN = 0.8;
 const FIT_MIN = 0.4;
 const REACH_MIN = 0.1;
 const MAX_PER_SCHOOL = 3;
-/** Số ngành em yêu thích tối đa được ưu tiên đưa vào danh sách, để vẫn đủ chỗ cho nguyện vọng chắc đỗ. */
+/** Số ngành bạn yêu thích tối đa được ưu tiên đưa vào danh sách, để vẫn đủ chỗ cho nguyện vọng chắc đỗ. */
 const MAX_FAVORITES = 6;
 
 export function candidateToWishlistItem(option: CandidateOption, rank: number): WishlistItem {
@@ -113,9 +113,9 @@ export function suggestPortfolio(
       n -= 1;
     }
   };
-  // An toàn lấy các ngành điểm CAO nhất trong nhóm an toàn: tốt nhất em vẫn chắc đỗ.
+  // An toàn lấy các ngành điểm CAO nhất trong nhóm an toàn: tốt nhất bạn vẫn chắc đỗ.
   take(tiers.safe, Math.round(size * 0.4));
-  // Ngành em yêu thích (còn cơ hội đỗ) được ưu tiên ngay sau phần chắc đỗ.
+  // Ngành bạn yêu thích (còn cơ hội đỗ) được ưu tiên ngay sau phần chắc đỗ.
   const favorites = new Set(favoriteIds);
   take(matched.filter((c) => favorites.has(c.programId) && c.admitProbability >= REACH_MIN).sort(byCutoffDesc), MAX_FAVORITES);
   take(tiers.fit, Math.round(size * 0.33));

@@ -6,7 +6,7 @@ import { formatProbability } from "@/lib/format";
 
 /**
  * Chọn ngành muốn vươn tới ngay tại chỗ. Mặc định gợi ý các ngành xét điểm thi có điểm cao nhất
- * mà em còn cơ hội (xác suất 5–70%); gõ vào ô tìm để chọn ngành bất kỳ.
+ * mà bạn còn cơ hội (xác suất 5–70%); gõ vào ô tìm để chọn ngành bất kỳ.
  * Chỉ ngành xét điểm thi: điểm học bạ khó thay đổi ở cuối cấp nên không có gì để cải thiện.
  */
 export function TargetPicker() {
@@ -47,10 +47,10 @@ export function TargetPicker() {
               className="flex w-full items-center justify-between gap-3 rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-left transition hover:border-blue-400 cursor-pointer"
             >
               <span className="min-w-0">
-                <span className="block truncate text-base font-extrabold text-slate-900">{c.majorName}</span>
+                <span className="block truncate text-base font-semibold text-slate-900">{c.majorName}</span>
                 <span className="block truncate text-sm text-slate-500">{c.schoolName}</span>
               </span>
-              <span className="shrink-0 text-right text-base font-black text-slate-900">{formatProbability(c.admitProbability)}</span>
+              <span className="shrink-0 text-right text-base font-bold text-slate-900">{formatProbability(c.admitProbability)}</span>
             </button>
           </li>
         ))}

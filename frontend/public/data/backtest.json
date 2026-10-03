@@ -1,108 +1,108 @@
 {
-  "generatedAt": "2026-10-03T02:20:24.058059+00:00",
+  "generatedAt": "2026-10-03T02:38:52.530483+00:00",
   "modelVersion": "2026.2-diem-nam-gan-nhat",
   "forecastRule": "Điểm chuẩn năm tới = điểm chuẩn thật của năm gần nhất; khoảng dự báo và xác suất đỗ dùng độ bất định đo từ dữ liệu.",
   "thinDataMultiplier": 1.3,
   "holdouts": [
     {
       "year": 2024,
-      "n": 776,
-      "mae": 1.32,
-      "rmse": 2.289,
-      "meanError": 0.826,
+      "n": 795,
+      "mae": 1.306,
+      "rmse": 2.254,
+      "meanError": 0.829,
       "shockStd": 1.096,
-      "idioStd": 1.395,
-      "coverageP10P90Pct": 87.5,
-      "meanBandWidth": 5.68,
+      "idioStd": 1.455,
+      "coverageP10P90Pct": 88.9,
+      "meanBandWidth": 5.73,
       "calibration": [
         {
           "offset": -3.0,
-          "predicted": 0.088,
-          "observed": 0.028
+          "predicted": 0.09,
+          "observed": 0.026
         },
         {
           "offset": -2.0,
-          "predicted": 0.182,
-          "observed": 0.036
+          "predicted": 0.184,
+          "observed": 0.034
         },
         {
           "offset": -1.0,
           "predicted": 0.325,
-          "observed": 0.097
+          "observed": 0.096
         },
         {
           "offset": 0.0,
           "predicted": 0.5,
-          "observed": 0.367
+          "observed": 0.386
         },
         {
           "offset": 1.0,
           "predicted": 0.675,
-          "observed": 0.692
+          "observed": 0.689
         },
         {
           "offset": 2.0,
-          "predicted": 0.818,
-          "observed": 0.849
+          "predicted": 0.816,
+          "observed": 0.844
         },
         {
           "offset": 3.0,
-          "predicted": 0.912,
-          "observed": 0.918
+          "predicted": 0.91,
+          "observed": 0.916
         }
       ],
-      "brierScore": 0.1279,
-      "calibrationGap": 0.089
+      "brierScore": 0.1285,
+      "calibrationGap": 0.086
     },
     {
       "year": 2025,
-      "n": 574,
-      "mae": 1.735,
-      "rmse": 2.475,
-      "meanError": 0.314,
-      "shockStd": 1.069,
-      "idioStd": 1.366,
-      "coverageP10P90Pct": 77.2,
-      "meanBandWidth": 5.47,
+      "n": 531,
+      "mae": 1.772,
+      "rmse": 2.521,
+      "meanError": 0.387,
+      "shockStd": 1.067,
+      "idioStd": 1.38,
+      "coverageP10P90Pct": 75.3,
+      "meanBandWidth": 5.3,
       "calibration": [
         {
           "offset": -3.0,
-          "predicted": 0.08,
+          "predicted": 0.074,
           "observed": 0.094
         },
         {
           "offset": -2.0,
-          "predicted": 0.173,
-          "observed": 0.152
+          "predicted": 0.165,
+          "observed": 0.153
         },
         {
           "offset": -1.0,
-          "predicted": 0.318,
-          "observed": 0.209
+          "predicted": 0.312,
+          "observed": 0.198
         },
         {
           "offset": 0.0,
           "predicted": 0.5,
-          "observed": 0.46
+          "observed": 0.441
         },
         {
           "offset": 1.0,
-          "predicted": 0.682,
-          "observed": 0.672
+          "predicted": 0.688,
+          "observed": 0.659
         },
         {
           "offset": 2.0,
-          "predicted": 0.827,
-          "observed": 0.815
+          "predicted": 0.835,
+          "observed": 0.802
         },
         {
           "offset": 3.0,
-          "predicted": 0.92,
-          "observed": 0.889
+          "predicted": 0.926,
+          "observed": 0.881
         }
       ],
-      "brierScore": 0.159,
-      "calibrationGap": 0.034
+      "brierScore": 0.1611,
+      "calibrationGap": 0.045
     }
   ],
   "limitationsVi": [

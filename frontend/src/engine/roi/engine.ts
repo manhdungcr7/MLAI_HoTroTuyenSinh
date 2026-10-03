@@ -18,7 +18,7 @@ export function calculateSubjectRoiList(
   target: TargetProgram,
   programs: TargetProgram[]
 ): SubjectRoiMetric[] {
-  // Môn của tổ hợp em dùng để xét ngành mục tiêu; không có tổ hợp hợp lệ thì không tính đòn bẩy.
+  // Môn của tổ hợp bạn dùng để xét ngành mục tiêu; không có tổ hợp hợp lệ thì không tính đòn bẩy.
   const targetScore = scoreForProgram(profile, target);
   const combo = targetScore?.combo ?? profile.activeCombination;
   const activeSubs = COMBINATION_SUBJECTS[combo] ?? [];

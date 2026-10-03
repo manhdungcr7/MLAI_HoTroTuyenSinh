@@ -1,4 +1,4 @@
-/** Vùng miền (bắc, trung, nam) của từng tỉnh/thành phố, dùng để lọc "trong vùng miền em ở". */
+/** Vùng miền (bắc, trung, nam) của từng tỉnh/thành phố, dùng để lọc "trong vùng miền bạn ở". */
 export const PROVINCE_REGIONS: Record<string, "bac" | "trung" | "nam"> = {
   "Hà Nội": "bac",
   "TP.HCM": "nam",

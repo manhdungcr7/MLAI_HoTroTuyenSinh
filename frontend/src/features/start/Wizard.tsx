@@ -40,7 +40,7 @@ function Choice({ label, selected, onClick }: { label: string; selected: boolean
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`flex w-full items-center justify-between rounded-2xl border-2 px-5 py-4 text-left text-base font-extrabold transition cursor-pointer ${
+      className={`flex w-full items-center justify-between rounded-2xl border-2 px-5 py-4 text-left text-base font-semibold transition cursor-pointer ${
         selected ? "border-blue-600 bg-blue-50 text-blue-800" : "border-slate-200 bg-white text-slate-800 hover:border-blue-300"
       }`}
     >
@@ -82,7 +82,7 @@ function NumberField({ label, value, onChange, max, step, name }: { label: strin
           const v = e.target.value === "" ? null : parseFloat(e.target.value);
           onChange(v !== null && Number.isFinite(v) ? v : null);
         }}
-        className="w-full bg-transparent text-2xl font-black text-slate-900 placeholder:text-slate-300 focus:outline-none"
+        className="w-full bg-transparent text-2xl font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none"
       />
     </label>
   );
@@ -114,7 +114,7 @@ function ScoreGrid({ kind }: { kind: "exam" | "hocba" }) {
         {!more ? (
           <button type="button" onClick={() => setMore(true)} className="text-sm font-bold text-blue-700 underline cursor-pointer">Môn khác</button>
         ) : <span />}
-        {combo && <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-800">Tổ hợp {combo}</span>}
+        {combo && <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">Tổ hợp {combo}</span>}
       </div>
     </div>
   );
@@ -135,14 +135,14 @@ const BUDGETS: { label: string; vnd: number }[] = [
 ];
 
 const TITLES: Record<StepId, string> = {
-  year: "Em thi tốt nghiệp năm nào?",
-  exam: "Điểm thi của em",
-  hocba: "Điểm học bạ của em",
+  year: "Bạn thi tốt nghiệp năm nào?",
+  exam: "Điểm thi của bạn",
+  hocba: "Điểm học bạ của bạn",
   cert: "Chứng chỉ và điểm ĐGNL",
-  place: "Em muốn học ở đâu?",
-  major: "Em thích ngành nào?",
+  place: "Bạn muốn học ở đâu?",
+  major: "Bạn thích ngành nào?",
   budget: "Học phí tối đa mỗi năm?",
-  priority: "Điểm ưu tiên của em",
+  priority: "Điểm ưu tiên của bạn",
 };
 
 export function Wizard() {
@@ -198,7 +198,7 @@ export function Wizard() {
         <div className="h-full rounded-full bg-blue-600 transition-all" style={{ width: `${((index + 1) / STEPS.length) * 100}%` }} />
       </div>
 
-      <h1 className="text-3xl font-black leading-tight tracking-tight text-slate-900 sm:text-4xl">{TITLES[step]}</h1>
+      <h1 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl">{TITLES[step]}</h1>
 
       {notice && <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-900">{notice}</p>}
 
@@ -223,16 +223,16 @@ export function Wizard() {
         {step === "place" && (
           <div className="space-y-4">
             <select
-              aria-label="Tỉnh / thành phố em ở"
+              aria-label="Tỉnh / thành phố bạn ở"
               value={profile.homeProvince || ""}
               onChange={(e) => updateProfile({ homeProvince: e.target.value })}
-              className="w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-4 text-base font-extrabold text-slate-900 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-2xl border-2 border-slate-200 bg-white px-4 py-4 text-base font-semibold text-slate-900 focus:border-blue-500 focus:outline-none"
             >
-              <option value="">Em ở tỉnh / thành phố nào?</option>
+              <option value="">Bạn ở tỉnh / thành phố nào?</option>
               {PROVINCES.map((p) => (<option key={p} value={p}>{p}</option>))}
             </select>
             <div className="grid gap-3">
-              {([["khong_gioi_han", "Cả nước"], ["trong_vung", "Cùng vùng miền với em"], ["chi_tinh_nha", "Chỉ ở tỉnh nhà"]] as [RelocationWillingness, string][]).map(([value, label]) => (
+              {([["khong_gioi_han", "Cả nước"], ["trong_vung", "Cùng vùng miền với bạn"], ["chi_tinh_nha", "Chỉ ở tỉnh nhà"]] as [RelocationWillingness, string][]).map(([value, label]) => (
                 <Choice key={value} label={label} selected={profile.relocationWillingness === value} onClick={() => updateProfile({ relocationWillingness: value })} />
               ))}
             </div>
@@ -277,7 +277,7 @@ export function Wizard() {
               <ArrowLeft className="h-5 w-5" />
             </button>
           )}
-          <button type="button" onClick={next} className="flex h-14 flex-1 items-center justify-center gap-2 rounded-2xl bg-blue-600 text-base font-black text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 cursor-pointer">
+          <button type="button" onClick={next} className="flex h-14 flex-1 items-center justify-center gap-2 rounded-2xl bg-blue-600 text-base font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 cursor-pointer">
             {nextLabel} <ArrowRight className="h-5 w-5" />
           </button>
         </div>

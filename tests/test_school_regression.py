@@ -18,9 +18,9 @@ INTERIM_PARQUET = ROOT / "data" / "interim" / "cutoff_panel_raw.parquet"
 # The 77 verified schools confirmed and audit-locked on 2026-09-28
 FROZEN_SCHOOL_SET = {
     "ANS", "BKA", "C19", "C23", "C25", "CSS", "D61", "D64", "DBL", "DCL",
-    "DCN", "DDF", "DDP", "DDQ", "DDS", "DDY", "DFA", "DHC", "DHD", "DHK",
+    "DCN", "DDF", "DDP", "DDQ", "DDS", "DDY", "DHC", "DHD", "DHK",
     "DHL", "DHN", "DHT", "DHY", "DMT", "DNB", "DNU", "DPQ", "DPY",
-    "DQB", "DQH", "DQU", "DTF", "DTL", "DTN", "DTQ", "DTV", "DVL", "GHA",
+    "DQB", "DQH", "DQU", "DTF", "DTL", "DTN", "DTV", "DVL", "GHA",
     "GSA", "GTA", "HCB", "HCH", "HCN", "HCS", "HHT", "HTC", "KMA", "LNH",
     "LPH", "NHH", "NHP", "QHI", "QHL", "QHQ", "QHS", "QHY", "QSC", "QST",
     "QSX", "QSY", "SDU", "SP2", "SPD", "SPS", "TDL", "TDV", "TSN", "TTN",

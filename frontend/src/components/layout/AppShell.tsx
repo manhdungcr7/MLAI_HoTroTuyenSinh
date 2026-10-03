@@ -13,7 +13,7 @@ export const NAV = [
 
 function Brand() {
   return (
-    <Link href="/start" className="flex items-center gap-2.5 font-black tracking-tight text-slate-900">
+    <Link href="/start" className="flex items-center gap-2.5 font-bold tracking-tight text-slate-900">
       <img src="/favicon.svg" alt="" className="h-8 w-8 rounded-xl" />
       <span className="text-lg">Nguyện Vọng</span>
     </Link>
@@ -50,7 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               >
                 {label}
                 {href === "/portfolio" && wishlist.length > 0 && (
-                  <span className="ml-1.5 rounded-full bg-blue-600 px-1.5 py-0.5 text-[10px] font-black text-white">{wishlist.length}</span>
+                  <span className="ml-1.5 rounded-full bg-blue-600 px-1.5 py-0.5 text-[10px] font-bold text-white">{wishlist.length}</span>
                 )}
               </Link>
             ))}
@@ -79,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="relative">
               <Icon className="h-5 w-5" />
               {href === "/portfolio" && wishlist.length > 0 && (
-                <span className="absolute -right-2.5 -top-1.5 min-w-4 rounded-full bg-blue-600 px-1 text-center text-[9px] font-black leading-4 text-white">{wishlist.length}</span>
+                <span className="absolute -right-2.5 -top-1.5 min-w-4 rounded-full bg-blue-600 px-1 text-center text-[9px] font-bold leading-4 text-white">{wishlist.length}</span>
               )}
             </span>
             {label}
@@ -90,10 +90,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {confirmReset && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-4 sm:items-center" role="dialog" aria-modal="true" aria-label="Làm lại từ đầu">
           <div className="w-full max-w-sm space-y-4 rounded-2xl bg-white p-5 shadow-2xl">
-            <p className="text-base font-extrabold text-slate-900">Xóa toàn bộ điểm và danh sách nguyện vọng?</p>
+            <p className="text-base font-semibold text-slate-900">Xóa toàn bộ điểm và danh sách nguyện vọng?</p>
             <div className="flex gap-2">
               <button type="button" onClick={() => setConfirmReset(false)} className="flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 cursor-pointer">Giữ lại</button>
-              <button type="button" onClick={doReset} className="flex-1 rounded-xl bg-rose-600 py-2.5 text-sm font-black text-white hover:bg-rose-700 cursor-pointer">Xóa và làm lại</button>
+              <button type="button" onClick={doReset} className="flex-1 rounded-xl bg-rose-600 py-2.5 text-sm font-bold text-white hover:bg-rose-700 cursor-pointer">Xóa và làm lại</button>
             </div>
           </div>
         </div>

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 import sys
 from pathlib import Path
 
@@ -62,7 +63,50 @@ _SUBJECT_WORD = (
 )
 _COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*(?:\(\s*[A-Z]\d{{2}}\s*\))?\s*")
 _CODE_ONLY = re.compile(r"\s*(?:[A-Z]\d{2}|PT\s*\d+|[A-Z]{2,4}|[\d\s,.;:\-–_/()]*)\s*")
-_NOT_REGULAR = re.compile(r"liên thông|văn bằng\s*(?:2|hai)|VB2", re.IGNORECASE)
+_NOT_REGULAR = re.compile(r"liên thông|văn bằng\s*(?:2|hai)|\bVB2\b", re.IGNORECASE)
+
+
+_COMBINING = re.compile(r"[̀-ͯ]")
+_SPLIT_LETTER = re.compile(r"(?<=\s)([a-zà-ỹ])\s(?=[a-zà-ỹ]{2,})")
+_TRAILING_COMBOS = re.compile(
+    rf"\s*\(\s*Tổ hợp xét tuyển\s*:[^)]*\)\s*$|\s+Tổ hợp\s*1\s*:.*$|\s+{_SUBJECT_WORD}(?:\s*,\s*{_SUBJECT_WORD}){{2}}(?:\s*;.*)?\.?$"
+)
+_NOT_A_MAJOR = re.compile(
+    r"^\s*(?:\d+\s*[.)]|Lĩnh vực\b|Mã tổ hợp|Khối ngành\b|\d+\s+ngành\b|\d+/[\wĐ-]+|V-?SAT\b|Tuyển sinh riêng|Nhóm ngành\b)"
+    r"|xét tuyển các ngành dưới đây|gồm các chuyên ngành\s*:\s*(?:\d+\.)|;\s*\w+[^;]*\s-\s",
+    re.IGNORECASE,
+)
+_VALID_SINGLE_WORDS = {"y", "ô"}
+_SPACE_BEFORE_MARK = re.compile(r"\s+([̀-ͯ])")
+
+
+_DASH_RUN = re.compile(r"(\s[-–])(?:\s[-–])+(?=\s|$)")
+_LEADING_DASH = re.compile(r"^[\s\-–•*]+")
+_SEGMENT_SPLIT = re.compile(r"\s+[-–]\s+")
+_CODE_SEGMENT = re.compile(r"\d{5,9}(?:[A-Z]{0,3}\d*(?:\.\d+)*)?")
+
+
+def _tidy_dashes(text: str) -> str:
+    """'Kế toán - 7340301 - - Kế toán' -> 'Kế toán': bỏ đoạn rỗng, đoạn chỉ là mã ngành và đoạn lặp liền kề."""
+    text = _LEADING_DASH.sub("", _DASH_RUN.sub(r"\1", text)).strip(" -–")
+    kept: list[str] = []
+    for seg in _SEGMENT_SPLIT.split(text):
+        seg = seg.strip(" -–")
+        if not seg or _CODE_SEGMENT.fullmatch(seg):
+            continue
+        if kept and _normalize(kept[-1]) == _normalize(seg):
+            continue
+        kept.append(seg)
+    return " - ".join(kept)
+
+
+def repair_major_label(label: object) -> object:
+    """Sửa lỗi trích PDF: dấu thanh rời khỏi chữ (NFC) và chữ cái bị tách khỏi từ ('n hân' -> 'nhân')."""
+    if not isinstance(label, str):
+        return label
+    text = unicodedata.normalize("NFC", _SPACE_BEFORE_MARK.sub(r"", label))
+    text = _tidy_dashes(_TRAILING_COMBOS.sub("", text).strip())
+    return _SPLIT_LETTER.sub(lambda m: m.group(1) if m.group(1) not in _VALID_SINGLE_WORDS else m.group(0), text)
 
 
 def is_garbage_major_label(label: object) -> bool:
@@ -73,7 +117,11 @@ def is_garbage_major_label(label: object) -> bool:
     text = label.strip()
     if len(text) < 3 or not any(ch.isalpha() for ch in text):
         return True
+    if _COMBINING.search(text) or text.count("(") != text.count(")"):  # dấu rời / ngoặc dang dở: nhãn hỏng
+        return True
     if text[0].islower():  # mảnh câu bị ngắt dòng từ PDF
+        return True
+    if _NOT_A_MAJOR.search(text):
         return True
     if _CODE_ONLY.fullmatch(text) or _COMBO_LIKE.fullmatch(text):
         return True
@@ -142,6 +190,7 @@ def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^[-+•*]\s*", "", regex=True)
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^\d{3,8}(?:_\d+)?\s+", "", regex=True)
 
+    cutoff["major_label"] = cutoff["major_label"].map(repair_major_label)
     cutoff = cutoff[~cutoff["major_label"].map(is_garbage_major_label)].copy()
     cutoff = drop_multi_school_documents(cutoff)
     cutoff = drop_cross_school_copies(cutoff)

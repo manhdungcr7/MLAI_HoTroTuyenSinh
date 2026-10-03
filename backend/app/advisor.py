@@ -26,7 +26,7 @@ Score = Field(None, ge=0, le=10)
 
 
 class SubjectScores(BaseModel):
-    """Điểm môn thang 10. Chỉ nhập các môn em thi/học."""
+    """Điểm môn thang 10. Chỉ nhập các môn bạn thi/học."""
     model_config = ConfigDict(extra="ignore")
     toan: float | None = Score
     van: float | None = Score
@@ -98,7 +98,7 @@ class PortfolioRequest(BaseModel):
     profile: AdvisorProfile
     programIds: list[str] | None = Field(
         None, max_length=core.MAX_WISHES,
-        description="Danh sách nguyện vọng em tự xếp (theo thứ tự). Bỏ trống để hệ thống đề xuất.",
+        description="Danh sách nguyện vọng bạn tự xếp (theo thứ tự). Bỏ trống để hệ thống đề xuất.",
     )
 
 

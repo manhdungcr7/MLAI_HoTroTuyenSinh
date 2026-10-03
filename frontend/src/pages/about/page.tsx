@@ -5,9 +5,9 @@ import { listSchoolRules } from "@/engine/scoring/school-rules";
 import { METHOD_LABELS_VI } from "@/engine/scoring/method-score";
 
 const STEPS = [
-  "Tính điểm xét tuyển của em theo từng phương thức: điểm thi, học bạ.",
+  "Tính điểm xét tuyển của bạn theo từng phương thức: điểm thi, học bạ.",
   "So với điểm chuẩn dự kiến của ngành, có tính biến động điểm chuẩn giữa các năm.",
-  "Chọn phương thức có lợi nhất cho em ở mỗi ngành và xếp theo xác suất đỗ.",
+  "Chọn phương thức có lợi nhất cho bạn ở mỗi ngành và xếp theo xác suất đỗ.",
 ];
 
 interface Holdout {
@@ -50,12 +50,12 @@ export default function AboutPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-black tracking-tight text-slate-900">Cách tính</h1>
+      <h1 className="text-2xl font-semibold text-slate-900">Cách tính</h1>
 
       <ol className="space-y-3">
         {STEPS.map((text, i) => (
           <li key={text} className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-4">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-black text-white">{i + 1}</span>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">{i + 1}</span>
             <p className="pt-1 text-base font-bold text-slate-800">{text}</p>
           </li>
         ))}
@@ -64,7 +64,7 @@ export default function AboutPage() {
       <section className="grid grid-cols-3 gap-3">
         {stats.map((s) => (
           <div key={s.label} className="rounded-2xl bg-white p-4 text-center shadow-xs ring-1 ring-slate-200">
-            <p className="text-3xl font-black text-slate-900">{s.value.toLocaleString("vi-VN")}</p>
+            <p className="text-3xl font-bold text-slate-900">{s.value.toLocaleString("vi-VN")}</p>
             <p className="mt-1 text-xs font-bold text-slate-500">{s.label}</p>
           </div>
         ))}
@@ -72,7 +72,7 @@ export default function AboutPage() {
 
       {backtest && backtest.holdouts.some((h) => h.mae !== undefined) && (
         <section className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-          <h2 className="text-base font-extrabold text-slate-900">Đã thử trên năm đã biết</h2>
+          <h2 className="text-base font-semibold text-slate-900">Đã thử trên năm đã biết</h2>
           <table className="mt-2 w-full text-left text-sm font-semibold text-slate-700">
             <thead className="text-xs text-slate-500">
               <tr><th className="py-1">Năm</th><th>Ngành</th><th>Sai số</th><th>Khoảng chứa</th><th>Xác suất lệch</th></tr>
@@ -93,7 +93,7 @@ export default function AboutPage() {
       )}
 
       <section className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-        <h2 className="text-base font-extrabold text-slate-900">Phương thức trong dữ liệu</h2>
+        <h2 className="text-base font-semibold text-slate-900">Phương thức trong dữ liệu</h2>
         <ul className="mt-2 divide-y divide-slate-100 text-sm font-semibold text-slate-700">
           {methods.map(([code, n]) => (
             <li key={code} className="flex justify-between py-2">

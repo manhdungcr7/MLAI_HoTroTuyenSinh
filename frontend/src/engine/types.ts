@@ -94,7 +94,7 @@ export interface StudentProfile {
   excludedMajorGroups?: string[];
   /** Nhóm ngành học sinh quan tâm (MAJOR_GROUPS.value); rỗng = tất cả. */
   interestMajorGroups?: string[];
-  /** Chương trình em đánh dấu yêu thích; được ưu tiên khi đề xuất danh sách nguyện vọng. */
+  /** Chương trình bạn đánh dấu yêu thích; được ưu tiên khi đề xuất danh sách nguyện vọng. */
   favoriteProgramIds?: string[];
 }
 
@@ -197,7 +197,7 @@ export interface WishlistItem {
 export interface GapMetric {
   targetProgram: TargetProgram;
   currentCompositeScore: number;
-  rawGap: number; // điểm của em - điểm chuẩn dự kiến (>0 là dư, <0 là thiếu)
+  rawGap: number; // điểm của bạn - điểm chuẩn dự kiến (>0 là dư, <0 là thiếu)
   admitProbability: number;
   gapStatus: "thach_thuc" | "vua_tam" | "an_toan";
   statusLabelVi: string;

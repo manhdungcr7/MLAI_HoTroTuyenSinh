@@ -27,13 +27,13 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }
 
   return (
     <article className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-[11px] font-black text-white ${tier.avatar}`} aria-hidden="true">
+      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-[11px] font-bold text-white ${tier.avatar}`} aria-hidden="true">
         {c.schoolCode.slice(0, 4)}
       </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-[15px] font-extrabold leading-snug text-slate-900">{c.majorName}</h3>
+          <h3 className="text-[15px] font-semibold leading-snug text-slate-900">{c.majorName}</h3>
           <button
             type="button"
             onClick={() => onFavorite(c)}
@@ -63,13 +63,13 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }
           )}
         </div>
         <p className="mt-1.5 text-[11px] text-slate-500">
-          em {c.userScore.toFixed(2)} · chuẩn dự kiến {c.cutoffP50.toFixed(1)}
+          bạn {c.userScore.toFixed(2)} · chuẩn dự kiến {c.cutoffP50.toFixed(1)}
         </p>
       </div>
 
       <div className="flex w-24 shrink-0 flex-col items-end justify-between gap-2 sm:w-28">
         <div className="w-full text-right">
-          <p className={`whitespace-nowrap text-lg font-black leading-none sm:text-xl ${tier.text}`}>{formatProbability(c.admitProbability)}</p>
+          <p className={`whitespace-nowrap text-lg font-bold leading-none sm:text-xl ${tier.text}`}>{formatProbability(c.admitProbability)}</p>
           <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100" role="img" aria-label={`Xác suất đỗ ${pct}%`}>
             <div className={`h-full rounded-full ${tier.bar}`} style={{ width: `${pct}%` }} />
           </div>
@@ -80,7 +80,7 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }
           onClick={() => onToggle(c)}
           aria-pressed={inList}
           aria-label={inList ? `Bỏ ${c.majorName} khỏi nguyện vọng` : `Thêm ${c.majorName} vào nguyện vọng`}
-          className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11px] font-black transition cursor-pointer ${inList ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-slate-900 text-white hover:bg-blue-600"}`}
+          className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11px] font-bold transition cursor-pointer ${inList ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-slate-900 text-white hover:bg-blue-600"}`}
         >
           {inList ? <><Check className="h-3.5 w-3.5" /> NV {rankInWishlist}</> : <><Plus className="h-3.5 w-3.5" /> Thêm</>}
         </button>

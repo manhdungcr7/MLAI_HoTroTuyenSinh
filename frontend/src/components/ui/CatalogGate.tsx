@@ -8,8 +8,8 @@ export function CatalogGate({ children }: { children: React.ReactNode }) {
   if (catalogStatus === "error") {
     return (
       <div className="space-y-4 py-16 text-center">
-        <p className="text-lg font-extrabold text-slate-900">Không tải được dữ liệu</p>
-        <button type="button" onClick={retryCatalog} className="h-12 rounded-2xl bg-blue-600 px-8 text-sm font-black text-white hover:bg-blue-700 cursor-pointer">
+        <p className="text-lg font-semibold text-slate-900">Không tải được dữ liệu</p>
+        <button type="button" onClick={retryCatalog} className="h-12 rounded-2xl bg-blue-600 px-8 text-sm font-bold text-white hover:bg-blue-700 cursor-pointer">
           Thử lại
         </button>
       </div>

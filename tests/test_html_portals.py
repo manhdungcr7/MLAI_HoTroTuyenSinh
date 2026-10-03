@@ -59,9 +59,9 @@ def test_programs_source_tier_partitioning():
         tiers = set(df["source_tier"].unique())
         assert tiers.issubset({"official_pdf", "aggregator_verified"}), f"Unexpected tiers: {tiers}"
         
-        # Verify official_pdf has at least 76 schools (DHS bị loại có chủ đích: chỉ có dữ liệu từ văn bản chung của ĐH Huế)
+        # Verify official_pdf has at least 74 schools (DHS, DFA, DTQ bị loại có chủ đích: văn bản chung nhiều trường, bản sao của HTC, nhãn gộp nhiều ngành)
         pdf_schools = set(df[df["source_tier"] == "official_pdf"]["school_code"].unique())
-        assert len(pdf_schools) >= 76, f"Official PDF schools count ({len(pdf_schools)}) < 76"
+        assert len(pdf_schools) >= 74, f"Official PDF schools count ({len(pdf_schools)}) < 74"
 
         # Verify aggregator_verified schools are present and correctly tagged
         agg_schools = set(df[df["source_tier"] == "aggregator_verified"]["school_code"].unique())
