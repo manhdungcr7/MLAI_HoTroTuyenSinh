@@ -24,8 +24,8 @@ const GROUP_LABEL = new Map(MAJOR_GROUPS.map((g) => [g.value, g.label]));
 
 const stepForMissing = (label: string): StepId => (/học bạ/i.test(label) ? "hocba" : /ĐGNL|ĐGTD/.test(label) ? "cert" : "exam");
 
-/** Xác suất làm tròn 1%; từ 97% trở lên coi là một nhóm "gần như chắc đỗ", xếp theo điểm chuẩn (trường tốt hơn lên trước). */
-const band = (p: number) => Math.min(97, Math.round(p * 100));
+/** Xếp theo đúng phần trăm hiển thị (giảm dần); từ 99% trở lên hiển thị chung là "trên 99%" nên xếp theo điểm chuẩn (trường tốt hơn lên trước). */
+const band = (p: number) => Math.min(99, Math.round(p * 100));
 
 export default function ResultsPage() {
   const { profile, wishlist, addWish, removeWish, toggleFavorite, updateProfile } = useApp();

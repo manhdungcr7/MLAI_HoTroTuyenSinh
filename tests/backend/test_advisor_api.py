@@ -35,7 +35,7 @@ def test_search_ranks_by_probability_and_applies_constraints():
     assert body["total"] > 0
     assert all(item["majorGroup"] == "cntt" for item in body["items"])
     pct = [item["probabilityPercent"] for item in body["items"]]
-    banded = [min(97, v) for v in pct]  # từ 97% trở lên xếp theo điểm chuẩn
+    banded = [min(99, v) for v in pct]  # từ 99% trở lên hiển thị chung nên xếp theo điểm chuẩn
     assert banded == sorted(banded, reverse=True)
     assert sum(body["tiers"].values()) == body["total"]
     assert set(body["notComputable"]) == {"methodNotSupported", "missingInputs"}

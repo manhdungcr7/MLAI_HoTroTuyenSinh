@@ -803,8 +803,8 @@ def rank_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def prob_band(prob: float) -> int:
-    """Xác suất làm tròn 1%; từ 97% trở lên coi là một nhóm "gần như chắc đỗ", xếp theo điểm chuẩn (trường tốt hơn lên trước)."""
-    return min(97, js_math_round(prob * 100))
+    """Xếp theo đúng phần trăm hiển thị (giảm dần); từ 99% trở lên hiển thị chung là "trên 99%" nên xếp theo điểm chuẩn."""
+    return min(99, js_math_round(prob * 100))
 
 
 def round_pct(prob: float) -> int:
