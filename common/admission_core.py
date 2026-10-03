@@ -131,30 +131,49 @@ _GH_WEIGHTS = [
 ]
 
 
+SCHOOL_SHARED_VARIANCE_SHARE = 0.23  # đo từ dữ liệu: hiệp phương sai giữa các ngành cùng trường (xem probability.ts)
+
+
 def portfolio_fail_all(
-    items: Iterable[Mapping[str, float]],
+    items: Iterable[Mapping[str, Any]],
     shock_std: float = DEFAULT_NATIONAL_SHOCK_STD,
     idio_std: float = DEFAULT_IDIO_STD,
 ) -> float:
-    """Xác suất không đỗ nguyện vọng nào, có tính cú sốc điểm chuẩn chung toàn quốc (tích phân Gauss-Hermite)."""
+    """Xác suất không đỗ nguyện vọng nào: cú sốc điểm chuẩn chung toàn quốc và cú sốc riêng dùng chung giữa các ngành cùng trường (Gauss-Hermite)."""
     valid = [w for w in items if math.isfinite(w["userScore"]) and math.isfinite(w["forecastP50"])]
     if not valid:
         return 1.0
     shock = shock_std if shock_std > 0 else DEFAULT_NATIONAL_SHOCK_STD
     idio = idio_std if idio_std > 0 else DEFAULT_IDIO_STD
+    rho = SCHOOL_SHARED_VARIANCE_SHARE
+    groups: dict[str, list[Mapping[str, Any]]] = {}
+    for i, w in enumerate(valid):
+        key = f"s:{w['schoolCode']}" if w.get("schoolCode") else f"i:{i}"
+        groups.setdefault(key, []).append(w)
+    sqrt2, sqrt_pi = math.sqrt(2), math.sqrt(math.pi)
     total = 0.0
     for x, w_m in zip(_GH_NODES, _GH_WEIGHTS):
-        survive = 1.0
-        for w in valid:
-            beta = w.get("beta") or 1.0
-            cutoff = w["forecastP50"] + math.sqrt(2) * beta * shock * x
-            scale = w.get("sigmaScale") or 1.0
-            sigma_i2 = scale * scale * (beta * beta * shock * shock + idio * idio)
-            idio_i = math.sqrt(max(0.01, sigma_i2 - beta * beta * shock * shock))
-            p = normal_cdf((w["userScore"] - cutoff) / idio_i)
-            survive *= max(0.0, min(1.0, 1.0 - p))
-        total += w_m * survive
-    return max(0.0, min(1.0, total / math.sqrt(math.pi)))
+        joint = 1.0
+        for group in groups.values():
+            shared = len(group) > 1
+            school_survival = 0.0
+            for k in range(15 if shared else 1):
+                z2 = sqrt2 * _GH_NODES[k] if shared else 0.0
+                wk = _GH_WEIGHTS[k] / sqrt_pi if shared else 1.0
+                survive = 1.0
+                for w in group:
+                    beta = w.get("beta") or 1.0
+                    scale = w.get("sigmaScale") or 1.0
+                    sigma_i2 = scale * scale * (beta * beta * shock * shock + idio * idio)
+                    idio_i = math.sqrt(max(0.01, sigma_i2 - beta * beta * shock * shock))
+                    shared_part = math.sqrt(rho) * idio_i * z2 if shared else 0.0
+                    own_std = math.sqrt(1 - rho) * idio_i if shared else idio_i
+                    cutoff = w["forecastP50"] + sqrt2 * beta * shock * x + shared_part
+                    survive *= max(0.0, min(1.0, 1.0 - normal_cdf((w["userScore"] - cutoff) / own_std)))
+                school_survival += wk * survive
+            joint *= school_survival
+        total += w_m * joint
+    return max(0.0, min(1.0, total / sqrt_pi))
 
 
 # --------------------------------------------------------------------------------------
@@ -842,7 +861,7 @@ def suggest_portfolio(
 
 def portfolio_summary(items: list[dict[str, Any]], shock_std: float, idio_std: float) -> dict[str, Any]:
     p_fail = portfolio_fail_all(
-        [{"userScore": c["userScore"], "forecastP50": c["cutoffP50"], "sigmaScale": c["sigmaScale"]} for c in items], shock_std, idio_std
+        [{"userScore": c["userScore"], "forecastP50": c["cutoffP50"], "sigmaScale": c["sigmaScale"], "schoolCode": c["schoolCode"]} for c in items], shock_std, idio_std
     ) if items else 1.0
     counts = {"an_toan": 0, "vua_tam": 0, "mao_hiem": 0}
     for c in items:

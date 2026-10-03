@@ -120,8 +120,15 @@ export function calculateAdmitProbability(
  * Tính xác suất trượt tất cả P(Fail All) qua 15 điểm nút Gauss-Hermite
  * Hoàn toàn xác định (không lấy mẫu ngẫu nhiên)
  */
+/**
+ * Phần phương sai riêng của điểm chuẩn (ngoài cú sốc chung toàn quốc) dùng chung giữa các ngành của cùng một trường.
+ * Đo từ dữ liệu: sau khi trừ mức thay đổi trung bình toàn quốc, hiệp phương sai giữa các ngành cùng trường cùng năm
+ * bằng khoảng 23% phương sai (15.329 cặp, các năm 2023–2025). Nhiều ngành cùng trường vì vậy không độc lập hoàn toàn.
+ */
+export const SCHOOL_SHARED_VARIANCE_SHARE = 0.23;
+
 export function calculatePortfolioFailAll(
-  wishlist: { userScore: number; forecastP50: number; beta?: number; sigmaScale?: number }[],
+  wishlist: { userScore: number; forecastP50: number; beta?: number; sigmaScale?: number; schoolCode?: string }[],
   shockStd = getActiveNationalShockStd(),
   idioStd = getActiveIdioStd()
 ): number {
@@ -136,6 +143,16 @@ export function calculatePortfolioFailAll(
 
   const safeShock = Number.isFinite(shockStd) && shockStd > 0 ? shockStd : DEFAULT_NATIONAL_SHOCK_STD;
   const safeIdio = Number.isFinite(idioStd) && idioStd > 0 ? idioStd : DEFAULT_IDIO_STD;
+  const rho = SCHOOL_SHARED_VARIANCE_SHARE;
+
+  // Nhóm theo trường: ngành cùng trường dùng chung một cú sốc riêng của trường. Ngành không rõ trường tự thành một nhóm.
+  const groups = new Map<string, typeof validWishlist>();
+  validWishlist.forEach((w, i) => {
+    const key = w.schoolCode ? `s:${w.schoolCode}` : `i:${i}`;
+    const list = groups.get(key);
+    if (list) list.push(w);
+    else groups.set(key, [w]);
+  });
 
   let totalIntegral = 0;
   const sqrtPi = Math.sqrt(Math.PI);
@@ -146,16 +163,30 @@ export function calculatePortfolioFailAll(
     const w_m = GH_WEIGHTS[m];
     let jointSurvivalAtNode = 1.0;
 
-    for (const w of validWishlist) {
-      const beta = Number.isFinite(w.beta) && (w.beta ?? 0) > 0 ? (w.beta as number) : 1.0;
-      const conditionalCutoff = w.forecastP50 + sqrt2 * beta * safeShock * x_m;
-      // Độ bất định riêng của chương trình khớp với xác suất từng nguyện vọng: σ_i² = (β·shock)² + idio_i².
-      const scale = Number.isFinite(w.sigmaScale) && (w.sigmaScale ?? 0) > 0 ? (w.sigmaScale as number) : 1.0;
-      const sigmaI2 = scale * scale * (beta * beta * safeShock * safeShock + safeIdio * safeIdio);
-      const idioI = Math.sqrt(Math.max(0.01, sigmaI2 - beta * beta * safeShock * safeShock));
-      const z_cond = (w.userScore - conditionalCutoff) / idioI;
-      const p_admit_cond = normalCDF(z_cond);
-      jointSurvivalAtNode *= Math.max(0.0, Math.min(1.0, 1.0 - p_admit_cond));
+    for (const group of groups.values()) {
+      // Với cú sốc chung đã biết, các trường độc lập nhau: kỳ vọng theo cú sốc của trường rồi nhân các trường lại.
+      const shared = group.length > 1;
+      let schoolSurvival = 0;
+      const innerNodes = shared ? 15 : 1;
+      for (let k = 0; k < innerNodes; k++) {
+        const z2 = shared ? sqrt2 * GH_NODES[k] : 0;
+        const wk = shared ? GH_WEIGHTS[k] / sqrtPi : 1;
+        let survive = 1.0;
+        for (const w of group) {
+          const beta = Number.isFinite(w.beta) && (w.beta ?? 0) > 0 ? (w.beta as number) : 1.0;
+          const scale = Number.isFinite(w.sigmaScale) && (w.sigmaScale ?? 0) > 0 ? (w.sigmaScale as number) : 1.0;
+          // Độ bất định riêng của chương trình khớp với xác suất từng nguyện vọng: σ_i² = (β·shock)² + idio_i².
+          const sigmaI2 = scale * scale * (beta * beta * safeShock * safeShock + safeIdio * safeIdio);
+          const idioI = Math.sqrt(Math.max(0.01, sigmaI2 - beta * beta * safeShock * safeShock));
+          const sharedPart = shared ? Math.sqrt(rho) * idioI * z2 : 0;
+          const ownStd = shared ? Math.sqrt(1 - rho) * idioI : idioI;
+          const conditionalCutoff = w.forecastP50 + sqrt2 * beta * safeShock * x_m + sharedPart;
+          const pAdmit = normalCDF((w.userScore - conditionalCutoff) / ownStd);
+          survive *= Math.max(0.0, Math.min(1.0, 1.0 - pAdmit));
+        }
+        schoolSurvival += wk * survive;
+      }
+      jointSurvivalAtNode *= schoolSurvival;
     }
 
     totalIntegral += w_m * jointSurvivalAtNode;

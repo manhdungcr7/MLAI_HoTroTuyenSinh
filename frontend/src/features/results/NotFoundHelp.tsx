@@ -62,6 +62,10 @@ export function NotFoundHelp() {
             <p>Ứng dụng chỉ tính cho chương trình đại học. Cao đẳng và nghề thường xét học bạ hoặc điểm tốt nghiệp với ngưỡng thấp hơn, bạn xem thông tin tuyển sinh của từng trường.</p>
           </div>
           <div>
+            <p className="font-medium text-slate-900">Học phí và hỗ trợ tài chính</p>
+            <p>Hầu hết đề án chưa công bố học phí theo từng ngành nên ứng dụng không lọc theo học phí. Bạn xem mức thu trong đề án của trường. Sinh viên thuộc diện chính sách, hộ nghèo, dân tộc thiểu số có thể được miễn giảm học phí, xét học bổng và vay vốn tín dụng sinh viên tại Ngân hàng Chính sách xã hội; hãy hỏi phòng công tác sinh viên của trường.</p>
+          </div>
+          <div>
             <p className="font-medium text-slate-900">Trường chưa có trong dữ liệu</p>
             <p>Hiện có {stats.schools} trường, {stats.programs} chương trình. Trường chưa có điểm chuẩn công bố sẽ được thêm khi có dữ liệu; hãy kiểm tra điểm chuẩn trực tiếp trên website của trường.</p>
           </div>

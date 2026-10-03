@@ -16,7 +16,7 @@ import { missingInputsForProgram, scoreForProgram } from "../src/engine/scoring/
 import { StudentProfile, TargetProgram } from "../src/engine/types";
 import { sanitize } from "../src/state/storage";
 import { comboAcceptancePrior } from "../src/engine/decision/combo-prior";
-import { FORECAST_YEAR, calculateAdmitProbability, sigmaScaleFor } from "../src/engine/admissions/probability";
+import { FORECAST_YEAR, calculateAdmitProbability, calculatePortfolioFailAll, sigmaScaleFor } from "../src/engine/admissions/probability";
 import { calculateSubjectRoiList } from "../src/engine/roi/engine";
 
 function assert(condition: boolean, message: string) {
@@ -173,3 +173,10 @@ const roiTarget = { programId: "roi", schoolCode: "ZZ9", schoolName: "Z", majorN
 const roi = calculateSubjectRoiList(profile(0), roiTarget, [roiTarget]);
 assert(roi.length === 3 && roi.every((r) => r.admitProbAfter >= r.admitProbBefore && r.simulatedScore <= 10), "Mô phỏng tăng điểm: xác suất đỗ không giảm và điểm không vượt 10");
 assert(roi[0].admitProbAfter - roi[0].admitProbBefore >= roi[2].admitProbAfter - roi[2].admitProbBefore, "Môn mang lại nhiều lợi nhất xếp đầu");
+
+// ---- Ngành cùng trường cùng chịu một cú sốc riêng: rủi ro trượt cả hai cao hơn hai trường khác nhau ----
+const twoItems = (a: string, b: string) => calculatePortfolioFailAll([
+  { userScore: 22, forecastP50: 22, schoolCode: a },
+  { userScore: 22, forecastP50: 22, schoolCode: b },
+]);
+assert(twoItems("AAA", "AAA") > twoItems("AAA", "BBB"), "Hai ngành cùng trường trượt cùng lúc nhiều hơn hai ngành khác trường");

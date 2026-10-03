@@ -6,10 +6,9 @@ import { AWARD_LABELS_VI, AwardLevel, ExamScores, MAJOR_GROUPS, PROVINCES, Prior
 import { fold, matchesQuery } from "@/lib/text";
 import { SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { bestCombination, countEntered } from "@/engine/scoring/combo";
-import { UNLIMITED_BUDGET_VND } from "@/engine/decision/constraints";
 
-export type StepId = "year" | "exam" | "hocba" | "cert" | "award" | "record" | "place" | "major" | "budget" | "priority";
-export const STEPS: StepId[] = ["year", "exam", "hocba", "cert", "award", "record", "place", "major", "budget", "priority"];
+export type StepId = "year" | "exam" | "hocba" | "cert" | "award" | "record" | "place" | "major" | "priority";
+export const STEPS: StepId[] = ["year", "exam", "hocba", "cert", "award", "record", "place", "major", "priority"];
 const REQUEST_KEY = "nv_start_step";
 
 /** Đặt bước sẽ mở khi vào trang Tìm ngành (dùng khi cần bổ sung điểm từ trang Kết quả). */
@@ -174,7 +173,7 @@ function MajorSearch() {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Gõ tên ngành hoặc trường, ví dụ: y khoa, bách khoa"
+          placeholder="Gõ tên ngành hoặc trường"
           aria-label="Tìm ngành hoặc trường"
           className="h-12 w-full rounded-2xl border-2 border-slate-200 bg-white pl-12 pr-4 text-base font-medium text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
         />
@@ -247,13 +246,6 @@ const AREAS: { value: PriorityArea; label: string }[] = [
 const OBJECTS: { value: PriorityObject; label: string }[] = [
   { value: "none", label: "Không" }, { value: "uu_tien_1", label: "Nhóm ưu tiên 1" }, { value: "uu_tien_2", label: "Nhóm ưu tiên 2" },
 ];
-const BUDGETS: { label: string; vnd: number }[] = [
-  { label: "Dưới 20 triệu / năm", vnd: 20_000_000 },
-  { label: "Dưới 40 triệu / năm", vnd: 40_000_000 },
-  { label: "Dưới 60 triệu / năm", vnd: 60_000_000 },
-  { label: "Dưới 100 triệu / năm", vnd: 100_000_000 },
-  { label: "Không giới hạn", vnd: UNLIMITED_BUDGET_VND },
-];
 
 const TITLES: Record<StepId, string> = {
   year: "Bạn thi tốt nghiệp năm nào?",
@@ -264,7 +256,6 @@ const TITLES: Record<StepId, string> = {
   record: "Học lực và hạnh kiểm lớp 12",
   place: "Bạn muốn học ở đâu?",
   major: "Bạn thích ngành nào?",
-  budget: "Học phí tối đa mỗi năm?",
   priority: "Điểm ưu tiên của bạn",
 };
 
@@ -410,13 +401,6 @@ export function Wizard() {
                 <Chip key={g.value} label={g.label} on={interest.includes(g.value)} onClick={() => updateProfile({ interestMajorGroups: interest.includes(g.value) ? interest.filter((x) => x !== g.value) : [...interest, g.value] })} />
               ))}
             </div>
-          </div>
-        )}
-        {step === "budget" && (
-          <div className="grid gap-3">
-            {BUDGETS.map((b) => (
-              <Choice key={b.vnd} label={b.label} selected={profile.annualBudgetVnd === b.vnd} onClick={() => choose(() => updateProfile({ annualBudgetVnd: b.vnd }))} />
-            ))}
           </div>
         )}
         {step === "priority" && (

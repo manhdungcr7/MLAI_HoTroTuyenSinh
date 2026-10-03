@@ -138,6 +138,7 @@ export function calculateWishlistFailAll(items: WishlistItem[]): number {
       userScore: w.user_score ?? (w.forecast_p50 ? w.forecast_p50 + (w.admit_prob > 0.5 ? 0.8 : -0.8) : 22.0),
       forecastP50: w.forecast_p50 ?? 22.0,
       sigmaScale: w.sigma_scale,
+      schoolCode: w.school_code,
     })),
   );
 }
