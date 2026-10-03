@@ -69,6 +69,7 @@ PDF dạng ảnh cho văn bản rỗng: đọc trực tiếp ảnh trang hoặc 
 | `certBonus` | Điểm thưởng IELTS (cộng sau điểm học lực), có thể loại nhóm ngành. |
 | `scoreFactor` | Hệ số quy đổi nhân vào điểm học lực khi trường quy đổi phương thức về thang chung. |
 | `minExamComboTotal`, `minHocBaComboTotal` | Ngưỡng đầu vào riêng (tổng 3 môn, thang 30, không hệ số). |
+| `majorGroupOverrides` | Ngoại lệ theo nhóm ngành (`majorGroup`), ghi đè lên quy tắc chung của phương thức, ví dụ ngành Ngôn ngữ không nhân hệ số Toán: `"majorGroupOverrides": { "ngon_ngu": { "components": [...] } }`. |
 | `priority` | `standard` hoặc `none` nếu trường không cộng ưu tiên cho phương thức này. |
 | `unsupportedReason` | Trường chưa công bố cách quy đổi: phương thức này không được tính, thay vì đoán. |
 
@@ -77,5 +78,8 @@ không so được với điểm tính theo công thức mới; trong trường 
 
 ## Đã nhập (đối chiếu từ thông tin tuyển sinh 2026)
 
-DBL, DDT, DPQ, DQN, GTA, KHA, SPD, TCT, TDV, TTN, XDT. Các trường khác dùng công thức chung.
+DBL, DDT, DPQ, DQN, GHA, GSA, GTA, KHA, SPD, TCT, TDV, TTN, XDT. Các trường khác dùng công thức chung.
 Chưa có file PDF 2026 trong kho dữ liệu: PKA, DDK, IUH, TMU. PDF dạng ảnh cần đọc tay: TDM, TSN, TLA, DCT, BVH, SPH và các trường khác.
+
+Trường đã đọc nhưng chưa nhập vì cách tính khác nhau theo từng ngành (cần bảng ngành → hệ số, hiện khung chỉ ghi đè theo nhóm ngành):
+DTL (Toán hệ số 2 ở một số ngành), DKK (hệ số 4.5/3.5/2 theo thứ tự môn), NTH (chương trình tích hợp thang 40, môn nhân 1,5), NHH, DDP, YDS, DHY.
