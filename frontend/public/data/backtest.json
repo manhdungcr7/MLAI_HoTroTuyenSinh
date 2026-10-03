@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-10-03T01:17:24.343657+00:00",
+  "generatedAt": "2026-10-03T02:20:24.058059+00:00",
   "modelVersion": "2026.2-diem-nam-gan-nhat",
   "forecastRule": "Điểm chuẩn năm tới = điểm chuẩn thật của năm gần nhất; khoảng dự báo và xác suất đỗ dùng độ bất định đo từ dữ liệu.",
   "thinDataMultiplier": 1.3,
   "holdouts": [
     {
       "year": 2024,
-      "n": 769,
-      "mae": 1.326,
-      "rmse": 2.298,
-      "meanError": 0.83,
+      "n": 776,
+      "mae": 1.32,
+      "rmse": 2.289,
+      "meanError": 0.826,
       "shockStd": 1.096,
       "idioStd": 1.395,
-      "coverageP10P90Pct": 87.4,
+      "coverageP10P90Pct": 87.5,
       "meanBandWidth": 5.68,
       "calibration": [
         {
           "offset": -3.0,
           "predicted": 0.088,
-          "observed": 0.029
+          "observed": 0.028
         },
         {
           "offset": -2.0,
@@ -27,8 +27,8 @@
         },
         {
           "offset": -1.0,
-          "predicted": 0.324,
-          "observed": 0.096
+          "predicted": 0.325,
+          "observed": 0.097
         },
         {
           "offset": 0.0,
@@ -37,72 +37,72 @@
         },
         {
           "offset": 1.0,
-          "predicted": 0.676,
-          "observed": 0.689
+          "predicted": 0.675,
+          "observed": 0.692
         },
         {
           "offset": 2.0,
           "predicted": 0.818,
-          "observed": 0.848
+          "observed": 0.849
         },
         {
           "offset": 3.0,
           "predicted": 0.912,
-          "observed": 0.917
+          "observed": 0.918
         }
       ],
-      "brierScore": 0.1283,
-      "calibrationGap": 0.088
+      "brierScore": 0.1279,
+      "calibrationGap": 0.089
     },
     {
       "year": 2025,
-      "n": 661,
-      "mae": 1.709,
-      "rmse": 2.43,
-      "meanError": 0.147,
+      "n": 574,
+      "mae": 1.735,
+      "rmse": 2.475,
+      "meanError": 0.314,
       "shockStd": 1.069,
       "idioStd": 1.366,
-      "coverageP10P90Pct": 76.9,
-      "meanBandWidth": 5.52,
+      "coverageP10P90Pct": 77.2,
+      "meanBandWidth": 5.47,
       "calibration": [
         {
           "offset": -3.0,
-          "predicted": 0.082,
-          "observed": 0.115
+          "predicted": 0.08,
+          "observed": 0.094
         },
         {
           "offset": -2.0,
-          "predicted": 0.175,
-          "observed": 0.177
+          "predicted": 0.173,
+          "observed": 0.152
         },
         {
           "offset": -1.0,
-          "predicted": 0.32,
-          "observed": 0.238
+          "predicted": 0.318,
+          "observed": 0.209
         },
         {
           "offset": 0.0,
           "predicted": 0.5,
-          "observed": 0.498
+          "observed": 0.46
         },
         {
           "offset": 1.0,
-          "predicted": 0.68,
-          "observed": 0.705
+          "predicted": 0.682,
+          "observed": 0.672
         },
         {
           "offset": 2.0,
-          "predicted": 0.825,
-          "observed": 0.831
+          "predicted": 0.827,
+          "observed": 0.815
         },
         {
           "offset": 3.0,
-          "predicted": 0.918,
-          "observed": 0.902
+          "predicted": 0.92,
+          "observed": 0.889
         }
       ],
-      "brierScore": 0.1606,
-      "calibrationGap": 0.024
+      "brierScore": 0.159,
+      "calibrationGap": 0.034
     }
   ],
   "limitationsVi": [

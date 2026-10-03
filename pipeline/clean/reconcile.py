@@ -80,6 +80,23 @@ def is_garbage_major_label(label: object) -> bool:
     return bool(_NOT_REGULAR.search(text))
 
 
+MULTI_SCHOOL_DOCUMENTS_PATH = MANUAL_DIR / "multi_school_documents.json"
+
+
+def drop_multi_school_documents(cutoff: pd.DataFrame) -> pd.DataFrame:
+    """Loại các dòng điểm lấy từ văn bản dùng chung nhiều trường thành viên (xem data/manual/multi_school_documents.json):
+    không thể biết dòng nào thuộc trường nào nên không gán cho một trường."""
+    if cutoff.empty or not MULTI_SCHOOL_DOCUMENTS_PATH.is_file():
+        return cutoff
+    docs = json.loads(MULTI_SCHOOL_DOCUMENTS_PATH.read_text(encoding="utf-8")).get("documents", [])
+    keys = {(d["schoolCode"], int(d["year"])) for d in docs}
+    doc_year = pd.to_numeric(cutoff["source_year_doc"], errors="coerce")
+    shared = [(s, y) in keys for s, y in zip(cutoff["school_code"], doc_year)]
+    if "source_tier" in cutoff.columns:
+        shared = [flag and tier == "official_pdf" for flag, tier in zip(shared, cutoff["source_tier"])]
+    return cutoff[~pd.Series(shared, index=cutoff.index)].copy()
+
+
 def drop_cross_school_copies(
     cutoff: pd.DataFrame, min_rows: int = 5, min_share: float = 0.5
 ) -> pd.DataFrame:
@@ -126,6 +143,7 @@ def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
     cutoff["major_label"] = cutoff["major_label"].str.replace(r"^\d{3,8}(?:_\d+)?\s+", "", regex=True)
 
     cutoff = cutoff[~cutoff["major_label"].map(is_garbage_major_label)].copy()
+    cutoff = drop_multi_school_documents(cutoff)
     cutoff = drop_cross_school_copies(cutoff)
 
     cutoff["major_key"] = cutoff.apply(

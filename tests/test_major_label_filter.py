@@ -26,3 +26,18 @@ def test_keeps_real_major_names(label):
 )
 def test_rejects_subject_lists_with_new_curriculum_names(label):
     assert is_garbage_major_label(label)
+
+
+def test_rows_from_multi_school_documents_are_dropped():
+    import pandas as pd
+
+    from pipeline.clean.reconcile import drop_multi_school_documents
+
+    frame = pd.DataFrame({
+        "school_code": ["DHS", "DHS", "DHS", "ZZZ"],
+        "source_year_doc": [2026, 2026, 2024, 2026],
+        "source_tier": ["official_pdf", "aggregator_verified", "official_pdf", "official_pdf"],
+        "score": [20.0, 21.0, 22.0, 23.0],
+    })
+    kept = drop_multi_school_documents(frame)
+    assert list(kept["score"]) == [21.0, 22.0, 23.0]

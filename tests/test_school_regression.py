@@ -19,7 +19,7 @@ INTERIM_PARQUET = ROOT / "data" / "interim" / "cutoff_panel_raw.parquet"
 FROZEN_SCHOOL_SET = {
     "ANS", "BKA", "C19", "C23", "C25", "CSS", "D61", "D64", "DBL", "DCL",
     "DCN", "DDF", "DDP", "DDQ", "DDS", "DDY", "DFA", "DHC", "DHD", "DHK",
-    "DHL", "DHN", "DHS", "DHT", "DHY", "DMT", "DNB", "DNU", "DPQ", "DPY",
+    "DHL", "DHN", "DHT", "DHY", "DMT", "DNB", "DNU", "DPQ", "DPY",
     "DQB", "DQH", "DQU", "DTF", "DTL", "DTN", "DTQ", "DTV", "DVL", "GHA",
     "GSA", "GTA", "HCB", "HCH", "HCN", "HCS", "HHT", "HTC", "KMA", "LNH",
     "LPH", "NHH", "NHP", "QHI", "QHL", "QHQ", "QHS", "QHY", "QSC", "QST",

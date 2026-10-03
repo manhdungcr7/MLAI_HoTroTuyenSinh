@@ -1,0 +1,20 @@
+{
+  "_ghi_chu": "Văn bản tuyển sinh dùng chung cho nhiều trường thành viên (ví dụ Đại học Huế). Chỉ tiêu và điểm của mọi trường thành viên nằm trong một file nhưng bị gán cho một mã trường duy nhất khi cào, nên không thể gán đúng trường: các dòng điểm lấy từ văn bản này bị loại (điểm từ trang tổng hợp theo từng trường vẫn giữ).",
+  "documents": [
+    {
+      "schoolCode": "DHS",
+      "year": 2026,
+      "reason": "Thông tin tuyển sinh chung của Đại học Huế (77 trang, nhiều trường thành viên) gán cho mã DHS"
+    },
+    {
+      "schoolCode": "DHC",
+      "year": 2025,
+      "reason": "Thông tin tuyển sinh chung của Đại học Huế năm 2025 (66 trang) gán cho mã DHC"
+    },
+    {
+      "schoolCode": "DHN",
+      "year": 2025,
+      "reason": "Thông tin tuyển sinh chung của Đại học Huế năm 2025 (66 trang) gán cho mã DHN"
+    }
+  ]
+}
