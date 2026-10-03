@@ -1,0 +1,674 @@
+
+<<<PAGE 1>>>
+THÔNG TIN TUYỂN SINH TRƯỜNG ĐẠI HỌC KHOA HỌC XÃ HỘI VÀ 
+NHÂN VĂN – ĐHQG TPHCM 2026
+(cập nhật ngày 15/02)
+I. THÔNG TIN CHUNG
+1. Tên cơ sở đào tạo: Trường Đại học Khoa học Xã hội và Nhân văn, Đại học Quốc gia 
+Thành phố Hồ Chí Minh (ĐHQG-HCM)
+2. Mã cơ sở đào tạo trong tuyển sinh: QSX
+3. Địa chỉ các trụ sở:
+- Cơ sở 1: số 10-12 Đinh Tiên Hoàng, Phường Sài Gòn, Tp.HCM (cơ sở Sài Gòn).
+- Cơ sở 2: Khu phố 33, Phường Linh Xuân, Tp.HCM (cơ sở Linh Xuân).
+4. Địa chỉ trang thông tin điện tử: https://hcmussh.edu.vn
+5. Địa chỉ công khai quy chế tuyển sinh, đề 
+án: https://hcmussh.edu.vn/tuyensinh hoặc https://hcmussh.edu.vn/qldt
+6. Số điện thoại liên hệ tuyển sinh: 028-38293828 - 112 hoặc 200 (trong giờ hành 
+chính).
+7. Địa chỉ công khai các thông tin về hoạt động của cơ sở đào 
+tạo: https://hcmussh.edu.vn
+II. Tuyển sinh đào tạo đại học
+1. Đối tượng, điều kiện dự tuyển
+1.1. Đối tượng tuyển sinh
+a) Người đã được công nhận tốt nghiệp trung học phổ thông (THPT) của Việt Nam hoặc 
+có bằng tốt nghiệp của nước ngoài được công nhận trình độ tương đương;
+b) Người đã có bằng tốt nghiệp trung cấp ngành nghề thuộc cùng nhóm ngành dự tuyển và 
+đã hoàn thành đủ yêu cầu khối lượng kiến thức văn hóa cấp THPT theo quy định của pháp 
+luật.
+1.2. Điều kiện tuyển sinh
+<<<PAGE 2>>>
+a) Đạt ngưỡng đầu vào theo quy định của Trường;
+b) Có đủ sức khoẻ để học tập theo quy định hiện hành;
+c) Có đủ thông tin cá nhân, hồ sơ dự tuyển theo quy định;
+2. Phương thức tuyển sinh
+2.1. Phương thức 1: xét tuyển thẳng theo quy định của Bộ GDĐT.
+2.2. Phương thức 2: xét tuyển tổng hợp, sử dụng các tiêu chí: kết quả kỳ thi tốt nghiệp 
+THPT năm 2026 (THPT); kết quả kỳ thi đánh giá năng lực ĐHQG-HCM năm 2026 
+(ĐGNL); kết quả học tập 03 năm THPT (HB); thành tích trong học tập, hoạt động xã hội, 
+văn hóa, thể dục, thể thao, văn nghệ; chứng chỉ ngoại ngữ quốc tế.
+2.2.1 Công thức tổng quát:
+ĐXT = w1THPT + w2ĐGNL + w3HB + [điểm cộng] + [điểm ưu tiên]
+• w là trọng số của các thành phần điểm thi, cụ thể:
++ w1 là trọng số của điểm thi tốt nghiệp THPT năm 2026: tổng điểm 3 môn thi TN 
+THPT cao nhất một trong các tổ hợp xét tuyển của ngành tương ứng.
++ w2 là trọng số của điểm thi ĐGNL của ĐHQG-HCM năm 2026: điểm ĐGNL cao 
+nhất trong 2 lần thi.
++ w3 là trọng số của điểm HB: tổng điểm trung bình cộng kết quả học tập của 3 năm 
+học THPT (lớp 10, 11 và 12) cao nhất thuộc một trong các tổ hợp xét tuyển của 
+ngành tương ứng (bao gồm cả thí sinh tốt nghiệp năm 2025 trở về trước).
+Trong đó: w1 = 45%, w2 = 45% và w3 = 10%
+• Tổng điểm (w1THPT + w2ĐGNL + w3HB) được gọi là Điểm học lực (ĐHL), được 
+tính theo nguyên tắc ở mục 2.2.2.
+2.2.2. Nguyên tắc tính điểm học lực:
+- Đối với thí sinh (1) có đủ 3 thành phần điểm, áp dụng công thức ĐXT với trọng số ở 
+trên.
+- Đối với thí sinh (2) chỉ có điểm THPT + HB và (3) chỉ có điểm ĐGNL + HB (bao 
+gồm cả thí sinh TN trước năm 2026). ĐHL được tính theo công thức sau:
+<<<PAGE 3>>>
+ĐHL = Max (ĐHL 1, ĐHL 2)
+Trong đó:
+(1). ĐHL 1: tính điểm thí sinh có điểm THPT theo trọng số w1 =90%, w3 = 10%
+ĐHL 1 = w1THPT + w3HB
+(2). ĐHL 2: tính điểm thí sinh có điểm ĐGNL theo trọng số w2 =90%, w3 = 10%
+ĐHL 2 = w2ĐGNL + w3HB
+• Lưu ý:
++ Thí sinh đủ 3 thành phần điểm, lấy giá trị điểm cao nhất của ĐXT.
++ Nếu thí sinh chỉ có điểm THPT, áp dụng công thức tính ĐHL 1.
++ Nếu thí sinh chỉ có điểm ĐGNL, áp dụng công thức tính ĐHL 2.
+3. Quy tắc quy đổi tương đương ngưỡng đầu vào và điểm trúng tuyển giữa các tổ hợp, 
+phương thức tuyển sinh
+a) Nguyên tắc quy đổi điểm ngưỡng đầu vào
+Quy đổi ngưỡng đầu vào giữa các phương thức xét tuyển, tổ hợp xét tuyển theo một quy 
+tắc bảo đảm tương đương về mức độ đáp ứng yêu cầu đầu vào của chương trình, ngành 
+đào tạo tương ứng; Quy tắc quy đổi ngưỡng đầu vào theo hướng dẫn của Bộ GDĐT, 
+ĐHQG-HCM.
+c) Nguyên tắc quy đổi điểm trúng tuyển
+- Điểm quy đổi về thang điểm 100 của từng thành phần điểm áp dụng theo công thức:
++ THPT= [Điểm thi TN THPT theo tổ hợp xét tuyển] x 100/30
++ ĐGNL = [Điểm thi ĐGNL] x 100/1200
++ HB = [Điểm trung bình HB 3 năm theo tổ hợp xét tuyển] x 100/30
+- Tổng điểm cộng, điểm thưởng (ĐC) không vượt quá 10% điểm tối đa của điểm xét tuyển 
+theo quy chế tuyển sinh của Bộ GD&ĐT, theo công thức:
++ Nếu ĐHL + ĐC < 100, ĐC = [điểm thành tích]
+<<<PAGE 4>>>
++ Nếu ĐHL + ĐC ≥ 100, ĐC = 100 – [điểm thành tích]
+- Điểm xét tuyển (điểm chuẩn) được quy đổi về thang điểm 100 (tối đa 100 điểm). Trọng 
+số w giữa các thành phần điểm được căn cứ kết quả hồi quy của dữ liệu kết quả nhập học 
+và điểm trung bình tích lũy (GPA) của các năm trước. Hội đồng tuyển sinh sẽ công bố 
+chính thức các tỷ trọng w khi công bố ngưỡng đảm bảo chất lượng. Điểm xét tuyển được 
+tính theo nguyên tắc:
+ĐXT = Max (ĐHL 1, ĐHL 2) + [điểm cộng] + [điểm ưu tiên]
+4. Số lượng tuyển sinh (dự kiến)
+Mã trường QSX, địa chỉ đào tạo:
+Chương trình chuẩn quốc tế: số 10-12 Đinh Tiên Hoàng, Phường Sài Gòn, Tp.HCM; 
+chương trình chuẩn: khu phố 33, Phường Linh Xuân, Tp.HCM.
+STT Mã xét tuyển
+Tên chương 
+trình xét 
+tuyển
+Mã ngành Tên ngành
+Số 
+lượng
+dự 
+kiến
+Phương 
+thức tuyển 
+sinh (PT)
+Ghi 
+chú
+1 7140101 Chương trình 
+chuẩn 7140101Giáo dục học 70
+PT 1
+PT 2 (B00, 
+C00, C01, 
+D01)
+2 7140114 Chương trình 
+chuẩn 7140114Quản lý giáo 
+dục 50
+PT 1
+PT 2 (A01, 
+C00, D01, 
+D14)
+3 7210213 Chương trình 
+chuẩn 7210213Nghệ thuật 
+học 50
+PT 1
+PT 2 (C00, 
+D01, D14)
+4 7220201 Chương trình 
+chuẩn 7220201Ngôn ngữ 
+Anh 225 PT 1
+PT 2 (D01)
+5 7220201_CLC Chương trình 
+chuẩn quốc tế 7220201_CLC
+Ngôn ngữ 
+Anh_Chuẩn 
+quốc tế
+135
+PT 1
+PT 2 (D01)
+6 7220202 Chương trình 
+chuẩn 7220202Ngôn ngữ 
+Nga 60
+PT 1
+PT 2 (D01, 
+D02, D14)
+7 7220203 7220203 80 PT 1
+<<<PAGE 5>>>
+Chương trình 
+chuẩn
+Ngôn ngữ 
+Pháp
+PT 2 (D01, 
+D03, D14)
+8 7220204 Chương trình 
+chuẩn 7220204Ngôn ngữ 
+Trung Quốc 165
+PT 1
+PT 2 (D01, 
+D04, D14)
+9 7220204_CLC Chương trình 
+chuẩn quốc tế 7220204_CLC
+Ngôn ngữ 
+Trung 
+Quốc_Chuẩn 
+quốc tế
+80
+PT 1
+PT 2 (D01, 
+D04, D14)
+10 7220205_CLC Chương trình 
+chuẩn quốc tế 7220205_CLC
+Ngôn ngữ 
+Đức_Chuẩn 
+quốc tế
+60
+PT 1
+PT 2 (D01, 
+D05, D14)
+11 7220206 Chương trình 
+chuẩn 7220206Ngôn ngữ 
+Tây Ban Nha 50
+PT 1
+PT 2 (D01, 
+D03, D05, 
+D14)
+12 7220208 Chương trình 
+chuẩn 7220208Ngôn ngữ 
+Italia 50
+PT 1
+PT 2 (D01, 
+D03, D05, 
+D14)
+13 7229001 Chương trình 
+chuẩn 7229001Triết học 50
+PT 1
+PT 2 (A01, 
+C00, D01, 
+D14)
+14 7229009 Chương trình 
+chuẩn 7229009Tôn giáo học 50
+PT 1
+PT 2 (C00, 
+D01, D14)
+15 7229010 Chương trình 
+chuẩn 7229010Lịch sử 100
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+16 7229020 Chương trình 
+chuẩn 7229020Ngôn ngữ học 80
+PT 1
+PT 2 (C00, 
+D01, D14)
+17 7229030 Chương trình 
+chuẩn 7229030Văn học 130
+PT 1
+PT 2 (C00, 
+D01, D14)
+18 7229040 7229040Văn hoá học 90 PT 1
+<<<PAGE 6>>>
+Chương trình 
+chuẩn
+PT 2 (C00, 
+D01, D14, 
+D15)
+19 7320101 Chương trình 
+chuẩn 7320101Báo chí 110
+PT 1
+PT 2 (C00, 
+D01, D14)
+20 7320101_CLC Chương trình 
+chuẩn quốc tế 7320101_CLC
+Báo 
+chí_Chuẩn 
+quốc tế
+60
+PT 1
+PT 2 (C00, 
+D01, D14)
+21 7320104 Chương trình 
+chuẩn 7320104
+Truyền thông 
+đa phương 
+tiện
+80
+PT 1
+PT 2 (D01, 
+D14, D15)
+22 7320201 Chương trình 
+chuẩn 7320201Thông tin -
+thư viện 55
+PT 1
+PT 2 (A01, 
+C00, D01, 
+D14)
+23 7320205 Chương trình 
+chuẩn 7320205Quản lý thông 
+tin 70
+PT 1
+PT 2 (A01, 
+C00, D01, 
+D14)
+24 7320303 Chương trình 
+chuẩn 7320303Lưu trữ học 65
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+25 7580112 Chương trình 
+chuẩn 7580112Đô thị học 100
+PT 1
+PT 2 (A01, 
+C00, D01, 
+D14)
+26 7310206 Chương trình 
+chuẩn 7310206Quan hệ quốc 
+tế 140
+PT 1
+PT 2 (D01, 
+D14)
+27 7310206_CLC Chương trình 
+chuẩn quốc tế 7310206_CLC
+Quan hệ quốc 
+tế_Chuẩn 
+quốc tế
+95
+PT 1
+PT 2 (D01, 
+D14)
+28 7310301 Chương trình 
+chuẩn 7310301Xã hội học 150
+PT 1
+PT 2 (A00, 
+C00, D01, 
+D14)
+29 7310302 7310302Nhân học 60 PT 1
+<<<PAGE 7>>>
+Chương trình 
+chuẩn
+PT 2 (C00, 
+D01, D14, 
+D15)
+30 7310401 Chương trình 
+chuẩn 7310401Tâm lý học 75
+PT 1
+PT 2 (B00, 
+C00, D01, 
+D14)
+31 7310403 Chương trình 
+chuẩn 7310403Tâm lý học 
+giáo dục 50
+PT 1
+PT 2 (B00, 
+B08, D01, 
+D14)
+32 7310501 Chương trình 
+chuẩn 7310501Địa lý học 95
+PT 1
+PT 2 (A01, 
+C00, D01, 
+D15)
+33 7310601 Chương trình 
+chuẩn 7310601Quốc tế học 50
+PT 1
+PT 2 (D01, 
+D09, D14, 
+D15)
+34 7310608 Chương trình 
+chuẩn 7310608Đông phương 
+học 205
+PT 1
+PT 2 (D01, 
+D04, D14, 
+D15)
+35 7310613 Chương 
+trình chuẩn 7310613Nhật Bản học 105
+PT 1
+PT 2 (D01, 
+D06, D14, 
+D63)
+36 7310613_CLC
+Chương 
+trình chuẩn 
+quốc tế
+7310613_CLC
+Nhật Bản 
+học_Chuẩn 
+quốc tế
+75
+PT 1
+PT 2 (D01, 
+D06, D14, 
+D63)
+37 7310614 Chương trình 
+chuẩn 7310614Hàn quốc học 165
+PT 1
+PT 2 (D01, 
+D14, DD2, 
+DH5)
+38 7310630 Chương trình 
+chuẩn 7310630Việt Nam học 55
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+39 73106a1 73106a1 64 PT 1
+<<<PAGE 8>>>
+Chương trình 
+chuẩn
+Kinh doanh 
+thương mại 
+Hàn Quốc
+PT 2 (D01, 
+D14, DD2, 
+DH5)
+40 7340406 Chương trình 
+chuẩn 7340406Quản trị văn 
+phòng 70
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+41 7810103 Chương trình 
+chuẩn 7810103
+Quản trị dịch 
+vụ du lịch và 
+lữ hành
+120
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+42 7810103_CLC Chương trình 
+chuẩn quốc tế 7810103_CLC
+Quản trị dịch 
+vụ du lịch và 
+lữ 
+hành_Chuẩn 
+quốc tế
+60
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+43 7760101 Chương trình 
+chuẩn 7760101Công tác xã 
+hội 90
+PT 1
+PT 2 (C00, 
+D01, D14, 
+D15)
+44 7140107 Chương trình 
+chuẩn 7140107
+Quản trị chất 
+lượng giáo 
+dục
+50
+PT 1
+PT 2 (C03, 
+D01, D14, 
+D15)
+Chương trình liên kết 2+2
+1 7220201_LKH
+Liên kết đào 
+tạo với nước 
+ngoài
+7220201Ngôn ngữ 
+Anh 30
+PT 1
+PT 2 (D01, 
+D14, D15)
+2 7220204_LKT
+Liên kết đào 
+tạo với nước 
+ngoài
+7220204Ngôn ngữ 
+Trung Quốc 90
+PT 1
+PT 2 (D01, 
+D04, D14, 
+D15)
+3 7320101_LKD
+Liên kết đào 
+tạo với nước 
+ngoài
+7320101
+Báo chí 
+(Truyền thông 
+chuyên ngành 
+báo chí)
+30
+PT 1
+PT 2 (A01, 
+D01, D14, 
+D15)
+4 7310206_LKD
+Liên kết đào 
+tạo với nước 
+ngoài
+7310206 Quan hệ 
+quốc tế 30
+PT 1
+PT 2 (D01, 
+D14)
+<<<PAGE 9>>>
+5 7310630_LKB
+Liên kết đào 
+tạo với nước 
+ngoài
+7310630Việt Nam học 30
+Liên kết đối 
+với sinh viên 
+người nước 
+ngoài
+CÁC NGÀNH/CHƯƠNG TRÌNH DỰ KIẾN MỞ TRONG NĂM 2026
+1 7310401_CLC Chương trình 
+chuẩn quốc tế 310401_CLC
+Tâm lý 
+học_Chuẩn 
+quốc tế
+50
+PT 1
+PT 2 (B00, 
+C00, D01, 
+D14)
+2 7580109 Chương trình 
+chuẩn 7580109
+Quản lý đô thị 
+và bất động 
+sản
+50
+PT 1
+PT 2 (A01, 
+D01, D14)
+3 Đang xin Chương trình 
+chuẩn Đang xinTiếng Trung 
+thương mại 50
+PT 1
+PT 2 (D01, 
+D04, D14, 
+D15)
+4 7320108 Chương trình 
+chuẩn 7320108Quan hệ công 
+chúng 80
+PT 1
+PT 2 (D01, 
+D14, D15)
+7220104 Chương trình 
+chuẩn 7220104Hán Nôm 50
+PT 1
+5
+PT 2 (D01, 
+D14)
+5. Các thông tin cần thiết khác để thí sinh dự tuyển vào cơ sở đào tạo
+5.1. Các điều kiện phụ sử dụng trong xét tuyển
+- Nếu muốn đăng ký xét tuyển vào trường các ngành có tổ hợp xét tuyển môn ngoại ngữ, 
+thí sinh phải đăng ký thi môn ngoại ngữ. Trường không sử dụng kết quả miễn thi bài thi 
+môn ngoại ngữ.
+- Điều kiện đối với chương trình liên kết đào tạo với nước ngoài, chương trình 2+2 do 
+CSĐT nước ngoài cấp bằng:
+STT Tên ngành Điều kiện ngoại ngữ
+Đầu vào Chuyển tiếp
+1 Báo chí (Truyền 
+thông, chuyên ngành 
+Báo chí)
+Chứng chỉ tiếng Anh đạt bậc 4 theo 
+Khung năng lực ngoại ngữ 6 bậc dành 
+cho Việt Nam.
+IELTS 6.0 (không có 
+kỹ năng dưới 6.0) trở 
+lên
+2 Quan hệ Quốc tế
+<<<PAGE 10>>>
+3 Ngôn ngữ Anh
+IELTS 5.5 (không có 
+kỹ năng dưới 5.0) trở 
+lên
+4 Ngôn ngữ Trung QuốcKhông yêu cầu. HSK 3 trở lên
+5.2. Điểm cộng
+Trường sử dụng điểm cộng thành tích trong học tập, hoạt động xã hội, văn hóa, thể dục, 
+thể thao, văn nghệ; chứng chỉ ngoại ngữ quốc tế, theo nguyên tắc:
+• Tổng điểm của các thành tích không vượt quá 10% mức điểm tối đa của thang điểm 
+xét;
+• Trong từng nhóm thành tích chỉ cộng 1 mức điểm cao nhất, cụ thể:
++ Nhóm 1. Thí sinh trong ds 149 trường THPT theo quy định của ĐHQG-HCM 
+năm 2025 (chỉ áp dụng cho thí sinh tốt nghiệp năm 2026), cộng tối đa 3 điểm.
++ Nhóm 2. Thí sinh có thành tích đạt được trong quá trình học tập (học sinh giỏi 
+quốc gia, cấp tỉnh/thành phố, cộng tối đa 4 điểm.
++ Nhóm 3. Thí sinh có chứng chỉ ngoại ngữ quốc tế, có thành tích xuất sắc, đặc 
+biệt nổi bật trong hoạt động xã hội, văn nghệ, thể thao, cộng tối đa 3 điểm.
+5.3. Điểm ưu tiên khu vực, đối tượng
+Thí sinh được hưởng chính sách ưu tiên khu vực theo quy định trong năm tốt nghiệp THPT 
+(hoặc trung cấp) và một năm kế tiếp.
+Điểm ưu tiên đối với thí sinh có tổng điểm đạt được từ 75 điểm được xác định theo công 
+thức sau: [(100 – Tổng điểm đạt được đã bao gồm điểm cộng)/25] × Mức điểm ưu tiên 
+khu vực, đối tượng (đã quy đổi về thang điểm 100).
+5.4. Tiêu chí phân chuyên ngành:
+- Đối với Ngành Đông phương học, mã xét tuyển 7310608, sinh viên được chia chuyên 
+ngành vào năm thứ 2 theo các tiêu chí chỉ tiêu phân bổ chuyên ngành (do khoa đề xuất) 
+của từng năm, cụ thể:
++ Sinh viên đăng ký chuyên ngành
+<<<PAGE 11>>>
++ Khoa tiến hành xét đăng ký chuyên ngành theo tiêu chí: (1) chỉ tiêu xét chuyên ngành, 
+kết hợp với (2) kết quả học tập của năm thứ nhất.
+Thông tin cụ thể về số lượng, điều kiện, thời gian tổ chức xét chuyên ngành do khoa công 
+bố trên trang thông tin của đơn vị.
+6. Xét tuyển thẳng: xét tuyển thẳng theo Quy chế tuyển sinh đại học, tuyển sinh cao đẳng 
+ngành Giáo dục Mầm non năm 2026
+Thí sinh đạt thành tích cao trong các kỳ thi, cuộc thi, giải đấu cấp quốc gia hoặc quốc tế, 
+do Bộ GDĐT tổ chức, cử tham gia, được xét tuyển thẳng vào các ngành phù hợp với môn 
+thi, nội dung đề tài hoặc nghề dự thi; cụ thể trong các trường hợp sau:
+a) Thí sinh đoạt giải nhất, nhì, ba trong kỳ thi chọn học sinh giỏi quốc gia, quốc tế do Bộ 
+GDĐT tổ chức, cử tham gia; thời gian đoạt giải không quá 3 năm tính tới thời điểm xét 
+tuyển thẳng; được xét tuyển thẳng vào các ngành phù hợp với môn thi, cụ thể:
+Số 
+TT
+Tên môn thi học 
+sinh giỏi Tên ngành đào tạo Mã ngành
+1 Ngữ Văn
+Việt Nam học 7310630
+Văn học (*) 7229030
+Nghệ thuật học 7210213
+Văn hóa học 7229040
+Báo chí (*) 7320101
+Ngôn ngữ học (*) 7229020
+Thông tin - thư viện 7320201
+2
+Lịch sử
+Lịch sử (*) 7229010
+Nhân học 7310302
+Lưu trữ học 7320303
+Đông phương học 7310608
+Địa lý học 7310501
+Việt Nam học 7310630
+Quốc tế học 7310601
+Văn hóa học 7229040
+3
+Địa lý
+Địa lý học (*) 7310501
+Đông phương học 7310608
+Lịch sử 7229010
+Việt Nam học 7310630
+Quốc tế học 7310601
+Văn hóa học 7229040
+<<<PAGE 12>>>
+Số 
+TT
+Tên môn thi học 
+sinh giỏi Tên ngành đào tạo Mã ngành
+4 Tiếng Anh
+Ngôn ngữ Anh (*) 7220201
+Ngôn ngữ Nga 7220202
+Ngôn ngữ Pháp 7220203
+Ngôn ngữ Trung Quốc 7220204
+Ngôn ngữ Đức 7220205
+Ngôn ngữ Tây Ban Nha 7220206
+Ngôn ngữ Italia 7220208
+Quan hệ quốc tế 7310206
+Quốc tế học 7310601
+Đông phương học 7310608
+Ngôn ngữ học 7229020
+Truyền thông đa phương tiện 7320104
+5 Tiếng Nga
+Ngôn ngữ Nga (*) 7220202
+Đông phương học 7310608
+Quốc tế học 7310601
+Ngôn ngữ học 7229020
+6
+11
+Tiếng Trung Quốc
+Ngôn ngữ Trung Quốc (*) 7220204
+Đông phương học 7310608
+Quốc tế học 7310601
+Ngôn ngữ học 7229020
+7 Tiếng Pháp
+Ngôn ngữ Pháp (*) 7220203
+Quốc tế học 7310601
+Đông phương học 7310608
+Ngôn ngữ học 7229020
+Ngôn ngữ Tây Ban Nha 7220206
+<<<PAGE 13>>>
+Số 
+TT
+Tên môn thi học 
+sinh giỏi Tên ngành đào tạo Mã ngành
+Ngôn ngữ Italia 7220208
+8 Tiếng Nhật
+Nhật Bản học (*) 7310613
+Đông phương học 7310608
+Quốc tế học 7310601
+Việt Nam học 7310630
+9 Sinh học Tâm lý học 7310401
+Tâm lý học giáo dục 7310403
+b) Thí sinh đoạt giải nhất, nhì, ba trong kỳ thi khoa học, kỹ thuật cấp quốc gia, quốc tế do 
+Bộ GDĐT tổ chức, cử tham gia; thời gian đoạt giải không quá 3 năm tính tới thời điểm xét 
+tuyển thẳng; được xét tuyển thẳng vào các ngành phù hợp với nội dung đề tài dự thi.
+7.1.2. Căn cứ kết quả học tập cấp THPT của thí sinh và yêu cầu của ngành đào tạo thí sinh 
+được xem xét, quyết định nhận vào học những trường hợp quy định dưới đây:
+a) Thí sinh là người khiếm thị, có học lực đạt từ khá trở lên trong ba năm học THPT, trong 
+đó ba môn đăng ký dự thi đạt từ 7.0 trở lên; thị lực dưới 10% (có xác nhận của cơ quan có 
+thẩm quyền). Các trường hợp khác, vận dụng điểm a khoản 4 Điều 8 của Quy chế tuyển 
+sinh;
+b) Thí sinh là người dân tộc thiểu số rất ít người theo quy định hiện hành của Chính phủ 
+và thí sinh 20 huyện nghèo biên giới, hải đảo thuộc khu vực Tây Nam Bộ;
+c) Thí sinh có nơi thường trú từ 3 năm trở lên, học 3 năm và tốt nghiệp THPT tại các huyện 
+nghèo (học sinh học phổ thông dân tộc nội trú tính theo nơi thường trú) theo quy định của 
+Chính phủ, Thủ tướng Chính phủ. Những thí sinh này phải học bổ sung kiến thức 01 (một) 
+năm học trước khi vào học chính thức;
+d) Thí sinh là người nước ngoài, tốt nghiệp chương trình THPT ở nước ngoài (đã được 
+nước sở tại cho phép thực hiện), có kết quả kiểm tra kiến thức và năng lực Tiếng Việt đáp 
+ứng quy định hiện hành của Bộ trưởng Bộ GDĐT, đáp ứng chuẩn năng lực ngoại ngữ 
+theo từng ngành, cụ thể: trình độ A2 đối với ngành Việt Nam học (sinh viên tiếp tục học 
+tiếng Việt để đạt được trình độ theo quy định) và trình độ B1 đối với các ngành học khác.

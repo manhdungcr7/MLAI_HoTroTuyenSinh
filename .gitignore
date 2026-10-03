@@ -14,20 +14,51 @@ __pycache__/
 *$py.class
 *.so
 
-# Data — dữ liệu thô (PDF đề án tuyển sinh, hàng GB) và file trung gian
-# KHÔNG commit — tái tạo bằng pipeline (xem README). Chỉ commit hai artefact
-# CUỐI CÙNG, nhỏ, cần thiết để ứng dụng chạy ngay sau khi clone mà không phải
-# chạy lại toàn bộ pipeline cào (~40+ phút, gọi hàng trăm request ra ngoài):
-#   data/processed/programs.parquet     (~120 KB)
-#   data/processed/national_shock.json  (~1 KB)
+# Data. Không commit PDF đề án thô (hơn 2,5 GB): chỉ commit
+#   - bảng trung gian nhỏ của pipeline (data/interim) và kết quả (data/processed),
+#   - tệp mô tả nguồn trong data/raw (manifest, bảng slug),
+#   - PDF đề án 2026 của các trường đã có quy tắc riêng (bằng chứng cho mã băm trong school-rules, khoảng 100 MB).
+# PDF còn lại tái tạo bằng `python -m pipeline.run_all`.
 data/raw/*
-data/interim/*
-data/processed/*
-!data/processed/programs.parquet
-!data/processed/national_shock.json
-!data/.gitkeep
 !data/raw/.gitkeep
-!data/interim/.gitkeep
+!data/raw/*.json
+!data/raw/*.csv
+!data/raw/*.txt
+data/raw/deans/*/*
+!data/raw/deans/*/
+!data/raw/deans/DBL/2026.pdf
+!data/raw/deans/DCT/2026.pdf
+!data/raw/deans/DDP/2026.pdf
+!data/raw/deans/DDS/2026.pdf
+!data/raw/deans/DDT/2026.pdf
+!data/raw/deans/DHY/2026.pdf
+!data/raw/deans/DKK/2026.pdf
+!data/raw/deans/DPQ/2026.pdf
+!data/raw/deans/DQN/2026.pdf
+!data/raw/deans/DTL/2026.pdf
+!data/raw/deans/GHA/2026.pdf
+!data/raw/deans/GSA/2026.pdf
+!data/raw/deans/GTA/2026.pdf
+!data/raw/deans/HHK/2026.pdf
+!data/raw/deans/IUH/2026.pdf
+!data/raw/deans/KHA/2026.pdf
+!data/raw/deans/NHF/2026.pdf
+!data/raw/deans/NHH/2026.pdf
+!data/raw/deans/NTH/2026.pdf
+!data/raw/deans/PKA/2026.pdf
+!data/raw/deans/QSX/2026.pdf
+!data/raw/deans/SP2/2026.pdf
+!data/raw/deans/SPD/2026.pdf
+!data/raw/deans/SPH/2026.pdf
+!data/raw/deans/SPS/2026.pdf
+!data/raw/deans/TCT/2026.pdf
+!data/raw/deans/TDV/2026.pdf
+!data/raw/deans/TLA/2026.pdf
+!data/raw/deans/TTN/2026.pdf
+!data/raw/deans/XDA/2026.pdf
+!data/raw/deans/XDT/2026.pdf
+!data/raw/deans/YDS/2026.pdf
+
 
 # Node
 node_modules/

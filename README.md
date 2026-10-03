@@ -54,8 +54,10 @@ common/                   admission_core.py (lõi Python), data/shared_rules.jso
 pipeline/                 scrape (cào), clean (làm sạch, ghép, tổ hợp từ đề án), features (dự báo, kiểm định), publish
 data/manual/              danh sách do người duy trì (tỉnh của trường, nhóm ngành, nguồn chính thức,
                           trường công an/quân đội bị loại, văn bản dùng chung nhiều trường bị loại)
-data/processed/           programs.parquet, national_shock.json (đã commit); phần còn lại do pipeline sinh
-data/raw, data/interim    PDF đề án và bảng trung gian (KHÔNG commit, tái tạo bằng pipeline)
+data/processed/           programs.parquet, national_shock.json, mô hình dự báo (đã commit)
+data/interim/             bảng trung gian của pipeline và văn bản đề án đã trích (đã commit, nhỏ)
+data/raw/                 manifest, bảng slug (đã commit) và PDF đề án 2026 của 32 trường có quy tắc riêng (~100 MB, bằng chứng
+                          cho mã băm); phần PDF còn lại (hơn 2,5 GB) KHÔNG commit, tái tạo bằng pipeline
 scripts/                  công cụ (xem mục 5 và 6)
 tools/qa/                 kịch bản kiểm thử giao diện bằng Playwright (mục 7)
 tests/                    pytest: lõi, pipeline, dữ liệu, backend
@@ -123,7 +125,7 @@ python -m pipeline.run_all        # ~40 phút lần đầu: cào, làm sạch, g
 Các bước (`pipeline/run_all.py`): cào PDF đề án → cào trang tổng hợp → phân tích bảng điểm chuẩn → học phí và việc làm → **ghép** (`pipeline/clean/reconcile.py`: lọc nhãn rác, loại văn bản dùng chung nhiều trường, loại trường công an/quân đội, loại bản sao giữa các trường, điền tổ hợp từ bảng chỉ tiêu) → dự báo → kiểm định ngược → xuất `programs-catalog.json` và snapshot mã băm.
 
 Lưu ý khi giao tiếp:
-- `data/raw` và `data/interim` không nằm trong repo. Chạy lại **từ bước ghép trở đi** cần `data/interim/cutoff_panel_raw.parquet` do các bước đầu tạo, nên lần đầu phải chạy đủ `run_all` (hoặc xin bản `data/` từ người duy trì).
+- Repo đã có `data/interim` (bảng trung gian) và `data/raw/dean_manifest.json`, nên chạy được **từ bước ghép trở đi** ngay (`pipeline.clean.reconcile` → `features.build` → `features.backtest` → `publish`). Chạy lại `run_all` từ đầu để tải lại toàn bộ PDF (hơn 2,5 GB, không nằm trong repo; PDF của 32 trường có quy tắc riêng thì có sẵn để kiểm mã băm).
 - Sau khi chạy lại dữ liệu, chạy thêm `python scripts/data_gaps.py` và `python scripts/rule_review.py`, rồi `pytest`. **Tắt `npm run dev` trước khi `pipeline.publish`** (Windows không ghi đè được `manifest.json` khi Vite đang giữ file).
 - Danh sách trường bị loại có chủ đích: `data/manual/non_civil_schools.json` (công an, quân đội), `data/manual/multi_school_documents.json` (văn bản chung của ĐH Huế). Hai bài test `tests/test_school_regression.py` và `tests/test_html_portals.py` giữ danh sách trường phải có mặt: nếu thay đổi làm một trường biến mất có chủ đích thì cập nhật bài test kèm lý do.
 - Khoảng trống dữ liệu cập nhật tự động ở [`docs/DATA_GAPS.md`](docs/DATA_GAPS.md): tỉnh chưa có trường, trường chưa có quy tắc riêng, tỷ lệ chương trình chưa có tổ hợp xác thực.

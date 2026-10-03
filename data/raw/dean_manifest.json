@@ -1,0 +1,5245 @@
+{
+  "SDU": {
+    "slug": "dai-hoc-sao-do-SDU",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SDU\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SDU\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SDU\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0706/de-an-ts-dh-sao-do.pdf",
+        "etag": "\"66884305-d67e4\"",
+        "last_modified": "Fri, 05 Jul 2024 19:01:25 GMT",
+        "sha256": "938fb6d3f2663c41dbe79d5838aea6e6fc794afe3db5c97c0a14501da0b57a8d",
+        "checked_at": "2026-10-03T01:46:00Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0415/truong-dai-hoc-sao-do-thong-bao-tuyen-sinh-nam-2025.pdf",
+        "etag": "\"67fe1a7f-1c50d\"",
+        "last_modified": "Tue, 15 Apr 2025 08:36:15 GMT",
+        "sha256": "cde2d3f9b57bcee4e556d271c701d86ef8f460142eb5cbb517ae10c26baf817e",
+        "checked_at": "2026-10-03T01:46:01Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0330/thong-tin-tuyen-sinh-dai-hoc-sao-do-2026.pdf",
+        "etag": "\"69c9d7a0-4a833\"",
+        "last_modified": "Mon, 30 Mar 2026 01:53:36 GMT",
+        "sha256": "118b8dea7940a173b89fde581d829c1ec3a4c98891a203d2963edb411072bdcb",
+        "checked_at": "2026-10-03T01:46:03Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:46:04Z",
+    "last_success_at": "2026-10-03T01:46:04Z",
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "TDD": {
+    "slug": "dai-hoc-thanh-do-TDD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDD\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDD\\2025.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0618/thong-tin-tuyen-sinh-truong-dai-hoc-thanh-do-nam-2026.pdf",
+        "etag": "\"6a336178-71637\"",
+        "last_modified": "Thu, 18 Jun 2026 03:09:44 GMT",
+        "sha256": "7ce1bf730e11e1407d1cd26d0d546625325309be10c85c9ec11383b01bb8ca9e",
+        "checked_at": "2026-10-03T01:46:06Z"
+      },
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0412/tdd-de-an-tuyen-sinh-nam-2024-truong-dh-thanh-do.pdf",
+        "etag": "\"6618a0f5-ab15f\"",
+        "last_modified": "Fri, 12 Apr 2024 02:48:21 GMT",
+        "sha256": "7909f42afab999cc5e3f25ca015b2880f965486c0439392c4cdc08066e8123b9",
+        "checked_at": "2026-10-03T01:46:08Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0415/thanh-do.pdf",
+        "etag": "\"67fe2325-1d863\"",
+        "last_modified": "Tue, 15 Apr 2025 09:13:09 GMT",
+        "sha256": "a7d1cd2a1c563b26ca94694e64aa7bb8f8c8fb0b8d3d4fa36d9b431fa89eb5d0",
+        "checked_at": "2026-10-03T01:46:10Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:46:11Z",
+    "last_success_at": "2026-10-03T01:46:11Z",
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "GTA": {
+    "slug": "dai-hoc-cong-nghe-giao-thong-van-tai-GTA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GTA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GTA\\2026.pdf"
+    },
+    "pdfs": {
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0725/thong-tin-tuyen-sinh-truong-dai-hoc-cong-nghe-giao-thong-van-tai-2025.pdf",
+        "etag": "\"6882f4ca-506ff\"",
+        "last_modified": "Fri, 25 Jul 2025 03:06:50 GMT",
+        "sha256": "e3f149249d08e5e38f416e75d7396db5839ec097b67252e7e88ac2a3c07d2c86",
+        "checked_at": "2026-10-03T01:46:13Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0406/cngtvt-thong-tin-tuyen-sinh-2026.pdf",
+        "etag": "\"69d38542-599f6\"",
+        "last_modified": "Mon, 06 Apr 2026 10:04:50 GMT",
+        "sha256": "fdfbaec78d97fa7ab9ef370b2bad0c1f8501fa41f3291b4ac55f6ec21278e44e",
+        "checked_at": "2026-10-03T01:46:15Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:46:16Z",
+    "last_success_at": "2026-10-03T01:46:16Z",
+    "undersized_years": []
+  },
+  "DBG": {
+    "slug": "dai-hoc-nong-lam-bac-giang-DBG",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DBG\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DBG\\2026.pdf"
+    },
+    "pdfs": {
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0624/thong-tin-tuyen-sinh-dai-hoc-nong-lam-bac-giang-2025.pdf",
+        "etag": "\"685a1dde-3b39ad\"",
+        "last_modified": "Tue, 24 Jun 2025 03:39:10 GMT",
+        "sha256": "14b15fb4ca5cbd2ce0c6d67467329b9617bc49515aef758eafbd50ab830aadc0",
+        "checked_at": "2026-10-03T01:46:19Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2025/1204/thong-tin-tuyen-sinh-truong-dh-nong-lam-bac-giang-2026.pdf",
+        "etag": "\"69314dc3-6d31c\"",
+        "last_modified": "Thu, 04 Dec 2025 09:00:51 GMT",
+        "sha256": "351c4b1b61bfb2ca2b57b609de14372c38dee817ca8110c43b720b860ca48263",
+        "checked_at": "2026-10-03T01:46:20Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:46:21Z",
+    "last_success_at": "2026-10-03T01:46:21Z",
+    "undersized_years": []
+  },
+  "DFA": {
+    "slug": "dai-hoc-tai-chinh-quan-tri-kinh-doanh-DFA",
+    "status": "fetch_failed",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DFA\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DFA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DFA\\2025.pdf"
+    },
+    "undersized_years": [],
+    "last_checked_at": "2026-10-03T01:46:27Z"
+  },
+  "DKQ": {
+    "slug": "dai-hoc-tai-chinh-ke-toan-DKQ",
+    "status": "fetch_failed",
+    "last_checked_at": "2026-10-03T01:46:33Z"
+  },
+  "DMT": {
+    "slug": "dai-hoc-tai-nguyen-va-moi-truong-ha-noi-DMT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DMT\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DMT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DMT\\2025.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0626/112826-thong-tin-tuyen-sinh-2026-chinh-thuc.pdf",
+        "etag": "\"6a3deeb2-13358c\"",
+        "last_modified": "Fri, 26 Jun 2026 03:14:58 GMT",
+        "sha256": "24332200674fcfdf158ff826e39d7783d8ea16d6a33201ff553f92c09097d5b0",
+        "checked_at": "2026-10-03T01:46:36Z"
+      },
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0401/de-an-ts-dh-tai-nguyen-moi-truong-hn-2024.pdf",
+        "etag": "\"660a1570-1567b1\"",
+        "last_modified": "Mon, 01 Apr 2024 02:01:20 GMT",
+        "sha256": "45d29384ec28e1432a66f90064611f720163e0d85c01c65e8548e6bd30e96120",
+        "checked_at": "2026-10-03T01:46:38Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0513/thong-tin-tuyen-sinh-dai-hoc-tai-nguyen-va-moi-truong-ha-noi-nam-2025.pdf",
+        "etag": "\"682298ea-296ba\"",
+        "last_modified": "Tue, 13 May 2025 00:57:14 GMT",
+        "sha256": "809a8c9ca3e26fb906a4c0f9f90dbf665267be660b46c3e0916f174baff052eb",
+        "checked_at": "2026-10-03T01:46:39Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:46:41Z",
+    "last_success_at": "2026-10-03T01:46:41Z",
+    "undersized_years": []
+  },
+  "TGC": {
+    "slug": "hoc-vien-bao-chi-tuyen-truyen-TGC",
+    "status": "fetch_failed",
+    "last_checked_at": "2026-10-03T01:46:47Z"
+  },
+  "ANS": {
+    "slug": "dai-hoc-an-ninh-nhan-dan-ANS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\ANS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\ANS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "BKA": {
+    "slug": "dai-hoc-bach-khoa-ha-noi-BKA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BKA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BKA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BKA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "BVH": {
+    "slug": "hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-bac-BVH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BVH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BVH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BVH\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0513/de-an-ts-hv-cong-nghe-buu-chinh-vien-thong-2024.pdf",
+        "etag": "\"6642322d-453f51\"",
+        "last_modified": "Mon, 13 May 2024 15:30:53 GMT",
+        "sha256": "1b1e3741108ce5711bc61823200d4acaa534082a70b769894ec61d28fbb167c3",
+        "checked_at": "2026-10-03T01:46:49Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0530/hoc-vien-cong-nghe-buu-chinh-vien-thong-2025.pdf",
+        "etag": "\"68390af5-e40ab\"",
+        "last_modified": "Fri, 30 May 2025 01:33:41 GMT",
+        "sha256": "53ce72f791f1a78dab65d6d6fccea0e886a949289bc1acc946b3624cfadf811d",
+        "checked_at": "2026-10-03T01:46:51Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0508/thong-tin-tuyen-sinh-hoc-vien-cong-nghe-buu-chinh-vien-thong-2026.pdf",
+        "etag": "\"69fd4746-110bc7\"",
+        "last_modified": "Fri, 08 May 2026 02:15:34 GMT",
+        "sha256": "ba4479cab75b7c1d8c1f611db928427c0d78b1341a6392d76f7d34ff4fb235fc",
+        "checked_at": "2026-10-03T01:46:53Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:46:54Z",
+    "last_success_at": "2026-10-03T01:46:54Z",
+    "undersized_years": []
+  },
+  "BVS": {
+    "slug": "hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-nam-BVS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BVS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BVS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\BVS\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0513/de-an-ts-hv-cong-nghe-buu-chinh-vien-thong-2024.pdf",
+        "etag": "\"6642322d-453f51\"",
+        "last_modified": "Mon, 13 May 2024 15:30:53 GMT",
+        "sha256": "1b1e3741108ce5711bc61823200d4acaa534082a70b769894ec61d28fbb167c3",
+        "checked_at": "2026-10-03T01:47:12Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0530/hoc-vien-cong-nghe-buu-chinh-vien-thong-2025.pdf",
+        "etag": "\"68390af5-e40ab\"",
+        "last_modified": "Fri, 30 May 2025 01:33:41 GMT",
+        "sha256": "53ce72f791f1a78dab65d6d6fccea0e886a949289bc1acc946b3624cfadf811d",
+        "checked_at": "2026-10-03T01:47:14Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0508/thong-tin-tuyen-sinh-hoc-vien-cong-nghe-buu-chinh-vien-thong-2026.pdf",
+        "etag": "\"69fd4746-110bc7\"",
+        "last_modified": "Fri, 08 May 2026 02:15:34 GMT",
+        "sha256": "ba4479cab75b7c1d8c1f611db928427c0d78b1341a6392d76f7d34ff4fb235fc",
+        "checked_at": "2026-10-03T01:47:17Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:47:18Z",
+    "last_success_at": "2026-10-03T01:47:18Z",
+    "undersized_years": []
+  },
+  "CSS": {
+    "slug": "dai-hoc-canh-sat-nhan-dan-CSS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CSS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CSS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DBD": {
+    "slug": "dai-hoc-binh-duong-DBD",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DBD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DBL": {
+    "slug": "dai-hoc-bac-lieu-DBL",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DBL\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DBL\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DBL\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DCA": {
+    "slug": "dai-hoc-chu-van-an-DCA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DCL": {
+    "slug": "dai-hoc-cuu-long-DCL",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCL\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCL\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCL\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DCN": {
+    "slug": "dai-hoc-cong-nghiep-ha-noi-DCN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDK": {
+    "slug": "dai-hoc-bach-khoa-dai-hoc-da-nang-DDK",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDK\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDM": {
+    "slug": "dai-hoc-cong-nghiep-quang-ninh-DDM",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDM\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDP": {
+    "slug": "phan-hieu-dai-hoc-da-nang-tai-kon-tum-DDP",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDP\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDP\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDP\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDT": {
+    "slug": "dai-hoc-dan-lap-duy-tan-DDT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDY": {
+    "slug": "khoa-y-duoc-dai-hoc-da-nang-DDY",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDY\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDY\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDY\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHC": {
+    "slug": "khoa-giao-duc-the-chat-dai-hoc-hue-DHC",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHC\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHC\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "http://images.tuyensinh247.com/user_data/2024/0706/DE_AN_TUYEN_SINH_2024_-_DU_THAO.pdf",
+        "etag": "\"668907b4-6e58e8\"",
+        "last_modified": "Sat, 06 Jul 2024 09:00:36 GMT",
+        "sha256": "f6d2d8fae15d195b6690c208d5117d204fe1508a35e78fa79fbe4e5f7779cb3e",
+        "checked_at": "2026-10-03T01:49:54Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0709/thong-tin-tuyen-sinh-dai-hoc-hue-2025_1.pdf",
+        "etag": "\"686dde34-1ea1b1\"",
+        "last_modified": "Wed, 09 Jul 2025 03:12:52 GMT",
+        "sha256": "43534acade192905b1466fef684402b6a3cd3761ad52a7a71d09e11b3a78763b",
+        "checked_at": "2026-10-03T01:49:56Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0425/thong-tin-tuyen-sinh-khoa-giao-duc-the-chat-dai-hoc-hue-2026.pdf",
+        "etag": "\"69ec25c6-a28d1\"",
+        "last_modified": "Sat, 25 Apr 2026 02:24:06 GMT",
+        "sha256": "ab453562c55559cafe07da2df157e33f10b2dc4eae83d46b589b9e63d1510fe8",
+        "checked_at": "2026-10-03T01:49:58Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:59Z",
+    "last_success_at": "2026-10-03T01:49:59Z",
+    "undersized_years": []
+  },
+  "DHD": {
+    "slug": "khoa-du-lich-dai-hoc-hue-DHD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHD\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "http://images.tuyensinh247.com/user_data/2024/0706/DE_AN_TUYEN_SINH_2024_-_DU_THAO.pdf",
+        "etag": "\"668907b4-6e58e8\"",
+        "last_modified": "Sat, 06 Jul 2024 09:00:36 GMT",
+        "sha256": "f6d2d8fae15d195b6690c208d5117d204fe1508a35e78fa79fbe4e5f7779cb3e",
+        "checked_at": "2026-10-03T01:49:46Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0725/thong-tin-tuyen-sinh-truong-du-lich-dh-hue-2025.pdf",
+        "etag": "\"68830b5c-2ce39\"",
+        "last_modified": "Fri, 25 Jul 2025 04:43:08 GMT",
+        "sha256": "0b0ab2ced454898cdae38fc27c1a4ae99f0c51753c0c257a0ce606e1d6a78cae",
+        "checked_at": "2026-10-03T01:49:48Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0423/thong-tin-tuyen-sinh-truong-du-lich-dai-hoc-hue-2026.pdf",
+        "etag": "\"69e9de9a-483841\"",
+        "last_modified": "Thu, 23 Apr 2026 08:55:54 GMT",
+        "sha256": "3ac5af7b471314ae368117eec8313d4daea452533ab63e87c10187e855580a0c",
+        "checked_at": "2026-10-03T01:49:50Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:51Z",
+    "last_success_at": "2026-10-03T01:49:51Z",
+    "undersized_years": []
+  },
+  "DHQ": {
+    "slug": "phan-hieu-dai-hoc-hue-tai-quang-tri-DHQ",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHQ\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DKH": {
+    "slug": "dai-hoc-duoc-ha-noi-DKH",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKH\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DMS": {
+    "slug": "dai-hoc-tai-chinh-marketing-DMS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DMS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DMS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DMS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DNH": {
+    "slug": "hoc-vien-khoa-hoc-quan-su-he-dan-su-kv-mien-bac-DNH",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNH\\2026.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0708/thong-tin-tuyen-sinh-hoc-vien-khoa-hoc-quan-su-nam-2026-2.pdf",
+        "etag": "\"6a4dc9b5-d9b8a\"",
+        "last_modified": "Wed, 08 Jul 2026 03:53:25 GMT",
+        "sha256": "8474f6c71ca28a531f056d349f51cc7fe9793b9f30da359b82c00ea6d4b454a5",
+        "checked_at": "2026-10-03T01:48:02Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:03Z",
+    "last_success_at": "2026-10-03T01:48:03Z",
+    "undersized_years": []
+  },
+  "DPD": {
+    "slug": "dai-hoc-dan-lap-phuong-dong-DPD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DPX": {
+    "slug": "dai-hoc-dan-lap-phu-xuan-DPX",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPX\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPX\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DQH": {
+    "slug": "hoc-vien-ki-thuat-quan-su-he-dan-su-kv-mien-bac-DQH",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQH\\2026.pdf"
+    },
+    "pdfs": {
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0630/thong-tin-tuyen-sinh-hoc-vien-ky-thuat-quan-su-2025_1.pdf",
+        "etag": "\"6862644b-d8798\"",
+        "last_modified": "Mon, 30 Jun 2025 10:17:47 GMT",
+        "sha256": "d69a57c05ac0e7b92fa0d10629d51da490042c7733b9a29a8df447dc9796ceb2",
+        "checked_at": "2026-10-03T01:48:17Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0428/thong-tin-tuyen-sinh-hoc-vien-ky-thuat-quan-su-2026_1.pdf",
+        "etag": "\"69f063fc-2412ea\"",
+        "last_modified": "Tue, 28 Apr 2026 07:38:36 GMT",
+        "sha256": "d928584bb6029a11ea888d4b95e54b7929d0538366f4adaed59be6239c088314",
+        "checked_at": "2026-10-03T01:48:19Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:20Z",
+    "last_success_at": "2026-10-03T01:48:20Z",
+    "undersized_years": []
+  },
+  "DSG": {
+    "slug": "dai-hoc-cong-nghe-sai-gon-DSG",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DSG\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DSG\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTC": {
+    "slug": "dai-hoc-cong-nghe-thong-tin-dai-hoc-thai-nguyen-DTC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTC\\2026.pdf"
+    },
+    "pdfs": {
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0417/thong-tin-tuyen-sinh-dai-hoc-chinh-quy-nam-2025.pdf",
+        "etag": "\"6800b7c6-3e698\"",
+        "last_modified": "Thu, 17 Apr 2025 08:11:50 GMT",
+        "sha256": "656b6eeac8b6ec0c40a871d14dda783533d302dd3a747c5eefda0234dcdc26ba",
+        "checked_at": "2026-10-03T01:49:40Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0512/thong-tin-tuyen-sinh-truong-dai-hoc-cong-nghe-thong-tin-va-truyen-thong-2026.pdf",
+        "etag": "\"6a02e1cd-3a490\"",
+        "last_modified": "Tue, 12 May 2026 08:16:13 GMT",
+        "sha256": "006a1cf0eee66ddc868b6879e59cf8de3a72237fabe2f738e1b24479f2ea3723",
+        "checked_at": "2026-10-03T01:49:42Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:43Z",
+    "last_success_at": "2026-10-03T01:49:43Z",
+    "undersized_years": []
+  },
+  "DTF": {
+    "slug": "khoa-ngoai-ngu-dai-hoc-thai-nguyen-DTF",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTF\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTF\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTF\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTS": {
+    "slug": "daihoc-su-pham-dai-hoc-thai-nguyen-DTS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTT": {
+    "slug": "dai-hoc-ton-duc-thang-DTT",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTV": {
+    "slug": "dai-hoc-dan-lap-luong-the-vinh-DTV",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTV\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTV\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTV\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DVL": {
+    "slug": "dai-hoc-dan-lap-van-lang-DVL",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVL\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVL\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVL\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "FPT": {
+    "slug": "dai-hoc-fpt-FPT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\FPT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\FPT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "GHA": {
+    "slug": "dai-hoc-giao-thong-van-tai-co-so-phia-bac-GHA",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GHA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "HCH": {
+    "slug": "hoc-vien-hanh-chinh-quoc-gia-phia-bac-HCH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCH\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCH\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCH\\2025.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0517/de-an-tuyen-sinh-hoc-vien-hanh-chinh-quoc-gia-nam-2024.pdf",
+        "etag": "\"66471e0b-52d5db\"",
+        "last_modified": "Fri, 17 May 2024 09:06:19 GMT",
+        "sha256": "da7e57768b61160257ee9119941633e4e52a298efa549548e9cd54c90849f425",
+        "checked_at": "2026-10-03T01:47:31Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0505/thong-tin-tuyen-sinh-hoc-vien-hanh-chinh-va-quan-tri-cong-2026.pdf",
+        "etag": "\"69f99c14-5db8a5\"",
+        "last_modified": "Tue, 05 May 2026 07:28:20 GMT",
+        "sha256": "bced81d500f072ef9ddc3423108260114b9febad391f411c1d6d891f0f73d64e",
+        "checked_at": "2026-10-03T01:47:43Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/user_data/2025/0526/Thong_tin_tuyen_sinh_2025_Hoc_vien_Hanh_chinh_va_Quan_tri_cong.pdf",
+        "etag": "\"68341be2-220de61\"",
+        "last_modified": "Mon, 26 May 2025 07:44:34 GMT",
+        "sha256": "8b30ef113be63b834db2555a89cc7921f847d5c42c8c9332c9a5a3bf250bf4d2",
+        "checked_at": "2026-10-03T01:47:48Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:47:49Z",
+    "last_success_at": "2026-10-03T01:47:49Z",
+    "undersized_years": []
+  },
+  "HCS": {
+    "slug": "hoc-vien-hanh-chinh-quoc-gia-phia-nam-HCS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCS\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCS\\2025.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0517/de-an-tuyen-sinh-hoc-vien-hanh-chinh-quoc-gia-nam-2024.pdf",
+        "etag": "\"66471e0b-52d5db\"",
+        "last_modified": "Fri, 17 May 2024 09:06:19 GMT",
+        "sha256": "da7e57768b61160257ee9119941633e4e52a298efa549548e9cd54c90849f425",
+        "checked_at": "2026-10-03T01:47:52Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0316/thong-tin-tuyen-sinh-hoc-vien-hanh-chinh-va-quan-tri-cong.pdf",
+        "etag": "\"69b7d0db-55c456\"",
+        "last_modified": "Mon, 16 Mar 2026 09:43:55 GMT",
+        "sha256": "6132cc70c151615472cf988c1df1683e4ca878fd6b8f9e3a38b4715559b1a852",
+        "checked_at": "2026-10-03T01:47:54Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/user_data/2025/0526/Thong_tin_tuyen_sinh_2025_Hoc_vien_Hanh_chinh_va_Quan_tri_cong.pdf",
+        "etag": "\"68341be2-220de61\"",
+        "last_modified": "Mon, 26 May 2025 07:44:34 GMT",
+        "sha256": "8b30ef113be63b834db2555a89cc7921f847d5c42c8c9332c9a5a3bf250bf4d2",
+        "checked_at": "2026-10-03T01:47:58Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:00Z",
+    "last_success_at": "2026-10-03T01:48:00Z",
+    "undersized_years": []
+  },
+  "HHK": {
+    "slug": "hoc-vien-hang-khong-viet-nam-HHK",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHK\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHK\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHK\\2025.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0622/thong-tin-tuyen-sinh-hoc-vien-hang-khong.pdf",
+        "etag": "\"6a38ad98-65a87f\"",
+        "last_modified": "Mon, 22 Jun 2026 03:35:52 GMT",
+        "sha256": "37d49175b50ca96b3a1acb13db759185368600fd1801c519d0d2f1747379abcd",
+        "checked_at": "2026-10-03T01:47:21Z"
+      },
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0213/hoc-vien-hang-khong-viet-nam-2024.pdf",
+        "etag": "\"67adc458-e2c25\"",
+        "last_modified": "Thu, 13 Feb 2025 10:07:20 GMT",
+        "sha256": "b4594bfb73026a36aa0c330aee3a1fe75dfb9825d4c28c0cdc1115f13e1dbae6",
+        "checked_at": "2026-10-03T01:47:23Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/1202/thong-tin-tuyen-sinh-hoc-vien-hang-khong-viet-nam-2025.pdf",
+        "etag": "\"692eab91-d88468\"",
+        "last_modified": "Tue, 02 Dec 2025 09:04:17 GMT",
+        "sha256": "08a04a7b65fffc366179678156ff3e0cfb2a2f86bb23d4ad4c55e1e8e4b73c41",
+        "checked_at": "2026-10-03T01:47:27Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:47:28Z",
+    "last_success_at": "2026-10-03T01:47:28Z",
+    "undersized_years": []
+  },
+  "HQT": {
+    "slug": "hoc-vien-ngoai-giao-HQT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HQT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HQT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HQT\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "http://images.tuyensinh247.com/user_data/2024/0706/de-an-ts-hv-ngoai-giao-2024.pdf",
+        "etag": "\"66882a19-19339ad\"",
+        "last_modified": "Fri, 05 Jul 2024 17:15:05 GMT",
+        "sha256": "06aee2ac9e27ec15db144df68b6b91c67e6294b37c34773a7ce7ff859306b76e",
+        "checked_at": "2026-10-03T01:48:34Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0327/thong-tin-tuyen-sinh-2025-hv-ngoai-giao.pdf",
+        "etag": "\"67e579e6-afcb9\"",
+        "last_modified": "Thu, 27 Mar 2025 16:16:38 GMT",
+        "sha256": "9c5d8894a966622f2d28c103b801ff4999a97a2314a4fb7a401b834225b04088",
+        "checked_at": "2026-10-03T01:48:36Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0506/thong-tin-tuyen-sinh-truong-hoc-vien-ngoai-giao-2026.pdf",
+        "etag": "\"69fb1ba8-ecb1c\"",
+        "last_modified": "Wed, 06 May 2026 10:44:56 GMT",
+        "sha256": "52d0bec0d366f3ffcde36eb490032937606ee047a732af1442e1d730b302c236",
+        "checked_at": "2026-10-03T01:48:38Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:39Z",
+    "last_success_at": "2026-10-03T01:48:39Z",
+    "undersized_years": []
+  },
+  "HTC": {
+    "slug": "hoc-vien-tai-chinh-HTC",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HTC\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HTC\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HTC\\2025.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0616/3-ttts-dhcq-nam-2026-ban-cap-nhat.pdf",
+        "etag": "\"6a30a634-a440f\"",
+        "last_modified": "Tue, 16 Jun 2026 01:26:12 GMT",
+        "sha256": "f6fb00558447f1c0529c62b29b52da2c1f2ca42e610577a13accdd5b48f25176",
+        "checked_at": "2026-10-03T01:49:02Z"
+      },
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0329/de-an-ts-hvtc-nam-2024.pdf",
+        "etag": "\"66064925-1efe02\"",
+        "last_modified": "Fri, 29 Mar 2024 04:52:53 GMT",
+        "sha256": "ab79a90045f79efb143cd01a6f111b7f007681b7018983df29951e5c657e3919",
+        "checked_at": "2026-10-03T01:49:04Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0529/thong-tin-tuyen-sinh-2025-hoc-vien-tai-chinh.pdf",
+        "etag": "\"683835a2-11862ba\"",
+        "last_modified": "Thu, 29 May 2025 10:23:30 GMT",
+        "sha256": "88dd203f2bee8ff0f8d672eb93d63674b28dc0210ff86d9ad9e77125c6d1cd6f",
+        "checked_at": "2026-10-03T01:49:15Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:16Z",
+    "last_success_at": "2026-10-03T01:49:16Z",
+    "undersized_years": []
+  },
+  "HVA": {
+    "slug": "hoc-vien-am-nhac-hue-HVA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HVA\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HVA\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0515/hoc-vien-am-nhac-hue.pdf",
+        "etag": "\"6644224a-3d5eac\"",
+        "last_modified": "Wed, 15 May 2024 02:47:38 GMT",
+        "sha256": "e3a7accef16a5adbe1a823603152aeeb79f72b010e668d3e2eb8154c45dfbef8",
+        "checked_at": "2026-10-03T01:49:29Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0407/thong-tin-tuyen-sinh-hoc-vien-am-nhac-hue-2026.pdf",
+        "etag": "\"69d4b3c9-43f619\"",
+        "last_modified": "Tue, 07 Apr 2026 07:35:37 GMT",
+        "sha256": "fc51897a36c9e4865ea0c26aa76fae6e43b4b39479819d26aa6ecdcb4f9b4050",
+        "checked_at": "2026-10-03T01:49:31Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:32Z",
+    "last_success_at": "2026-10-03T01:49:32Z",
+    "undersized_years": []
+  },
+  "HVQ": {
+    "slug": "hoc-vien-quan-ly-giao-duc-HVQ",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HVQ\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HVQ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HVQ\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0706/de-an-ts-hv-quan-ly-giao-duc-2024.pdf",
+        "etag": "\"66882b17-ebd0c\"",
+        "last_modified": "Fri, 05 Jul 2024 17:19:19 GMT",
+        "sha256": "4c0e31906ec2deaa9361334eaace72a1af5233ec49cbedcf6898f5c31ce17b28",
+        "checked_at": "2026-10-03T01:48:50Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0609/quyet-dinh-ve-viec-ban-hanh-thong-tin-tuyen-sinh-dai-hoc-nam-2025-cua-hoc-vien-quan-ly-giao-duc_2.pdf",
+        "etag": "\"6846690d-5c0704\"",
+        "last_modified": "Mon, 09 Jun 2025 04:54:37 GMT",
+        "sha256": "62c16500c7bb88ff233f2e9384004f99ee51cb683dd1ee46ff559aad98627411",
+        "checked_at": "2026-10-03T01:48:53Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0407/thong-tin-tuyen-sinh-hoc-vien-quan-ly-giao-duc-2026.pdf",
+        "etag": "\"69d4b73b-896a62\"",
+        "last_modified": "Tue, 07 Apr 2026 07:50:19 GMT",
+        "sha256": "6d754d9c184cb810105f46aa8c7e3498bdc59e84c8ff4a67708dff636f8b0bc2",
+        "checked_at": "2026-10-03T01:48:56Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:57Z",
+    "last_success_at": "2026-10-03T01:48:57Z",
+    "undersized_years": []
+  },
+  "HYD": {
+    "slug": "hoc-vien-y-duoc-hoc-co-truyen-viet-nam-HYD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HYD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HYD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HYD\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0521/de-an-ts-hv-y-duoc-hoc-co-truyen-vn-2024.pdf",
+        "etag": "\"664c756e-5a98de\"",
+        "last_modified": "Tue, 21 May 2024 10:20:30 GMT",
+        "sha256": "bbe035117e3939aeb581db721acc8e3ebe60c1e8bea0985eb76449106bf228bc",
+        "checked_at": "2026-10-03T01:49:20Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0703/thong-tin-tuyen-sinh-hoc-vien-y-duoc-hoc-co-truyen-viet-nam-2025.pdf",
+        "etag": "\"68665853-42a5b6\"",
+        "last_modified": "Thu, 03 Jul 2025 10:15:47 GMT",
+        "sha256": "600382619587d29cbdc622616b7aeb11eb03b367b9be943aef2df16d927f966f",
+        "checked_at": "2026-10-03T01:49:22Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0508/quyet-dinh-ban-hanh-thong-tin-tuyen-sinh-dai-hoc-chinh-quy-nam-2026.pdf",
+        "etag": "\"69fda100-527e3c\"",
+        "last_modified": "Fri, 08 May 2026 08:38:24 GMT",
+        "sha256": "dca4cf5f35e4fdf5f092ccd3afcc2f691d79f2d753da850375c2458d534b9110",
+        "checked_at": "2026-10-03T01:49:25Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:26Z",
+    "last_success_at": "2026-10-03T01:49:26Z",
+    "undersized_years": []
+  },
+  "KMA": {
+    "slug": "hoc-vien-ky-thuat-mat-ma-KMA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KMA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KMA\\2025.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0213/hoc-vien-ky-thuat-mat-ma-2024-1.pdf",
+        "etag": "\"67adac5f-52d8f\"",
+        "last_modified": "Thu, 13 Feb 2025 08:25:03 GMT",
+        "sha256": "bc941ea6536e5a5aa4c1cb134eb25ae206101390e43e1a481925394423883180",
+        "checked_at": "2026-10-03T01:48:23Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0703/thong-tin-tuyen-sinh-hoc-vien-ky-thuat-mat-ma-2025.pdf",
+        "etag": "\"68664c2b-136b37\"",
+        "last_modified": "Thu, 03 Jul 2025 09:23:55 GMT",
+        "sha256": "b5e640805774f9eb2d6da55c95e2ba1d0ba2b5a8fe8a81d2a2ac7938f8b5baf1",
+        "checked_at": "2026-10-03T01:48:24Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:26Z",
+    "last_success_at": "2026-10-03T01:48:26Z",
+    "undersized_years": []
+  },
+  "LDA": {
+    "slug": "dai-hoc-cong-doan-LDA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LDA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LDA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LDA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "MHN": {
+    "slug": "vien-dai-hoc-mo-ha-noi-MHN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MHN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MHN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MHN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "NHH": {
+    "slug": "hoc-vien-ngan-hang-NHH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHH\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHH\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHH\\2025.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0329/de-an-ts-hoc-vien-ngan-hang-2024.pdf",
+        "etag": "\"66061998-6bc36\"",
+        "last_modified": "Fri, 29 Mar 2024 01:30:00 GMT",
+        "sha256": "b67ae4469e6a77b7567b78e1c81a751c9d78e18008bdc60fef4d77feb141794c",
+        "checked_at": "2026-10-03T01:48:41Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0401/thong-tin-tuyen-sinh-hoc-vien-ngan-hang-2026.pdf",
+        "etag": "\"69ccedda-b785d8\"",
+        "last_modified": "Wed, 01 Apr 2026 10:05:14 GMT",
+        "sha256": "c003ead9666a431ce69e2d4097bd608cccf53d584cb038d7c5e2c6b90b11d30f",
+        "checked_at": "2026-10-03T01:48:45Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0525/thong-tin-tuyen-sinh-hoc-vien-ngan-hang-2025-1.pdf",
+        "etag": "\"6a13b69e-100644\"",
+        "last_modified": "Mon, 25 May 2026 02:40:30 GMT",
+        "sha256": "7d0edd7f08577f09e163c5bf7ca7264652bd96da0ab30196807b8bc0c8b46709",
+        "checked_at": "2026-10-03T01:48:47Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:48:48Z",
+    "last_success_at": "2026-10-03T01:48:48Z",
+    "undersized_years": []
+  },
+  "NVH": {
+    "slug": "hoc-vien-am-nhac-quoc-gia-viet-nam-NVH",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NVH\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NVH\\2025.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0618/thong-tin-tuyen-sinh-hoc-vien-am-nhac-quoc-gia.pdf",
+        "etag": "\"6a33567d-44e8d\"",
+        "last_modified": "Thu, 18 Jun 2026 02:22:53 GMT",
+        "sha256": "fdb0d58f86334b488edf383707127d506a3e609489f8341ccd54002b12674197",
+        "checked_at": "2026-10-03T01:49:35Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/user_data/2025/0403/thong-tin-tuyen-sinh-hv-am-nhac-quoc-gia.pdf",
+        "etag": "\"67ede6ad-25a2d\"",
+        "last_modified": "Thu, 03 Apr 2025 01:38:53 GMT",
+        "sha256": "ddbd89bc7aaea30b75b85d8155f6f5447b23f604681dc06457789ff4c78cc7cc",
+        "checked_at": "2026-10-03T01:49:37Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:49:38Z",
+    "last_success_at": "2026-10-03T01:49:38Z",
+    "undersized_years": []
+  },
+  "NVS": {
+    "slug": "nhac-vien-tphcm-NVS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NVS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NVS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHI": {
+    "slug": "dai-hoc-cong-nghe-dai-hoc-quoc-gia-ha-noi-QHI",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHI\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHI\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHL": {
+    "slug": "khoa-luat-dai-hoc-quoc-gia-ha-noi-QHL",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHL\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHL\\2025.pdf"
+    },
+    "pdfs": {
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0519/thong-tin-tuyen-sinh-truong-dh-luat-dhqghn-2026.pdf",
+        "etag": "\"6a0bbcc4-26605d\"",
+        "last_modified": "Tue, 19 May 2026 01:28:36 GMT",
+        "sha256": "85717fc04713d17023879a894607b776b6f2f26af0b0c1ebaa297e3492965f12",
+        "checked_at": "2026-10-03T01:50:12Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/user_data/2025/0601/Thong_tin_tuyen_sinh_2025_-_Dai_hoc_Luat_DHQGHN.pdf",
+        "etag": "\"683c0f1b-328aef\"",
+        "last_modified": "Sun, 01 Jun 2025 08:28:11 GMT",
+        "sha256": "23a209c1aa8f8f07decad9f63b68280289c717d6c94acd6602d875b5af5aeb8d",
+        "checked_at": "2026-10-03T01:50:14Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:50:16Z",
+    "last_success_at": "2026-10-03T01:50:16Z",
+    "undersized_years": []
+  },
+  "QHQ": {
+    "slug": "khoa-quoc-te-dai-hoc-quoc-gia-ha-noi-QHQ",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHQ\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHQ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHQ\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "QSB": {
+    "slug": "dai-hoc-bach-khoa-dai-hoc-quoc-gia-tphcm-QSB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSB\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSB\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "QSC": {
+    "slug": "dai-hoc-cong-nghe-thong-tin-dai-hoc-quoc-gia-tphcm-QSC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "QSK": {
+    "slug": "dai-hoc-kinh-te-luat-dai-hoc-quoc-gia-tphcm-QSK",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSK\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSK\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSK\\2026.pdf"
+    },
+    "pdfs": {
+      "2024": {
+        "url": "https://images.tuyensinh247.com/picture/2024/0424/de-an-tuyen-sinh-dai-hoc-nam-2024-dh-kinh-te-luat.pdf",
+        "etag": "\"66288938-1e2ae6\"",
+        "last_modified": "Wed, 24 Apr 2024 04:23:20 GMT",
+        "sha256": "70dbd7abf42f12efcd225a70ff1f56b92cd0e765d509b509e2534591b02e1ad8",
+        "checked_at": "2026-10-03T01:50:02Z"
+      },
+      "2025": {
+        "url": "https://images.tuyensinh247.com/picture/2025/0703/thong-tin-tuyen-sinh-dhcq-dh-kinh-te-luat-nam-2025.pdf",
+        "etag": "\"686613d7-a570bd\"",
+        "last_modified": "Thu, 03 Jul 2025 05:23:35 GMT",
+        "sha256": "ab581dbce1bc3e1aa4ab19edebf6e142dd5f61b41589df5eaf856e61ed647f3a",
+        "checked_at": "2026-10-03T01:50:05Z"
+      },
+      "2026": {
+        "url": "https://images.tuyensinh247.com/picture/2026/0409/thong-tin-tuyen-sinh-truong-dai-hoc-kinh-te-luat-dhqg-tphcm-2026.pdf",
+        "etag": "\"69d775e7-c025e2\"",
+        "last_modified": "Thu, 09 Apr 2026 09:48:23 GMT",
+        "sha256": "c4f9d123f8caf3b4ef01020684c9ac8a18e064fb4a4cdaaa7eb45d38a0dd3cd4",
+        "checked_at": "2026-10-03T01:50:08Z"
+      }
+    },
+    "last_checked_at": "2026-10-03T01:50:10Z",
+    "last_success_at": "2026-10-03T01:50:10Z",
+    "undersized_years": []
+  },
+  "TCT": {
+    "slug": "dai-hoc-can-tho-TCT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TCT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TCT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DNS": {
+    "slug": "hoc-vien-khoa-hoc-quan-su-he-dan-su-kv-mien-nam-DNS",
+    "status": "fetch_failed",
+    "last_checked_at": "2026-10-03T01:48:09Z"
+  },
+  "DQS": {
+    "slug": "hoc-vien-ki-thuat-quan-su-he-dan-su-kv-mien-nam-DQS",
+    "status": "fetch_failed",
+    "last_checked_at": "2026-10-03T01:48:15Z"
+  },
+  "QH1": {
+    "slug": "khoa-su-pham-dai-hoc-quoc-gia-ha-noi-QH1",
+    "status": "fetch_failed"
+  },
+  "TAG": {
+    "slug": "dai-hoc-an-giang-TAG",
+    "status": "fetch_failed"
+  },
+  "DBV": {
+    "slug": "dai-hoc-ba-ria-vung-tau-DBV",
+    "status": "fetch_failed"
+  },
+  "HUI": {
+    "slug": "dai-hoc-cong-nghiep-tphcm-HUI",
+    "status": "fetch_failed"
+  },
+  "DCG": {
+    "slug": "dai-hoc-cong-nghe-thong-tin-gia-dinh-DCG",
+    "status": "fetch_failed"
+  },
+  "DVX": {
+    "slug": "dai-hoc-cong-nghe-van-xuan-DVX",
+    "status": "no_pdf_found"
+  },
+  "DHP": {
+    "slug": "dai-hoc-dan-lap-hai-phong-DHP",
+    "status": "fetch_failed"
+  },
+  "DHB": {
+    "slug": "dai-hoc-quoc-te-hong-bang-DHB",
+    "status": "fetch_failed"
+  },
+  "DDD": {
+    "slug": "dai-hoc-dan-lap-dong-do-DDD",
+    "status": "fetch_failed"
+  },
+  "GSA": {
+    "slug": "dai-hoc-giao-thong-van-tai-co-so-phia-nam-GSA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GSA\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GSA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GSA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "GTS": {
+    "slug": "dai-hoc-giao-thong-van-tai-tphcm-GTS",
+    "status": "fetch_failed"
+  },
+  "DNB": {
+    "slug": "dai-hoc-hoa-lu-ninh-binh-DNB",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNB\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNB\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTH": {
+    "slug": "dai-hoc-hoa-sen-DTH",
+    "status": "fetch_failed"
+  },
+  "DHH": {
+    "slug": "dai-hoc-ha-hoa-tien-DHH",
+    "status": "no_pdf_found"
+  },
+  "NHF": {
+    "slug": "dai-hoc-ha-noi-NHF",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHF\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHF\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHF\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "HHT": {
+    "slug": "dai-hoc-ha-tinh-HHT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "HHA": {
+    "slug": "dai-hoc-hang-hai-HHA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHA\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HHA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "HBU": {
+    "slug": "dai-hoc-hoa-binh-HBU",
+    "status": "fetch_failed"
+  },
+  "THV": {
+    "slug": "dai-hoc-hung-vuong-THV",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\THV\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\THV\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "THP": {
+    "slug": "dai-hoc-hai-phong-THP",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\THP\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\THP\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\THP\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "HDT": {
+    "slug": "dai-hoc-hong-duc-HDT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HDT\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HDT\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HDT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHT": {
+    "slug": "dai-hoc-khoa-hoc-dai-hoc-hue-DHT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHT\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "DTZ": {
+    "slug": "dai-hoc-khoa-hoc-dai-hoc-thai-nguyen-DTZ",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTZ\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTZ\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTZ\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHT": {
+    "slug": "dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-ha-noi-QHT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHT\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QST": {
+    "slug": "dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-tphcm-QST",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QST\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QST\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QST\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHX": {
+    "slug": "dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-dai-hoc-quoc-gia-ha-noi-QHX",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHX\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHX\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHX\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QSX": {
+    "slug": "dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-dai-hoc-quoc-gia-tphcm-QSX",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSX\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSX\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSX\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DQK": {
+    "slug": "dai-hoc-kinh-doanh-va-cong-nghe-ha-noi-DQK",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQK\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHK": {
+    "slug": "dai-hoc-kinh-te-dai-hoc-hue-DHK",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHK\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHK\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHK\\2026.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "QHE": {
+    "slug": "dai-hoc-kinh-te-dai-hoc-quoc-gia-ha-noi-QHE",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHE\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHE\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHE\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDQ": {
+    "slug": "dai-hoc-kinh-te-dai-hoc-da-nang-DDQ",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDQ\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDQ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDQ\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "KTC": {
+    "slug": "dai-hoc-kinh-te-tai-chinh-tphcm-KTC",
+    "status": "fetch_failed"
+  },
+  "DLA": {
+    "slug": "dai-hoc-kinh-te-cong-nghiep-long-an-DLA",
+    "status": "no_pdf_found"
+  },
+  "DKK": {
+    "slug": "dai-hoc-kinh-te-ky-thuat-cong-nghiep-DKK",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKK\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKK\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKK\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "KHA": {
+    "slug": "dai-hoc-kinh-te-quoc-dan-KHA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KHA\\2025.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KHA\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KHA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "KSA": {
+    "slug": "dai-hoc-kinh-te-tphcm-KSA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KSA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KSA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTE": {
+    "slug": "dai-hoc-kinh-te-quan-tri-kinh-doanh-dai-hoc-thai-nguyen-DTE",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTE\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTE\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "KTA": {
+    "slug": "dai-hoc-kien-truc-ha-noi-KTA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KTA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KTA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "KTS": {
+    "slug": "dai-hoc-kien-truc-tphcm-KTS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KTS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KTS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "KTD": {
+    "slug": "dai-hoc-kien-truc-da-nang-KTD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KTD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KTD\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DKC": {
+    "slug": "dai-hoc-cong-nghe-tphcm-DKC",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKC\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTK": {
+    "slug": "dai-hoc-ky-thuat-cong-nghiep-dai-hoc-thai-nguyen-DTK",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTK\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTK\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTK\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DKY": {
+    "slug": "dai-hoc-ky-thuat-y-te-hai-duong-DKY",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKY\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKY\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DLX": {
+    "slug": "dai-hoc-lao-dong-xa-hoi-co-so-ha-noi-DLX",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLX\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLX\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLX\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DLS": {
+    "slug": "dai-hoc-lao-dong-xa-hoi-co-so-phia-nam-DLS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLS\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "LPH": {
+    "slug": "dai-hoc-luat-ha-noi-LPH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LPH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LPH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LPH\\2026.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "LPS": {
+    "slug": "dai-hoc-luat-tphcm-LPS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LPS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LPS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LPS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "LNH": {
+    "slug": "dai-hoc-lam-nghiep-co-so-1-LNH",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LNH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LNH\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DLH": {
+    "slug": "dai-hoc-lac-hong-DLH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DLH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "MTC": {
+    "slug": "dai-hoc-my-thuat-cong-nghiep-MTC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "MTS": {
+    "slug": "dai-hoc-my-thuat-tphcm-MTS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTS\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "MTH": {
+    "slug": "dai-hoc-my-thuat-viet-nam-MTH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTH\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTH\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "MDA": {
+    "slug": "dai-hoc-mo-dia-chat-MDA",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MDA\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "MBS": {
+    "slug": "dai-hoc-mo-tphcm-MBS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MBS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MBS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHN": {
+    "slug": "dai-hoc-nghe-thuat-dai-hoc-hue-DHN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DNT": {
+    "slug": "dai-hoc-ngoai-ngu-tin-hoc-tphcm-DNT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHF": {
+    "slug": "dai-hoc-ngoai-ngu-dai-hoc-hue-DHF",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHF\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHF\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHF": {
+    "slug": "dai-hoc-ngoai-ngu-dai-hoc-quoc-gia-ha-noi-QHF",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHF\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHF\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDF": {
+    "slug": "dai-hoc-ngoai-ngu-dai-hoc-da-nang-DDF",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDF\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDF\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDF\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "NTH": {
+    "slug": "dai-hoc-ngoai-thuong-co-so-phia-bac-NTH",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTH\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "NTS": {
+    "slug": "dai-hoc-ngoai-thuong-phia-nam-NTS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "NTU": {
+    "slug": "dai-hoc-nguyen-trai-NTU",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTU\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTU\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "NHS": {
+    "slug": "dai-hoc-ngan-hang-tphcm-NHS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TSN": {
+    "slug": "dai-hoc-nha-trang-TSN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TSN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TSN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TSN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "TSB": {
+    "slug": "dai-hoc-nha-trang-kv-mien-bac-TSB",
+    "status": "fetch_failed"
+  },
+  "TSS": {
+    "slug": "dai-hoc-nha-trang-kv-mien-nam-TSS",
+    "status": "fetch_failed"
+  },
+  "DHL": {
+    "slug": "dai-hoc-nong-lam-dai-hoc-hue-DHL",
+    "status": "ok",
+    "years": [
+      "2024"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHL\\2024.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTN": {
+    "slug": "dai-hoc-nong-lam-dai-hoc-thai-nguyen-DTN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "NLS": {
+    "slug": "dai-hoc-nong-lam-tphcm-NLS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NLS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NLS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "NNH": {
+    "slug": "dai-hoc-nong-nghiep-ha-noi-NNH",
+    "status": "fetch_failed"
+  },
+  "DPC": {
+    "slug": "dai-hoc-phan-chau-trinh-DPC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "PCH": {
+    "slug": "dai-hoc-phong-chay-chua-chay-phia-bac-PCH",
+    "status": "no_pdf_found"
+  },
+  "PCS": {
+    "slug": "dai-hoc-phong-chay-chua-chay-phia-nam-PCS",
+    "status": "no_pdf_found"
+  },
+  "DPY": {
+    "slug": "dai-hoc-phu-yen-DPY",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPY\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPY\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DPQ": {
+    "slug": "dai-hoc-pham-van-dong-DPQ",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPQ\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPQ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPQ\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DQT": {
+    "slug": "dai-hoc-quang-trung-DQT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DQN": {
+    "slug": "dai-hoc-quy-nhon-DQN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQN\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DQB": {
+    "slug": "dai-hoc-quang-binh-DQB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQB\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DQU": {
+    "slug": "dai-hoc-quang-nam-DQU",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQU\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQU\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DQU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QSQ": {
+    "slug": "dai-hoc-quoc-te-dai-hoc-quoc-gia-tphcm-QSQ",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSQ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSQ\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DBH": {
+    "slug": "dai-hoc-quoc-te-bac-ha-DBH",
+    "status": "no_pdf_found"
+  },
+  "RMU": {
+    "slug": "dai-hoc-quoc-te-rmit-viet-nam-RMU",
+    "status": "no_pdf_found"
+  },
+  "TTQ": {
+    "slug": "dai-hoc-quoc-te-sai-gon-TTQ",
+    "status": "fetch_failed"
+  },
+  "RHM": {
+    "slug": "dai-hoc-rang-ham-mat-RHM",
+    "status": "no_pdf_found"
+  },
+  "SGD": {
+    "slug": "dai-hoc-sai-gon-SGD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SGD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SGD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SGD\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "SKD": {
+    "slug": "dai-hoc-san-khau-dien-anh-SKD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKD\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHS": {
+    "slug": "dai-hoc-su-pham-dai-hoc-hue-DHS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHS\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDS": {
+    "slug": "dai-hoc-su-pham-dai-hoc-da-nang-DDS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDS\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SPH": {
+    "slug": "dai-hoc-su-pham-ha-noi-SPH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPH\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SP2": {
+    "slug": "dai-hoc-su-pham-ha-noi-2-SP2",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SP2\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SP2\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SP2\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SKH": {
+    "slug": "dai-hoc-su-pham-ky-thuat-hung-yen-SKH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKH\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SKN": {
+    "slug": "dai-hoc-su-pham-ky-thuat-nam-dinh-SKN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKN\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SPK": {
+    "slug": "dai-hoc-su-pham-ky-thuat-tphcm-SPK",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPK\\2025.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPK\\2024.pdf"
+    },
+    "undersized_years": []
+  },
+  "SKV": {
+    "slug": "dai-hoc-su-pham-ky-thuat-vinh-SKV",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKV\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SKV\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "GNT": {
+    "slug": "dai-hoc-su-pham-nghe-thuat-trung-uong-GNT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GNT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GNT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\GNT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "TDH": {
+    "slug": "dai-hoc-su-pham-the-duc-the-thao-ha-noi-TDH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDH\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "STS": {
+    "slug": "dai-hoc-su-pham-the-ducthe-thao-tphcm-STS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\STS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\STS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\STS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "SPS": {
+    "slug": "dai-hoc-su-pham-tphcm-SPS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "TLA": {
+    "slug": "dai-hoc-thuy-loi-co-so-1-TLA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TLA\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TLA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TLS": {
+    "slug": "dai-hoc-thuy-loi-co-so-2-TLS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TLS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TLS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTA": {
+    "slug": "dai-hoc-thanh-tay-DTA",
+    "status": "fetch_failed"
+  },
+  "TBD": {
+    "slug": "dai-hoc-thai-binh-duong-TBD",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TBD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTL": {
+    "slug": "dai-hoc-thang-long-DTL",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTL\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTL\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTL\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TMA": {
+    "slug": "dai-hoc-thuong-mai-TMA",
+    "status": "fetch_failed"
+  },
+  "TDB": {
+    "slug": "dai-hoc-the-duc-the-thao-bac-ninh-TDB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDB\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TDS": {
+    "slug": "dai-hoc-the-duc-the-thao-tphcm-TDS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "TTD": {
+    "slug": "dai-hoc-the-ducthe-thao-da-nang-TTD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTD\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "TTG": {
+    "slug": "dai-hoc-tien-giang-TTG",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTG\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTG\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TTB": {
+    "slug": "dai-hoc-tay-bac-TTB",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTB\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTB\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TTN": {
+    "slug": "dai-hoc-tay-nguyen-TTN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTD": {
+    "slug": "dai-hoc-tay-do-DTD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTD\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DCQ": {
+    "slug": "dai-hoc-cong-nghe-va-quan-ly-huu-nghi-DCQ",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCQ\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCQ\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TDV": {
+    "slug": "dai-hoc-vinh-TDV",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDV\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDV\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDV\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "VGU": {
+    "slug": "dai-hoc-viet-duc-VGU",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VGU\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VGU\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "VTT": {
+    "slug": "dai-hoc-vo-truong-toan-VTT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VTT\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VTT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DVH": {
+    "slug": "dai-hoc-van-hien-DVH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVH\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "ZNS": {
+    "slug": "dai-hoc-van-hoa-nghe-thuat-quan-doi-mien-nam-ZNS",
+    "status": "fetch_failed"
+  },
+  "ZNH": {
+    "slug": "dai-hoc-van-hoa-nghe-thuat-quan-doi-mien-bac-ZNH",
+    "status": "no_pdf_found"
+  },
+  "VHH": {
+    "slug": "dai-hoc-van-hoa-ha-noi-VHH",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHH\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHH\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "VHS": {
+    "slug": "dai-hoc-van-hoa-tphcm-VHS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHS\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHS\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "XDA": {
+    "slug": "dai-hoc-xay-dung-ha-noi-XDA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\XDA\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\XDA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHY": {
+    "slug": "dai-hoc-y-duoc-dai-hoc-hue-DHY",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHY\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHY\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHY\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTY": {
+    "slug": "dai-hoc-y-duoc-dai-hoc-thai-nguyen-DTY",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTY\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTY\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTY\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "YCT": {
+    "slug": "dai-hoc-y-duoc-can-tho-YCT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YCT\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YCT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YCT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YDS": {
+    "slug": "dai-hoc-y-duoc-tphcm-YDS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YDS\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YDS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YDS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YHB": {
+    "slug": "dai-hoc-y-ha-noi-YHB",
+    "status": "ok",
+    "years": [
+      "2023",
+      "2025"
+    ],
+    "files": {
+      "2023": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YHB\\2023.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YHB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YPB": {
+    "slug": "dai-hoc-y-hai-phong-YPB",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YPB\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YPB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TYS": {
+    "slug": "dai-hoc-y-khoa-pham-ngoc-thach-TYS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TYS\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TYS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TYS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YTB": {
+    "slug": "dai-hoc-y-thai-binh-YTB",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YTB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YTC": {
+    "slug": "dai-hoc-y-te-cong-cong-YTC",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YTC\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YTC\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YTC\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DYD": {
+    "slug": "dai-hoc-yersin-da-lat-DYD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DYD\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DYD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YDD": {
+    "slug": "dai-hoc-dieu-duong-nam-dinh-YDD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YDD\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YDD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YDD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDL": {
+    "slug": "dai-hoc-dien-luc-DDL",
+    "status": "ok",
+    "years": [
+      "2020",
+      "2023",
+      "2026"
+    ],
+    "files": {
+      "2023": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDL\\2023.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDL\\2026.pdf",
+      "2020": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDL\\2020.pdf"
+    },
+    "undersized_years": []
+  },
+  "TDL": {
+    "slug": "dai-hoc-da-lat-TDL",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDL\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDL\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDL\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DAD": {
+    "slug": "dai-hoc-dong-a-DAD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DAD\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DAD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDN": {
+    "slug": "dai-hoc-dai-nam-DDN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDN\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SPD": {
+    "slug": "dai-hoc-dong-thap-SPD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPD\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\SPD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "TDM": {
+    "slug": "dai-hoc-thu-dau-mot-TDM",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDM\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDM\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TDM\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "VUI": {
+    "slug": "dai-hoc-cong-nghiep-viet-tri-VUI",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VUI\\2024.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VUI\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VUI\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QSY": {
+    "slug": "dai-hoc-quoc-gia-tphcm-khoa-y-QSY",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSY\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QSY\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "TTU": {
+    "slug": "dh-tan-tao-TTU",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTU\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\TTU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DHA": {
+    "slug": "khoa-luat-dai-hoc-hue-DHA",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHA\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DHA\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DVT": {
+    "slug": "dai-hoc-tra-vinh-DVT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DKB": {
+    "slug": "dai-hoc-kinh-te-ky-thuat-binh-duong-DKB",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKB\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DNU": {
+    "slug": "dai-hoc-dong-nai-DNU",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNU\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNU\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTM": {
+    "slug": "dh-tai-nguyen-moi-truong-tphcm-DTM",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTM\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTM\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTM\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHY": {
+    "slug": "khoa-y-duoc-dh-qghn-QHY",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHY\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHY\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHY\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "MTU": {
+    "slug": "dai-hoc-xay-dung-mien-tay-MTU",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\MTU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "NTT": {
+    "slug": "dai-hoc-nguyen-tat-thanh-NTT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTT\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NTT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "FBU": {
+    "slug": "dai-hoc-tai-chinh-ngan-hang-ha-noi-FBU",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\FBU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DCT": {
+    "slug": "dai-hoc-cong-nghiep-thuc-pham-tp-hcm-DCT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "XDT": {
+    "slug": "dai-hoc-xay-dung-mien-trung-XDT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\XDT\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\XDT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTQ": {
+    "slug": "khoa-quoc-te-dai-hoc-thai-nguyen-DTQ",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTQ\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DNV": {
+    "slug": "dai-hoc-noi-vu-DNV",
+    "status": "no_pdf_found"
+  },
+  "HCP": {
+    "slug": "hoc-vien-chinh-sach-va-phat-trien-HCP",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCP\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCP\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DKT": {
+    "slug": "dai-hoc-kinh-te-ky-thuat-hai-duong-DKT",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKT\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DKT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "VHD": {
+    "slug": "dai-hoc-cong-nghiep-viet-hung-VHD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHD\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\VHD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DTB": {
+    "slug": "dai-hoc-thai-binh-DTB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTB\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DTB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DCD": {
+    "slug": "dai-hoc-cong-nghe-dong-nai-DCD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DCD\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DSD": {
+    "slug": "dai-hoc-san-khau-dien-anh-tphcm-DSD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DSD\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DSD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DSD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "EIU": {
+    "slug": "dai-hoc-quoc-te-mien-dong-EIU",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\EIU\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\EIU\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DPT": {
+    "slug": "dai-hoc-phan-thiet-DPT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPT\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DPT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDB": {
+    "slug": "dai-hoc-thanh-dong-DDB",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDB\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDA": {
+    "slug": "dai-hoc-cong-nghe-dong-a-DDA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DDA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "YKV": {
+    "slug": "dai-hoc-y-khoa-vinh-YKV",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YKV\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YKV\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YKV\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "DVD": {
+    "slug": "dai-hoc-van-hoa-the-thao-va-du-lich-thanh-hoa-DVD",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVD\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVD\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "NHP": {
+    "slug": "hoc-vien-ngan-hang-phan-vien-phu-yen-NHP",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHP\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHP\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\NHP\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "HTN": {
+    "slug": "hoc-vien-thanh-thieu-nien-viet-nam-HTN",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HTN\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HTN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HTN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "PVU": {
+    "slug": "dai-hoc-dau-khi-viet-nam-PVU",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\PVU\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\PVU\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\PVU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "HCB": {
+    "slug": "dai-hoc-ky-thuat-hau-can-cong-an-nhan-dan-phia-bac-HCB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCB\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "HCN": {
+    "slug": "dai-hoc-ky-thuat-hau-can-cong-an-nhan-dan-phia-nam-HCN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCN\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\HCN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DLT": {
+    "slug": "dai-hoc-lao-dong-xa-hoi-co-so-son-tay-DLT",
+    "status": "fetch_failed"
+  },
+  "LNS": {
+    "slug": "dai-hoc-lam-nghiep-co-so-2-LNS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LNS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\LNS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "KCN": {
+    "slug": "dai-hoc-khoa-hoc-va-cong-nghe-ha-noi-KCN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KCN\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\KCN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "QHS": {
+    "slug": "dai-hoc-giao-duc-dh-quoc-gia-ha-noi-QHS",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHS\\2026.pdf",
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHS\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\QHS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "BUV": {
+    "slug": "dai-hoc-anh-quoc-viet-nam-BUV",
+    "status": "no_pdf_found"
+  },
+  "UKB": {
+    "slug": "dai-hoc-kinh-bac-UKB",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\UKB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DVB": {
+    "slug": "dai-hoc-viet-bac-DVB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVB\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DNC": {
+    "slug": "dai-hoc-nam-can-tho-DNC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNC\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DNC\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "SDU1": {
+    "slug": "dai-hoc-sao-do-he-cao-dang-SDU1",
+    "status": "fetch_failed"
+  },
+  "PCH1": {
+    "slug": "dai-hoc-phong-chay-chua-chay-he-dan-su-phia-bac-PCH1",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\PCH1\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "PCS1": {
+    "slug": "dai-hoc-phong-chay-chua-chay-he-dan-su-phia-nam-PCS1",
+    "status": "no_pdf_found"
+  },
+  "DVP": {
+    "slug": "dai-hoc-trung-vuong-DVP",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVP\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\DVP\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CBK": {
+    "slug": "cao-dang-bach-khoa-hung-yen-CBK",
+    "status": "fetch_failed"
+  },
+  "CKB": {
+    "slug": "cao-dang-bach-khoa-da-nang-CKB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKB\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKB\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CBT": {
+    "slug": "cao-dang-bach-nghe-tay-ha-CBT",
+    "status": "no_pdf_found"
+  },
+  "CBV": {
+    "slug": "cao-dang-bach-viet-CBV",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CBV\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CBC": {
+    "slug": "cao-dang-ban-cong-cong-nghe-va-quan-tri-doanh-nghiep-CBC",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CBC\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C56": {
+    "slug": "cao-dang-ben-tre-C56",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C56\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C56\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CDQ": {
+    "slug": "cao-dang-cong-ky-nghe-dong-a-CDQ",
+    "status": "fetch_failed"
+  },
+  "CSC": {
+    "slug": "cao-dang-cong-nghiep-cao-su-CSC",
+    "status": "fetch_failed"
+  },
+  "CCC": {
+    "slug": "cao-dang-cong-nghiep-cam-pha-CCC",
+    "status": "fetch_failed"
+  },
+  "CCS": {
+    "slug": "cao-dang-kinh-te-ky-thuat-vinatex-tphcm-CCS",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CCH": {
+    "slug": "cao-dang-cong-nghiep-hue-CCH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CCA": {
+    "slug": "cao-dang-cong-nghiep-hoa-chat-CCA",
+    "status": "fetch_failed"
+  },
+  "CHY": {
+    "slug": "cao-dang-y-te-hung-yen-CHY",
+    "status": "fetch_failed"
+  },
+  "CCI": {
+    "slug": "cao-dang-cong-nghiep-in-CCI",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCI\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CND": {
+    "slug": "cao-dang-cong-nghiep-nam-dinh-CND",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CND\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CPY": {
+    "slug": "cao-dang-cong-nghiep-phuc-yen-CPY",
+    "status": "fetch_failed"
+  },
+  "CCB": {
+    "slug": "cao-dang-cong-nghiep-thai-nguyen-CCB",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CTP": {
+    "slug": "cao-dang-cong-nghiep-thuc-pham-CTP",
+    "status": "fetch_failed"
+  },
+  "CCP": {
+    "slug": "cao-dang-cong-nghiep-tuy-hoa-CCP",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCP\\2026.pdf"
+    },
+    "undersized_years": [
+      "2026"
+    ]
+  },
+  "CCV": {
+    "slug": "cao-dang-cong-nghiep-viet-duc-CCV",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCV\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CCX": {
+    "slug": "cao-dang-cong-nghiep-va-xay-dung-CCX",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCX\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CCM": {
+    "slug": "cao-dang-cong-nghe-det-may-thoi-trang-ha-noi-CCM",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCM\\2026.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCM\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDC": {
+    "slug": "cao-dang-cong-nghe-dai-hoc-da-nang-DDC",
+    "status": "fetch_failed"
+  },
+  "CBH": {
+    "slug": "cao-dang-cong-nghe-bac-ha-CBH",
+    "status": "fetch_failed"
+  },
+  "CNH": {
+    "slug": "cao-dang-cong-nghe-ha-noi-CNH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CNH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "DDI": {
+    "slug": "cao-dang-cong-nghe-thong-tin-dai-hoc-da-nang-DDI",
+    "status": "fetch_failed"
+  },
+  "CHV": {
+    "slug": "cao-dang-cong-nghe-thong-tin-huu-nghi-viet-han-CHV",
+    "status": "fetch_failed"
+  },
+  "CCO": {
+    "slug": "cao-dang-cong-nghe-thu-duc-CCO",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCO\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVT": {
+    "slug": "cao-dang-cong-nghe-viettronics-CVT",
+    "status": "fetch_failed"
+  },
+  "CCZ": {
+    "slug": "cao-dang-cong-nghe-va-kinh-doanh-viet-tien-CCZ",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCZ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CCZ\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CXD": {
+    "slug": "cao-dang-cong-nghe-va-kinh-te-cong-nghiep-CXD",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CXD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CDS": {
+    "slug": "cao-dang-cong-nghe-va-quan-tri-sonadezi-CDS",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDS\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CES": {
+    "slug": "cao-dang-cong-thuong-tphcm-CES",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CES\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKL": {
+    "slug": "cao-dang-co-khi-luyen-kim-CKL",
+    "status": "fetch_failed"
+  },
+  "C55": {
+    "slug": "cao-dang-can-tho-C55",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C55\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "D52": {
+    "slug": "cao-dang-cong-dong-ba-ria-vung-tau-D52",
+    "status": "fetch_failed"
+  },
+  "C47": {
+    "slug": "cao-dang-cong-dong-binh-thuan-C47",
+    "status": "fetch_failed"
+  },
+  "D61": {
+    "slug": "cao-dang-cong-dong-ca-mau-D61",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D61\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CHN": {
+    "slug": "cao-dang-cong-dong-ha-noi-CHN",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CHN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "D20": {
+    "slug": "cao-dang-cong-dong-ha-tay-D20",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D20\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D20\\2026.pdf"
+    },
+    "undersized_years": [
+      "2026"
+    ]
+  },
+  "D03": {
+    "slug": "cao-dang-cong-dong-hai-phong-D03",
+    "status": "fetch_failed"
+  },
+  "D64": {
+    "slug": "cao-dang-cong-dong-hau-giang-D64",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D64\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D64\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "D54": {
+    "slug": "cao-dang-cong-dong-kien-giang-D54",
+    "status": "fetch_failed"
+  },
+  "CLC": {
+    "slug": "cao-dang-cong-dong-lai-chau-CLC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CLC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CLC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CST": {
+    "slug": "cao-dang-cong-dong-soc-trang-CST",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CST\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CST\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "D57": {
+    "slug": "cao-dang-cong-dong-vinh-long-D57",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D57\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D57\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "D50": {
+    "slug": "cao-dang-cong-dong-dong-thap-D50",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\D50\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CDH": {
+    "slug": "cao-dang-du-lich-ha-noi-CDH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CDD": {
+    "slug": "cao-dang-dan-lap-kinh-te-ky-thuat-dong-du-da-nang-CDD",
+    "status": "fetch_failed"
+  },
+  "CDU": {
+    "slug": "cao-dang-duoc-phu-tho-CDU",
+    "status": "fetch_failed"
+  },
+  "CYS": {
+    "slug": "cao-dang-duoc-trung-uong-CYS",
+    "status": "no_pdf_found"
+  },
+  "CGS": {
+    "slug": "cao-dang-giao-thong-van-tai-3-CGS",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CGS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CGD": {
+    "slug": "cao-dang-giao-thong-van-tai-ii-CGD",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CGD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CGN": {
+    "slug": "cao-dang-giao-thong-van-tai-mien-trung-CGN",
+    "status": "fetch_failed"
+  },
+  "CGT": {
+    "slug": "cao-dang-giao-thong-van-tai-tphcm-CGT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CGT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CGT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CHH": {
+    "slug": "cao-dang-hang-hai-i-CHH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CHH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKK": {
+    "slug": "cao-dang-kinh-te-ke-hoach-da-nang-CKK",
+    "status": "fetch_failed"
+  },
+  "DTU": {
+    "slug": "cao-dang-kinh-te-ky-thuat-dai-hoc-thai-nguyen-DTU",
+    "status": "fetch_failed"
+  },
+  "CEC": {
+    "slug": "cao-dang-kinh-te-ky-thuat-can-tho-CEC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CEC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CEC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKN": {
+    "slug": "cao-dang-kinh-te-ky-thuat-ha-noi-CKN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKQ": {
+    "slug": "cao-dang-kinh-te-ky-thuat-quang-nam-CKQ",
+    "status": "fetch_failed"
+  },
+  "CKE": {
+    "slug": "cao-dang-kinh-te-ky-thuat-sai-gon-CKE",
+    "status": "fetch_failed"
+  },
+  "CTH": {
+    "slug": "cao-dang-kinh-te-ky-thuat-thuong-mai-CTH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CTH\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKT": {
+    "slug": "cao-dang-kinh-te-tai-chinh-thai-nguyen-CKT",
+    "status": "fetch_failed"
+  },
+  "CKV": {
+    "slug": "cao-dang-kinh-te-tai-chinh-vinh-long-CKV",
+    "status": "fetch_failed"
+  },
+  "CCK": {
+    "slug": "cao-dang-kinh-te-cong-nghiep-ha-noi-CCK",
+    "status": "no_pdf_found"
+  },
+  "CKG": {
+    "slug": "cao-dang-kinh-te-ky-thuat-kien-giang-CKG",
+    "status": "fetch_failed"
+  },
+  "CKM": {
+    "slug": "cao-dang-kinh-te-ky-thuat-mien-nam-CKM",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKM\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKM\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CEA": {
+    "slug": "cao-dang-kinh-te-ky-thuat-nghe-an-CEA",
+    "status": "ok",
+    "years": [
+      "2024",
+      "2025"
+    ],
+    "files": {
+      "2024": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CEA\\2024.pdf",
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CEA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CPL": {
+    "slug": "cao-dang-kinh-te-ky-thuat-phu-lam-CPL",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CPL\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CPP": {
+    "slug": "cao-dang-kinh-te-ky-thuat-phu-tho-CPP",
+    "status": "fetch_failed"
+  },
+  "CTB": {
+    "slug": "cao-dang-kinh-te-ky-thuat-thai-binh-CTB",
+    "status": "fetch_failed"
+  },
+  "CDB": {
+    "slug": "cao-dang-kinh-te-ky-thuat-dien-bien-CDB",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CEP": {
+    "slug": "cao-dang-kinh-te-tphcm-CEP",
+    "status": "fetch_failed"
+  },
+  "CKD": {
+    "slug": "cao-dang-kinh-te-doi-ngoai-CKD",
+    "status": "fetch_failed"
+  },
+  "CKO": {
+    "slug": "cao-dang-kinh-te-ky-thuat-kon-tum-CKO",
+    "status": "fetch_failed"
+  },
+  "CET": {
+    "slug": "cao-dang-kinh-te-cong-nghe-tphcm-CET",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CET\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKC": {
+    "slug": "cao-dang-ky-thuat-cao-thang-CKC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CCQ": {
+    "slug": "cao-dang-ky-thuat-cong-nghiep-quang-ngai-CCQ",
+    "status": "fetch_failed"
+  },
+  "CCG": {
+    "slug": "cao-dang-ky-thuat-cong-nghe-bach-khoa-CCG",
+    "status": "fetch_failed"
+  },
+  "CKS": {
+    "slug": "cao-dang-ky-thuat-khach-san-va-du-lich-CKS",
+    "status": "fetch_failed"
+  },
+  "CKP": {
+    "slug": "cao-dang-ky-thuat-ly-tu-trong-tphcm-CKP",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKP\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CKP\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CKY": {
+    "slug": "cao-dang-ky-thuat-y-te-ii-CKY",
+    "status": "fetch_failed"
+  },
+  "CVX": {
+    "slug": "cao-dang-ky-thuat-cong-nghe-van-xuan-CVX",
+    "status": "fetch_failed"
+  },
+  "CLT": {
+    "slug": "cao-dang-luong-thuc-thuc-pham-CLT",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CLT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CLV": {
+    "slug": "cao-dang-lac-viet-CLV",
+    "status": "fetch_failed"
+  },
+  "CMH": {
+    "slug": "cao-dang-mua-viet-nam-CMH",
+    "status": "fetch_failed"
+  },
+  "CDN": {
+    "slug": "cao-dang-my-thuat-trang-tri-dong-nai-CDN",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CNT": {
+    "slug": "cao-dang-nghe-thuat-ha-noi-CNT",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CNT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CNC": {
+    "slug": "cao-dang-ngoai-ngu-cong-nghe-viet-nhat-CNC",
+    "status": "no_pdf_found"
+  },
+  "CDP": {
+    "slug": "cao-dang-nong-lam-dong-bac-CDP",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDP\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CEN": {
+    "slug": "cao-dang-co-dien-va-nong-nghiep-nam-bo-CEN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CEN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CEN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CNP": {
+    "slug": "cao-dang-nong-nghiep-va-phat-trien-nong-thon-bac-bo-CNP",
+    "status": "fetch_failed"
+  },
+  "CPT": {
+    "slug": "cao-dang-phat-thanh-truyen-hinh-i-CPT",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CPT\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CPS": {
+    "slug": "cao-dang-phat-thanh-truyen-hinh-ii-CPS",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CPS\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CPN": {
+    "slug": "cao-dang-phuong-dong-da-nang-CPN",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CPN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CPD": {
+    "slug": "cao-dang-phuong-dong-quang-nam-CPD",
+    "status": "fetch_failed"
+  },
+  "C52": {
+    "slug": "cao-dang-su-pham-ba-ria-vung-tau-C52",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C52\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C43": {
+    "slug": "cao-dang-su-pham-binh-phuoc-C43",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C43\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C43\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C37": {
+    "slug": "cao-dang-binh-dinh-C37",
+    "status": "fetch_failed"
+  },
+  "C11": {
+    "slug": "cao-dang-cong-dong-bac-kan-C11",
+    "status": "fetch_failed"
+  },
+  "C19": {
+    "slug": "cao-dang-su-pham-bac-ninh-C19",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C19\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C06": {
+    "slug": "cao-dang-su-pham-cao-bang-C06",
+    "status": "fetch_failed"
+  },
+  "C61": {
+    "slug": "cao-dang-su-pham-ca-mau-C61",
+    "status": "fetch_failed"
+  },
+  "C38": {
+    "slug": "cao-dang-su-pham-gia-lai-C38",
+    "status": "fetch_failed"
+  },
+  "C23": {
+    "slug": "cao-dang-su-pham-hoa-binh-C23",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C23\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C23\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C05": {
+    "slug": "cao-dang-su-pham-ha-giang-C05",
+    "status": "fetch_failed"
+  },
+  "C24": {
+    "slug": "cao-dang-su-pham-ha-nam-C24",
+    "status": "fetch_failed"
+  },
+  "C01": {
+    "slug": "cao-dang-su-pham-ha-noi-C01",
+    "status": "fetch_failed"
+  },
+  "C20": {
+    "slug": "cao-dang-su-pham-ha-tay-C20",
+    "status": "fetch_failed"
+  },
+  "C22": {
+    "slug": "cao-dang-su-pham-hung-yen-C22",
+    "status": "fetch_failed"
+  },
+  "C21": {
+    "slug": "cao-dang-hai-duong-C21",
+    "status": "fetch_failed"
+  },
+  "C54": {
+    "slug": "cao-dang-su-pham-kien-giang-C54",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C54\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C54\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C36": {
+    "slug": "cao-dang-su-pham-kon-tum-C36",
+    "status": "fetch_failed"
+  },
+  "CK4": {
+    "slug": "cao-dang-su-pham-ky-thuat-vinh-long-CK4",
+    "status": "fetch_failed"
+  },
+  "C49": {
+    "slug": "cao-dang-su-pham-long-an-C49",
+    "status": "fetch_failed"
+  },
+  "C08": {
+    "slug": "cao-dang-su-pham-lao-cai-C08",
+    "status": "fetch_failed"
+  },
+  "C10": {
+    "slug": "cao-dang-su-pham-lang-son-C10",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C10\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C10\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C25": {
+    "slug": "cao-dang-su-pham-nam-dinh-C25",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C25\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C29": {
+    "slug": "cao-dang-su-pham-nghe-an-C29",
+    "status": "fetch_failed"
+  },
+  "C18": {
+    "slug": "cao-dang-su-pham-ngo-gia-tu-bac-giang-C18",
+    "status": "fetch_failed"
+  },
+  "C41": {
+    "slug": "cao-dang-su-pham-nha-trang-C41",
+    "status": "fetch_failed"
+  },
+  "C45": {
+    "slug": "cao-dang-su-pham-ninh-thuan-C45",
+    "status": "fetch_failed"
+  },
+  "C17": {
+    "slug": "cao-dang-su-pham-quang-ninh-C17",
+    "status": "fetch_failed"
+  },
+  "C32": {
+    "slug": "cao-dang-su-pham-quang-tri-C32",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C32\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C59": {
+    "slug": "cao-dang-su-pham-soc-trang-C59",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C59\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C14": {
+    "slug": "cao-dang-son-la-C14",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C14\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C14\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C26": {
+    "slug": "cao-dang-su-pham-thai-binh-C26",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C26\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C12": {
+    "slug": "cao-dang-su-pham-thai-nguyen-C12",
+    "status": "fetch_failed"
+  },
+  "C33": {
+    "slug": "cao-dang-su-pham-thua-thien-hue-C33",
+    "status": "fetch_failed"
+  },
+  "CM1": {
+    "slug": "cao-dang-su-pham-trung-uong-CM1",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CM1\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CM1\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CM3": {
+    "slug": "cao-dang-su-pham-trung-uong-tphcm-CM3",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CM3\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CM3\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "C09": {
+    "slug": "cao-dang-su-pham-tuyen-quang-C09",
+    "status": "fetch_failed"
+  },
+  "CM2": {
+    "slug": "cao-dang-su-pham-tw-nha-trang-CM2",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CM2\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CM2\\2026.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "C46": {
+    "slug": "cao-dang-su-pham-tay-ninh-C46",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C46\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C57": {
+    "slug": "cao-dang-su-pham-vinh-long-C57",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C57\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C16": {
+    "slug": "cao-dang-su-pham-vinh-phuc-C16",
+    "status": "fetch_failed"
+  },
+  "C13": {
+    "slug": "cao-dang-su-pham-yen-bai-C13",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C13\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C62": {
+    "slug": "cao-dang-su-pham-dien-bien-C62",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C62\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "C42": {
+    "slug": "cao-dang-su-pham-da-lat-C42",
+    "status": "fetch_failed"
+  },
+  "C40": {
+    "slug": "cao-dang-su-pham-dak-lak-C40",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\C40\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CSB": {
+    "slug": "cao-dang-thuy-san-CSB",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CSB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CMS": {
+    "slug": "cao-dang-thuong-mai-CMS",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CMS\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CMS\\2026.pdf"
+    },
+    "undersized_years": [
+      "2026"
+    ]
+  },
+  "CTM": {
+    "slug": "cao-dang-thuong-mai-va-du-lich-CTM",
+    "status": "fetch_failed"
+  },
+  "CTO": {
+    "slug": "cao-dang-the-ducthe-thaothanh-hoa-CTO",
+    "status": "fetch_failed"
+  },
+  "CTE": {
+    "slug": "cao-dang-thong-ke-CTE",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CTE\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CTL": {
+    "slug": "cao-dang-thuy-loi-bac-bo-CTL",
+    "status": "fetch_failed"
+  },
+  "CTV": {
+    "slug": "cao-dang-truyen-hinh-CTV",
+    "status": "fetch_failed"
+  },
+  "CTS": {
+    "slug": "cao-dang-tai-chinh-hai-quan-CTS",
+    "status": "fetch_failed"
+  },
+  "CMM": {
+    "slug": "cao-dang-tai-nguyen-va-moi-truong-mien-trung-CMM",
+    "status": "fetch_failed"
+  },
+  "CDA": {
+    "slug": "cao-dang-tu-thuc-duc-tri-CDA",
+    "status": "fetch_failed"
+  },
+  "CDV": {
+    "slug": "cao-dang-vien-dong-CDV",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDV\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVY": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-du-lich-yen-bai-CVY",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVY\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVV": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-nghe-an-CVV",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVV\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVH": {
+    "slug": "cao-dang-van-hoa-the-thao-va-du-lich-nguyen-du-CVH",
+    "status": "fetch_failed"
+  },
+  "CNB": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-thai-binh-CNB",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CNB\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVN": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-tphcm-CVN",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVN\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVB": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-tay-bac-CVB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVB\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVB\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CNV": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-viet-bac-CNV",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CNV\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CNV\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVD": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-va-du-lich-ha-long-CVD",
+    "status": "fetch_failed"
+  },
+  "CDK": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-va-du-lich-nha-trang-CDK",
+    "status": "fetch_failed"
+  },
+  "CVS": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-va-du-lich-sai-gon-CVS",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVS\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CVL": {
+    "slug": "cao-dang-van-hoa-nghe-thuat-dak-lak-CVL",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CVL\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CDT": {
+    "slug": "cao-dang-xay-dung-cong-trinh-do-thi-CDT",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CDT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CXN": {
+    "slug": "cao-dang-xay-dung-nam-dinh-CXN",
+    "status": "fetch_failed"
+  },
+  "CXH": {
+    "slug": "cao-dang-xay-dung-so-1-CXH",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CXH\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CXH\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CXS": {
+    "slug": "cao-dang-xay-dung-so-2-CXS",
+    "status": "fetch_failed"
+  },
+  "CBY": {
+    "slug": "cao-dang-y-te-binh-duong-CBY",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CBY\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CBY\\2026.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CYX": {
+    "slug": "cao-dang-y-te-binh-thuan-CYX",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYX\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYR": {
+    "slug": "cao-dang-y-te-binh-dinh-CYR",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYR\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYB": {
+    "slug": "cao-dang-y-te-bac-lieu-CYB",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYB\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYB\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CMY": {
+    "slug": "cao-dang-y-te-ca-mau-CMY",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CMY\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYC": {
+    "slug": "cao-dang-y-te-can-tho-CYC",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYC\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYC\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYY": {
+    "slug": "cao-dang-y-te-hue-CYY",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYY\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYH": {
+    "slug": "cao-dang-y-te-ha-nam-CYH",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYH\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CYZ": {
+    "slug": "cao-dang-y-te-ha-noi-CYZ",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYZ\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYZ\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYN": {
+    "slug": "cao-dang-y-te-ha-tinh-CYN",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYN\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYN\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYF": {
+    "slug": "cao-dang-y-te-hai-phong-CYF",
+    "status": "ok",
+    "years": [
+      "2026"
+    ],
+    "files": {
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYF\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYK": {
+    "slug": "cao-dang-y-te-khanh-hoa-CYK",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYK\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYG": {
+    "slug": "cao-dang-y-te-kien-giang-CYG",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYG\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CYL": {
+    "slug": "cao-dang-y-te-lang-son-CYL",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYL\\2025.pdf"
+    },
+    "undersized_years": [
+      "2025"
+    ]
+  },
+  "CYA": {
+    "slug": "cao-dang-y-te-dong-thap-CYA",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYA\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYP": {
+    "slug": "cao-dang-y-te-phu-tho-CYP",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYP\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYU": {
+    "slug": "cao-dang-y-te-quang-nam-CYU",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYU\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYQ": {
+    "slug": "cao-dang-y-te-quang-ninh-CYQ",
+    "status": "fetch_failed"
+  },
+  "CYT": {
+    "slug": "cao-dang-y-te-thanh-hoa-CYT",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYT\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYT\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYE": {
+    "slug": "cao-dang-y-te-thai-binh-CYE",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYE\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYI": {
+    "slug": "cao-dang-y-te-thai-nguyen-CYI",
+    "status": "fetch_failed"
+  },
+  "CYV": {
+    "slug": "cao-dang-y-te-tien-giang-CYV",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYV\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYV\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "YTV": {
+    "slug": "cao-dang-y-te-tra-vinh-YTV",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YTV\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\YTV\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CYD": {
+    "slug": "cao-dang-y-te-dong-nai-CYD",
+    "status": "ok",
+    "years": [
+      "2025",
+      "2026"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYD\\2025.pdf",
+      "2026": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CYD\\2026.pdf"
+    },
+    "undersized_years": []
+  },
+  "CLD": {
+    "slug": "cao-dang-dien-luc-mien-trung-CLD",
+    "status": "ok",
+    "years": [
+      "2025"
+    ],
+    "files": {
+      "2025": "F:\\MLAI_Hackathon\\nguyen-vong\\data\\raw\\deans\\CLD\\2025.pdf"
+    },
+    "undersized_years": []
+  },
+  "CDE": {
+    "slug": "cao-dang-dien-luc-tphcm-CDE",
+    "status": "fetch_failed"
+  }
+}
