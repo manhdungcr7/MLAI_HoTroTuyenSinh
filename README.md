@@ -196,4 +196,4 @@ Theo thứ tự nên làm:
 - Chuỗi trong giao diện xưng "bạn", không dùng "em"; không thêm trang hay đoạn chữ giải thích thừa.
 - Quy tắc trường: theo mục 5; mọi con số phải đối chiếu được với văn bản có mã băm.
 - Tên nhánh và commit: `feat/…`, `fix/…`, `docs/…`; commit rõ một việc; đừng ép đẩy (force-push) lên `main`.
-- Tài liệu cũ: `ba.md` và `.agents/AGENTS.md` viết từ giai đoạn cuộc thi MLAI Hackathon 2026 (sitemap 20 màn, triển khai Cloudflare, nhiều quy ước đã đổi). **README này là nguồn đúng nhất về hiện trạng**; hai file kia chỉ để tham khảo bối cảnh.
+- Tài liệu: README này cùng `docs/CHECKLIST.md`, `docs/DATA_GAPS.md`, `docs/RULE_REVIEW.md` và `frontend/src/data/school-rules/README.md` là toàn bộ tài liệu còn hiệu lực. Hai file `ba.md` và `.agents/AGENTS.md` từ giai đoạn cuộc thi đã bị xóa vì nội dung cũ; xem lịch sử git nếu cần bối cảnh.
