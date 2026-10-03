@@ -73,7 +73,11 @@ def render() -> str:
             parts.append(f"{method}: {', '.join(fields)}")
         note = src.get("verifiedBy", "").replace("|", "/")
         lines.append(f"| {rule['schoolCode']} | [{src.get('document', 'văn bản gốc')}]({src['url']})<br>`{src.get('sha256', '')[:16]}…` | {note} | {'; '.join(parts)} |  |")
-    OUT.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    return "\n".join(lines) + "\n"
+
+
+def review() -> None:
+    OUT.write_text(render(), encoding="utf-8", newline="\n")
     print(f"Đã ghi {OUT.relative_to(ROOT)} ({len(load())} quy tắc)")
 
 
