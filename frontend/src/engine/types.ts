@@ -160,6 +160,8 @@ export interface CandidateOption {
   ruleSource?: string;
   /** true khi điểm Tiếng Anh được thay bằng điểm quy đổi từ IELTS. */
   usedIeltsConversion?: boolean;
+  /** Xác suất trường nhận tổ hợp này (ước lượng) khi đề án không ghi tổ hợp; đã nhân vào admitProbability. */
+  comboAcceptance?: number;
   /** Hệ số nhân độ bất định theo độ cũ và độ mỏng của dữ liệu (xem sigmaScaleFor). */
   sigmaScale?: number;
 }

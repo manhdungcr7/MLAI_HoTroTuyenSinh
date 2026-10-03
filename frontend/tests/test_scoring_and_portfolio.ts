@@ -15,6 +15,7 @@ import { clearSchoolRules, registerSchoolRules, validateSchoolRule, SchoolRule }
 import { missingInputsForProgram, scoreForProgram } from "../src/engine/scoring/method-score";
 import { StudentProfile, TargetProgram } from "../src/engine/types";
 import { sanitize } from "../src/state/storage";
+import { comboAcceptancePrior } from "../src/engine/decision/combo-prior";
 import { FORECAST_YEAR, calculateAdmitProbability, sigmaScaleFor } from "../src/engine/admissions/probability";
 
 function assert(condition: boolean, message: string) {
@@ -126,6 +127,15 @@ assert(!warnings.some((w) => w.code === "SHADOWED" || w.code === "TEACHER_RANK")
 assert(sigmaScaleFor(FORECAST_YEAR - 1, 3) === 1 && Math.abs(sigmaScaleFor(FORECAST_YEAR - 3, 3) - Math.sqrt(3)) < 1e-9, "Dữ liệu cũ hơn thì độ bất định tăng theo căn bậc hai số năm");
 assert(Math.abs(sigmaScaleFor(FORECAST_YEAR - 1, 1) - 1.3) < 1e-9, "Chương trình chỉ có 1 năm dữ liệu có độ bất định lớn hơn");
 assert(calculateAdmitProbability(24, 22, 1, 1.5, 1.2, sigmaScaleFor(FORECAST_YEAR - 3, 1)) < calculateAdmitProbability(24, 22, 1, 1.5, 1.2, 1), "Cùng điểm, dữ liệu cũ và mỏng thì xác suất đỗ kém chắc chắn hơn");
+
+// ---- 3c. Xác suất trường nhận tổ hợp khi đề án không ghi ----
+const accept = comboAcceptancePrior(DECISION_PROGRAM_POOL);
+const a00 = accept("cntt", "A00");
+const rare = accept("cntt", "A09");
+assert(a00 > 0 && a00 < 1 && rare >= 0 && rare < a00, "Tỷ lệ trường nhận tổ hợp phổ biến (A00) cao hơn tổ hợp hiếm, đều nằm trong (0, 1)");
+const unverified = all.filter((c) => c.combinationsVerified === false);
+assert(unverified.length > 100 && unverified.every((c) => typeof c.comboAcceptance === "number" && c.comboAcceptance > 0 && c.comboAcceptance <= 1), "Mọi ngành chưa rõ tổ hợp đều mang xác suất trường nhận tổ hợp");
+assert(all.filter((c) => c.combinationsVerified !== false).every((c) => c.comboAcceptance === undefined), "Ngành đã rõ tổ hợp không bị nhân xác suất nhận tổ hợp");
 
 // ---- 4. Lưu trữ ----
 const dirty = sanitize({

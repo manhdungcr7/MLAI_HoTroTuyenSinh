@@ -398,15 +398,15 @@ def _score_combo(profile, rule, combo, needs, major_group=None):
     }
 
 
-def evaluate_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
+def _evaluate(profile: Mapping[str, Any], program: Mapping[str, Any], explore_unverified: bool):
     """(điểm tốt nhất theo quy tắc của trường, các đầu vào còn thiếu)."""
     method = program_method(program)
     resolved = resolve_method_rule(program["schoolCode"], method)
     if resolved is None or program.get("requiresAptitude"):
-        return None, []
+        return None, [], []
     rule, origin, source = resolved
     if rule.get("unsupportedReason"):
-        return None, []
+        return None, [], []
     needs_combo = any(c["source"] in COMBO_SOURCES for c in rule["components"])
     combos: list[str] = [""]
     unverified = False
@@ -414,26 +414,73 @@ def evaluate_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
         declared = program.get("combinations") or []
         published = [c for c in declared if c in COMBINATION_SUBJECTS]
         if declared and not published:
-            return None, []
+            return None, [], []
         from_rule = [c for c in rule.get("allowedCombinations", []) if c in COMBINATION_SUBJECTS]
         if not declared and from_rule:
             combos = from_rule
         else:
             unverified = not declared
             active = profile.get("activeCombination")
-            combos = ([active] if active in COMBINATION_SUBJECTS else []) if unverified else published
+            if unverified:
+                combos = list(COMBINATION_SUBJECTS) if explore_unverified else ([active] if active in COMBINATION_SUBJECTS else [])
+            else:
+                combos = published
         if not combos:
-            return None, ["Tổ hợp xét tuyển"]
+            return None, ["Tổ hợp xét tuyển"], []
     missing: set[str] = set()
     best = None
+    options: list[dict[str, Any]] = []
     for combo in combos:
         s = _score_combo(profile, rule, combo, missing, program.get("majorGroup"))
         if s is None:
             continue
-        if best is None or s["score"] > best["score"]:
-            best = {**s, "method": method, "combo": combo, "comboUnverified": unverified,
-                    "ruleOrigin": origin, "ruleSource": source}
-    return best, ([] if best else sorted(missing))
+        option = {**s, "method": method, "combo": combo, "comboUnverified": unverified,
+                  "ruleOrigin": origin, "ruleSource": source}
+        options.append(option)
+        if best is None or option["score"] > best["score"]:
+            best = option
+    return best, ([] if best else sorted(missing)), options
+
+
+def evaluate_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
+    best, missing, _ = _evaluate(profile, program, False)
+    return best, missing
+
+
+def score_options(profile: Mapping[str, Any], program: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Mọi cách tính được; với chương trình chưa rõ tổ hợp là điểm theo từng tổ hợp học sinh có điểm."""
+    return _evaluate(profile, program, True)[2]
+
+
+def combo_acceptance_prior(programs: list[dict[str, Any]]):
+    """Xác suất một chương trình nhận một tổ hợp, ước lượng từ các chương trình đã có tổ hợp xác thực cùng nhóm ngành
+    (cùng công thức với comboAcceptancePrior ở frontend)."""
+    prog_by_group: dict[str, int] = {}
+    combo_by_group: dict[str, dict[str, int]] = {}
+    overall: dict[str, int] = {}
+    total = 0
+    for p in programs:
+        if not p.get("combinationsVerified"):
+            continue
+        combos = {c for c in p.get("combinations") or [] if c in COMBINATION_SUBJECTS}
+        if not combos:
+            continue
+        group = p.get("majorGroup") or "other"
+        total += 1
+        prog_by_group[group] = prog_by_group.get(group, 0) + 1
+        per = combo_by_group.setdefault(group, {})
+        for c in combos:
+            per[c] = per.get(c, 0) + 1
+            overall[c] = overall.get(c, 0) + 1
+
+    def acceptance(major_group: str, combo: str) -> float:
+        rate = overall.get(combo, 0) / total if total > 0 else 0.5
+        group = major_group or "other"
+        n = prog_by_group.get(group, 0)
+        k = combo_by_group.get(group, {}).get(combo, 0)
+        return (k + 5 * rate) / (n + 5)
+
+    return acceptance
 
 
 def score_for_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
@@ -556,6 +603,7 @@ def build_candidates(
         if p["forecastP50"] and p["forecastP50"] >= 10 and p["majorGroup"]:
             by_group.setdefault(p["majorGroup"].strip().lower(), []).append(p["forecastP50"])
     medians = {g: sorted(v)[len(v) // 2] for g, v in by_group.items()}
+    acceptance = combo_acceptance_prior(programs)
 
     candidates: list[dict[str, Any]] = []
     for p in programs:
@@ -563,8 +611,8 @@ def build_candidates(
             continue
         if budget > 0 and p["tuitionVnd"] is not None and p["tuitionVnd"] > budget:
             continue
-        ms = score_for_program(profile, p)
-        if ms is None or ms["score"] <= 0:
+        options = [o for o in score_options(profile, p) if o["score"] > 0]
+        if not options:
             continue
         p50, p10, p90 = p["forecastP50"], p["forecastP10"], p["forecastP90"]
         years = p["yearsOfData"]
@@ -578,7 +626,13 @@ def build_candidates(
             p10 = max(12.0, js_to_fixed(p50 - half * 1.6, 2))
             p90 = min(30.0, js_to_fixed(p50 + half * 1.6, 2))
         sigma_scale = sigma_scale_for(p["latestYear"], years)
-        prob = admit_probability(ms["score"], p50, shock_std=shock_std, idio_std=idio_std, sigma_scale=sigma_scale)
+        ms, prob, combo_acceptance = options[0], -1.0, None
+        for option in options:
+            accept = acceptance(p["majorGroup"], option["combo"]) if option["comboUnverified"] else 1.0
+            value = accept * admit_probability(option["score"], p50, shock_std=shock_std, idio_std=idio_std, sigma_scale=sigma_scale)
+            if value > prob:
+                prob, ms = value, option
+                combo_acceptance = accept if option["comboUnverified"] else None
         candidates.append({
             "programId": p["programId"],
             "majorKey": p["majorKey"],
@@ -606,6 +660,7 @@ def build_candidates(
             "sourceUrl": p["sourceUrl"],
             "usedIeltsConversion": ms["usedIeltsConversion"],
             "sigmaScale": sigma_scale,
+            "comboAcceptance": combo_acceptance,
             "ruleOrigin": ms["ruleOrigin"],
             "ruleSource": (ms["ruleSource"] or {}).get("url") if ms["ruleSource"] else None,
         })

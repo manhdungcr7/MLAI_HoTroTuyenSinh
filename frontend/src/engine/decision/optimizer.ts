@@ -9,7 +9,8 @@ import {
   classifyRole,
   sigmaScaleFor,
 } from "@/engine/admissions/probability";
-import { scoreForProgram } from "@/engine/scoring/method-score";
+import { scoreOptionsForProgram } from "@/engine/scoring/method-score";
+import { comboAcceptancePrior } from "@/engine/decision/combo-prior";
 
 const round2 = (n: number) => Number(n.toFixed(2));
 
@@ -44,6 +45,7 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
   const excludedSchools = new Set((profile.excludedSchoolCodes ?? []).map((code) => code.trim().toUpperCase()));
   const excludedGroups = new Set((profile.excludedMajorGroups ?? []).map((group) => group.trim().toLowerCase()));
   const medians = groupMedians(programs);
+  const acceptance = comboAcceptancePrior(programs);
 
   const candidates: CandidateOption[] = [];
   for (const p of programs) {
@@ -51,8 +53,8 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
     if (excludedGroups.has(p.majorGroup.trim().toLowerCase())) continue;
     if (budget > 0 && p.tuitionVnd != null && p.tuitionVnd > budget) continue;
 
-    const ms = scoreForProgram(profile, p);
-    if (!ms || ms.score <= 0) continue;
+    const options = scoreOptionsForProgram(profile, p).filter((o) => o.score > 0);
+    if (options.length === 0) continue;
 
     const yearsOfData = (p as TargetProgram & { yearsOfData?: number }).yearsOfData ?? countCutoffYears(p);
     let p50 = p.forecastP50;
@@ -72,7 +74,19 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
     }
 
     const sigmaScale = sigmaScaleFor((p as TargetProgram & { latestYear?: number }).latestYear, yearsOfData);
-    const prob = calculateAdmitProbability(ms.score, p50, 1.0, undefined, undefined, sigmaScale);
+    // Chương trình chưa rõ tổ hợp: nhân xác suất đỗ với xác suất trường nhận tổ hợp đó, chọn tổ hợp cho kết quả tốt nhất.
+    let ms = options[0];
+    let prob = -1;
+    let comboAcceptance: number | undefined;
+    for (const option of options) {
+      const accept = option.comboUnverified ? acceptance(p.majorGroup, option.combo) : 1;
+      const value = accept * calculateAdmitProbability(option.score, p50, 1.0, undefined, undefined, sigmaScale);
+      if (value > prob) {
+        prob = value;
+        ms = option;
+        comboAcceptance = option.comboUnverified ? accept : undefined;
+      }
+    }
     const role: Role = classifyRole(prob);
     candidates.push({
       programId: p.programId,
@@ -103,6 +117,7 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
       ruleSource: ms.ruleSource?.url,
       usedIeltsConversion: ms.usedIeltsConversion,
       sigmaScale,
+      comboAcceptance,
     });
   }
 

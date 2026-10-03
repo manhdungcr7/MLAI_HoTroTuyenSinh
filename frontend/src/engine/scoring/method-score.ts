@@ -132,16 +132,18 @@ function comboComponentScores(
 interface Evaluation {
   score: MethodScore | null;
   missing: string[];
+  /** Mọi tổ hợp tính được (chỉ đầy đủ khi khám phá tổ hợp chưa xác thực). */
+  options: MethodScore[];
 }
 
-function evaluate(profile: StudentProfile, program: TargetProgram): Evaluation {
+function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnverified = false): Evaluation {
   const method = programMethod(program);
   const resolved = resolveMethodRule(program.schoolCode, method);
-  if (!resolved) return { score: null, missing: [] };
+  if (!resolved) return { score: null, missing: [], options: [] };
   // Ngành có thi năng khiếu: điểm văn hoá không phản ánh điểm xét tuyển.
-  if ((program as TargetProgram & { requiresAptitude?: boolean }).requiresAptitude) return { score: null, missing: [] };
+  if ((program as TargetProgram & { requiresAptitude?: boolean }).requiresAptitude) return { score: null, missing: [], options: [] };
   const { rule, origin, source } = resolved;
-  if (rule.unsupportedReason) return { score: null, missing: [] };
+  if (rule.unsupportedReason) return { score: null, missing: [], options: [] };
 
   const needsCombo = rule.components.some((c) => COMBO_SOURCES.includes(c.source));
   let combos: string[] = [""];
@@ -150,7 +152,7 @@ function evaluate(profile: StudentProfile, program: TargetProgram): Evaluation {
     const declared = Array.isArray(program.combinations) ? program.combinations : [];
     const published = declared.filter((c) => COMBINATION_SUBJECTS[c]);
     // Đề án ghi tổ hợp nhưng toàn mã năng khiếu (T00, V00...) → không tính được.
-    if (declared.length > 0 && published.length === 0) return { score: null, missing: [] };
+    if (declared.length > 0 && published.length === 0) return { score: null, missing: [], options: [] };
     const fromRule = (rule.allowedCombinations ?? []).filter((c) => COMBINATION_SUBJECTS[c]);
     if (declared.length === 0 && fromRule.length > 0) {
       // Trường công bố các tổ hợp được nhận ở mức trường: dữ liệu này đã đối chiếu nên không còn là "chưa xác thực".
@@ -158,20 +160,25 @@ function evaluate(profile: StudentProfile, program: TargetProgram): Evaluation {
     } else {
       comboUnverified = declared.length === 0;
       combos = comboUnverified
-        ? (profile.activeCombination && COMBINATION_SUBJECTS[profile.activeCombination] ? [profile.activeCombination] : [])
+        ? exploreUnverified
+          ? Object.keys(COMBINATION_SUBJECTS)
+          : (profile.activeCombination && COMBINATION_SUBJECTS[profile.activeCombination] ? [profile.activeCombination] : [])
         : published;
     }
-    if (combos.length === 0) return { score: null, missing: ["Tổ hợp xét tuyển"] };
+    if (combos.length === 0) return { score: null, missing: ["Tổ hợp xét tuyển"], options: [] };
   }
 
   const missing = new Set<string>();
   let best: MethodScore | null = null;
+  const options: MethodScore[] = [];
   for (const combo of combos) {
     const s = scoreCombo(profile, rule, combo, missing, (program as TargetProgram).majorGroup);
     if (!s) continue;
-    if (!best || s.score > best.score) best = { ...s, method, combo, comboUnverified, ruleOrigin: origin, ruleSource: source };
+    const option = { ...s, method, combo, comboUnverified, ruleOrigin: origin, ruleSource: source };
+    options.push(option);
+    if (!best || option.score > best.score) best = option;
   }
-  return { score: best, missing: best ? [] : [...missing] };
+  return { score: best, missing: best ? [] : [...missing], options };
 }
 
 function scoreCombo(
@@ -234,6 +241,14 @@ function scoreCombo(
 /** Điểm tốt nhất của học sinh cho chương trình (chọn tổ hợp có lợi nhất). null nếu chưa tính được. */
 export function scoreForProgram(profile: StudentProfile, program: TargetProgram): MethodScore | null {
   return evaluate(profile, program).score;
+}
+
+/**
+ * Mọi cách tính được cho chương trình. Với chương trình chưa rõ tổ hợp, trả về điểm theo từng tổ hợp học sinh có điểm
+ * (để nhân với xác suất trường nhận tổ hợp đó); các chương trình khác chỉ có tổ hợp trường công bố.
+ */
+export function scoreOptionsForProgram(profile: StudentProfile, program: TargetProgram): MethodScore[] {
+  return evaluate(profile, program, true).options;
 }
 
 /** Học sinh cần bổ sung điểm gì để tính được chương trình này (rỗng nếu đã tính được hoặc không tính được vì lý do khác). */
