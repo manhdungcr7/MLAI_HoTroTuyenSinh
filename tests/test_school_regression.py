@@ -17,11 +17,11 @@ INTERIM_PARQUET = ROOT / "data" / "interim" / "cutoff_panel_raw.parquet"
 
 # The 77 verified schools confirmed and audit-locked on 2026-09-28
 FROZEN_SCHOOL_SET = {
-    "ANS", "BKA", "C19", "C23", "C25", "CSS", "D61", "D64", "DBL", "DCL",
+    "BKA", "C19", "C23", "C25", "D61", "D64", "DBL", "DCL",
     "DCN", "DDF", "DDP", "DDQ", "DDS", "DDY", "DHC", "DHD", "DHK",
     "DHL", "DHN", "DHT", "DHY", "DMT", "DNB", "DNU", "DPQ", "DPY",
     "DQB", "DQH", "DQU", "DTF", "DTL", "DTN", "DTV", "DVL", "GHA",
-    "GSA", "GTA", "HCB", "HCH", "HCN", "HCS", "HHT", "HTC", "KMA", "LNH",
+    "GSA", "GTA", "HCB", "HCH", "HCN", "HCS", "HTC", "KMA", "LNH",
     "LPH", "NHH", "NHP", "QHI", "QHL", "QHQ", "QHS", "QHY", "QSC", "QST",
     "QSX", "QSY", "SDU", "SP2", "SPD", "SPS", "TDL", "TDV", "TSN", "TTN",
     "TTU", "TYS", "VHH", "XDA", "XDT", "YDS", "YHB"
@@ -33,7 +33,7 @@ FROZEN_SCHOOL_SET = {
 EXCLUDED_COPIED_SOURCE = {"DHC", "DHD", "DHK", "DHL", "DHN", "DHT", "HCH"}
 
 # The 7 key sensitive schools that were previously recovered or audited
-SENSITIVE_TARGETS = ["C19", "C25", "DQB", "DTN", "DVL", "C23", "CSS"]
+SENSITIVE_TARGETS = ["C19", "C25", "DQB", "DTN", "DVL", "C23"]
 
 
 @pytest.fixture(scope="module")

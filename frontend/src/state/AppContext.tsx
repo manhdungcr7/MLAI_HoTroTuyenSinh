@@ -12,6 +12,8 @@ type ScoreKind = "exam" | "hocba";
 interface AppApi {
   profile: StudentProfile;
   updateProfile: (updates: Partial<StudentProfile>) => void;
+  /** Ghi điểm học bạ một môn của một lớp. Khi đủ 3 lớp, điểm trung bình 3 năm của môn đó được cập nhật theo. */
+  setGradeScore: (grade: "10" | "11" | "12", subject: keyof ExamScores, value: number | null) => void;
   /** Ghi điểm một môn (thang 10, null = xóa). Tổ hợp chính được cập nhật theo điểm đã nhập. */
   setScore: (kind: ScoreKind, subject: keyof ExamScores, value: number | null) => void;
   wishlist: WishlistItem[];
@@ -83,6 +85,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const setGradeScore = useCallback((grade: "10" | "11" | "12", subject: keyof ExamScores, value: number | null) => {
+    if (value !== null && (!Number.isFinite(value) || value < 0 || value > 10)) return;
+    const rounded = value === null ? null : Math.round(value * 100) / 100;
+    setState((s) => {
+      const grades = { ...(s.profile.hocBaGrades ?? {}) };
+      const row: ExamScores = { ...(grades[grade] ?? {}) };
+      if (rounded === null) delete row[subject];
+      else row[subject] = rounded;
+      grades[grade] = row;
+      const hocBa: ExamScores = { ...(s.profile.hocBaScores ?? {}) };
+      const values = (["10", "11", "12"] as const).map((g) => grades[g]?.[subject]);
+      if (values.every((v) => typeof v === "number")) hocBa[subject] = Math.round(((values as number[]).reduce((a, b) => a + b, 0) / 3) * 100) / 100;
+      const profile = { ...s.profile, hocBaGrades: grades, hocBaScores: hocBa };
+      const combo = bestCombination(profile.examScores) ?? bestCombination(profile.hocBaScores) ?? bestCombination(grades["12"]) ?? bestCombination(grades["11"]);
+      return { ...s, profile: { ...profile, activeCombination: combo ?? profile.activeCombination } };
+    });
+  }, []);
+
   const addWish = useCallback((c: CandidateOption): boolean => {
     let added = false;
     setState((s) => {
@@ -129,11 +149,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<AppApi>(
     () => ({
-      profile: state.profile, updateProfile, setScore,
+      profile: state.profile, updateProfile, setScore, setGradeScore,
       wishlist: state.wishlist, addWish, removeWish, moveWish, setWishlist,
       target: state.target, setTarget, toggleFavorite, resetAll, epoch, catalog, catalogStatus, retryCatalog,
     }),
-    [state, epoch, catalog, catalogStatus, retryCatalog, updateProfile, setScore, addWish, removeWish, moveWish, setWishlist, setTarget, toggleFavorite, resetAll],
+    [state, epoch, catalog, catalogStatus, retryCatalog, updateProfile, setScore, setGradeScore, addWish, removeWish, moveWish, setWishlist, setTarget, toggleFavorite, resetAll],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

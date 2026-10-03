@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Check, GraduationCap, School, Search, X } from "lucide-react";
 import { useApp } from "@/state/AppContext";
 import { useRouter } from "@/routes";
-import { ExamScores, MAJOR_GROUPS, PROVINCES, PriorityArea, PriorityObject, RelocationWillingness } from "@/engine/types";
+import { AWARD_LABELS_VI, AwardLevel, ExamScores, MAJOR_GROUPS, PROVINCES, PriorityArea, PriorityObject, RankLevel, RelocationWillingness } from "@/engine/types";
+import { fold, matchesQuery } from "@/lib/text";
 import { SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { bestCombination, countEntered } from "@/engine/scoring/combo";
 import { UNLIMITED_BUDGET_VND } from "@/engine/decision/constraints";
 
-export type StepId = "year" | "exam" | "hocba" | "cert" | "place" | "major" | "budget" | "priority";
-export const STEPS: StepId[] = ["year", "exam", "hocba", "cert", "place", "major", "budget", "priority"];
+export type StepId = "year" | "exam" | "hocba" | "cert" | "award" | "record" | "place" | "major" | "budget" | "priority";
+export const STEPS: StepId[] = ["year", "exam", "hocba", "cert", "award", "record", "place", "major", "budget", "priority"];
 const REQUEST_KEY = "nv_start_step";
 
 /** Đặt bước sẽ mở khi vào trang Tìm ngành (dùng khi cần bổ sung điểm từ trang Kết quả). */
@@ -120,6 +121,126 @@ function ScoreGrid({ kind }: { kind: "exam" | "hocba" }) {
   );
 }
 
+const AWARD_CHOICES: (AwardLevel | null)[] = [null, "tinh_ba", "tinh_nhi", "tinh_nhat", "quoc_gia", "quoc_te"];
+const RANK_LABELS: Record<RankLevel, string> = { gioi: "Giỏi", kha: "Khá", trung_binh: "Trung bình", yeu: "Yếu" };
+const CONDUCT_LABELS: Record<RankLevel, string> = { gioi: "Tốt", kha: "Khá", trung_binh: "Trung bình", yeu: "Yếu" };
+const RANKS: RankLevel[] = ["gioi", "kha", "trung_binh", "yeu"];
+
+/** Chọn ngành hoặc trường cụ thể bằng cách gõ tên (không cần gõ dấu). */
+function MajorSearch() {
+  const { profile, updateProfile, catalog } = useApp();
+  const [query, setQuery] = useState("");
+  const names = useMemo(() => profile.interestMajorNames ?? [], [profile.interestMajorNames]);
+  const schools = useMemo(() => profile.preferredSchoolCodes ?? [], [profile.preferredSchoolCodes]);
+
+  const vocabulary = useMemo(() => {
+    const majors = new Map<string, { name: string; count: number }>();
+    const schoolList = new Map<string, string>();
+    for (const p of catalog?.programs ?? []) {
+      const key = fold(p.majorName);
+      const hit = majors.get(key);
+      if (hit) hit.count += 1;
+      else majors.set(key, { name: p.majorName, count: 1 });
+      schoolList.set(p.schoolCode, p.schoolName);
+    }
+    return { majors: [...majors.values()], schools: [...schoolList.entries()].map(([code, name]) => ({ code, name })) };
+  }, [catalog]);
+
+  const suggestions = useMemo(() => {
+    if (query.trim().length < 2) return [];
+    const m = vocabulary.majors
+      .filter((x) => matchesQuery(x.name, query) && !names.some((n) => fold(n) === fold(x.name)))
+      .sort((a, b) => a.name.length - b.name.length || b.count - a.count)
+      .slice(0, 5)
+      .map((x) => ({ kind: "major" as const, key: x.name, label: x.name, hint: `${x.count} chương trình` }));
+    const sc = vocabulary.schools
+      .filter((x) => (matchesQuery(x.name, query) || fold(x.code) === fold(query)) && !schools.includes(x.code))
+      .slice(0, 4)
+      .map((x) => ({ kind: "school" as const, key: x.code, label: x.name, hint: x.code }));
+    return [...m, ...sc];
+  }, [query, vocabulary, names, schools]);
+
+  const add = (kind: "major" | "school", key: string) => {
+    if (kind === "major") updateProfile({ interestMajorNames: [...names, key] });
+    else updateProfile({ preferredSchoolCodes: [...schools, key] });
+    setQuery("");
+  };
+  const schoolName = (code: string) => vocabulary.schools.find((x) => x.code === code)?.name ?? code;
+
+  return (
+    <div className="space-y-3">
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Gõ tên ngành hoặc trường, ví dụ: y khoa, bách khoa"
+          aria-label="Tìm ngành hoặc trường"
+          className="h-12 w-full rounded-2xl border-2 border-slate-200 bg-white pl-12 pr-4 text-base font-medium text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      {suggestions.length > 0 && (
+        <ul className="space-y-1.5">
+          {suggestions.map((x) => (
+            <li key={`${x.kind}-${x.key}`}>
+              <button type="button" onClick={() => add(x.kind, x.key)} className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left hover:border-blue-400 cursor-pointer">
+                {x.kind === "major" ? <GraduationCap className="h-5 w-5 shrink-0 text-blue-600" /> : <School className="h-5 w-5 shrink-0 text-emerald-600" />}
+                <span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-900">{x.label}</span>
+                <span className="shrink-0 text-xs text-slate-500">{x.hint}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {(names.length > 0 || schools.length > 0) && (
+        <div className="flex flex-wrap gap-2">
+          {names.map((n) => (
+            <button key={`n-${n}`} type="button" onClick={() => updateProfile({ interestMajorNames: names.filter((x) => x !== n) })} className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm font-medium text-white cursor-pointer" aria-label={`Bỏ ${n}`}>
+              {n} <X className="h-3.5 w-3.5" />
+            </button>
+          ))}
+          {schools.map((c) => (
+            <button key={`s-${c}`} type="button" onClick={() => updateProfile({ preferredSchoolCodes: schools.filter((x) => x !== c) })} className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white cursor-pointer" aria-label={`Bỏ ${schoolName(c)}`}>
+              {schoolName(c)} <X className="h-3.5 w-3.5" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Điểm học bạ theo từng lớp: một số trường chỉ lấy lớp 11, 12 hoặc cả năm lớp 12. */
+function GradeScores() {
+  const { profile, setGradeScore } = useApp();
+  const [grade, setGrade] = useState<"10" | "11" | "12">("12");
+  const row = profile.hocBaGrades?.[grade];
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2" role="tablist" aria-label="Lớp">
+        {(["10", "11", "12"] as const).map((g) => (
+          <button key={g} type="button" role="tab" aria-selected={grade === g} onClick={() => setGrade(g)} className={`flex-1 rounded-xl py-2 text-sm font-medium cursor-pointer ${grade === g ? "bg-blue-600 text-white" : "bg-white text-slate-700 ring-1 ring-slate-200"}`}>
+            Lớp {g}
+          </button>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {MAIN.map((sub) => (
+          <NumberField
+            key={`${grade}-${sub}`}
+            name={`Học bạ lớp ${grade} – ${SUBJECT_LABELS_VI[sub] ?? sub}`}
+            label={SUBJECT_LABELS_VI[sub] ?? sub}
+            value={row?.[sub]}
+            max={10}
+            step="0.05"
+            onChange={(v) => setGradeScore(grade, sub, v)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const AREAS: { value: PriorityArea; label: string }[] = [
   { value: "KV3", label: "KV3" }, { value: "KV2", label: "KV2" }, { value: "KV2-NT", label: "KV2-NT" }, { value: "KV1", label: "KV1" },
 ];
@@ -139,6 +260,8 @@ const TITLES: Record<StepId, string> = {
   exam: "Điểm thi của bạn",
   hocba: "Điểm học bạ của bạn",
   cert: "Chứng chỉ và điểm ĐGNL",
+  award: "Bạn có giải học sinh giỏi không?",
+  record: "Học lực và hạnh kiểm lớp 12",
   place: "Bạn muốn học ở đâu?",
   major: "Bạn thích ngành nào?",
   budget: "Học phí tối đa mỗi năm?",
@@ -150,12 +273,15 @@ export function Wizard() {
   const router = useRouter();
   const [index, setIndex] = useState(takeRequestedStep);
   const [notice, setNotice] = useState<string | null>(null);
+  const [perGrade, setPerGrade] = useState(false);
   const timer = useRef<number | null>(null);
   const step = STEPS[index];
 
   useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
 
-  const hasScores = bestCombination(profile.examScores) !== null || bestCombination(profile.hocBaScores) !== null;
+  const hasAltScore = (["dgnl_hcm", "dgnl_hn", "dgtd_bk"] as const).some((k) => (profile.altScores?.[k] ?? 0) > 0);
+  const hasGradeScores = (['10', '11', '12'] as const).some((g) => bestCombination(profile.hocBaGrades?.[g]) !== null);
+  const hasScores = bestCombination(profile.examScores) !== null || bestCombination(profile.hocBaScores) !== null || hasGradeScores || hasAltScore;
   const last = index === STEPS.length - 1;
 
   const go = (next: number) => {
@@ -166,7 +292,7 @@ export function Wizard() {
 
   const finish = () => {
     if (!hasScores) {
-      setNotice("Cần điểm 3 môn của một tổ hợp (điểm thi hoặc học bạ) để tính kết quả.");
+      setNotice("Cần điểm 3 môn của một tổ hợp (điểm thi hoặc học bạ) hoặc điểm ĐGNL/ĐGTD để tính kết quả.");
       setIndex(STEPS.indexOf("exam"));
       return;
     }
@@ -183,12 +309,14 @@ export function Wizard() {
   const alt = profile.altScores ?? {};
   const setAlt = (key: "ielts" | "dgnl_hcm" | "dgnl_hn" | "dgtd_bk", v: number | null) => updateProfile({ altScores: { ...alt, [key]: v } });
 
-  const skippable = step === "hocba" || step === "cert" || step === "major" || step === "priority" || (step === "exam" && !countEntered(profile.examScores));
+  const skippable = step === "hocba" || step === "cert" || step === "award" || step === "record" || step === "major" || step === "priority" || (step === "exam" && !countEntered(profile.examScores));
   const filled =
     step === "exam" ? countEntered(profile.examScores) > 0
-    : step === "hocba" ? countEntered(profile.hocBaScores) > 0
+    : step === "hocba" ? countEntered(profile.hocBaScores) > 0 || hasGradeScores
     : step === "cert" ? Object.values(alt).some((v) => typeof v === "number")
-    : step === "major" ? interest.length > 0
+    : step === "award" ? profile.award != null
+    : step === "record" ? profile.academicRank != null || profile.conduct != null
+    : step === "major" ? interest.length > 0 || (profile.interestMajorNames ?? []).length > 0 || (profile.preferredSchoolCodes ?? []).length > 0
     : true;
   const nextLabel = last ? "Xem kết quả" : skippable && !filled ? "Bỏ qua" : "Tiếp tục";
 
@@ -210,14 +338,50 @@ export function Wizard() {
             ))}
           </div>
         )}
-        {step === "exam" && <ScoreGrid kind="exam" />}
-        {step === "hocba" && <ScoreGrid kind="hocba" />}
+        {step === "exam" && (
+          <div className="space-y-3">
+            <ScoreGrid kind="exam" />
+            <p className="text-sm text-slate-500">Chưa thi? Nhập điểm thi thử hoặc điểm bạn dự kiến.</p>
+          </div>
+        )}
+        {step === "hocba" && (
+          <div className="space-y-4">
+            {perGrade ? <GradeScores /> : <ScoreGrid kind="hocba" />}
+            <button type="button" onClick={() => setPerGrade((v) => !v)} className="text-sm font-medium text-blue-700 underline cursor-pointer">
+              {perGrade ? "Nhập trung bình 3 năm" : "Nhập theo từng lớp (một số trường chỉ lấy lớp 11, 12)"}
+            </button>
+          </div>
+        )}
         {step === "cert" && (
           <div className="grid grid-cols-2 gap-3">
+            <p className="col-span-2 text-sm text-slate-500">Chỉ nhập những gì bạn có. TOEIC, TOEFL mỗi trường quy đổi khác nhau nên ứng dụng hiện chỉ tính IELTS.</p>
             <NumberField name="IELTS" label="IELTS (0–9)" value={alt.ielts} max={9} step="0.5" onChange={(v) => setAlt("ielts", v)} />
             <NumberField name="ĐGNL ĐHQG-HCM" label="ĐGNL ĐHQG-HCM (/1200)" value={alt.dgnl_hcm} max={1200} step="1" onChange={(v) => setAlt("dgnl_hcm", v)} />
             <NumberField name="ĐGNL ĐHQG Hà Nội" label="ĐGNL ĐHQG Hà Nội (/150)" value={alt.dgnl_hn} max={150} step="1" onChange={(v) => setAlt("dgnl_hn", v)} />
             <NumberField name="ĐGTD Bách khoa" label="ĐGTD Bách khoa (/100)" value={alt.dgtd_bk} max={100} step="0.5" onChange={(v) => setAlt("dgtd_bk", v)} />
+          </div>
+        )}
+        {step === "award" && (
+          <div className="grid gap-3">
+            {AWARD_CHOICES.map((a) => (
+              <Choice key={a ?? "none"} label={a ? AWARD_LABELS_VI[a] : "Không có"} selected={(profile.award ?? null) === a} onClick={() => choose(() => updateProfile({ award: a }))} />
+            ))}
+          </div>
+        )}
+        {step === "record" && (
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <p className="text-sm text-slate-500">Học lực</p>
+              <div className="flex flex-wrap gap-2.5">
+                {RANKS.map((r) => (<Chip key={r} label={RANK_LABELS[r]} on={profile.academicRank === r} onClick={() => updateProfile({ academicRank: profile.academicRank === r ? null : r })} />))}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-slate-500">Hạnh kiểm</p>
+              <div className="flex flex-wrap gap-2.5">
+                {RANKS.map((r) => (<Chip key={r} label={CONDUCT_LABELS[r]} on={profile.conduct === r} onClick={() => updateProfile({ conduct: profile.conduct === r ? null : r })} />))}
+              </div>
+            </div>
           </div>
         )}
         {step === "place" && (
@@ -239,10 +403,13 @@ export function Wizard() {
           </div>
         )}
         {step === "major" && (
-          <div className="flex flex-wrap gap-2.5">
-            {MAJOR_GROUPS.map((g) => (
-              <Chip key={g.value} label={g.label} on={interest.includes(g.value)} onClick={() => updateProfile({ interestMajorGroups: interest.includes(g.value) ? interest.filter((x) => x !== g.value) : [...interest, g.value] })} />
-            ))}
+          <div className="space-y-5">
+            <MajorSearch />
+            <div className="flex flex-wrap gap-2.5">
+              {MAJOR_GROUPS.map((g) => (
+                <Chip key={g.value} label={g.label} on={interest.includes(g.value)} onClick={() => updateProfile({ interestMajorGroups: interest.includes(g.value) ? interest.filter((x) => x !== g.value) : [...interest, g.value] })} />
+              ))}
+            </div>
           </div>
         )}
         {step === "budget" && (
@@ -254,6 +421,7 @@ export function Wizard() {
         )}
         {step === "priority" && (
           <div className="space-y-6">
+            <p className="text-sm text-slate-500">Khu vực tính theo nơi bạn học THPT lâu nhất. Không rõ thì chọn KV3 và để Không ở mục đối tượng; trường sẽ xác nhận khi bạn nộp hồ sơ.</p>
             <div className="space-y-2">
               <p className="text-sm font-bold text-slate-500">Khu vực</p>
               <div className="flex flex-wrap gap-2.5">

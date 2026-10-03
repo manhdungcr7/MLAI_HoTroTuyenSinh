@@ -121,7 +121,7 @@ function comboComponentScores(
         usedIelts = true;
       }
     }
-    if (typeof v !== "number") { needs.add(`Điểm môn ${SUBJECT_LABELS_VI[sub] ?? sub}`); return null; }
+    if (typeof v !== "number") { needs.add(`Điểm ${component.source === "hocba_combo" ? "học bạ" : "thi"} môn ${SUBJECT_LABELS_VI[sub] ?? sub}`); return null; }
     weighted += w * clamp10(v);
     max += w * 10;
     rawTotal += clamp10(v);
@@ -135,6 +135,8 @@ interface Evaluation {
   /** Mọi tổ hợp tính được (chỉ đầy đủ khi khám phá tổ hợp chưa xác thực). */
   options: MethodScore[];
 }
+
+const TEACHER_MIN_EXAM_TOTAL = 18;
 
 function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnverified = false): Evaluation {
   const method = programMethod(program);
@@ -228,11 +230,19 @@ function scoreCombo(
   }
   if (rule.minHocBaComboTotal !== undefined && hocBaRaw !== null && hocBaRaw < rule.minHocBaComboTotal) return null;
 
+  // Ngành sư phạm (đề án 2026 của nhiều trường): ngưỡng đầu vào 18 điểm không tính ưu tiên/điểm cộng; xét học bạ cần học lực lớp 12 giỏi.
+  if (majorGroup === "su_pham") {
+    if (usesExam && examRaw !== null && r2(examRaw) < TEACHER_MIN_EXAM_TOTAL) return null;
+    if (hocBaRaw !== null && profile.academicRank && profile.academicRank !== "gioi") return null;
+  }
+
   let certPoints = 0;
   const ielts = profile.altScores?.ielts;
   if (ielts && rule.certBonus?.ielts && !rule.certBonus.excludedMajorGroups?.includes(majorGroup)) {
     for (const t of rule.certBonus.ielts) if (ielts >= t.min && t.points > certPoints) certPoints = t.points;
   }
+  const award = profile.award ? rule.awardBonus?.[profile.award] ?? 0 : 0;
+  certPoints += award;
   const priority = rule.priority === "standard" && profile.priority ? calculateTotalPriorityBonus(profile.priority, base) : 0;
   const bonus = r2(Math.min(rule.bonusCap ?? DEFAULT_BONUS_CAP, certPoints + priority));
   return { score: Math.min(30, r2(base + bonus)), rawScore: base, bonus, usedIeltsConversion: usedIelts };

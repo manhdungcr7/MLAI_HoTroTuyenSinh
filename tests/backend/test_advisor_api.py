@@ -6,6 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.app.main import app
+from common import admission_core as core
 from backend.app.security import rate_limiter
 
 client = TestClient(app)
@@ -34,7 +35,8 @@ def test_search_ranks_by_probability_and_applies_constraints():
     assert body["total"] > 0
     assert all(item["majorGroup"] == "cntt" for item in body["items"])
     pct = [item["probabilityPercent"] for item in body["items"]]
-    assert pct == sorted(pct, reverse=True)
+    banded = [min(97, v) for v in pct]  # từ 97% trở lên xếp theo điểm chuẩn
+    assert banded == sorted(banded, reverse=True)
     assert sum(body["tiers"].values()) == body["total"]
     assert set(body["notComputable"]) == {"methodNotSupported", "missingInputs"}
 
@@ -108,3 +110,18 @@ def test_meta_known_gaps_are_computed_not_stale():
     gaps = client.get("/api/meta").json()["known_gaps"]
     text = " ".join(gaps)
     assert "58/440" not in text and "0.3%" not in text
+
+
+def test_search_accepts_named_major_award_and_dgnl_fields():
+    profile = {**PROFILE, "interestMajorGroups": [], "interestMajorNames": ["khoa hoc may tinh"], "award": "tinh_nhat",
+               "academicRank": "gioi", "conduct": "gioi", "altScores": {"ielts": 6.5, "dgnl_hcm": 950}}
+    r = client.post("/api/advisor/search", json={"profile": profile, "limit": 50})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["total"] > 0
+    assert all("khoa hoc may tinh" in core.fold(item["majorName"]) for item in body["items"])
+
+
+def test_search_rejects_unknown_award():
+    r = client.post("/api/advisor/search", json={"profile": {**PROFILE, "award": "vo_dich"}, "limit": 5})
+    assert r.status_code == 422

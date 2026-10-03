@@ -89,3 +89,18 @@ def test_major_group_override_is_validated_like_a_method():
     broken = _rule({"THPT": {"priority": "standard", "components": [{"source": "exam_combo", "weight": 1}],
                              "majorGroupOverrides": {"ngon_ngu": {"components": [{"source": "exam_combo", "weight": 0.5}]}}}})
     assert any("ngon_ngu" in p for p in core.validate_school_rule(broken))
+
+
+def test_award_bonus_and_teacher_rules():
+    core.register_school_rules(core.load_school_rules())
+    base = {"schoolCode": "GHA", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "kinh_te"}
+    with_award = core.score_for_program({**PROFILE, "award": "tinh_nhat"}, base)
+    assert with_award["score"] == pytest.approx(24.0)  # 21,75 + IELTS 1,25 + giải nhất tỉnh 1,00
+    teacher = {"schoolCode": "ZZ0", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "su_pham"}
+    low = {**PROFILE, "examScores": {"toan": 6, "van": 6, "anh": 5.5}, "priority": {"area": "KV1", "object": "uu_tien_1"}}
+    assert core.score_for_program(low, teacher) is None  # 17,5 < 18 dù cộng ưu tiên
+    ok = {**PROFILE, "examScores": {"toan": 6, "van": 6, "anh": 6}}
+    assert core.score_for_program(ok, teacher) is not None
+    hb = {"schoolCode": "ZZ0", "admissionMethod": "HOC_BA", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "su_pham"}
+    assert core.score_for_program({**PROFILE, "academicRank": "kha"}, hb) is None
+    assert core.score_for_program({**PROFILE, "academicRank": "gioi"}, hb) is not None

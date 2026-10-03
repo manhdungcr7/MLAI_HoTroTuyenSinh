@@ -70,15 +70,15 @@ export default function ImprovePage() {
       ) : (
         roi.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold text-slate-900">Học thêm môn nào?</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Tăng thêm 1 điểm môn nào?</h2>
             <ol className="space-y-2">
               {roi.map((r, i) => (
                 <li key={r.subject} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3.5">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">{i + 1}</span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-base font-medium text-slate-900">{r.subjectVi}</p>
+                    <p className="text-base font-medium text-slate-900">{r.subjectVi} <span className="text-sm font-normal text-slate-500">{r.currentScore} → {r.simulatedScore}</span></p>
                     <p className="text-sm text-slate-600">
-                      +0,5 điểm: {r.gapReduction > 0 ? `gần hơn ${r.gapReduction.toFixed(2)} điểm` : "ít đổi kết quả"}
+                      Khả năng đỗ ngành này {formatProbability(r.admitProbBefore)} → {formatProbability(r.admitProbAfter)}
                       {r.unlockedOptionsCount > 0 ? `, mở thêm ${r.unlockedOptionsCount} ngành` : ""}
                     </p>
                   </div>

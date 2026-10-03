@@ -75,3 +75,31 @@ def test_dash_and_code_artifacts_are_tidied():
     assert repair_major_label("Kế toán - 7340301") == "Kế toán"
     assert repair_major_label("Tài chính - Ngân hàng") == "Tài chính - Ngân hàng"
     assert repair_major_label("Kế toán doanh nghiệp (Theo định hướng ACCA) - 7340301 - Kế toán") == "Kế toán doanh nghiệp (Theo định hướng ACCA) - Kế toán"
+
+
+def test_labels_with_annotations_are_cleaned_and_control_chars_rejected():
+    from pipeline.clean.reconcile import is_garbage_major_label, repair_major_label
+
+    assert repair_major_label("Ngành Kiến trúc (*) Tổ hợp V00, V01, H02") == "Kiến trúc"
+    assert repair_major_label("Hộ sinh* - Hộ sinh") == "Hộ sinh"
+    assert repair_major_label("Công nghệ hóa học gồm 03 chuyên ngành: Công nghệ kỹ thuật hóa học; Hóa dược.") == "Công nghệ hóa học"
+    assert is_garbage_major_label("Công nghê\x01ky\x01thuâṭ ô tô") is True
+
+
+def test_non_civil_schools_are_dropped():
+    import pandas as pd
+
+    from pipeline.clean.reconcile import drop_non_civil_schools
+
+    frame = pd.DataFrame({"school_code": ["CSS", "BKA", "HHT"], "score": [20.0, 25.0, 21.0]})
+    assert list(drop_non_civil_schools(frame)["school_code"]) == ["BKA"]
+
+
+def test_subject_lists_with_aptitude_words_are_rejected():
+    from pipeline.clean.reconcile import is_garbage_major_label
+
+    for junk in ["Ngữ văn, GD công dân, Tiếng Anh", "Ngữ văn, Giáo dục công dân, Năng khiếu (hát, đọc diễn cảm)",
+                 "Ngữ văn, Lịch sử, Địa lý;", "Ngữ văn, Toán, Đọc diễn cảm - Hát", "Ngữ văn, Năng khiếu 1, Năng khiếu 2"]:
+        assert is_garbage_major_label(junk), junk
+    assert not is_garbage_major_label("Sư phạm Ngữ văn")
+    assert not is_garbage_major_label("Công nghệ thông tin")

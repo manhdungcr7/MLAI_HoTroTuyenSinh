@@ -6,7 +6,7 @@
     "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Giao thông vận tải (phân hiệu TP.HCM)",
     "sha256": "6a6592ebcad85c1968aad6fc288f3d4f59040945c6b97d6c6c42722802cb3895",
     "verifiedAt": "2026-10-03",
-    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 1.1.1–1.1.2: Toán nhân 2 (trừ Ngôn ngữ Anh); mục 2.2: điểm cộng IELTS 5.0→0.5 … ≥7.0→1.5. Chưa mã hóa điều kiện học bạ (không môn nào dưới 5,5 mỗi năm, thi Toán ≥5)."
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 1.1.1–1.1.2: Toán nhân 2 (trừ Ngôn ngữ Anh); mục 2.2: điểm cộng IELTS 5.0→0.5 … ≥7.0→1.5. Chưa mã hóa điều kiện học bạ (không môn nào dưới 5,5 mỗi năm, thi Toán ≥5). Điểm cộng giải nhất/nhì/ba học sinh giỏi cấp tỉnh: 1,00 / 0,75 / 0,50 (mục 5.3, bảng điểm cộng)."
   },
   "methods": {
     "THPT": {
@@ -53,6 +53,11 @@
             }
           ]
         }
+      },
+      "awardBonus": {
+        "tinh_nhat": 1.0,
+        "tinh_nhi": 0.75,
+        "tinh_ba": 0.5
       }
     },
     "HOC_BA": {
@@ -99,6 +104,11 @@
             }
           ]
         }
+      },
+      "awardBonus": {
+        "tinh_nhat": 1.0,
+        "tinh_nhi": 0.75,
+        "tinh_ba": 0.5
       }
     }
   }

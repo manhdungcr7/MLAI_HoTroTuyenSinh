@@ -17,6 +17,7 @@ import { StudentProfile, TargetProgram } from "../src/engine/types";
 import { sanitize } from "../src/state/storage";
 import { comboAcceptancePrior } from "../src/engine/decision/combo-prior";
 import { FORECAST_YEAR, calculateAdmitProbability, sigmaScaleFor } from "../src/engine/admissions/probability";
+import { calculateSubjectRoiList } from "../src/engine/roi/engine";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -74,7 +75,7 @@ assert(near(zz3?.score, 20) && near(zz3?.rawScore, 20), "Học bạ nhân hệ s
 // Hồ sơ 3 (D01: 7 + 6 + 4 = 17) + điểm thưởng IELTS 6.5 = 0.75 cho ngành kinh tế; ngành sư phạm không được cộng.
 const zz4 = scoreForProgram(profile(3), program(9));
 assert(near(zz4?.score, 17.75) && zz4?.combo === "D01" && zz4?.comboUnverified === false, "Tổ hợp trường nhận (D01) thay cho tổ hợp suy đoán; điểm thưởng IELTS theo bảng của trường");
-assert(near(scoreForProgram(profile(3), program(10))?.score, 17), "Ngành thuộc nhóm bị loại khỏi điểm thưởng chứng chỉ thì không được cộng");
+assert(scoreForProgram(profile(3), program(10)) === null, "Ngành sư phạm: tổng 3 môn thi 17 dưới ngưỡng 18 thì không được xét (dù có điểm cộng)");
 // Phương thức không có quy tắc
 assert(scoreForProgram(profile(0), program(5)) === null && missingInputsForProgram(profile(0), program(5)).length === 0, "Phương thức chưa có quy tắc thì không tính, không bịa");
 
@@ -154,6 +155,21 @@ console.log("\n🎉 TẤT CẢ KIỂM THỬ QUY TẮC TRƯỜNG, ĐỀ XUẤT V�
 // Hồ sơ 0 (A00: 9 + 8 + 8.5): Toán x2 → (18 + 8 + 8.5)/40·30 = 25.875; ngôn ngữ không hệ số → 25.5 (ưu tiên KV2 cộng thêm 0.15)
 clearSchoolRules();
 registerSchoolRules(fixture.rules);
-const zz9Math = scoreForProgram(profile(0), program(fixture.programs.length - 2));
-const zz9Language = scoreForProgram(profile(0), program(fixture.programs.length - 1));
+const zz9Math = scoreForProgram(profile(0), program(11));
+const zz9Language = scoreForProgram(profile(0), program(12));
 assert(near(zz9Math?.rawScore, 25.88) && near(zz9Language?.rawScore, 25.5), "Ngoại lệ theo nhóm ngành: ngành ngôn ngữ không nhân hệ số Toán, các ngành khác vẫn nhân");
+
+// ---- Điểm cộng giải thưởng, ngưỡng và điều kiện học lực của ngành sư phạm ----
+clearSchoolRules();
+registerSchoolRules(fixture.rules);
+// Hồ sơ 4 (giải nhì tỉnh 0,75): 25.88 + 0.75 + ưu tiên 0.14 = 26.77; không có giải: 26.02
+const award = scoreForProgram(profile(4), program(11));
+assert(near(award?.score, 26.77) && near(scoreForProgram(profile(0), program(11))?.score, 26.02), "Giải học sinh giỏi cấp tỉnh được cộng điểm theo văn bản của trường");
+assert(scoreForProgram(profile(5), program(13)) === null && scoreForProgram(profile(0), program(13)) !== null, "Ngành sư phạm: tổng 3 môn thi dưới 18 thì không được xét theo điểm thi");
+assert(scoreForProgram(profile(4), program(14)) === null && scoreForProgram(profile(5), program(14)) !== null, "Ngành sư phạm xét học bạ: học lực lớp 12 chưa giỏi thì không được xét");
+
+// ---- Học thêm môn nào: mô phỏng tăng 1 điểm từng môn của tổ hợp ----
+const roiTarget = { programId: "roi", schoolCode: "ZZ9", schoolName: "Z", majorName: "Ngành thử", majorGroup: "kinh_te", forecastP10: 24, forecastP50: 26.5, forecastP90: 28, tuitionVnd: null, employmentRate: null, dataPassport: "", combinations: ["A00"], admissionMethod: "THPT" } as unknown as TargetProgram;
+const roi = calculateSubjectRoiList(profile(0), roiTarget, [roiTarget]);
+assert(roi.length === 3 && roi.every((r) => r.admitProbAfter >= r.admitProbBefore && r.simulatedScore <= 10), "Mô phỏng tăng điểm: xác suất đỗ không giảm và điểm không vượt 10");
+assert(roi[0].admitProbAfter - roi[0].admitProbBefore >= roi[2].admitProbAfter - roi[2].admitProbBefore, "Môn mang lại nhiều lợi nhất xếp đầu");

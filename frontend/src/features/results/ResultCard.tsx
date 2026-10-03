@@ -1,8 +1,9 @@
-import React from "react";
-import { Plus, Check, AlertCircle, BadgeCheck, Heart } from "lucide-react";
+import React, { useState } from "react";
+import { Plus, Check, AlertCircle, BadgeCheck, Heart, ChevronDown, ExternalLink } from "lucide-react";
 import { CandidateOption } from "@/engine/types";
 import { METHOD_SHORT_VI } from "@/engine/scoring/method-score";
 import { formatProbability } from "@/lib/format";
+import { ProgramCatalogItem } from "@/data/catalog";
 
 const TIER = {
   an_toan: { label: "Chắc đỗ", bar: "bg-emerald-500", text: "text-emerald-700", avatar: "from-emerald-500 to-teal-500" },
@@ -16,17 +17,21 @@ interface ResultCardProps {
   onToggle: (c: CandidateOption) => void;
   favorite: boolean;
   onFavorite: (c: CandidateOption) => void;
+  note?: string | null;
+  program?: ProgramCatalogItem;
 }
 
 /** Một ngành của một trường: xác suất đỗ nổi bật nhất, thêm vào nguyện vọng bằng một lần bấm. */
-export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }: ResultCardProps) {
+export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite, note, program }: ResultCardProps) {
+  const [open, setOpen] = useState(false);
   const tier = TIER[c.role];
   const pct = Math.max(1, Math.min(100, Math.round(c.admitProbability * 100)));
   const needsCheck = c.methodInferred || c.combinationsVerified === false;
   const inList = rankInWishlist !== null;
 
   return (
-    <article className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+    <div className="flex gap-3">
       <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-[11px] font-bold text-white ${tier.avatar}`} aria-hidden="true">
         {c.schoolCode.slice(0, 4)}
       </div>
@@ -62,9 +67,11 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }
             </span>
           )}
         </div>
-        <p className="mt-1.5 text-[11px] text-slate-500">
+        <p className="mt-1.5 text-xs text-slate-500">
           bạn {c.userScore.toFixed(2)} · chuẩn dự kiến {c.cutoffP50.toFixed(1)}
+          {c.tuitionVnd ? ` · ~${Math.round(c.tuitionVnd / 1_000_000)} triệu/năm` : ""}
         </p>
+        {note && <p className="mt-1 text-xs font-medium text-amber-700">{note}</p>}
       </div>
 
       <div className="flex w-24 shrink-0 flex-col items-end justify-between gap-2 sm:w-28">
@@ -85,6 +92,51 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }
           {inList ? <><Check className="h-3.5 w-3.5" /> NV {rankInWishlist}</> : <><Plus className="h-3.5 w-3.5" /> Thêm</>}
         </button>
       </div>
+    </div>
+    <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="mt-3 flex items-center gap-1 text-xs font-medium text-blue-700 cursor-pointer">
+      {open ? "Ẩn chi tiết" : "Vì sao ra kết quả này?"} <ChevronDown className={`h-3.5 w-3.5 transition ${open ? "rotate-180" : ""}`} />
+    </button>
+    {open && <Details c={c} program={program} />}
     </article>
+  );
+}
+
+function Details({ c, program }: { c: CandidateOption; program?: ProgramCatalogItem }) {
+  const years = Object.entries(program?.cutoffs ?? {}).sort((a, b) => a[0].localeCompare(b[0]));
+  const diff = c.userScore - c.cutoffP50;
+  const sourceUrl = program?.sourceUrl;
+  return (
+    <dl className="mt-3 space-y-2.5 border-t border-slate-100 pt-3 text-sm text-slate-700">
+      <div>
+        <dt className="text-xs text-slate-500">Điểm của bạn so với điểm chuẩn dự kiến</dt>
+        <dd>{c.userScore.toFixed(2)} so với {c.cutoffP50.toFixed(1)}: {diff >= 0 ? `dư ${diff.toFixed(2)}` : `thiếu ${Math.abs(diff).toFixed(2)}`} điểm. Điểm chuẩn có thể dao động từ {(c.cutoffP10 ?? c.cutoffP50).toFixed(1)} đến {(c.cutoffP90 ?? c.cutoffP50).toFixed(1)}.</dd>
+      </div>
+      {years.length > 0 && (
+        <div>
+          <dt className="text-xs text-slate-500">Điểm chuẩn các năm</dt>
+          <dd>{years.map(([y, v]) => `${y}: ${v.toFixed(2)}`).join(" · ")}</dd>
+        </div>
+      )}
+      <div>
+        <dt className="text-xs text-slate-500">Cách tính điểm của bạn</dt>
+        <dd>
+          {c.ruleOrigin === "school"
+            ? "Theo quy chế riêng của trường (hệ số môn, điểm cộng, ngưỡng đầu vào đã đối chiếu với đề án)."
+            : "Công thức chung: tổng điểm 3 môn của tổ hợp (hoặc trung bình học bạ) cộng điểm ưu tiên. Trường này chưa có quy tắc riêng trong ứng dụng, hãy kiểm tra đề án."}
+        </dd>
+      </div>
+      {c.employmentRate != null && (
+        <div>
+          <dt className="text-xs text-slate-500">Sinh viên có việc làm sau tốt nghiệp</dt>
+          <dd>{Math.round(c.employmentRate * 100)}%</dd>
+        </div>
+      )}
+      {(sourceUrl || c.ruleSource) && (
+        <div className="flex flex-wrap gap-x-4 gap-y-1">
+          {sourceUrl && <a href={sourceUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-blue-700 underline">Đề án tuyển sinh <ExternalLink className="h-3.5 w-3.5" /></a>}
+          {c.ruleSource && c.ruleSource !== sourceUrl && <a href={c.ruleSource} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-blue-700 underline">Văn bản quy chế <ExternalLink className="h-3.5 w-3.5" /></a>}
+        </div>
+      )}
+    </dl>
   );
 }

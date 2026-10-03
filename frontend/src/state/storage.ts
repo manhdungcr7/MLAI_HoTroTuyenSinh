@@ -1,4 +1,4 @@
-import { ExamScores, StudentProfile, TargetProgram, WishlistItem } from "@/engine/types";
+import { AwardLevel, ExamScores, RankLevel, StudentProfile, TargetProgram, WishlistItem } from "@/engine/types";
 
 const KEY = "nguyen_vong_ai_app_state_v5";
 const LEGACY_KEYS = ["nguyen_vong_ai_app_state_v4", "nguyen_vong_ai_decision_state_v3", "nguyen_vong_ai_decision_state_v2"];
@@ -31,6 +31,10 @@ export function blankState(): PersistedState {
   return { version: 5, profile: blankProfile(), wishlist: [], target: null };
 }
 
+const AWARDS: AwardLevel[] = ["quoc_te", "quoc_gia", "tinh_nhat", "tinh_nhi", "tinh_ba"];
+const RANKS: RankLevel[] = ["gioi", "kha", "trung_binh", "yeu"];
+const cleanStrings = (v: unknown, max: number): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && x.length > 0 && x.length < 120).slice(0, max) : []);
+
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 
 /** Giữ lại điểm hợp lệ (0–10); bỏ giá trị lạ để dữ liệu cũ hỏng không làm sai kết quả. */
@@ -56,6 +60,11 @@ export function sanitize(raw: unknown): PersistedState {
     altScores: isObject(p.altScores) ? { ...blank.profile.altScores, ...p.altScores } : blank.profile.altScores,
     priority: isObject(p.priority) ? { ...blank.profile.priority, ...p.priority } : blank.profile.priority,
     interestMajorGroups: Array.isArray(p.interestMajorGroups) ? p.interestMajorGroups.filter((g) => typeof g === "string") : [],
+    interestMajorNames: cleanStrings(p.interestMajorNames, 12),
+    preferredSchoolCodes: cleanStrings(p.preferredSchoolCodes, 12),
+    award: AWARDS.includes(p.award as AwardLevel) ? (p.award as AwardLevel) : null,
+    academicRank: RANKS.includes(p.academicRank as RankLevel) ? (p.academicRank as RankLevel) : null,
+    conduct: RANKS.includes(p.conduct as RankLevel) ? (p.conduct as RankLevel) : null,
     favoriteProgramIds: Array.isArray(p.favoriteProgramIds) ? p.favoriteProgramIds.filter((id) => typeof id === "string").slice(0, 50) : [],
   };
   if (isObject(p.hocBaGrades)) {

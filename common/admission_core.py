@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import math
+import unicodedata
 import re
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
@@ -238,6 +239,9 @@ def _validate_method_rule(method: str, m: Mapping[str, Any]) -> list[str]:
     for t in (m.get("certBonus") or {}).get("ielts", []):
         if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("points", -1) <= 3):
             problems.append(f"{method}: bảng điểm cộng IELTS không hợp lệ")
+    for v in (m.get("awardBonus") or {}).values():
+        if not (0 <= v <= 3):
+            problems.append(f"{method}: điểm cộng giải thưởng phải trong [0, 3]")
     if m.get("priority") not in ("standard", "none"):
         problems.append(f"{method}: priority phải là standard hoặc none")
     if "bonusCap" in m and not (0 <= m["bonusCap"] <= 3):
@@ -356,6 +360,9 @@ def _combo_component(component, subjects, profile, needs, rule):
     return weighted, max_total, used_ielts, raw_total
 
 
+TEACHER_MIN_EXAM_TOTAL = 18
+
+
 def _score_combo(profile, rule, combo, needs, major_group=None):
     subjects = COMBINATION_SUBJECTS.get(combo, []) if combo else []
     base, used_ielts, exam_raw, hocba_raw = 0.0, False, None, None
@@ -395,12 +402,21 @@ def _score_combo(profile, rule, combo, needs, major_group=None):
     if rule.get("minHocBaComboTotal") is not None and hocba_raw is not None and hocba_raw < rule["minHocBaComboTotal"]:
         return None
 
+    # Ngành sư phạm: ngưỡng 18 điểm (không ưu tiên/điểm cộng); xét học bạ cần học lực lớp 12 giỏi.
+    if major_group == "su_pham":
+        if uses_exam and exam_raw is not None and js_math_round(exam_raw * 100) / 100 < TEACHER_MIN_EXAM_TOTAL:
+            return None
+        if hocba_raw is not None and profile.get("academicRank") and profile.get("academicRank") != "gioi":
+            return None
+
     cert_points = 0.0
     ielts = profile.get("ielts") or alt.get("ielts")
     if ielts and major_group not in (rule.get("certBonus") or {}).get("excludedMajorGroups", []):
         for t in (rule.get("certBonus") or {}).get("ielts", []):
             if ielts >= t["min"] and t["points"] > cert_points:
                 cert_points = t["points"]
+    award = profile.get("award")
+    cert_points += (rule.get("awardBonus") or {}).get(award, 0.0) if award else 0.0
     priority = profile.get("priority") or {}
     pri = priority_bonus(priority.get("area", "KV3"), priority.get("object", "none"), base) if rule["priority"] == "standard" and priority else 0.0
     bonus = js_math_round(min(rule.get("bonusCap", DEFAULT_BONUS_CAP), cert_points + pri) * 100) / 100
@@ -702,15 +718,43 @@ def matches_constraints(c: Mapping[str, Any], profile: Mapping[str, Any]) -> boo
     budget = profile.get("annualBudgetVnd") or 0
     if 0 < budget < UNLIMITED_BUDGET_VND and c["tuitionVnd"] and c["tuitionVnd"] > budget:
         return False
-    interest = profile.get("interestMajorGroups") or []
-    if interest and c["majorGroup"] not in interest:
-        return False
-    return True
+    return matches_interest(c, profile)
+
+
+def fold(text: str | None) -> str:
+    """Bỏ dấu tiếng Việt, hạ chữ thường (giống lib/text.ts của frontend)."""
+    decomposed = unicodedata.normalize("NFD", text or "")
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch)).replace("đ", "d").replace("Đ", "d")
+    return " ".join(stripped.lower().split())
+
+
+def has_interest(profile: Mapping[str, Any]) -> bool:
+    return bool(profile.get("interestMajorGroups") or profile.get("interestMajorNames") or profile.get("preferredSchoolCodes"))
+
+
+def matches_interest(c: Mapping[str, Any], profile: Mapping[str, Any]) -> bool:
+    """Trường bạn chọn luôn có mặt; còn lại phải thuộc nhóm ngành hoặc trùng tên ngành đã chọn; không chọn gì thì lấy tất cả."""
+    groups = profile.get("interestMajorGroups") or []
+    names = [fold(n) for n in (profile.get("interestMajorNames") or [])]
+    schools = [str(s).upper() for s in (profile.get("preferredSchoolCodes") or [])]
+    if str(c["schoolCode"]).upper() in schools:
+        return True
+    if not groups and not names:
+        return not schools
+    if c["majorGroup"] in groups:
+        return True
+    name = fold(c["majorName"])
+    return any(n in name for n in names)
 
 
 def rank_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Xếp theo xác suất (làm tròn 1%), cùng mức thì ngành điểm chuẩn cao hơn trước."""
-    return sorted(candidates, key=lambda c: (-round_pct(c["admitProbability"]), -c["cutoffP50"]))
+    return sorted(candidates, key=lambda c: (-prob_band(c["admitProbability"]), -c["cutoffP50"], -c["admitProbability"]))
+
+
+def prob_band(prob: float) -> int:
+    """Xác suất làm tròn 1%; từ 97% trở lên coi là một nhóm "gần như chắc đỗ", xếp theo điểm chuẩn (trường tốt hơn lên trước)."""
+    return min(97, js_math_round(prob * 100))
 
 
 def round_pct(prob: float) -> int:

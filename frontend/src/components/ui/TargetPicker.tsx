@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { useApp, useCandidates } from "@/state/AppContext";
 import { findProgram } from "@/data/catalog";
 import { formatProbability } from "@/lib/format";
+import { matchesQuery } from "@/lib/text";
 
 /**
  * Chọn ngành muốn vươn tới ngay tại chỗ. Mặc định gợi ý các ngành xét điểm thi có điểm cao nhất
@@ -15,10 +16,10 @@ export function TargetPicker() {
   const [query, setQuery] = useState("");
 
   const options = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = query.trim();
     const base = matched.filter((c) => (c.admissionMethod ?? "THPT") === "THPT");
     const list = q
-      ? base.filter((c) => `${c.schoolName} ${c.schoolCode} ${c.majorName}`.toLowerCase().includes(q))
+      ? base.filter((c) => matchesQuery(`${c.schoolName} ${c.schoolCode} ${c.majorName}`, q))
       : base.filter((c) => c.admitProbability >= 0.05 && c.admitProbability <= 0.7);
     return list.sort((a, b) => b.cutoffP50 - a.cutoffP50).slice(0, 8);
   }, [matched, query]);
@@ -54,7 +55,13 @@ export function TargetPicker() {
             </button>
           </li>
         ))}
-        {options.length === 0 && <li className="py-6 text-center text-sm font-semibold text-slate-500">Không có ngành phù hợp</li>}
+        {options.length === 0 && (
+          <li className="py-6 text-center text-sm font-medium text-slate-500">
+            {query.trim() || matched.some((c) => (c.admissionMethod ?? "THPT") === "THPT")
+              ? "Không có ngành phù hợp"
+              : "Phần này cần điểm thi (hoặc thi thử) của 3 môn. Quay lại bước nhập điểm để thêm."}
+          </li>
+        )}
       </ul>
     </div>
   );

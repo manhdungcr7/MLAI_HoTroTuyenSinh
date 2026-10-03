@@ -10,7 +10,7 @@
  * luôn ghi rõ đó là quy tắc riêng của trường hay công thức chung để học sinh biết mức tin cậy.
  */
 
-import { AdmissionMethod } from "@/engine/types";
+import { AdmissionMethod, AwardLevel } from "@/engine/types";
 
 export type ComponentSource = "exam_combo" | "hocba_combo" | "dgnl_hcm" | "dgnl_hn" | "dgtd_bk";
 
@@ -43,6 +43,8 @@ export interface MethodRule {
   /** Tổng điểm thi gốc của tổ hợp (thang 30) tối thiểu để được xét. */
   minExamComboTotal?: number;
   certBonus?: CertBonus;
+  /** Điểm cộng cho giải học sinh giỏi cấp tỉnh (thang 30) theo văn bản của trường; giải quốc gia, quốc tế xét tuyển thẳng nên không cộng. */
+  awardBonus?: Partial<Record<AwardLevel, number>>;
   /** Tổng điểm cộng (chứng chỉ + ưu tiên) tối đa trên thang 30. Mặc định 3 theo quy chế. */
   bonusCap?: number;
   /**
@@ -178,6 +180,7 @@ function validateMethodRule(method: string, m: MethodRule): string[] {
     for (const t of m.ieltsToEnglish ?? []) if (!(t.min >= 0 && t.min <= 9 && t.score >= 0 && t.score <= 10)) problems.push(`${method}: bảng quy đổi IELTS sang điểm Tiếng Anh không hợp lệ`);
     if (m.minHocBaComboTotal !== undefined && !(m.minHocBaComboTotal >= 0 && m.minHocBaComboTotal <= 30)) problems.push(`${method}: ngưỡng tổng điểm học bạ phải trong [0, 30]`);
     for (const t of m.certBonus?.ielts ?? []) if (!(t.min >= 0 && t.min <= 9 && t.points >= 0 && t.points <= 3)) problems.push(`${method}: bảng điểm cộng IELTS không hợp lệ`);
+    for (const v of Object.values(m.awardBonus ?? {})) if (!(v >= 0 && v <= 3)) problems.push(`${method}: điểm cộng giải thưởng phải trong [0, 3]`);
     if (m.priority !== "standard" && m.priority !== "none") problems.push(`${method}: priority phải là standard hoặc none`);
     if (m.bonusCap !== undefined && !(m.bonusCap >= 0 && m.bonusCap <= 3)) problems.push(`${method}: trần điểm cộng phải trong [0, 3]`);
     if (m.minExamComboTotal !== undefined && !(m.minExamComboTotal >= 0 && m.minExamComboTotal <= 30)) problems.push(`${method}: ngưỡng tổng điểm thi phải trong [0, 30]`);

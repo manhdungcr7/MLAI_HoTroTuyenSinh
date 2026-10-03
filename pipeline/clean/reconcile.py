@@ -59,9 +59,10 @@ def load_panels() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 _SUBJECT_WORD = (
     r"(?:Toán|Ngữ văn|Văn|Vật lí|Vật lý|Lý|Hóa học|Hoá học|Hóa|Hoá|Sinh học|Sinh|Lịch sử|Sử|"
     r"Địa lí|Địa lý|Địa|Tiếng Anh|Anh|GDCD|GDKT\s*&\s*PL|GD\s*Công dân|Giáo dục công dân|"
-    r"Giáo dục kinh tế và pháp luật|Công nghệ|Khoa học tự nhiên|Khoa học xã hội|KHTN|KHXH|Tin học|Tin)"
+    r"Giáo dục kinh tế và pháp luật|Công nghệ|Khoa học tự nhiên|Khoa học xã hội|KHTN|KHXH|Tin học|Tin|"
+    r"Năng khiếu(?:\s*\d+)?(?:\s*\([^)]*\))?|Đọc diễn cảm|Hát|Vẽ|Kể chuyện)"
 )
-_COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*(?:\(\s*[A-Z]\d{{2}}\s*\))?\s*")
+_COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*(?:\(\s*[A-Z]\d{{2}}\s*\))?\s*[;.]?\s*", re.IGNORECASE)
 _CODE_ONLY = re.compile(r"\s*(?:[A-Z]\d{2}|PT\s*\d+|[A-Z]{2,4}|[\d\s,.;:\-–_/()]*)\s*")
 _NOT_REGULAR = re.compile(r"liên thông|văn bằng\s*(?:2|hai)|\bVB2\b", re.IGNORECASE)
 
@@ -69,8 +70,12 @@ _NOT_REGULAR = re.compile(r"liên thông|văn bằng\s*(?:2|hai)|\bVB2\b", re.IG
 _COMBINING = re.compile(r"[̀-ͯ]")
 _SPLIT_LETTER = re.compile(r"(?<=\s)([a-zà-ỹ])\s(?=[a-zà-ỹ]{2,})")
 _TRAILING_COMBOS = re.compile(
-    rf"\s*\(\s*Tổ hợp xét tuyển\s*:[^)]*\)\s*$|\s+Tổ hợp\s*1\s*:.*$|\s+{_SUBJECT_WORD}(?:\s*,\s*{_SUBJECT_WORD}){{2}}(?:\s*;.*)?\.?$"
+    rf"\s*\(\s*Tổ hợp xét tuyển\s*:[^)]*\)\s*$|\s+Tổ hợp\s*(?:1\s*:|:?\s*[A-Z]\d{{2}}\b).*$|\s+{_SUBJECT_WORD}(?:\s*,\s*{_SUBJECT_WORD}){{2}}(?:\s*;.*)?\.?$"
 )
+_CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f]")
+_LEADING_NGANH = re.compile(r"^Ngành\s+", re.IGNORECASE)
+_LIST_SUFFIX = re.compile(r"\s*,?\s*gồm\s+(?:\d+|các)\s+(?:chuyên ngành|chương trình)\b.*$", re.IGNORECASE)
+_STAR_NOTE = re.compile(r"\s*\(\*\)|\*")
 _NOT_A_MAJOR = re.compile(
     r"^\s*(?:\d+\s*[.)]|Lĩnh vực\b|Mã tổ hợp|Khối ngành\b|\d+\s+ngành\b|\d+/[\wĐ-]+|V-?SAT\b|Tuyển sinh riêng|Nhóm ngành\b)"
     r"|xét tuyển các ngành dưới đây|gồm các chuyên ngành\s*:\s*(?:\d+\.)|;\s*\w+[^;]*\s-\s",
@@ -104,7 +109,8 @@ def repair_major_label(label: object) -> object:
     """Sửa lỗi trích PDF: dấu thanh rời khỏi chữ (NFC) và chữ cái bị tách khỏi từ ('n hân' -> 'nhân')."""
     if not isinstance(label, str):
         return label
-    text = unicodedata.normalize("NFC", _SPACE_BEFORE_MARK.sub(r"", label))
+    text = unicodedata.normalize("NFC", _SPACE_BEFORE_MARK.sub(r"\1", label))
+    text = _LIST_SUFFIX.sub("", _STAR_NOTE.sub("", _LEADING_NGANH.sub("", text)))
     text = _tidy_dashes(_TRAILING_COMBOS.sub("", text).strip())
     return _SPLIT_LETTER.sub(lambda m: m.group(1) if m.group(1) not in _VALID_SINGLE_WORDS else m.group(0), text)
 
@@ -117,7 +123,7 @@ def is_garbage_major_label(label: object) -> bool:
     text = label.strip()
     if len(text) < 3 or not any(ch.isalpha() for ch in text):
         return True
-    if _COMBINING.search(text) or text.count("(") != text.count(")"):  # dấu rời / ngoặc dang dở: nhãn hỏng
+    if _CONTROL_CHARS.search(text) or _COMBINING.search(text) or text.count("(") != text.count(")"):  # dấu rời / ngoặc dang dở: nhãn hỏng
         return True
     if text[0].islower():  # mảnh câu bị ngắt dòng từ PDF
         return True
@@ -126,6 +132,17 @@ def is_garbage_major_label(label: object) -> bool:
     if _CODE_ONLY.fullmatch(text) or _COMBO_LIKE.fullmatch(text):
         return True
     return bool(_NOT_REGULAR.search(text))
+
+
+NON_CIVIL_SCHOOLS_PATH = MANUAL_DIR / "non_civil_schools.json"
+
+
+def drop_non_civil_schools(cutoff: pd.DataFrame) -> pd.DataFrame:
+    """Loại các trường công an, quân đội (data/manual/non_civil_schools.json): tuyển sinh riêng, không áp dụng cách tính xác suất chung."""
+    if cutoff.empty or not NON_CIVIL_SCHOOLS_PATH.is_file():
+        return cutoff
+    codes = set(json.loads(NON_CIVIL_SCHOOLS_PATH.read_text(encoding="utf-8")).get("schools", {}))
+    return cutoff[~cutoff["school_code"].isin(codes)].copy()
 
 
 MULTI_SCHOOL_DOCUMENTS_PATH = MANUAL_DIR / "multi_school_documents.json"
@@ -192,6 +209,7 @@ def prepare_cutoff_rows(cutoff: pd.DataFrame) -> pd.DataFrame:
 
     cutoff["major_label"] = cutoff["major_label"].map(repair_major_label)
     cutoff = cutoff[~cutoff["major_label"].map(is_garbage_major_label)].copy()
+    cutoff = drop_non_civil_schools(cutoff)
     cutoff = drop_multi_school_documents(cutoff)
     cutoff = drop_cross_school_copies(cutoff)
 

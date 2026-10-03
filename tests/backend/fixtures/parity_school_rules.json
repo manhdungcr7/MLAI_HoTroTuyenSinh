@@ -223,6 +223,10 @@
                 }
               ]
             }
+          },
+          "awardBonus": {
+            "tinh_nhat": 1.0,
+            "tinh_nhi": 0.75
           }
         }
       }
@@ -332,6 +336,24 @@
       ],
       "requiresAptitude": false,
       "majorGroup": "ngon_ngu"
+    },
+    {
+      "schoolCode": "ZZ0",
+      "admissionMethod": "THPT",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false,
+      "majorGroup": "su_pham"
+    },
+    {
+      "schoolCode": "ZZ0",
+      "admissionMethod": "HOC_BA",
+      "combinations": [
+        "A00"
+      ],
+      "requiresAptitude": false,
+      "majorGroup": "su_pham"
     }
   ],
   "profiles": [
@@ -424,6 +446,78 @@
         "object": "none"
       },
       "graduationYear": 2027
+    },
+    {
+      "examScores": {
+        "toan": 9,
+        "ly": 8,
+        "hoa": 8.5,
+        "anh": 7
+      },
+      "hocBaScores": {
+        "toan": 8.5,
+        "ly": 8,
+        "hoa": 8
+      },
+      "hocBaGrades": {
+        "11": {
+          "toan": 8,
+          "ly": 8,
+          "hoa": 8
+        },
+        "12": {
+          "toan": 9,
+          "ly": 8.5,
+          "hoa": 8.2
+        }
+      },
+      "altScores": {
+        "ielts": 6.5,
+        "dgnl_hcm": 900
+      },
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV2",
+        "object": "none"
+      },
+      "graduationYear": 2026,
+      "award": "tinh_nhi",
+      "academicRank": "kha"
+    },
+    {
+      "examScores": {
+        "toan": 5.5,
+        "ly": 6,
+        "hoa": 6
+      },
+      "hocBaScores": {
+        "toan": 8.5,
+        "ly": 8,
+        "hoa": 8
+      },
+      "hocBaGrades": {
+        "11": {
+          "toan": 8,
+          "ly": 8,
+          "hoa": 8
+        },
+        "12": {
+          "toan": 9,
+          "ly": 8.5,
+          "hoa": 8.2
+        }
+      },
+      "altScores": {
+        "ielts": 6.5,
+        "dgnl_hcm": 900
+      },
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV1",
+        "object": "uu_tien_1"
+      },
+      "graduationYear": 2026,
+      "academicRank": "gioi"
     }
   ]
 }

@@ -9,6 +9,7 @@
 
 import "@/data/school-rules";
 import { AdmissionMethod, TargetProgram } from "@/engine/types";
+import { COMBINATION_SUBJECTS } from "@/data/universities/combinations";
 
 export interface ProgramCatalogItem extends TargetProgram {
   programKey: string;
@@ -129,6 +130,12 @@ function toCatalogItem(item: RawCatalogItem): ProgramCatalogItem | null {
     requiresAptitude: APTITUDE_MAJOR_PATTERN.test(item.majorName || "") || item.admissionMethod === "NANG_KHIEU",
     schoolProvince: province,
   };
+}
+
+/** Ngành phải thi năng khiếu riêng (vẽ, nhạc, thể thao...): theo tên ngành hoặc đề án chỉ ghi tổ hợp có môn năng khiếu. */
+export function isAptitudeProgram(p: Pick<ProgramCatalogItem, "requiresAptitude" | "combinations">): boolean {
+  if (p.requiresAptitude) return true;
+  return p.combinations.length > 0 && p.combinations.every((c) => !COMBINATION_SUBJECTS[c]);
 }
 
 export interface CatalogStats {

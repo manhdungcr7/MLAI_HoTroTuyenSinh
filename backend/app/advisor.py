@@ -50,6 +50,9 @@ class PriorityIn(BaseModel):
 class AltScoresIn(BaseModel):
     model_config = ConfigDict(extra="ignore")
     ielts: float | None = Field(None, ge=0, le=9)
+    dgnl_hcm: float | None = Field(None, ge=0, le=1200)
+    dgnl_hn: float | None = Field(None, ge=0, le=150)
+    dgtd_bk: float | None = Field(None, ge=0, le=100)
 
 
 class AdvisorProfile(BaseModel):
@@ -57,6 +60,7 @@ class AdvisorProfile(BaseModel):
     model_config = ConfigDict(extra="ignore")
     examScores: SubjectScores | None = None
     hocBaScores: SubjectScores | None = None
+    hocBaGrades: dict[Literal["10", "11", "12"], SubjectScores] | None = None
     altScores: AltScoresIn = Field(default_factory=AltScoresIn)
     activeCombination: str | None = None
     priority: PriorityIn = Field(default_factory=PriorityIn)
@@ -66,6 +70,11 @@ class AdvisorProfile(BaseModel):
     relocationWillingness: Literal["chi_tinh_nha", "trong_vung", "khong_gioi_han"] = "khong_gioi_han"
     annualBudgetVnd: int = Field(0, ge=0)
     interestMajorGroups: list[str] = Field(default_factory=list, max_length=20)
+    interestMajorNames: list[str] = Field(default_factory=list, max_length=12)
+    preferredSchoolCodes: list[str] = Field(default_factory=list, max_length=12)
+    award: Literal["quoc_te", "quoc_gia", "tinh_nhat", "tinh_nhi", "tinh_ba"] | None = None
+    academicRank: Literal["gioi", "kha", "trung_binh", "yeu"] | None = None
+    conduct: Literal["gioi", "kha", "trung_binh", "yeu"] | None = None
     favoriteProgramIds: list[str] = Field(default_factory=list, max_length=50)
     excludedSchoolCodes: list[str] = Field(default_factory=list, max_length=200)
     excludedMajorGroups: list[str] = Field(default_factory=list, max_length=20)
@@ -74,6 +83,10 @@ class AdvisorProfile(BaseModel):
         data = self.model_dump()
         for key in ("examScores", "hocBaScores"):
             data[key] = {k: v for k, v in (data[key] or {}).items() if v is not None}
+        data["hocBaGrades"] = {
+            g: {k: v for k, v in scores.items() if v is not None} for g, scores in (data.get("hocBaGrades") or {}).items()
+        }
+        data["altScores"] = {k: v for k, v in (data["altScores"] or {}).items() if v is not None}
         return data
 
 
@@ -210,7 +223,7 @@ def portfolio(req: PortfolioRequest) -> dict[str, Any]:
         mode = "evaluate"
     else:
         matched = [c for c in candidates if core.matches_constraints(c, profile)]
-        items = core.suggest_portfolio(matched, bool(profile["interestMajorGroups"]), profile["favoriteProgramIds"])
+        items = core.suggest_portfolio(matched, core.has_interest(profile), profile["favoriteProgramIds"])
         mode = "suggest"
 
     summary = core.portfolio_summary(items, shock, idio)

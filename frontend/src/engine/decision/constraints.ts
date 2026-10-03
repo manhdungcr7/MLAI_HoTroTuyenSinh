@@ -1,5 +1,6 @@
 import { CandidateOption, StudentProfile } from "@/engine/types";
 import { PROVINCE_REGIONS } from "@/engine/geo/regions";
+import { fold } from "@/lib/text";
 
 export const UNLIMITED_BUDGET_VND = 200_000_000;
 
@@ -22,9 +23,26 @@ export function matchesConstraints(c: CandidateOption, profile: StudentProfile):
   }
   const budget = profile.annualBudgetVnd;
   if (budget > 0 && budget < UNLIMITED_BUDGET_VND && c.tuitionVnd && c.tuitionVnd > budget) return false;
-  const interest = profile.interestMajorGroups ?? [];
-  if (interest.length > 0 && !interest.includes(c.majorGroup)) return false;
-  return true;
+  return matchesInterest(c, profile);
+}
+
+export function hasInterest(profile: StudentProfile): boolean {
+  return (profile.interestMajorGroups ?? []).length > 0 || (profile.interestMajorNames ?? []).length > 0 || (profile.preferredSchoolCodes ?? []).length > 0;
+}
+
+/**
+ * Điều kiện quan tâm: trường bạn chọn luôn có mặt; còn lại phải thuộc một nhóm ngành hoặc trùng tên một ngành bạn đã chọn.
+ * Không chọn gì thì lấy tất cả.
+ */
+export function matchesInterest(c: Pick<CandidateOption, "schoolCode" | "majorGroup" | "majorName">, profile: StudentProfile): boolean {
+  const groups = profile.interestMajorGroups ?? [];
+  const names = (profile.interestMajorNames ?? []).map(fold);
+  const schools = (profile.preferredSchoolCodes ?? []).map((s) => s.toUpperCase());
+  if (schools.includes(c.schoolCode.toUpperCase())) return true;
+  if (groups.length === 0 && names.length === 0) return schools.length === 0;
+  if (groups.includes(c.majorGroup)) return true;
+  const name = fold(c.majorName);
+  return names.some((n) => name.includes(n));
 }
 
 export function filterByConstraints(list: CandidateOption[], profile: StudentProfile): CandidateOption[] {

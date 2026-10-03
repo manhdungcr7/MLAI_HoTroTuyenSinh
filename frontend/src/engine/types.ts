@@ -31,6 +31,18 @@ export interface AlternativeScores {
   ielts?: number | null;
 }
 
+/** Giải học sinh giỏi cao nhất của học sinh. */
+export type AwardLevel = "quoc_te" | "quoc_gia" | "tinh_nhat" | "tinh_nhi" | "tinh_ba";
+export type RankLevel = "gioi" | "kha" | "trung_binh" | "yeu";
+
+export const AWARD_LABELS_VI: Record<AwardLevel, string> = {
+  quoc_te: "Quốc tế",
+  quoc_gia: "Quốc gia",
+  tinh_nhat: "Tỉnh – giải nhất",
+  tinh_nhi: "Tỉnh – giải nhì",
+  tinh_ba: "Tỉnh – giải ba",
+};
+
 export type PriorityArea = "KV1" | "KV2-NT" | "KV2" | "KV3";
 export type PriorityObject = "none" | "uu_tien_1" | "uu_tien_2" | "uu_tien_3";
 
@@ -94,6 +106,15 @@ export interface StudentProfile {
   excludedMajorGroups?: string[];
   /** Nhóm ngành học sinh quan tâm (MAJOR_GROUPS.value); rỗng = tất cả. */
   interestMajorGroups?: string[];
+  /** Giải học sinh giỏi cao nhất (xét tuyển thẳng, điểm cộng); thiếu = không có. */
+  award?: AwardLevel | null;
+  /** Học lực và hạnh kiểm lớp 12 (ngành sư phạm xét học bạ yêu cầu học lực giỏi). */
+  academicRank?: RankLevel | null;
+  conduct?: RankLevel | null;
+  /** Tên ngành cụ thể học sinh muốn học (chuẩn hóa, không dấu); rỗng = chỉ lọc theo nhóm ngành. */
+  interestMajorNames?: string[];
+  /** Trường học sinh muốn học (mã trường): luôn được đưa vào kết quả, kể cả khi không thuộc nhóm ngành đã chọn. */
+  preferredSchoolCodes?: string[];
   /** Chương trình bạn đánh dấu yêu thích; được ưu tiên khi đề xuất danh sách nguyện vọng. */
   favoriteProgramIds?: string[];
 }
@@ -209,16 +230,15 @@ export interface GapMetric {
   p90: number;
 }
 
+/** Tăng điểm một môn thêm `deltaScore` thì khả năng đỗ ngành mục tiêu và số ngành trong tầm thay đổi ra sao. */
 export interface SubjectRoiMetric {
   subject: keyof ExamScores;
   subjectVi: string;
   currentScore: number;
   simulatedScore: number;
-  deltaScore: number; // +0.5
-  unlockedOptionsCount: number; // số ngành mở mới khi tăng điểm
-  gapReduction: number; // điểm thu hẹp với mục tiêu
-  effortDifficulty: number;
-  netRoi: number;
-  tier: 1 | 2 | 3;
-  explanationVi: string;
+  deltaScore: number;
+  admitProbBefore: number;
+  admitProbAfter: number;
+  /** Số ngành mới vào tầm (xác suất đủ để thử sức) khi tăng điểm môn này. */
+  unlockedOptionsCount: number;
 }

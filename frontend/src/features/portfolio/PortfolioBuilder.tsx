@@ -4,6 +4,7 @@ import { AlertTriangle, ArrowDown, ArrowRight, ArrowUp, Copy, Printer, Sparkles,
 import { useApp, useCandidates } from "@/state/AppContext";
 import { CandidateOption, WishlistItem } from "@/engine/types";
 import { calculateWishlistFailAll } from "@/engine/decision/optimizer";
+import { hasInterest } from "@/engine/decision/constraints";
 import { candidateToWishlistItem, portfolioWarnings, suggestPortfolio } from "@/engine/decision/portfolio-suggest";
 import { METHOD_SHORT_VI } from "@/engine/scoring/method-score";
 import { formatProbability } from "@/lib/format";
@@ -39,8 +40,8 @@ export function PortfolioBuilder() {
 
   const byId = useMemo(() => new Map(candidates.map((c) => [c.programId, c])), [candidates]);
   const suggestedItems = useMemo(
-    () => suggestPortfolio(matched, (profile.interestMajorGroups ?? []).length > 0, profile.favoriteProgramIds ?? []).items.map((c, i) => candidateToWishlistItem(c, i + 1)),
-    [matched, profile.interestMajorGroups, profile.favoriteProgramIds],
+    () => suggestPortfolio(matched, hasInterest(profile), profile.favoriteProgramIds ?? []).items.map((c, i) => candidateToWishlistItem(c, i + 1)),
+    [matched, profile],
   );
 
   const isSuggestion = wishlist.length === 0;
