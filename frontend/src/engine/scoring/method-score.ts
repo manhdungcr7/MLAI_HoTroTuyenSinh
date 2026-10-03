@@ -62,6 +62,7 @@ export interface MethodScore {
   /** "school": quy tắc riêng của trường đã kiểm chứng; "default": công thức chung. */
   ruleOrigin: RuleOrigin;
   ruleSource?: RuleSource;
+  approximateReason?: string;
 }
 
 export function programMethod(program: Pick<TargetProgram, "admissionMethod">): AdmissionMethod {
@@ -148,7 +149,7 @@ const TEACHER_MIN_EXAM_TOTAL = 18;
 
 function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnverified = false): Evaluation {
   const method = programMethod(program);
-  const resolved = resolveMethodRule(program.schoolCode, method, (program as TargetProgram).majorGroup);
+  const resolved = resolveMethodRule(program.schoolCode, method, (program as TargetProgram).majorGroup, program.majorName);
   if (!resolved) return { score: null, missing: [], options: [] };
   // Ngành có thi năng khiếu: điểm văn hoá không phản ánh điểm xét tuyển.
   // Ngành thi năng khiếu chỉ tính được khi đề án ghi tổ hợp có môn năng khiếu mà ứng dụng hiểu (V00–V03, T00…, M01…).
@@ -186,20 +187,31 @@ function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnveri
   for (const combo of combos) {
     const s = scoreCombo(profile, rule, combo, missing, (program as TargetProgram).majorGroup);
     if (!s) continue;
-    const option = { ...s, method, combo, comboUnverified, ruleOrigin: origin, ruleSource: source };
+    const option = { ...s, method, combo, comboUnverified, ruleOrigin: origin, ruleSource: source, approximateReason: rule.approximateReason };
     options.push(option);
     if (!best || option.score > best.score) best = option;
   }
   return { score: best, missing: best ? [] : [...missing], options };
 }
 
-function scoreCombo(
+type ComboScore = Pick<MethodScore, "score" | "rawScore" | "bonus" | "usedIeltsConversion">;
+
+function scoreCombo(profile: StudentProfile, rule: MethodRule, combo: string, missing: Needs, majorGroup: string): ComboScore | null {
+  if (rule.certMode !== "either") return scoreComboOnce(profile, rule, combo, missing, majorGroup);
+  // Chứng chỉ chỉ được dùng một lần: quy đổi thành điểm môn Tiếng Anh hoặc lấy điểm cộng, chọn cách có lợi hơn.
+  const converted = scoreComboOnce(profile, { ...rule, certBonus: undefined }, combo, missing, majorGroup);
+  const bonus = scoreComboOnce(profile, { ...rule, ieltsToEnglish: undefined, toeflToEnglish: undefined }, combo, missing, majorGroup);
+  if (converted && bonus) return converted.score >= bonus.score ? converted : bonus;
+  return converted ?? bonus;
+}
+
+function scoreComboOnce(
   profile: StudentProfile,
   rule: MethodRule,
   combo: string,
   missing: Needs,
   majorGroup: string,
-): Pick<MethodScore, "score" | "rawScore" | "bonus" | "usedIeltsConversion"> | null {
+): ComboScore | null {
   const subjects = combo ? COMBINATION_SUBJECTS[combo] : [];
   let base = 0;
   let usedIelts = false;

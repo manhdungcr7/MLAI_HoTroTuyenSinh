@@ -126,3 +126,23 @@ def test_toefl_table_and_bonus_follow_school_documents():
     dtl = {"schoolCode": "DTL", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "kinh_te"}
     assert core.score_for_program(profile, dtl)["score"] == pytest.approx(22.0)  # 21 + điểm khuyến khích TOEFL 65-74 = 1,0
     assert core.score_for_program({**profile, "altScores": {"toefl": 40}}, dpq)["score"] == pytest.approx(21.0)  # dưới ngưỡng bảng: không quy đổi
+
+
+def test_nhh_main_subject_double_and_either_certificate_mode():
+    core.register_school_rules(core.load_school_rules())
+    base = {"schoolCode": "NHH", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False}
+    kt = core.score_for_program(PROFILE, {**base, "majorGroup": "kinh_te", "majorName": "Tài chính"})
+    # IELTS 6,5 quy đổi 9,5: (2×8 + 7 + 9,5)×3/4 = 24,375; nếu chỉ lấy điểm cộng: 21,75 + 1,0. Lấy cách có lợi hơn.
+    assert kt["rawScore"] == pytest.approx(24.38, abs=0.01) and kt["usedIeltsConversion"] is True
+    luat = core.score_for_program(PROFILE, {**base, "majorGroup": "luat", "majorName": "Luật kinh tế"})
+    assert luat["rawScore"] == pytest.approx(23.63, abs=0.01)  # môn chính của nhóm Luật là Ngữ văn
+    weak = core.score_for_program({**PROFILE, "examScores": {"toan": 8, "van": 7, "anh": 9.5}}, {**base, "majorGroup": "kinh_te", "majorName": "Tài chính"})
+    assert weak["usedIeltsConversion"] is False and weak["bonus"] == pytest.approx(1.0)  # điểm thi đã cao hơn bảng quy đổi: dùng điểm cộng
+
+
+def test_dhy_certificate_table_has_stricter_rows_for_medicine():
+    core.register_school_rules(core.load_school_rules())
+    profile = {**PROFILE, "altScores": {"ielts": 6.0}, "examScores": {"toan": 8, "van": 7, "anh": 6}}
+    base = {"schoolCode": "DHY", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "y_duoc"}
+    assert core.score_for_program(profile, {**base, "majorName": "Điều dưỡng"})["rawScore"] == pytest.approx(24.0)  # 8 + 7 + 9,0
+    assert core.score_for_program(profile, {**base, "majorName": "Y khoa"})["rawScore"] == pytest.approx(21.0)  # IELTS 6,0 chưa đủ 6,5

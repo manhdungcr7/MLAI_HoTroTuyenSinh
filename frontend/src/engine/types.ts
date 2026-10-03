@@ -185,6 +185,8 @@ export interface CandidateOption {
   /** "school": điểm tính theo quy tắc riêng của trường đã kiểm chứng; "default": công thức chung. */
   ruleOrigin?: "school" | "default";
   ruleSource?: string;
+  /** Trường tính khác công thức chung theo cách chưa mã hóa: kết quả chỉ là ước lượng. */
+  approximateReason?: string;
   /** true khi điểm Tiếng Anh được thay bằng điểm quy đổi từ IELTS. */
   usedIeltsConversion?: boolean;
   /** Tổ hợp có môn năng khiếu: điểm năng khiếu do trường tổ chức thi. */

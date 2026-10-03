@@ -61,6 +61,11 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite, 
               <BadgeCheck className="h-3 w-3" /> Theo quy chế trường
             </span>
           )}
+          {c.approximateReason && (
+            <span title={c.approximateReason} className="inline-flex items-center gap-1 rounded-md bg-orange-50 px-2 py-0.5 text-[11px] font-bold text-orange-700">
+              Ước lượng
+            </span>
+          )}
           {c.aptitude && (
             <span title="Điểm năng khiếu do trường tổ chức thi; ứng dụng dùng điểm bạn tự nhập" className="inline-flex items-center gap-1 rounded-md bg-violet-50 px-2 py-0.5 text-[11px] font-bold text-violet-700">
               Có thi năng khiếu
@@ -130,6 +135,12 @@ function Details({ c, program }: { c: CandidateOption; program?: ProgramCatalogI
             : "Công thức chung: tổng điểm 3 môn của tổ hợp (hoặc trung bình học bạ) cộng điểm ưu tiên. Trường này chưa có quy tắc riêng trong ứng dụng, hãy kiểm tra đề án."}
         </dd>
       </div>
+      {c.approximateReason && (
+        <div>
+          <dt className="text-xs text-slate-500">Lưu ý về cách tính</dt>
+          <dd>{c.approximateReason}</dd>
+        </div>
+      )}
       {c.employmentRate != null && (
         <div>
           <dt className="text-xs text-slate-500">Sinh viên có việc làm sau tốt nghiệp</dt>

@@ -1,0 +1,126 @@
+{
+  "schoolCode": "DHY",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0305/thong-tin-tuyen-sinh-dai-hoc-y-duoc-hue-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Y Dược, Đại học Huế",
+    "sha256": "58a9b399006a5fc1072ff6d07f73e7b4a06aaf89776b450fe6a66c482d04b9d2",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 3.1: IELTS/TOEFL iBT quy đổi thay điểm thi Tiếng Anh (IELTS 5,5→8,5; 6,0→9; 6,5→9,5; ≥7,0→10; TOEFL iBT 46–59→8,5; 60–78→9; 79–93→9,5; ≥94→10); riêng Y khoa, Răng - Hàm - Mặt, Dược học chỉ nhận từ IELTS 6,5 hoặc TOEFL 79. Mức IELTS 5,0 và TOEFL 35–45 ghi trong bảng nhưng điều kiện nêu từ 5,5 và 46 nên không mã hóa (thận trọng)."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 5.5,
+          "score": 8.5
+        },
+        {
+          "min": 6.0,
+          "score": 9.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.5
+        },
+        {
+          "min": 7.0,
+          "score": 10
+        }
+      ],
+      "toeflToEnglish": [
+        {
+          "min": 46,
+          "score": 8.5
+        },
+        {
+          "min": 60,
+          "score": 9.0
+        },
+        {
+          "min": 79,
+          "score": 9.5
+        },
+        {
+          "min": 94,
+          "score": 10
+        }
+      ],
+      "majorGroupOverrides": {
+        "name:y khoa": {
+          "ieltsToEnglish": [
+            {
+              "min": 6.5,
+              "score": 9.5
+            },
+            {
+              "min": 7.0,
+              "score": 10
+            }
+          ],
+          "toeflToEnglish": [
+            {
+              "min": 79,
+              "score": 9.5
+            },
+            {
+              "min": 94,
+              "score": 10
+            }
+          ]
+        },
+        "name:rang - ham - mat": {
+          "ieltsToEnglish": [
+            {
+              "min": 6.5,
+              "score": 9.5
+            },
+            {
+              "min": 7.0,
+              "score": 10
+            }
+          ],
+          "toeflToEnglish": [
+            {
+              "min": 79,
+              "score": 9.5
+            },
+            {
+              "min": 94,
+              "score": 10
+            }
+          ]
+        },
+        "name:duoc hoc": {
+          "ieltsToEnglish": [
+            {
+              "min": 6.5,
+              "score": 9.5
+            },
+            {
+              "min": 7.0,
+              "score": 10
+            }
+          ],
+          "toeflToEnglish": [
+            {
+              "min": 79,
+              "score": 9.5
+            },
+            {
+              "min": 94,
+              "score": 10
+            }
+          ]
+        }
+      }
+    }
+  }
+}

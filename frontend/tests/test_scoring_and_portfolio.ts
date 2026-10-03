@@ -195,3 +195,13 @@ const toeflProfile = { ...profile(3), examScores: { toan: 8, van: 7, anh: 6 }, a
 const toeflProgram = (code: string) => ({ programId: "t", schoolCode: code, majorName: "Kinh tế", majorGroup: "kinh_te", combinations: ["D01"], admissionMethod: "THPT" }) as unknown as TargetProgram;
 assert(near(scoreForProgram(toeflProfile, toeflProgram("DPQ"))?.score, 24), "DPQ: TOEFL iBT 65 quy đổi 9,0 điểm thay Tiếng Anh");
 assert(near(scoreForProgram(toeflProfile, toeflProgram("DTL"))?.score, 22), "DTL: TOEFL iBT 65 được điểm khuyến khích 1,0");
+
+// ---- NHH: môn chính nhân đôi, chứng chỉ chỉ dùng một lần; DHY: bảng chặt hơn cho Y khoa ----
+registerSchoolRules(SCHOOL_RULES);
+const certProfile = { ...profile(3), examScores: { toan: 8, van: 7, anh: 6 }, altScores: { ielts: 6.5 }, priority: { area: "KV3", object: "none" } } as StudentProfile;
+const named = (code: string, name: string, group: string) => ({ programId: "n", schoolCode: code, majorName: name, majorGroup: group, combinations: ["D01"], admissionMethod: "THPT" }) as unknown as TargetProgram;
+const nhh = scoreForProgram(certProfile, named("NHH", "Tài chính", "kinh_te"));
+assert(near(nhh?.rawScore, 24.38) && nhh?.usedIeltsConversion === true, "NHH: Toán nhân đôi, IELTS 6,5 quy đổi 9,5 thay Tiếng Anh (có lợi hơn điểm cộng)");
+assert(near(scoreForProgram(certProfile, named("NHH", "Luật kinh tế", "luat"))?.rawScore, 23.63), "NHH: nhóm Luật nhân đôi Ngữ văn");
+const dhyProfile = { ...certProfile, altScores: { ielts: 6.0 } } as StudentProfile;
+assert(near(scoreForProgram(dhyProfile, named("DHY", "Điều dưỡng", "y_duoc"))?.rawScore, 24) && near(scoreForProgram(dhyProfile, named("DHY", "Y khoa", "y_duoc"))?.rawScore, 21), "DHY: Y khoa chỉ nhận chứng chỉ từ IELTS 6,5");

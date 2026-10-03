@@ -11,6 +11,7 @@
  */
 
 import { AdmissionMethod, AwardLevel } from "@/engine/types";
+import { fold } from "@/lib/text";
 
 export type ComponentSource = "exam_combo" | "hocba_combo" | "dgnl_hcm" | "dgnl_hn" | "dgtd_bk";
 
@@ -70,9 +71,14 @@ export interface MethodRule {
   minHocBaComboTotal?: number;
   /** "standard": ưu tiên khu vực/đối tượng theo quy chế; "none": trường không cộng ưu tiên cho phương thức này. */
   priority: "standard" | "none";
+  /** Trường tính khác công thức chung theo cách ứng dụng chưa mã hóa được: kết quả chỉ là ước lượng và hiển thị lý do này. */
+  approximateReason?: string;
+  /** "either": thí sinh dùng chứng chỉ để quy đổi điểm môn Tiếng Anh HOẶC để lấy điểm cộng (không được cả hai); lấy cách có lợi hơn. */
+  certMode?: "either";
   /**
    * Ngoại lệ theo nhóm ngành (majorGroup) khi trường tính khác cho một vài ngành, ví dụ ngành Ngôn ngữ không nhân
    * hệ số Toán. Các trường khai báo ở đây ghi đè lên quy tắc chung của phương thức, chỉ với nhóm ngành đó.
+   * Khóa dạng "name:y khoa" khớp theo tên ngành (không dấu, chứa chuỗi đó), dùng khi chỉ vài ngành cụ thể tính khác.
    */
   majorGroupOverrides?: Record<string, Partial<Omit<MethodRule, "majorGroupOverrides">>>;
 }
@@ -130,11 +136,14 @@ export function resolveMethodRule(
   schoolCode: string,
   method: AdmissionMethod,
   majorGroup?: string,
+  majorName?: string,
 ): { rule: MethodRule; origin: RuleOrigin; source?: RuleSource } | null {
   const school = getSchoolRule(schoolCode);
   const own = school?.methods[method];
   if (own) {
-    const override = majorGroup ? own.majorGroupOverrides?.[majorGroup] : undefined;
+    const overrides = own.majorGroupOverrides ?? {};
+    const byName = majorName ? Object.entries(overrides).find(([key, o]) => key.startsWith("name:") && o && fold(majorName).includes(fold(key.slice(5)))) : undefined;
+    const override = byName?.[1] ?? (majorGroup ? overrides[majorGroup] : undefined);
     return { rule: override ? { ...own, ...override, majorGroupOverrides: undefined } : own, origin: "school", source: school?.source };
   }
   const fallback = DEFAULT_RULES[method];

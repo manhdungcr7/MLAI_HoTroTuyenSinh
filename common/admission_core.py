@@ -319,11 +319,13 @@ def load_school_rules(directory: Path | str | None = None) -> list[dict[str, Any
     return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(folder.glob("*.json"))]
 
 
-def resolve_method_rule(school_code: str, method: str, major_group: str | None = None):
+def resolve_method_rule(school_code: str, method: str, major_group: str | None = None, major_name: str | None = None):
     school = _SCHOOL_RULES.get(school_code.upper())
     own = (school or {}).get("methods", {}).get(method)
     if own:
-        override = (own.get("majorGroupOverrides") or {}).get(major_group) if major_group else None
+        overrides = own.get("majorGroupOverrides") or {}
+        by_name = next((o for key, o in overrides.items() if key.startswith("name:") and major_name and fold(key[5:]) in fold(major_name)), None)
+        override = by_name or (overrides.get(major_group) if major_group else None)
         if override:
             own = {**{k: v for k, v in own.items() if k != "majorGroupOverrides"}, **override}
         return own, "school", (school or {}).get("source")
@@ -390,6 +392,17 @@ TEACHER_MIN_EXAM_TOTAL = 18
 
 
 def _score_combo(profile, rule, combo, needs, major_group=None):
+    if rule.get("certMode") != "either":
+        return _score_combo_once(profile, rule, combo, needs, major_group)
+    # Chứng chỉ chỉ được dùng một lần: quy đổi thành điểm môn Tiếng Anh hoặc lấy điểm cộng, chọn cách có lợi hơn.
+    converted = _score_combo_once(profile, {k: v for k, v in rule.items() if k != "certBonus"}, combo, needs, major_group)
+    bonus = _score_combo_once(profile, {k: v for k, v in rule.items() if k not in ("ieltsToEnglish", "toeflToEnglish")}, combo, needs, major_group)
+    if converted and bonus:
+        return converted if converted["score"] >= bonus["score"] else bonus
+    return converted or bonus
+
+
+def _score_combo_once(profile, rule, combo, needs, major_group=None):
     subjects = COMBINATION_SUBJECTS.get(combo, []) if combo else []
     base, used_ielts, exam_raw, hocba_raw = 0.0, False, None, None
     alt = profile.get("altScores") or {}
@@ -460,7 +473,7 @@ def _score_combo(profile, rule, combo, needs, major_group=None):
 def _evaluate(profile: Mapping[str, Any], program: Mapping[str, Any], explore_unverified: bool):
     """(điểm tốt nhất theo quy tắc của trường, các đầu vào còn thiếu)."""
     method = program_method(program)
-    resolved = resolve_method_rule(program["schoolCode"], method, program.get("majorGroup"))
+    resolved = resolve_method_rule(program["schoolCode"], method, program.get("majorGroup"), program.get("majorName"))
     if resolved is None:
         return None, [], []
     declared_combos = program.get("combinations") or []
@@ -497,7 +510,7 @@ def _evaluate(profile: Mapping[str, Any], program: Mapping[str, Any], explore_un
         if s is None:
             continue
         option = {**s, "method": method, "combo": combo, "comboUnverified": unverified,
-                  "ruleOrigin": origin, "ruleSource": source}
+                  "ruleOrigin": origin, "ruleSource": source, "approximateReason": rule.get("approximateReason")}
         options.append(option)
         if best is None or option["score"] > best["score"]:
             best = option
@@ -726,6 +739,7 @@ def build_candidates(
             "comboAcceptance": combo_acceptance,
             "ruleOrigin": ms["ruleOrigin"],
             "ruleSource": (ms["ruleSource"] or {}).get("url") if ms["ruleSource"] else None,
+            "approximateReason": ms.get("approximateReason"),
         })
 
     best: dict[str, dict[str, Any]] = {}
