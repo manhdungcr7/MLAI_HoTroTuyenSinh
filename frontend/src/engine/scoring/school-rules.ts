@@ -31,6 +31,8 @@ export interface CertBonus {
   excludedMajorGroups?: string[];
   /** Bảng điểm cộng theo IELTS: lấy mức cao nhất đạt được, tính trên thang 30. */
   ielts?: { min: number; points: number }[];
+  /** Bảng điểm cộng theo TOEFL iBT, nếu trường công bố. */
+  toefl?: { min: number; points: number }[];
 }
 
 export interface MethodRule {
@@ -52,6 +54,8 @@ export interface MethodRule {
    * (nhiều trường không cho dùng chứng chỉ thay điểm thi, và mỗi trường quy đổi một khác).
    */
   ieltsToEnglish?: { min: number; score: number }[];
+  /** Bảng quy đổi TOEFL iBT sang điểm môn Tiếng Anh do chính trường công bố (không có bảng thì không quy đổi). */
+  toeflToEnglish?: { min: number; score: number }[];
   /**
    * Hệ số quy đổi nhân vào điểm học lực (trước điểm cộng/ưu tiên), khi trường quy đổi phương thức này về thang điểm
    * chung (ví dụ học bạ nhân 5/6). Điểm chuẩn của phương thức đó nằm trên thang đã quy đổi.
@@ -179,6 +183,8 @@ function validateMethodRule(method: string, m: MethodRule): string[] {
     if (m.scoreFactor !== undefined && !(m.scoreFactor > 0 && m.scoreFactor <= 3)) problems.push(`${method}: hệ số quy đổi phải trong (0, 3]`);
     for (const t of m.ieltsToEnglish ?? []) if (!(t.min >= 0 && t.min <= 9 && t.score >= 0 && t.score <= 10)) problems.push(`${method}: bảng quy đổi IELTS sang điểm Tiếng Anh không hợp lệ`);
     if (m.minHocBaComboTotal !== undefined && !(m.minHocBaComboTotal >= 0 && m.minHocBaComboTotal <= 30)) problems.push(`${method}: ngưỡng tổng điểm học bạ phải trong [0, 30]`);
+    for (const t of m.toeflToEnglish ?? []) if (!(t.min >= 0 && t.min <= 120 && t.score >= 0 && t.score <= 10)) problems.push(`${method}: bảng quy đổi TOEFL sang điểm Tiếng Anh không hợp lệ`);
+    for (const t of m.certBonus?.toefl ?? []) if (!(t.min >= 0 && t.min <= 120 && t.points >= 0 && t.points <= 3)) problems.push(`${method}: bảng điểm cộng TOEFL không hợp lệ`);
     for (const t of m.certBonus?.ielts ?? []) if (!(t.min >= 0 && t.min <= 9 && t.points >= 0 && t.points <= 3)) problems.push(`${method}: bảng điểm cộng IELTS không hợp lệ`);
     for (const v of Object.values(m.awardBonus ?? {})) if (!(v >= 0 && v <= 3)) problems.push(`${method}: điểm cộng giải thưởng phải trong [0, 3]`);
     if (m.priority !== "standard" && m.priority !== "none") problems.push(`${method}: priority phải là standard hoặc none`);

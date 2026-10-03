@@ -41,7 +41,26 @@ export const COMBINATION_SUBJECTS: Record<string, string[]> = {
   D66: ["van", "gdcd", "anh"],
   D84: ["toan", "gdcd", "anh"],
   ...buildXCombinations(),
+  // Tổ hợp có môn năng khiếu: nghĩa từng mã đối chiếu với bảng tổ hợp trong đề án 2026 của ĐH Cần Thơ (mục Danh sách tổ hợp).
+  V00: ["toan", "ly", "ve"],
+  V01: ["toan", "van", "ve"],
+  V02: ["toan", "anh", "ve"],
+  V03: ["toan", "hoa", "ve"],
+  T00: ["toan", "sinh", "nk_tdtt"],
+  T01: ["van", "toan", "nk_tdtt"],
+  T06: ["toan", "hoa", "nk_tdtt"],
+  T10: ["toan", "anh", "nk_tdtt"],
+  M01: ["van", "su", "nk_gdmn"],
+  M05: ["van", "dia", "nk_gdmn"],
+  M06: ["van", "toan", "nk_gdmn"],
+  M11: ["van", "anh", "nk_gdmn"],
 };
+
+/** Môn năng khiếu do trường tổ chức thi (không phải môn thi tốt nghiệp). */
+export const APTITUDE_SUBJECTS = ["ve", "nk_tdtt", "nk_gdmn"] as const;
+export const isAptitudeCombination = (code: string): boolean => (COMBINATION_SUBJECTS[code] ?? []).some((s) => (APTITUDE_SUBJECTS as readonly string[]).includes(s));
+/** Tổ hợp thường (chỉ môn thi tốt nghiệp), dùng khi phải đoán tổ hợp. */
+export const STANDARD_COMBINATIONS = (): string[] => Object.keys(COMBINATION_SUBJECTS).filter((c) => !isAptitudeCombination(c));
 
 /**
  * Khối Toán X01–X24: Toán + môn thứ hai (Văn, Lý, Hóa, Sinh, Sử, Địa) + lần lượt
@@ -86,4 +105,7 @@ export const SUBJECT_LABELS_VI: Record<string, string> = {
   tin: "Tin học",
   cncn: "Công nghệ công nghiệp",
   cnnn: "Công nghệ nông nghiệp",
+  ve: "Vẽ mỹ thuật",
+  nk_tdtt: "Năng khiếu TDTT",
+  nk_gdmn: "Năng khiếu mầm non",
 };

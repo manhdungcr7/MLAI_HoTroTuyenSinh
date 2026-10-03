@@ -7,7 +7,7 @@
  */
 
 import { AdmissionMethod, ExamScores, StudentProfile, TargetProgram } from "@/engine/types";
-import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
+import { APTITUDE_SUBJECTS, COMBINATION_SUBJECTS, STANDARD_COMBINATIONS, SUBJECT_LABELS_VI, isAptitudeCombination } from "@/data/universities/combinations";
 import { calculateTotalPriorityBonus, tableIeltsScore } from "@/engine/admissions/priority";
 import { HocBaGrade, MethodRule, RuleComponent, RuleOrigin, RuleSource, resolveMethodRule } from "@/engine/scoring/school-rules";
 
@@ -106,19 +106,27 @@ function comboComponentScores(
   let rawTotal = 0;
   let usedIelts = false;
   const ielts = profile.altScores?.ielts;
+  const toefl = profile.altScores?.toefl;
   const table = rule.ieltsToEnglish;
   for (const sub of subjects) {
     const w = component.subjectWeights?.[sub] ?? 1;
-    const values = sources.map((s) => s[sub as keyof ExamScores]);
+    // Môn năng khiếu chỉ có điểm thi của trường, không có điểm học bạ: luôn lấy điểm năng khiếu đã nhập.
+    const isAptitude = (APTITUDE_SUBJECTS as readonly string[]).includes(sub);
+    const values = isAptitude ? [profile.examScores?.[sub as keyof ExamScores]] : sources.map((s) => s[sub as keyof ExamScores]);
     let v: number | null | undefined;
     if (values.every((x) => typeof x === "number" && Number.isFinite(x))) {
       v = (values as number[]).reduce((a, b) => a + b, 0) / values.length;
     }
-    if (sub === "anh" && table?.length && ielts) {
-      const converted = tableIeltsScore(ielts, table);
-      if (converted !== null && (typeof v !== "number" || converted > v)) {
-        v = converted;
-        usedIelts = true;
+    if (sub === "anh") {
+      const candidates = [
+        table?.length && ielts ? tableIeltsScore(ielts, table) : null,
+        rule.toeflToEnglish?.length && toefl ? tableIeltsScore(toefl, rule.toeflToEnglish) : null,
+      ];
+      for (const converted of candidates) {
+        if (converted !== null && (typeof v !== "number" || converted > v)) {
+          v = converted;
+          usedIelts = true;
+        }
       }
     }
     if (typeof v !== "number") { needs.add(`Điểm ${component.source === "hocba_combo" ? "học bạ" : "thi"} môn ${SUBJECT_LABELS_VI[sub] ?? sub}`); return null; }
@@ -143,7 +151,9 @@ function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnveri
   const resolved = resolveMethodRule(program.schoolCode, method, (program as TargetProgram).majorGroup);
   if (!resolved) return { score: null, missing: [], options: [] };
   // Ngành có thi năng khiếu: điểm văn hoá không phản ánh điểm xét tuyển.
-  if ((program as TargetProgram & { requiresAptitude?: boolean }).requiresAptitude) return { score: null, missing: [], options: [] };
+  // Ngành thi năng khiếu chỉ tính được khi đề án ghi tổ hợp có môn năng khiếu mà ứng dụng hiểu (V00–V03, T00…, M01…).
+  const declaredCombos = Array.isArray(program.combinations) ? program.combinations : [];
+  if ((program as TargetProgram & { requiresAptitude?: boolean }).requiresAptitude && !declaredCombos.some((c) => COMBINATION_SUBJECTS[c] && isAptitudeCombination(c))) return { score: null, missing: [], options: [] };
   const { rule, origin, source } = resolved;
   if (rule.unsupportedReason) return { score: null, missing: [], options: [] };
 
@@ -163,7 +173,7 @@ function evaluate(profile: StudentProfile, program: TargetProgram, exploreUnveri
       comboUnverified = declared.length === 0;
       combos = comboUnverified
         ? exploreUnverified
-          ? Object.keys(COMBINATION_SUBJECTS)
+          ? STANDARD_COMBINATIONS()
           : (profile.activeCombination && COMBINATION_SUBJECTS[profile.activeCombination] ? [profile.activeCombination] : [])
         : published;
     }
@@ -240,6 +250,10 @@ function scoreCombo(
   const ielts = profile.altScores?.ielts;
   if (ielts && rule.certBonus?.ielts && !rule.certBonus.excludedMajorGroups?.includes(majorGroup)) {
     for (const t of rule.certBonus.ielts) if (ielts >= t.min && t.points > certPoints) certPoints = t.points;
+  }
+  const toeflScore = profile.altScores?.toefl;
+  if (toeflScore && rule.certBonus?.toefl && !rule.certBonus.excludedMajorGroups?.includes(majorGroup)) {
+    for (const t of rule.certBonus.toefl) if (toeflScore >= t.min && t.points > certPoints) certPoints = t.points;
   }
   const award = profile.award ? rule.awardBonus?.[profile.award] ?? 0 : 0;
   certPoints += award;

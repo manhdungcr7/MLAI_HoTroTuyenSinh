@@ -1,5 +1,5 @@
 import { CandidateOption, StudentProfile } from "@/engine/types";
-import { COMBINATION_SUBJECTS } from "@/data/universities/combinations";
+import { COMBINATION_SUBJECTS, isAptitudeCombination } from "@/data/universities/combinations";
 import { filterByConstraints, UNLIMITED_BUDGET_VND } from "@/engine/decision/constraints";
 
 export interface Notice {
@@ -33,7 +33,8 @@ function bestExamTotal(profile: StudentProfile): number | null {
   const e = profile.examScores as Record<string, number | null | undefined> | undefined;
   if (!e) return null;
   let best: number | null = null;
-  for (const subs of Object.values(COMBINATION_SUBJECTS)) {
+  for (const [code, subs] of Object.entries(COMBINATION_SUBJECTS)) {
+    if (isAptitudeCombination(code)) continue;
     const values = subs.map((sub) => e[sub]);
     if (values.some((v) => typeof v !== "number")) continue;
     const sum = (values as number[]).reduce((x, y) => x + y, 0);

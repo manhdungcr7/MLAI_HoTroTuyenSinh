@@ -4,7 +4,7 @@ import { useApp } from "@/state/AppContext";
 import { useRouter } from "@/routes";
 import { AWARD_LABELS_VI, AwardLevel, ExamScores, MAJOR_GROUPS, PROVINCES, PriorityArea, PriorityObject, RankLevel, RelocationWillingness } from "@/engine/types";
 import { fold, matchesQuery } from "@/lib/text";
-import { SUBJECT_LABELS_VI } from "@/data/universities/combinations";
+import { APTITUDE_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { bestCombination, countEntered } from "@/engine/scoring/combo";
 
 export type StepId = "year" | "exam" | "hocba" | "cert" | "award" | "record" | "place" | "major" | "priority";
@@ -32,7 +32,7 @@ function takeRequestedStep(): number {
 }
 
 const MAIN: (keyof ExamScores)[] = ["toan", "van", "anh", "ly", "hoa", "sinh", "su", "dia"];
-const OTHER: (keyof ExamScores)[] = ["gdcd", "tin", "cncn", "cnnn"];
+const OTHER: (keyof ExamScores)[] = ["gdcd", "tin", "cncn", "cnnn", "ve", "nk_tdtt", "nk_gdmn"];
 
 function Choice({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
   return (
@@ -94,7 +94,7 @@ function ScoreGrid({ kind }: { kind: "exam" | "hocba" }) {
   const scores = kind === "exam" ? profile.examScores : profile.hocBaScores;
   const prefix = kind === "exam" ? "Điểm thi" : "Điểm học bạ";
   const combo = bestCombination(scores);
-  const list = more ? [...MAIN, ...OTHER] : MAIN;
+  const list = more ? [...MAIN, ...OTHER.filter((s) => kind === "exam" || !APTITUDE_SUBJECTS.includes(s as never))] : MAIN;
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -260,11 +260,12 @@ const TITLES: Record<StepId, string> = {
 };
 
 export function Wizard() {
-  const { profile, updateProfile } = useApp();
+  const { profile, updateProfile, catalog } = useApp();
   const router = useRouter();
   const [index, setIndex] = useState(takeRequestedStep);
   const [notice, setNotice] = useState<string | null>(null);
   const [perGrade, setPerGrade] = useState(false);
+  const provincesWithSchools = useMemo(() => new Set((catalog?.programs ?? []).map((p) => p.province).filter((v): v is string => Boolean(v))), [catalog]);
   const timer = useRef<number | null>(null);
   const step = STEPS[index];
 
@@ -298,7 +299,7 @@ export function Wizard() {
 
   const interest = profile.interestMajorGroups ?? [];
   const alt = profile.altScores ?? {};
-  const setAlt = (key: "ielts" | "dgnl_hcm" | "dgnl_hn" | "dgtd_bk", v: number | null) => updateProfile({ altScores: { ...alt, [key]: v } });
+  const setAlt = (key: "ielts" | "toefl" | "dgnl_hcm" | "dgnl_hn" | "dgtd_bk", v: number | null) => updateProfile({ altScores: { ...alt, [key]: v } });
 
   const skippable = step === "hocba" || step === "cert" || step === "award" || step === "record" || step === "major" || step === "priority" || (step === "exam" && !countEntered(profile.examScores));
   const filled =
@@ -345,8 +346,9 @@ export function Wizard() {
         )}
         {step === "cert" && (
           <div className="grid grid-cols-2 gap-3">
-            <p className="col-span-2 text-sm text-slate-500">Chỉ nhập những gì bạn có. TOEIC, TOEFL mỗi trường quy đổi khác nhau nên ứng dụng hiện chỉ tính IELTS.</p>
+            <p className="col-span-2 text-sm text-slate-500">Chỉ nhập những gì bạn có. Mỗi trường quy đổi chứng chỉ khác nhau: ứng dụng chỉ tính khi trường công bố bảng quy đổi. TOEIC chưa hỗ trợ.</p>
             <NumberField name="IELTS" label="IELTS (0–9)" value={alt.ielts} max={9} step="0.5" onChange={(v) => setAlt("ielts", v)} />
+            <NumberField name="TOEFL iBT" label="TOEFL iBT (0–120)" value={alt.toefl} max={120} step="1" onChange={(v) => setAlt("toefl", v)} />
             <NumberField name="ĐGNL ĐHQG-HCM" label="ĐGNL ĐHQG-HCM (/1200)" value={alt.dgnl_hcm} max={1200} step="1" onChange={(v) => setAlt("dgnl_hcm", v)} />
             <NumberField name="ĐGNL ĐHQG Hà Nội" label="ĐGNL ĐHQG Hà Nội (/150)" value={alt.dgnl_hn} max={150} step="1" onChange={(v) => setAlt("dgnl_hn", v)} />
             <NumberField name="ĐGTD Bách khoa" label="ĐGTD Bách khoa (/100)" value={alt.dgtd_bk} max={100} step="0.5" onChange={(v) => setAlt("dgtd_bk", v)} />
@@ -386,6 +388,9 @@ export function Wizard() {
               <option value="">Bạn ở tỉnh / thành phố nào?</option>
               {PROVINCES.map((p) => (<option key={p} value={p}>{p}</option>))}
             </select>
+            {profile.homeProvince && profile.relocationWillingness === "chi_tinh_nha" && !provincesWithSchools.has(profile.homeProvince) && (
+              <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">Dữ liệu hiện chưa có trường nào ở {profile.homeProvince}. Hãy chọn "Cùng vùng miền với bạn" hoặc "Cả nước" để thấy ngành.</p>
+            )}
             <div className="grid gap-3">
               {([["khong_gioi_han", "Cả nước"], ["trong_vung", "Cùng vùng miền với bạn"], ["chi_tinh_nha", "Chỉ ở tỉnh nhà"]] as [RelocationWillingness, string][]).map(([value, label]) => (
                 <Choice key={value} label={label} selected={profile.relocationWillingness === value} onClick={() => updateProfile({ relocationWillingness: value })} />

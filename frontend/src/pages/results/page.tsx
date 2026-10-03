@@ -78,6 +78,7 @@ export default function ResultsPage() {
     return top ? { label: top[0], count: top[1] } : null;
   }, [candidates, profile, programs]);
 
+  const noLocalSchool = profile.relocationWillingness === "chi_tinh_nha" && !!profile.homeProvince && !programs.some((p) => p.province === profile.homeProvince);
   const options = useMemo(() => (matched.length === 0 ? relaxations(candidates, profile) : []), [matched.length, candidates, profile]);
 
   const toggle = (c: CandidateOption) => {
@@ -166,6 +167,7 @@ export default function ResultsPage() {
       {matched.length === 0 ? (
         <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 text-center">
           <p className="text-lg font-semibold text-slate-900">Chưa có ngành thỏa điều kiện của bạn</p>
+          {noLocalSchool && <p className="text-sm text-slate-600">Dữ liệu hiện chưa có trường nào ở {profile.homeProvince}.</p>}
           {options.length > 0 ? (
             <div className="grid gap-2.5">
               {options.map((o) => (

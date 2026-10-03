@@ -104,3 +104,25 @@ def test_award_bonus_and_teacher_rules():
     hb = {"schoolCode": "ZZ0", "admissionMethod": "HOC_BA", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "su_pham"}
     assert core.score_for_program({**PROFILE, "academicRank": "kha"}, hb) is None
     assert core.score_for_program({**PROFILE, "academicRank": "gioi"}, hb) is not None
+
+
+def test_aptitude_combination_uses_entered_aptitude_score():
+    """V00 = Toán + Vật lí + Vẽ mỹ thuật (bảng tổ hợp đề án 2026 của ĐH Cần Thơ): 8 + 7 + 8,5 = 23,5; thiếu điểm vẽ thì không tính."""
+    core.register_school_rules(core.load_school_rules())
+    program = {"schoolCode": "ZZ5", "admissionMethod": "THPT", "combinations": ["V00"], "requiresAptitude": True, "majorGroup": "kien_truc"}
+    profile = {**PROFILE, "examScores": {"toan": 8, "ly": 7, "ve": 8.5}, "priority": {"area": "KV3", "object": "none"}}
+    assert core.score_for_program(profile, program)["score"] == pytest.approx(23.5)
+    assert core.score_for_program({**profile, "examScores": {"toan": 8, "ly": 7}}, program) is None
+    unknown = {**program, "combinations": ["H00"]}
+    assert core.score_for_program(profile, unknown) is None
+    assert "V00" not in core.STANDARD_COMBINATIONS
+
+
+def test_toefl_table_and_bonus_follow_school_documents():
+    core.register_school_rules(core.load_school_rules())
+    profile = {**PROFILE, "altScores": {"toefl": 65}, "examScores": {"toan": 8, "van": 7, "anh": 6}}
+    dpq = {"schoolCode": "DPQ", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "kinh_te"}
+    assert core.score_for_program(profile, dpq)["score"] == pytest.approx(24.0)  # TOEFL 65 -> 9,0 thay Tiếng Anh 6
+    dtl = {"schoolCode": "DTL", "admissionMethod": "THPT", "combinations": ["D01"], "requiresAptitude": False, "majorGroup": "kinh_te"}
+    assert core.score_for_program(profile, dtl)["score"] == pytest.approx(22.0)  # 21 + điểm khuyến khích TOEFL 65-74 = 1,0
+    assert core.score_for_program({**profile, "altScores": {"toefl": 40}}, dpq)["score"] == pytest.approx(21.0)  # dưới ngưỡng bảng: không quy đổi

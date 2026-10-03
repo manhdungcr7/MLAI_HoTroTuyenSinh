@@ -15,6 +15,7 @@ import { clearSchoolRules, registerSchoolRules, validateSchoolRule, SchoolRule }
 import { missingInputsForProgram, scoreForProgram } from "../src/engine/scoring/method-score";
 import { StudentProfile, TargetProgram } from "../src/engine/types";
 import { sanitize } from "../src/state/storage";
+import { SCHOOL_RULES } from "../src/data/school-rules";
 import { comboAcceptancePrior } from "../src/engine/decision/combo-prior";
 import { FORECAST_YEAR, calculateAdmitProbability, calculatePortfolioFailAll, sigmaScaleFor } from "../src/engine/admissions/probability";
 import { calculateSubjectRoiList } from "../src/engine/roi/engine";
@@ -180,3 +181,17 @@ const twoItems = (a: string, b: string) => calculatePortfolioFailAll([
   { userScore: 22, forecastP50: 22, schoolCode: b },
 ]);
 assert(twoItems("AAA", "AAA") > twoItems("AAA", "BBB"), "Hai ngành cùng trường trượt cùng lúc nhiều hơn hai ngành khác trường");
+
+// ---- Tổ hợp có môn năng khiếu ----
+const aptitudeProgram = { programId: "nk", schoolCode: "ZZ5", majorName: "Kiến trúc", majorGroup: "kien_truc", combinations: ["V00"], admissionMethod: "THPT", requiresAptitude: true } as unknown as TargetProgram;
+const aptProfile = { ...profile(0), examScores: { toan: 8, ly: 7, ve: 8.5 }, priority: { area: "KV3", object: "none" } } as StudentProfile;
+assert(near(scoreForProgram(aptProfile, aptitudeProgram)?.score, 23.5), "Tổ hợp V00: Toán + Lý + điểm vẽ do học sinh nhập");
+assert(scoreForProgram({ ...aptProfile, examScores: { toan: 8, ly: 7 } }, aptitudeProgram) === null, "Thiếu điểm năng khiếu thì không tính");
+assert(scoreForProgram(aptProfile, { ...aptitudeProgram, combinations: ["H00"] } as unknown as TargetProgram) === null, "Tổ hợp năng khiếu chưa có định nghĩa trong đề án thì không tính");
+
+// ---- TOEFL iBT: bảng quy đổi và điểm khuyến khích theo văn bản của từng trường ----
+registerSchoolRules(SCHOOL_RULES);
+const toeflProfile = { ...profile(3), examScores: { toan: 8, van: 7, anh: 6 }, altScores: { toefl: 65 }, priority: { area: "KV3", object: "none" } } as StudentProfile;
+const toeflProgram = (code: string) => ({ programId: "t", schoolCode: code, majorName: "Kinh tế", majorGroup: "kinh_te", combinations: ["D01"], admissionMethod: "THPT" }) as unknown as TargetProgram;
+assert(near(scoreForProgram(toeflProfile, toeflProgram("DPQ"))?.score, 24), "DPQ: TOEFL iBT 65 quy đổi 9,0 điểm thay Tiếng Anh");
+assert(near(scoreForProgram(toeflProfile, toeflProgram("DTL"))?.score, 22), "DTL: TOEFL iBT 65 được điểm khuyến khích 1,0");

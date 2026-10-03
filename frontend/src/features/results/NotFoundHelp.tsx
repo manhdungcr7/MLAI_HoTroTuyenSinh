@@ -44,7 +44,7 @@ export function NotFoundHelp() {
         <div className="space-y-4 border-t border-slate-100 px-4 py-4 text-sm leading-relaxed text-slate-700">
           <div>
             <p className="font-medium text-slate-900">Ngành thi năng khiếu (vẽ, nhạc, thể thao, mầm non)</p>
-            <p>Ngoài điểm văn hóa còn thi năng khiếu riêng của trường nên chưa tính được xác suất đỗ.</p>
+            <p>Ngoài điểm văn hóa còn thi năng khiếu riêng của trường. Nếu bạn đã có điểm năng khiếu, nhập ở mục "Môn khác" của bước điểm thi: ứng dụng tính cho các tổ hợp V00–V03, T00, T01, T06, T10, M01, M05, M06, M11. Tổ hợp năng khiếu khác chưa tính được xác suất đỗ.</p>
             {aptitude.length > 0 && (
               <ul className="mt-2 space-y-1">
                 {aptitude.map((p) => (

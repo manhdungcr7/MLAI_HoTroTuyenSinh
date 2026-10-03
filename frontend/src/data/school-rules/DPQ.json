@@ -6,7 +6,7 @@
     "document": "Thông tin tuyển sinh chính quy năm 2026 – Trường Đại học Phạm Văn Đồng",
     "sha256": "5b34528a782ce0f2b3df21eee78a818982e70d2ac2e819e776d91a46a835ee50",
     "verifiedAt": "2026-10-03",
-    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 5.b: IELTS quy đổi sang điểm môn Tiếng Anh của kỳ thi THPT 2026."
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 5.b: IELTS quy đổi sang điểm môn Tiếng Anh của kỳ thi THPT 2026. Bảng quy đổi TOEFL iBT: 45-50→7,5; 51-55→8,0; 56-60→8,5; 61-70→9,0; 71-79→9,5; ≥80→10 (mục 5.b). TOEIC chưa mã hóa vì bảng trong văn bản không thẳng cột."
   },
   "methods": {
     "THPT": {
@@ -40,6 +40,32 @@
         },
         {
           "min": 6.5,
+          "score": 10
+        }
+      ],
+      "toeflToEnglish": [
+        {
+          "min": 45,
+          "score": 7.5
+        },
+        {
+          "min": 51,
+          "score": 8.0
+        },
+        {
+          "min": 56,
+          "score": 8.5
+        },
+        {
+          "min": 61,
+          "score": 9.0
+        },
+        {
+          "min": 71,
+          "score": 9.5
+        },
+        {
+          "min": 80,
           "score": 10
         }
       ]

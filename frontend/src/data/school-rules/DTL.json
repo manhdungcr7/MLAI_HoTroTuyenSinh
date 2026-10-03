@@ -6,7 +6,7 @@
     "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Thăng Long",
     "sha256": "12988a0b42ed421eae7049b7b7ba863a313dbac6516f3365fd9aa4d847f0d4c4",
     "verifiedAt": "2026-10-03",
-    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.1: ngành có môn hệ số 2 (khoa học máy tính, hệ thống thông tin, công nghệ thông tin, trí tuệ nhân tạo: Toán) tính (Toán×2 + 2 môn)×3/4, các ngành khác tổng 3 môn; mục 5.2: điểm khuyến khích IELTS 5.0→0.5 … ≥7.0→1.5. Quy đổi IELTS thành điểm môn Tiếng Anh chỉ thuộc phương thức 2 (kết hợp) nên không áp dụng cho thi THPT. Nhóm CNTT trong dữ liệu có thêm ngành Mạng máy tính (không có trong bảng ngành hệ số 2 của đề án) nên kết quả ngành này có thể lệch."
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.1: ngành có môn hệ số 2 (khoa học máy tính, hệ thống thông tin, công nghệ thông tin, trí tuệ nhân tạo: Toán) tính (Toán×2 + 2 môn)×3/4, các ngành khác tổng 3 môn; mục 5.2: điểm khuyến khích IELTS 5.0→0.5 … ≥7.0→1.5. Quy đổi IELTS thành điểm môn Tiếng Anh chỉ thuộc phương thức 2 (kết hợp) nên không áp dụng cho thi THPT. Nhóm CNTT trong dữ liệu có thêm ngành Mạng máy tính (không có trong bảng ngành hệ số 2 của đề án) nên kết quả ngành này có thể lệch. Điểm khuyến khích TOEFL iBT: 45-54→0,5; 55-64→0,75; 65-74→1,0; 75-84→1,25; ≥85→1,5 (mục 5.2)."
   },
   "methods": {
     "THPT": {
@@ -37,6 +37,28 @@
           },
           {
             "min": 7.0,
+            "points": 1.5
+          }
+        ],
+        "toefl": [
+          {
+            "min": 45,
+            "points": 0.5
+          },
+          {
+            "min": 55,
+            "points": 0.75
+          },
+          {
+            "min": 65,
+            "points": 1.0
+          },
+          {
+            "min": 75,
+            "points": 1.25
+          },
+          {
+            "min": 85,
             "points": 1.5
           }
         ]

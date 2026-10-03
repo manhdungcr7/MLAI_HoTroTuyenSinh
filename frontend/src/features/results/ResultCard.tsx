@@ -61,6 +61,11 @@ export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite, 
               <BadgeCheck className="h-3 w-3" /> Theo quy chế trường
             </span>
           )}
+          {c.aptitude && (
+            <span title="Điểm năng khiếu do trường tổ chức thi; ứng dụng dùng điểm bạn tự nhập" className="inline-flex items-center gap-1 rounded-md bg-violet-50 px-2 py-0.5 text-[11px] font-bold text-violet-700">
+              Có thi năng khiếu
+            </span>
+          )}
           {needsCheck && (
             <span title={`Đề án không ghi rõ phương thức hoặc tổ hợp cạnh điểm chuẩn; hệ thống đã suy ra.${c.comboAcceptance !== undefined ? ` Xác suất đã tính cả khả năng trường không nhận tổ hợp ${c.combination} (ước ${Math.round(c.comboAcceptance * 100)}% ngành nhận).` : ""} Hãy kiểm tra đề án của trường.`} className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-800">
               <AlertCircle className="h-3 w-3" /> Kiểm tra đề án

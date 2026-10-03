@@ -40,6 +40,9 @@ class SubjectScores(BaseModel):
     tin: float | None = Score
     cncn: float | None = Score
     cnnn: float | None = Score
+    ve: float | None = Score
+    nk_tdtt: float | None = Score
+    nk_gdmn: float | None = Score
 
 
 class PriorityIn(BaseModel):
@@ -50,6 +53,7 @@ class PriorityIn(BaseModel):
 class AltScoresIn(BaseModel):
     model_config = ConfigDict(extra="ignore")
     ielts: float | None = Field(None, ge=0, le=9)
+    toefl: float | None = Field(None, ge=0, le=120)
     dgnl_hcm: float | None = Field(None, ge=0, le=1200)
     dgnl_hn: float | None = Field(None, ge=0, le=150)
     dgtd_bk: float | None = Field(None, ge=0, le=100)

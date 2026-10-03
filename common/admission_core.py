@@ -24,6 +24,8 @@ from typing import Any, Iterable, Mapping
 ROOT = Path(__file__).resolve().parents[1]
 _RULES = json.loads((Path(__file__).parent / "data" / "shared_rules.json").read_text(encoding="utf-8"))
 COMBINATION_SUBJECTS: dict[str, list[str]] = _RULES["combinations"]
+APTITUDE_SUBJECTS = {"ve", "nk_tdtt", "nk_gdmn"}
+STANDARD_COMBINATIONS = [c for c, subs in COMBINATION_SUBJECTS.items() if not APTITUDE_SUBJECTS.intersection(subs)]
 PROVINCE_REGIONS: dict[str, str] = _RULES["provinceRegions"]
 
 DEFAULT_CATALOG_PATH = ROOT / "frontend" / "src" / "data" / "programs-catalog.json"
@@ -361,15 +363,20 @@ def _combo_component(component, subjects, profile, needs, rule):
 
     weighted, max_total, raw_total, used_ielts = 0.0, 0.0, 0.0, False
     ielts = profile.get("ielts") or (profile.get("altScores") or {}).get("ielts")
+    toefl = (profile.get("altScores") or {}).get("toefl")
     table = rule.get("ieltsToEnglish")
     for sub in subjects:
         w = (component.get("subjectWeights") or {}).get(sub, 1)
-        values = [_num_or_none(s.get(sub)) for s in sources]
+        # Môn năng khiếu chỉ có điểm thi của trường: luôn lấy điểm năng khiếu đã nhập (không có học bạ).
+        values = [_num_or_none((profile.get("examScores") or {}).get(sub))] if sub in APTITUDE_SUBJECTS else [_num_or_none(s.get(sub)) for s in sources]
         v = sum(values) / len(values) if all(x is not None for x in values) else None
-        if sub == "anh" and table and ielts:
-            converted = table_ielts_score(ielts, table)
-            if converted is not None and (v is None or converted > v):
-                v, used_ielts = converted, True
+        if sub == "anh":
+            for converted in (
+                table_ielts_score(ielts, table) if table and ielts else None,
+                table_ielts_score(toefl, rule["toeflToEnglish"]) if rule.get("toeflToEnglish") and toefl else None,
+            ):
+                if converted is not None and (v is None or converted > v):
+                    v, used_ielts = converted, True
         if v is None:
             needs.add(f"Điểm môn {sub}")
             return None
@@ -436,6 +443,11 @@ def _score_combo(profile, rule, combo, needs, major_group=None):
                 cert_points = t["points"]
     award = profile.get("award")
     cert_points += (rule.get("awardBonus") or {}).get(award, 0.0) if award else 0.0
+    toefl_score = alt.get("toefl")
+    if toefl_score and (rule.get("certBonus") or {}).get("toefl") and major_group not in (rule.get("certBonus") or {}).get("excludedMajorGroups", []):
+        for t in rule["certBonus"]["toefl"]:
+            if toefl_score >= t["min"] and t["points"] > cert_points:
+                cert_points = t["points"]
     priority = profile.get("priority") or {}
     pri = priority_bonus(priority.get("area", "KV3"), priority.get("object", "none"), base) if rule["priority"] == "standard" and priority else 0.0
     bonus = js_math_round(min(rule.get("bonusCap", DEFAULT_BONUS_CAP), cert_points + pri) * 100) / 100
@@ -449,7 +461,10 @@ def _evaluate(profile: Mapping[str, Any], program: Mapping[str, Any], explore_un
     """(điểm tốt nhất theo quy tắc của trường, các đầu vào còn thiếu)."""
     method = program_method(program)
     resolved = resolve_method_rule(program["schoolCode"], method, program.get("majorGroup"))
-    if resolved is None or program.get("requiresAptitude"):
+    if resolved is None:
+        return None, [], []
+    declared_combos = program.get("combinations") or []
+    if program.get("requiresAptitude") and not any(c in COMBINATION_SUBJECTS and c not in STANDARD_COMBINATIONS for c in declared_combos):
         return None, [], []
     rule, origin, source = resolved
     if rule.get("unsupportedReason"):
@@ -469,7 +484,7 @@ def _evaluate(profile: Mapping[str, Any], program: Mapping[str, Any], explore_un
             unverified = not declared
             active = profile.get("activeCombination")
             if unverified:
-                combos = list(COMBINATION_SUBJECTS) if explore_unverified else ([active] if active in COMBINATION_SUBJECTS else [])
+                combos = list(STANDARD_COMBINATIONS) if explore_unverified else ([active] if active in COMBINATION_SUBJECTS else [])
             else:
                 combos = published
         if not combos:
@@ -706,6 +721,7 @@ def build_candidates(
             "sourceTier": p["sourceTier"],
             "sourceUrl": p["sourceUrl"],
             "usedIeltsConversion": ms["usedIeltsConversion"],
+            "aptitude": ms["combo"] in COMBINATION_SUBJECTS and ms["combo"] not in STANDARD_COMBINATIONS,
             "sigmaScale": sigma_scale,
             "comboAcceptance": combo_acceptance,
             "ruleOrigin": ms["ruleOrigin"],

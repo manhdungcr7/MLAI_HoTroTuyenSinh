@@ -11,6 +11,7 @@ import {
 } from "@/engine/admissions/probability";
 import { scoreOptionsForProgram } from "@/engine/scoring/method-score";
 import { comboAcceptancePrior } from "@/engine/decision/combo-prior";
+import { isAptitudeCombination } from "@/data/universities/combinations";
 
 const round2 = (n: number) => Number(n.toFixed(2));
 
@@ -116,6 +117,7 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
       ruleOrigin: ms.ruleOrigin,
       ruleSource: ms.ruleSource?.url,
       usedIeltsConversion: ms.usedIeltsConversion,
+      aptitude: isAptitudeCombination(ms.combo),
       sigmaScale,
       comboAcceptance,
     });

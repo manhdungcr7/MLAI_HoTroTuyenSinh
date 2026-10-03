@@ -364,6 +364,66 @@
    "van",
    "cnnn",
    "anh"
+  ],
+  "V00": [
+   "toan",
+   "ly",
+   "ve"
+  ],
+  "V01": [
+   "toan",
+   "van",
+   "ve"
+  ],
+  "V02": [
+   "toan",
+   "anh",
+   "ve"
+  ],
+  "V03": [
+   "toan",
+   "hoa",
+   "ve"
+  ],
+  "T00": [
+   "toan",
+   "sinh",
+   "nk_tdtt"
+  ],
+  "T01": [
+   "van",
+   "toan",
+   "nk_tdtt"
+  ],
+  "T06": [
+   "toan",
+   "hoa",
+   "nk_tdtt"
+  ],
+  "T10": [
+   "toan",
+   "anh",
+   "nk_tdtt"
+  ],
+  "M01": [
+   "van",
+   "su",
+   "nk_gdmn"
+  ],
+  "M05": [
+   "van",
+   "dia",
+   "nk_gdmn"
+  ],
+  "M06": [
+   "van",
+   "toan",
+   "nk_gdmn"
+  ],
+  "M11": [
+   "van",
+   "anh",
+   "nk_gdmn"
   ]
  },
  "provinceRegions": {

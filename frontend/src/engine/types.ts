@@ -14,6 +14,10 @@ export interface ExamScores {
   tin?: number | null;
   cncn?: number | null;
   cnnn?: number | null;
+  /** Điểm năng khiếu do trường tổ chức thi: vẽ mỹ thuật, thể dục thể thao, giáo dục mầm non. */
+  ve?: number | null;
+  nk_tdtt?: number | null;
+  nk_gdmn?: number | null;
 }
 
 /** Phương thức xét tuyển, khớp `pipeline/clean/methods.py`. */
@@ -29,6 +33,8 @@ export interface AlternativeScores {
   /** Đánh giá tư duy Bách khoa, thang 100. */
   dgtd_bk?: number | null;
   ielts?: number | null;
+  /** TOEFL iBT (0–120). */
+  toefl?: number | null;
 }
 
 /** Giải học sinh giỏi cao nhất của học sinh. */
@@ -181,6 +187,8 @@ export interface CandidateOption {
   ruleSource?: string;
   /** true khi điểm Tiếng Anh được thay bằng điểm quy đổi từ IELTS. */
   usedIeltsConversion?: boolean;
+  /** Tổ hợp có môn năng khiếu: điểm năng khiếu do trường tổ chức thi. */
+  aptitude?: boolean;
   /** Xác suất trường nhận tổ hợp này (ước lượng) khi đề án không ghi tổ hợp; đã nhân vào admitProbability. */
   comboAcceptance?: number;
   /** Hệ số nhân độ bất định theo độ cũ và độ mỏng của dữ liệu (xem sigmaScaleFor). */
