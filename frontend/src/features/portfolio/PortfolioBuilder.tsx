@@ -54,6 +54,12 @@ export function PortfolioBuilder() {
   const warnings = portfolioWarnings(items);
   const stale = rows.some((r) => r.stale);
 
+  const dropStale = () => {
+    const keep = rows.filter((r) => !r.stale).map((r) => r.item);
+    setWishlist(keep.map((w, i) => ({ ...w, rank: i + 1 })));
+    say("Đã gỡ");
+  };
+
   const persistThen = (fn: () => void) => {
     if (isSuggestion) setWishlist(items.map((w, i) => ({ ...w, rank: i + 1 })));
     window.setTimeout(fn, 0);
@@ -104,7 +110,13 @@ export function PortfolioBuilder() {
               {w.code === "TEACHER_RANK" && `Ngành sư phạm phải nằm trong 5 nguyện vọng đầu (đang ở ${w.positions.join(", ")})`}
             </li>
           ))}
-          {stale && <li className="flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-700"><AlertTriangle className="h-4 w-4 shrink-0" /> Có nguyện vọng chưa tính lại theo điểm mới (dấu *)</li>}
+          {stale && (
+            <li className="flex flex-wrap items-center gap-3 rounded-xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-700">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              <span className="min-w-0 flex-1">Có nguyện vọng (dấu *) không còn tính được theo điểm hiện tại, nên xác suất là số cũ.</span>
+              <button type="button" onClick={dropStale} className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-blue-600 cursor-pointer">Gỡ các mục này</button>
+            </li>
+          )}
         </ul>
       )}
 

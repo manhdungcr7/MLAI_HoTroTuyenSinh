@@ -2,7 +2,7 @@
 
 Sinh tự động bằng `python scripts/data_gaps.py`. Không bổ sung bằng số liệu không có nguồn.
 
-- Chương trình trong danh mục: 2530; trường: 100; trường có quy tắc riêng: 31.
+- Chương trình trong danh mục: 2529; trường: 100; trường có quy tắc riêng: 31.
 - Chương trình chưa có tổ hợp xét tuyển xác thực: 1256 (49%).
 - Tỉnh/thành trong danh sách chọn nhưng chưa có trường nào trong dữ liệu (17): An Giang, Cà Mau, Cao Bằng, Đắk Lắk, Điện Biên, Gia Lai, Hà Tĩnh, Hưng Yên, Lai Châu, Lạng Sơn, Lào Cai, Phú Thọ, Quảng Ninh, Quảng Trị, Sơn La, Tây Ninh, Tuyên Quang.
 

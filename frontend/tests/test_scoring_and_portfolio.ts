@@ -205,3 +205,7 @@ assert(near(nhh?.rawScore, 24.38) && nhh?.usedIeltsConversion === true, "NHH: To
 assert(near(scoreForProgram(certProfile, named("NHH", "Luật kinh tế", "luat"))?.rawScore, 23.63), "NHH: nhóm Luật nhân đôi Ngữ văn");
 const dhyProfile = { ...certProfile, altScores: { ielts: 6.0 } } as StudentProfile;
 assert(near(scoreForProgram(dhyProfile, named("DHY", "Điều dưỡng", "y_duoc"))?.rawScore, 24) && near(scoreForProgram(dhyProfile, named("DHY", "Y khoa", "y_duoc"))?.rawScore, 21), "DHY: Y khoa chỉ nhận chứng chỉ từ IELTS 6,5");
+
+// ---- Trang phải cuộn được: không khóa cuộn của cả trang bằng CSS ----
+const css = readFileSync(new URL("../src/globals.css", import.meta.url), "utf-8");
+assert(!/body\s*\{[^}]*overflow:\s*hidden/.test(css), "CSS không được khóa cuộn trang (body overflow hidden)");

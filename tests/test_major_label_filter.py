@@ -103,3 +103,9 @@ def test_subject_lists_with_aptitude_words_are_rejected():
         assert is_garbage_major_label(junk), junk
     assert not is_garbage_major_label("Sư phạm Ngữ văn")
     assert not is_garbage_major_label("Công nghệ thông tin")
+
+
+def test_nganh_list_suffix_is_cut():
+    from pipeline.clean.reconcile import repair_major_label
+
+    assert repair_major_label("Tài chính ngân hàng gồm 02 ngành: Tài chính; Ngân hàng;") == "Tài chính ngân hàng"

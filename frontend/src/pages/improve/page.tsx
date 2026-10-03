@@ -65,6 +65,12 @@ export default function ImprovePage() {
         <p className="mt-3 text-sm text-slate-600">Bạn {ms.score.toFixed(2)} · chuẩn {gap.p50.toFixed(1)} · đỗ {formatProbability(prob)}</p>
       </section>
 
+      {!isHocBa && roi.length === 0 && (
+        <p className="rounded-2xl bg-slate-100 px-5 py-4 text-sm text-slate-700">
+          {prob >= 0.95 ? "Bạn đã đủ điểm cho ngành này, không cần học thêm." : "Các môn của tổ hợp đã gần điểm tối đa nên không còn môn nào để tăng thêm."}
+        </p>
+      )}
+
       {isHocBa ? (
         <p className="rounded-2xl bg-slate-100 px-5 py-4 text-base font-bold text-slate-700">Ngành này xét học bạ nên điểm khó thay đổi. Hãy chọn ngành xét điểm thi để biết nên học thêm môn nào.</p>
       ) : (

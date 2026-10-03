@@ -74,7 +74,7 @@ _TRAILING_COMBOS = re.compile(
 )
 _CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f]")
 _LEADING_NGANH = re.compile(r"^Ngành\s+", re.IGNORECASE)
-_LIST_SUFFIX = re.compile(r"\s*,?\s*gồm\s+(?:\d+|các)\s+(?:chuyên ngành|chương trình)\b.*$", re.IGNORECASE)
+_LIST_SUFFIX = re.compile(r"\s*,?\s*gồm\s+(?:\d+|các)\s+(?:chuyên ngành|chương trình|ngành)\b.*$", re.IGNORECASE)
 _STAR_NOTE = re.compile(r"\s*\(\*\)|\*")
 _NOT_A_MAJOR = re.compile(
     r"^\s*(?:\d+\s*[.)]|Lĩnh vực\b|Mã tổ hợp|Khối ngành\b|\d+\s+ngành\b|\d+/[\wĐ-]+|V-?SAT\b|Tuyển sinh riêng|Nhóm ngành\b)"

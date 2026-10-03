@@ -73,11 +73,9 @@ body,
 #root {
   width: 100%;
   min-height: 100%;
-  height: 100%;
 }
 
 body {
-  overflow: hidden;
   background-color: var(--background);
   color: var(--foreground);
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -95,44 +93,6 @@ html {
 /* Chống rớt chữ đơn lẻ trên tiêu đề và mô tả */
 h1, h2, h3, h4, h5, h6, p, .text-pretty {
   text-wrap: pretty;
-}
-
-/* Các lớp cấu trúc layout chuẩn phân tầng hệ thống */
-.app-shell {
-  width: 100vw;
-  height: 100dvh;
-  display: flex;
-  overflow: hidden;
-}
-
-.sidebar-shell {
-  flex: 0 0 250px;
-  width: 250px;
-  min-width: 250px;
-  max-width: 250px;
-  height: 100dvh;
-}
-
-.main-shell {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
-.page-viewport {
-  flex: 1 1 auto;
-  min-height: 0;
-  min-width: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-gutter: stable;
-}
-
-.page-content {
-  width: 100%;
-  max-width: none !important;
 }
 
 /* Đảm bảo chữ số liệu hiển thị cân đối thẳng hàng */
@@ -373,11 +333,7 @@ input[type="range"]::-moz-range-thumb:hover {
 @media print {
   html,
   body,
-  #root,
-  .app-shell,
-  .main-shell,
-  .page-viewport,
-  .page-content {
+  #root {
     width: 100% !important;
     height: auto !important;
     min-height: auto !important;
