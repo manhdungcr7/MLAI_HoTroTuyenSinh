@@ -5,7 +5,9 @@
  */
 
 import { readFileSync } from "node:fs";
-import { DECISION_PROGRAM_POOL } from "../src/data/catalog";
+import { loadCatalog } from "../src/data/catalog";
+
+const DECISION_PROGRAM_POOL = (await loadCatalog()).programs;
 import { buildCandidateOptions } from "../src/engine/decision/optimizer";
 import { filterByConstraints } from "../src/engine/decision/constraints";
 import { portfolioWarnings, suggestPortfolio, candidateToWishlistItem } from "../src/engine/decision/portfolio-suggest";

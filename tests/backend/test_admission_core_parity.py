@@ -28,7 +28,7 @@ def ts_result():
     if not npx or not (ROOT / "frontend" / "node_modules").exists():
         pytest.skip("Cần Node và frontend/node_modules để chạy engine TypeScript")
     proc = subprocess.run(
-        [npx, "tsx", "../scripts/dump_parity.ts", str(FIXTURE), str(RULES_FIXTURE)],
+        [npx, "tsx", "../scripts/dump_parity.mts", str(FIXTURE), str(RULES_FIXTURE)],
         cwd=ROOT / "frontend", capture_output=True, text=True, encoding="utf-8", timeout=240,
     )
     assert proc.returncode == 0, proc.stderr[-2000:]

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { useApp, useCandidates } from "@/state/AppContext";
-import { findProgramById } from "@/data/catalog";
+import { findProgram } from "@/data/catalog";
 import { formatProbability } from "@/lib/format";
 
 /**
@@ -11,7 +11,7 @@ import { formatProbability } from "@/lib/format";
  */
 export function TargetPicker() {
   const { setTarget } = useApp();
-  const { matched } = useCandidates();
+  const { matched, programs } = useCandidates();
   const [query, setQuery] = useState("");
 
   const options = useMemo(() => {
@@ -41,7 +41,7 @@ export function TargetPicker() {
             <button
               type="button"
               onClick={() => {
-                const program = findProgramById(c.programId);
+                const program = findProgram(programs, c.programId);
                 if (program) setTarget(program);
               }}
               className="flex w-full items-center justify-between gap-3 rounded-2xl border-2 border-slate-200 bg-white px-4 py-3 text-left transition hover:border-blue-400 cursor-pointer"

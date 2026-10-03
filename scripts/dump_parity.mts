@@ -1,7 +1,9 @@
 // Chạy engine TypeScript trên các hồ sơ mẫu để đối chiếu với common/admission_core.py.
 // Dùng bởi tests/backend/test_admission_core_parity.py.
 import { readFileSync } from "node:fs";
-import { DECISION_PROGRAM_POOL } from "../frontend/src/data/catalog";
+import { loadCatalog } from "../frontend/src/data/catalog";
+
+const DECISION_PROGRAM_POOL = (await loadCatalog()).programs;
 import { buildCandidateOptions, calculateWishlistFailAll } from "../frontend/src/engine/decision/optimizer";
 import { filterByConstraints } from "../frontend/src/engine/decision/constraints";
 import { suggestPortfolio, candidateToWishlistItem } from "../frontend/src/engine/decision/portfolio-suggest";

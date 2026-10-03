@@ -9,7 +9,6 @@
 
 import "@/data/school-rules";
 import { AdmissionMethod, TargetProgram } from "@/engine/types";
-import rawCatalog from "./programs-catalog.json";
 
 export interface ProgramCatalogItem extends TargetProgram {
   programKey: string;
@@ -132,35 +131,57 @@ function toCatalogItem(item: RawCatalogItem): ProgramCatalogItem | null {
   };
 }
 
-/** Toàn bộ chương trình–phương thức có ngưỡng điểm hợp lệ. */
-export const ALL_PROGRAMS_CATALOG: ProgramCatalogItem[] = (rawCatalog as RawCatalogItem[])
-  .map(toCatalogItem)
-  .filter((p): p is ProgramCatalogItem => p !== null);
-
-/** Tập chương trình dùng cho mọi engine (gợi ý, khám phá, so sánh, what-if, đòn bẩy môn). */
-export const DECISION_PROGRAM_POOL: ProgramCatalogItem[] = ALL_PROGRAMS_CATALOG;
-
-
-/** Tra cứu chương trình theo id. */
-export function findProgramById(programId: string | null | undefined): ProgramCatalogItem | undefined {
-  if (!programId) return undefined;
-  return ALL_PROGRAMS_CATALOG.find((p) => p.programId === programId);
+export interface CatalogStats {
+  rawRows: number;
+  usableRows: number;
+  schools: number;
+  majors: number;
+  withTuition: number;
+  withEmployment: number;
+  byMethod: Record<string, number>;
+  latestYear: number;
 }
 
-/** Thống kê minh bạch cho trang Dữ liệu & nguồn */
-export const CATALOG_STATS = {
-  rawRows: (rawCatalog as RawCatalogItem[]).length,
-  usableRows: ALL_PROGRAMS_CATALOG.length,
-  schools: new Set(ALL_PROGRAMS_CATALOG.map((p) => p.schoolCode)).size,
-  majors: new Set(ALL_PROGRAMS_CATALOG.map((p) => p.majorKey || `${p.schoolCode}::${p.majorName}`)).size,
-  withTuition: ALL_PROGRAMS_CATALOG.filter((p) => p.tuitionVnd !== null).length,
-  withEmployment: ALL_PROGRAMS_CATALOG.filter((p) => p.employmentRate !== null).length,
-  officialPdf: ALL_PROGRAMS_CATALOG.filter((p) => p.sourceTier === "official_pdf").length,
-  aggregator: ALL_PROGRAMS_CATALOG.filter((p) => p.sourceTier === "aggregator_verified").length,
-  byMethod: ALL_PROGRAMS_CATALOG.reduce<Record<string, number>>((acc, p) => {
-    const m = p.admissionMethod ?? "THPT";
-    acc[m] = (acc[m] ?? 0) + 1;
-    return acc;
-  }, {}),
-  latestYear: Math.max(...ALL_PROGRAMS_CATALOG.map((p) => p.latestYear ?? 0)),
-};
+export interface CatalogData {
+  programs: ProgramCatalogItem[];
+  stats: CatalogStats;
+}
+
+function computeStats(programs: ProgramCatalogItem[], rawRows: number): CatalogStats {
+  const byMethod: Record<string, number> = {};
+  for (const p of programs) byMethod[p.admissionMethod ?? "THPT"] = (byMethod[p.admissionMethod ?? "THPT"] ?? 0) + 1;
+  return {
+    rawRows,
+    usableRows: programs.length,
+    schools: new Set(programs.map((p) => p.schoolCode)).size,
+    majors: new Set(programs.map((p) => p.majorKey || `${p.schoolCode}::${p.majorName}`)).size,
+    withTuition: programs.filter((p) => p.tuitionVnd !== null).length,
+    withEmployment: programs.filter((p) => p.employmentRate !== null).length,
+    byMethod,
+    latestYear: Math.max(0, ...programs.map((p) => p.latestYear ?? 0)),
+  };
+}
+
+let loading: Promise<CatalogData> | null = null;
+
+/**
+ * Toàn bộ chương trình–phương thức có ngưỡng điểm hợp lệ. Dữ liệu nằm trong một gói riêng chỉ tải khi cần,
+ * để màn nhập điểm mở ngay; tên gói có mã băm nên trình duyệt lưu lại cho các lần sau.
+ */
+export function loadCatalog(): Promise<CatalogData> {
+  loading ??= import("./programs-catalog.json")
+    .then((module) => {
+      const raw = module.default as RawCatalogItem[];
+      const programs = raw.map(toCatalogItem).filter((p): p is ProgramCatalogItem => p !== null);
+      return { programs, stats: computeStats(programs, raw.length) };
+    })
+    .catch((error) => {
+      loading = null; // cho phép thử tải lại
+      throw error;
+    });
+  return loading;
+}
+
+export function findProgram(programs: ProgramCatalogItem[], programId: string | null | undefined): ProgramCatalogItem | undefined {
+  return programId ? programs.find((p) => p.programId === programId) : undefined;
+}

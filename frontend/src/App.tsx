@@ -3,6 +3,7 @@ import { AppProvider } from "@/state/AppContext";
 import AppShell from "@/components/layout/AppShell";
 import { usePathname } from "@/routes";
 import { DatasetFreshnessProvider } from "@/state/dataset-freshness";
+import { CatalogGate } from "@/components/ui/CatalogGate";
 
 const StartPage = lazy(() => import("@/pages/start/page"));
 const ResultsPage = lazy(() => import("@/pages/results/page"));
@@ -35,13 +36,13 @@ function Routes() {
   const pathname = usePathname();
   switch (ALIASES[pathname] ?? pathname) {
     case "/results":
-      return <ResultsPage />;
+      return <CatalogGate><ResultsPage /></CatalogGate>;
     case "/portfolio":
-      return <PortfolioPage />;
+      return <CatalogGate><PortfolioPage /></CatalogGate>;
     case "/improve":
-      return <ImprovePage />;
+      return <CatalogGate><ImprovePage /></CatalogGate>;
     case "/about":
-      return <AboutPage />;
+      return <CatalogGate><AboutPage /></CatalogGate>;
     default:
       return <StartPage />;
   }

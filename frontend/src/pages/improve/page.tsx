@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
 import Link from "@/components/navigation/HashLink";
 import { ArrowRight, RefreshCw } from "lucide-react";
-import { useApp } from "@/state/AppContext";
-import { DECISION_PROGRAM_POOL } from "@/data/catalog";
+import { useApp, useCandidates } from "@/state/AppContext";
 import { TargetPicker } from "@/components/ui/TargetPicker";
 import { runGapAnalysis } from "@/engine/gap/engine";
 import { calculateSubjectRoiList } from "@/engine/roi/engine";
@@ -11,15 +10,16 @@ import { formatProbability } from "@/lib/format";
 
 export default function ImprovePage() {
   const { profile, target, setTarget } = useApp();
+  const { programs } = useCandidates();
 
   const result = useMemo(() => {
     if (!target) return null;
     const ms = scoreForProgram(profile, target);
     if (!ms) return { kind: "no-score" as const };
     const gap = runGapAnalysis(target, profile);
-    const roi = calculateSubjectRoiList(profile, target, DECISION_PROGRAM_POOL).slice(0, 3);
+    const roi = calculateSubjectRoiList(profile, target, programs).slice(0, 3);
     return { kind: "ok" as const, ms, gap, roi, prob: gap.admitProbability };
-  }, [target, profile]);
+  }, [target, profile, programs]);
 
   if (!target) {
     return (

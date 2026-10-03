@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { CandidateOption, ExamScores, StudentProfile, TargetProgram, WishlistItem } from "@/engine/types";
-import { DECISION_PROGRAM_POOL } from "@/data/catalog";
+import { CatalogData, ProgramCatalogItem, loadCatalog } from "@/data/catalog";
 import { buildCandidateOptions } from "@/engine/decision/optimizer";
 import { filterByConstraints } from "@/engine/decision/constraints";
 import { MAX_WISHES, candidateToWishlistItem } from "@/engine/decision/portfolio-suggest";
@@ -24,6 +24,10 @@ interface AppApi {
   resetAll: () => void;
   /** Tăng mỗi lần xóa hết, để các màn hình nhập liệu tạo lại từ trạng thái trống. */
   epoch: number;
+  /** Dữ liệu điểm chuẩn; null khi đang tải hoặc tải lỗi. */
+  catalog: CatalogData | null;
+  catalogStatus: "loading" | "ready" | "error";
+  retryCatalog: () => void;
 }
 
 const AppContext = createContext<AppApi | null>(null);
@@ -33,6 +37,28 @@ const renumber = (items: WishlistItem[]) => items.slice(0, MAX_WISHES).map((w, i
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<PersistedState>(() => loadState());
   const [epoch, setEpoch] = useState(0);
+  const [catalog, setCatalog] = useState<CatalogData | null>(null);
+  const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [attempt, setAttempt] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    setCatalogStatus("loading");
+    loadCatalog()
+      .then((data) => {
+        if (!active) return;
+        setCatalog(data);
+        setCatalogStatus("ready");
+      })
+      .catch(() => {
+        if (active) setCatalogStatus("error");
+      });
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
+
+  const retryCatalog = useCallback(() => setAttempt((n) => n + 1), []);
 
   useEffect(() => {
     saveState(state);
@@ -96,9 +122,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     () => ({
       profile: state.profile, updateProfile, setScore,
       wishlist: state.wishlist, addWish, removeWish, moveWish, setWishlist,
-      target: state.target, setTarget, resetAll, epoch,
+      target: state.target, setTarget, resetAll, epoch, catalog, catalogStatus, retryCatalog,
     }),
-    [state, epoch, updateProfile, setScore, addWish, removeWish, moveWish, setWishlist, setTarget, resetAll],
+    [state, epoch, catalog, catalogStatus, retryCatalog, updateProfile, setScore, addWish, removeWish, moveWish, setWishlist, setTarget, resetAll],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -114,9 +140,10 @@ export function useApp(): AppApi {
  * Xác suất đỗ của học sinh cho từng ngành (phương thức tốt nhất) và phần thỏa ràng buộc đã khai.
  * Tách khỏi context để màn hình nhập điểm không phải tính lại toàn bộ danh mục sau mỗi lần gõ.
  */
-export function useCandidates(): { candidates: CandidateOption[]; matched: CandidateOption[] } {
-  const { profile } = useApp();
-  const candidates = useMemo(() => buildCandidateOptions(DECISION_PROGRAM_POOL, profile), [profile]);
+export function useCandidates(): { candidates: CandidateOption[]; matched: CandidateOption[]; programs: ProgramCatalogItem[] } {
+  const { profile, catalog } = useApp();
+  const programs = useMemo(() => catalog?.programs ?? [], [catalog]);
+  const candidates = useMemo(() => buildCandidateOptions(programs, profile), [programs, profile]);
   const matched = useMemo(() => filterByConstraints(candidates, profile), [candidates, profile]);
-  return { candidates, matched };
+  return { candidates, matched, programs };
 }

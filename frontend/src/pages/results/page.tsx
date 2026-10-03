@@ -3,7 +3,6 @@ import Link from "@/components/navigation/HashLink";
 import { useRouter } from "@/routes";
 import { ArrowRight, Search } from "lucide-react";
 import { useApp, useCandidates } from "@/state/AppContext";
-import { DECISION_PROGRAM_POOL } from "@/data/catalog";
 import { CandidateOption } from "@/engine/types";
 import { missingInputsForProgram } from "@/engine/scoring/method-score";
 import { ResultCard } from "@/features/results/ResultCard";
@@ -22,7 +21,7 @@ const stepForMissing = (label: string): StepId => (/học bạ/i.test(label) ? "
 
 export default function ResultsPage() {
   const { profile, wishlist, addWish, removeWish } = useApp();
-  const { candidates, matched } = useCandidates();
+  const { candidates, matched, programs } = useCandidates();
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("all");
   const [query, setQuery] = useState("");
@@ -49,7 +48,7 @@ export default function ResultsPage() {
     const computed = new Set(candidates.map((c) => c.majorKey || c.programId));
     const counted = new Map<string, number>();
     const seen = new Set<string>();
-    for (const p of DECISION_PROGRAM_POOL) {
+    for (const p of programs) {
       const key = p.majorKey || p.programId;
       if (computed.has(key) || seen.has(key)) continue;
       const needs = missingInputsForProgram(profile, p);
@@ -59,7 +58,7 @@ export default function ResultsPage() {
     }
     const top = [...counted.entries()].sort((a, b) => b[1] - a[1])[0];
     return top ? { label: top[0], count: top[1] } : null;
-  }, [candidates, profile]);
+  }, [candidates, profile, programs]);
 
   const toggle = (c: CandidateOption) => {
     const rank = rankById.get(c.programId);

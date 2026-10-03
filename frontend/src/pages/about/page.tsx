@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DatasetFreshness } from "@/state/dataset-freshness";
-import { CATALOG_STATS } from "@/data/catalog";
+import { useApp } from "@/state/AppContext";
 import { listSchoolRules } from "@/engine/scoring/school-rules";
 import { METHOD_LABELS_VI } from "@/engine/scoring/method-score";
 
@@ -38,13 +38,15 @@ function useBacktest(): Backtest | null {
 /** Trang thông tin: cách tính và độ tin cậy dữ liệu, ngắn gọn. */
 export default function AboutPage() {
   const backtest = useBacktest();
+  const { catalog } = useApp();
+  const stats0 = catalog?.stats;
   const ownRules = listSchoolRules().length;
   const stats = [
-    { value: CATALOG_STATS.usableRows, label: "ngành đã có điểm chuẩn" },
-    { value: CATALOG_STATS.schools, label: "trường" },
+    { value: (stats0?.usableRows ?? 0), label: "ngành đã có điểm chuẩn" },
+    { value: (stats0?.schools ?? 0), label: "trường" },
     { value: ownRules, label: "trường có quy chế riêng" },
   ];
-  const methods = Object.entries(CATALOG_STATS.byMethod).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  const methods = Object.entries(stats0?.byMethod ?? {}).sort((a, b) => b[1] - a[1]).slice(0, 4);
 
   return (
     <div className="space-y-6">
