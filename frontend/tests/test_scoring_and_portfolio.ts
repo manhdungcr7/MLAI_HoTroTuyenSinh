@@ -87,6 +87,12 @@ assert(matched.every((c) => c.region === "trung"), "Mọi ngành còn lại đ�
 assert(new Set(all.map((c) => c.majorKey || c.programId)).size === all.length, "Mỗi ngành chỉ xuất hiện một lần (phương thức tốt nhất)");
 
 const suggestion = suggestPortfolio(matched, false).items;
+
+// Ngành em yêu thích còn cơ hội đỗ được ưu tiên đưa vào danh sách đề xuất
+const favoriteTargets = matched.filter((c) => c.admitProbability >= 0.1 && c.admitProbability < 0.4 && !suggestion.includes(c)).slice(0, 2);
+const withFavorites = suggestPortfolio(matched, false, favoriteTargets.map((c) => c.programId)).items;
+assert(favoriteTargets.length === 2 && favoriteTargets.every((c) => withFavorites.some((x) => x.programId === c.programId)), "Ngành yêu thích (còn cơ hội đỗ) được đưa vào danh sách đề xuất");
+assert(withFavorites.filter((c) => c.admitProbability >= 0.8).length >= 2 || withFavorites.length < 6, "Ưu tiên ngành yêu thích vẫn giữ nguyện vọng chắc đỗ");
 assert(suggestion.length > 0 && suggestion.length <= 15, "Đề xuất tối đa 15 nguyện vọng");
 const perSchool = new Map<string, number>();
 for (const c of suggestion) perSchool.set(c.schoolCode, (perSchool.get(c.schoolCode) ?? 0) + 1);

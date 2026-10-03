@@ -39,8 +39,8 @@ export function PortfolioBuilder() {
 
   const byId = useMemo(() => new Map(candidates.map((c) => [c.programId, c])), [candidates]);
   const suggestedItems = useMemo(
-    () => suggestPortfolio(matched, (profile.interestMajorGroups ?? []).length > 0).items.map((c, i) => candidateToWishlistItem(c, i + 1)),
-    [matched, profile.interestMajorGroups],
+    () => suggestPortfolio(matched, (profile.interestMajorGroups ?? []).length > 0, profile.favoriteProgramIds ?? []).items.map((c, i) => candidateToWishlistItem(c, i + 1)),
+    [matched, profile.interestMajorGroups, profile.favoriteProgramIds],
   );
 
   const isSuggestion = wishlist.length === 0;

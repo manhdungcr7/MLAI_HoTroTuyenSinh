@@ -21,6 +21,7 @@ interface AppApi {
   setWishlist: (items: WishlistItem[]) => void;
   target: TargetProgram | null;
   setTarget: (t: TargetProgram | null) => void;
+  toggleFavorite: (programId: string) => void;
   resetAll: () => void;
   /** Tăng mỗi lần xóa hết, để các màn hình nhập liệu tạo lại từ trạng thái trống. */
   epoch: number;
@@ -110,6 +111,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState((s) => ({ ...s, wishlist: renumber(items) }));
   }, []);
 
+  const toggleFavorite = useCallback((programId: string) => {
+    setState((s) => {
+      const current = s.profile.favoriteProgramIds ?? [];
+      const next = current.includes(programId) ? current.filter((id) => id !== programId) : [...current, programId].slice(-50);
+      return { ...s, profile: { ...s.profile, favoriteProgramIds: next } };
+    });
+  }, []);
+
   const setTarget = useCallback((target: TargetProgram | null) => setState((s) => ({ ...s, target })), []);
 
   const resetAll = useCallback(() => {
@@ -122,9 +131,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     () => ({
       profile: state.profile, updateProfile, setScore,
       wishlist: state.wishlist, addWish, removeWish, moveWish, setWishlist,
-      target: state.target, setTarget, resetAll, epoch, catalog, catalogStatus, retryCatalog,
+      target: state.target, setTarget, toggleFavorite, resetAll, epoch, catalog, catalogStatus, retryCatalog,
     }),
-    [state, epoch, catalog, catalogStatus, retryCatalog, updateProfile, setScore, addWish, removeWish, moveWish, setWishlist, setTarget, resetAll],
+    [state, epoch, catalog, catalogStatus, retryCatalog, updateProfile, setScore, addWish, removeWish, moveWish, setWishlist, setTarget, toggleFavorite, resetAll],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

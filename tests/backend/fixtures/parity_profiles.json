@@ -1,6 +1,122 @@
 [
-  {"name": "thpt_va_hoc_ba_a01", "profile": {"examScores": {"toan": 8, "ly": 7.5, "anh": 7.25, "hoa": 7, "van": 6.5}, "hocBaScores": {"toan": 8.8, "ly": 8.5, "anh": 8.4, "hoa": 8.6, "van": 8}, "activeCombination": "A01", "priority": {"area": "KV3", "object": "none"}, "altScores": {}, "annualBudgetVnd": 0, "relocationWillingness": "khong_gioi_han", "homeProvince": "Nghệ An", "interestMajorGroups": []}},
-  {"name": "diem_cao_uu_tien_kv1", "profile": {"examScores": {"toan": 9.4, "ly": 9.2, "hoa": 9.0, "anh": 9.6, "van": 8.0, "sinh": 8.5}, "activeCombination": "A00", "priority": {"area": "KV1", "object": "uu_tien_2"}, "altScores": {}, "graduationYear": 2026, "annualBudgetVnd": 0, "relocationWillingness": "khong_gioi_han", "homeProvince": "Hà Nội", "interestMajorGroups": ["cntt", "ky_thuat"]}},
-  {"name": "ielts_va_rang_buoc", "profile": {"examScores": {"toan": 7, "van": 7.5, "anh": 5.5, "su": 8, "dia": 8}, "hocBaScores": {"toan": 8, "van": 8.2, "anh": 8, "su": 8.5, "dia": 8.4}, "activeCombination": "D01", "priority": {"area": "KV2-NT", "object": "none"}, "altScores": {"ielts": 6.5}, "graduationYear": 2026, "annualBudgetVnd": 40000000, "relocationWillingness": "trong_vung", "homeProvince": "Đà Nẵng", "interestMajorGroups": ["kinh_te", "ngon_ngu"]}},
-  {"name": "duoi_san_15_va_ielts_thap", "profile": {"examScores": {"toan": 4, "ly": 4.5, "hoa": 5, "anh": 3}, "activeCombination": "A00", "priority": {"area": "KV3", "object": "none"}, "altScores": {"ielts": 4.5}, "graduationYear": 2026, "annualBudgetVnd": 0, "relocationWillingness": "chi_tinh_nha", "homeProvince": "Cần Thơ", "interestMajorGroups": []}}
+  {
+    "name": "thpt_va_hoc_ba_a01",
+    "profile": {
+      "examScores": {
+        "toan": 8,
+        "ly": 7.5,
+        "anh": 7.25,
+        "hoa": 7,
+        "van": 6.5
+      },
+      "hocBaScores": {
+        "toan": 8.8,
+        "ly": 8.5,
+        "anh": 8.4,
+        "hoa": 8.6,
+        "van": 8
+      },
+      "activeCombination": "A01",
+      "priority": {
+        "area": "KV3",
+        "object": "none"
+      },
+      "altScores": {},
+      "annualBudgetVnd": 0,
+      "relocationWillingness": "khong_gioi_han",
+      "homeProvince": "Nghệ An",
+      "interestMajorGroups": [],
+      "favoriteProgramIds": [
+        "TTN::giáo dục tiểu học - 7140202::HOC_BA",
+        "DNB::giáo dục tiểu học::HOC_BA",
+        "DDK::kỹ thuật cơ điện tử - kỹ thuật cơ điện tử::HOC_BA"
+      ]
+    }
+  },
+  {
+    "name": "diem_cao_uu_tien_kv1",
+    "profile": {
+      "examScores": {
+        "toan": 9.4,
+        "ly": 9.2,
+        "hoa": 9.0,
+        "anh": 9.6,
+        "van": 8.0,
+        "sinh": 8.5
+      },
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV1",
+        "object": "uu_tien_2"
+      },
+      "altScores": {},
+      "graduationYear": 2026,
+      "annualBudgetVnd": 0,
+      "relocationWillingness": "khong_gioi_han",
+      "homeProvince": "Hà Nội",
+      "interestMajorGroups": [
+        "cntt",
+        "ky_thuat"
+      ]
+    }
+  },
+  {
+    "name": "ielts_va_rang_buoc",
+    "profile": {
+      "examScores": {
+        "toan": 7,
+        "van": 7.5,
+        "anh": 5.5,
+        "su": 8,
+        "dia": 8
+      },
+      "hocBaScores": {
+        "toan": 8,
+        "van": 8.2,
+        "anh": 8,
+        "su": 8.5,
+        "dia": 8.4
+      },
+      "activeCombination": "D01",
+      "priority": {
+        "area": "KV2-NT",
+        "object": "none"
+      },
+      "altScores": {
+        "ielts": 6.5
+      },
+      "graduationYear": 2026,
+      "annualBudgetVnd": 40000000,
+      "relocationWillingness": "trong_vung",
+      "homeProvince": "Đà Nẵng",
+      "interestMajorGroups": [
+        "kinh_te",
+        "ngon_ngu"
+      ]
+    }
+  },
+  {
+    "name": "duoi_san_15_va_ielts_thap",
+    "profile": {
+      "examScores": {
+        "toan": 4,
+        "ly": 4.5,
+        "hoa": 5,
+        "anh": 3
+      },
+      "activeCombination": "A00",
+      "priority": {
+        "area": "KV3",
+        "object": "none"
+      },
+      "altScores": {
+        "ielts": 4.5
+      },
+      "graduationYear": 2026,
+      "annualBudgetVnd": 0,
+      "relocationWillingness": "chi_tinh_nha",
+      "homeProvince": "Cần Thơ",
+      "interestMajorGroups": []
+    }
+  }
 ]

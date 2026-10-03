@@ -20,7 +20,7 @@ const TABS: { key: Tab; label: string; on: string }[] = [
 const stepForMissing = (label: string): StepId => (/học bạ/i.test(label) ? "hocba" : /ĐGNL|ĐGTD/.test(label) ? "cert" : "exam");
 
 export default function ResultsPage() {
-  const { profile, wishlist, addWish, removeWish } = useApp();
+  const { profile, wishlist, addWish, removeWish, toggleFavorite } = useApp();
   const { candidates, matched, programs } = useCandidates();
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("all");
@@ -41,6 +41,7 @@ export default function ResultsPage() {
       .sort((a, b) => Math.round(b.admitProbability * 100) - Math.round(a.admitProbability * 100) || b.cutoffP50 - a.cutoffP50);
   }, [matched, tab, query]);
 
+  const favorites = useMemo(() => new Set(profile.favoriteProgramIds ?? []), [profile.favoriteProgramIds]);
   const rankById = useMemo(() => new Map(wishlist.map((w) => [w.program_id, w.rank])), [wishlist]);
 
   // Điểm còn thiếu nhiều ngành nhất: gợi ý một việc duy nhất để học sinh bổ sung.
@@ -126,7 +127,7 @@ export default function ResultsPage() {
       ) : (
         <div className="space-y-3">
           {ranked.slice(0, shown).map((c) => (
-            <ResultCard key={c.programId} c={c} rankInWishlist={rankById.get(c.programId) ?? null} onToggle={toggle} />
+            <ResultCard key={c.programId} c={c} rankInWishlist={rankById.get(c.programId) ?? null} onToggle={toggle} favorite={favorites.has(c.programId)} onFavorite={(x) => toggleFavorite(x.programId)} />
           ))}
           {ranked.length === 0 && <p className="py-8 text-center text-sm font-semibold text-slate-500">Không tìm thấy</p>}
           {shown < ranked.length && (

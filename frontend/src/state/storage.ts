@@ -56,6 +56,7 @@ export function sanitize(raw: unknown): PersistedState {
     altScores: isObject(p.altScores) ? { ...blank.profile.altScores, ...p.altScores } : blank.profile.altScores,
     priority: isObject(p.priority) ? { ...blank.profile.priority, ...p.priority } : blank.profile.priority,
     interestMajorGroups: Array.isArray(p.interestMajorGroups) ? p.interestMajorGroups.filter((g) => typeof g === "string") : [],
+    favoriteProgramIds: Array.isArray(p.favoriteProgramIds) ? p.favoriteProgramIds.filter((id) => typeof id === "string").slice(0, 50) : [],
   };
   if (isObject(p.hocBaGrades)) {
     const grades: NonNullable<StudentProfile["hocBaGrades"]> = {};

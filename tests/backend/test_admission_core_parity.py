@@ -78,7 +78,7 @@ def test_constraints_and_portfolio_match_typescript(case, ts_result, catalog):
     candidates = core.build_candidates(catalog, profile)
     matched = [c for c in candidates if core.matches_constraints(c, profile)]
     assert len(matched) == ts["matched"]
-    items = core.suggest_portfolio(matched, bool(profile.get("interestMajorGroups")))
+    items = core.suggest_portfolio(matched, bool(profile.get("interestMajorGroups")), profile.get("favoriteProgramIds", []))
     assert [c["programId"] for c in items] == ts["suggestion"]
     summary = core.portfolio_summary(items, core.DEFAULT_NATIONAL_SHOCK_STD, core.DEFAULT_IDIO_STD)
     assert summary["pFailAll"] == pytest.approx(ts["pFailAll"], abs=1e-9)

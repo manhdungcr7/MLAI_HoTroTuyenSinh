@@ -5,6 +5,8 @@ const SAFE_MIN = 0.8;
 const FIT_MIN = 0.4;
 const REACH_MIN = 0.1;
 const MAX_PER_SCHOOL = 3;
+/** Số ngành em yêu thích tối đa được ưu tiên đưa vào danh sách, để vẫn đủ chỗ cho nguyện vọng chắc đỗ. */
+const MAX_FAVORITES = 6;
 
 export function candidateToWishlistItem(option: CandidateOption, rank: number): WishlistItem {
   const nYears = option.yearsOfData ?? 0;
@@ -87,7 +89,12 @@ export interface PortfolioSuggestion {
  * Mỗi trường tối đa 3 nguyện vọng. Thứ tự: điểm chuẩn cao → thấp (ngành "mơ ước" hơn lên trước),
  * vì hệ thống xét từ nguyện vọng 1 xuống, đỗ ở đâu trước thì dừng ở đó.
  */
-export function suggestPortfolio(matched: CandidateOption[], hasInterest: boolean, size = MAX_WISHES): PortfolioSuggestion {
+export function suggestPortfolio(
+  matched: CandidateOption[],
+  hasInterest: boolean,
+  favoriteIds: readonly string[] = [],
+  size = MAX_WISHES,
+): PortfolioSuggestion {
   const order = (l: CandidateOption[]) => (hasInterest ? [...l].sort(byCutoffDesc) : roundRobinByGroup(l));
   const tiers = {
     reach: order(matched.filter((c) => c.admitProbability >= REACH_MIN && c.admitProbability < FIT_MIN)),
@@ -108,6 +115,9 @@ export function suggestPortfolio(matched: CandidateOption[], hasInterest: boolea
   };
   // An toàn lấy các ngành điểm CAO nhất trong nhóm an toàn: tốt nhất em vẫn chắc đỗ.
   take(tiers.safe, Math.round(size * 0.4));
+  // Ngành em yêu thích (còn cơ hội đỗ) được ưu tiên ngay sau phần chắc đỗ.
+  const favorites = new Set(favoriteIds);
+  take(matched.filter((c) => favorites.has(c.programId) && c.admitProbability >= REACH_MIN).sort(byCutoffDesc), MAX_FAVORITES);
   take(tiers.fit, Math.round(size * 0.33));
   take(tiers.reach, Math.round(size * 0.27));
   // Bù chỗ trống: vừa tầm → an toàn → thử sức.

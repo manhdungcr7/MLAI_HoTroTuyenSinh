@@ -16,7 +16,7 @@ for (const { name, profile } of cases) {
   const full = { name: "", grade: "", highSchool: "", availableHoursPerWeek: 0, ...profile };
   const all = buildCandidateOptions(DECISION_PROGRAM_POOL, full);
   const matched = filterByConstraints(all, full);
-  const suggestion = suggestPortfolio(matched, (full.interestMajorGroups ?? []).length > 0).items;
+  const suggestion = suggestPortfolio(matched, (full.interestMajorGroups ?? []).length > 0, full.favoriteProgramIds ?? []).items;
   const items = suggestion.map((c, i) => candidateToWishlistItem(c, i + 1));
   result[name] = {
     candidates: all.map((c) => ({

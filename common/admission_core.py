@@ -632,6 +632,7 @@ def round_pct(prob: float) -> int:
 
 _REACH_MIN = 0.1
 _MAX_PER_SCHOOL = 3
+_MAX_FAVORITES = 6
 
 
 def _by_cutoff(l: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -666,7 +667,9 @@ def _teacher_training_first_five(items: list[dict[str, Any]]) -> list[dict[str, 
     return head + rest
 
 
-def suggest_portfolio(matched: list[dict[str, Any]], has_interest: bool, size: int = MAX_WISHES) -> list[dict[str, Any]]:
+def suggest_portfolio(
+    matched: list[dict[str, Any]], has_interest: bool, favorite_ids: Iterable[str] = (), size: int = MAX_WISHES
+) -> list[dict[str, Any]]:
     order = _by_cutoff if has_interest else _round_robin
     tiers = {
         "reach": order([c for c in matched if _REACH_MIN <= c["admitProbability"] < REACH_MAX_PROB]),
@@ -689,6 +692,8 @@ def suggest_portfolio(matched: list[dict[str, Any]], has_interest: bool, size: i
             n -= 1
 
     take(tiers["safe"], int(js_math_round(size * 0.4)))
+    favorites = set(favorite_ids)
+    take(_by_cutoff([c for c in matched if c["programId"] in favorites and c["admitProbability"] >= _REACH_MIN]), _MAX_FAVORITES)
     take(tiers["fit"], int(js_math_round(size * 0.33)))
     take(tiers["reach"], int(js_math_round(size * 0.27)))
     take(tiers["fit"], size)

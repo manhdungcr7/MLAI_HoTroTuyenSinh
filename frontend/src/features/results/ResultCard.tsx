@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus, Check, AlertCircle, BadgeCheck } from "lucide-react";
+import { Plus, Check, AlertCircle, BadgeCheck, Heart } from "lucide-react";
 import { CandidateOption } from "@/engine/types";
 import { METHOD_SHORT_VI } from "@/engine/scoring/method-score";
 import { formatProbability } from "@/lib/format";
@@ -14,10 +14,12 @@ interface ResultCardProps {
   c: CandidateOption;
   rankInWishlist: number | null;
   onToggle: (c: CandidateOption) => void;
+  favorite: boolean;
+  onFavorite: (c: CandidateOption) => void;
 }
 
 /** Một ngành của một trường: xác suất đỗ nổi bật nhất, thêm vào nguyện vọng bằng một lần bấm. */
-export function ResultCard({ c, rankInWishlist, onToggle }: ResultCardProps) {
+export function ResultCard({ c, rankInWishlist, onToggle, favorite, onFavorite }: ResultCardProps) {
   const tier = TIER[c.role];
   const pct = Math.max(1, Math.min(100, Math.round(c.admitProbability * 100)));
   const needsCheck = c.methodInferred || c.combinationsVerified === false;
@@ -30,7 +32,18 @@ export function ResultCard({ c, rankInWishlist, onToggle }: ResultCardProps) {
       </div>
 
       <div className="min-w-0 flex-1">
-        <h3 className="text-[15px] font-extrabold leading-snug text-slate-900">{c.majorName}</h3>
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-[15px] font-extrabold leading-snug text-slate-900">{c.majorName}</h3>
+          <button
+            type="button"
+            onClick={() => onFavorite(c)}
+            aria-pressed={favorite}
+            aria-label={favorite ? `Bỏ yêu thích ${c.majorName}` : `Yêu thích ${c.majorName}`}
+            className="shrink-0 rounded-full p-1 text-slate-300 transition hover:text-rose-500 cursor-pointer"
+          >
+            <Heart className={`h-5 w-5 ${favorite ? "fill-rose-500 text-rose-500" : ""}`} />
+          </button>
+        </div>
         <p className="mt-0.5 truncate text-xs font-medium text-slate-600">
           {c.schoolName}
           {c.province ? ` · ${c.province}` : ""}

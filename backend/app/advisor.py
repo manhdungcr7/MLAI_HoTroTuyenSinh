@@ -66,6 +66,7 @@ class AdvisorProfile(BaseModel):
     relocationWillingness: Literal["chi_tinh_nha", "trong_vung", "khong_gioi_han"] = "khong_gioi_han"
     annualBudgetVnd: int = Field(0, ge=0)
     interestMajorGroups: list[str] = Field(default_factory=list, max_length=20)
+    favoriteProgramIds: list[str] = Field(default_factory=list, max_length=50)
     excludedSchoolCodes: list[str] = Field(default_factory=list, max_length=200)
     excludedMajorGroups: list[str] = Field(default_factory=list, max_length=20)
 
@@ -209,7 +210,7 @@ def portfolio(req: PortfolioRequest) -> dict[str, Any]:
         mode = "evaluate"
     else:
         matched = [c for c in candidates if core.matches_constraints(c, profile)]
-        items = core.suggest_portfolio(matched, bool(profile["interestMajorGroups"]))
+        items = core.suggest_portfolio(matched, bool(profile["interestMajorGroups"]), profile["favoriteProgramIds"])
         mode = "suggest"
 
     summary = core.portfolio_summary(items, shock, idio)

@@ -94,6 +94,8 @@ export interface StudentProfile {
   excludedMajorGroups?: string[];
   /** Nhóm ngành học sinh quan tâm (MAJOR_GROUPS.value); rỗng = tất cả. */
   interestMajorGroups?: string[];
+  /** Chương trình em đánh dấu yêu thích; được ưu tiên khi đề xuất danh sách nguyện vọng. */
+  favoriteProgramIds?: string[];
 }
 
 export interface TargetProgram {
