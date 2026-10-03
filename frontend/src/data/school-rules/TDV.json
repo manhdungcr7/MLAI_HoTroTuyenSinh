@@ -1,0 +1,87 @@
+{
+  "schoolCode": "TDV",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0615/thongtintuyensinh2026update.pdf",
+    "document": "Thông tin tuyển sinh đại học chính quy năm 2026 – Trường Đại học Vinh",
+    "sha256": "032e0331fad9af56ed8197508ff983ac95dc8d8c696b34dfa5e9ec04e37e5bef",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 3.1: IELTS Academic được cộng điểm thưởng (không quy đổi môn) cho các ngành ngoài sư phạm; tổng điểm cộng không quá 3 và tổng điểm xét tuyển không quá 30."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "bonusCap": 3,
+      "certBonus": {
+        "excludedMajorGroups": [
+          "su_pham"
+        ],
+        "ielts": [
+          {
+            "min": 5.5,
+            "points": 0.25
+          },
+          {
+            "min": 6.0,
+            "points": 0.5
+          },
+          {
+            "min": 6.5,
+            "points": 0.75
+          },
+          {
+            "min": 7.0,
+            "points": 1.0
+          },
+          {
+            "min": 7.5,
+            "points": 1.25
+          }
+        ]
+      }
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "bonusCap": 3,
+      "certBonus": {
+        "excludedMajorGroups": [
+          "su_pham"
+        ],
+        "ielts": [
+          {
+            "min": 5.5,
+            "points": 0.25
+          },
+          {
+            "min": 6.0,
+            "points": 0.5
+          },
+          {
+            "min": 6.5,
+            "points": 0.75
+          },
+          {
+            "min": 7.0,
+            "points": 1.0
+          },
+          {
+            "min": 7.5,
+            "points": 1.25
+          }
+        ]
+      }
+    }
+  }
+}

@@ -101,6 +101,7 @@ export function buildCandidateOptions(programs: TargetProgram[], profile: Studen
       sourceTier: p.sourceTier,
       ruleOrigin: ms.ruleOrigin,
       ruleSource: ms.ruleSource?.url,
+      usedIeltsConversion: ms.usedIeltsConversion,
       sigmaScale,
     });
   }

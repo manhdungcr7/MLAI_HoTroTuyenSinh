@@ -60,27 +60,9 @@ export function calculateTotalPriorityBonus(
   return baseBonus;
 }
 
-/**
- * Quy đổi chứng chỉ IELTS sang điểm môn Tiếng Anh
- */
-export function convertIeltsToEnglishScore(
-  ielts: number | null | undefined,
-  baseScore: number | null | undefined
-): number | null | undefined {
-  if (!ielts) return baseScore;
-
-  let converted = baseScore ?? 0;
-  if (ielts >= 7.0) {
-    converted = Math.max(converted, 10.0);
-  } else if (ielts >= 6.5) {
-    converted = Math.max(converted, 9.5);
-  } else if (ielts >= 6.0) {
-    converted = Math.max(converted, 9.0);
-  } else if (ielts >= 5.5) {
-    converted = Math.max(converted, 8.5);
-  } else if (ielts >= 5.0) {
-    converted = Math.max(converted, 7.0);
-  }
-
-  return converted;
+/** Điểm Tiếng Anh quy đổi theo bảng của trường (mức cao nhất đạt được); null nếu IELTS thấp hơn mọi mức trong bảng. */
+export function tableIeltsScore(ielts: number, table: { min: number; score: number }[]): number | null {
+  let best: number | null = null;
+  for (const row of table) if (ielts >= row.min && (best === null || row.score > best)) best = row.score;
+  return best;
 }

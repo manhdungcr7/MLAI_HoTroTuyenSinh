@@ -1,0 +1,54 @@
+{
+  "schoolCode": "SPD",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0616/20260528044344d-spd-thong-tin-tuyen-sinh-dai-hoc-cao-dang-2026-hoanchinh-trnh-ky-20260528015322-e.pdf",
+    "document": "Thông tin tuyển sinh đại học, cao đẳng năm 2026 – Trường Đại học Đồng Tháp",
+    "sha256": "b003f6a11adff8a18dcc7e7c18923b5598dd5310bb6b9a213f4d10439d0b5bb1",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Phương thức 100: IELTS quy đổi theo Phụ lục 3 (chỉ phương thức này); phương thức 200: TB cả năm lớp 10-11-12 của 3 môn đạt từ 18,0 thang 30."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 5.0,
+          "score": 8.0
+        },
+        {
+          "min": 5.5,
+          "score": 8.5
+        },
+        {
+          "min": 6.0,
+          "score": 9.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.5
+        },
+        {
+          "min": 7.0,
+          "score": 10
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "minHocBaComboTotal": 18.0
+    }
+  }
+}

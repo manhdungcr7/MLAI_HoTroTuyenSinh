@@ -88,6 +88,111 @@
      ]
     }
    }
+  },
+  {
+   "schoolCode": "ZZ2",
+   "year": 2026,
+   "source": {
+    "url": "https://example.test/fixture-zz2",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "test-fixture"
+   },
+   "methods": {
+    "THPT": {
+     "priority": "none",
+     "components": [
+      {
+       "source": "exam_combo",
+       "weight": 1
+      }
+     ],
+     "ieltsToEnglish": [
+      {
+       "min": 5.0,
+       "score": 8.0
+      },
+      {
+       "min": 6.0,
+       "score": 9.0
+      },
+      {
+       "min": 7.0,
+       "score": 10
+      }
+     ]
+    },
+    "HOC_BA": {
+     "priority": "none",
+     "components": [
+      {
+       "source": "hocba_combo",
+       "weight": 1
+      }
+     ],
+     "minHocBaComboTotal": 25
+    }
+   }
+  },
+  {
+   "schoolCode": "ZZ3",
+   "year": 2026,
+   "source": {
+    "url": "https://example.test/fixture-zz3",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "test-fixture"
+   },
+   "methods": {
+    "HOC_BA": {
+     "priority": "standard",
+     "scoreFactor": 0.8333333333333334,
+     "minHocBaComboTotal": 18,
+     "components": [
+      {
+       "source": "hocba_combo",
+       "weight": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "schoolCode": "ZZ4",
+   "year": 2026,
+   "source": {
+    "url": "https://example.test/fixture-zz4",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "test-fixture"
+   },
+   "methods": {
+    "THPT": {
+     "priority": "none",
+     "components": [
+      {
+       "source": "exam_combo",
+       "weight": 1
+      }
+     ],
+     "allowedCombinations": [
+      "A01",
+      "D01"
+     ],
+     "certBonus": {
+      "ielts": [
+       {
+        "min": 5.5,
+        "points": 0.25
+       },
+       {
+        "min": 6.5,
+        "points": 0.75
+       }
+      ],
+      "excludedMajorGroups": [
+       "su_pham"
+      ]
+     }
+    }
+   }
   }
  ],
  "programs": [
@@ -138,6 +243,44 @@
     "A00"
    ],
    "requiresAptitude": false
+  },
+  {
+   "schoolCode": "ZZ2",
+   "admissionMethod": "THPT",
+   "combinations": [
+    "D01"
+   ],
+   "requiresAptitude": false
+  },
+  {
+   "schoolCode": "ZZ2",
+   "admissionMethod": "HOC_BA",
+   "combinations": [
+    "A00"
+   ],
+   "requiresAptitude": false
+  },
+  {
+   "schoolCode": "ZZ3",
+   "admissionMethod": "HOC_BA",
+   "combinations": [
+    "A00"
+   ],
+   "requiresAptitude": false
+  },
+  {
+   "schoolCode": "ZZ4",
+   "admissionMethod": "THPT",
+   "combinations": [],
+   "requiresAptitude": false,
+   "majorGroup": "kinh_te"
+  },
+  {
+   "schoolCode": "ZZ4",
+   "admissionMethod": "THPT",
+   "combinations": [],
+   "requiresAptitude": false,
+   "majorGroup": "su_pham"
   }
  ],
  "profiles": [
@@ -209,6 +352,27 @@
     "area": "KV1",
     "object": "uu_tien_1"
    }
+  },
+  {
+   "examScores": {
+    "toan": 7,
+    "van": 6,
+    "anh": 4
+   },
+   "hocBaScores": {
+    "toan": 8,
+    "ly": 8,
+    "hoa": 8
+   },
+   "altScores": {
+    "ielts": 6.5
+   },
+   "activeCombination": "D01",
+   "priority": {
+    "area": "KV3",
+    "object": "none"
+   },
+   "graduationYear": 2027
   }
  ]
 }

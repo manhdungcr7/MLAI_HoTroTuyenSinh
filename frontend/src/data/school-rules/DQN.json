@@ -1,0 +1,75 @@
+{
+  "schoolCode": "DQN",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0616/thong-tin-tuyen-sinh-truong-dai-hoc-quy-nhon-nam-2026.pdf",
+    "document": "Thông tin tuyển sinh trình độ đại học năm 2026 – Trường Đại học Quy Nhơn",
+    "sha256": "efe81d6720286c553d1ae8e53363d3d201df8082ce8e768fe481efc7215c2322",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 5.c: IELTS thay điểm môn Tiếng Anh khi xét tuyển phương thức 1 (thi THPT) và 2 (học bạ)."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 5.0,
+          "score": 8.0
+        },
+        {
+          "min": 5.5,
+          "score": 8.5
+        },
+        {
+          "min": 6.0,
+          "score": 9.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.5
+        },
+        {
+          "min": 7.0,
+          "score": 10
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 5.0,
+          "score": 8.0
+        },
+        {
+          "min": 5.5,
+          "score": 8.5
+        },
+        {
+          "min": 6.0,
+          "score": 9.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.5
+        },
+        {
+          "min": 7.0,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

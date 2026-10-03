@@ -55,10 +55,14 @@ Bảng dùng chung (tổ hợp, vùng của tỉnh) xuất từ TypeScript bằn
 
 ## Việc dữ liệu còn lại
 
-- Nạp điểm chuẩn **mùa tuyển sinh 2026** (đã công bố): dữ liệu hiện dừng ở 2025 nên mọi dự báo cho 2027 đang cách hai năm và có độ bất định rộng.
-  Khi nạp xong, đổi `FORECAST_YEAR` ở `common/admission_core.py` và `frontend/src/engine/admissions/probability.ts` (có test nhắc khi quá hạn).
-- Nhập quy tắc tính điểm riêng từng trường từ văn bản gốc: `frontend/src/data/school-rules/README.md`.
-- Điểm chuẩn ĐGNL/ĐGTD cùng thang để so sánh được.
+- Điểm chuẩn mùa 2026 mới có cho khoảng 945/3.023 chương trình (31 trường, chủ yếu từ trang tổng hợp): chạy lại `python -m pipeline.run_all`
+  khi có thêm trường công bố. Chương trình có dữ liệu cũ hơn được tính độ bất định rộng hơn tự động.
+  Năm dự báo là `FORECAST_YEAR` (`common/admission_core.py`, `frontend/src/engine/admissions/probability.ts`); có test nhắc khi quá hạn.
+- Tổ hợp xét tuyển từng ngành: 65% chương trình chưa có tổ hợp xác thực trong dữ liệu (đề án dạng bảng ảnh hoặc bảng chưa tách được).
+  Cần OCR/tách bảng "mã ngành → tổ hợp", hoặc khai báo `allowedCombinations` theo trường khi mọi ngành cùng tổ hợp.
+- Quy tắc tính điểm riêng từng trường: 11 trường đã nhập, còn lại dùng công thức chung. Quy trình và công cụ ở
+  `frontend/src/data/school-rules/README.md` (`scripts/extract_dean_text.py`, `scripts/build_rules_index.py`).
+- Điểm chuẩn ĐGNL/ĐGTD cùng thang với cách tính để so sánh được.
 
 ## Cập nhật dữ liệu
 

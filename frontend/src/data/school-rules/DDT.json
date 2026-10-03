@@ -1,0 +1,44 @@
+{
+  "schoolCode": "DDT",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0416/thong-tin-tuyen-sinh-dai-hoc-duy-tan-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Duy Tân",
+    "sha256": "80da7338ea6702ae83aa562cceff5f3cd78714ffaf7b4998150e7bcfb9567e25",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục VI.6: mức quy đổi điểm IELTS; không nhân hệ số điểm môn xét tuyển."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 5.5,
+          "score": 8.0
+        },
+        {
+          "min": 6.0,
+          "score": 8.5
+        },
+        {
+          "min": 6.5,
+          "score": 9.0
+        },
+        {
+          "min": 7.0,
+          "score": 9.5
+        },
+        {
+          "min": 7.5,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

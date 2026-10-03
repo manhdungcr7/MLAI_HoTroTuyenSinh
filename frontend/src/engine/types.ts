@@ -158,6 +158,8 @@ export interface CandidateOption {
   /** "school": điểm tính theo quy tắc riêng của trường đã kiểm chứng; "default": công thức chung. */
   ruleOrigin?: "school" | "default";
   ruleSource?: string;
+  /** true khi điểm Tiếng Anh được thay bằng điểm quy đổi từ IELTS. */
+  usedIeltsConversion?: boolean;
   /** Hệ số nhân độ bất định theo độ cũ và độ mỏng của dữ liệu (xem sigmaScaleFor). */
   sigmaScale?: number;
 }

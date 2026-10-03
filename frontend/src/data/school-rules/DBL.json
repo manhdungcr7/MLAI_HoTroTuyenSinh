@@ -1,0 +1,60 @@
+{
+  "schoolCode": "DBL",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0616/thong-tin-tuyen-sinh-dai-hoc-bac-lieu.pdf",
+    "document": "Thông tin tuyển sinh năm 2026 – Trường Đại học Bạc Liêu",
+    "sha256": "7bf10efe2cc2d66e0b505c1285ca220b86f1f9bbbd8182afe78b9b922e288865",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 6.b: chứng chỉ thay môn ngoại ngữ trong tổ hợp xét tuyển, bảng quy đổi IELTS."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 6.0
+        },
+        {
+          "min": 4.5,
+          "score": 6.5
+        },
+        {
+          "min": 5.0,
+          "score": 7.0
+        },
+        {
+          "min": 5.5,
+          "score": 7.5
+        },
+        {
+          "min": 6.0,
+          "score": 8.0
+        },
+        {
+          "min": 6.5,
+          "score": 8.5
+        },
+        {
+          "min": 7.0,
+          "score": 9.0
+        },
+        {
+          "min": 7.5,
+          "score": 9.5
+        },
+        {
+          "min": 8.0,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

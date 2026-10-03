@@ -174,12 +174,12 @@ def priority_bonus(area: str, obj: str, raw_total: float) -> float:
     return base
 
 
-def ielts_to_english(ielts: float | None, base: float | None) -> float | None:
-    """Quy đổi IELTS thay môn Tiếng Anh (bảng phổ biến; mỗi trường quy đổi khác nhau). IELTS < 5.0: không quy đổi."""
-    if not ielts or ielts < 5.0:
-        return base
-    floor = 10.0 if ielts >= 7.0 else 9.5 if ielts >= 6.5 else 9.0 if ielts >= 6.0 else 8.5 if ielts >= 5.5 else 7.0
-    return max(base or 0.0, floor)
+def table_ielts_score(ielts: float, table: list[Mapping[str, float]]) -> float | None:
+    best = None
+    for row in table:
+        if ielts >= row["min"] and (best is None or row["score"] > best):
+            best = row["score"]
+    return best
 
 
 def program_method(program: Mapping[str, Any]) -> str:
@@ -191,7 +191,7 @@ def program_method(program: Mapping[str, Any]) -> str:
 # --------------------------------------------------------------------------------------
 
 DEFAULT_RULES: dict[str, dict[str, Any]] = {
-    "THPT": {"components": [{"source": "exam_combo", "weight": 1}], "priority": "standard", "englishCertConversion": "common"},
+    "THPT": {"components": [{"source": "exam_combo", "weight": 1}], "priority": "standard"},
     "HOC_BA": {"components": [{"source": "hocba_combo", "weight": 1}], "priority": "standard"},
 }
 COMBO_SOURCES = ("exam_combo", "hocba_combo")
@@ -220,6 +220,10 @@ def validate_school_rule(rule: Mapping[str, Any]) -> list[str]:
     if not methods:
         problems.append("chưa có phương thức nào")
     for method, m in methods.items():
+        if "unsupportedReason" in m:
+            if not str(m["unsupportedReason"]).strip():
+                problems.append(f"{method}: lý do không tính được không được để trống")
+            continue
         comps = m.get("components") or []
         if not comps:
             problems.append(f"{method}: thiếu thành phần điểm")
@@ -237,8 +241,16 @@ def validate_school_rule(rule: Mapping[str, Any]) -> list[str]:
                 problems.append(f"{method}: hệ số môn chỉ dùng cho tổ hợp môn")
             if any(not (w > 0) for w in (c.get("subjectWeights") or {}).values()):
                 problems.append(f"{method}: hệ số môn phải dương")
-        if m.get("englishCertConversion") not in (None, "common", "none"):
-            problems.append(f"{method}: englishCertConversion phải là common hoặc none")
+        for t in m.get("ieltsToEnglish", []):
+            if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("score", -1) <= 10):
+                problems.append(f"{method}: bảng quy đổi IELTS sang điểm Tiếng Anh không hợp lệ")
+        for code in m.get("allowedCombinations", []):
+            if not re.fullmatch(r"[A-Z]\d{2}", str(code)):
+                problems.append(f"{method}: mã tổ hợp không hợp lệ \"{code}\"")
+        if "scoreFactor" in m and not (0 < m["scoreFactor"] <= 3):
+            problems.append(f"{method}: hệ số quy đổi phải trong (0, 3]")
+        if "minHocBaComboTotal" in m and not (0 <= m["minHocBaComboTotal"] <= 30):
+            problems.append(f"{method}: ngưỡng tổng điểm học bạ phải trong [0, 30]")
         for t in (m.get("certBonus") or {}).get("ielts", []):
             if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("points", -1) <= 3):
                 problems.append(f"{method}: bảng điểm cộng IELTS không hợp lệ")
@@ -290,7 +302,7 @@ def _num_or_none(v: Any) -> float | None:
     return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) else None
 
 
-def _combo_component(component, subjects, profile, needs, allow_cert):
+def _combo_component(component, subjects, profile, needs, rule):
     if component["source"] == "exam_combo":
         if not profile.get("examScores"):
             needs.add("Điểm thi các môn của tổ hợp")
@@ -312,14 +324,15 @@ def _combo_component(component, subjects, profile, needs, allow_cert):
             return None
         sources = [profile["hocBaScores"]]
 
-    weighted, max_total, used_ielts = 0.0, 0.0, False
+    weighted, max_total, raw_total, used_ielts = 0.0, 0.0, 0.0, False
     ielts = profile.get("ielts") or (profile.get("altScores") or {}).get("ielts")
+    table = rule.get("ieltsToEnglish")
     for sub in subjects:
         w = (component.get("subjectWeights") or {}).get(sub, 1)
         values = [_num_or_none(s.get(sub)) for s in sources]
         v = sum(values) / len(values) if all(x is not None for x in values) else None
-        if sub == "anh" and allow_cert and ielts and ielts >= 5.0:
-            converted = ielts_to_english(ielts, v)
+        if sub == "anh" and table and ielts:
+            converted = table_ielts_score(ielts, table)
             if converted is not None and (v is None or converted > v):
                 v, used_ielts = converted, True
         if v is None:
@@ -327,22 +340,24 @@ def _combo_component(component, subjects, profile, needs, allow_cert):
             return None
         weighted += w * _clamp10(v)
         max_total += w * 10
-    return weighted, max_total, used_ielts
+        raw_total += _clamp10(v)
+    return weighted, max_total, used_ielts, raw_total
 
 
-def _score_combo(profile, rule, combo, needs):
+def _score_combo(profile, rule, combo, needs, major_group=None):
     subjects = COMBINATION_SUBJECTS.get(combo, []) if combo else []
-    allow_conversion = (rule.get("englishCertConversion") or "none") == "common"
-    base, used_ielts, exam_raw = 0.0, False, None
+    base, used_ielts, exam_raw, hocba_raw = 0.0, False, None, None
     alt = profile.get("altScores") or {}
     for c in rule["components"]:
         if c["source"] in COMBO_SOURCES:
-            cs = _combo_component(c, subjects, profile, needs, allow_conversion and c["source"] == "exam_combo")
+            cs = _combo_component(c, subjects, profile, needs, rule)
             if cs is None:
                 return None
-            weighted, max_total, used = cs
+            weighted, max_total, used, raw_total = cs
             value30 = (weighted / max_total) * 30
             used_ielts = used_ielts or used
+            if c["source"] == "hocba_combo":
+                hocba_raw = js_math_round(raw_total * 100) / 100
             if c["source"] == "exam_combo":
                 own = profile.get("examScores")
                 exam_raw = sum(_clamp10(_num_or_none(own.get(s)) or 0.0) for s in subjects) if own else None
@@ -354,7 +369,7 @@ def _score_combo(profile, rule, combo, needs):
             scale = EXTERNAL_SCALES[c["source"]]
             value30 = (max(0.0, min(float(scale), v)) / scale) * 30
         base += c["weight"] * value30
-    base = min(30.0, js_math_round(base * 100) / 100)
+    base = min(30.0, js_math_round(base * rule.get("scoreFactor", 1) * 100) / 100)
 
     grad = profile.get("graduationYear")
     uses_exam = any(c["source"] == "exam_combo" for c in rule["components"])
@@ -365,9 +380,12 @@ def _score_combo(profile, rule, combo, needs):
     elif uses_exam and exam_raw is not None and min_total is not None and js_math_round(exam_raw * 100) / 100 < min_total:
         return None
 
+    if rule.get("minHocBaComboTotal") is not None and hocba_raw is not None and hocba_raw < rule["minHocBaComboTotal"]:
+        return None
+
     cert_points = 0.0
     ielts = profile.get("ielts") or alt.get("ielts")
-    if ielts:
+    if ielts and major_group not in (rule.get("certBonus") or {}).get("excludedMajorGroups", []):
         for t in (rule.get("certBonus") or {}).get("ielts", []):
             if ielts >= t["min"] and t["points"] > cert_points:
                 cert_points = t["points"]
@@ -387,6 +405,8 @@ def evaluate_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
     if resolved is None or program.get("requiresAptitude"):
         return None, []
     rule, origin, source = resolved
+    if rule.get("unsupportedReason"):
+        return None, []
     needs_combo = any(c["source"] in COMBO_SOURCES for c in rule["components"])
     combos: list[str] = [""]
     unverified = False
@@ -395,15 +415,19 @@ def evaluate_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
         published = [c for c in declared if c in COMBINATION_SUBJECTS]
         if declared and not published:
             return None, []
-        unverified = not declared
-        active = profile.get("activeCombination")
-        combos = ([active] if active in COMBINATION_SUBJECTS else []) if unverified else published
+        from_rule = [c for c in rule.get("allowedCombinations", []) if c in COMBINATION_SUBJECTS]
+        if not declared and from_rule:
+            combos = from_rule
+        else:
+            unverified = not declared
+            active = profile.get("activeCombination")
+            combos = ([active] if active in COMBINATION_SUBJECTS else []) if unverified else published
         if not combos:
             return None, ["Tổ hợp xét tuyển"]
     missing: set[str] = set()
     best = None
     for combo in combos:
-        s = _score_combo(profile, rule, combo, missing)
+        s = _score_combo(profile, rule, combo, missing, program.get("majorGroup"))
         if s is None:
             continue
         if best is None or s["score"] > best["score"]:

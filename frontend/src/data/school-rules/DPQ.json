@@ -1,0 +1,48 @@
+{
+  "schoolCode": "DPQ",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0425/pdu-thong-tin-tuyen-sinh-cq-2026-1.pdf",
+    "document": "Thông tin tuyển sinh chính quy năm 2026 – Trường Đại học Phạm Văn Đồng",
+    "sha256": "5b34528a782ce0f2b3df21eee78a818982e70d2ac2e819e776d91a46a835ee50",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 5.b: IELTS quy đổi sang điểm môn Tiếng Anh của kỳ thi THPT 2026."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 7.5
+        },
+        {
+          "min": 4.5,
+          "score": 8.0
+        },
+        {
+          "min": 5.0,
+          "score": 8.5
+        },
+        {
+          "min": 5.5,
+          "score": 9.0
+        },
+        {
+          "min": 6.0,
+          "score": 9.5
+        },
+        {
+          "min": 6.5,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

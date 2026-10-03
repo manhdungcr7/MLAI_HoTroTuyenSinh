@@ -8,7 +8,7 @@
 
 import { AdmissionMethod, ExamScores, StudentProfile, TargetProgram } from "@/engine/types";
 import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
-import { calculateTotalPriorityBonus, convertIeltsToEnglishScore } from "@/engine/admissions/priority";
+import { calculateTotalPriorityBonus, tableIeltsScore } from "@/engine/admissions/priority";
 import { HocBaGrade, MethodRule, RuleComponent, RuleOrigin, RuleSource, resolveMethodRule } from "@/engine/scoring/school-rules";
 
 export const METHOD_LABELS_VI: Record<AdmissionMethod, string> = {
@@ -82,8 +82,8 @@ function comboComponentScores(
   subjects: string[],
   profile: StudentProfile,
   needs: Needs,
-  allowCertConversion: boolean,
-): { weighted: number; max: number; usedIelts: boolean } | null {
+  rule: MethodRule,
+): { weighted: number; max: number; usedIelts: boolean; rawTotal: number } | null {
   let sources: ExamScores[];
   if (component.source === "exam_combo") {
     if (!profile.examScores) { needs.add("Điểm thi các môn của tổ hợp"); return null; }
@@ -103,7 +103,10 @@ function comboComponentScores(
 
   let weighted = 0;
   let max = 0;
+  let rawTotal = 0;
   let usedIelts = false;
+  const ielts = profile.altScores?.ielts;
+  const table = rule.ieltsToEnglish;
   for (const sub of subjects) {
     const w = component.subjectWeights?.[sub] ?? 1;
     const values = sources.map((s) => s[sub as keyof ExamScores]);
@@ -111,10 +114,9 @@ function comboComponentScores(
     if (values.every((x) => typeof x === "number" && Number.isFinite(x))) {
       v = (values as number[]).reduce((a, b) => a + b, 0) / values.length;
     }
-    const ielts = profile.altScores?.ielts;
-    if (sub === "anh" && allowCertConversion && ielts && ielts >= 5.0) {
-      const converted = convertIeltsToEnglishScore(ielts, typeof v === "number" ? v : undefined);
-      if (typeof converted === "number" && (typeof v !== "number" || converted > v)) {
+    if (sub === "anh" && table?.length && ielts) {
+      const converted = tableIeltsScore(ielts, table);
+      if (converted !== null && (typeof v !== "number" || converted > v)) {
         v = converted;
         usedIelts = true;
       }
@@ -122,8 +124,9 @@ function comboComponentScores(
     if (typeof v !== "number") { needs.add(`Điểm môn ${SUBJECT_LABELS_VI[sub] ?? sub}`); return null; }
     weighted += w * clamp10(v);
     max += w * 10;
+    rawTotal += clamp10(v);
   }
-  return { weighted, max, usedIelts };
+  return { weighted, max, usedIelts, rawTotal };
 }
 
 interface Evaluation {
@@ -138,6 +141,7 @@ function evaluate(profile: StudentProfile, program: TargetProgram): Evaluation {
   // Ngành có thi năng khiếu: điểm văn hoá không phản ánh điểm xét tuyển.
   if ((program as TargetProgram & { requiresAptitude?: boolean }).requiresAptitude) return { score: null, missing: [] };
   const { rule, origin, source } = resolved;
+  if (rule.unsupportedReason) return { score: null, missing: [] };
 
   const needsCombo = rule.components.some((c) => COMBO_SOURCES.includes(c.source));
   let combos: string[] = [""];
@@ -147,17 +151,23 @@ function evaluate(profile: StudentProfile, program: TargetProgram): Evaluation {
     const published = declared.filter((c) => COMBINATION_SUBJECTS[c]);
     // Đề án ghi tổ hợp nhưng toàn mã năng khiếu (T00, V00...) → không tính được.
     if (declared.length > 0 && published.length === 0) return { score: null, missing: [] };
-    comboUnverified = declared.length === 0;
-    combos = comboUnverified
-      ? (profile.activeCombination && COMBINATION_SUBJECTS[profile.activeCombination] ? [profile.activeCombination] : [])
-      : published;
+    const fromRule = (rule.allowedCombinations ?? []).filter((c) => COMBINATION_SUBJECTS[c]);
+    if (declared.length === 0 && fromRule.length > 0) {
+      // Trường công bố các tổ hợp được nhận ở mức trường: dữ liệu này đã đối chiếu nên không còn là "chưa xác thực".
+      combos = fromRule;
+    } else {
+      comboUnverified = declared.length === 0;
+      combos = comboUnverified
+        ? (profile.activeCombination && COMBINATION_SUBJECTS[profile.activeCombination] ? [profile.activeCombination] : [])
+        : published;
+    }
     if (combos.length === 0) return { score: null, missing: ["Tổ hợp xét tuyển"] };
   }
 
   const missing = new Set<string>();
   let best: MethodScore | null = null;
   for (const combo of combos) {
-    const s = scoreCombo(profile, method, rule, combo, missing);
+    const s = scoreCombo(profile, rule, combo, missing, (program as TargetProgram).majorGroup);
     if (!s) continue;
     if (!best || s.score > best.score) best = { ...s, method, combo, comboUnverified, ruleOrigin: origin, ruleSource: source };
   }
@@ -166,24 +176,25 @@ function evaluate(profile: StudentProfile, program: TargetProgram): Evaluation {
 
 function scoreCombo(
   profile: StudentProfile,
-  method: AdmissionMethod,
   rule: MethodRule,
   combo: string,
   missing: Needs,
+  majorGroup: string,
 ): Pick<MethodScore, "score" | "rawScore" | "bonus" | "usedIeltsConversion"> | null {
   const subjects = combo ? COMBINATION_SUBJECTS[combo] : [];
-  const allowConversion = (rule.englishCertConversion ?? "none") === "common";
   let base = 0;
   let usedIelts = false;
   let examRaw: number | null = null;
+  let hocBaRaw: number | null = null;
 
   for (const c of rule.components) {
     let value30: number;
     if (c.source === "exam_combo" || c.source === "hocba_combo") {
-      const cs = comboComponentScores(c, subjects, profile, missing, allowConversion && c.source === "exam_combo");
+      const cs = comboComponentScores(c, subjects, profile, missing, rule);
       if (!cs) return null;
       value30 = (cs.weighted / cs.max) * 30;
       usedIelts = usedIelts || cs.usedIelts;
+      if (c.source === "hocba_combo") hocBaRaw = r2(cs.rawTotal);
       if (c.source === "exam_combo") {
         // Tổng điểm thi gốc 3 môn (không hệ số, không quy đổi chứng chỉ) để kiểm ngưỡng đầu vào.
         const own = profile.examScores;
@@ -199,7 +210,7 @@ function scoreCombo(
     }
     base += c.weight * value30;
   }
-  base = Math.min(30, r2(base));
+  base = Math.min(30, r2(base * (rule.scoreFactor ?? 1)));
 
   // Từ kỳ thi 2026: tổng điểm thi gốc của tổ hợp phải đạt sàn 15/30; trường có thể đặt ngưỡng riêng cao hơn.
   const usesExam = rule.components.some((c) => c.source === "exam_combo");
@@ -208,11 +219,11 @@ function scoreCombo(
   } else if (usesExam && examRaw !== null && rule.minExamComboTotal !== undefined && r2(examRaw) < rule.minExamComboTotal) {
     return null;
   }
-  void method;
+  if (rule.minHocBaComboTotal !== undefined && hocBaRaw !== null && hocBaRaw < rule.minHocBaComboTotal) return null;
 
   let certPoints = 0;
   const ielts = profile.altScores?.ielts;
-  if (ielts && rule.certBonus?.ielts) {
+  if (ielts && rule.certBonus?.ielts && !rule.certBonus.excludedMajorGroups?.includes(majorGroup)) {
     for (const t of rule.certBonus.ielts) if (ielts >= t.min && t.points > certPoints) certPoints = t.points;
   }
   const priority = rule.priority === "standard" && profile.priority ? calculateTotalPriorityBonus(profile.priority, base) : 0;

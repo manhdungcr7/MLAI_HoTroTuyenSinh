@@ -55,6 +55,25 @@ assert(scoreForProgram(profile(1), program(3)) === null && missingInputsForProgr
 assert(scoreForProgram(profile(1), program(0)) === null && missingInputsForProgram(profile(1), program(0)).includes("Điểm ĐGNL ĐHQG-HCM"), "Thiếu điểm ĐGNL thì không tính và nêu đúng cần bổ sung gì");
 // Ngưỡng đầu vào riêng của trường (tổng thi tối thiểu 18)
 assert(scoreForProgram(profile(1), program(2)) === null, "Tổng điểm thi dưới ngưỡng riêng của trường thì không được xét");
+// ZZ2: bảng quy đổi IELTS riêng của trường (6.5 → mức 6.0 → 9.0 điểm thay Tiếng Anh 4): 7 + 6 + 9 = 22
+const zz2 = scoreForProgram(profile(3), program(6));
+assert(near(zz2?.score, 22) && zz2?.usedIeltsConversion === true, "Quy đổi IELTS theo bảng riêng của trường (lấy mức cao nhất đạt được)");
+// ZZ2 học bạ: tổng 3 môn 24 < ngưỡng riêng 25 của trường → không được xét
+assert(scoreForProgram(profile(3), program(7)) === null, "Tổng điểm học bạ dưới ngưỡng riêng của trường thì không được xét");
+// Trường chưa có bảng riêng: KHÔNG quy đổi IELTS (nhiều trường không cho dùng chứng chỉ thay điểm thi)
+const cons = scoreForProgram({ ...profile(3), activeCombination: "D01" }, { programId: "x", schoolCode: "NOP", admissionMethod: "THPT", combinations: ["D01"] } as unknown as TargetProgram);
+assert(near(cons?.score, 7 + 6 + 4) && cons?.usedIeltsConversion === false, "Trường chưa có bảng riêng: không quy đổi IELTS, chỉ dùng điểm thi thật");
+// Phương thức trường tuyên bố chưa tính được thì không đoán
+registerSchoolRules([{ schoolCode: "ZZ9", year: 2026, source: { url: "https://example.test/zz9", verifiedAt: "2026-10-03", verifiedBy: "test-fixture" }, methods: { HOC_BA: { unsupportedReason: "Trường chưa công bố bảng quy đổi học bạ", priority: "standard", components: [] } } }]);
+assert(scoreForProgram(profile(3), { programId: "x", schoolCode: "ZZ9", admissionMethod: "HOC_BA", combinations: ["A00"] } as unknown as TargetProgram) === null, "Phương thức trường chưa công bố cách quy đổi thì không tính xác suất");
+// ZZ3: học bạ nhân hệ số quy đổi 5/6, ngưỡng 18: hồ sơ 3 có học bạ 8+8+8=24 → 24 × 5/6 = 20.00
+const zz3 = scoreForProgram(profile(3), program(8));
+assert(near(zz3?.score, 20) && near(zz3?.rawScore, 20), "Học bạ nhân hệ số quy đổi của trường (5/6): 24 điểm thành 20 điểm xét tuyển");
+// ZZ4: trường chỉ nhận A01/D01; đề án không ghi tổ hợp từng ngành nên dùng tổ hợp trường nhận, không phải tổ hợp tốt nhất của học sinh.
+// Hồ sơ 3 (D01: 7 + 6 + 4 = 17) + điểm thưởng IELTS 6.5 = 0.75 cho ngành kinh tế; ngành sư phạm không được cộng.
+const zz4 = scoreForProgram(profile(3), program(9));
+assert(near(zz4?.score, 17.75) && zz4?.combo === "D01" && zz4?.comboUnverified === false, "Tổ hợp trường nhận (D01) thay cho tổ hợp suy đoán; điểm thưởng IELTS theo bảng của trường");
+assert(near(scoreForProgram(profile(3), program(10))?.score, 17), "Ngành thuộc nhóm bị loại khỏi điểm thưởng chứng chỉ thì không được cộng");
 // Phương thức không có quy tắc
 assert(scoreForProgram(profile(0), program(5)) === null && missingInputsForProgram(profile(0), program(5)).length === 0, "Phương thức chưa có quy tắc thì không tính, không bịa");
 

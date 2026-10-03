@@ -1,0 +1,28 @@
+{
+  "schoolCode": "KHA",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0306/thong-tin-tuyen-sinh-dai-hoc-kinh-te-quoc-dan-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Đại học Kinh tế Quốc dân (bản ảnh, đọc trực tiếp các trang 2–4)",
+    "sha256": "a4a5dd1c4ccc59eb7cc90b6b1a0db3062fa29e43a7e7dff2763bdd3f31a5eae4",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.2 (PTXT5): xét điểm thi THPT 2026 với 4 tổ hợp A00, A01, D01, D07, các môn hệ số 1; chứng chỉ chỉ dùng cho phương thức kết hợp riêng."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "allowedCombinations": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ]
+    }
+  }
+}
