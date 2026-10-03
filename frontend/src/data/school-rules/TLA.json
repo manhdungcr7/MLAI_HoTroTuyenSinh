@@ -1,0 +1,110 @@
+{
+  "schoolCode": "TLA",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0323/thong-tin-tuyen-sinh-truong-dai-hoc-thuy-loi-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học chính quy năm 2026 – Trường Đại học Thủy lợi (bản ảnh, đọc trực tiếp trang 11–13)",
+    "sha256": "c7aea4ff4477fca3ffab546c70f22120b7494ba3aa0c2d13258f9a69cf2253ce",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.2–2.3: điểm = M1+M2+M3 (+ưu tiên); riêng Ngôn ngữ Anh (M1 Toán, M2 Tiếng Anh, M3 môn còn lại) tính (M1×2 + M2×2 + M3)×3/5. Phương thức học bạ: trung bình 3 năm, cộng điểm giải học sinh giỏi cấp tỉnh (nhất 1,00; nhì 0,75; ba 0,50; khuyến khích 0,25 chưa mã hóa) và chứng chỉ IELTS 5,0→0,2 … ≥7,0→1,0; TOEFL iBT 60–64→0,2 … ≥79→1,0. Ngôn ngữ Trung Quốc (M2 ngoại ngữ ×2) chưa mã hóa vì tổ hợp tiếng Trung chưa có trong ứng dụng."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "majorGroupOverrides": {
+        "name:ngon ngu anh": {
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1,
+              "subjectWeights": {
+                "toan": 2,
+                "anh": 2
+              }
+            }
+          ]
+        }
+      }
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "majorGroupOverrides": {
+        "name:ngon ngu anh": {
+          "components": [
+            {
+              "source": "hocba_combo",
+              "weight": 1,
+              "subjectWeights": {
+                "toan": 2,
+                "anh": 2
+              }
+            }
+          ]
+        }
+      },
+      "awardBonus": {
+        "tinh_nhat": 1.0,
+        "tinh_nhi": 0.75,
+        "tinh_ba": 0.5
+      },
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.0,
+            "points": 0.2
+          },
+          {
+            "min": 5.5,
+            "points": 0.4
+          },
+          {
+            "min": 6.0,
+            "points": 0.6
+          },
+          {
+            "min": 6.5,
+            "points": 0.8
+          },
+          {
+            "min": 7.0,
+            "points": 1.0
+          }
+        ],
+        "toefl": [
+          {
+            "min": 60,
+            "points": 0.2
+          },
+          {
+            "min": 65,
+            "points": 0.4
+          },
+          {
+            "min": 70,
+            "points": 0.6
+          },
+          {
+            "min": 75,
+            "points": 0.8
+          },
+          {
+            "min": 79,
+            "points": 1.0
+          }
+        ]
+      }
+    }
+  }
+}

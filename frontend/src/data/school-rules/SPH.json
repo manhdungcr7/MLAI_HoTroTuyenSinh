@@ -1,0 +1,23 @@
+{
+  "schoolCode": "SPH",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0707/thong-tin-tuyen-sinh-dh-su-pham-hn-cap-nhap-196.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Sư phạm Hà Nội (bản ảnh, đọc trực tiếp trang 5)",
+    "sha256": "5e5c1f4ebc0ee8a8bbde6b5ccd47c1b16000606d083805cf31d5e01e5206705f",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục III-1.3: điểm xét thang 30; tổ hợp gốc của ngành không nhân hệ số, tổ hợp khác quy đổi theo hệ số riêng (chưa mã hóa)."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "approximateReason": "Chỉ tổ hợp gốc của ngành được tính không nhân hệ số; các tổ hợp khác trường quy đổi theo hệ số riêng, ứng dụng chưa mã hóa nên điểm của bạn có thể lệch; hãy tính lại theo đề án."
+    }
+  }
+}
