@@ -30,10 +30,10 @@ import pandas as pd
 from scipy import stats
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from common.admission_core import FORECAST_YEAR  # noqa: E402
 from common.national_shock import estimate_national_shock  # noqa: E402
 from pipeline import config  # noqa: E402
 
-FORECAST_YEAR = 2026
 Z90 = float(stats.norm.ppf(0.90))  # ≈1.2816
 # Chương trình chỉ có 1 năm dữ liệu dao động mạnh hơn: đo trên hai năm giữ lại, độ lệch chuẩn sai số
 # gấp 1.14 lần (2025) và 1.47 lần (2024) so với chương trình có từ 2 năm; lấy mức giữa.

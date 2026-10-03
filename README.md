@@ -53,6 +53,13 @@ Lõi tính ở `common/admission_core.py` được đối chiếu tự động v
 (`tests/backend/test_admission_core_parity.py`): đổi công thức ở một bên thì phải đổi cả bên kia.
 Bảng dùng chung (tổ hợp, vùng của tỉnh) xuất từ TypeScript bằng `scripts/export_shared_rules.ts`.
 
+## Việc dữ liệu còn lại
+
+- Nạp điểm chuẩn **mùa tuyển sinh 2026** (đã công bố): dữ liệu hiện dừng ở 2025 nên mọi dự báo cho 2027 đang cách hai năm và có độ bất định rộng.
+  Khi nạp xong, đổi `FORECAST_YEAR` ở `common/admission_core.py` và `frontend/src/engine/admissions/probability.ts` (có test nhắc khi quá hạn).
+- Nhập quy tắc tính điểm riêng từng trường từ văn bản gốc: `frontend/src/data/school-rules/README.md`.
+- Điểm chuẩn ĐGNL/ĐGTD cùng thang để so sánh được.
+
 ## Cập nhật dữ liệu
 
 ```powershell

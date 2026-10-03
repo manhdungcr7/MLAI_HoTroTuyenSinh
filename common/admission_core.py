@@ -27,7 +27,7 @@ PROVINCE_REGIONS: dict[str, str] = _RULES["provinceRegions"]
 
 DEFAULT_CATALOG_PATH = ROOT / "frontend" / "src" / "data" / "programs-catalog.json"
 
-FORECAST_YEAR = 2026
+FORECAST_YEAR = 2027  # năm tuyển sinh cần dự báo; cập nhật cùng probability.ts khi có điểm chuẩn mùa mới
 THIN_DATA_MULTIPLIER = 1.3
 DEFAULT_NATIONAL_SHOCK_STD = 1.29
 DEFAULT_IDIO_STD = 1.28

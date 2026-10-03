@@ -4,7 +4,7 @@
  */
 
 /** Năm tuyển sinh cần dự báo; dữ liệu càng cũ so với năm này thì độ bất định càng lớn. */
-export const FORECAST_YEAR = 2026;
+export const FORECAST_YEAR = 2027;
 /** Chương trình chỉ có 1 năm dữ liệu dao động mạnh hơn (đo trên hai năm giữ lại: 1.14 và 1.47 lần). */
 export const THIN_DATA_MULTIPLIER = 1.3;
 

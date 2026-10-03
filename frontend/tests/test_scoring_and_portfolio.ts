@@ -15,7 +15,7 @@ import { clearSchoolRules, registerSchoolRules, validateSchoolRule, SchoolRule }
 import { missingInputsForProgram, scoreForProgram } from "../src/engine/scoring/method-score";
 import { StudentProfile, TargetProgram } from "../src/engine/types";
 import { sanitize } from "../src/state/storage";
-import { calculateAdmitProbability, sigmaScaleFor } from "../src/engine/admissions/probability";
+import { FORECAST_YEAR, calculateAdmitProbability, sigmaScaleFor } from "../src/engine/admissions/probability";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -104,9 +104,9 @@ const warnings = portfolioWarnings(suggestion.map((c, i) => candidateToWishlistI
 assert(!warnings.some((w) => w.code === "SHADOWED" || w.code === "TEACHER_RANK"), "Danh sách đề xuất không vi phạm các cảnh báo cấu trúc");
 
 // ---- 3b. Độ bất định theo độ cũ của dữ liệu ----
-assert(sigmaScaleFor(2025, 3) === 1 && Math.abs(sigmaScaleFor(2023, 3) - Math.sqrt(3)) < 1e-9, "Dữ liệu cũ hơn thì độ bất định tăng theo căn bậc hai số năm");
-assert(Math.abs(sigmaScaleFor(2025, 1) - 1.3) < 1e-9, "Chương trình chỉ có 1 năm dữ liệu có độ bất định lớn hơn");
-assert(calculateAdmitProbability(24, 22, 1, 1.5, 1.2, sigmaScaleFor(2023, 1)) < calculateAdmitProbability(24, 22, 1, 1.5, 1.2, 1), "Cùng điểm, dữ liệu cũ và mỏng thì xác suất đỗ kém chắc chắn hơn");
+assert(sigmaScaleFor(FORECAST_YEAR - 1, 3) === 1 && Math.abs(sigmaScaleFor(FORECAST_YEAR - 3, 3) - Math.sqrt(3)) < 1e-9, "Dữ liệu cũ hơn thì độ bất định tăng theo căn bậc hai số năm");
+assert(Math.abs(sigmaScaleFor(FORECAST_YEAR - 1, 1) - 1.3) < 1e-9, "Chương trình chỉ có 1 năm dữ liệu có độ bất định lớn hơn");
+assert(calculateAdmitProbability(24, 22, 1, 1.5, 1.2, sigmaScaleFor(FORECAST_YEAR - 3, 1)) < calculateAdmitProbability(24, 22, 1, 1.5, 1.2, 1), "Cùng điểm, dữ liệu cũ và mỏng thì xác suất đỗ kém chắc chắn hơn");
 
 // ---- 4. Lưu trữ ----
 const dirty = sanitize({

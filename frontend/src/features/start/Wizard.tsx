@@ -205,7 +205,7 @@ export function Wizard() {
       <div className="min-h-[220px]">
         {step === "year" && (
           <div className="grid gap-3">
-            {[2026, 2027, 2028].map((y) => (
+            {[2027, 2028].map((y) => (
               <Choice key={y} label={`Năm ${y}`} selected={profile.graduationYear === y} onClick={() => choose(() => updateProfile({ graduationYear: y }))} />
             ))}
           </div>

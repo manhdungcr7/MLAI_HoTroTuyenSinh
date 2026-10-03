@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T01:10:32.771316+00:00",
+  "generatedAt": "2026-10-03T01:17:24.343657+00:00",
   "modelVersion": "2026.2-diem-nam-gan-nhat",
   "forecastRule": "Điểm chuẩn năm tới = điểm chuẩn thật của năm gần nhất; khoảng dự báo và xác suất đỗ dùng độ bất định đo từ dữ liệu.",
   "thinDataMultiplier": 1.3,
