@@ -5,6 +5,8 @@ import devtoolsJson from "vite-plugin-devtools-json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Đường dẫn tương đối để chạy được ở thư mục con (GitHub Pages); định tuyến dùng hash nên không cần cấu hình máy chủ.
+  base: "./",
   plugins: [
     react(),
     devtoolsJson(),

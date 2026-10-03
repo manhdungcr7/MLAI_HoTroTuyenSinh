@@ -14,7 +14,7 @@ export const NAV = [
 function Brand() {
   return (
     <Link href="/start" className="flex items-center gap-2.5 font-bold tracking-tight text-slate-900">
-      <img src="/favicon.svg" alt="" className="h-8 w-8 rounded-xl" />
+      <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="h-8 w-8 rounded-xl" />
       <span className="text-lg">Nguyện Vọng</span>
     </Link>
   );

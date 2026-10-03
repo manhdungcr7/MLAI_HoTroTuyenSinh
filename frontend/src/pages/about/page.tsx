@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { dataUrl } from "@/lib/data-url";
 import { DatasetFreshness } from "@/state/dataset-freshness";
 import { useApp } from "@/state/AppContext";
 import { listSchoolRules } from "@/engine/scoring/school-rules";
@@ -26,7 +27,7 @@ function useBacktest(): Backtest | null {
   const [data, setData] = useState<Backtest | null>(null);
   useEffect(() => {
     let active = true;
-    fetch("/data/backtest.json")
+    fetch(dataUrl("backtest.json"))
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => { if (active && Array.isArray(j?.holdouts)) setData(j as Backtest); })
       .catch(() => undefined);

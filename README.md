@@ -103,3 +103,10 @@ pipeline/       cào, làm sạch, dự báo, xuất catalog và snapshot
 
 Thêm quy tắc tính điểm riêng cho một trường: `frontend/src/data/school-rules/README.md`.
 `ba.md` ghi bối cảnh và yêu cầu ban đầu của cuộc thi; phần sitemap 20 màn trong đó đã được thay bằng 5 màn ở trên.
+
+## Đưa web lên mạng
+
+Web là trang tĩnh (mọi phép tính chạy ngay trên trình duyệt, định tuyến bằng hash), nên chỉ cần máy chủ tệp tĩnh.
+Workflow `.github/workflows/deploy.yml` tự kiểm tra rồi đăng `frontend/dist` lên GitHub Pages mỗi lần đẩy lên nhánh `main`.
+Bật một lần: GitHub → Settings → Pages → Source: **GitHub Actions**. Địa chỉ: `https://<tài khoản>.github.io/<tên repo>/`.
+Dùng nơi khác (Netlify, Vercel, Cloudflare Pages): thư mục `frontend`, lệnh `npm ci && npm run build`, thư mục xuất `dist`.

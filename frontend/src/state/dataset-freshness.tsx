@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { dataUrl } from "@/lib/data-url";
 import type { ReactNode } from "react";
 import { configureShockParameters } from "@/engine/admissions/probability";
 
@@ -87,7 +88,7 @@ function stateFromManifest(manifest: SnapshotManifest, cached: boolean): Freshne
 }
 
 async function verifyCachedSnapshot(cache: Cache, manifest: SnapshotManifest): Promise<boolean> {
-  const response = await cache.match(`/data/${manifest.datasets.admissions.path}`);
+  const response = await cache.match(dataUrl(manifest.datasets.admissions.path));
   return Boolean(response && await sha256(response) === manifest.datasets.admissions.sha256);
 }
 
@@ -101,7 +102,7 @@ export function DatasetFreshnessProvider({ children }: { children: ReactNode }) 
       let cachedManifest: SnapshotManifest | null = null;
       try {
         cache = "caches" in window ? await caches.open(CACHE_NAME) : null;
-        const cachedManifestResponse = await cache?.match("/data/manifest.json");
+        const cachedManifestResponse = await cache?.match(dataUrl("manifest.json"));
         if (cachedManifestResponse) {
           try {
             cachedManifest = parseManifest(await cachedManifestResponse.json());
@@ -122,16 +123,16 @@ export function DatasetFreshnessProvider({ children }: { children: ReactNode }) 
           return;
         }
 
-        const manifestResponse = await fetch("/data/manifest.json", { cache: "no-store" });
+        const manifestResponse = await fetch(dataUrl("manifest.json"), { cache: "no-store" });
         if (!manifestResponse.ok) throw new Error("Không tải được manifest dữ liệu");
         const manifest = parseManifest(await manifestResponse.json());
-        const snapshotResponse = await fetch(`/data/${manifest.datasets.admissions.path}`, { cache: "force-cache" });
+        const snapshotResponse = await fetch(dataUrl(manifest.datasets.admissions.path), { cache: "force-cache" });
         if (!snapshotResponse.ok || await sha256(snapshotResponse) !== manifest.datasets.admissions.sha256) {
           throw new Error("Hash snapshot không khớp manifest");
         }
         if (cache) {
-          await cache.put(`/data/${manifest.datasets.admissions.path}`, snapshotResponse.clone());
-          await cache.put("/data/manifest.json", new Response(JSON.stringify(manifest), {
+          await cache.put(dataUrl(manifest.datasets.admissions.path), snapshotResponse.clone());
+          await cache.put(dataUrl("manifest.json"), new Response(JSON.stringify(manifest), {
             headers: { "Content-Type": "application/json" },
           }));
         }
