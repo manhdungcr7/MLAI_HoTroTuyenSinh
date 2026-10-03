@@ -56,6 +56,7 @@ from backend.app.schemas import (  # noqa: E402
 )
 from common.decision_result import build_decision_result_v2  # noqa: E402
 from backend.app.models import init_database  # noqa: E402
+from backend.app.advisor import router as advisor_router  # noqa: E402
 from backend.app.events import (  # noqa: E402
     webhook_router,
     event_bus,
@@ -248,6 +249,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RateLimitingMiddleware)
 
 app.include_router(webhook_router)
+app.include_router(advisor_router)
 
 # --------------------------------------------------------------------------
 # Global Exception Handlers (Correlation ID Tracing & Standard Error Schema)
@@ -438,6 +440,22 @@ def data_provenance_check() -> dict:
     }
 
 
+def _known_gaps() -> list[str]:
+    """Giới hạn dữ liệu tính từ số liệu thật đang nạp, không viết cứng."""
+    m = _state.get("meta") or {}
+    gaps = [
+        f"Chỉ phủ {m.get('n_schools', 0)} trường có điểm chuẩn công bố trong đề án tuyển sinh; "
+        "nhiều trường chưa có dữ liệu hoặc dữ liệu chưa đối chiếu được.",
+        f"Học phí xác thực cho {round(100 * m.get('tuition_coverage', 0))}% chương trình, "
+        f"tỷ lệ việc làm cho {round(100 * m.get('employment_coverage', 0))}%; phần thiếu được ghi rõ, không điền số ước đoán.",
+        "Xác suất đỗ mới tính được cho hai phương thức: điểm thi tốt nghiệp THPT và học bạ. "
+        "ĐGNL, ĐGTD, năng khiếu, tuyển thẳng và xét kết hợp chưa quy đổi được.",
+        "Ước lượng biến động điểm chuẩn theo năm dựa trên ít cặp năm liên tiếp; "
+        "hệ thống cố ý để dải rộng thay vì giả vờ chắc chắn.",
+    ]
+    return gaps
+
+
 @app.get("/api/meta")
 def meta() -> dict:
     """Thông tin minh bạch về dữ liệu — trang '/du-lieu' của frontend gọi API này."""
@@ -446,16 +464,7 @@ def meta() -> dict:
         "national_shock": _state["national_shock"],
         "data_source": "Đề án tuyển sinh công khai của từng trường, cào qua "
                        "diemthi.tuyensinh247.com. Xem data/labels/... để biết chi tiết.",
-        "known_gaps": [
-            "Chỉ phủ 58/440+ trường đã thử cào — nhiều trường không công bố "
-            "bảng điểm chuẩn nhiều năm trong tài liệu hiện có.",
-            "Học phí chỉ xác nhận được cho rất ít trường (~0.3%) — phần lớn dùng "
-            "giá trị ước lượng, có gắn cờ trong utility_breakdown.meta.tuition_estimated.",
-            "Tỷ lệ việc làm tương tự — phần lớn ước lượng.",
-            "Ước lượng biến động điểm chuẩn theo năm dựa trên chỉ 3 cặp năm liên "
-            "tiếp — độ tin cậy của khoảng dự báo còn hạn chế, hệ thống cố ý để "
-            "biên rộng thay vì giả vờ chắc chắn.",
-        ],
+        "known_gaps": _known_gaps(),
     }
 
 

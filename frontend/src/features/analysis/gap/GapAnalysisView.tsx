@@ -52,6 +52,7 @@ export const GapAnalysisView: React.FC<GapAnalysisViewProps> = ({
           <GapTargetHeroCard
             target={analysis.targetProgram}
             currentScore={currentScore}
+            expectedCutoff={p50}
           />
         </div>
 

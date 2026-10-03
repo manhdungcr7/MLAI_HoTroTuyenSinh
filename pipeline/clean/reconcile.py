@@ -57,7 +57,8 @@ def load_panels() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
 _SUBJECT_WORD = (
     r"(?:Toán|Ngữ văn|Văn|Vật lí|Vật lý|Lý|Hóa học|Hoá học|Hóa|Hoá|Sinh học|Sinh|Lịch sử|Sử|"
-    r"Địa lí|Địa lý|Địa|Tiếng Anh|Anh|GDCD|GDKT&PL|Tin học|Tin)"
+    r"Địa lí|Địa lý|Địa|Tiếng Anh|Anh|GDCD|GDKT\s*&\s*PL|GD\s*Công dân|Giáo dục công dân|"
+    r"Giáo dục kinh tế và pháp luật|Công nghệ|Khoa học tự nhiên|Khoa học xã hội|KHTN|KHXH|Tin học|Tin)"
 )
 _COMBO_LIKE = re.compile(rf"\s*{_SUBJECT_WORD}(?:\s*[,;\-]\s*{_SUBJECT_WORD}){{1,3}}\s*")
 _CODE_ONLY = re.compile(r"\s*(?:[A-Z]\d{2}|PT\s*\d+|[A-Z]{2,4}|[\d\s,.;:\-–_/()]*)\s*")

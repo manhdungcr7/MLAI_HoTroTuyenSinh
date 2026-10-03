@@ -28,6 +28,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "@/components/navigation/HashLink";
+import { TargetPicker } from "@/components/ui/TargetPicker";
 import { useDecision } from "@/state/DecisionContext";
 import { DECISION_PROGRAM_POOL, ProgramCatalogItem } from "@/data/catalog";
 import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI, combinationLabel } from "@/data/universities/combinations";
@@ -101,50 +102,6 @@ export default function ProfilePage() {
 
   const handleSave = () => {
     showToast("Đã lưu hồ sơ học tập và đồng bộ thành công!");
-  };
-
-  // Danh sách các trường đại học duy nhất từ toàn bộ catalog
-  const universityList = useMemo(() => {
-    const map = new Map<string, { code: string; name: string }>();
-    for (const prog of DECISION_PROGRAM_POOL) {
-      if (!map.has(prog.schoolCode)) {
-        map.set(prog.schoolCode, { code: prog.schoolCode, name: prog.schoolName });
-      }
-    }
-    // Sắp xếp ưu tiên các trường lớn trước, sau đó theo tên A-Z
-    const topCodes = ["BKA", "NEU", "NTH", "QHI", "QST", "NHH", "TMA", "BVH", "SPH", "YHB"];
-    return Array.from(map.values()).sort((a, b) => {
-      const aTop = topCodes.indexOf(a.code);
-      const bTop = topCodes.indexOf(b.code);
-      if (aTop !== -1 && bTop !== -1) return aTop - bTop;
-      if (aTop !== -1) return -1;
-      if (bTop !== -1) return 1;
-      return a.name.localeCompare(b.name, "vi");
-    });
-  }, []);
-
-  // Xác định trường đang chọn
-  const activeSchoolCode = target?.schoolCode || "NEU";
-
-  // Danh sách các ngành của trường đang chọn
-  const availableMajors = useMemo(() => {
-    return DECISION_PROGRAM_POOL.filter((p) => p.schoolCode === activeSchoolCode);
-  }, [activeSchoolCode]);
-
-  // Đổi trường mục tiêu
-  const handleSchoolChange = (code: string) => {
-    const majorsOfSchool = DECISION_PROGRAM_POOL.filter((p) => p.schoolCode === code);
-    if (majorsOfSchool.length > 0) {
-      setTarget(majorsOfSchool[0]);
-    }
-  };
-
-  // Đổi ngành mục tiêu
-  const handleMajorChange = (programId: string) => {
-    const found = DECISION_PROGRAM_POOL.find((p) => p.programId === programId);
-    if (found) {
-      setTarget(found);
-    }
   };
 
   // Các môn thuộc tổ hợp đang kích hoạt
@@ -519,7 +476,7 @@ export default function ProfilePage() {
                           key={subKey}
                           className="flex items-center justify-between gap-2 p-2 rounded-lg border border-slate-200 bg-white"
                         >
-                          <span className="text-xs font-semibold text-slate-800 truncate">{SUBJECT_LABELS_VI[subKey] || subKey}</span>
+                          <span className="text-xs font-semibold leading-tight text-slate-800">{SUBJECT_LABELS_VI[subKey] || subKey}</span>
                           <input
                             type="number"
                             min="0"
@@ -908,53 +865,27 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              {/* Chọn Trường đại học mục tiêu */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Trường đại học mục tiêu
-                </label>
-                <select
-                  value={activeSchoolCode}
-                  onChange={(e) => handleSchoolChange(e.target.value)}
-                  className="w-full font-bold text-slate-900 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
-                >
-                  {universityList.map((sch) => (
-                    <option key={sch.code} value={sch.code}>
-                      {sch.name} ({sch.code})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Chọn Ngành mục tiêu của trường đó */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Ngành học mục tiêu
-                </label>
-                <select
-                  value={target?.programId || (availableMajors[0]?.programId ?? "")}
-                  onChange={(e) => handleMajorChange(e.target.value)}
-                  className="w-full font-bold text-slate-900 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
-                >
-                  {availableMajors.map((prog) => (
-                    <option key={prog.programId} value={prog.programId}>
-                      {prog.majorName} · Chuẩn P50: {prog.forecastP50 ? `${prog.forecastP50.toFixed(2)}đ` : "—"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Thông tin mốc chuẩn tham chiếu */}
-              {target && (
-                <div className="p-3.5 rounded-xl bg-purple-50/50 border border-purple-100 flex items-center justify-between text-xs">
-                  <span className="text-purple-700 font-bold">Điểm chuẩn tham chiếu (P50):</span>
-                  <span className="font-black text-purple-900 text-sm">
-                    {target.forecastP50 ? `${target.forecastP50.toFixed(2)}đ` : "—"}
-                  </span>
+            {target ? (
+              <div className="space-y-3">
+                <div className="rounded-xl border border-purple-100 bg-purple-50/50 p-3.5">
+                  <p className="text-sm font-black text-slate-900">{target.majorName}</p>
+                  <p className="text-xs font-semibold text-slate-600">{target.schoolName}</p>
+                  <p className="mt-2 text-xs text-purple-800">
+                    Điểm chuẩn dự kiến:{" "}
+                    <b>{target.forecastP50 ? `${target.forecastP50.toFixed(2)}đ` : "chưa có"}</b>
+                  </p>
                 </div>
-              )}
-            </div>
+                <div className="flex gap-2">
+                  <Link href="/analysis" className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-black text-white hover:bg-blue-700">Xem cần thêm bao nhiêu điểm</Link>
+                  <button type="button" onClick={() => setTarget(null)} className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer">Đổi mục tiêu</button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <p className="text-xs text-slate-600">Chưa chọn. Mục tiêu dùng cho phần &quot;Cải thiện điểm&quot; và &quot;Kế hoạch học&quot;.</p>
+                <TargetPicker />
+              </div>
+            )}
           </div>
 
           {/* Card 2: Ảnh hưởng gần đây (Môn ưu tiên bứt phá điểm số) */}

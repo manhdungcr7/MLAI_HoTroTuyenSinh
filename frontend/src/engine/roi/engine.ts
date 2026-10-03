@@ -65,7 +65,7 @@ export function calculateSubjectRoiList(
 
     if (netRoi >= 6.5) {
       tier = 1; // Đòn bẩy vàng
-      explanationVi = `Tăng thêm 0.5 điểm ${SUBJECT_LABELS_VI[subKey]} giúp bạn gần ${target.schoolCode} hơn ${gapReduction} điểm và có thêm ${unlockedOptions} ngành trong tầm với — nhiều hơn các môn khác.`;
+      explanationVi = `Tăng thêm 0.5 điểm ${SUBJECT_LABELS_VI[subKey]} giúp bạn gần ngành mục tiêu hơn ${gapReduction} điểm và có thêm ${unlockedOptions} ngành trong tầm với — nhiều hơn các môn khác.`;
     } else if (netRoi >= 4.0) {
       tier = 2; // Bổ trợ
       explanationVi = `Tăng thêm 0.5 điểm ${SUBJECT_LABELS_VI[subKey]} giúp bạn có thêm ${unlockedOptions} ngành trong tầm với.`;

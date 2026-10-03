@@ -7,6 +7,7 @@ import {
   Trash2,
   Plus,
 } from "lucide-react";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useDecision } from "@/state/DecisionContext";
 import MockTestModal from "@/features/study-plan/MockTestModal";
 import SubjectRoiTierAllocation from "@/features/study-plan/SubjectRoiTierAllocation";
@@ -24,6 +25,9 @@ export default function StudyPlanPage() {
     studyPlan,
     mockHistory,
     deleteMockHistory,
+    target,
+    profile,
+    updateProfile,
   } = useDecision();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,6 +47,37 @@ export default function StudyPlanPage() {
           Kế hoạch học tập
         </h1>
       </div>
+
+      <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-blue-100 bg-blue-50/50 p-4">
+        <label htmlFor="weekly-hours" className="text-sm font-bold text-slate-800">
+          Em tự học được bao nhiêu giờ mỗi tuần (ngoài giờ học trên lớp)?
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            id="weekly-hours"
+            type="number"
+            min="0"
+            max="70"
+            step="1"
+            value={profile.availableHoursPerWeek > 0 ? profile.availableHoursPerWeek : ""}
+            placeholder="0"
+            onChange={(e) => {
+              const v = e.target.value === "" ? 0 : Math.max(0, Math.min(70, Math.round(Number(e.target.value))));
+              updateProfile({ availableHoursPerWeek: Number.isFinite(v) ? v : 0 });
+            }}
+            className="w-20 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-right text-sm font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <span className="text-sm font-semibold text-slate-600">giờ / tuần</span>
+        </div>
+      </section>
+
+      {!target && (
+        <EmptyState
+          title="Chọn ngành em muốn vươn tới để có kế hoạch học"
+          description="Kế hoạch học dồn thời gian vào những môn giúp em tiến gần ngành đó nhất."
+          picker
+        />
+      )}
 
       {/* 1. PHÂN BỔ THỜI GIAN THEO MÔN TRỌNG TÂM (WATER-FILLING THEO DỮ LIỆU THẬT) */}
       <SubjectRoiTierAllocation

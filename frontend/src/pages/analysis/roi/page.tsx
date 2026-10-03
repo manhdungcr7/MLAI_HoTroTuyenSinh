@@ -1,3 +1,4 @@
+import { TargetPicker } from "@/components/ui/TargetPicker";
 import React, { useMemo } from "react";
 import { useDecision } from "@/state/DecisionContext";
 import { HeroLeverageBanner } from "@/features/analysis/roi/HeroLeverageBanner";
@@ -151,10 +152,13 @@ export default function SubjectRoiPage() {
               ? "Hãy chọn ngành mục tiêu để biết môn nào giúp em tiến gần mục tiêu nhất."
               : "Hãy nhập điểm thi (hoặc điểm dự kiến) các môn trong tổ hợp xét tuyển của ngành mục tiêu."}
           </p>
-          <div className="mt-4 flex justify-center gap-2">
-            <Link href="/profile" className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Nhập điểm</Link>
-            <Link href="/profile/goal" className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold">Chọn mục tiêu</Link>
-          </div>
+          {!target ? (
+            <TargetPicker />
+          ) : (
+            <div className="mt-4 flex justify-center gap-2">
+              <Link href="/start" className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Nhập điểm</Link>
+            </div>
+          )}
         </div>
       ) : (
       <>

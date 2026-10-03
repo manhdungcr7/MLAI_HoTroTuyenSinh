@@ -1,5 +1,7 @@
 import { AdmissionMethod, Role, StudentProfile } from "@/engine/types";
-import { VIETNAM_PROVINCES } from "@/engine/geo/distance";
+import { regionOfProvince } from "@/engine/decision/constraints";
+
+export { regionOfProvince };
 
 /** Khu vực trường: theo vùng, hoặc cùng tỉnh với nhà em. */
 export type RegionFilter = "all" | "bac" | "trung" | "nam" | "home";
@@ -33,11 +35,6 @@ export const INITIAL_OPTIONS_FILTER: OptionsFilterState = {
   matchLevel: "all",
   sortBy: "admit_prob",
 };
-
-export function regionOfProvince(province: string | null | undefined): "bac" | "trung" | "nam" | null {
-  if (!province) return null;
-  return VIETNAM_PROVINCES[province]?.region ?? null;
-}
 
 /**
  * Bộ lọc khởi tạo từ ràng buộc em đã khai trong hồ sơ, để danh sách ngay từ đầu là

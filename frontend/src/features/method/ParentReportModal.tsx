@@ -6,7 +6,7 @@ import {
   WishlistItem,
   GapMetric,
 } from "@/engine/types";
-import { GOLDEN_PROGRAMS } from "@/data/universities";
+import { ALL_PROGRAMS_CATALOG } from "@/data/catalog";
 import { SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { formatEmploymentRate, formatTuitionPerYear } from "@/lib/format";
 
@@ -232,7 +232,7 @@ export default function ParentReportModal({
                     </tr>
                   )}
                   {items.map((item) => {
-                    const prog = GOLDEN_PROGRAMS.find(
+                    const prog = ALL_PROGRAMS_CATALOG.find(
                       (g) => g.schoolCode === item.school_code && g.majorName.includes(item.major_label.split(" (")[0])
                     );
                     const tuition = item.tuition_vnd ?? prog?.tuitionVnd ?? null;

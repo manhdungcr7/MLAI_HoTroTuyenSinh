@@ -11,7 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { TargetProgram, MAJOR_GROUPS } from "@/engine/types";
-import { GOLDEN_PROGRAMS } from "@/data/universities";
+import { ALL_PROGRAMS_CATALOG } from "@/data/catalog";
 import { formatEmploymentRate, formatTuitionPerYear } from "@/lib/format";
 
 interface DataPassportTableProps {
@@ -37,7 +37,7 @@ export default function DataPassportTable({
   // Danh sách trường đại học duy nhất
   const schools = useMemo(() => {
     const map = new Map<string, string>();
-    GOLDEN_PROGRAMS.forEach((p) => {
+    ALL_PROGRAMS_CATALOG.forEach((p) => {
       if (!map.has(p.schoolCode)) {
         map.set(p.schoolCode, p.schoolName);
       }
@@ -47,7 +47,7 @@ export default function DataPassportTable({
 
   // Lọc và sắp xếp chương trình
   const filteredPassports = useMemo(() => {
-    return GOLDEN_PROGRAMS.filter((p: TargetProgram) => {
+    return ALL_PROGRAMS_CATALOG.filter((p: TargetProgram) => {
       const matchSchool = selectedSchool === "ALL" || p.schoolCode === selectedSchool;
       const matchGroup = selectedGroup === "ALL" || p.majorGroup === selectedGroup;
       const term = searchFilter.trim().toLowerCase();

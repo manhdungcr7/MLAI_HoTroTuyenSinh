@@ -2,7 +2,6 @@ import React from "react";
 import Link from "@/components/navigation/HashLink";
 import { usePathname } from "@/routes";
 import {
-  LayoutDashboard,
   UserCheck,
   TrendingUp,
   Building2,
@@ -31,25 +30,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     href: "/start",
     label: "Tìm ngành cho em",
     icon: Search,
-    matchPaths: ["/", "/start"],
-  },
-  {
-    href: "/dashboard",
-    label: "Tổng quan",
-    icon: LayoutDashboard,
-    matchPaths: ["/dashboard"],
-  },
-  {
-    href: "/profile",
-    label: "Hồ sơ của em",
-    icon: UserCheck,
-    matchPaths: ["/profile", "/profile/goal"],
-  },
-  {
-    href: "/analysis",
-    label: "Phân tích năng lực",
-    icon: TrendingUp,
-    matchPaths: ["/analysis", "/analysis/gap", "/analysis/roi", "/analysis/simulation", "/simulation"],
+    matchPaths: ["/", "/start", "/dashboard"],
   },
   {
     href: "/options",
@@ -64,10 +45,22 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     matchPaths: ["/portfolio", "/strategy"],
   },
   {
+    href: "/analysis",
+    label: "Cải thiện điểm",
+    icon: TrendingUp,
+    matchPaths: ["/analysis", "/analysis/gap", "/analysis/roi", "/analysis/simulation", "/simulation"],
+  },
+  {
     href: "/study-plan",
     label: "Kế hoạch học",
     icon: CalendarDays,
     matchPaths: ["/study-plan"],
+  },
+  {
+    href: "/profile",
+    label: "Hồ sơ chi tiết",
+    icon: UserCheck,
+    matchPaths: ["/profile", "/profile/goal"],
   },
   {
     href: "/explanation",

@@ -134,6 +134,9 @@ export interface WishlistItem {
   region?: "bac" | "trung" | "nam";
   province?: string;
   source_tier?: "official_pdf" | "aggregator_verified";
+  admission_method?: AdmissionMethod;
+  method_inferred?: boolean;
+  combinations_verified?: boolean;
 }
 
 export interface RecommendResponse {

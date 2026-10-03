@@ -18,3 +18,11 @@ def test_rejects_non_major_labels(label):
 )
 def test_keeps_real_major_names(label):
     assert not is_garbage_major_label(label)
+
+
+@pytest.mark.parametrize(
+    "label",
+    ["Ngữ văn, Địa lý, GD Công dân", "Toán, Công nghệ, Tiếng Anh", "Ngữ văn, Lịch sử, Giáo dục công dân"],
+)
+def test_rejects_subject_lists_with_new_curriculum_names(label):
+    assert is_garbage_major_label(label)

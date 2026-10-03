@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useDecision } from "@/state/DecisionContext";
 import { validatePortfolio } from "@/engine/decision/optimizer";
-import { GOLDEN_PROGRAMS } from "@/data/universities";
+import { ALL_PROGRAMS_CATALOG } from "@/data/catalog";
 import { calculateTotalPriorityBonus } from "@/engine/admissions/priority";
 import { formatProbability } from "@/lib/format";
 import { Priority } from "@/engine/types";
@@ -50,13 +50,13 @@ export default function VerifyPage() {
   const [passportSearch, setPassportSearch] = useState("");
   const verifiedPrograms = useMemo(() => {
     const q = passportSearch.trim().toLowerCase();
-    if (!q) return GOLDEN_PROGRAMS.slice(0, 8);
-    return GOLDEN_PROGRAMS.filter(
+    if (!q) return ALL_PROGRAMS_CATALOG.slice(0, 8);
+    return ALL_PROGRAMS_CATALOG.filter(
       (p) =>
         p.schoolCode.toLowerCase().includes(q) ||
         p.schoolName.toLowerCase().includes(q) ||
         p.majorName.toLowerCase().includes(q)
-    );
+    ).slice(0, 30);
   }, [passportSearch]);
 
   return (

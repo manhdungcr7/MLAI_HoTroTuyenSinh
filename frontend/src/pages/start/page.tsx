@@ -65,7 +65,7 @@ function ScoreGrid({
           const v = scores?.[s];
           return (
             <label key={s} className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50/60 px-2.5 py-1.5">
-              <span className="text-xs font-semibold text-slate-800 truncate">{SUBJECT_LABELS_VI[s] ?? s}</span>
+              <span className="text-xs font-semibold leading-tight text-slate-800">{SUBJECT_LABELS_VI[s] ?? s}</span>
               <input
                 type="number"
                 min="0"

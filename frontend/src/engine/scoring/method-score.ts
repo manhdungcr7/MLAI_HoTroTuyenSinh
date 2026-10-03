@@ -82,7 +82,7 @@ function comboScore(
   let usedIelts = false;
   for (const sub of subjects) {
     let v = scores[sub as keyof ExamScores];
-    if (sub === "anh" && allowIelts && ielts) {
+    if (sub === "anh" && allowIelts && ielts && ielts >= 5.0) {
       const converted = convertIeltsToEnglishScore(ielts, v);
       if (typeof converted === "number" && (typeof v !== "number" || converted > v)) {
         v = converted;

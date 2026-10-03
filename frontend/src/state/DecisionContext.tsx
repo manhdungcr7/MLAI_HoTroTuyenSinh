@@ -1,3 +1,4 @@
+import { candidateToWishlistItem } from "@/engine/decision/portfolio-suggest";
 import React, {
   createContext,
   useContext,
@@ -19,7 +20,6 @@ import {
   TimeDeduction,
   ClosedLoopDiff,
 } from "@/engine/types";
-import { GOLDEN_PROGRAMS } from "@/data/universities";
 import { SUBJECT_LABELS_VI } from "@/data/universities/combinations";
 import { BLANK_USER_DECISION_PROFILE } from "@/engine/decision-profile";
 import { SAMPLE_PERSONAS, getSamplePersona } from "@/data/seed/personas";
@@ -973,50 +973,14 @@ export function DecisionProvider({ children }: { children: React.ReactNode }) {
         return prev;
       }
       added = true;
-      const utilityTarget = primaryTarget ?? {
-        ...(GOLDEN_PROGRAMS[0] as TargetProgram),
-        majorGroup: option.majorGroup,
-        province: prev.profile?.homeProvince || option.province,
-      };
-      const breakdown = computeUtilityBreakdown(option, utilityTarget);
-      const nYears = option.yearsOfData ?? 0;
-      const newItem: WishlistItem = {
-        rank: current.length + 1,
-        program_id: option.programId,
-        school_code: option.schoolCode,
-        school_name: option.schoolName,
-        major_label: option.majorName,
-        major_group: option.majorGroup,
-        combinations_seen: option.combination,
-        role: option.role,
-        admit_prob: option.admitProbability,
-        forecast_p50: option.cutoffP50,
-        forecast_p10: option.cutoffP10 ?? option.cutoffP50 - 1.28 * NATIONAL_SHOCK_STD,
-        forecast_p90: option.cutoffP90 ?? option.cutoffP50 + 1.28 * NATIONAL_SHOCK_STD,
-        n_years: nYears,
-        data_quality: nYears >= 3 ? "day_du" : nYears === 1 ? "chi_1_nam" : "thieu_mot_phan",
-        user_score: option.userScore,
-        tuition_vnd: option.tuitionVnd,
-        employment_rate: option.employmentRate,
-        data_passport_url: option.dataPassportUrl,
-        why_option_vi: option.whyThisOptionVi,
-        region: option.region,
-        province: option.province,
-        source_tier: (option as any).sourceTier || (option as any).source_tier || "official_pdf",
-        utility: breakdown.utility,
-        util_breakdown: breakdown.parts,
-        util_meta: {
-          total_cost_per_year_vnd: option.tuitionVnd ?? undefined,
-          tuition_estimated: !option.tuitionVnd,
-        },
-      };
+      const newItem = candidateToWishlistItem(option, current.length + 1);
       return {
         ...prev,
         wishlist: [...current, newItem].map((item, idx) => ({ ...item, rank: idx + 1 })),
       };
     });
     return added;
-  }, [wishlist, primaryTarget]);
+  }, [wishlist]);
 
   const setWishlist = useCallback((newWishlist: WishlistItem[]) => {
     setAppState((prev) => ({
@@ -1056,46 +1020,10 @@ export function DecisionProvider({ children }: { children: React.ReactNode }) {
         const selectedFit = fitPool.slice(0, targetFit);
         const selectedSafe = safePool.slice(0, targetSafe);
 
-        const utilityTarget = primaryTarget ?? {
-          ...(GOLDEN_PROGRAMS[0] as TargetProgram),
-          majorGroup: "cong_nghe_thong_tin",
-          province: prev.profile?.homeProvince || "hanoi",
-        };
-
-        const mapCandidateToWishlist = (option: CandidateOption, role: "mao_hiem" | "vua_tam" | "an_toan"): WishlistItem => {
-          const breakdown = computeUtilityBreakdown(option, utilityTarget);
-          const nYears = option.yearsOfData ?? 0;
-          return {
-            rank: 0,
-            program_id: option.programId,
-            school_code: option.schoolCode,
-            school_name: option.schoolName,
-            major_label: option.majorName,
-            major_group: option.majorGroup,
-            combinations_seen: option.combination,
-            role,
-            admit_prob: option.admitProbability,
-            forecast_p50: option.cutoffP50,
-            forecast_p10: option.cutoffP10 ?? option.cutoffP50 - 1.28 * NATIONAL_SHOCK_STD,
-            forecast_p90: option.cutoffP90 ?? option.cutoffP50 + 1.28 * NATIONAL_SHOCK_STD,
-            n_years: nYears,
-            data_quality: nYears >= 3 ? "day_du" : nYears === 1 ? "chi_1_nam" : "thieu_mot_phan",
-            user_score: option.userScore,
-            tuition_vnd: option.tuitionVnd,
-            employment_rate: option.employmentRate,
-            data_passport_url: option.dataPassportUrl,
-            why_option_vi: option.whyThisOptionVi,
-            region: option.region,
-            province: option.province,
-            source_tier: (option as any).sourceTier || (option as any).source_tier || "official_pdf",
-            utility: breakdown.utility,
-            util_breakdown: breakdown.parts,
-            util_meta: {
-              total_cost_per_year_vnd: option.tuitionVnd ?? undefined,
-              tuition_estimated: !option.tuitionVnd,
-            },
-          };
-        };
+        const mapCandidateToWishlist = (option: CandidateOption, role: "mao_hiem" | "vua_tam" | "an_toan"): WishlistItem => ({
+          ...candidateToWishlistItem(option, 0),
+          role,
+        });
 
         const newItems: WishlistItem[] = [
           ...selectedReach.map((c) => mapCandidateToWishlist(c, "mao_hiem")),
@@ -1106,7 +1034,7 @@ export function DecisionProvider({ children }: { children: React.ReactNode }) {
         return { ...prev, wishlist: newItems };
       });
     },
-    [candidates, effectiveProfile, primaryTarget]
+    [candidates, effectiveProfile]
   );
 
   const autoBalancePortfolio = useCallback(() => {

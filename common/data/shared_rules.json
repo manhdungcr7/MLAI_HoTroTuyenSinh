@@ -1,0 +1,434 @@
+{
+ "combinations": {
+  "A00": [
+   "toan",
+   "ly",
+   "hoa"
+  ],
+  "A01": [
+   "toan",
+   "ly",
+   "anh"
+  ],
+  "A02": [
+   "toan",
+   "ly",
+   "sinh"
+  ],
+  "A07": [
+   "toan",
+   "su",
+   "dia"
+  ],
+  "A08": [
+   "toan",
+   "su",
+   "gdcd"
+  ],
+  "A09": [
+   "toan",
+   "dia",
+   "gdcd"
+  ],
+  "B00": [
+   "toan",
+   "hoa",
+   "sinh"
+  ],
+  "B03": [
+   "toan",
+   "sinh",
+   "van"
+  ],
+  "B08": [
+   "toan",
+   "sinh",
+   "anh"
+  ],
+  "C00": [
+   "van",
+   "su",
+   "dia"
+  ],
+  "C01": [
+   "van",
+   "toan",
+   "ly"
+  ],
+  "C02": [
+   "van",
+   "toan",
+   "hoa"
+  ],
+  "C03": [
+   "van",
+   "toan",
+   "su"
+  ],
+  "C04": [
+   "van",
+   "toan",
+   "dia"
+  ],
+  "C05": [
+   "van",
+   "ly",
+   "hoa"
+  ],
+  "C08": [
+   "van",
+   "hoa",
+   "sinh"
+  ],
+  "C14": [
+   "van",
+   "toan",
+   "gdcd"
+  ],
+  "C19": [
+   "van",
+   "su",
+   "gdcd"
+  ],
+  "C20": [
+   "van",
+   "dia",
+   "gdcd"
+  ],
+  "D01": [
+   "toan",
+   "van",
+   "anh"
+  ],
+  "D07": [
+   "toan",
+   "hoa",
+   "anh"
+  ],
+  "D08": [
+   "toan",
+   "sinh",
+   "anh"
+  ],
+  "D09": [
+   "toan",
+   "su",
+   "anh"
+  ],
+  "D10": [
+   "toan",
+   "dia",
+   "anh"
+  ],
+  "D11": [
+   "van",
+   "ly",
+   "anh"
+  ],
+  "D12": [
+   "van",
+   "hoa",
+   "anh"
+  ],
+  "D13": [
+   "van",
+   "sinh",
+   "anh"
+  ],
+  "D14": [
+   "van",
+   "su",
+   "anh"
+  ],
+  "D15": [
+   "van",
+   "dia",
+   "anh"
+  ],
+  "D66": [
+   "van",
+   "gdcd",
+   "anh"
+  ],
+  "D84": [
+   "toan",
+   "gdcd",
+   "anh"
+  ],
+  "X01": [
+   "toan",
+   "van",
+   "gdcd"
+  ],
+  "X02": [
+   "toan",
+   "van",
+   "tin"
+  ],
+  "X03": [
+   "toan",
+   "van",
+   "cncn"
+  ],
+  "X04": [
+   "toan",
+   "van",
+   "cnnn"
+  ],
+  "X05": [
+   "toan",
+   "ly",
+   "gdcd"
+  ],
+  "X06": [
+   "toan",
+   "ly",
+   "tin"
+  ],
+  "X07": [
+   "toan",
+   "ly",
+   "cncn"
+  ],
+  "X08": [
+   "toan",
+   "ly",
+   "cnnn"
+  ],
+  "X09": [
+   "toan",
+   "hoa",
+   "gdcd"
+  ],
+  "X10": [
+   "toan",
+   "hoa",
+   "tin"
+  ],
+  "X11": [
+   "toan",
+   "hoa",
+   "cncn"
+  ],
+  "X12": [
+   "toan",
+   "hoa",
+   "cnnn"
+  ],
+  "X13": [
+   "toan",
+   "sinh",
+   "gdcd"
+  ],
+  "X14": [
+   "toan",
+   "sinh",
+   "tin"
+  ],
+  "X15": [
+   "toan",
+   "sinh",
+   "cncn"
+  ],
+  "X16": [
+   "toan",
+   "sinh",
+   "cnnn"
+  ],
+  "X17": [
+   "toan",
+   "su",
+   "gdcd"
+  ],
+  "X18": [
+   "toan",
+   "su",
+   "tin"
+  ],
+  "X19": [
+   "toan",
+   "su",
+   "cncn"
+  ],
+  "X20": [
+   "toan",
+   "su",
+   "cnnn"
+  ],
+  "X21": [
+   "toan",
+   "dia",
+   "gdcd"
+  ],
+  "X22": [
+   "toan",
+   "dia",
+   "tin"
+  ],
+  "X23": [
+   "toan",
+   "dia",
+   "cncn"
+  ],
+  "X24": [
+   "toan",
+   "dia",
+   "cnnn"
+  ],
+  "X25": [
+   "toan",
+   "gdcd",
+   "anh"
+  ],
+  "X26": [
+   "toan",
+   "tin",
+   "anh"
+  ],
+  "X27": [
+   "toan",
+   "cncn",
+   "anh"
+  ],
+  "X28": [
+   "toan",
+   "cnnn",
+   "anh"
+  ],
+  "X53": [
+   "toan",
+   "gdcd",
+   "tin"
+  ],
+  "X66": [
+   "van",
+   "sinh",
+   "gdcd"
+  ],
+  "X70": [
+   "van",
+   "su",
+   "gdcd"
+  ],
+  "X71": [
+   "van",
+   "su",
+   "tin"
+  ],
+  "X72": [
+   "van",
+   "su",
+   "cncn"
+  ],
+  "X73": [
+   "van",
+   "su",
+   "cnnn"
+  ],
+  "X74": [
+   "van",
+   "dia",
+   "gdcd"
+  ],
+  "X75": [
+   "van",
+   "dia",
+   "tin"
+  ],
+  "X76": [
+   "van",
+   "dia",
+   "cncn"
+  ],
+  "X77": [
+   "van",
+   "dia",
+   "cnnn"
+  ],
+  "X78": [
+   "van",
+   "gdcd",
+   "anh"
+  ],
+  "X79": [
+   "van",
+   "tin",
+   "anh"
+  ],
+  "X80": [
+   "van",
+   "cncn",
+   "anh"
+  ],
+  "X81": [
+   "van",
+   "cnnn",
+   "anh"
+  ]
+ },
+ "provinceRegions": {
+  "Hà Nội": "bac",
+  "TP.HCM": "nam",
+  "Hải Phòng": "bac",
+  "Đà Nẵng": "trung",
+  "Cần Thơ": "nam",
+  "Huế": "trung",
+  "Đồng Nai": "nam",
+  "Bình Dương": "nam",
+  "Bà Rịa - Vũng Tàu": "nam",
+  "Long An": "nam",
+  "Tiền Giang": "nam",
+  "An Giang": "nam",
+  "Bắc Ninh": "bac",
+  "Hưng Yên": "bac",
+  "Hải Dương": "bac",
+  "Quảng Ninh": "bac",
+  "Thái Nguyên": "bac",
+  "Nam Định": "bac",
+  "Ninh Bình": "bac",
+  "Thanh Hóa": "trung",
+  "Nghệ An": "trung",
+  "Hà Tĩnh": "trung",
+  "Quảng Bình": "trung",
+  "Quảng Trị": "trung",
+  "Quảng Nam": "trung",
+  "Quảng Ngãi": "trung",
+  "Bình Định": "trung",
+  "Khánh Hòa": "trung",
+  "Lâm Đồng": "trung",
+  "Đắk Lắk": "trung",
+  "Gia Lai": "trung",
+  "Cà Mau": "nam",
+  "Kiên Giang": "nam",
+  "Vĩnh Long": "nam",
+  "Bến Tre": "nam",
+  "Trà Vinh": "nam",
+  "Sóc Trăng": "nam",
+  "Bạc Liêu": "nam",
+  "Tây Ninh": "nam",
+  "Bình Phước": "nam",
+  "Phú Thọ": "bac",
+  "Vĩnh Phúc": "bac",
+  "Lào Cai": "bac",
+  "Sơn La": "bac",
+  "Điện Biên": "bac",
+  "Lai Châu": "bac",
+  "Hòa Bình": "bac",
+  "Hà Nam": "bac",
+  "Thái Bình": "bac",
+  "Lạng Sơn": "bac",
+  "Bắc Giang": "bac",
+  "Bắc Kạn": "bac",
+  "Cao Bằng": "bac",
+  "Hà Giang": "bac",
+  "Tuyên Quang": "bac",
+  "Yên Bái": "bac",
+  "Kon Tum": "trung",
+  "Đắk Nông": "trung",
+  "Phú Yên": "trung",
+  "Ninh Thuận": "trung",
+  "Bình Thuận": "trung",
+  "Đồng Tháp": "nam",
+  "Hậu Giang": "nam"
+ }
+}

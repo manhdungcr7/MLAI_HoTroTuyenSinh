@@ -1,3 +1,4 @@
+import { TargetPicker } from "@/components/ui/TargetPicker";
 import React, { useState } from "react";
 import Link from "@/components/navigation/HashLink";
 import {
@@ -139,13 +140,23 @@ export default function AnalysisPage() {
               ? "Hãy chọn ngành mục tiêu để xem em đang cách điểm chuẩn bao xa."
               : "Hãy nhập điểm các môn trong tổ hợp xét tuyển của ngành mục tiêu (điểm thi hoặc học bạ, tùy phương thức)."}
           </p>
-          <div className="mt-4 flex justify-center gap-2">
-            <Link href="/profile" className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Nhập hồ sơ</Link>
-            <Link href="/profile/goal" className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold">Chọn mục tiêu</Link>
-          </div>
+          {!target ? (
+            <TargetPicker />
+          ) : (
+            <div className="mt-4 flex justify-center gap-2">
+              <Link href="/start" className="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Nhập điểm</Link>
+            </div>
+          )}
         </section>
       ) : (
       <>
+      {targetMethodScore?.method === "HOC_BA" && (
+        <section className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Ngành mục tiêu này đang được tính theo <b>học bạ</b>. Điểm học bạ khó thay đổi ở cuối cấp nên các mô phỏng &quot;tăng điểm thi&quot; bên dưới
+          không làm đổi kết quả. Hãy <Link href="/analysis" className="font-bold underline">chọn một ngành xét điểm thi</Link> để xem em cần cải thiện môn nào.
+        </section>
+      )}
+
       {/* 1. HEADER CARD: BỨC TRANH NĂNG LỰC VÀ MỤC TIÊU */}
       <section className="rounded-2xl border border-blue-200 bg-blue-50/50 p-6 sm:p-7 space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T16:15:36.170086+00:00",
+  "generatedAt": "2026-10-02T16:43:53.047580+00:00",
   "modelVersion": "2026.1-prod",
   "healthStatus": "healthy",
   "isDriftDetected": false,
@@ -12,7 +12,7 @@
     "nationalShockStd": 1.069,
     "idioStd": 1.366,
     "nationalMedianTrend": 0.23,
-    "nHistoricalTransitions": 1320,
+    "nHistoricalTransitions": 1311,
     "groupTrendsCount": 12
   },
   "metrics": {
@@ -30,14 +30,14 @@
     },
     "ourModel": {
       "label": "Hierarchical Group Pooling & Bất định (Nguyện Vọng AI)",
-      "mae": 1.818,
-      "rmse": 2.536,
+      "mae": 1.821,
+      "rmse": 2.539,
       "coverageP10P90Pct": 77.7,
       "meanBandWidth": 5.63,
       "n": 667
     }
   },
-  "brierScore": 0.1903,
+  "brierScore": 0.1906,
   "calibrationMethod": "Định chuẩn xác suất tại 5 mức z-score kiểm định quyết định (-2.0đ đến +2.0đ) đối chiếu với 426 kết quả xét tuyển thực tế (tổng cộng 2.130 phép thử xác suất).",
   "calibrationCurve": [
     {
@@ -55,13 +55,13 @@
     {
       "bin": "20%-30%",
       "predictedProb": 0.22,
-      "observedFreq": 0.249,
+      "observedFreq": 0.25,
       "count": 667
     },
     {
       "bin": "30%-40%",
       "predictedProb": 0.34,
-      "observedFreq": 0.334,
+      "observedFreq": 0.336,
       "count": 539
     },
     {
@@ -73,7 +73,7 @@
     {
       "bin": "50%-60%",
       "predictedProb": 0.5,
-      "observedFreq": 0.61,
+      "observedFreq": 0.613,
       "count": 667
     },
     {

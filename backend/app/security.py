@@ -122,7 +122,7 @@ class InMemoryRateLimiter:
         self.limit = limit_per_minute
         self.heavy_limit = heavy_limit_per_minute
         self.requests: dict[str, list[float]] = defaultdict(list)
-        self.heavy_endpoints = {"/api/recommend", "/api/decision-v2", "/api/study-plan"}
+        self.heavy_endpoints = {"/api/recommend", "/api/decision-v2", "/api/study-plan", "/api/advisor/search", "/api/advisor/portfolio"}
 
     def is_allowed(self, client_ip: str, path: str) -> tuple[bool, int]:
         now = time.time()

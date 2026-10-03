@@ -5,10 +5,8 @@ import { usePathname } from "@/routes";
 import { DatasetFreshnessProvider } from "@/state/dataset-freshness";
 
 // Lazy-load các trang Domain của ứng dụng
-const DashboardPage = lazy(() => import("@/pages/overview/page"));
 const StartPage = lazy(() => import("@/pages/start/page"));
 const ProfilePage = lazy(() => import("@/pages/profile/page"));
-const ProfileGoalPage = lazy(() => import("@/pages/profile/goal/page"));
 const AnalysisPage = lazy(() => import("@/pages/analysis/page"));
 const GapAnalysisPage = lazy(() => import("@/pages/analysis/gap/page"));
 const SubjectRoiPage = lazy(() => import("@/pages/analysis/roi/page"));
@@ -27,13 +25,12 @@ function AppContent() {
     switch (pathname) {
       case "/":
       case "/start":
-        return <StartPage />;
       case "/dashboard":
-        return <DashboardPage />;
+        return <StartPage />;
       case "/profile":
         return <ProfilePage />;
       case "/profile/goal":
-        return <ProfileGoalPage />;
+        return <AnalysisPage />;
       case "/analysis":
         return <AnalysisPage />;
       case "/analysis/gap":
