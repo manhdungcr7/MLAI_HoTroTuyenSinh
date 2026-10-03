@@ -22,9 +22,6 @@ export function getActiveIdioStd(): number {
   return activeIdioStd;
 }
 
-export const NATIONAL_SHOCK_STD = DEFAULT_NATIONAL_SHOCK_STD;
-export const IDIO_STD = DEFAULT_IDIO_STD;
-
 // Ngưỡng phân nhóm dùng chung cho mọi màn hình (Thử sức / Phù hợp / An toàn)
 export const SAFE_MIN_PROB = 0.8;
 export const REACH_MAX_PROB = 0.4;

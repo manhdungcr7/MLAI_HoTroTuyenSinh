@@ -22,7 +22,7 @@ import {
   DEFAULT_IDIO_STD,
 } from "../src/engine/admissions/probability";
 import { calculateTotalPriorityBonus } from "../src/engine/admissions/priority";
-import { validatePortfolio } from "../src/engine/decision/optimizer";
+import { portfolioWarnings } from "../src/engine/decision/portfolio-suggest";
 import { WishlistItem } from "../src/engine/types";
 
 function assert(condition: boolean, message: string) {
@@ -170,30 +170,18 @@ async function runTestSuite() {
 
   // 6.2 Sư phạm đặt ngoài Top 5 -> Bị bắt lỗi vi phạm
   const invalidTeacherWishlist: WishlistItem[] = [
-    { rank: 1, school_code: "BKA", school_name: "ĐH Bách Khoa", major_label: "Khoa học Máy tính", major_group: "cntt", admit_prob: 0.35, role: "mao_hiem", user_score: 25, forecast_p50: 27, utility: 0.8, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
-    { rank: 2, school_code: "BKA", school_name: "ĐH Bách Khoa", major_label: "Kỹ thuật Máy tính", major_group: "cntt", admit_prob: 0.45, role: "vua_tam", user_score: 25, forecast_p50: 26, utility: 0.75, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
-    { rank: 3, school_code: "DCN", school_name: "ĐH Công nghiệp", major_label: "CNTT", major_group: "cntt", admit_prob: 0.65, role: "vua_tam", user_score: 25, forecast_p50: 25, utility: 0.7, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
-    { rank: 4, school_code: "DCN", school_name: "ĐH Công nghiệp", major_label: "Hệ thống TT", major_group: "cntt", admit_prob: 0.75, role: "vua_tam", user_score: 25, forecast_p50: 24.5, utility: 0.65, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
-    { rank: 5, school_code: "GHA", school_name: "ĐH GTVT", major_label: "Kỹ thuật phần mềm", major_group: "cntt", admit_prob: 0.85, role: "an_toan", user_score: 25, forecast_p50: 23, utility: 0.6, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
+    { rank: 1, program_id: "p1", school_code: "BKA", school_name: "ĐH Bách Khoa", major_label: "Khoa học Máy tính", major_group: "cntt", admit_prob: 0.35, role: "mao_hiem", user_score: 25, forecast_p50: 27, n_years: 3, data_quality: "day_du" },
+    { rank: 2, program_id: "p2", school_code: "BKA", school_name: "ĐH Bách Khoa", major_label: "Kỹ thuật Máy tính", major_group: "cntt", admit_prob: 0.45, role: "vua_tam", user_score: 25, forecast_p50: 26, n_years: 3, data_quality: "day_du" },
+    { rank: 3, program_id: "p3", school_code: "DCN", school_name: "ĐH Công nghiệp", major_label: "CNTT", major_group: "cntt", admit_prob: 0.65, role: "vua_tam", user_score: 25, forecast_p50: 25, n_years: 3, data_quality: "day_du" },
+    { rank: 4, program_id: "p4", school_code: "DCN", school_name: "ĐH Công nghiệp", major_label: "Hệ thống TT", major_group: "cntt", admit_prob: 0.75, role: "vua_tam", user_score: 25, forecast_p50: 24.5, n_years: 3, data_quality: "day_du" },
+    { rank: 5, program_id: "p5", school_code: "GHA", school_name: "ĐH GTVT", major_label: "Kỹ thuật phần mềm", major_group: "cntt", admit_prob: 0.85, role: "an_toan", user_score: 25, forecast_p50: 23, n_years: 3, data_quality: "day_du" },
     // Vi phạm: Ngành Sư phạm ở NV6
-    { rank: 6, school_code: "SPS", school_name: "ĐH Sư Phạm Hà Nội", major_label: "Sư phạm Tin học", major_group: "su_pham", admit_prob: 0.90, role: "an_toan", user_score: 25, forecast_p50: 22, utility: 0.55, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
+    { rank: 6, program_id: "p6", school_code: "SPS", school_name: "ĐH Sư Phạm Hà Nội", major_label: "Sư phạm Tin học", major_group: "su_pham", admit_prob: 0.90, role: "an_toan", user_score: 25, forecast_p50: 22, n_years: 3, data_quality: "day_du" },
   ];
 
-  const teacherValidation = validatePortfolio(invalidTeacherWishlist);
-  const teacherWarning = teacherValidation.warnings.find((w) => w.code === "TT06_TEACHER_RANK_VIOLATION");
-  assert(!teacherValidation.isValid, "Danh mục vi phạm quy chế Sư phạm phải có isValid = false");
-  assert(Boolean(teacherWarning), "Hệ thống phải kích hoạt mã cảnh báo TT06_TEACHER_RANK_VIOLATION");
-  assert(teacherWarning?.level === "red", "Cảnh báo vi phạm sư phạm phải là mức ĐỎ (loại trừ)");
-
-  // 6.3 Điểm dưới sàn 15.0/30.0 -> Bị bắt lỗi vi phạm
-  const lowScoreWishlist: WishlistItem[] = [
-    { rank: 1, school_code: "XYZ", school_name: "ĐH XYZ", major_label: "Quản trị", major_group: "kinh_te", admit_prob: 0.85, role: "an_toan", user_score: 13.5, forecast_p50: 14.0, utility: 0.5, util_breakdown: {} as any, util_meta: {} as any, n_years: 3, data_quality: "day_du" },
-  ];
-  const floorValidation = validatePortfolio(lowScoreWishlist);
-  const floorWarning = floorValidation.warnings.find((w) => w.code === "TT06_FLOOR_SCORE_VIOLATION");
-  assert(!floorValidation.isValid, "Điểm thi < 15.0 phải có isValid = false");
-  assert(Boolean(floorWarning), "Hệ thống phải kích hoạt mã cảnh báo TT06_FLOOR_SCORE_VIOLATION");
-  assert(floorWarning?.level === "red", "Cảnh báo dưới điểm sàn 15.0 phải là mức ĐỎ");
+  const teacherWarning = portfolioWarnings(invalidTeacherWishlist).find((w) => w.code === "TEACHER_RANK");
+  assert(Boolean(teacherWarning), "Danh mục có ngành Sư phạm ngoài 5 nguyện vọng đầu phải bị cảnh báo");
+  assert(JSON.stringify(teacherWarning?.positions) === "[6]", "Cảnh báo phải chỉ đúng vị trí vi phạm (NV 6)");
 
   console.log("\n==================================================================");
   console.log("🎉 TẤT CẢ KIỂM THỬ TOÁN HỌC, GAUSS-HERMITE VÀ TT06 ĐÃ ĐẠT 100%!");

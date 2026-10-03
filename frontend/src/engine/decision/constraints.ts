@@ -1,11 +1,11 @@
 import { CandidateOption, StudentProfile } from "@/engine/types";
-import { VIETNAM_PROVINCES } from "@/engine/geo/distance";
+import { PROVINCE_REGIONS } from "@/engine/geo/regions";
 
 export const UNLIMITED_BUDGET_VND = 200_000_000;
 
 export function regionOfProvince(province: string | null | undefined): "bac" | "trung" | "nam" | null {
   if (!province) return null;
-  return VIETNAM_PROVINCES[province]?.region ?? null;
+  return PROVINCE_REGIONS[province] ?? null;
 }
 
 /**

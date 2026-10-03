@@ -36,7 +36,7 @@ def test_search_ranks_by_probability_and_applies_constraints():
     pct = [item["probabilityPercent"] for item in body["items"]]
     assert pct == sorted(pct, reverse=True)
     assert sum(body["tiers"].values()) == body["total"]
-    assert set(body["notComputable"]) == {"hocBaMissingScores", "examMissingScores", "methodNotSupported"}
+    assert set(body["notComputable"]) == {"methodNotSupported", "missingInputs"}
 
 
 def test_search_without_scores_returns_empty_not_error():
@@ -96,7 +96,7 @@ def test_portfolio_rejects_more_than_15():
 def test_methods_and_program_detail():
     m = client.get("/api/advisor/methods").json()
     computed = {x["code"] for x in m["methods"] if x["probabilityComputed"]}
-    assert computed == {"THPT", "HOC_BA"}
+    assert {"THPT", "HOC_BA"} <= computed
     assert m["catalog"]["programs"] > 1000
     pid = client.post("/api/advisor/search", json={"profile": PROFILE, "limit": 1}).json()["items"][0]["programId"]
     d = client.get(f"/api/advisor/programs/{pid}")

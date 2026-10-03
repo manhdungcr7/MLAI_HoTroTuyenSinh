@@ -6,7 +6,9 @@ $env:PYTHONIOENCODING = "utf-8"
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
-Write-Host "--- [1/2] Python: pytest (pythonpath = . trong pytest.ini) ---" -ForegroundColor Yellow
+Write-Host "--- [1/2] Python: kiểm tra quy tắc trường + pytest (pythonpath = . trong pytest.ini) ---" -ForegroundColor Yellow
+python scripts/validate_school_rules.py
+if ($LASTEXITCODE -ne 0) { Write-Host "validate_school_rules failed" -ForegroundColor Red; exit 1 }
 python -m pytest -q
 if ($LASTEXITCODE -ne 0) { Write-Host "pytest failed" -ForegroundColor Red; exit 1 }
 

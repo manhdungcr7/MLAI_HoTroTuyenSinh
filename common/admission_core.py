@@ -33,7 +33,6 @@ SAFE_MIN_PROB = 0.8
 REACH_MAX_PROB = 0.4
 MIN_VALID_CUTOFF = 12
 UNLIMITED_BUDGET_VND = 200_000_000
-SCORABLE_METHODS = ("THPT", "HOC_BA")
 MAX_WISHES = 15
 
 METHOD_LABELS_VI = {
@@ -170,67 +169,238 @@ def ielts_to_english(ielts: float | None, base: float | None) -> float | None:
     return max(base or 0.0, floor)
 
 
-def _combo_score(scores: Mapping[str, Any], combo: str, ielts: float | None, allow_ielts: bool):
-    subjects = COMBINATION_SUBJECTS.get(combo)
-    if not subjects:
-        return None
-    total, used_ielts = 0.0, False
-    for sub in subjects:
-        v = scores.get(sub)
-        v = float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else None
-        if sub == "anh" and allow_ielts and ielts and ielts >= 5.0:
-            converted = ielts_to_english(ielts, v)
-            if converted is not None and (v is None or converted > v):
-                v, used_ielts = converted, True
-        if v is None or not math.isfinite(v):
-            return None
-        total += max(0.0, min(10.0, v))
-    return min(30.0, js_math_round(total * 100) / 100), used_ielts
-
-
 def program_method(program: Mapping[str, Any]) -> str:
     return program.get("admissionMethod") or "THPT"
 
 
-def score_for_program(profile: Mapping[str, Any], program: Mapping[str, Any]) -> dict[str, Any] | None:
-    """Điểm tốt nhất của học sinh cho chương trình theo đúng phương thức của ngưỡng điểm.
-    None khi phương thức chưa tính được (ĐGNL, năng khiếu, kết hợp...) hoặc thiếu điểm môn."""
-    method = program_method(program)
-    if method not in SCORABLE_METHODS or program.get("requiresAptitude"):
-        return None
-    scores = profile.get("examScores") if method == "THPT" else profile.get("hocBaScores")
-    if not scores:
-        return None
-    declared = program.get("combinations") or []
-    published = [c for c in declared if c in COMBINATION_SUBJECTS]
-    if declared and not published:
-        return None
-    unverified = not declared
-    active = profile.get("activeCombination")
-    combos = ([active] if active in COMBINATION_SUBJECTS else []) if unverified else published
+# --------------------------------------------------------------------------------------
+# Quy tắc riêng của từng trường (cùng cấu trúc với frontend/src/engine/scoring/school-rules.ts)
+# --------------------------------------------------------------------------------------
 
+DEFAULT_RULES: dict[str, dict[str, Any]] = {
+    "THPT": {"components": [{"source": "exam_combo", "weight": 1}], "priority": "standard", "englishCertConversion": "common"},
+    "HOC_BA": {"components": [{"source": "hocba_combo", "weight": 1}], "priority": "standard"},
+}
+COMBO_SOURCES = ("exam_combo", "hocba_combo")
+EXTERNAL_SCALES = {"dgnl_hcm": 1200, "dgnl_hn": 150, "dgtd_bk": 100}
+DEFAULT_BONUS_CAP = 3.0
+RULES_DIR = ROOT / "frontend" / "src" / "data" / "school-rules"
+_SOURCES = ("exam_combo", "hocba_combo", "dgnl_hcm", "dgnl_hn", "dgtd_bk")
+_SCHOOL_RULES: dict[str, dict[str, Any]] = {}
+
+
+def validate_school_rule(rule: Mapping[str, Any]) -> list[str]:
+    problems: list[str] = []
+    if not re.fullmatch(r"[A-Z0-9]{2,5}", str(rule.get("schoolCode", ""))):
+        problems.append("mã trường phải gồm 2–5 chữ hoa/số")
+    year = rule.get("year")
+    if not isinstance(year, int) or year < 2025:
+        problems.append("năm tuyển sinh không hợp lệ")
+    src = rule.get("source") or {}
+    if not re.match(r"https?://", str(src.get("url", ""))):
+        problems.append("thiếu đường dẫn văn bản gốc")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(src.get("verifiedAt", ""))):
+        problems.append("thiếu ngày kiểm chứng (YYYY-MM-DD)")
+    if not src.get("verifiedBy"):
+        problems.append("thiếu người kiểm chứng")
+    methods = rule.get("methods") or {}
+    if not methods:
+        problems.append("chưa có phương thức nào")
+    for method, m in methods.items():
+        comps = m.get("components") or []
+        if not comps:
+            problems.append(f"{method}: thiếu thành phần điểm")
+        total = sum(c.get("weight", 0) for c in comps)
+        if comps and abs(total - 1) > 1e-9:
+            problems.append(f"{method}: tổng tỷ trọng các thành phần phải bằng 1 (đang {total})")
+        for c in comps:
+            if c.get("source") not in _SOURCES:
+                problems.append(f"{method}: nguồn điểm không hợp lệ \"{c.get('source')}\"")
+            if not (0 < c.get("weight", 0) <= 1):
+                problems.append(f"{method}: tỷ trọng phải trong (0, 1]")
+            if c.get("grades") and c.get("source") != "hocba_combo":
+                problems.append(f"{method}: chỉ học bạ mới chọn lớp")
+            if c.get("subjectWeights") and c.get("source") not in COMBO_SOURCES:
+                problems.append(f"{method}: hệ số môn chỉ dùng cho tổ hợp môn")
+            if any(not (w > 0) for w in (c.get("subjectWeights") or {}).values()):
+                problems.append(f"{method}: hệ số môn phải dương")
+        if m.get("englishCertConversion") not in (None, "common", "none"):
+            problems.append(f"{method}: englishCertConversion phải là common hoặc none")
+        for t in (m.get("certBonus") or {}).get("ielts", []):
+            if not (0 <= t.get("min", -1) <= 9 and 0 <= t.get("points", -1) <= 3):
+                problems.append(f"{method}: bảng điểm cộng IELTS không hợp lệ")
+        if m.get("priority") not in ("standard", "none"):
+            problems.append(f"{method}: priority phải là standard hoặc none")
+        if "bonusCap" in m and not (0 <= m["bonusCap"] <= 3):
+            problems.append(f"{method}: trần điểm cộng phải trong [0, 3]")
+        if "minExamComboTotal" in m and not (0 <= m["minExamComboTotal"] <= 30):
+            problems.append(f"{method}: ngưỡng tổng điểm thi phải trong [0, 30]")
+    return problems
+
+
+def register_school_rules(rules: Iterable[Mapping[str, Any]]) -> None:
+    for rule in rules:
+        problems = validate_school_rule(rule)
+        if problems:
+            raise ValueError(f"Quy tắc trường {rule.get('schoolCode')} không hợp lệ: {'; '.join(problems)}")
+        _SCHOOL_RULES[str(rule["schoolCode"]).upper()] = dict(rule)
+
+
+def registered_school_rules() -> list[dict[str, Any]]:
+    return list(_SCHOOL_RULES.values())
+
+
+def clear_school_rules() -> None:
+    _SCHOOL_RULES.clear()
+
+
+def load_school_rules(directory: Path | str | None = None) -> list[dict[str, Any]]:
+    """Nạp quy tắc từ các file JSON trong thư mục (mặc định: thư mục dùng chung với frontend)."""
+    folder = Path(directory or RULES_DIR)
+    return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(folder.glob("*.json"))]
+
+
+def resolve_method_rule(school_code: str, method: str):
+    school = _SCHOOL_RULES.get(school_code.upper())
+    own = (school or {}).get("methods", {}).get(method)
+    if own:
+        return own, "school", (school or {}).get("source")
+    fallback = DEFAULT_RULES.get(method)
+    return (fallback, "default", None) if fallback else None
+
+
+def _clamp10(v: float) -> float:
+    return max(0.0, min(10.0, v))
+
+
+def _num_or_none(v: Any) -> float | None:
+    return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) else None
+
+
+def _combo_component(component, subjects, profile, needs, allow_cert):
+    if component["source"] == "exam_combo":
+        if not profile.get("examScores"):
+            needs.add("Điểm thi các môn của tổ hợp")
+            return None
+        sources = [profile["examScores"]]
+    elif component.get("grades"):
+        sources = []
+        for g in component["grades"]:
+            grade = (profile.get("hocBaGrades") or {}).get(str(g))
+            if not grade:
+                needs.add(f"Điểm học bạ lớp {g}")
+            else:
+                sources.append(grade)
+        if len(sources) < len(component["grades"]):
+            return None
+    else:
+        if not profile.get("hocBaScores"):
+            needs.add("Điểm học bạ các môn của tổ hợp")
+            return None
+        sources = [profile["hocBaScores"]]
+
+    weighted, max_total, used_ielts = 0.0, 0.0, False
     ielts = profile.get("ielts") or (profile.get("altScores") or {}).get("ielts")
+    for sub in subjects:
+        w = (component.get("subjectWeights") or {}).get(sub, 1)
+        values = [_num_or_none(s.get(sub)) for s in sources]
+        v = sum(values) / len(values) if all(x is not None for x in values) else None
+        if sub == "anh" and allow_cert and ielts and ielts >= 5.0:
+            converted = ielts_to_english(ielts, v)
+            if converted is not None and (v is None or converted > v):
+                v, used_ielts = converted, True
+        if v is None:
+            needs.add(f"Điểm môn {sub}")
+            return None
+        weighted += w * _clamp10(v)
+        max_total += w * 10
+    return weighted, max_total, used_ielts
+
+
+def _score_combo(profile, rule, combo, needs):
+    subjects = COMBINATION_SUBJECTS.get(combo, []) if combo else []
+    allow_conversion = (rule.get("englishCertConversion") or "none") == "common"
+    base, used_ielts, exam_raw = 0.0, False, None
+    alt = profile.get("altScores") or {}
+    for c in rule["components"]:
+        if c["source"] in COMBO_SOURCES:
+            cs = _combo_component(c, subjects, profile, needs, allow_conversion and c["source"] == "exam_combo")
+            if cs is None:
+                return None
+            weighted, max_total, used = cs
+            value30 = (weighted / max_total) * 30
+            used_ielts = used_ielts or used
+            if c["source"] == "exam_combo":
+                own = profile.get("examScores")
+                exam_raw = sum(_clamp10(_num_or_none(own.get(s)) or 0.0) for s in subjects) if own else None
+        else:
+            v = _num_or_none(alt.get(c["source"]))
+            if v is None:
+                needs.add(c["source"])
+                return None
+            scale = EXTERNAL_SCALES[c["source"]]
+            value30 = (max(0.0, min(float(scale), v)) / scale) * 30
+        base += c["weight"] * value30
+    base = min(30.0, js_math_round(base * 100) / 100)
+
     grad = profile.get("graduationYear")
+    uses_exam = any(c["source"] == "exam_combo" for c in rule["components"])
+    min_total = rule.get("minExamComboTotal")
+    if uses_exam and exam_raw is not None and grad is not None and grad >= 2026 and profile.get("minimumScoreException") is not True:
+        if js_math_round(exam_raw * 100) / 100 < max(15, min_total or 0):
+            return None
+    elif uses_exam and exam_raw is not None and min_total is not None and js_math_round(exam_raw * 100) / 100 < min_total:
+        return None
+
+    cert_points = 0.0
+    ielts = profile.get("ielts") or alt.get("ielts")
+    if ielts:
+        for t in (rule.get("certBonus") or {}).get("ielts", []):
+            if ielts >= t["min"] and t["points"] > cert_points:
+                cert_points = t["points"]
     priority = profile.get("priority") or {}
+    pri = priority_bonus(priority.get("area", "KV3"), priority.get("object", "none"), base) if rule["priority"] == "standard" and priority else 0.0
+    bonus = js_math_round(min(rule.get("bonusCap", DEFAULT_BONUS_CAP), cert_points + pri) * 100) / 100
+    return {
+        "score": min(30.0, js_math_round((base + bonus) * 100) / 100),
+        "rawScore": base, "bonus": bonus, "usedIeltsConversion": used_ielts,
+    }
+
+
+def evaluate_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
+    """(điểm tốt nhất theo quy tắc của trường, các đầu vào còn thiếu)."""
+    method = program_method(program)
+    resolved = resolve_method_rule(program["schoolCode"], method)
+    if resolved is None or program.get("requiresAptitude"):
+        return None, []
+    rule, origin, source = resolved
+    needs_combo = any(c["source"] in COMBO_SOURCES for c in rule["components"])
+    combos: list[str] = [""]
+    unverified = False
+    if needs_combo:
+        declared = program.get("combinations") or []
+        published = [c for c in declared if c in COMBINATION_SUBJECTS]
+        if declared and not published:
+            return None, []
+        unverified = not declared
+        active = profile.get("activeCombination")
+        combos = ([active] if active in COMBINATION_SUBJECTS else []) if unverified else published
+        if not combos:
+            return None, ["Tổ hợp xét tuyển"]
+    missing: set[str] = set()
     best = None
     for combo in combos:
-        cs = _combo_score(scores, combo, ielts, method == "THPT")
-        if cs is None:
+        s = _score_combo(profile, rule, combo, missing)
+        if s is None:
             continue
-        raw, used_ielts = cs
-        # Từ kỳ thi 2026: tổng điểm thi gốc của tổ hợp phải đạt sàn 15/30, không cộng ưu tiên, không bù bằng IELTS.
-        if method == "THPT" and grad is not None and grad >= 2026 and profile.get("minimumScoreException") is not True:
-            exam_only = _combo_score(scores, combo, None, False)
-            if exam_only is None or exam_only[0] < 15:
-                continue
-        bonus = priority_bonus(priority.get("area", "KV3"), priority.get("object", "none"), raw) if priority else 0.0
-        score = min(30.0, js_math_round((raw + bonus) * 100) / 100)
-        if best is None or score > best["score"]:
-            best = {
-                "method": method, "score": score, "rawScore": raw, "bonus": bonus, "combo": combo,
-                "usedIeltsConversion": used_ielts, "comboUnverified": unverified,
-            }
-    return best
+        if best is None or s["score"] > best["score"]:
+            best = {**s, "method": method, "combo": combo, "comboUnverified": unverified,
+                    "ruleOrigin": origin, "ruleSource": source}
+    return best, ([] if best else sorted(missing))
+
+
+def score_for_program(profile: Mapping[str, Any], program: Mapping[str, Any]):
+    return evaluate_program(profile, program)[0]
 
 
 # --------------------------------------------------------------------------------------
@@ -397,6 +567,8 @@ def build_candidates(
             "sourceTier": p["sourceTier"],
             "sourceUrl": p["sourceUrl"],
             "usedIeltsConversion": ms["usedIeltsConversion"],
+            "ruleOrigin": ms["ruleOrigin"],
+            "ruleSource": (ms["ruleSource"] or {}).get("url") if ms["ruleSource"] else None,
         })
 
     best: dict[str, dict[str, Any]] = {}

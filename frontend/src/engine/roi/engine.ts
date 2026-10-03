@@ -10,7 +10,6 @@ import {
   ExamScores,
 } from "@/engine/types";
 import { COMBINATION_SUBJECTS, SUBJECT_LABELS_VI } from "@/data/universities/combinations";
-import { calculateCompositeScore } from "@/engine/scoring/composite";
 import { calculateAdmitProbability, REACH_MAX_PROB } from "@/engine/admissions/probability";
 import { scoreForProgram } from "@/engine/scoring/method-score";
 
@@ -26,7 +25,7 @@ export function calculateSubjectRoiList(
   const roiResults: SubjectRoiMetric[] = [];
   if (activeSubs.length === 0) return roiResults;
 
-  const baseComposite = targetScore?.score ?? calculateCompositeScore(profile.examScores, profile.altScores, profile.priority, combo);
+  const baseComposite = targetScore?.score ?? 0;
 
   // Đếm số ngành trong tầm với theo đúng phương thức của từng ngành (đổi điểm thi chỉ ảnh hưởng ngành xét điểm thi).
   const countWithinReach = (scores: ExamScores) => {
@@ -46,8 +45,7 @@ export function calculateSubjectRoiList(
     const simScore = Math.min(10.0, currScore + delta);
 
     const simExamScores = { ...profile.examScores, [subKey]: simScore };
-    const simComposite = scoreForProgram({ ...profile, examScores: simExamScores }, target)?.score
-      ?? calculateCompositeScore(simExamScores, profile.altScores, profile.priority, combo);
+    const simComposite = scoreForProgram({ ...profile, examScores: simExamScores }, target)?.score ?? baseComposite;
 
     const simEligibleCount = countWithinReach(simExamScores);
 

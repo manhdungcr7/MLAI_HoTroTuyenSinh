@@ -316,22 +316,9 @@ def build_frontend_catalog(frame: pd.DataFrame, references: dict[str, str] | Non
     return items
 
 
-def build_school_methods(frame: pd.DataFrame) -> dict[str, list[str]]:
-    """Các phương thức mỗi trường thực sự công bố trong đề án (kể cả tuyển thẳng/riêng)."""
-    frame = _with_method_columns(frame)
-    known = frame[frame["admission_method"] != "UNKNOWN"]
-    return {
-        school: sorted(set(group["admission_method"]))
-        for school, group in known.groupby("school_code")
-    }
-
-
 def export_frontend_catalog(frame: pd.DataFrame, references: dict[str, str] | None = None) -> int:
     items = build_frontend_catalog(frame, references)
     atomic_write(CATALOG_PATH, json.dumps(items, ensure_ascii=False, separators=(",", ":"), allow_nan=False).encode("utf-8"))
-    # Cùng thư mục với catalog để mọi nơi thay CATALOG_PATH (vd test) cũng thay luôn file này.
-    atomic_write(CATALOG_PATH.parent / "school-methods.json",
-                 json.dumps(build_school_methods(frame), ensure_ascii=False, indent=1).encode("utf-8"))
     return len(items)
 
 

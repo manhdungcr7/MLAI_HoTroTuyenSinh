@@ -1,3 +1,5 @@
+> **Cập nhật 10/2026:** ứng dụng đã rút gọn còn 5 màn (Tìm ngành, Kết quả, Nguyện vọng, Cải thiện điểm, Cách tính) và tính điểm theo quy tắc từng trường. Sitemap 20 màn, trang Tổng quan/Khám phá/Kế hoạch học/Kiểm chứng và backend cũ ở dưới **không còn hiệu lực**; xem `README.md` cho cấu trúc hiện tại.
+
 # Nguyện Vọng AI — Đặc tả sản phẩm (BA, nguồn sự thật duy nhất)
 
 > **Dự thi:** MLAI Hackathon 2026 · Bảng Decision Intelligence (TMA Solutions) · Đề 6 "Chọn trường hoặc chương trình học". Team RTC đã vào chung kết (Sprint 2).

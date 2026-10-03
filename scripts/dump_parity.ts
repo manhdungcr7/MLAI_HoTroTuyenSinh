@@ -5,6 +5,8 @@ import { DECISION_PROGRAM_POOL } from "../frontend/src/data/catalog";
 import { buildCandidateOptions, calculateWishlistFailAll } from "../frontend/src/engine/decision/optimizer";
 import { filterByConstraints } from "../frontend/src/engine/decision/constraints";
 import { suggestPortfolio, candidateToWishlistItem } from "../frontend/src/engine/decision/portfolio-suggest";
+import { registerSchoolRules, clearSchoolRules } from "../frontend/src/engine/scoring/school-rules";
+import { scoreForProgram, missingInputsForProgram } from "../frontend/src/engine/scoring/method-score";
 
 const cases = JSON.parse(readFileSync(process.argv[2], "utf-8")) as { name: string; profile: any }[];
 const result: Record<string, unknown> = { catalogSize: DECISION_PROGRAM_POOL.length };
@@ -23,5 +25,22 @@ for (const { name, profile } of cases) {
     suggestion: suggestion.map((c) => c.programId),
     pFailAll: items.length ? calculateWishlistFailAll(items) : 1,
   };
+}
+
+// Quy tắc riêng từng trường (fixture thử nghiệm): ma trận hồ sơ x chương trình tổng hợp.
+if (process.argv[3]) {
+  const fx = JSON.parse(readFileSync(process.argv[3], "utf-8"));
+  clearSchoolRules();
+  registerSchoolRules(fx.rules);
+  const matrix: unknown[] = [];
+  for (const profile of fx.profiles) {
+    for (const program of fx.programs) {
+      const full = { name: "", grade: "", highSchool: "", availableHoursPerWeek: 0, ...profile };
+      const s = scoreForProgram(full, { programId: "x", ...program } as any);
+      matrix.push(s ? { score: s.score, raw: s.rawScore, bonus: s.bonus, combo: s.combo, origin: s.ruleOrigin, unverified: s.comboUnverified, ielts: s.usedIeltsConversion }
+                    : { score: null, missing: missingInputsForProgram(full, { programId: "x", ...program } as any) });
+    }
+  }
+  result.ruleMatrix = matrix;
 }
 console.log(JSON.stringify(result));

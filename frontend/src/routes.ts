@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 function normalizePath(path: string): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  return normalized === "/" ? "/dashboard" : normalized;
+  return normalized === "/" ? "/start" : normalized;
 }
 
 function currentPath(): string {
-  if (typeof window === "undefined") return "/dashboard";
+  if (typeof window === "undefined") return "/start";
   const hash = window.location.hash.slice(1);
   if (hash) return normalizePath(decodeURIComponent(hash));
   return normalizePath(window.location.pathname);

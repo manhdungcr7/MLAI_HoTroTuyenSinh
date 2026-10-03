@@ -27,17 +27,12 @@ export function candidateToWishlistItem(option: CandidateOption, rank: number): 
     tuition_vnd: option.tuitionVnd,
     employment_rate: option.employmentRate,
     data_passport_url: option.dataPassportUrl,
-    why_option_vi: option.whyThisOptionVi,
     region: option.region,
     province: option.province,
     source_tier: option.sourceTier ?? "official_pdf",
     admission_method: option.admissionMethod,
     method_inferred: option.methodInferred,
     combinations_verified: option.combinationsVerified,
-    // Không còn điểm "độ phù hợp" tổng hợp: thứ tự do học sinh quyết định, xác suất do dữ liệu quyết định.
-    utility: 0,
-    util_breakdown: { fit: 0, cost: null, location: 0, career: null, capability: 0 },
-    util_meta: { total_cost_per_year_vnd: option.tuitionVnd ?? undefined, tuition_estimated: !option.tuitionVnd },
   };
 }
 
@@ -124,4 +119,30 @@ export function suggestPortfolio(matched: CandidateOption[], hasInterest: boolea
   const firstSure = sorted.findIndex((c) => c.admitProbability >= 0.95);
   const useful = firstSure >= 0 ? sorted.slice(0, firstSure + 1) : sorted;
   return { items: useful, mixedFields: !hasInterest };
+}
+
+export type PortfolioWarningCode = "FEW_SAFE" | "SHADOWED" | "TEACHER_RANK";
+
+export interface PortfolioWarning {
+  code: PortfolioWarningCode;
+  /** Vị trí nguyện vọng (bắt đầu từ 1) liên quan đến cảnh báo. */
+  positions: number[];
+}
+
+const SHADOW_PROB = 0.95;
+const MIN_SAFE = 2;
+const TEACHER_MAX_RANK = 5;
+
+/** Các vấn đề của danh sách nguyện vọng: thiếu nguyện vọng chắc đỗ, nguyện vọng không bao giờ được xét, sư phạm xếp quá thấp. */
+export function portfolioWarnings(items: WishlistItem[]): PortfolioWarning[] {
+  const warnings: PortfolioWarning[] = [];
+  if (items.length === 0) return warnings;
+  if (items.filter((w) => w.role === "an_toan").length < MIN_SAFE) warnings.push({ code: "FEW_SAFE", positions: [] });
+  const firstSure = items.findIndex((w) => w.admit_prob >= SHADOW_PROB);
+  if (firstSure >= 0 && firstSure < items.length - 1) {
+    warnings.push({ code: "SHADOWED", positions: items.slice(firstSure + 1).map((_, i) => firstSure + i + 2) });
+  }
+  const teacherLate = items.map((w, i) => (w.major_group === "su_pham" && i >= TEACHER_MAX_RANK ? i + 1 : 0)).filter(Boolean);
+  if (teacherLate.length > 0) warnings.push({ code: "TEACHER_RANK", positions: teacherLate });
+  return warnings;
 }

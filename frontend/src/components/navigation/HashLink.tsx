@@ -4,7 +4,7 @@ type HashLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 
 function routePath(href: string): string | null {
   if (href.startsWith("/") && !href.startsWith("//")) {
-    return href === "/" ? "/dashboard" : href;
+    return href === "/" ? "/start" : href;
   }
   if (href.startsWith("#/")) return href.slice(1);
   return null;

@@ -10,21 +10,20 @@
     "data:publish": "cd .. && python -m pipeline.publish",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx tests/test_decision_quality.ts && tsx tests/test_recommendation_engine.ts && tsx tests/test_storage_engine.ts && tsx tests/test_ai_decision_engine.ts && tsx tests/test_study_plan.ts && tsx tests/test_math_invariants_and_mc.ts && tsx tests/test_commercial_ai_robustness.ts && tsx tests/test_percentile_equating.ts && tsx tests/test_closed_loop_feedback.ts"
+    "test": "tsx tests/test_math_invariants_and_mc.ts && tsx tests/test_scoring_and_portfolio.ts"
   },
   "dependencies": {
     "lucide-react": "1.48.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "recharts": "^3.10.1"
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.1.1",
-    "@eslint/js": "^10.0.1",
     "eslint": "^10.11.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.12.0",

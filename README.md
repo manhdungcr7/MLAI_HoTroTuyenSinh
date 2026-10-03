@@ -77,6 +77,18 @@ Hoặc chạy tất cả một lần: `powershell -File scripts/run-all-tests.ps
 
 ## Cấu trúc
 
-`frontend/` là sản phẩm (decision layer nằm ở `frontend/src/engine/`); `pipeline/` sinh dữ liệu; `common/` là toán dùng chung. Cây thư mục đầy đủ và luật phụ thuộc: `ba.md` §8.6. Sitemap 20 màn, phân công và timeline: `ba.md` §6 và §9 (issue #31–#49).
+```
+frontend/src/
+  pages/        5 màn: start (nhập từng câu hỏi), results, portfolio, improve, about
+  features/     start (Wizard), results (thẻ kết quả), portfolio (danh sách nguyện vọng)
+  engine/       thuần TypeScript: scoring (quy tắc từng trường), admissions (xác suất, ưu tiên),
+                decision (ứng viên, ràng buộc, đề xuất nguyện vọng), roi, gap
+  data/         catalog điểm chuẩn, tổ hợp, school-rules/ (quy tắc riêng từng trường)
+  state/        AppContext (hồ sơ, nguyện vọng, mục tiêu), lưu trình duyệt
+backend/app/    FastAPI: advisor (API tư vấn), health/meta
+common/         admission_core.py (lõi Python, đối chiếu tự động với engine TypeScript)
+pipeline/       cào, làm sạch, dự báo, xuất catalog và snapshot
+```
 
-Thư mục `backend/` (FastAPI) được giữ nhưng **đóng băng**: bản demo không gọi tới nó (test ở `tests/backend/`). Lý do ở `ba.md` §6.3.
+Thêm quy tắc tính điểm riêng cho một trường: `frontend/src/data/school-rules/README.md`.
+`ba.md` ghi bối cảnh và yêu cầu ban đầu của cuộc thi; phần sitemap 20 màn trong đó đã được thay bằng 5 màn ở trên.

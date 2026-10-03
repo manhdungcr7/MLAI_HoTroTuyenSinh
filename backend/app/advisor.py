@@ -18,6 +18,8 @@ from common import admission_core as core
 
 router = APIRouter(prefix="/api/advisor", tags=["advisor"])
 
+core.register_school_rules(core.load_school_rules())
+
 SHOCK_PATH = Path(__file__).resolve().parents[2] / "data" / "processed" / "national_shock.json"
 
 Score = Field(None, ge=0, le=10)
@@ -100,14 +102,15 @@ class PortfolioRequest(BaseModel):
 
 
 @lru_cache(maxsize=1)
-def _catalog() -> list[dict[str, Any]]:
+def catalog() -> list[dict[str, Any]]:
+    """Catalog chương trình đã chuẩn hoá (nạp một lần)."""
     try:
         return core.load_catalog()
     except FileNotFoundError as exc:
         raise HTTPException(status_code=503, detail="Danh mục chương trình chưa được nạp") from exc
 
 
-def _shock() -> tuple[float, float]:
+def shock_parameters() -> tuple[float, float]:
     try:
         data = json.loads(SHOCK_PATH.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -126,32 +129,34 @@ def _public(c: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
-def _not_computable(programs: list[dict[str, Any]], candidates: list[dict[str, Any]], profile: dict[str, Any]) -> dict[str, int]:
-    """Ngành có ngưỡng điểm nhưng chưa tính được cho học sinh, và lý do."""
+def _not_computable(programs: list[dict[str, Any]], candidates: list[dict[str, Any]], profile: dict[str, Any]) -> dict[str, Any]:
+    """Ngành có ngưỡng điểm nhưng chưa tính được cho học sinh, và học sinh cần bổ sung gì."""
     computed = {c["majorKey"] or c["programId"] for c in candidates}
-    counts = {"hocBaMissingScores": 0, "examMissingScores": 0, "methodNotSupported": 0}
+    missing_inputs: dict[str, int] = {}
+    unsupported = 0
     seen: set[str] = set()
     for p in programs:
         key = p["majorKey"] or p["programId"]
         if key in computed or key in seen:
             continue
-        method = core.program_method(p)
-        if method not in core.SCORABLE_METHODS or p["requiresAptitude"]:
-            counts["methodNotSupported"] += 1
-        elif core.score_for_program(profile, p) is None:
-            counts["hocBaMissingScores" if method == "HOC_BA" else "examMissingScores"] += 1
-        else:
+        score, missing = core.evaluate_program(profile, p)
+        if score is not None:
             continue
         seen.add(key)
-    return counts
+        if missing:
+            for label in missing:
+                missing_inputs[label] = missing_inputs.get(label, 0) + 1
+        else:
+            unsupported += 1
+    return {"methodNotSupported": unsupported, "missingInputs": missing_inputs}
 
 
 @router.post("/search")
 def search(req: SearchRequest) -> dict[str, Any]:
     """Mọi ngành của mọi trường thỏa ràng buộc, xếp theo xác suất đỗ (phương thức tốt nhất cho học sinh)."""
-    programs = _catalog()
+    programs = catalog()
     profile = req.profile.to_core()
-    shock, idio = _shock()
+    shock, idio = shock_parameters()
     candidates = core.build_candidates(programs, profile, shock, idio)
     not_computable = _not_computable(programs, candidates, profile)
 
@@ -185,9 +190,9 @@ def search(req: SearchRequest) -> dict[str, Any]:
 @router.post("/portfolio")
 def portfolio(req: PortfolioRequest) -> dict[str, Any]:
     """Đề xuất (hoặc đánh giá) danh sách tối đa 15 nguyện vọng và xác suất không đỗ nguyện vọng nào."""
-    programs = _catalog()
+    programs = catalog()
     profile = req.profile.to_core()
-    shock, idio = _shock()
+    shock, idio = shock_parameters()
     candidates = core.build_candidates(programs, profile, shock, idio)
     by_id = {c["programId"]: c for c in candidates}
 
@@ -231,7 +236,7 @@ def portfolio(req: PortfolioRequest) -> dict[str, Any]:
 @router.get("/methods")
 def methods() -> dict[str, Any]:
     """Các phương thức xét tuyển hệ thống hiểu, phương thức nào đã tính được xác suất, và số liệu danh mục."""
-    programs = _catalog()
+    programs = catalog()
     by_method: dict[str, int] = {}
     for p in programs:
         by_method[p["admissionMethod"]] = by_method.get(p["admissionMethod"], 0) + 1
@@ -240,11 +245,17 @@ def methods() -> dict[str, Any]:
             {
                 "code": code,
                 "label": label,
-                "probabilityComputed": code in core.SCORABLE_METHODS,
+                "probabilityComputed": code in core.DEFAULT_RULES or any(
+                    code in (r.get("methods") or {}) for r in core.registered_school_rules()
+                ),
                 "programs": by_method.get(code, 0),
             }
             for code, label in core.METHOD_LABELS_VI.items()
         ],
+        "schoolRules": {
+            "schoolsWithOwnRules": len(core.registered_school_rules()),
+            "note": "Trường chưa có quy tắc riêng dùng công thức chung (tổng điểm tổ hợp + ưu tiên theo quy chế).",
+        },
         "catalog": {
             "programs": len(programs),
             "schools": len({p["schoolCode"] for p in programs}),
@@ -256,7 +267,7 @@ def methods() -> dict[str, Any]:
 
 @router.get("/programs/{program_id}")
 def program_detail(program_id: str) -> dict[str, Any]:
-    for p in _catalog():
+    for p in catalog():
         if p["programId"] == program_id:
             return {**{k: v for k, v in p.items() if k != "sourceUrl"}, "source": p["sourceUrl"],
                     "methodLabel": core.METHOD_LABELS_VI.get(p["admissionMethod"])}

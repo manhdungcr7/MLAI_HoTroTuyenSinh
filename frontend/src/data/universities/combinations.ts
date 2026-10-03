@@ -87,24 +87,3 @@ export const SUBJECT_LABELS_VI: Record<string, string> = {
   cncn: "Công nghệ công nghiệp",
   cnnn: "Công nghệ nông nghiệp",
 };
-
-/** Môn thi tốt nghiệp THPT từ 2025: bắt buộc Toán, Ngữ văn + 2 môn tự chọn. */
-export const EXAM_REQUIRED_SUBJECTS = ["toan", "van"] as const;
-export const EXAM_ELECTIVE_SUBJECTS = ["anh", "ly", "hoa", "sinh", "su", "dia", "gdcd", "tin", "cncn", "cnnn"] as const;
-
-/** Tên đầy đủ của tổ hợp, vd "X06 (Toán, Vật lý, Tin học)". */
-export function combinationLabel(code: string): string {
-  const subjects = COMBINATION_SUBJECTS[code];
-  if (!subjects) return code;
-  return `${code} (${subjects.map((s) => SUBJECT_LABELS_VI[s] ?? s).join(", ")})`;
-}
-
-export const MAJOR_GROUPS: Record<string, string> = {
-  cntt: "Công nghệ thông tin & Khoa học máy tính",
-  kinh_te: "Kinh tế, Tài chính & Quản trị kinh doanh",
-  y_duoc: "Y khoa, Dược học & Sức khỏe",
-  ky_thuat: "Kỹ thuật, Cơ khí & Tự động hóa",
-  luat: "Luật & Khoa học xã hội",
-  su_pham: "Sư phạm & Ngôn ngữ học",
-  truyen_thong: "Truyền thông & Marketing số",
-};

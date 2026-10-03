@@ -7,9 +7,9 @@
  * Không có dữ liệu soạn tay nào ghi đè lên số liệu từ đề án.
  */
 
+import "@/data/school-rules";
 import { AdmissionMethod, TargetProgram } from "@/engine/types";
 import rawCatalog from "./programs-catalog.json";
-import schoolMethodsRaw from "./school-methods.json";
 
 export interface ProgramCatalogItem extends TargetProgram {
   programKey: string;
@@ -122,9 +122,6 @@ function toCatalogItem(item: RawCatalogItem): ProgramCatalogItem | null {
     yearlyTrendDelta: 0,
     tuitionVnd: typeof item.tuitionVnd === "number" ? item.tuitionVnd : null,
     employmentRate: typeof item.employmentRate === "number" ? item.employmentRate : null,
-    // Không có nguồn đo cho mức ảnh hưởng của AI / đòn bẩy nghề nghiệp → trung lập, không hiển thị.
-    aiExposure: 0,
-    leverageScore: 0,
     betaProgram: round(item.betaProgram || 1.0, 3),
     idioStd: round(item.idioStd || 1.28, 3),
     dataQuality: years.length >= 3 ? "day_du" : years.length === 1 ? "chi_1_nam" : "thieu_mot_phan",
@@ -147,8 +144,6 @@ export const ALL_PROGRAMS_CATALOG: ProgramCatalogItem[] = (rawCatalog as RawCata
 /** Tập chương trình dùng cho mọi engine (gợi ý, khám phá, so sánh, what-if, đòn bẩy môn). */
 export const DECISION_PROGRAM_POOL: ProgramCatalogItem[] = ALL_PROGRAMS_CATALOG;
 
-/** Các phương thức mỗi trường công bố trong đề án (kể cả tuyển thẳng, tuyển sinh riêng). */
-export const SCHOOL_METHODS: Record<string, AdmissionMethod[]> = schoolMethodsRaw as Record<string, AdmissionMethod[]>;
 
 /** Tra cứu chương trình theo id. */
 export function findProgramById(programId: string | null | undefined): ProgramCatalogItem | undefined {
