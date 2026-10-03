@@ -1,0 +1,23 @@
+{
+  "schoolCode": "DDS",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0615/dds-thong-tin-tuyen-sinh-0862026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Sư phạm, Đại học Đà Nẵng",
+    "sha256": "48f9c9edaee1c2407c01ce026fb9f9ec715f97a0c799bcc95fa76a28dac19f0f",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Phương thức kết hợp: ĐXT = Đ1_THPT×X + Đ1_HB×Y + điểm cộng + ưu tiên (X = 0,7 ngành giáo viên, 0,6 ngành khác; Y là phần còn lại); chưa mã hóa."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "approximateReason": "Trường xét kết hợp điểm thi THPT và điểm học bạ theo tỷ trọng (0,6/0,4 hoặc 0,7/0,3), ứng dụng chưa mã hóa nên điểm của bạn chỉ là ước lượng; hãy tính lại theo đề án."
+    }
+  }
+}

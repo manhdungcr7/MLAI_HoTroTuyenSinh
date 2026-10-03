@@ -2,7 +2,7 @@
 
 Sinh tự động bằng `python scripts/data_gaps.py`. Không bổ sung bằng số liệu không có nguồn.
 
-- Chương trình trong danh mục: 2530; trường: 100; trường có quy tắc riêng: 26.
+- Chương trình trong danh mục: 2530; trường: 100; trường có quy tắc riêng: 31.
 - Chương trình chưa có tổ hợp xét tuyển xác thực: 1256 (49%).
 - Tỉnh/thành trong danh sách chọn nhưng chưa có trường nào trong dữ liệu (17): An Giang, Cà Mau, Cao Bằng, Đắk Lắk, Điện Biên, Gia Lai, Hà Tĩnh, Hưng Yên, Lai Châu, Lạng Sơn, Lào Cai, Phú Thọ, Quảng Ninh, Quảng Trị, Sơn La, Tây Ninh, Tuyên Quang.
 
@@ -10,19 +10,14 @@ Sinh tự động bằng `python scripts/data_gaps.py`. Không bổ sung bằng 
 
 | Mã | Trường | Số chương trình |
 |---|---|---|
-| QSX | ĐH KHXH&NV - ĐHQG TP.HCM | 78 |
 | QST | ĐH Khoa học Tự nhiên - ĐHQG TP.HCM | 63 |
 | DDK | ĐH Bách Khoa - ĐH Đà Nẵng | 62 |
 | TMU | Trường Đại học Thương mại | 51 |
 | TDM | Trường Đại học Thủ Dầu Một | 50 |
-| SPS | ĐH Sư phạm TP.HCM | 47 |
 | TSN | ĐH Nha Trang | 47 |
-| SP2 | ĐH Sư phạm Hà Nội 2 | 44 |
-| XDA | ĐH Xây dựng Hà Nội | 41 |
 | TDL | ĐH Đà Lạt | 39 |
 | BVH | Học viện Công nghệ Bưu chính Viễn thông | 37 |
 | HNM | Trường Đại học Thủ Đô Hà Nội | 35 |
-| DDS | ĐH Sư phạm - ĐH Đà Nẵng | 34 |
 | QHX | ĐH Khoa học Xã hội & Nhân văn - ĐHQGHN | 29 |
 | HBT | Học viện Báo chí và Tuyên truyền | 27 |
 | DQK | ĐH Kinh doanh và Công nghệ Hà Nội | 25 |

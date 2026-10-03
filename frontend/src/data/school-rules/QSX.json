@@ -1,0 +1,19 @@
+{
+  "schoolCode": "QSX",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0228/thong-tin-tuyen-sinh-truong-dai-hoc-khoa-hoc-xa-hoi-va-nhan-van.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Khoa học Xã hội và Nhân văn, ĐHQG-HCM",
+    "sha256": "7c63fbd3fad110e28ff68ad4063ce8310df2b6c2b47f8e81bda21ad28020a241",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.2: ĐXT = w1·THPT + w2·ĐGNL + w3·HB + điểm cộng + ưu tiên, quy về thang 100, trọng số w chưa công bố; vì vậy các phương thức xét điểm không tính được xác suất."
+  },
+  "methods": {
+    "THPT": {
+      "unsupportedReason": "Trường dùng công thức kết hợp điểm thi THPT, ĐGNL và học bạ quy về thang 100 với trọng số w chưa công bố (sẽ công bố cùng ngưỡng đảm bảo chất lượng), điểm chuẩn các năm trước cũng không cùng thang; chưa tính được xác suất."
+    },
+    "HOC_BA": {
+      "unsupportedReason": "Trường dùng công thức kết hợp điểm thi THPT, ĐGNL và học bạ quy về thang 100 với trọng số w chưa công bố (sẽ công bố cùng ngưỡng đảm bảo chất lượng), điểm chuẩn các năm trước cũng không cùng thang; chưa tính được xác suất."
+    }
+  }
+}

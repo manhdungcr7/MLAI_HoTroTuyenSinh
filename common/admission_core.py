@@ -24,6 +24,7 @@ from typing import Any, Iterable, Mapping
 ROOT = Path(__file__).resolve().parents[1]
 _RULES = json.loads((Path(__file__).parent / "data" / "shared_rules.json").read_text(encoding="utf-8"))
 COMBINATION_SUBJECTS: dict[str, list[str]] = _RULES["combinations"]
+SUBJECT_LABELS_VI = {"toan": "Toán", "van": "Ngữ văn", "anh": "Tiếng Anh", "ly": "Vật lý", "hoa": "Hóa học", "sinh": "Sinh học", "su": "Lịch sử", "dia": "Địa lý", "gdcd": "GDKT&PL", "tin": "Tin học", "cncn": "Công nghệ công nghiệp", "cnnn": "Công nghệ nông nghiệp", "ve": "Vẽ mỹ thuật", "nk_tdtt": "Năng khiếu TDTT", "nk_gdmn": "Năng khiếu mầm non"}
 APTITUDE_SUBJECTS = {"ve", "nk_tdtt", "nk_gdmn"}
 STANDARD_COMBINATIONS = [c for c, subs in COMBINATION_SUBJECTS.items() if not APTITUDE_SUBJECTS.intersection(subs)]
 PROVINCE_REGIONS: dict[str, str] = _RULES["provinceRegions"]
@@ -380,7 +381,7 @@ def _combo_component(component, subjects, profile, needs, rule):
                 if converted is not None and (v is None or converted > v):
                     v, used_ielts = converted, True
         if v is None:
-            needs.add(f"Điểm môn {sub}")
+            needs.add(f"Điểm {'học bạ' if component['source'] == 'hocba_combo' else 'thi'} môn {SUBJECT_LABELS_VI.get(sub, sub)}")
             return None
         weighted += w * _clamp10(v)
         max_total += w * 10

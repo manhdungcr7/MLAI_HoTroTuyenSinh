@@ -55,14 +55,16 @@ Bảng dùng chung (tổ hợp, vùng của tỉnh) xuất từ TypeScript bằn
 
 ## Việc dữ liệu còn lại
 
-- Điểm chuẩn mùa 2026 mới có cho khoảng 945/3.023 chương trình (31 trường, chủ yếu từ trang tổng hợp): chạy lại `python -m pipeline.run_all`
-  khi có thêm trường công bố. Chương trình có dữ liệu cũ hơn được tính độ bất định rộng hơn tự động.
+Số liệu cập nhật tự động trong [`docs/DATA_GAPS.md`](docs/DATA_GAPS.md) (`python scripts/data_gaps.py`): tỉnh chưa có trường, trường chưa có quy tắc riêng, tỷ lệ chương trình chưa có tổ hợp xác thực.
+
+- Điểm chuẩn mùa 2026 mới có cho một phần chương trình: chạy lại `python -m pipeline.run_all` khi có thêm trường công bố.
   Năm dự báo là `FORECAST_YEAR` (`common/admission_core.py`, `frontend/src/engine/admissions/probability.ts`); có test nhắc khi quá hạn.
-- Tổ hợp xét tuyển từng ngành: 65% chương trình chưa có tổ hợp xác thực trong dữ liệu (đề án dạng bảng ảnh hoặc bảng chưa tách được).
-  Cần OCR/tách bảng "mã ngành → tổ hợp", hoặc khai báo `allowedCombinations` theo trường khi mọi ngành cùng tổ hợp.
-- Quy tắc tính điểm riêng từng trường: 11 trường đã nhập, còn lại dùng công thức chung. Quy trình và công cụ ở
-  `frontend/src/data/school-rules/README.md` (`scripts/extract_dean_text.py`, `scripts/build_rules_index.py`).
-- Điểm chuẩn ĐGNL/ĐGTD cùng thang với cách tính để so sánh được.
+- Tổ hợp xét tuyển từng ngành: lấy từ bảng chỉ tiêu trong đề án khi tên ngành khớp chính xác (`pipeline/clean/doc_combos.py`); phần còn lại dùng xác suất trường nhận tổ hợp.
+- Quy tắc tính điểm riêng từng trường: xem `frontend/src/data/school-rules/README.md` và [`docs/RULE_REVIEW.md`](docs/RULE_REVIEW.md) (tài liệu cho người thẩm định, cần người thật rà soát trước khi dùng thương mại).
+  `python scripts/rule_review.py --check` kiểm tra mã băm văn bản gốc. Đề án dạng ảnh: render trang bằng pypdfium2 rồi đọc ảnh hoặc dùng nhận dạng chữ của Windows để tìm trang công thức.
+- Ngành năng khiếu chỉ tính cho tổ hợp V00–V03, T00, T01, T06, T10, M01, M05, M06, M11 (nghĩa từng mã đã đối chiếu đề án); mã khác chưa có định nghĩa chung nên không tính.
+- Học phí: gần như không có dữ liệu theo ngành nên không có bộ lọc học phí trong giao diện.
+- Điểm chuẩn ĐGNL/ĐGTD: dữ liệu rất ít, học sinh chỉ có điểm ĐGNL sẽ được hướng dẫn nhập thêm điểm thi.
 
 ## Cập nhật dữ liệu
 
