@@ -1,0 +1,7 @@
+{
+  "name": "qa-harness",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kịch bản QA tự động bằng Playwright (Microsoft Edge), xem README gốc mục Kiểm thử giao diện",
+  "dependencies": { "playwright-core": "^1.63.0" }
+}

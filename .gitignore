@@ -48,3 +48,8 @@ scratch/
 
 # Pipeline run logs
 artifacts/
+
+# QA tự động (ảnh chụp, kết quả chạy)
+tools/qa/out-*/
+tools/qa/ocr/
+tools/qa/node_modules/
