@@ -51,6 +51,7 @@ export interface NguonNam {
   nam: string; // năm của tài liệu
   loai: "deAn" | "diemChuan"; // đề án tuyển sinh của trường, hay trang công bố điểm chuẩn
   url: string;
+  tai?: string; // năm của đề án chứa điểm này (đề án năm sau thường công bố điểm chuẩn năm trước)
   trang?: number; // trang trong file PDF nơi ngành này xuất hiện
 }
 

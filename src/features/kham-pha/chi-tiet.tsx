@@ -83,7 +83,7 @@ function BangDiemChuan({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
             <li key={n} className="flex items-center justify-between gap-3 py-2">
               <span className="text-[14px] text-chu">Năm {n}</span>
               <span className="flex items-center gap-3">
-                {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="text-[12px] font-bold text-xanh hover:underline">Xem trong đề án{link.trang ? `, trang ${link.trang}` : ""}</a>}
+                {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="text-[12px] font-bold text-xanh hover:underline">Xem trong đề án {link.tai ?? ""}{link.trang ? `, trang ${link.trang}` : ""}</a>}
                 <b className="text-[16px] text-muc tabular-nums">{d.toFixed(2)}</b>
               </span>
             </li>
@@ -105,7 +105,7 @@ function NguonTungNam({ lc }: { lc: LuaChon }) {
       {ds.map((x) => (
         <li key={`${x.nam}-${x.url}`}>
           <a href={x.trang ? `${x.url}#page=${x.trang}` : x.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[12px] font-bold text-xanh hover:underline">
-            {x.loai === "deAn" ? `Đề án tuyển sinh ${x.nam}` : `Bảng điểm chuẩn ${x.nam}`}{x.trang ? `, trang ${x.trang}` : ""}
+            {x.loai === "deAn" ? `Điểm chuẩn ${x.nam} trong đề án ${x.tai ?? x.nam}` : `Bảng điểm chuẩn ${x.nam}`}{x.trang ? `, trang ${x.trang}` : ""}
           </a>
         </li>
       ))}
