@@ -11,3 +11,10 @@ __pycache__/
 legacy/**/node_modules/
 legacy/**/dist/
 
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
