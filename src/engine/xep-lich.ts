@@ -42,14 +42,18 @@ export const CAU_HINH_MAC_DINH: CauHinhTuHoc = {
   nghiGiuaBuoi: 10,
 };
 
-// Khung giờ luôn dành cho ăn uống, nghỉ ngơi
-const KHUNG_BAO_VE = [
-  { batDau: 11 * 60 + 45, ketThuc: 13 * 60 },
-  { batDau: 18 * 60, ketThuc: 19 * 60 },
+/** Khung giờ luôn dành cho ăn uống, nghỉ ngơi. Thuật toán không bao giờ xếp việc vào đây. */
+export const KHUNG_BAO_VE_GIO: { ten: string; batDau: string; ketThuc: string }[] = [
+  { ten: "Ăn trưa & nghỉ ngơi", batDau: "11:45", ketThuc: "13:00" },
+  { ten: "Ăn tối & nghỉ ngơi", batDau: "18:00", ketThuc: "19:00" },
 ];
+const KHUNG_BAO_VE = KHUNG_BAO_VE_GIO.map((k) => ({ batDau: phutTuGio(k.batDau), ketThuc: phutTuGio(k.ketThuc) }));
 const MUC_QUY_DOI_TAM_TRANG: Record<TamTrang, number> = { tot: 1, binhThuong: 0.85, met: 0.5 };
 const TOI_DA_MOT_BUOI = 90;
 const TOI_THIEU_MOT_BUOI = 25;
+/** Buổi từ 60 phút trở lên là buổi nặng: phải xong trước giờ nghỉ cuối ngày ít nhất chừng này phút. */
+export const BUOI_NANG_PHUT = 60;
+export const CACH_GIO_NGU = 30;
 
 interface Khung { batDau: number; ketThuc: number }
 
@@ -100,6 +104,7 @@ const DIEM_UU_TIEN = { cao: 3, vua: 2, thap: 1 } as const;
 interface DauVao {
   tuanBatDau: string; // thứ 2
   tuNgay?: string; // chỉ xếp từ ngày này trở đi
+  tuPhut?: number; // trong ngày tuNgay, chỉ xếp từ phút này trở đi (giờ hiện tại), để không xếp vào giờ đã qua
   coDinh: TietCoDinh[];
   viec: ViecCanHoc[];
   cfg: CauHinhTuHoc;
@@ -129,15 +134,25 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   const taiTheoNgay = new Map<string, number>();
   const monTheoNgay = new Map<string, MonId[]>();
   for (const n of ngays) {
-    khungTheoNgay.set(n, khungTrongTrongNgay(n, coDinh, cfg, khoiDaCo));
+    let khungs = khungTrongTrongNgay(n, coDinh, cfg, khoiDaCo);
+    if (dv.tuNgay && n === dv.tuNgay && dv.tuPhut) khungs = truKhung(khungs, { batDau: 0, ketThuc: dv.tuPhut }).filter((k) => k.ketThuc - k.batDau >= TOI_THIEU_MOT_BUOI);
+    khungTheoNgay.set(n, khungs);
     // tính phần tự học đã có vào mức tải của ngày
     taiTheoNgay.set(n, khoiDaCo.filter((k) => k.ngay === n && k.loai === "tuHoc").reduce((s, k) => s + phutTuGio(k.ketThuc) - phutTuGio(k.batDau), 0));
     monTheoNgay.set(n, []);
   }
 
   const ra: KhoiHoc[] = [];
+  // id không được trùng với khối đang giữ lại (ví dụ khối của việc đã xong vẫn nằm trong tuần)
+  const idDaDung = new Set(khoiDaCo.map((k) => k.id));
   let dem = 0;
-  const them = (k: Omit<KhoiHoc, "id">) => { ra.push({ ...k, id: `auto-${k.ngay}-${dem++}` }); };
+  const them = (k: Omit<KhoiHoc, "id">) => {
+    let id = `auto-${k.ngay}-${dem++}`;
+    while (idDaDung.has(id)) id = `auto-${k.ngay}-${dem++}`;
+    idDaDung.add(id);
+    ra.push({ ...k, id });
+  };
+  const gioNgu = phutTuGio(cfg.gioKetThuc) - CACH_GIO_NGU;
 
   const datVao = (ngay: string, batDau: number, phut: number) => {
     const khungs = khungTheoNgay.get(ngay)!;
@@ -148,13 +163,16 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   // 1) Chuẩn bị bài: tối hôm trước mỗi môn có tiết ngày mai, dành 15 phút xem trước
   for (const n of ngays) {
     const mai = congNgay(n, 1);
-    const cacMon = new Set(coDinh.filter((t) => t.thu === thuCuaNgay(mai) && t.mon).map((t) => t.mon!));
-    for (const mon of cacMon) {
+    // mỗi môn một buổi, ghi theo tiết sớm nhất của môn đó ngày mai
+    const tietMai = coDinh.filter((t) => t.thu === thuCuaNgay(mai) && t.mon).sort((a, b) => phutTuGio(a.batDau) - phutTuGio(b.batDau));
+    const cacMon = new Map<MonId, string>();
+    for (const t of tietMai) if (!cacMon.has(t.mon!)) cacMon.set(t.mon!, buoiTrongNgay(t.batDau));
+    for (const [mon, buoiMai] of cacMon) {
       const khungs = khungTheoNgay.get(n)!;
       const o = khungs.find((k) => k.ketThuc >= 19 * 60 + 15 && k.ketThuc - Math.max(k.batDau, 19 * 60) >= 15);
       if (!o || (taiTheoNgay.get(n) ?? 0) + 15 > tran) continue;
       const bd = Math.max(o.batDau, 19 * 60);
-      them({ viecId: null, ten: `Xem trước bài ${tenMonNgan(mon)} (sáng mai có tiết)`, loai: "tuHoc", mon, ngay: n, batDau: gioTuPhut(bd), ketThuc: gioTuPhut(bd + 15), ghiChu: "Đọc lướt 15 phút để sáng mai nghe giảng dễ hơn." });
+      them({ viecId: null, ten: `Xem trước bài ${tenMonNgan(mon)} (${buoiMai} mai có tiết)`, loai: "tuHoc", mon, ngay: n, batDau: gioTuPhut(bd), ketThuc: gioTuPhut(bd + 15), ghiChu: `Đọc lướt 15 phút để ${buoiMai} mai nghe giảng dễ hơn.` });
       datVao(n, bd, 15);
       monTheoNgay.get(n)!.push(mon);
     }
@@ -175,7 +193,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   const thieu = new Map<string, number>();
   for (const b of buoi) {
     let tot: { ngay: string; bd: number; diem: number } | null = null;
-    for (const n of ngays) {
+    for (const [thuTu, n] of ngays.entries()) {
       const tai = taiTheoNgay.get(n) ?? 0;
       if (tai + b.phut > tran) continue;
       for (const k of khungTheoNgay.get(n)!) {
@@ -183,9 +201,11 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
         const uaThich = TAM_UU_TIEN[cfg.thoiDiemTot];
         const cacUngVien = new Set([k.batDau, Math.max(k.batDau, Math.min(uaThich, k.ketThuc - b.phut))]);
         for (const bd of cacUngVien) {
+          if (b.phut >= BUOI_NANG_PHUT && bd + b.phut > gioNgu) continue; // không học nặng sát giờ ngủ
           const trungMon = monTheoNgay.get(n)!.includes(b.viec.mon) ? 60 : 0; // đỡ học một môn hai lần trong ngày
           const xaGio = DIEM_UU_TIEN[b.viec.mucUuTien] >= 2 ? Math.abs(bd - uaThich) / 4 : Math.abs(bd - uaThich) / 12;
-          const diem = tai * 0.5 + trungMon + xaGio;
+          const somTrongTuan = b.viec.mucUuTien === "cao" ? thuTu * 8 : 0; // việc nên làm trước thì làm sớm trong tuần
+          const diem = tai * 0.5 + trungMon + xaGio + somTrongTuan;
           if (!tot || diem < tot.diem) tot = { ngay: n, bd, diem };
         }
       }
@@ -203,3 +223,31 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
 }
 
 const tenMonNgan = (m: MonId): string => TEN_MON_NGAN[m];
+const buoiTrongNgay = (gio: string) => (phutTuGio(gio) < 12 * 60 ? "sáng" : phutTuGio(gio) < 18 * 60 ? "chiều" : "tối");
+
+export interface KhungGoiY { ngay: string; batDau: string; ketThuc: string }
+
+/**
+ * Tìm các khung trống gần nhất đủ `phut` phút, bắt đầu từ ngày `tuNgay` (và từ `tuPhut` trong ngày đó).
+ * Có `ganMoc`: trong mỗi khung trống chọn giờ gần mốc nhất (dùng khi dời một khối bị trùng giờ),
+ * kết quả xếp theo ngày rồi theo độ gần mốc. Không có `ganMoc`: lấy giờ sớm nhất của mỗi khung.
+ */
+export function khungTrongGanNhat(dv: {
+  tuNgay: string; tuPhut?: number; phut: number; coDinh: TietCoDinh[]; cfg: CauHinhTuHoc; khoiDaCo?: KhoiHoc[];
+  soKhung?: number; soNgay?: number; ganMoc?: number;
+}): KhungGoiY[] {
+  const ra: (KhungGoiY & { thuTu: number; lech: number })[] = [];
+  const soNgay = dv.soNgay ?? 7;
+  for (let i = 0; i < soNgay; i++) {
+    const ngay = congNgay(dv.tuNgay, i);
+    if (dv.cfg.ngayNghi.includes(thuCuaNgay(ngay))) continue;
+    for (const k of khungTrongTrongNgay(ngay, dv.coDinh, dv.cfg, dv.khoiDaCo ?? [])) {
+      const dau = Math.ceil(Math.max(k.batDau, i === 0 ? dv.tuPhut ?? 0 : 0) / 5) * 5;
+      if (k.ketThuc - dau < dv.phut) continue;
+      const bd = dv.ganMoc === undefined ? dau : Math.min(Math.max(Math.round(dv.ganMoc / 5) * 5, dau), k.ketThuc - dv.phut);
+      ra.push({ ngay, batDau: gioTuPhut(bd), ketThuc: gioTuPhut(bd + dv.phut), thuTu: i, lech: dv.ganMoc === undefined ? bd : Math.abs(bd - dv.ganMoc) });
+    }
+  }
+  ra.sort((a, b) => a.thuTu - b.thuTu || a.lech - b.lech);
+  return ra.slice(0, dv.soKhung ?? 4).map(({ ngay, batDau, ketThuc }) => ({ ngay, batDau, ketThuc }));
+}

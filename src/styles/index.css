@@ -43,9 +43,11 @@ body {
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
 }
-button, input, select, textarea { font: inherit; color: inherit; }
-button { cursor: pointer; }
-:focus-visible { outline: 3px solid #8db4ff; outline-offset: 2px; }
+@layer base {
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid #8db4ff; outline-offset: 2px; }
+}
 
 /* Khung điện thoại: trên máy tính, ứng dụng nằm giữa một cột rộng 430px */
 .khung-ung-dung { max-width: 430px; margin: 0 auto; min-height: 100dvh; background: var(--color-nen); position: relative; box-shadow: 0 0 40px rgba(22, 100, 245, .08); overflow-x: clip; }

@@ -1,6 +1,6 @@
 // Trạng thái toàn ứng dụng, lưu trên máy (localStorage). Chưa có máy chủ: hồ sơ không rời khỏi điện thoại.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { bayNgayCuaTuan, xepLichTuan } from "@/engine/xep-lich";
+import { bayNgayCuaTuan, isoNgay, xepLichTuan } from "@/engine/xep-lich";
 import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau } from "./mau";
 import type {
   CauHinhTuHoc, DiemThi, HoSo, KhoiHoc, MonId, MucTieuChinh, NhacNho, TamTrang, TietCoDinh, TinhHuongDaLuu, TrangThaiViec, ViecCanHoc, LichSuHoanThanh,
@@ -48,6 +48,7 @@ interface Ctx {
   doiYeuThich: (id: string) => void;
   doiSoSanh: (id: string) => void;
   datSoSanh: (ids: string[]) => void;
+  datNguyenVong: (ids: string[]) => void;
   themDiemThi: (d: DiemThi) => void;
   luuTinhHuong: (t: Omit<TinhHuongDaLuu, "id" | "luc">) => void;
   xoaTinhHuong: (id: string) => void;
@@ -93,6 +94,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     doiYeuThich: (id) => cap((x) => ({ ...x, yeuThich: x.yeuThich.includes(id) ? x.yeuThich.filter((i) => i !== id) : [...x.yeuThich, id] })),
     doiSoSanh: (id) => cap((x) => ({ ...x, soSanh: x.soSanh.includes(id) ? x.soSanh.filter((i) => i !== id) : [...x.soSanh, id].slice(-2) })),
     datSoSanh: (ids) => cap((x) => ({ ...x, soSanh: ids.slice(0, 2) })),
+    datNguyenVong: (ids) => cap((x) => {
+      const duy = Array.from(new Set(ids));
+      return { ...x, nguyenVong: duy };
+    }),
     themDiemThi: (d) => cap((x) => ({ ...x, diemThi: [...x.diemThi, d] })),
     luuTinhHuong: (th) => cap((x) => ({ ...x, tinhHuong: [...x.tinhHuong, { ...th, id: idMoi("th"), luc: new Date().toISOString() }].slice(-6) })),
     xoaTinhHuong: (id) => cap((x) => ({ ...x, tinhHuong: x.tinhHuong.filter((t) => t.id !== id) })),
@@ -127,7 +132,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (tt === "xong" || tt === "boQua") return false;
         return !giu.some((k) => k.viecId === v.id && k.khoa);
       });
-      const r = xepLichTuan({ tuanBatDau, tuNgay, coDinh: x.coDinh, viec: viecCan, cfg: x.cauHinh, tamTrang: x.tamTrang, khoiDaCo: giu });
+      const bayGio = new Date();
+      const tuPhut = tuNgay && tuNgay === isoNgay(bayGio) ? bayGio.getHours() * 60 + bayGio.getMinutes() : undefined;
+      const r = xepLichTuan({ tuanBatDau, tuNgay, tuPhut, coDinh: x.coDinh, viec: viecCan, cfg: x.cauHinh, tamTrang: x.tamTrang, khoiDaCo: giu });
       setS({ ...x, khoiHoc: [...giu, ...r.khoi] });
       return { chuaXep: r.chuaXep.length, ghiChu: r.ghiChu };
     },

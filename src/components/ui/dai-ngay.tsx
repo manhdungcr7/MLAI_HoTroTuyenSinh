@@ -8,7 +8,7 @@ const NHAN_THU = ["", "T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 export function DaiNgay({ cacNgay, chon, onChon, soViec }: { cacNgay: string[]; chon: string; onChon: (n: string) => void; soViec?: Record<string, number> }) {
   const homNay = isoNgay(new Date());
   return (
-    <div role="tablist" aria-label="Chọn ngày" className="grid grid-cols-7 gap-1.5">
+    <div role="tablist" aria-label="Chọn ngày" className="grid grid-cols-7 gap-1">
       {cacNgay.map((n) => {
         const thu = thuCuaNgay(n), dang = n === chon, la = n === homNay;
         return (

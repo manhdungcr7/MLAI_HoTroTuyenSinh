@@ -11,6 +11,7 @@ import { routes as thuTinhHuong } from "@/features/thu-tinh-huong/routes";
 import { routes as mucTieu } from "@/features/muc-tieu/routes";
 import { routes as keHoach } from "@/features/ke-hoach/routes";
 import { routes as tuHoc } from "@/features/tu-hoc/routes";
+import { useNhacNho } from "@/features/tu-hoc/dung-nhac-nho";
 import { routes as thietKe } from "@/features/thiet-ke/routes";
 
 // Thêm slice mới: import `routes` của nó rồi thêm vào mảng này. Không sửa gì khác.
@@ -33,6 +34,9 @@ const router = createHashRouter([
   },
 ]);
 
+/** Đặt các nhắc việc trong lúc ứng dụng đang mở. */
+function NhacNhoNen() { useNhacNho(); return null; }
+
 export default function App() {
-  return <RouterProvider router={router} />;
+  return <><NhacNhoNen /><RouterProvider router={router} /></>;
 }

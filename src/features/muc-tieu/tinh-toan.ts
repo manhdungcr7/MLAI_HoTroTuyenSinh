@@ -1,0 +1,221 @@
+// Tính toán riêng của slice Mục tiêu. TypeScript thuần, không import React, để dễ kiểm thử và chuyển lên máy chủ sau này.
+// Mọi con số "công sức" ở đây là ƯỚC TÍNH từ điểm thi thử, không phải cam kết hay xác suất.
+import type { KhoangCachMon } from "@/engine/phan-tich";
+import { TEN_MON, type DiemThi, type MonId } from "@/state/types";
+
+const lam1 = (n: number) => Math.round(n * 10) / 10;
+
+/** Hiển thị điểm luôn 1 chữ số thập phân. */
+export const diem1 = (n: number) => lam1(n).toFixed(1);
+
+/** yyyy-mm-dd → dd/mm/yyyy. */
+export function ngayVN(iso: string): string {
+  const [y, m, d] = iso.split("-");
+  return y && m && d ? `${d}/${m}/${y}` : iso;
+}
+
+// ---------- Điểm hiện tại lấy từ đâu ----------
+
+/** Các môn của tổ hợp em chưa có điểm (cả hồ sơ lẫn thi thử). */
+export function monChuaCoDiem(diem: Record<MonId, number | null>, toHop: MonId[]): MonId[] {
+  return toHop.filter((m) => diem[m] === null || diem[m] === undefined);
+}
+
+export interface NguonDiemHienTai {
+  loai: "thiThu" | "hoSo" | "tronLan";
+  ngayGanNhat: string | null; // ngày thi thử gần nhất trong các môn của tổ hợp
+}
+
+/** Điểm hiện tại của tổ hợp lấy từ thi thử, từ hồ sơ, hay trộn cả hai (giống quy tắc của diemHienTaiCuaTungMon). */
+export function nguonDiemHienTai(diemThi: DiemThi[], toHop: MonId[]): NguonDiemHienTai {
+  const coThiThu = toHop.filter((m) => diemThi.some((d) => d.mon === m));
+  const ngay = diemThi.filter((d) => toHop.includes(d.mon)).map((d) => d.ngay).sort();
+  return {
+    loai: coThiThu.length === toHop.length ? "thiThu" : coThiThu.length === 0 ? "hoSo" : "tronLan",
+    ngayGanNhat: ngay.length ? ngay[ngay.length - 1] : null,
+  };
+}
+
+// ---------- Xu hướng và công sức ----------
+
+/** Điểm các lần thi thử gần nhất của một môn, cũ → mới (tối đa `so` lần). */
+export function diemCacLanGanNhat(diemThi: DiemThi[], mon: MonId, so = 3): number[] {
+  return diemThi.filter((d) => d.mon === mon).sort((a, b) => a.ngay.localeCompare(b.ngay)).slice(-so).map((d) => d.diem);
+}
+
+/** Độ dốc trung bình (điểm mỗi lần thi) của các lần gần nhất; null khi chưa đủ 2 lần. */
+export function doDocXuHuong(gia: number[]): number | null {
+  if (gia.length < 2) return null;
+  return lam1(((gia[gia.length - 1] - gia[0]) / (gia.length - 1)) * 10) / 10;
+}
+
+export type XuHuong = "tang" | "giu" | "giam" | "chuaRo";
+export function loaiXuHuong(doc: number | null): XuHuong {
+  if (doc === null) return "chuaRo";
+  if (doc > 0.05) return "tang";
+  if (doc < -0.05) return "giam";
+  return "giu";
+}
+export const TEN_XU_HUONG: Record<XuHuong, string> = { tang: "đang tăng", giu: "đi ngang", giam: "đang giảm", chuaRo: "chưa đủ lần thi để biết" };
+
+export type MucCongSuc = "thap" | "vua" | "cao";
+export const TEN_CONG_SUC: Record<MucCongSuc, string> = { thap: "Thấp", vua: "Vừa", cao: "Cao" };
+
+/** Điểm càng cao thì tăng thêm mỗi điểm càng khó (dư địa 10 - điểm hẹp lại). */
+export function heSoDoKho(hienTai: number): number {
+  if (hienTai >= 9) return 1.6;
+  if (hienTai >= 8) return 1.3;
+  if (hienTai >= 6.5) return 1;
+  return 0.8;
+}
+
+/** Môn đang tăng đều thì cần ít công sức hơn; môn đang giảm cần nhiều hơn. */
+export function heSoXuHuong(doc: number | null): number {
+  if (doc === null) return 1;
+  if (doc >= 0.3) return 0.7;
+  if (doc > 0.05) return 0.85;
+  if (doc <= -0.1) return 1.25;
+  return 1;
+}
+
+export interface CongSuc { muc: MucCongSuc; diem: number; doKho: number; heSoXH: number; doc: number | null }
+
+/** Công sức cần bỏ ra = điểm còn thiếu × độ khó (theo điểm hiện tại) × hệ số xu hướng. Chia 3 nấc. */
+export function congSucMon(thieu: number, hienTai: number, gia: number[]): CongSuc {
+  const doc = doDocXuHuong(gia);
+  const doKho = heSoDoKho(hienTai);
+  const heSoXH = heSoXuHuong(doc);
+  // Dư địa gần hết (gần 10 điểm) mà vẫn phải tăng: luôn tính là công sức cao.
+  const hetDuDia = thieu > 0 && 10 - hienTai - thieu < 0.3;
+  const diem = Math.round(thieu * doKho * heSoXH * 100) / 100;
+  const muc: MucCongSuc = thieu <= 0 ? "thap" : hetDuDia || diem >= 0.9 ? "cao" : diem >= 0.5 ? "vua" : "thap";
+  return { muc, diem, doKho, heSoXH, doc };
+}
+
+// ---------- Nhãn ưu tiên ----------
+
+export type NhanMon = "Nên ưu tiên" | "Dễ tăng" | "Giữ vững";
+export const THU_TU_NHAN: Record<NhanMon, number> = { "Nên ưu tiên": 0, "Dễ tăng": 1, "Giữ vững": 2 };
+
+export interface MonKeoDiem extends KhoangCachMon {
+  nhan: NhanMon;
+  congSuc: CongSuc;
+  cacLan: number[];
+  xuHuong: XuHuong;
+}
+
+/** Môn còn thiếu nhiều nhất (cùng mức thì giữ thứ tự tổ hợp, khớp gợi ý ở trang Hôm nay). */
+export function monThieuNhieuNhat(ds: KhoangCachMon[]): KhoangCachMon | undefined {
+  return [...ds].sort((a, b) => b.thieu - a.thieu)[0];
+}
+
+/**
+ * Gắn nhãn và công sức cho từng môn:
+ * - còn thiếu dưới 0.25 điểm → Giữ vững
+ * - môn còn thiếu nhiều nhất → Nên ưu tiên
+ * - các môn còn lại: công sức Cao → Nên ưu tiên, còn lại → Dễ tăng
+ * Kết quả xếp theo nhãn, rồi theo điểm còn thiếu.
+ */
+export function phanLoaiMon(ds: KhoangCachMon[], diemThi: DiemThi[]): MonKeoDiem[] {
+  const dau = monThieuNhieuNhat(ds.filter((x) => x.thieu >= 0.25));
+  return ds
+    .map((k) => {
+      const cacLan = diemCacLanGanNhat(diemThi, k.mon);
+      const congSuc = congSucMon(k.thieu, k.hienTai, cacLan);
+      const nhan: NhanMon = k.thieu < 0.25 ? "Giữ vững" : k.mon === dau?.mon || congSuc.muc === "cao" ? "Nên ưu tiên" : "Dễ tăng";
+      return { ...k, nhan, congSuc, cacLan, xuHuong: loaiXuHuong(congSuc.doc) };
+    })
+    .sort((a, b) => THU_TU_NHAN[a.nhan] - THU_TU_NHAN[b.nhan] || b.thieu - a.thieu);
+}
+
+// ---------- Câu nhận định ----------
+
+export interface NhanDinh { tieuDe: string; moTa: string; datRoi: boolean }
+
+/** Câu nhận định sinh từ số liệu: đã đạt / thiếu đều / thiếu chủ yếu ở một môn. */
+export function nhanDinhMucTieu(ds: KhoangCachMon[], conThieu: number, hienTai: number, mucTieu: number, maToHop: string): NhanDinh {
+  if (conThieu <= 0) {
+    const du = lam1(hienTai - mucTieu);
+    return {
+      datRoi: true,
+      tieuDe: "Em đã đạt mục tiêu rồi!",
+      moTa: du > 0
+        ? `Điểm dự kiến đang cao hơn mục tiêu ${diem1(du)} điểm. Giữ vững phong độ, mỗi tuần làm một đề để không bị tụt.`
+        : "Điểm dự kiến đúng bằng mục tiêu. Giữ vững phong độ và luyện đề đều đặn nhé.",
+    };
+  }
+  const xep = [...ds].sort((a, b) => b.thieu - a.thieu);
+  const [nhat, nhi] = xep;
+  if (!nhat) return { datRoi: false, tieuDe: "Chưa đủ dữ liệu để nhận định", moTa: "Em nhập điểm các môn để mình tính tiếp nhé." };
+  // Hai môn đầu chênh nhau dưới 0.15 điểm: coi như thiếu đều, không nói "chủ yếu".
+  if (nhi && nhat.thieu - nhi.thieu < 0.15) {
+    return {
+      datRoi: false,
+      tieuDe: `Phần còn thiếu khá đều giữa các môn ${maToHop}`,
+      moTa: `Nên bắt đầu từ môn ${nhat.ten} (còn thiếu ${diem1(nhat.thieu)} điểm), rồi tới ${nhi.ten}.`,
+    };
+  }
+  return {
+    datRoi: false,
+    tieuDe: `Em đang thiếu chủ yếu ở môn ${nhat.ten}`,
+    moTa: `${nhat.ten} còn thiếu ${diem1(nhat.thieu)} điểm, nhiều nhất trong tổ hợp ${maToHop}. Tập trung môn này sẽ thu hẹp khoảng cách nhanh hơn.`,
+  };
+}
+
+// ---------- Kiểm tra dữ liệu nhập ----------
+
+export type KetQuaNhap<T> = { ok: true; gia: T } | { ok: false; loi: string };
+
+/** Điểm mục tiêu: số từ 1 đến 30, chấp nhận dấu phẩy, làm tròn 1 chữ số thập phân. */
+export function kiemTraDiemMucTieu(chu: string): KetQuaNhap<number> {
+  const t = chu.trim().replace(",", ".");
+  if (!t) return { ok: false, loi: "Em nhập điểm mục tiêu nhé." };
+  if (!/^\d+(\.\d+)?$/.test(t)) return { ok: false, loi: "Điểm chỉ gồm chữ số, ví dụ 26 hoặc 26.5." };
+  const n = Number(t);
+  if (n > 30) return { ok: false, loi: "Tổng 3 môn tối đa là 30 điểm." };
+  if (n < 1) return { ok: false, loi: "Điểm mục tiêu cần lớn hơn 0." };
+  return { ok: true, gia: lam1(n) };
+}
+
+/** Ngày thi: đúng dạng yyyy-mm-dd, không ở quá khứ. */
+export function kiemTraNgayThi(iso: string, homNay: string): KetQuaNhap<string> {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso) || Number.isNaN(new Date(iso).getTime())) return { ok: false, loi: "Em chọn ngày thi dự kiến nhé." };
+  if (iso < homNay) return { ok: false, loi: "Ngày thi đã qua. Em chọn một ngày từ hôm nay trở đi." };
+  return { ok: true, gia: iso };
+}
+
+// ---------- Gợi ý nội dung tuần này ----------
+
+/** Nội dung ôn phổ biến theo chương trình THPT, dùng làm gợi ý (không phải lịch học bắt buộc). */
+export const NOI_DUNG_ON: Record<MonId, string[]> = {
+  toan: ["Ôn chuyên đề hàm số và đồ thị (Toán)", "Làm 1 đề Toán tính giờ, chữa câu sai", "Luyện xác suất và thống kê (Toán)"],
+  vatLy: ["Luyện bài tập vật lí nhiệt, khí lí tưởng", "Ôn từ trường và làm 10 câu cơ bản (Lý)", "Làm 1 đề Vật lý tính giờ, chữa câu sai"],
+  hoaHoc: ["Ôn este – lipit và làm bài tập (Hóa)", "Luyện bài tập kim loại (Hóa)", "Làm 1 đề Hóa tính giờ, chữa câu sai"],
+  sinh: ["Ôn di truyền học và làm bài tập (Sinh)", "Ôn tiến hóa và sinh thái (Sinh)", "Làm 1 đề Sinh tính giờ, chữa câu sai"],
+  nguVan: ["Luyện đọc hiểu 2 văn bản (Văn)", "Lập dàn ý 2 đề nghị luận xã hội", "Viết 1 bài nghị luận văn học, tự chấm theo dàn ý"],
+  tiengAnh: ["Làm 3 bài đọc hiểu Tiếng Anh, ghi từ mới", "Ôn câu điều kiện, mệnh đề quan hệ (Anh)", "Làm 1 đề Tiếng Anh và chữa lỗi sai"],
+};
+
+/** 3 gợi ý: lần lượt theo các môn còn thiếu (đã xếp ưu tiên); đã đạt hết thì mỗi môn một bài giữ phong độ. */
+export function goiYTuanNay(ds: { mon: MonId; thieu: number }[], so = 3): { mon: MonId; noiDung: string }[] {
+  const canTang = ds.filter((x) => x.thieu > 0);
+  const nguon = canTang.length ? canTang : ds;
+  const ra: { mon: MonId; noiDung: string }[] = [];
+  for (let vong = 0; ra.length < so && vong < 3; vong++) {
+    for (const x of nguon) {
+      if (ra.length >= so) break;
+      const nd = NOI_DUNG_ON[x.mon][vong];
+      if (nd) ra.push({ mon: x.mon, noiDung: nd });
+    }
+  }
+  return ra;
+}
+
+/** Tổng các phần bù (sau làm tròn) và độ lệch so với khoảng cách tổng. */
+export function tongPhanBu(ds: { thieu: number }[], conThieu: number) {
+  const tong = lam1(ds.reduce((s, x) => s + x.thieu, 0));
+  return { tong, lech: lam1(tong - conThieu) };
+}
+
+/** "Toán – Vật lý – Tiếng Anh" */
+export const tenToHop = (toHop: MonId[]) => toHop.map((m) => TEN_MON[m]).join(" – ");

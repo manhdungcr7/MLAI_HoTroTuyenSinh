@@ -8,14 +8,15 @@ import { TO_HOP, type LuaChon, type MonId } from "./types";
 export const homNay = () => isoNgay(new Date());
 export const tuanHienTai = () => thuHaiCuaTuan(homNay());
 
-export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; toHop: MonId[] } | null {
+export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; toHop: MonId[]; monThieu: MonId[] } | null {
   if (!s.mucTieu) return null;
   const lc = tim(s.mucTieu.luaChonId);
   if (!lc) return null;
   const diem = diemHienTaiCuaTungMon(s);
   const hienTai = tongDiem(diem, s.mucTieu.toHop);
+  const monThieu = s.mucTieu.toHop.filter((m) => diem[m] === null);
   return {
-    lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, toHop: s.mucTieu.toHop,
+    lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, toHop: s.mucTieu.toHop, monThieu,
     conThieu: Math.max(0, Math.round((s.mucTieu.diemMucTieu - hienTai) * 10) / 10),
     soNgayCon: Math.max(0, soNgayTu(homNay(), s.mucTieu.ngayThi)),
   };
@@ -50,7 +51,9 @@ export const cacNgayTuanNay = () => bayNgayCuaTuan(tuanHienTai());
 
 export function tenGoi(hoTen: string) {
   const p = hoTen.trim().split(/\s+/);
-  return p.length ? p[p.length - 1] : "bạn";
+  if (p.length >= 3) return `${p[p.length - 2]} ${p[p.length - 1]}`;
+  if (p.length === 2) return p[p.length - 1];
+  return p.length ? p[0] : "bạn";
 }
 
 

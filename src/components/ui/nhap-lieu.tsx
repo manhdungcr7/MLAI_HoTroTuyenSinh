@@ -2,15 +2,26 @@ import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from "react
 import { Check, ChevronDown, type LucideIcon } from "lucide-react";
 import { gop } from "./nut-the";
 
-export function Truong({ nhan, batBuoc, goiY, children }: { nhan: string; batBuoc?: boolean; goiY?: string; children: ReactNode }) {
+export function Truong({ nhan, batBuoc, goiY, htmlFor, children }: { nhan: string; batBuoc?: boolean; goiY?: string; htmlFor?: string; children: ReactNode }) {
+  if (htmlFor) {
+    return (
+      <fieldset className="border-none p-0 min-w-0">
+        <label htmlFor={htmlFor} className="block text-[14px] font-bold text-chu mb-1.5 cursor-pointer">
+          {nhan}{batBuoc && <span className="text-do"> *</span>}
+        </label>
+        {children}
+        {goiY && <span className="block text-[12px] text-chu-phu mt-1">{goiY}</span>}
+      </fieldset>
+    );
+  }
   return (
-    <label className="block">
-      <span className="block text-[14px] font-bold text-chu mb-1.5">
+    <fieldset className="border-none p-0 min-w-0">
+      <legend className="block text-[14px] font-bold text-chu mb-1.5">
         {nhan}{batBuoc && <span className="text-do"> *</span>}
-      </span>
+      </legend>
       {children}
       {goiY && <span className="block text-[12px] text-chu-phu mt-1">{goiY}</span>}
-    </label>
+    </fieldset>
   );
 }
 
@@ -57,7 +68,7 @@ export function ChonNhanh<T extends string | number | boolean>({ cacLua, giaTri,
           <button
             type="button" key={String(c.gia)} onClick={() => bam(c.gia)} aria-pressed={chon}
             className={gop(
-              "min-h-11 px-3 rounded-xl border text-[14px] font-semibold inline-flex items-center justify-center gap-1.5 transition-colors",
+              "min-h-12 px-3 rounded-xl border text-[14px] font-semibold inline-flex items-center justify-center gap-1.5 transition-colors",
               chon ? "bg-xanh-nhat border-xanh text-xanh" : "bg-white border-vien text-chu active:bg-xanh-nhat",
             )}
           >
@@ -94,7 +105,7 @@ export function ThanhChuyen<T extends string>({ cacMuc, giaTri, onChange }: { ca
     <div role="tablist" className="flex bg-white border border-vien rounded-xl p-1 gap-1">
       {cacMuc.map((m) => (
         <button key={m.gia} role="tab" aria-selected={giaTri === m.gia} onClick={() => onChange(m.gia)}
-          className={gop("flex-1 min-h-10 rounded-lg text-[13px] font-bold transition-colors", giaTri === m.gia ? "bg-xanh text-white" : "text-chu-phu")}>
+          className={gop("flex-1 min-h-12 rounded-lg text-[13px] font-bold transition-colors", giaTri === m.gia ? "bg-xanh text-white" : "text-chu-phu")}>
           {m.nhan}
         </button>
       ))}

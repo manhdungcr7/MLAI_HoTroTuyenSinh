@@ -10,7 +10,8 @@ function doc(khuVucMacDinh?: string): BoLoc {
   if (hienTai) return hienTai;
   try {
     const t = sessionStorage.getItem(KHOA);
-    if (t) return (hienTai = JSON.parse(t));
+    // Gộp với mặc định để bộ lọc lưu từ bản cũ (thiếu trường mới) vẫn dùng được.
+    if (t) return (hienTai = { ...BO_LOC_MAC_DINH, ...JSON.parse(t) });
   } catch { /* bỏ qua */ }
   return (hienTai = { ...BO_LOC_MAC_DINH, khuVuc: khuVucMacDinh ?? "" });
 }

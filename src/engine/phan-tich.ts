@@ -69,7 +69,7 @@ export function phanTichDanhSach(ds: { lc: LuaChon; nhan: NhanNguyenVong }[], ho
   if (ds.length === 0) { diemCB = 0; canhBao.push("Em chưa thêm nguyện vọng nào."); }
   else {
     if (dem["An toàn"] + dem["Dự phòng"] === 0) { diemCB -= 40; canhBao.push("Danh sách chưa có nguyện vọng an toàn. Nên thêm ít nhất 1 nguyện vọng chắc chân."); }
-    if (dem["Thử sức"] / n > 0.5) { diemCB -= 20; canhBao.push("Hơn một nửa danh sách là thử sức, rủi ro khá lớn."); }
+    if (dem["Thử sức"] / n > 0.5) { diemCB -= 20; canhBao.push("Hơn một nửa danh sách là thử sức, mức chắc chắn còn thấp."); }
     if (dem["Vừa sức"] === 0) { diemCB -= 15; canhBao.push("Chưa có nguyện vọng vừa sức với điểm hiện tại."); }
     if (dem["Dự phòng"] === 0 && dem["An toàn"] < 2) diemCB -= 5;
     if (dem["Thử sức"] === 0 && ds.length >= 3) { diemCB -= 5; canhBao.push("Danh sách hơi an toàn, em có thể thêm một nguyện vọng thử sức."); }

@@ -77,7 +77,7 @@ export function DauTrangCoQuayLai({ tieuDe, buoc, quayLai, phai }: { tieuDe: str
   return (
     <header className="sticky top-0 z-30 bg-nen/95 backdrop-blur grid grid-cols-[48px_1fr_48px] items-center min-h-14 px-2">
       <button type="button" onClick={() => (quayLai ? nav(quayLai) : nav(-1))} aria-label="Quay lại" className="size-11 grid place-items-center rounded-full active:bg-xanh-nhat"><ArrowLeft size={22} /></button>
-      <h1 className="text-center text-[16px] font-extrabold text-muc truncate">{tieuDe}</h1>
+      <h1 className="text-center text-[15px] font-extrabold text-muc line-clamp-2 leading-tight">{tieuDe}</h1>
       <span className="text-right text-[13px] font-bold text-xanh pr-2 whitespace-nowrap">{phai ?? buoc}</span>
     </header>
   );
@@ -94,7 +94,7 @@ export function ThanhPhuKeHoach() {
           return (
             <li key={m.id} className="flex-1">
               <Link to={m.den} aria-current={dang ? "page" : undefined}
-                className={gop("min-h-10 rounded-lg grid place-items-center text-[13px] font-bold transition-colors", dang ? "gd-xanh text-white" : "text-chu-phu")}>
+                className={gop("min-h-12 rounded-lg grid place-items-center text-[13px] font-bold transition-colors", dang ? "gd-xanh text-white" : "text-chu-phu")}>
                 {m.nhan}
               </Link>
             </li>
