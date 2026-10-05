@@ -82,7 +82,7 @@ export function goiYHocPhi(nganSach: HoSo["nganSach"], choO: HoSo["choO"]): GoiY
 }
 
 /** Số lựa chọn mà học phí cao nhất vẫn không vượt mức ngân sách (dùng với dữ liệu mẫu). */
-export function demVuaNganSach(nganSach: MucNganSach, ds: { hocPhiMax: number }[]): number {
+export function demVuaNganSach(nganSach: MucNganSach, ds: { hocPhiMax?: number }[]): number {
   const den = KHOANG_NGAN_SACH[nganSach].den;
-  return ds.filter((l) => den === null || l.hocPhiMax <= den).length;
+  return ds.filter((l) => den === null || (typeof l.hocPhiMax === "number" && l.hocPhiMax <= den)).length;
 }

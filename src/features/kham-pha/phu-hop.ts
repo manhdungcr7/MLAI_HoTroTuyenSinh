@@ -2,12 +2,15 @@
 // Mức phù hợp và điểm gợi ý /100 chỉ để em sắp xếp, so sánh. KHÔNG phải xác suất đậu.
 import { NGAN_SACH_TOI_DA, diemPhuHop, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongA01 } from "@/state/chon";
-import type { AppState } from "@/state/store";
+import { coHocPhi } from "@/data/lua-chon-phu";
+import { tongChoLuaChon } from "./to-hop";
+import { diemHienTaiCuaTungMon, type AppState } from "@/state/store";
 import type { LuaChon, MucPhuHop, ToneTen } from "@/state/types";
 import { cungNoi } from "./bo-loc";
 
 export interface BoiCanh {
-  tong: number | null; // tổng Toán + Lý + Anh hiện tại, null nếu chưa nhập đủ
+  tong: number | null; // tổng Toán + Lý + Anh hiện tại, null nếu chưa nhập đủ (cho các màn chưa tính theo tổ hợp từng ngành)
+  diem: ReturnType<typeof diemHienTaiCuaTungMon>; // điểm từng môn hiện tại, để tính theo đúng tổ hợp của từng ngành
   nganSach: number | null; // triệu đồng / năm
   khuVucUuTien: string[];
   tinh: string;
@@ -20,6 +23,7 @@ export function boiCanhTu(s: AppState): BoiCanh {
   const h = s.hoSo;
   return {
     tong: tongA01(s),
+    diem: diemHienTaiCuaTungMon(s),
     nganSach: h.nganSach ? NGAN_SACH_TOI_DA[h.nganSach] : null,
     khuVucUuTien: h.khuVuc,
     tinh: h.tinh === "Tỉnh khác" ? "" : h.tinh,
@@ -36,6 +40,7 @@ const THU_TU_MUC: Record<MucPhuHop, number> = { "Phù hợp": 0, "Có thể th�
 
 export interface KetQuaPhuHop {
   muc: MucPhuHop | null; // null = em chưa nhập đủ điểm để so
+  tong: number | null; // điểm của em theo tổ hợp của ngành (null = chưa đủ điểm)
   chenh: number | null; // điểm của em trừ điểm tham khảo thấp nhất
   diemGoiY: number | null; // /100, điểm gợi ý, không phải xác suất đậu
   chacChan: MucChacChan | null;
@@ -60,19 +65,24 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const tot: string[] = [];
   const luuY: string[] = [];
 
-  // 1) Điểm
-  const chenh = bc.tong === null ? null : Math.round((bc.tong - lc.diemMin) * 10) / 10;
-  if (bc.tong !== null && chenh !== null) {
-    if (bc.tong >= lc.diemMax) tot.push(`Điểm hiện tại của em (${so(bc.tong)}) đã cao hơn cả mức tham khảo cao nhất ${so(lc.diemMax)} của năm ${lc.namDiem}.`);
-    else if (chenh >= 0) tot.push(`Điểm hiện tại của em (${so(bc.tong)}) cao hơn mức tham khảo thấp nhất ${so(chenh)} điểm.`);
-    else luuY.push(`Điểm hiện tại của em (${so(bc.tong)}) thấp hơn mức tham khảo ${so(-chenh)} điểm. Em cần tăng khoảng ${so(-chenh)} điểm ở 3 môn Toán, Lý, Anh.`);
+  // 1) Điểm: tính theo tổ hợp đề án ghi cho ngành này; đề án chưa ghi thì lấy tổ hợp cao nhất của em.
+  const tl = tongChoLuaChon(lc, bc.diem);
+  const tong = tl.tong;
+  const chenh = tong === null ? null : Math.round((tong - lc.diemMin) * 10) / 10;
+  const moNhom = tl.toHop ? ` (tổ hợp ${tl.toHop})` : "";
+  if (tong !== null && chenh !== null) {
+    if (tong >= lc.diemMax) tot.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, đã cao hơn cả mức tham khảo cao nhất ${so(lc.diemMax)} của năm ${lc.namDiem}.`);
+    else if (chenh >= 0) tot.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, cao hơn mức tham khảo thấp nhất ${so(chenh)} điểm.`);
+    else luuY.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, thấp hơn mức tham khảo ${so(-chenh)} điểm. Em cần tăng khoảng ${so(-chenh)} điểm ở 3 môn của tổ hợp.`);
+    if (tl.suyRa) luuY.push(`Đề án chưa ghi tổ hợp xét tuyển của ngành này nên đã lấy tổ hợp cao nhất của em (${tl.toHop}). Hãy kiểm tra đề án.`);
   }
 
   // 2) Học phí so với ngân sách
   let vuotNganSach = false;
   if (bc.nganSach !== null) {
-    if (lc.hocPhiMin > bc.nganSach) { vuotNganSach = true; luuY.push(`Học phí từ ${lc.hocPhiMin} triệu/năm, vượt ngân sách ${bc.nganSach} triệu/năm em đã chọn.`); }
-    else if (lc.hocPhiMax > bc.nganSach) luuY.push(`Học phí có thể lên tới ${lc.hocPhiMax} triệu/năm, cao hơn ngân sách ${bc.nganSach} triệu/năm của em.`);
+    if (!coHocPhi(lc)) luuY.push("Đề án chưa công bố học phí theo ngành này nên chưa so được với ngân sách của em.");
+    else if ((lc.hocPhiMin as number) > bc.nganSach) { vuotNganSach = true; luuY.push(`Học phí từ ${lc.hocPhiMin} triệu/năm, vượt ngân sách ${bc.nganSach} triệu/năm em đã chọn.`); }
+    else if ((lc.hocPhiMax as number) > bc.nganSach) luuY.push(`Học phí có thể lên tới ${lc.hocPhiMax} triệu/năm, cao hơn ngân sách ${bc.nganSach} triệu/năm của em.`);
     else tot.push(`Học phí nằm trong ngân sách ${bc.nganSach} triệu/năm của em.`);
   }
 
@@ -89,11 +99,11 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   if (bc.nganhQuanTam.includes(lc.nhomNganh)) tot.push(`Đúng nhóm ngành ${lc.nhomNganh} em quan tâm.`);
   else if (khacNganh) luuY.push(`Khác nhóm ngành em đã chọn (${bc.nganhQuanTam.join(", ")}).`);
 
-  if (bc.tong === null || chenh === null) {
+  if (tong === null || chenh === null) {
     return {
-      muc: null, chenh: null, diemGoiY: null, chacChan: null, vuotNganSach, ngoaiKhuVuc, tot, luuY,
-      tomTat: "Nhập điểm Toán, Lý, Anh để so",
-      giaiThich: "Em chưa nhập đủ điểm Toán, Lý, Anh nên chưa so được với điểm tham khảo.",
+      muc: null, tong: null, chenh: null, diemGoiY: null, chacChan: null, vuotNganSach, ngoaiKhuVuc, tot, luuY,
+      tomTat: "Nhập đủ điểm 3 môn của một tổ hợp để so",
+      giaiThich: "Em chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
     };
   }
 
@@ -101,14 +111,14 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const theoDiem: MucPhuHop = chenh >= 0 ? "Phù hợp" : chenh >= -2 ? "Có thể thử sức" : "Cần cân nhắc";
   let muc = theoDiem;
   if (vuotNganSach || ngoaiKhuVuc || khacNganh) muc = "Cần cân nhắc";
-  const vuaNganSach = bc.nganSach !== null && lc.hocPhiMax <= bc.nganSach;
+  const vuaNganSach = bc.nganSach !== null && coHocPhi(lc) && (lc.hocPhiMax as number) <= bc.nganSach;
 
-  const nhan = nhanNguyenVong(lc, bc.tong);
+  const nhan = nhanNguyenVong(lc, tong);
   const chacChan: MucChacChan = nhan === "Thử sức" ? "Thấp" : nhan === "Vừa sức" ? "Vừa" : "Cao";
 
   const khuVucSo = bc.khuVucUuTien.find((k) => cungNoi(lc.khuVuc, k)) ?? bc.khuVucUuTien[0] ?? "";
   const diemGoiY = diemPhuHop(lc, {
-    tong: bc.tong, nganSachTrieu: bc.nganSach ?? lc.hocPhiMax, khuVuc: khuVucSo === "Tỉnh khác" ? "" : khuVucSo,
+    tong, nganSachTrieu: bc.nganSach ?? lc.hocPhiMax ?? 0, khuVuc: khuVucSo === "Tỉnh khác" ? "" : khuVucSo,
     uuTien: bc.uuTienViecLam ? "viecLam" : "hocPhi",
   });
 
@@ -124,7 +134,7 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
           : khacNganh ? `Ngành này khác nhóm ngành em quan tâm. Điểm của em ${phanDiem}.`
             : `Điểm của em ${phanDiem}, khoảng cách còn khá xa.`;
 
-  return { muc, chenh, diemGoiY, chacChan, vuotNganSach, ngoaiKhuVuc, tomTat, giaiThich, tot, luuY };
+  return { muc, tong, chenh, diemGoiY, chacChan, vuotNganSach, ngoaiKhuVuc, tomTat, giaiThich, tot, luuY };
 }
 
 export type KieuSapXep = "phuHop" | "hocPhi" | "diem";
@@ -135,7 +145,7 @@ export const CAC_KIEU_SAP_XEP: { gia: KieuSapXep; nhan: string }[] = [
 export function sapXep(ds: LuaChon[], kieu: KieuSapXep, bc: BoiCanh): LuaChon[] {
   const kq = new Map(ds.map((l) => [l.id, danhGia(l, bc)]));
   return [...ds].sort((a, b) => {
-    if (kieu === "hocPhi") return a.hocPhiMin - b.hocPhiMin || a.hocPhiMax - b.hocPhiMax;
+    if (kieu === "hocPhi") return (a.hocPhiMin ?? Infinity) - (b.hocPhiMin ?? Infinity) || 0;
     if (kieu === "diem") return a.diemMin - b.diemMin;
     const ka = kq.get(a.id)!, kb = kq.get(b.id)!;
     if (ka.muc && kb.muc) return THU_TU_MUC[ka.muc] - THU_TU_MUC[kb.muc] || (kb.diemGoiY ?? 0) - (ka.diemGoiY ?? 0);
@@ -148,6 +158,7 @@ export function sapXep(ds: LuaChon[], kieu: KieuSapXep, bc: BoiCanh): LuaChon[] 
 // ---------- So sánh 2 lựa chọn ----------
 
 const VIEC_LAM_HANG = { "Rất cao": 3, Cao: 2, Khá: 1 } as const;
+const hangViec = (l: LuaChon) => (l.coHoiViecLam ? VIEC_LAM_HANG[l.coHoiViecLam] : null);
 const giua = (a: number, b: number) => (a + b) / 2;
 
 /** Bên nào tốt hơn cho em ở từng tiêu chí: "a", "b" hoặc null (ngang nhau / không so được). */
@@ -164,9 +175,9 @@ export function soSanhHai(a: LuaChon, b: LuaChon, bc: BoiCanh): { kqA: KetQuaPhu
   const tot: DongSoSanh = {
     // Điểm đầu vào thấp hơn = dễ đạt hơn với em.
     diem: hon(b.diemMin, a.diemMin, 0.2),
-    hocPhi: hon(giua(b.hocPhiMin, b.hocPhiMax), giua(a.hocPhiMin, a.hocPhiMax), 1),
+    hocPhi: coHocPhi(a) && coHocPhi(b) ? hon(giua(b.hocPhiMin as number, b.hocPhiMax as number), giua(a.hocPhiMin as number, a.hocPhiMax as number), 1) : null,
     khuVuc: kvA === null || kvA === kvB ? null : kvA ? "a" : "b",
-    viecLam: hon(VIEC_LAM_HANG[a.coHoiViecLam], VIEC_LAM_HANG[b.coHoiViecLam]),
+    viecLam: hangViec(a) !== null && hangViec(b) !== null ? hon(hangViec(a) as number, hangViec(b) as number) : null,
     phuHop: kqA.muc && kqB.muc ? hon(hangMuc(kqA), hangMuc(kqB)) || hon(kqA.diemGoiY ?? 0, kqB.diemGoiY ?? 0, 2) : null,
     chacChan: kqA.chacChan && kqB.chacChan ? hon(hangCC(kqA), hangCC(kqB)) : null,
   };
@@ -192,24 +203,27 @@ export function ketLuanNhanh(a: LuaChon, b: LuaChon, kqA: KetQuaPhuHop, kqB: Ket
   }
 
   // Học phí
-  const hpA = giua(a.hocPhiMin, a.hocPhiMax), hpB = giua(b.hocPhiMin, b.hocPhiMax);
-  if (Math.abs(hpA - hpB) < 1.5) ra.push("Học phí hai bên gần bằng nhau.");
-  else {
-    const re = hpA < hpB ? a : b;
-    ra.push(`${ten(re)} có học phí thấp hơn khoảng ${Math.round(Math.abs(hpA - hpB))} triệu/năm.`);
-  }
+  if (coHocPhi(a) && coHocPhi(b)) {
+    const hpA = giua(a.hocPhiMin as number, a.hocPhiMax as number), hpB = giua(b.hocPhiMin as number, b.hocPhiMax as number);
+    if (Math.abs(hpA - hpB) < 1.5) ra.push("Học phí hai bên gần bằng nhau.");
+    else {
+      const re = hpA < hpB ? a : b;
+      ra.push(`${ten(re)} có học phí thấp hơn khoảng ${Math.round(Math.abs(hpA - hpB))} triệu/năm.`);
+    }
+  } else ra.push("Chưa so được học phí vì đề án chưa công bố học phí theo ngành.");
 
   // Ý thứ ba: hợp với em hơn (nếu có điểm), nếu không thì việc làm / môi trường học.
   if (kqA.muc && kqB.muc && kqA.chenh !== null && kqB.chenh !== null && kqA.muc !== kqB.muc) {
     const hop = THU_TU_MUC[kqA.muc] < THU_TU_MUC[kqB.muc] ? a : b;
     const k = hop === a ? kqA : kqB;
     ra.push(`Với điểm hiện tại, ${ten(hop)} hợp với em hơn (${k.muc!.toLowerCase()}).`);
-  } else if (a.coHoiViecLam !== b.coHoiViecLam) {
-    const hon2 = VIEC_LAM_HANG[a.coHoiViecLam] > VIEC_LAM_HANG[b.coHoiViecLam] ? a : b;
-    const kia = hon2 === a ? b : a;
-    ra.push(`${ten(hon2)} có cơ hội việc làm ${hon2.coHoiViecLam.toLowerCase()}; ${ten(kia)} có môi trường ${kia.moiTruongHoc.charAt(0).toLowerCase() + kia.moiTruongHoc.slice(1)}.`);
+  } else if (a.coHoiViecLam && b.coHoiViecLam && a.coHoiViecLam !== b.coHoiViecLam) {
+    const hon2 = (hangViec(a) as number) > (hangViec(b) as number) ? a : b;
+    ra.push(`${ten(hon2)} có cơ hội việc làm ${(hon2.coHoiViecLam as string).toLowerCase()}.`);
+  } else if (!a.coHoiViecLam || !b.coHoiViecLam) {
+    ra.push("Chưa so được cơ hội việc làm vì chưa có dữ liệu cho cả hai.");
   } else {
-    ra.push(`Cả hai có cơ hội việc làm ${a.coHoiViecLam.toLowerCase()}. Khác ở môi trường: ${ten(a)} ${a.moiTruongHoc.toLowerCase()}, ${ten(b)} ${b.moiTruongHoc.toLowerCase()}.`);
+    ra.push(`Cả hai có cơ hội việc làm ${a.coHoiViecLam.toLowerCase()}.`);
   }
   return ra;
 }

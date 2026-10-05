@@ -1,6 +1,7 @@
 import { CAU_HINH_MAC_DINH, congNgay, isoNgay, thuHaiCuaTuan, xepLichTuan } from "@/engine/xep-lich";
 import { LICH_CO_DINH_MAU, VIEC_MAU } from "@/data/lich-mau";
 import type { AppState } from "./store";
+import { idHoSoMau } from "@/data/lua-chon-that";
 import { TO_HOP, type DiemThi, type HoSo, type MonId } from "./types";
 
 export const HO_SO_TRONG: HoSo = {
@@ -30,6 +31,7 @@ export function taoHoSoMau(): AppState {
     ["toan", [7.2, 7.6, 8.0]], ["vatLy", [8.0, 8.3, 8.5]], ["tiengAnh", [7.0, 7.5, 8.0]],
     ["hoaHoc", [7.0, 7.2, 7.2]], ["nguVan", [7.6, 7.5, 7.6]], ["sinh", [8.0, 8.2, 8.3]],
   ] as [MonId, number[]][]).flatMap(([mon, d]) => d.map((diem, i) => ({ mon, diem, ngay: ngay((2 - i) * 14 + 1) })));
+  const ids = idHoSoMau();
   const nen: AppState = {
     ...TRANG_THAI_BAN_DAU,
     hoSo: {
@@ -39,9 +41,9 @@ export function taoHoSoMau(): AppState {
       cachHoc: ["Học qua bài tập", "Học theo dự án"], nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"], ghiChuChiPhi: "",
       hocXaNha: true, quanTamViecLam: "rat", conDuong: "daiHoc", hoanTat: true,
     },
-    mucTieu: { luaChonId: "uit-cntt", phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: 26, ngayThi: congNgay(isoNgay(hom), 266) },
-    nguyenVong: ["uit-cntt", "hcmus-khdl", "hcmute-ktpm", "ute-kdqt", "fpt-poly-thietke"],
-    yeuThich: ["uit-cntt"], soSanh: ["uit-cntt", "hcmus-khdl"],
+    mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: 26, ngayThi: congNgay(isoNgay(hom), 266) },
+    nguyenVong: ids.slice(0, 5),
+    yeuThich: ids.slice(0, 1), soSanh: ids.slice(0, 2),
     diemThi,
     coDinh: LICH_CO_DINH_MAU, viec: VIEC_MAU,
     lichSu: [

@@ -165,7 +165,7 @@ const trongKhuVuc = (lc: LuaChon, kv: string[]) => kv.some((k) => lc.khuVuc.repl
 export function chonTruong(dk: DkGoiY, nhans: NhanNguyenVong[], soLuong: number, boQua: string[] = []) {
   const ns = dk.hoSo.nganSach ? NGAN_SACH_TOI_DA[dk.hoSo.nganSach] : Infinity;
   return dk.tatCa
-    .filter((lc) => !dk.daCo.includes(lc.id) && !boQua.includes(lc.id) && lc.hocPhiMin <= ns)
+    .filter((lc) => !dk.daCo.includes(lc.id) && !boQua.includes(lc.id) && (lc.hocPhiMin ?? 0) <= ns)
     .map((lc) => ({ lc, nhan: nhanNguyenVong(lc, dk.tong) }))
     .filter((x) => nhans.includes(x.nhan))
     .sort((a, b) =>

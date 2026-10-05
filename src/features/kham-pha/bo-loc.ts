@@ -1,5 +1,6 @@
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { LuaChon } from "@/state/types";
+import { coHocPhi } from "@/data/lua-chon-phu";
 
 export const CAC_NHOM = [...new Set(LUA_CHON_MAU.map((l) => l.nhomNganh))];
 export const CAC_KHU_VUC = [...new Set(LUA_CHON_MAU.map((l) => l.khuVuc))];
@@ -31,9 +32,13 @@ export const cungNoi = (khuVucTruong: string, noi: string) => {
 export function loc(ds: LuaChon[], b: BoLoc, tinhCuaEm?: string): LuaChon[] {
   return ds.filter((l) => {
     if (l.diemMin > b.diemDen || l.diemMax < b.diemTu) return false;
-    if (b.hocPhi === "duoi20" && l.hocPhiMin >= 20) return false;
-    if (b.hocPhi === "20-40" && (l.hocPhiMin > 40 || l.hocPhiMax < 20)) return false;
-    if (b.hocPhi === "tren40" && l.hocPhiMax <= 40) return false;
+    // Chưa có dữ liệu học phí thì không loại (không thể nói là vượt hay vừa mức đã chọn).
+    if (coHocPhi(l)) {
+      const min = l.hocPhiMin as number, max = l.hocPhiMax as number;
+      if (b.hocPhi === "duoi20" && min >= 20) return false;
+      if (b.hocPhi === "20-40" && (min > 40 || max < 20)) return false;
+      if (b.hocPhi === "tren40" && max <= 40) return false;
+    }
     if (b.khuVuc && l.khuVuc !== b.khuVuc) return false;
     if (b.nhom && l.nhomNganh !== b.nhom) return false;
     // "Không học xa": chỉ giữ trường cùng nơi em sống. Chưa biết nơi sống thì không lọc được.

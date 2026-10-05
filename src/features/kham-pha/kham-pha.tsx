@@ -20,14 +20,16 @@ export default function KhamPha() {
   const [b, sua, datLai] = useBoLoc(CAC_KHU_VUC.includes(s.hoSo.khuVuc[0]) ? s.hoSo.khuVuc[0] : undefined);
   const [tuKhoa, setTuKhoa] = useState("");
   const [kieu, setKieu] = useState<KieuSapXep>("phuHop");
+  const [soHien, setSoHien] = useState(30);
   const bc = useMemo(() => boiCanhTu(s), [s]);
 
   const ds = useMemo(() => {
     const k = tuKhoa.trim().toLowerCase();
     const daLoc = loc(LUA_CHON_MAU, b, bc.tinh || undefined)
       .filter((l) => !k || `${l.truong} ${l.tenTruong} ${l.nganh} ${l.nhomNganh}`.toLowerCase().includes(k));
-    return sapXep(daLoc, kieu, bc).map((l) => ({ l, kq: danhGia(l, bc) }));
+    return sapXep(daLoc, kieu, bc);
   }, [b, tuKhoa, kieu, bc]);
+  const hien = useMemo(() => ds.slice(0, soHien).map((l) => ({ l, kq: danhGia(l, bc) })), [ds, soHien, bc]);
 
   const soLoc = dem(b);
   const nhomChip = [{ gia: "", nhan: "Tất cả" }, ...CAC_NHOM.map((n) => ({ gia: n, nhan: n }))];
@@ -100,7 +102,12 @@ export default function KhamPha() {
           </TrangThaiTrong>
         ) : (
           <ul className="space-y-3">
-            {ds.map(({ l, kq }) => <li key={l.id}><TheKhamPha l={l} kq={kq} onClick={() => nav(DUONG_DAN.chiTiet(l.id))} /></li>)}
+            {hien.map(({ l, kq }) => <li key={l.id}><TheKhamPha l={l} kq={kq} onClick={() => nav(DUONG_DAN.chiTiet(l.id))} /></li>)}
+            {ds.length > soHien && (
+              <li className="pt-1">
+                <Nut kieu="vien" onClick={() => setSoHien((n) => n + 30)}>Xem thêm (còn {ds.length - soHien} ngành)</Nut>
+              </li>
+            )}
           </ul>
         )}
       </NoiDung>

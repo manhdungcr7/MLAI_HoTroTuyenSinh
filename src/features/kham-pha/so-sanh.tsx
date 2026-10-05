@@ -136,10 +136,10 @@ export default function SoSanh() {
                 a={<><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></>}
                 b={<><b className="text-[15px] text-muc">{khoangHocPhi(b!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></>} />
               <Hang icon={MapPin} nhan="Khu vực" tot={ss.tot.khuVuc}
-                a={<><b className="text-muc">{a!.khuVuc}</b><span className="text-[12px] text-chu-phu">{a!.diaChi.split(",")[0]}</span></>}
-                b={<><b className="text-muc">{b!.khuVuc}</b><span className="text-[12px] text-chu-phu">{b!.diaChi.split(",")[0]}</span></>} />
-              <Hang icon={Briefcase} nhan="Cơ hội việc làm" tot={ss.tot.viecLam} a={<b className="text-muc">{a!.coHoiViecLam}</b>} b={<b className="text-muc">{b!.coHoiViecLam}</b>} />
-              <Hang icon={Users} nhan="Môi trường học" tot={null} a={<span className="text-[13px] text-chu">{a!.moiTruongHoc}</span>} b={<span className="text-[13px] text-chu">{b!.moiTruongHoc}</span>} />
+                a={<><b className="text-muc">{a!.khuVuc}</b><span className="text-[12px] text-chu-phu">{a!.diaChi?.split(",")[0]}</span></>}
+                b={<><b className="text-muc">{b!.khuVuc}</b><span className="text-[12px] text-chu-phu">{b!.diaChi?.split(",")[0]}</span></>} />
+              <Hang icon={Briefcase} nhan="Cơ hội việc làm" tot={ss.tot.viecLam} a={a!.coHoiViecLam ? <b className="text-muc">{a!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} b={b!.coHoiViecLam ? <b className="text-muc">{b!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
+              <Hang icon={Users} nhan="Môi trường học" tot={null} a={<span className="text-[13px] text-chu">{a!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} b={<span className="text-[13px] text-chu">{b!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} />
               <Hang icon={CheckCircle2} nhan="Mức phù hợp với em" tot={ss.tot.phuHop} a={<NhanPhuHop kq={ss.kqA} xuongDong />} b={<NhanPhuHop kq={ss.kqB} xuongDong />} />
               <Hang icon={ShieldCheck} nhan="Mức chắc chắn" tot={ss.tot.chacChan} a={<ChacChan kq={ss.kqA} />} b={<ChacChan kq={ss.kqB} />} />
               <p className="flex items-start gap-1.5 text-[12px] text-chu-phu pt-1.5 pb-1 border-t border-vien mt-1">

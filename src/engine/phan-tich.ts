@@ -2,6 +2,7 @@
 // TypeScript thuần, không import React. Điểm "phù hợp" là điểm gợi ý trên 100, KHÔNG phải xác suất đậu.
 import type { HoSo, LuaChon, MonId, NhanNguyenVong } from "@/state/types";
 import { TEN_MON } from "@/state/types";
+import { coHocPhi } from "@/data/lua-chon-phu";
 
 export const NGAN_SACH_TOI_DA: Record<NonNullable<HoSo["nganSach"]>, number> = {
   duoi30: 30, "30-60": 60, "60-100": 100, tren100: 150,
@@ -79,10 +80,14 @@ export function phanTichDanhSach(ds: { lc: LuaChon; nhan: NhanNguyenVong }[], ho
   const ns = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : null;
   let diemTC = 0, chiTietTC = "Em chưa chọn ngân sách học phí.";
   if (ns !== null && ds.length) {
-    const vua = ds.filter((d) => d.lc.hocPhiMin <= ns).length;
-    diemTC = Math.round((vua / ds.length) * 100);
-    chiTietTC = `${vua}/${ds.length} nguyện vọng có học phí nằm trong ngân sách ${ns} triệu/năm.`;
-    if (vua < ds.length) canhBao.push(`Có ${ds.length - vua} nguyện vọng vượt ngân sách học phí của em.`);
+    const coPhi = ds.filter((d) => coHocPhi(d.lc));
+    if (coPhi.length === 0) chiTietTC = "Các nguyện vọng này chưa có dữ liệu học phí để so với ngân sách.";
+    else {
+      const vua = coPhi.filter((d) => (d.lc.hocPhiMin as number) <= ns).length;
+      diemTC = Math.round((vua / coPhi.length) * 100);
+      chiTietTC = `${vua}/${coPhi.length} nguyện vọng có học phí nằm trong ngân sách ${ns} triệu/năm${coPhi.length < ds.length ? ` (${ds.length - coPhi.length} nguyện vọng chưa có dữ liệu học phí)` : ""}.`;
+      if (vua < coPhi.length) canhBao.push(`Có ${coPhi.length - vua} nguyện vọng vượt ngân sách học phí của em.`);
+    }
   }
   let diemKV = 0, chiTietKV = "Em chưa chọn khu vực ưu tiên.";
   if (hoSo.khuVuc.length && ds.length) {
@@ -108,11 +113,17 @@ export interface DieuKienThu {
 /** Điểm phù hợp /100 của một lựa chọn trong một tình huống. */
 export function diemPhuHop(lc: LuaChon, dk: DieuKienThu): number {
   const diemThi = kep(50 + (dk.tong - lc.diemMin) * 15, 5, 100);
-  const tc = dk.nganSachTrieu >= lc.hocPhiMax ? 100 : dk.nganSachTrieu >= lc.hocPhiMin ? 70 : Math.max(0, 100 - (lc.hocPhiMin - dk.nganSachTrieu) * 8);
+  const tc = coHocPhi(lc)
+    ? dk.nganSachTrieu >= (lc.hocPhiMax as number) ? 100 : dk.nganSachTrieu >= (lc.hocPhiMin as number) ? 70 : Math.max(0, 100 - ((lc.hocPhiMin as number) - dk.nganSachTrieu) * 8)
+    : null;
   const kv = !dk.khuVuc || lc.khuVuc.replace(/\s/g, "") === dk.khuVuc.replace(/\s/g, "") ? 100 : 30;
-  const viec = { "Rất cao": 100, Cao: 85, Khá: 65 }[lc.coHoiViecLam];
+  const viec = lc.coHoiViecLam ? { "Rất cao": 100, Cao: 85, Khá: 65 }[lc.coHoiViecLam] : null;
   const trongSo = dk.uuTien === "viecLam" ? [0.45, 0.2, 0.1, 0.25] : dk.uuTien === "hocPhi" ? [0.4, 0.35, 0.1, 0.15] : [0.45, 0.2, 0.25, 0.1];
-  return Math.round(diemThi * trongSo[0] + tc * trongSo[1] + kv * trongSo[2] + viec * trongSo[3]);
+  // Thành phần nào chưa có dữ liệu (học phí, việc làm) thì bỏ ra và chia lại trọng số cho các phần còn lại.
+  const phan: [number | null, number][] = [[diemThi, trongSo[0]], [tc, trongSo[1]], [kv, trongSo[2]], [viec, trongSo[3]]];
+  const co = phan.filter((x): x is [number, number] => x[0] !== null);
+  const tongTrong = co.reduce((s, x) => s + x[1], 0);
+  return Math.round(co.reduce((s, x) => s + x[0] * x[1], 0) / tongTrong);
 }
 
 export const NGUONG_PHU_HOP = 70;

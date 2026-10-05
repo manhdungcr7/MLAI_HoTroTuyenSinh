@@ -102,7 +102,7 @@ function phanLoai(goc: number, moi: number): { trangThai: TrangThaiThay; nhom: N
 function lyDoThay(lc: LuaChon, tongTruoc: number, tongSau: number, dkGoc: DieuKien, dkMoi: DieuKien, goc: number, chenh: number): string {
   const ns = dkMoi.nganSachTrieu, nsDoi = ns !== dkGoc.nganSachTrieu, kvDoi = dkMoi.khuVuc !== dkGoc.khuVuc;
   const ngoaiKv = !!dkMoi.khuVuc && lc.khuVuc.replace(/\s/g, "") !== dkMoi.khuVuc.replace(/\s/g, "");
-  if (nsDoi && ns < lc.hocPhiMin && chenh < 0) return `Học phí từ ${lc.hocPhiMin} triệu/năm, cao hơn ngân sách ${ns} triệu.`;
+  if (nsDoi && typeof lc.hocPhiMin === "number" && ns < lc.hocPhiMin && chenh < 0) return `Học phí từ ${lc.hocPhiMin} triệu/năm, cao hơn ngân sách ${ns} triệu.`;
   if (kvDoi && ngoaiKv && chenh < 0) return `Trường ở ${lc.khuVuc}, ngoài khu vực em ưu tiên.`;
   if (tongSau > tongTruoc) {
     if (tongTruoc < lc.diemMin && tongSau >= lc.diemMin) return `Điểm sau khi tăng (${vietDiem(tongSau)}) đã chạm mức tham khảo ${vietDiem(lc.diemMin)}.`;
@@ -111,7 +111,7 @@ function lyDoThay(lc: LuaChon, tongTruoc: number, tongSau: number, dkGoc: DieuKi
     return `Điểm cao hơn mức tham khảo ${vietDiem(lam(tongSau - lc.diemMin, 1))} điểm, chắc chắn hơn.`;
   }
   if (tongSau < tongTruoc && tongSau < lc.diemMin) return `Điểm sau khi giảm thấp hơn mức tham khảo ${vietDiem(lc.diemMin)}.`;
-  if (nsDoi && ns >= lc.hocPhiMax && chenh > 0) return `Học phí ${lc.hocPhiMin}–${lc.hocPhiMax} triệu/năm nằm gọn trong ngân sách.`;
+  if (nsDoi && typeof lc.hocPhiMax === "number" && ns >= lc.hocPhiMax && chenh > 0) return `Học phí ${lc.hocPhiMin}–${lc.hocPhiMax} triệu/năm nằm gọn trong ngân sách.`;
   if (kvDoi && !ngoaiKv && chenh > 0) return `Trường ở ${lc.khuVuc}, đúng khu vực em ưu tiên.`;
   if (chenh !== 0) return `Ưu tiên "${TEN_UU_TIEN[dkMoi.uuTien]}" làm điểm phù hợp ${chenh > 0 ? "tăng" : "giảm"}.`;
   if (tongSau < lc.diemMin) return `Vẫn còn cách mức tham khảo ${vietDiem(lam(lc.diemMin - tongSau, 1))} điểm.`;
@@ -148,7 +148,7 @@ export function tinhTinhHuong(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc:
   const dem: Record<NhomLoc, number> = { moiMo: 0, tang: 0, khongDoi: 0, giam: 0 };
   dong.forEach((d) => dem[d.nhom]++);
   const demDat = (t: number) => lcs.filter((l) => t >= l.diemMin).length;
-  const demVua = (ns: number) => lcs.filter((l) => l.hocPhiMin <= ns).length;
+  const demVua = (ns: number) => lcs.filter((l) => (l.hocPhiMin ?? 0) <= ns).length;
   const lon = ss.thayDoiLonNhat ? dong.find((d) => d.lc.id === ss.thayDoiLonNhat.lc.id) ?? null : null;
   return {
     tongTruoc, tongSau, dkGoc, dkMoi, dong, dem,

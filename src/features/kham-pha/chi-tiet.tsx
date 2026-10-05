@@ -2,13 +2,14 @@ import { useMemo, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
-  AlertTriangle, BarChart3, Briefcase, Check, CheckCircle2, CircleDot, FileText, GitCompareArrows, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, ThumbsUp, Users, Wallet,
+  AlertTriangle, BarChart3, Briefcase, Check, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, ThumbsUp, Users, Wallet,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { AnhBia, BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { tim } from "@/data/lua-chon-mau";
+import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { LuaChon, ToneTen } from "@/state/types";
@@ -16,10 +17,10 @@ import { TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 
-const MO_TA_VIEC_LAM: Record<LuaChon["coHoiViecLam"], string> = {
-  "Rất cao": "Theo dữ liệu mẫu, ngành có nhiều chỗ tuyển.",
-  Cao: "Theo dữ liệu mẫu, ngành có khá nhiều chỗ tuyển.",
-  Khá: "Theo dữ liệu mẫu, cơ hội ở mức khá, nên chủ động thực tập sớm.",
+const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
+  "Rất cao": "Theo dữ liệu việc làm đã đo, tỷ lệ có việc rất cao.",
+  Cao: "Theo dữ liệu việc làm đã đo, tỷ lệ có việc cao.",
+  Khá: "Theo dữ liệu việc làm đã đo, tỷ lệ có việc ở mức khá, nên chủ động thực tập sớm.",
 };
 
 function DongThongTin({ icon, tone, nhan, giaTri, phu }: { icon: LucideIcon; tone: ToneTen; nhan: ReactNode; giaTri: ReactNode; phu?: ReactNode }) {
@@ -60,6 +61,55 @@ function DanhSachY({ tone, icon: Icon, tieuDe, cuaEm, chung }: { tone: ToneTen; 
       {chung.length > 0 && <div className="mt-2.5">{ds(chung)}</div>}
       {cuaEm.length + chung.length === 0 && <p className="mt-2 text-[14px] text-chu-phu">Chưa có dữ liệu cho mục này.</p>}
     </section>
+  );
+}
+
+const TEN_PHUONG_THUC: Record<string, string> = {
+  THPT: "Điểm thi tốt nghiệp THPT", HOC_BA: "Học bạ THPT", DGNL_HCM: "ĐGNL ĐHQG TP.HCM", DGNL_HN: "ĐGNL ĐHQG Hà Nội",
+  DGNL_KHAC: "Đánh giá năng lực (khác)", DGTD: "Đánh giá tư duy", KET_HOP: "Kết hợp nhiều tiêu chí", NANG_KHIEU: "Có thi năng khiếu",
+};
+
+/** Điểm chuẩn từng năm có thật, kèm điểm của em để so ngay. Không nội suy năm thiếu. */
+function BangDiemChuan({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
+  const nam = Object.entries(lc.diemTheoNam ?? {}).sort((a, b) => b[0].localeCompare(a[0]));
+  if (nam.length === 0) return null;
+  return (
+    <section className="rounded-the bg-trang border border-vien shadow-the p-4" aria-label="Điểm chuẩn các năm">
+      <h2 className="text-[16px] font-extrabold text-muc">Điểm chuẩn các năm</h2>
+      <ul className="mt-2 divide-y divide-vien">
+        {nam.map(([n, d]) => {
+          const link = lc.nguonTheoNam?.find((x) => x.nam === n);
+          return (
+            <li key={n} className="flex items-center justify-between gap-3 py-2">
+              <span className="text-[14px] text-chu">Năm {n}</span>
+              <span className="flex items-center gap-3">
+                {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="text-[12px] font-bold text-xanh hover:underline">Xem trong đề án{link.trang ? `, trang ${link.trang}` : ""}</a>}
+                <b className="text-[16px] text-muc tabular-nums">{d.toFixed(2)}</b>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em theo tổ hợp của ngành: <b className="text-chu">{diemEm.toFixed(2)}</b></p>}
+      {lc.diemDuKien != null && <p className="mt-1 text-[12px] text-chu-phu">Điểm chuẩn dự kiến năm tới lấy bằng năm gần nhất ({lc.diemDuKien.toFixed(2)}); điểm thật có thể lệch vài điểm.</p>}
+    </section>
+  );
+}
+
+/** Liên kết tới tài liệu gốc của từng năm (đề án PDF, đúng trang có ngành). */
+function NguonTungNam({ lc }: { lc: LuaChon }) {
+  const ds = lc.nguonTheoNam ?? [];
+  if (ds.length === 0) return null;
+  return (
+    <ul className="mt-1.5 space-y-0.5">
+      {ds.map((x) => (
+        <li key={`${x.nam}-${x.url}`}>
+          <a href={x.trang ? `${x.url}#page=${x.trang}` : x.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[12px] font-bold text-xanh hover:underline">
+            {x.loai === "deAn" ? `Đề án tuyển sinh ${x.nam}` : `Bảng điểm chuẩn ${x.nam}`}{x.trang ? `, trang ${x.trang}` : ""}
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -153,13 +203,23 @@ export default function ChiTiet() {
         {/* Thông tin chính */}
         <section className="rounded-the bg-trang border border-vien shadow-the p-4" aria-label="Thông tin chính">
           <ul className="divide-y divide-vien">
-            <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm tham khảo (năm ${lc.namDiem})`} giaTri={`${khoangDiem(lc)} điểm`} phu="Thang 30. Điểm năm nay có thể khác." />
-            <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={`${khoangHocPhi(lc)} triệu đồng`} phu={bc.nganSach !== null ? `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm.` : undefined} />
-            <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc} phu={lc.diaChi} />
-            <DongThongTin icon={Briefcase} tone="luc" nhan="Cơ hội việc làm" giaTri={lc.coHoiViecLam} phu={<>Hướng công việc: {lc.moTa.charAt(0).toLowerCase() + lc.moTa.slice(1)}. {MO_TA_VIEC_LAM[lc.coHoiViecLam]}</>} />
-            <DongThongTin icon={Users} tone="xanh" nhan="Môi trường học" giaTri={lc.moiTruongHoc} />
+            <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn tham khảo (năm ${lc.namDiem})`} giaTri={`${khoangDiem(lc)} điểm`} phu="Thang 30. Điểm chuẩn năm nay có thể khác." />
+            {lc.toHopXet !== undefined && (
+              <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
+            )}
+            <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
+              phu={coHocPhi(lc) ? (bc.nganSach !== null ? `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm.` : undefined) : "Đề án chưa công bố học phí theo ngành này, em xem mức thu trên trang của trường."} />
+            <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
+            {lc.coHoiViecLam ? (
+              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.coHoiViecLam} phu={MO_TA_VIEC_LAM[lc.coHoiViecLam]} />
+            ) : (
+              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri="Chưa có dữ liệu" phu="Trường chưa công bố tỷ lệ việc làm của ngành này." />
+            )}
+            {lc.moiTruongHoc && <DongThongTin icon={Users} tone="xanh" nhan="Môi trường học" giaTri={lc.moiTruongHoc} />}
           </ul>
         </section>
+
+        <BangDiemChuan lc={lc} diemEm={kq.tong} />
 
         <DanhSachY tone="luc" icon={ThumbsUp} tieuDe="Vì sao nên cân nhắc" cuaEm={kq.tot} chung={lc.lyDoPhuHop} />
         <DanhSachY tone="cam" icon={AlertTriangle} tieuDe="Điều cần lưu ý" cuaEm={kq.luuY} chung={lc.canLuuY} />
@@ -184,9 +244,10 @@ export default function ChiTiet() {
             )}
             {lc.linkNguon && (
               <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-1 text-[12px] font-bold text-xanh hover:underline">
-                Xem trang tuyển sinh chính thức
+                {lc.nguonCap === "aggregator_verified" ? "Xem bảng điểm chuẩn của trường (trang tổng hợp)" : "Xem trang tuyển sinh chính thức"}
               </a>
             )}
+            <NguonTungNam lc={lc} />
           </div>
         </section>
 

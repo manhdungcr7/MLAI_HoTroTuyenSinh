@@ -47,6 +47,13 @@ export type BacHoc = "Đại học" | "Cao đẳng";
 export type MucPhuHop = "Phù hợp" | "Có thể thử sức" | "Cần cân nhắc";
 export type NhanNguyenVong = "Thử sức" | "Vừa sức" | "An toàn" | "Dự phòng";
 
+export interface NguonNam {
+  nam: string; // năm của tài liệu
+  loai: "deAn" | "diemChuan"; // đề án tuyển sinh của trường, hay trang công bố điểm chuẩn
+  url: string;
+  trang?: number; // trang trong file PDF nơi ngành này xuất hiện
+}
+
 export interface LuaChon {
   id: string;
   truong: string; // tên ngắn: UIT
@@ -56,16 +63,16 @@ export interface LuaChon {
   moTa: string;
   bac: BacHoc;
   khuVuc: string; // TP.HCM
-  diaChi: string;
-  hocPhiMin: number; // triệu đồng / năm
-  hocPhiMax: number;
+  diaChi?: string; // chưa có trong đề án thì để trống, không điền thay
+  hocPhiMin?: number; // triệu đồng / năm; để trống khi đề án chưa công bố học phí theo ngành
+  hocPhiMax?: number;
   diemMin: number; // điểm tham khảo năm trước (thang 30)
   diemMax: number;
   namDiem: number;
-  coHoiViecLam: "Cao" | "Rất cao" | "Khá";
-  moiTruongHoc: string; // ví dụ "Năng động, thiên về thực hành"
-  mucPhuHop: MucPhuHop;
-  doPhuHop: "Cao" | "Khá cao" | "Trung bình";
+  coHoiViecLam?: "Cao" | "Rất cao" | "Khá"; // chỉ có khi đo được từ dữ liệu việc làm
+  moiTruongHoc?: string; // ví dụ "Năng động, thiên về thực hành"
+  mucPhuHop?: MucPhuHop; // dữ liệu mẫu cũ; dữ liệu thật tính từ hồ sơ của em (xem features/kham-pha/phu-hop.ts)
+  doPhuHop?: "Cao" | "Khá cao" | "Trung bình";
   tone: ToneTen; // màu huy hiệu (gradient), không dùng mã màu viết tay
   lyDoPhuHop: string[];
   canLuuY: string[];
@@ -74,6 +81,14 @@ export interface LuaChon {
   ngayCapNhat?: string;
   linkNguon?: string;
   donViXacThuc?: string;
+  // ---- Dữ liệu thật (có khi nạp từ du-lieu-that.json) ----
+  maTruong?: string; // mã trường tuyển sinh, ví dụ QSC
+  phuongThuc?: string; // THPT, HOC_BA, DGNL_HCM...
+  toHopXet?: string[]; // tổ hợp đề án ghi cho ngành này; rỗng = đề án chưa ghi rõ
+  diemTheoNam?: Record<string, number>; // điểm chuẩn từng năm có thật
+  diemDuKien?: number | null; // điểm chuẩn dự kiến năm tới (bằng năm gần nhất)
+  nguonCap?: "official_pdf" | "aggregator_verified"; // đề án chính thức hay trang tổng hợp
+  nguonTheoNam?: NguonNam[]; // liên kết tới tài liệu gốc của từng năm (đề án PDF, có số trang nếu tìm được)
 }
 
 export interface MucTieuChinh {

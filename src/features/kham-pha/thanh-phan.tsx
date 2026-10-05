@@ -6,6 +6,7 @@ import { HopTruot } from "@/components/ui/hien-thi";
 import { OInput } from "@/components/ui/nhap-lieu";
 import { Nhan, gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
+import { hocPhiChu } from "@/data/lua-chon-phu";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
@@ -21,7 +22,7 @@ export function kyHieu(truong: string): string {
 }
 
 export const khoangDiem =(l: LuaChon) => `${l.diemMin.toFixed(1)} – ${l.diemMax.toFixed(1)}`;
-export const khoangHocPhi = (l: LuaChon) => `${l.hocPhiMin} – ${l.hocPhiMax}`;
+export const khoangHocPhi = (l: LuaChon) => hocPhiChu(l);
 
 /** Nhãn mức phù hợp tính từ hồ sơ. Chưa có điểm thì nói rõ là chưa so được. */
 export function NhanPhuHop({ kq, xuongDong }: { kq: KetQuaPhuHop; xuongDong?: boolean }) {
@@ -97,7 +98,8 @@ export function HopChonLuaChon({ mo, dong, tieuDe, boQua = [], onChon }: {
     const quen = (l: LuaChon) => (s.yeuThich.includes(l.id) || s.nguyenVong.includes(l.id) ? 0 : 1);
     return LUA_CHON_MAU
       .filter((l) => !boQua.includes(l.id) && (!k || `${l.truong} ${l.tenTruong} ${l.nganh}`.toLowerCase().includes(k)))
-      .sort((a, b) => quen(a) - quen(b));
+      .sort((a, b) => quen(a) - quen(b))
+      .slice(0, 40); // danh mục có hàng nghìn ngành, chỉ hiện 40 mục đầu; em gõ tên để tìm chính xác
   }, [tuKhoa, boQua, s.yeuThich, s.nguyenVong]);
   return (
     <HopTruot mo={mo} dong={dong} tieuDe={tieuDe}>
