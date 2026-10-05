@@ -1,0 +1,110 @@
+// BỘ KHUNG DUY NHẤT. Slice không tự vẽ thanh dưới hay đầu trang, chỉ dùng các thành phần ở đây.
+import { type ReactNode } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, Bell, CalendarDays, GraduationCap, Heart, Home, Search, UserRound, type LucideIcon } from "lucide-react";
+import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
+import { gop } from "@/components/ui/nut-the";
+
+const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
+  homNay: Home, khamPha: Search, nguyenVong: Heart, keHoach: CalendarDays, hoSo: UserRound,
+};
+
+/** Khung có thanh 5 tab ở dưới. Dùng cho mọi trang trừ Chào mừng và các bước Bắt đầu. */
+export function KhungCoThanhDuoi() {
+  const { pathname } = useLocation();
+  return (
+    <div className="khung-ung-dung pb-24">
+      <Outlet />
+      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang/95 backdrop-blur border-t border-vien vung-an-toan-duoi">
+        <ul className="grid grid-cols-5">
+          {CAC_TAB.map((t) => {
+            const dang = t.khop(pathname);
+            const Icon = ICON_TAB[t.id];
+            return (
+              <li key={t.id}>
+                <Link to={t.den} aria-current={dang ? "page" : undefined}
+                  className={gop("min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold", dang ? "text-xanh" : "text-chu-phu")}>
+                  <Icon size={22} strokeWidth={dang ? 2.6 : 2} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />
+                  {t.nhan}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
+  );
+}
+
+export function KhungKhongThanh() {
+  return <div className="khung-ung-dung"><Outlet /></div>;
+}
+
+export function Logo({ nho }: { nho?: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 font-extrabold text-muc">
+      <span className="size-8 rounded-lg gd-xanh text-white grid place-items-center"><GraduationCap size={18} /></span>
+      <span className={nho ? "text-[14px]" : "text-[15px]"}>Nguyện Vọng AI</span>
+    </span>
+  );
+}
+
+/** Đầu trang CỦA TAB (trang gốc): logo + chuông nhắc nhở + tiêu đề lớn. */
+export function DauTrangChinh({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?: string; phai?: ReactNode }) {
+  const nav = useNavigate();
+  return (
+    <header className="px-4 pt-3 pb-2">
+      <div className="flex items-center justify-between">
+        <Logo nho />
+        <button type="button" aria-label="Nhắc nhở" onClick={() => nav(DUONG_DAN.nhacNho())} className="size-11 grid place-items-center rounded-full bg-trang border border-vien">
+          <Bell size={20} />
+        </button>
+      </div>
+      <div className="mt-3 flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-[26px] leading-tight font-extrabold text-muc">{tieuDe}</h1>
+          {moTa && <p className="text-[14px] text-chu-phu mt-1">{moTa}</p>}
+        </div>
+        {phai}
+      </div>
+    </header>
+  );
+}
+
+/** Đầu trang CON: nút quay lại, tiêu đề giữa, ghi chú nhỏ (ví dụ "Bước 2/3") hoặc nút ở bên phải. */
+export function DauTrangCoQuayLai({ tieuDe, buoc, quayLai, phai }: { tieuDe: string; buoc?: string; quayLai?: string; phai?: ReactNode }) {
+  const nav = useNavigate();
+  return (
+    <header className="sticky top-0 z-30 bg-nen/95 backdrop-blur grid grid-cols-[48px_1fr_48px] items-center min-h-14 px-2">
+      <button type="button" onClick={() => (quayLai ? nav(quayLai) : nav(-1))} aria-label="Quay lại" className="size-11 grid place-items-center rounded-full active:bg-xanh-nhat"><ArrowLeft size={22} /></button>
+      <h1 className="text-center text-[16px] font-extrabold text-muc truncate">{tieuDe}</h1>
+      <span className="text-right text-[13px] font-bold text-xanh pr-2 whitespace-nowrap">{phai ?? buoc}</span>
+    </header>
+  );
+}
+
+/** 3 mục chuyển nhanh của tab Kế hoạch: Mục tiêu · Kế hoạch tuần · Tiến độ. Đặt ngay dưới đầu trang. */
+export function ThanhPhuKeHoach() {
+  const { pathname } = useLocation();
+  return (
+    <nav aria-label="Mục của Kế hoạch" className="px-4 pb-3">
+      <ul className="flex bg-trang border border-vien rounded-xl p-1 gap-1">
+        {CAC_MUC_KE_HOACH.map((m) => {
+          const dang = m.khop(pathname);
+          return (
+            <li key={m.id} className="flex-1">
+              <Link to={m.den} aria-current={dang ? "page" : undefined}
+                className={gop("min-h-10 rounded-lg grid place-items-center text-[13px] font-bold transition-colors", dang ? "gd-xanh text-white" : "text-chu-phu")}>
+                {m.nhan}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+export function NoiDung({ children, className }: { children: ReactNode; className?: string }) {
+  return <main className={gop("px-4 pb-6 space-y-3 hien-len", className)}>{children}</main>;
+}
