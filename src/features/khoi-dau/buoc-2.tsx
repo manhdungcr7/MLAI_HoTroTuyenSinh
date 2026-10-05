@@ -43,18 +43,18 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             const Icon = ICON_MON[m];
             const sai = kq.loai === "khongPhaiSo" || kq.loai === "ngoaiKhoang";
             return (
-              <div key={m} className={gop("rounded-the border bg-trang p-2 shadow-the", sai ? "border-do/60" : "border-vien")}>
-                <label htmlFor={idDiem(m)} className="flex items-center gap-1.5 text-[14px] font-bold text-chu mb-1.5">
-                  <span className={gop("size-6 rounded-lg grid place-items-center", TONE_NEN[TONE_MON[m]], TONE_CHU[TONE_MON[m]])}><Icon size={14} /></span>
-                  {TEN_MON_NGAN[m]}
+              <div key={m} className={gop("rounded-the border bg-trang p-1.5 sm:p-2 shadow-the min-w-0", sai ? "border-do/60" : "border-vien")}>
+                <label htmlFor={idDiem(m)} className="flex items-center gap-1 text-[13px] sm:text-[14px] font-bold text-chu mb-1">
+                  <span className={gop("size-5 sm:size-6 rounded-lg grid place-items-center shrink-0", TONE_NEN[TONE_MON[m]], TONE_CHU[TONE_MON[m]])}><Icon size={13} /></span>
+                  <span className="truncate">{TEN_MON_NGAN[m]}</span>
                 </label>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5 sm:gap-1">
                   <input id={idDiem(m)} inputMode="decimal" autoComplete="off" placeholder="–" value={chuDiem[m]} maxLength={5}
                     onChange={(e) => goDiem(m, e.target.value)} aria-invalid={sai}
                     aria-describedby={sai ? "loi-diem" : undefined}
-                    className={gop("w-full min-w-0 min-h-12 rounded-xl border bg-trang px-2 text-center text-[17px] font-bold text-muc placeholder:text-chu-phu/60 focus:border-xanh",
+                    className={gop("w-full min-w-0 min-h-11 sm:min-h-12 rounded-xl border bg-trang px-1 text-center text-[15px] sm:text-[17px] font-bold text-muc placeholder:text-chu-phu/60 focus:border-xanh",
                       sai ? "border-do text-do-chu" : "border-vien")} />
-                  <span className="text-[12px] text-chu-phu shrink-0">/10</span>
+                  <span className="text-[11px] sm:text-[12px] text-chu-phu shrink-0">/10</span>
                 </div>
               </div>
             );

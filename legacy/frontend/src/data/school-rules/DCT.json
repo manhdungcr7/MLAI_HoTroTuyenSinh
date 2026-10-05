@@ -1,0 +1,120 @@
+{
+  "schoolCode": "DCT",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0520/thong-tin-tuyen-sinh-dai-hoc-cong-thuong-tphcm.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Công Thương TP.HCM (bản ảnh, đọc trực tiếp các trang 5–9)",
+    "sha256": "67617b5e5a0f1eda3713f0e8c1738f75459ed8d0a9ba80906aca13db2eabdf89",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Điểm xét tuyển = tổng 3 môn của tổ hợp; chứng chỉ IELTS/TOEFL iBT quy đổi thay điểm môn Tiếng Anh cho phương thức thi THPT và học bạ (IELTS 4,0→6; 4,5–5,0→7; 5,5–6,0→8; 6,5–7,5→9; ≥8,0→10; TOEFL iBT 40–44→6; 45–59→7; 60–78→8; 79–101→9; ≥102→10); học bạ cần tổng 3 môn từ 20,00 (Toán và Ngữ văn từ 6,0 chưa mã hóa). Cột điểm 10 của bảng bị cắt mép ảnh nên mức ≥8,0 và ≥102 suy từ quy luật bảng."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 6.0
+        },
+        {
+          "min": 4.5,
+          "score": 7.0
+        },
+        {
+          "min": 5.5,
+          "score": 8.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.0
+        },
+        {
+          "min": 8.0,
+          "score": 10
+        }
+      ],
+      "toeflToEnglish": [
+        {
+          "min": 40,
+          "score": 6.0
+        },
+        {
+          "min": 45,
+          "score": 7.0
+        },
+        {
+          "min": 60,
+          "score": 8.0
+        },
+        {
+          "min": 79,
+          "score": 9.0
+        },
+        {
+          "min": 102,
+          "score": 10
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "minHocBaComboTotal": 20.0,
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 6.0
+        },
+        {
+          "min": 4.5,
+          "score": 7.0
+        },
+        {
+          "min": 5.5,
+          "score": 8.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.0
+        },
+        {
+          "min": 8.0,
+          "score": 10
+        }
+      ],
+      "toeflToEnglish": [
+        {
+          "min": 40,
+          "score": 6.0
+        },
+        {
+          "min": 45,
+          "score": 7.0
+        },
+        {
+          "min": 60,
+          "score": 8.0
+        },
+        {
+          "min": 79,
+          "score": 9.0
+        },
+        {
+          "min": 102,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

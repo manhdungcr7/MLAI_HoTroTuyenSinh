@@ -1,0 +1,11 @@
+# Phụ thuộc cho pipeline cào + phân tích PDF (không cần khi chỉ chạy API với
+# data/processed/programs.parquet đã có sẵn — xem backend/requirements.txt).
+-r backend/requirements.txt
+pdfplumber==0.11.10
+requests==2.34.2
+scikit-learn==1.9.1
+joblib==1.6.0
+scipy==1.18.1
+
+# LightGBM dùng trong pipeline/models/train_ml.py để huấn luyện Gradient Boosting Regressor (Huber Loss & Quantile Pinball Loss)
+lightgbm>=4.5.0

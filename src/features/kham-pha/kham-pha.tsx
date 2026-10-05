@@ -12,6 +12,7 @@ import { CAC_KHU_VUC, CAC_NHOM, dem, loc } from "./bo-loc";
 import { useBoLoc } from "./dung-bo-loc";
 import { CAC_KIEU_SAP_XEP, boiCanhTu, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
+import { NutTuVan } from "@/features/tu-van/tu-van";
 
 export default function KhamPha() {
   const nav = useNavigate();
@@ -35,6 +36,7 @@ export default function KhamPha() {
     <>
       <DauTrangChinh tieuDe="Khám phá" moTa="Những hướng đi hợp với điểm, sở thích và ngân sách của em." />
       <NoiDung>
+        <NutTuVan nguCanh="Khám phá ngành học" />
         <div className="relative">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu pointer-events-none" />
           <input type="search" value={tuKhoa} onChange={(e) => setTuKhoa(e.target.value)} placeholder="Tìm trường hoặc ngành..." aria-label="Tìm trường hoặc ngành"

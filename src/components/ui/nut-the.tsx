@@ -38,13 +38,13 @@ export function Nut({ kieu = "chinh", bieuTuong: Icon, muiTen, rong = true, clas
       type={type}
       {...p}
       className={gop(
-        "min-h-12 px-4 rounded-xl font-bold text-[15px] inline-flex items-center justify-center gap-2 transition active:scale-[.99] disabled:opacity-50 disabled:pointer-events-none",
+        "min-h-12 px-3.5 py-2.5 rounded-xl font-bold text-[15px] inline-flex items-center justify-center gap-2 transition active:scale-[.99] disabled:opacity-50 disabled:pointer-events-none text-center select-none",
         rong && "w-full", KIEU_NUT[kieu], className,
       )}
     >
-      {Icon && <Icon size={18} strokeWidth={2.4} />}
-      {children}
-      {muiTen && <ChevronRight size={18} strokeWidth={2.6} />}
+      {Icon && <Icon size={18} strokeWidth={2.4} className="shrink-0" />}
+      <span className="truncate inline-block max-w-full">{children}</span>
+      {muiTen && <ChevronRight size={18} strokeWidth={2.6} className="shrink-0" />}
     </button>
   );
 }

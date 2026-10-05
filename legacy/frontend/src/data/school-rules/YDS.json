@@ -1,0 +1,220 @@
+{
+  "schoolCode": "YDS",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0616/2415-thongbao-xettuyendhcq2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Đại học Y Dược TP.HCM",
+    "sha256": "322c55c4b379942a8dfc69a9b196f406a48994c685a4c1eb28c0e5b2a09de6b3",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 6.2.2: tổng 3 môn không nhân hệ số + ưu tiên + điểm khuyến khích; chứng chỉ chọn một trong IELTS (≥6,0) hoặc TOEFL iBT (≥80): 0,9×IELTS/9 hoặc 0,9×TOEFL/120, tối đa 1,5. Chưa mã hóa điểm SAT."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 6.0,
+            "points": 0.6
+          },
+          {
+            "min": 6.5,
+            "points": 0.65
+          },
+          {
+            "min": 7.0,
+            "points": 0.7
+          },
+          {
+            "min": 7.5,
+            "points": 0.75
+          },
+          {
+            "min": 8.0,
+            "points": 0.8
+          },
+          {
+            "min": 8.5,
+            "points": 0.85
+          },
+          {
+            "min": 9.0,
+            "points": 0.9
+          }
+        ],
+        "toefl": [
+          {
+            "min": 80,
+            "points": 0.6
+          },
+          {
+            "min": 81,
+            "points": 0.608
+          },
+          {
+            "min": 82,
+            "points": 0.615
+          },
+          {
+            "min": 83,
+            "points": 0.623
+          },
+          {
+            "min": 84,
+            "points": 0.63
+          },
+          {
+            "min": 85,
+            "points": 0.637
+          },
+          {
+            "min": 86,
+            "points": 0.645
+          },
+          {
+            "min": 87,
+            "points": 0.652
+          },
+          {
+            "min": 88,
+            "points": 0.66
+          },
+          {
+            "min": 89,
+            "points": 0.668
+          },
+          {
+            "min": 90,
+            "points": 0.675
+          },
+          {
+            "min": 91,
+            "points": 0.682
+          },
+          {
+            "min": 92,
+            "points": 0.69
+          },
+          {
+            "min": 93,
+            "points": 0.698
+          },
+          {
+            "min": 94,
+            "points": 0.705
+          },
+          {
+            "min": 95,
+            "points": 0.713
+          },
+          {
+            "min": 96,
+            "points": 0.72
+          },
+          {
+            "min": 97,
+            "points": 0.727
+          },
+          {
+            "min": 98,
+            "points": 0.735
+          },
+          {
+            "min": 99,
+            "points": 0.743
+          },
+          {
+            "min": 100,
+            "points": 0.75
+          },
+          {
+            "min": 101,
+            "points": 0.758
+          },
+          {
+            "min": 102,
+            "points": 0.765
+          },
+          {
+            "min": 103,
+            "points": 0.773
+          },
+          {
+            "min": 104,
+            "points": 0.78
+          },
+          {
+            "min": 105,
+            "points": 0.787
+          },
+          {
+            "min": 106,
+            "points": 0.795
+          },
+          {
+            "min": 107,
+            "points": 0.802
+          },
+          {
+            "min": 108,
+            "points": 0.81
+          },
+          {
+            "min": 109,
+            "points": 0.818
+          },
+          {
+            "min": 110,
+            "points": 0.825
+          },
+          {
+            "min": 111,
+            "points": 0.833
+          },
+          {
+            "min": 112,
+            "points": 0.84
+          },
+          {
+            "min": 113,
+            "points": 0.848
+          },
+          {
+            "min": 114,
+            "points": 0.855
+          },
+          {
+            "min": 115,
+            "points": 0.863
+          },
+          {
+            "min": 116,
+            "points": 0.87
+          },
+          {
+            "min": 117,
+            "points": 0.877
+          },
+          {
+            "min": 118,
+            "points": 0.885
+          },
+          {
+            "min": 119,
+            "points": 0.893
+          },
+          {
+            "min": 120,
+            "points": 0.9
+          }
+        ]
+      }
+    }
+  }
+}

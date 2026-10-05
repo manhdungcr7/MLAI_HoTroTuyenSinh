@@ -45,7 +45,9 @@ body {
 }
 @layer base {
   button, input, select, textarea { font: inherit; color: inherit; }
-  button { cursor: pointer; }
+  button { cursor: pointer; text-wrap: balance; }
+  h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+  p { text-wrap: pretty; }
   :focus-visible { outline: 3px solid #8db4ff; outline-offset: 2px; }
 }
 

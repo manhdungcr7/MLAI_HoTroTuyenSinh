@@ -1,0 +1,76 @@
+{
+  "schoolCode": "XDT",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0618/12-pl06-thong-tin-tuyen-sinh-15052026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Xây dựng Miền Trung (QĐ 384/QĐ-ĐHXDMT ngày 15/5/2026)",
+    "sha256": "beb177ad3495871df35b734e4aec2dcb2046a834d600b90a158d72f7e65fc9b6",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 3.3.1: tổng điểm 3 môn học bạ (chưa quy đổi) phải từ 18,0; Phụ lục Bảng 2: quy đổi chứng chỉ Tiếng Anh. Hệ số quy đổi học bạ (Kqđ) chưa mã hóa vì điểm chuẩn trong dữ liệu là ngưỡng 18,0 chưa quy đổi."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 8.0
+        },
+        {
+          "min": 6.0,
+          "score": 8.5
+        },
+        {
+          "min": 7.0,
+          "score": 9.0
+        },
+        {
+          "min": 8.0,
+          "score": 9.5
+        },
+        {
+          "min": 8.5,
+          "score": 10
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "minHocBaComboTotal": 18.0,
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 8.0
+        },
+        {
+          "min": 6.0,
+          "score": 8.5
+        },
+        {
+          "min": 7.0,
+          "score": 9.0
+        },
+        {
+          "min": 8.0,
+          "score": 9.5
+        },
+        {
+          "min": 8.5,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

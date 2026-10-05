@@ -1,0 +1,1502 @@
+{
+  "KHA": [
+    "dai-hoc-kinh-te-quoc-dan-KHA",
+    "KHA-Đại Học Kinh Tế Quốc Dân",
+    "/diem-chuan/dai-hoc-kinh-te-quoc-dan-KHA.html"
+  ],
+  "BKA": [
+    "dai-hoc-bach-khoa-ha-noi-BKA",
+    "BKA-Đại Học Bách Khoa Hà Nội",
+    "/diem-chuan/dai-hoc-bach-khoa-ha-noi-BKA.html"
+  ],
+  "HTC": [
+    "hoc-vien-tai-chinh-HTC",
+    "HTC-Học Viện Tài chính",
+    "/diem-chuan/hoc-vien-tai-chinh-HTC.html"
+  ],
+  "NHH": [
+    "hoc-vien-ngan-hang-NHH",
+    "NHH-Học Viện Ngân Hàng",
+    "/diem-chuan/hoc-vien-ngan-hang-NHH.html"
+  ],
+  "NTH": [
+    "dai-hoc-ngoai-thuong-co-so-phia-bac-NTH",
+    "NTH-Trường Đại học Ngoại thương",
+    "/diem-chuan/dai-hoc-ngoai-thuong-co-so-phia-bac-NTH.html"
+  ],
+  "QSB": [
+    "dai-hoc-bach-khoa-hcm-QSB",
+    "QSB-Trường Đại Học Bách Khoa HCM",
+    "/diem-chuan/dai-hoc-bach-khoa-hcm-QSB.html"
+  ],
+  "YHB": [
+    "dai-hoc-y-ha-noi-YHB",
+    "YHB-Trường Đại Học Y Hà Nội",
+    "/diem-chuan/dai-hoc-y-ha-noi-YHB.html"
+  ],
+  "BVH": [
+    "hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-bac-BVH",
+    "BVH-Học Viện Công Nghệ Bưu Chính Viễn Thông",
+    "/diem-chuan/hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-bac-BVH.html"
+  ],
+  "SPH": [
+    "dai-hoc-su-pham-ha-noi-SPH",
+    "SPH-Trường Đại Học Sư Phạm Hà Nội",
+    "/diem-chuan/dai-hoc-su-pham-ha-noi-SPH.html"
+  ],
+  "TMU": [
+    "dai-hoc-thuong-mai-TMU",
+    "TMU-Trường Đại Học Thương Mại",
+    "/diem-chuan/dai-hoc-thuong-mai-TMU.html"
+  ],
+  "SPS": [
+    "dai-hoc-su-pham-tphcm-SPS",
+    "SPS-Trường Đại Học Sư Phạm TPHCM",
+    "/diem-chuan/dai-hoc-su-pham-tphcm-SPS.html"
+  ],
+  "YDS": [
+    "dai-hoc-y-duoc-tphcm-YDS",
+    "YDS-Đại Học Y Dược TPHCM",
+    "/diem-chuan/dai-hoc-y-duoc-tphcm-YDS.html"
+  ],
+  "QHI": [
+    "dai-hoc-cong-nghe-dai-hoc-quoc-gia-ha-noi-QHI",
+    "QHI-Trường Đại Học Công Nghệ – Đại Học Quốc Gia Hà Nội",
+    "/diem-chuan/dai-hoc-cong-nghe-dai-hoc-quoc-gia-ha-noi-QHI.html"
+  ],
+  "HNM": [
+    "dai-hoc-thu-do-ha-noi-HNM",
+    "HNM-Trường Đại học Thủ Đô Hà Nội",
+    "/diem-chuan/dai-hoc-thu-do-ha-noi-HNM.html"
+  ],
+  "GHA": [
+    "dai-hoc-giao-thong-van-tai-co-so-phia-bac-GHA",
+    "GHA-Trường Đại Học Giao Thông Vận Tải",
+    "/diem-chuan/dai-hoc-giao-thong-van-tai-co-so-phia-bac-GHA.html"
+  ],
+  "YTB": [
+    "dai-hoc-y-duoc-thai-binh-YTB",
+    "YTB-Trường Đại Học Y Dược Thái Bình",
+    "/diem-chuan/dai-hoc-y-duoc-thai-binh-YTB.html"
+  ],
+  "KMA": [
+    "hoc-vien-ky-thuat-mat-ma-KMA",
+    "KMA-Học Viện Kỹ Thuật Mật Mã",
+    "/diem-chuan/hoc-vien-ky-thuat-mat-ma-KMA.html"
+  ],
+  "DCN": [
+    "dai-hoc-cong-nghiep-ha-noi-DCN",
+    "DCN-Đại Học Công Nghiệp Hà Nội",
+    "/diem-chuan/dai-hoc-cong-nghiep-ha-noi-DCN.html"
+  ],
+  "YPB": [
+    "dai-hoc-y-duoc-hai-phong-YPB",
+    "YPB-Trường Đại Học Y Dược Hải Phòng",
+    "/diem-chuan/dai-hoc-y-duoc-hai-phong-YPB.html"
+  ],
+  "IUH": [
+    "dai-hoc-cong-nghiep-tphcm-IUH",
+    "IUH-Trường Đại Học Công Nghiệp TPHCM",
+    "/diem-chuan/dai-hoc-cong-nghiep-tphcm-IUH.html"
+  ],
+  "HPN": [
+    "hoc-vien-phu-nu-viet-nam-HPN",
+    "HPN-Học Viện Phụ Nữ Việt Nam",
+    "/diem-chuan/hoc-vien-phu-nu-viet-nam-HPN.html"
+  ],
+  "DKH": [
+    "dai-hoc-duoc-ha-noi-DKH",
+    "DKH-Trường Đại Học Dược Hà Nội",
+    "/diem-chuan/dai-hoc-duoc-ha-noi-DKH.html"
+  ],
+  "ANH": [
+    "hoc-vien-an-ninh-nhan-dan-ANH",
+    "ANH-Học Viện An Ninh Nhân Dân",
+    "/diem-chuan/hoc-vien-an-ninh-nhan-dan-ANH.html"
+  ],
+  "DKY": [
+    "dai-hoc-ky-thuat-y-te-hai-duong-DKY",
+    "DKY-Trường Đại Học Kỹ Thuật Y Tế Hải Dương",
+    "/diem-chuan/dai-hoc-ky-thuat-y-te-hai-duong-DKY.html"
+  ],
+  "UTH": [
+    "dai-hoc-giao-thong-van-tai-tphcm-UTH",
+    "UTH-Trường Đại Học Giao Thông Vận Tải TPHCM",
+    "/diem-chuan/dai-hoc-giao-thong-van-tai-tphcm-UTH.html"
+  ],
+  "HYD": [
+    "hoc-vien-y-duoc-hoc-co-truyen-viet-nam-HYD",
+    "HYD-Học Viện Y Dược Học Cổ Truyền Việt Nam",
+    "/diem-chuan/hoc-vien-y-duoc-hoc-co-truyen-viet-nam-HYD.html"
+  ],
+  "CSH": [
+    "hoc-vien-canh-sat-nhan-dan-CSH",
+    "CSH-Học Viện Cảnh Sát Nhân Dân",
+    "/diem-chuan/hoc-vien-canh-sat-nhan-dan-CSH.html"
+  ],
+  "DKK": [
+    "dai-hoc-kinh-te-ky-thuat-cong-nghiep-DKK",
+    "DKK-Trường Đại Học Kinh Tế Kỹ Thuật Công Nghiệp",
+    "/diem-chuan/dai-hoc-kinh-te-ky-thuat-cong-nghiep-DKK.html"
+  ],
+  "DCT": [
+    "dai-hoc-cong-thuong-tphcm-DCT",
+    "DCT-Trường Đại Học Công Thương TPHCM",
+    "/diem-chuan/dai-hoc-cong-thuong-tphcm-DCT.html"
+  ],
+  "LAH": [
+    "truong-si-quan-luc-quan-1-dai-hoc-tran-quoc-tuan-LAH",
+    "LAH-Trường Sĩ Quan Lục Quân 1 - Đại học Trần Quốc Tuấn",
+    "/diem-chuan/truong-si-quan-luc-quan-1-dai-hoc-tran-quoc-tuan-LAH.html"
+  ],
+  "HQH": [
+    "hoc-vien-hai-quan-HQH",
+    "HQH-Học Viện Hải Quân",
+    "/diem-chuan/hoc-vien-hai-quan-HQH.html"
+  ],
+  "HHK": [
+    "hoc-vien-hang-khong-viet-nam-HHK",
+    "HHK-Học Viện Hàng không Việt Nam",
+    "/diem-chuan/hoc-vien-hang-khong-viet-nam-HHK.html"
+  ],
+  "PKA": [
+    "dai-hoc-phenikaa-PKA",
+    "PKA-Đại Học Phenikaa",
+    "/diem-chuan/dai-hoc-phenikaa-PKA.html"
+  ],
+  "PKH": [
+    "hoc-vien-phong-khong-khong-quan-PKH",
+    "PKH-Học Viện Phòng Không – Không Quân",
+    "/diem-chuan/hoc-vien-phong-khong-khong-quan-PKH.html"
+  ],
+  "CSS": [
+    "dai-hoc-canh-sat-nhan-dan-CSS",
+    "CSS-Trường Đại Học Cảnh Sát Nhân Dân",
+    "/diem-chuan/dai-hoc-canh-sat-nhan-dan-CSS.html"
+  ],
+  "TTH": [
+    "truong-si-quan-thong-tin-he-quan-su-dai-hoc-thong-tin-lien-lac-TTH",
+    "TTH-Trường Sĩ Quan Thông Tin - Hệ Quân sự - Đại Học Thông Tin Liên Lạc",
+    "/diem-chuan/truong-si-quan-thong-tin-he-quan-su-dai-hoc-thong-tin-lien-lac-TTH.html"
+  ],
+  "NHF": [
+    "dai-hoc-ha-noi-NHF",
+    "NHF-Trường Đại Học Hà Nội",
+    "/diem-chuan/dai-hoc-ha-noi-NHF.html"
+  ],
+  "KQH": [
+    "hoc-vien-ky-thuat-quan-su-he-quan-su-KQH",
+    "KQH-Học Viện Kỹ Thuật Quân Sự - Hệ Quân sự",
+    "/diem-chuan/hoc-vien-ky-thuat-quan-su-he-quan-su-KQH.html"
+  ],
+  "YTC": [
+    "dai-hoc-y-te-cong-cong-YTC",
+    "YTC-Trường Đại Học Y Tế Công Cộng",
+    "/diem-chuan/dai-hoc-y-te-cong-cong-YTC.html"
+  ],
+  "HQT": [
+    "hoc-vien-ngoai-giao-HQT",
+    "HQT-Học Viện Ngoại Giao",
+    "/diem-chuan/hoc-vien-ngoai-giao-HQT.html"
+  ],
+  "ANS": [
+    "dai-hoc-an-ninh-nhan-dan-ANS",
+    "ANS-Trường Đại Học An Ninh Nhân Dân",
+    "/diem-chuan/dai-hoc-an-ninh-nhan-dan-ANS.html"
+  ],
+  "YCT": [
+    "dai-hoc-y-duoc-can-tho-YCT",
+    "YCT-Trường Đại Học Y Dược Cần Thơ",
+    "/diem-chuan/dai-hoc-y-duoc-can-tho-YCT.html"
+  ],
+  "TDM": [
+    "dai-hoc-thu-dau-mot-TDM",
+    "TDM-Trường Đại học Thủ Dầu Một",
+    "/diem-chuan/dai-hoc-thu-dau-mot-TDM.html"
+  ],
+  "TYS": [
+    "dai-hoc-y-khoa-pham-ngoc-thach-TYS",
+    "TYS-Trường Đại Học Y Khoa Phạm Ngọc Thạch",
+    "/diem-chuan/dai-hoc-y-khoa-pham-ngoc-thach-TYS.html"
+  ],
+  "DTL": [
+    "dai-hoc-thang-long-DTL",
+    "DTL-Trường Đại Học Thăng Long",
+    "/diem-chuan/dai-hoc-thang-long-DTL.html"
+  ],
+  "TLA": [
+    "dai-hoc-thuy-loi-co-so-1-TLA",
+    "TLA-Trường Đại Học Thủy Lợi",
+    "/diem-chuan/dai-hoc-thuy-loi-co-so-1-TLA.html"
+  ],
+  "QST": [
+    "dai-hoc-khoa-hoc-tu-nhien-tphcm-QST",
+    "QST-Trường Đại Học Khoa Học Tự Nhiên TPHCM",
+    "/diem-chuan/dai-hoc-khoa-hoc-tu-nhien-tphcm-QST.html"
+  ],
+  "VHH": [
+    "dai-hoc-van-hoa-ha-noi-VHH",
+    "VHH-Trường Đại Học Văn Hóa Hà Nội",
+    "/diem-chuan/dai-hoc-van-hoa-ha-noi-VHH.html"
+  ],
+  "DTT": [
+    "dai-hoc-ton-duc-thang-DTT",
+    "DTT-Trường Đại Học Tôn Đức Thắng",
+    "/diem-chuan/dai-hoc-ton-duc-thang-DTT.html"
+  ],
+  "HVN": [
+    "hoc-vien-nong-nghiep-viet-nam-HVN",
+    "HVN-Học Viện Nông Nghiệp Việt Nam",
+    "/diem-chuan/hoc-vien-nong-nghiep-viet-nam-HVN.html"
+  ],
+  "QHX": [
+    "dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-ha-noi-QHX",
+    "QHX-Trường Đại Học Khoa Học Xã Hội và Nhân Văn Hà Nội",
+    "/diem-chuan/dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-ha-noi-QHX.html"
+  ],
+  "LPH": [
+    "dai-hoc-luat-ha-noi-LPH",
+    "LPH-Trường Đại Học Luật Hà Nội",
+    "/diem-chuan/dai-hoc-luat-ha-noi-LPH.html"
+  ],
+  "QHF": [
+    "dai-hoc-ngoai-ngu-ha-noi-QHF",
+    "QHF-Trường Đại Học Ngoại Ngữ - ĐH Quốc gia Hà Nội",
+    "/diem-chuan/dai-hoc-ngoai-ngu-ha-noi-QHF.html"
+  ],
+  "HBT": [
+    "hoc-vien-bao-chi-va-tuyen-truyen-HBT",
+    "HBT-Học viện Báo chí và Tuyên truyền",
+    "/diem-chuan/hoc-vien-bao-chi-va-tuyen-truyen-HBT.html"
+  ],
+  "QHT": [
+    "dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-ha-noi-QHT",
+    "QHT-Trường Đại Học Khoa Học Tự Nhiên Hà Nội",
+    "/diem-chuan/dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-ha-noi-QHT.html"
+  ],
+  "QHE": [
+    "dai-hoc-kinh-te-ha-noi-QHE",
+    "QHE-Trường Đại Học Kinh Tế - ĐHQG Hà Nội",
+    "/diem-chuan/dai-hoc-kinh-te-ha-noi-QHE.html"
+  ],
+  "QSX": [
+    "dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-tphcm-QSX",
+    "QSX-Trường Đại Học Khoa Học Xã Hội và Nhân Văn TPHCM",
+    "/diem-chuan/dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-tphcm-QSX.html"
+  ],
+  "DTS": [
+    "dai-hoc-su-pham-thai-nguyen-DTS",
+    "DTS-Đại Học Sư Phạm Thái Nguyên",
+    "/diem-chuan/dai-hoc-su-pham-thai-nguyen-DTS.html"
+  ],
+  "LCH": [
+    "truong-si-quan-chinh-tri-dai-hoc-chinh-tri-LCH",
+    "LCH-Trường Sĩ Quan Chính Trị - Đại Học Chính Trị",
+    "/diem-chuan/truong-si-quan-chinh-tri-dai-hoc-chinh-tri-LCH.html"
+  ],
+  "TCT": [
+    "dai-hoc-can-tho-TCT",
+    "TCT-Đại Học Cần Thơ",
+    "/diem-chuan/dai-hoc-can-tho-TCT.html"
+  ],
+  "DKS": [
+    "dai-hoc-kiem-sat-DKS",
+    "DKS-Trường Đại học Kiểm Sát",
+    "/diem-chuan/dai-hoc-kiem-sat-DKS.html"
+  ],
+  "BPH": [
+    "hoc-vien-bien-phong-BPH",
+    "BPH-Học Viện Biên Phòng",
+    "/diem-chuan/hoc-vien-bien-phong-BPH.html"
+  ],
+  "QHL": [
+    "dai-hoc-luat-dai-hoc-quoc-gia-ha-noi-QHL",
+    "QHL-Trường Đại học Luật – ĐHQG Hà Nội",
+    "/diem-chuan/dai-hoc-luat-dai-hoc-quoc-gia-ha-noi-QHL.html"
+  ],
+  "DHS": [
+    "dai-hoc-su-pham-hue-DHS",
+    "DHS-Trường Đại Học Sư Phạm Huế",
+    "/diem-chuan/dai-hoc-su-pham-hue-DHS.html"
+  ],
+  "QSC": [
+    "dai-hoc-cong-nghe-thong-tin-dhqg-tphcm-QSC",
+    "QSC-Trường Đại Học Công Nghệ Thông Tin - ĐHQG TPHCM",
+    "/diem-chuan/dai-hoc-cong-nghe-thong-tin-dhqg-tphcm-QSC.html"
+  ],
+  "SGD": [
+    "dai-hoc-sai-gon-SGD",
+    "SGD-Trường Đại Học Sài Gòn",
+    "/diem-chuan/dai-hoc-sai-gon-SGD.html"
+  ],
+  "NQH": [
+    "hoc-vien-khoa-hoc-quan-su-he-quan-su-NQH",
+    "NQH-Học Viện Khoa Học Quân Sự - Hệ Quân sự",
+    "/diem-chuan/hoc-vien-khoa-hoc-quan-su-he-quan-su-NQH.html"
+  ],
+  "NTS": [
+    "dai-hoc-ngoai-thuong-co-so-phia-nam-NTS",
+    "NTS-Trường Đại học Ngoại thương (Cơ sở II)",
+    "/diem-chuan/dai-hoc-ngoai-thuong-co-so-phia-nam-NTS.html"
+  ],
+  "HTA": [
+    "hoc-vien-toa-an-HTA",
+    "HTA-Học viện Tòa án",
+    "/diem-chuan/hoc-vien-toa-an-HTA.html"
+  ],
+  "DDS": [
+    "dai-hoc-su-pham-dai-hoc-da-nang-DDS",
+    "DDS-Trường Đại Học Sư Phạm - Đại Học Đà Nẵng",
+    "/diem-chuan/dai-hoc-su-pham-dai-hoc-da-nang-DDS.html"
+  ],
+  "SP2": [
+    "dai-hoc-su-pham-ha-noi-2-SP2",
+    "SP2-Trường Đại Học Sư Phạm Hà Nội 2",
+    "/diem-chuan/dai-hoc-su-pham-ha-noi-2-SP2.html"
+  ],
+  "QHS": [
+    "dai-hoc-giao-duc-ha-noi-QHS",
+    "QHS-Trường Đại Học Giáo Dục - ĐHQG Hà Nội",
+    "/diem-chuan/dai-hoc-giao-duc-ha-noi-QHS.html"
+  ],
+  "VHS": [
+    "dai-hoc-van-hoa-tphcm-VHS",
+    "VHS-Trường Đại Học Văn Hóa TPHCM",
+    "/diem-chuan/dai-hoc-van-hoa-tphcm-VHS.html"
+  ],
+  "SPK": [
+    "dai-hoc-cong-nghe-ky-thuat-tphcm-SPK",
+    "SPK-Trường Đại Học Công nghệ Kỹ thuật TP HCM",
+    "/diem-chuan/dai-hoc-cong-nghe-ky-thuat-tphcm-SPK.html"
+  ],
+  "HTN": [
+    "hoc-vien-thanh-thieu-nien-viet-nam-HTN",
+    "HTN-Học Viện Thanh Thiếu Niên Việt Nam",
+    "/diem-chuan/hoc-vien-thanh-thieu-nien-viet-nam-HTN.html"
+  ],
+  "YQH": [
+    "hoc-vien-quan-y-he-quan-su-YQH",
+    "YQH-Học Viện Quân Y - Hệ Quân sự",
+    "/diem-chuan/hoc-vien-quan-y-he-quan-su-YQH.html"
+  ],
+  "QSK": [
+    "dai-hoc-kinh-te-luat-tphcm-QSK",
+    "QSK-Trường Đại học Kinh Tế Luật TPHCM",
+    "/diem-chuan/dai-hoc-kinh-te-luat-tphcm-QSK.html"
+  ],
+  "HEH": [
+    "hoc-vien-hau-can-he-quan-su-HEH",
+    "HEH-Học Viện Hậu Cần - Hệ Quân sự",
+    "/diem-chuan/hoc-vien-hau-can-he-quan-su-HEH.html"
+  ],
+  "LPS": [
+    "dai-hoc-luat-tphcm-LPS",
+    "LPS-Trường Đại Học Luật TPHCM",
+    "/diem-chuan/dai-hoc-luat-tphcm-LPS.html"
+  ],
+  "DDF": [
+    "dai-hoc-ngoai-ngu-da-nang-DDF",
+    "DDF-Trường Đại Học Ngoại Ngữ Đà Nẵng",
+    "/diem-chuan/dai-hoc-ngoai-ngu-da-nang-DDF.html"
+  ],
+  "KSA": [
+    "dai-hoc-kinh-te-tphcm-KSA",
+    "KSA-Đại Học Kinh Tế TPHCM",
+    "/diem-chuan/dai-hoc-kinh-te-tphcm-KSA.html"
+  ],
+  "QHY": [
+    "dai-hoc-y-duoc-dai-hoc-quoc-gia-ha-noi-QHY",
+    "QHY-Trường Đại học Y Dược - ĐHQG Hà Nội",
+    "/diem-chuan/dai-hoc-y-duoc-dai-hoc-quoc-gia-ha-noi-QHY.html"
+  ],
+  "DDK": [
+    "dai-hoc-bach-khoa-da-nang-DDK",
+    "DDK-Trường Đại Học Bách Khoa Đà Nẵng",
+    "/diem-chuan/dai-hoc-bach-khoa-da-nang-DDK.html"
+  ],
+  "DHF": [
+    "dai-hoc-ngoai-ngu-hue-DHF",
+    "DHF-Trường Đại Học Ngoại Ngữ Huế",
+    "/diem-chuan/dai-hoc-ngoai-ngu-hue-DHF.html"
+  ],
+  "DMS": [
+    "dai-hoc-tai-chinh-marketing-DMS",
+    "DMS-Trường Đại Học Tài Chính Marketing",
+    "/diem-chuan/dai-hoc-tai-chinh-marketing-DMS.html"
+  ],
+  "GSA": [
+    "dai-hoc-giao-thong-van-tai-co-so-phia-nam-GSA",
+    "GSA-Trường Đại Học Giao Thông Vận Tải (Cơ sở 2)",
+    "/diem-chuan/dai-hoc-giao-thong-van-tai-co-so-phia-nam-GSA.html"
+  ],
+  "TSN": [
+    "dai-hoc-nha-trang-TSN",
+    "TSN-Trường Đại Học Nha Trang",
+    "/diem-chuan/dai-hoc-nha-trang-TSN.html"
+  ],
+  "LBH": [
+    "truong-si-quan-luc-quan-2-dai-hoc-nguyen-hue-LBH",
+    "LBH-Trường Sĩ Quan Lục Quân 2 - Đại học Nguyễn Huệ",
+    "/diem-chuan/truong-si-quan-luc-quan-2-dai-hoc-nguyen-hue-LBH.html"
+  ],
+  "BVS": [
+    "hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-nam-BVS",
+    "BVS-Học Viện Công Nghệ Bưu Chính Viễn Thông (Cơ sở TP.HCM)",
+    "/diem-chuan/hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-nam-BVS.html"
+  ],
+  "YKV": [
+    "dai-hoc-y-khoa-vinh-YKV",
+    "YKV-Trường Đại Học Y Khoa Vinh",
+    "/diem-chuan/dai-hoc-y-khoa-vinh-YKV.html"
+  ],
+  "YDN": [
+    "dai-hoc-ky-thuat-y-duoc-da-nang-YDN",
+    "YDN-Trường Đại học Kỹ thuật Y Dược Đà Nẵng",
+    "/diem-chuan/dai-hoc-ky-thuat-y-duoc-da-nang-YDN.html"
+  ],
+  "DTY": [
+    "dai-hoc-y-duoc-thai-nguyen-DTY",
+    "DTY-Trường Đại Học Y Dược Thái Nguyên",
+    "/diem-chuan/dai-hoc-y-duoc-thai-nguyen-DTY.html"
+  ],
+  "DHY": [
+    "dai-hoc-y-duoc-hue-DHY",
+    "DHY-Trường Đại Học Y Dược Huế",
+    "/diem-chuan/dai-hoc-y-duoc-hue-DHY.html"
+  ],
+  "DDY": [
+    "truong-y-duoc-da-nang-DDY",
+    "DDY-Trường Y Dược Đà Nẵng",
+    "/diem-chuan/truong-y-duoc-da-nang-DDY.html"
+  ],
+  "KTS": [
+    "dai-hoc-kien-truc-tphcm-KTS",
+    "KTS-Trường Đại Học Kiến Trúc TPHCM",
+    "/diem-chuan/dai-hoc-kien-truc-tphcm-KTS.html"
+  ],
+  "HCA": [
+    "hoc-vien-chinh-tri-cong-an-nhan-dan-HCA",
+    "HCA-Học Viện Chính Trị Công An Nhân Dân",
+    "/diem-chuan/hoc-vien-chinh-tri-cong-an-nhan-dan-HCA.html"
+  ],
+  "QSY": [
+    "dai-hoc-khoa-hoc-suc-khoe-tphcm-QSY",
+    "QSY-Trường Đại học Khoa học sức khỏe TPHCM",
+    "/diem-chuan/dai-hoc-khoa-hoc-suc-khoe-tphcm-QSY.html"
+  ],
+  "QSQ": [
+    "dai-hoc-quoc-te-dhqg-tphcm-QSQ",
+    "QSQ-Trường Đại Học Quốc Tế - ĐHQG TPHCM",
+    "/diem-chuan/dai-hoc-quoc-te-dhqg-tphcm-QSQ.html"
+  ],
+  "THV": [
+    "dai-hoc-hung-vuong-THV",
+    "THV-Trường Đại Học Hùng Vương",
+    "/diem-chuan/dai-hoc-hung-vuong-THV.html"
+  ],
+  "THP": [
+    "dai-hoc-hai-phong-THP",
+    "THP-Trường Đại Học Hải Phòng",
+    "/diem-chuan/dai-hoc-hai-phong-THP.html"
+  ],
+  "HCP": [
+    "hoc-vien-chinh-sach-va-phat-trien-HCP",
+    "HCP-Học Viện Chính Sách và Phát Triển",
+    "/diem-chuan/hoc-vien-chinh-sach-va-phat-trien-HCP.html"
+  ],
+  "MHN": [
+    "dai-hoc-mo-ha-noi-MHN",
+    "MHN-Trường Đại Học Mở Hà Nội",
+    "/diem-chuan/dai-hoc-mo-ha-noi-MHN.html"
+  ],
+  "LDA": [
+    "dai-hoc-cong-doan-LDA",
+    "LDA-Trường Đại Học Công Đoàn",
+    "/diem-chuan/dai-hoc-cong-doan-LDA.html"
+  ],
+  "HHA": [
+    "dai-hoc-hang-hai-HHA",
+    "HHA-Trường Đại Học Hàng Hải Việt Nam",
+    "/diem-chuan/dai-hoc-hang-hai-HHA.html"
+  ],
+  "KTA": [
+    "dai-hoc-kien-truc-ha-noi-KTA",
+    "KTA-Trường Đại Học Kiến Trúc Hà Nội",
+    "/diem-chuan/dai-hoc-kien-truc-ha-noi-KTA.html"
+  ],
+  "TDV": [
+    "dai-hoc-vinh-TDV",
+    "TDV-Trường Đại Học Vinh",
+    "/diem-chuan/dai-hoc-vinh-TDV.html"
+  ],
+  "QSA": [
+    "dai-hoc-an-giang-QSA",
+    "QSA-Trường Đại Học An Giang",
+    "/diem-chuan/dai-hoc-an-giang-QSA.html"
+  ],
+  "HCH": [
+    "hoc-vien-hanh-chinh-va-quan-tri-cong-HCH",
+    "HCH-Học Viện Hành Chính và Quản trị công",
+    "/diem-chuan/hoc-vien-hanh-chinh-va-quan-tri-cong-HCH.html"
+  ],
+  "SPD": [
+    "dai-hoc-dong-thap-SPD",
+    "SPD-Trường Đại Học Đồng Tháp",
+    "/diem-chuan/dai-hoc-dong-thap-SPD.html"
+  ],
+  "QHK": [
+    "truong-khoa-hoc-lien-nganh-va-nghe-thuat-ha-noi-QHK",
+    "QHK-Trường Khoa học liên ngành và Nghệ thuật Hà Nội",
+    "/diem-chuan/truong-khoa-hoc-lien-nganh-va-nghe-thuat-ha-noi-QHK.html"
+  ],
+  "TTN": [
+    "dai-hoc-tay-nguyen-TTN",
+    "TTN-Trường Đại Học Tây Nguyên",
+    "/diem-chuan/dai-hoc-tay-nguyen-TTN.html"
+  ],
+  "DQN": [
+    "dai-hoc-quy-nhon-DQN",
+    "DQN-Trường Đại Học Quy Nhơn",
+    "/diem-chuan/dai-hoc-quy-nhon-DQN.html"
+  ],
+  "DHC": [
+    "khoa-giao-duc-the-chat-hue-DHC",
+    "DHC-Khoa Giáo Dục Thể Chất Huế",
+    "/diem-chuan/khoa-giao-duc-the-chat-hue-DHC.html"
+  ],
+  "GNT": [
+    "dai-hoc-su-pham-nghe-thuat-trung-uong-GNT",
+    "GNT-Trường Đại Học Sư Phạm Nghệ Thuật Trung Ương",
+    "/diem-chuan/dai-hoc-su-pham-nghe-thuat-trung-uong-GNT.html"
+  ],
+  "DDQ": [
+    "dai-hoc-kinh-te-dai-hoc-da-nang-DDQ",
+    "DDQ-Trường Đại Học Kinh Tế – Đại Học Đà Nẵng",
+    "/diem-chuan/dai-hoc-kinh-te-dai-hoc-da-nang-DDQ.html"
+  ],
+  "DTF": [
+    "truong-ngoai-ngu-thai-nguyen-DTF",
+    "DTF-Trường Ngoại Ngữ Thái Nguyên",
+    "/diem-chuan/truong-ngoai-ngu-thai-nguyen-DTF.html"
+  ],
+  "HLU": [
+    "dai-hoc-ha-long-HLU",
+    "HLU-Trường Đại Học Hạ Long",
+    "/diem-chuan/dai-hoc-ha-long-HLU.html"
+  ],
+  "DKT": [
+    "dai-hoc-hai-duong-DKT",
+    "DKT-Trường Đại Học Hải Dương",
+    "/diem-chuan/dai-hoc-hai-duong-DKT.html"
+  ],
+  "DQB": [
+    "dai-hoc-quang-binh-DQB",
+    "DQB-Trường Đại Học Quảng Bình",
+    "/diem-chuan/dai-hoc-quang-binh-DQB.html"
+  ],
+  "DPQ": [
+    "dai-hoc-pham-van-dong-DPQ",
+    "DPQ-Trường Đại Học Phạm Văn Đồng",
+    "/diem-chuan/dai-hoc-pham-van-dong-DPQ.html"
+  ],
+  "HHT": [
+    "dai-hoc-ha-tinh-HHT",
+    "HHT-Trường Đại Học Hà Tĩnh",
+    "/diem-chuan/dai-hoc-ha-tinh-HHT.html"
+  ],
+  "DMT": [
+    "dai-hoc-tai-nguyen-va-moi-truong-ha-noi-DMT",
+    "DMT-Trường Đại học Tài Nguyên và Môi Trường Hà Nội",
+    "/diem-chuan/dai-hoc-tai-nguyen-va-moi-truong-ha-noi-DMT.html"
+  ],
+  "HCS": [
+    "hoc-vien-hanh-chinh-va-quan-tri-cong-phia-nam-HCS",
+    "HCS-Học Viện Hành Chính Và Quản Trị Công (phía Nam)",
+    "/diem-chuan/hoc-vien-hanh-chinh-va-quan-tri-cong-phia-nam-HCS.html"
+  ],
+  "NHS": [
+    "dai-hoc-ngan-hang-tphcm-NHS",
+    "NHS-Trường Đại Học Ngân Hàng TPHCM",
+    "/diem-chuan/dai-hoc-ngan-hang-tphcm-NHS.html"
+  ],
+  "DLX": [
+    "dai-hoc-lao-dong-xa-hoi-co-so-ha-noi-DLX",
+    "DLX-Trường Đại Học Lao Động – Xã Hội",
+    "/diem-chuan/dai-hoc-lao-dong-xa-hoi-co-so-ha-noi-DLX.html"
+  ],
+  "DBL": [
+    "dai-hoc-bac-lieu-DBL",
+    "DBL-Trường Đại Học Bạc Liêu",
+    "/diem-chuan/dai-hoc-bac-lieu-DBL.html"
+  ],
+  "DQU": [
+    "dai-hoc-quang-nam-DQU",
+    "DQU-Trường Đại Học Quảng Nam",
+    "/diem-chuan/dai-hoc-quang-nam-DQU.html"
+  ],
+  "DLS": [
+    "dai-hoc-lao-dong-xa-hoi-co-so-phia-nam-DLS",
+    "DLS-Trường Đại Học Lao Động – Xã Hội (Cơ sở II)",
+    "/diem-chuan/dai-hoc-lao-dong-xa-hoi-co-so-phia-nam-DLS.html"
+  ],
+  "DPY": [
+    "dai-hoc-phu-yen-DPY",
+    "DPY-Trường Đại Học Phú Yên",
+    "/diem-chuan/dai-hoc-phu-yen-DPY.html"
+  ],
+  "DDP": [
+    "phan-hieu-dai-hoc-da-nang-tai-kon-tum-DDP",
+    "DDP-Phân Hiệu Đại Học Đà Nẵng tại Kon Tum",
+    "/diem-chuan/phan-hieu-dai-hoc-da-nang-tai-kon-tum-DDP.html"
+  ],
+  "TDH": [
+    "dai-hoc-su-pham-the-duc-the-thao-ha-noi-TDH",
+    "TDH-Trường Đại Học Sư Phạm Thể Dục Thể Thao Hà Nội",
+    "/diem-chuan/dai-hoc-su-pham-the-duc-the-thao-ha-noi-TDH.html"
+  ],
+  "KCC": [
+    "dai-hoc-ky-thuat-cong-nghe-can-tho-KCC",
+    "KCC-Trường Đại học Kỹ Thuật Công Nghệ Cần Thơ",
+    "/diem-chuan/dai-hoc-ky-thuat-cong-nghe-can-tho-KCC.html"
+  ],
+  "QHQ": [
+    "truong-quoc-te-dai-hoc-quoc-gia-ha-noi-QHQ",
+    "QHQ-Trường Quốc Tế  - ĐHQG Hà Nội",
+    "/diem-chuan/truong-quoc-te-dai-hoc-quoc-gia-ha-noi-QHQ.html"
+  ],
+  "KCN": [
+    "dai-hoc-khoa-hoc-va-cong-nghe-ha-noi-KCN",
+    "KCN-Trường Đại Học Khoa Học Và Công Nghệ Hà Nội",
+    "/diem-chuan/dai-hoc-khoa-hoc-va-cong-nghe-ha-noi-KCN.html"
+  ],
+  "DCV": [
+    "dai-hoc-cong-nghiep-vinh-DCV",
+    "DCV-Trường Đại học Công nghiệp Vinh",
+    "/diem-chuan/dai-hoc-cong-nghiep-vinh-DCV.html"
+  ],
+  "DVT": [
+    "dai-hoc-tra-vinh-DVT",
+    "DVT-Đại Học Trà Vinh",
+    "/diem-chuan/dai-hoc-tra-vinh-DVT.html"
+  ],
+  "NLS": [
+    "dai-hoc-nong-lam-tphcm-NLS",
+    "NLS-Trường Đại Học Nông Lâm TPHCM",
+    "/diem-chuan/dai-hoc-nong-lam-tphcm-NLS.html"
+  ],
+  "HVC": [
+    "hoc-vien-can-bo-tphcm-HVC",
+    "HVC-Học viện cán bộ TPHCM",
+    "/diem-chuan/hoc-vien-can-bo-tphcm-HVC.html"
+  ],
+  "XDA": [
+    "dai-hoc-xay-dung-ha-noi-XDA",
+    "XDA-Trường Đại Học Xây Dựng Hà Nội",
+    "/diem-chuan/dai-hoc-xay-dung-ha-noi-XDA.html"
+  ],
+  "SKH": [
+    "dai-hoc-su-pham-ky-thuat-hung-yen-SKH",
+    "SKH-Trường Đại Học Sư Phạm Kỹ Thuật Hưng Yên",
+    "/diem-chuan/dai-hoc-su-pham-ky-thuat-hung-yen-SKH.html"
+  ],
+  "MBS": [
+    "dai-hoc-mo-tphcm-MBS",
+    "MBS-Trường Đại Học Mở TPHCM",
+    "/diem-chuan/dai-hoc-mo-tphcm-MBS.html"
+  ],
+  "FBU": [
+    "dai-hoc-tai-chinh-ngan-hang-ha-noi-FBU",
+    "FBU-Trường Đại Học Tài Chính Ngân Hàng Hà Nội",
+    "/diem-chuan/dai-hoc-tai-chinh-ngan-hang-ha-noi-FBU.html"
+  ],
+  "GTA": [
+    "dai-hoc-cong-nghe-giao-thong-van-tai-GTA",
+    "GTA-Trường Đại học Công nghệ Giao thông vận tải",
+    "/diem-chuan/dai-hoc-cong-nghe-giao-thong-van-tai-GTA.html"
+  ],
+  "MDA": [
+    "dai-hoc-mo-dia-chat-MDA",
+    "MDA-Trường Đại Học Mỏ Địa Chất",
+    "/diem-chuan/dai-hoc-mo-dia-chat-MDA.html"
+  ],
+  "DDL": [
+    "dai-hoc-dien-luc-DDL",
+    "DDL-Trường Đại Học Điện Lực",
+    "/diem-chuan/dai-hoc-dien-luc-DDL.html"
+  ],
+  "TDS": [
+    "dai-hoc-the-duc-the-thao-tphcm-TDS",
+    "TDS-Trường Đại Học Thể Dục Thể Thao TPHCM",
+    "/diem-chuan/dai-hoc-the-duc-the-thao-tphcm-TDS.html"
+  ],
+  "DPD": [
+    "dai-hoc-phuong-dong-DPD",
+    "DPD-Trường Đại Học Phương Đông",
+    "/diem-chuan/dai-hoc-phuong-dong-DPD.html"
+  ],
+  "VLU": [
+    "dai-hoc-su-pham-ky-thuat-vinh-long-VLU",
+    "VLU-Trường Đại học Công nghệ kỹ thuật Vĩnh Long",
+    "/diem-chuan/dai-hoc-su-pham-ky-thuat-vinh-long-VLU.html"
+  ],
+  "KTD": [
+    "dai-hoc-kien-truc-da-nang-KTD",
+    "KTD-Trường Đại Học Kiến Trúc Đà Nẵng",
+    "/diem-chuan/dai-hoc-kien-truc-da-nang-KTD.html"
+  ],
+  "DQK": [
+    "dai-hoc-kinh-doanh-va-cong-nghe-ha-noi-DQK",
+    "DQK-Trường Đại Học Kinh Doanh và Công Nghệ Hà Nội",
+    "/diem-chuan/dai-hoc-kinh-doanh-va-cong-nghe-ha-noi-DQK.html"
+  ],
+  "DTK": [
+    "dai-hoc-ky-thuat-cong-nghiep-thai-nguyen-DTK",
+    "DTK-Trường Đại Học Kỹ Thuật Công Nghiệp Thái Nguyên",
+    "/diem-chuan/dai-hoc-ky-thuat-cong-nghiep-thai-nguyen-DTK.html"
+  ],
+  "STS": [
+    "dai-hoc-su-pham-the-duc-the-thao-tphcm-STS",
+    "STS-Trường Đại Học Sư Phạm Thể Dục Thể Thao TPHCM",
+    "/diem-chuan/dai-hoc-su-pham-the-duc-the-thao-tphcm-STS.html"
+  ],
+  "UKH": [
+    "dai-hoc-khanh-hoa-UKH",
+    "UKH-Trường Đại học Khánh Hòa",
+    "/diem-chuan/dai-hoc-khanh-hoa-UKH.html"
+  ],
+  "DSK": [
+    "dai-hoc-su-pham-ky-thuat-dai-hoc-da-nang-DSK",
+    "DSK-Trường Đại học Sư phạm Kỹ thuật - Đại học Đà Nẵng",
+    "/diem-chuan/dai-hoc-su-pham-ky-thuat-dai-hoc-da-nang-DSK.html"
+  ],
+  "NHB": [
+    "hoc-vien-ngan-hang-phan-vien-bac-ninh-NHB",
+    "NHB-Học Viện Ngân Hàng (Phân Viện Bắc Ninh)",
+    "/diem-chuan/hoc-vien-ngan-hang-phan-vien-bac-ninh-NHB.html"
+  ],
+  "DHI": [
+    "khoa-quoc-te-dai-hoc-hue-DHI",
+    "DHI-Khoa Quốc tế - Đại học Huế",
+    "/diem-chuan/khoa-quoc-te-dai-hoc-hue-DHI.html"
+  ],
+  "CMC": [
+    "dai-hoc-cmc-CMC",
+    "CMC-Trường Đại Học CMC",
+    "/diem-chuan/dai-hoc-cmc-CMC.html"
+  ],
+  "NTT": [
+    "dai-hoc-nguyen-tat-thanh-NTT",
+    "NTT-Trường Đại Học Nguyễn Tất Thành",
+    "/diem-chuan/dai-hoc-nguyen-tat-thanh-NTT.html"
+  ],
+  "DHK": [
+    "dai-hoc-kinh-te-dai-hoc-hue-DHK",
+    "DHK-Trường Đại Học Kinh Tế - Đại Học Huế",
+    "/diem-chuan/dai-hoc-kinh-te-dai-hoc-hue-DHK.html"
+  ],
+  "DHD": [
+    "truong-du-lich-dai-hoc-hue-DHD",
+    "DHD-Trường Du Lịch - Đại Học Huế",
+    "/diem-chuan/truong-du-lich-dai-hoc-hue-DHD.html"
+  ],
+  "KGH": [
+    "truong-si-quan-khong-quan-he-dai-hoc-KGH",
+    "KGH-Trường Sĩ Quan Không Quân - Hệ Đại học",
+    "/diem-chuan/truong-si-quan-khong-quan-he-dai-hoc-KGH.html"
+  ],
+  "DTC": [
+    "dai-hoc-cong-nghe-thong-tin-va-truyen-thong-thai-nguyen-DTC",
+    "DTC-Trường Đại học Công Nghệ Thông Tin và Truyền Thông Thái Nguyên",
+    "/diem-chuan/dai-hoc-cong-nghe-thong-tin-va-truyen-thong-thai-nguyen-DTC.html"
+  ],
+  "HGH": [
+    "truong-si-quan-phong-hoa-HGH",
+    "HGH-Trường Sĩ Quan Phòng Hóa",
+    "/diem-chuan/truong-si-quan-phong-hoa-HGH.html"
+  ],
+  "TGH": [
+    "truong-siquan-tang-thiet-giap-TGH",
+    "TGH-Trường Sĩ Quan Tăng - Thiết Giáp",
+    "/diem-chuan/truong-siquan-tang-thiet-giap-TGH.html"
+  ],
+  "HVQ": [
+    "hoc-vien-quan-ly-giao-duc-HVQ",
+    "HVQ-Học Viện Quản Lý Giáo Dục",
+    "/diem-chuan/hoc-vien-quan-ly-giao-duc-HVQ.html"
+  ],
+  "DDT": [
+    "dai-hoc-duy-tan-DDT",
+    "DDT-Đại Học Duy Tân",
+    "/diem-chuan/dai-hoc-duy-tan-DDT.html"
+  ],
+  "DNC": [
+    "dai-hoc-nam-can-tho-DNC",
+    "DNC-Trường Đại học Nam Cần Thơ",
+    "/diem-chuan/dai-hoc-nam-can-tho-DNC.html"
+  ],
+  "HIU": [
+    "dai-hoc-quoc-te-hong-bang-HIU",
+    "HIU-Trường Đại Học Quốc Tế Hồng Bàng",
+    "/diem-chuan/dai-hoc-quoc-te-hong-bang-HIU.html"
+  ],
+  "TTU": [
+    "dai-hoc-tan-tao-TTU",
+    "TTU-Trường Đại học Tân Tạo",
+    "/diem-chuan/dai-hoc-tan-tao-TTU.html"
+  ],
+  "TTD": [
+    "dai-hoc-the-duc-the-thao-da-nang-TTD",
+    "TTD-Trường Đại Học Thể Dục Thể Thao Đà Nẵng",
+    "/diem-chuan/dai-hoc-the-duc-the-thao-da-nang-TTD.html"
+  ],
+  "DCL": [
+    "dai-hoc-cuu-long-DCL",
+    "DCL-Trường Đại Học Cửu Long",
+    "/diem-chuan/dai-hoc-cuu-long-DCL.html"
+  ],
+  "DVL": [
+    "dai-hoc-van-lang-DVL",
+    "DVL-Trường Đại Học Văn Lang",
+    "/diem-chuan/dai-hoc-van-lang-DVL.html"
+  ],
+  "DPC": [
+    "dai-hoc-phan-chau-trinh-DPC",
+    "DPC-Trường Đại Học Phan Châu Trinh",
+    "/diem-chuan/dai-hoc-phan-chau-trinh-DPC.html"
+  ],
+  "UKB": [
+    "dai-hoc-kinh-bac-UKB",
+    "UKB-Trường Đại Học Kinh Bắc",
+    "/diem-chuan/dai-hoc-kinh-bac-UKB.html"
+  ],
+  "ETU": [
+    "dai-hoc-hoa-binh-ETU",
+    "ETU-Trường Đại Học Hòa Bình",
+    "/diem-chuan/dai-hoc-hoa-binh-ETU.html"
+  ],
+  "DDN": [
+    "dai-hoc-dai-nam-DDN",
+    "DDN-Trường Đại Học Đại Nam",
+    "/diem-chuan/dai-hoc-dai-nam-DDN.html"
+  ],
+  "VTT": [
+    "dai-hoc-vo-truong-toan-VTT",
+    "VTT-Trường Đại Học Võ Trường Toản",
+    "/diem-chuan/dai-hoc-vo-truong-toan-VTT.html"
+  ],
+  "DAD": [
+    "dai-hoc-dong-a-DAD",
+    "DAD-Trường Đại Học Đông Á",
+    "/diem-chuan/dai-hoc-dong-a-DAD.html"
+  ],
+  "SNH": [
+    "truong-si-quan-cong-binh-he-quan-su-dai-hoc-ngo-quyen-SNH",
+    "SNH-Trường Sĩ Quan Công Binh - Hệ Quân sự - Đại học Ngô Quyền",
+    "/diem-chuan/truong-si-quan-cong-binh-he-quan-su-dai-hoc-ngo-quyen-SNH.html"
+  ],
+  "DCH": [
+    "truong-si-quan-dac-cong-DCH",
+    "DCH-Trường Sĩ Quan Đặc Công",
+    "/diem-chuan/truong-si-quan-dac-cong-DCH.html"
+  ],
+  "HCB": [
+    "hoc-vien-ky-thuat-cong-nghe-an-ninh-phia-bac-HCB",
+    "HCB-Học viện Kỹ thuật và Công nghệ an ninh (Phía Bắc)",
+    "/diem-chuan/hoc-vien-ky-thuat-cong-nghe-an-ninh-phia-bac-HCB.html"
+  ],
+  "HCN": [
+    "hoc-vien-ky-thuat-va-cong-nghe-an-ninh-phia-nam-HCN",
+    "HCN-Học viện Kỹ thuật và Công nghệ an ninh (Phía Nam)",
+    "/diem-chuan/hoc-vien-ky-thuat-va-cong-nghe-an-ninh-phia-nam-HCN.html"
+  ],
+  "PBH": [
+    "truong-si-quan-phao-binh-PBH",
+    "PBH-Trường Sĩ Quan Pháo Binh",
+    "/diem-chuan/truong-si-quan-phao-binh-PBH.html"
+  ],
+  "KSV": [
+    "dai-hoc-kinh-te-tphcm-phan-hieu-vinh-long-KSV",
+    "KSV-Đại học Kinh Tế TPHCM - Phân hiệu Vĩnh Long",
+    "/diem-chuan/dai-hoc-kinh-te-tphcm-phan-hieu-vinh-long-KSV.html"
+  ],
+  "QHD": [
+    "truong-quan-tri-va-kinh-doanh-dh-quoc-gia-ha-noi-QHD",
+    "QHD-Trường Quản Trị và Kinh Doanh - ĐHQG Hà Nội",
+    "/diem-chuan/truong-quan-tri-va-kinh-doanh-dh-quoc-gia-ha-noi-QHD.html"
+  ],
+  "VGU": [
+    "dai-hoc-viet-duc-VGU",
+    "VGU-Trường Đại Học Việt Đức",
+    "/diem-chuan/dai-hoc-viet-duc-VGU.html"
+  ],
+  "TLS": [
+    "dai-hoc-thuy-loi-co-so-2-TLS",
+    "TLS-Trường Đại Học Thủy Lợi (Cơ sở 2)",
+    "/diem-chuan/dai-hoc-thuy-loi-co-so-2-TLS.html"
+  ],
+  "SDU": [
+    "dai-hoc-sao-do-SDU",
+    "SDU-Trường Đại học Sao Đỏ",
+    "/diem-chuan/dai-hoc-sao-do-SDU.html"
+  ],
+  "PCS": [
+    "dai-hoc-phong-chay-chua-chay-phia-nam-PCS",
+    "PCS-Học viện Phòng cháy chữa cháy và cứu nạn cứu hộ (phía Nam)",
+    "/diem-chuan/dai-hoc-phong-chay-chua-chay-phia-nam-PCS.html"
+  ],
+  "PCH": [
+    "dai-hoc-phong-chay-chua-chay-phia-bac-PCH",
+    "PCH-Học viện Phòng cháy chữa cháy và Cứu nạn cứu hộ",
+    "/diem-chuan/dai-hoc-phong-chay-chua-chay-phia-bac-PCH.html"
+  ],
+  "NLN": [
+    "phan-hieu-dai-hoc-nong-lam-tphcm-tai-ninh-thuan-NLN",
+    "NLN-Phân hiệu Đại học Nông Lâm TPHCM tại Ninh Thuận",
+    "/diem-chuan/phan-hieu-dai-hoc-nong-lam-tphcm-tai-ninh-thuan-NLN.html"
+  ],
+  "DTD": [
+    "dai-hoc-tay-do-DTD",
+    "DTD-Trường Đại Học Tây Đô",
+    "/diem-chuan/dai-hoc-tay-do-DTD.html"
+  ],
+  "DKC": [
+    "dai-hoc-cong-nghe-tphcm-DKC",
+    "DKC-Trường Đại học Công Nghệ TPHCM",
+    "/diem-chuan/dai-hoc-cong-nghe-tphcm-DKC.html"
+  ],
+  "DDU": [
+    "dai-hoc-dong-do-DDU",
+    "DDU-Trường Đại Học Đông Đô",
+    "/diem-chuan/dai-hoc-dong-do-DDU.html"
+  ],
+  "DLH": [
+    "dai-hoc-lac-hong-DLH",
+    "DLH-Trường Đại Học Lạc Hồng",
+    "/diem-chuan/dai-hoc-lac-hong-DLH.html"
+  ],
+  "DDB": [
+    "dai-hoc-thanh-dong-DDB",
+    "DDB-Trường Đại Học Thành Đông",
+    "/diem-chuan/dai-hoc-thanh-dong-DDB.html"
+  ],
+  "DHA": [
+    "dai-hoc-luat-dai-hoc-hue-DHA",
+    "DHA-Trường Đại học Luật Huế",
+    "/diem-chuan/dai-hoc-luat-dai-hoc-hue-DHA.html"
+  ],
+  "DYD": [
+    "dai-hoc-yersin-da-lat-DYD",
+    "DYD-Trường Đại Học Yersin Đà Lạt",
+    "/diem-chuan/dai-hoc-yersin-da-lat-DYD.html"
+  ],
+  "TDD": [
+    "dai-hoc-thanh-do-TDD",
+    "TDD-Trường Đại học Thành Đô",
+    "/diem-chuan/dai-hoc-thanh-do-TDD.html"
+  ],
+  "DBD": [
+    "dai-hoc-binh-duong-DBD",
+    "DBD-Trường Đại Học Bình Dương",
+    "/diem-chuan/dai-hoc-binh-duong-DBD.html"
+  ],
+  "DTV": [
+    "dai-hoc-luong-the-vinh-DTV",
+    "DTV-Trường Đại Học Lương Thế Vinh",
+    "/diem-chuan/dai-hoc-luong-the-vinh-DTV.html"
+  ],
+  "VJU": [
+    "dai-hoc-viet-nhat-ha-noi-VJU",
+    "VJU-Trường Đại học Việt Nhật - ĐHQG Hà Nội",
+    "/diem-chuan/dai-hoc-viet-nhat-ha-noi-VJU.html"
+  ],
+  "BVU": [
+    "dai-hoc-ba-ria-vung-tau-BVU",
+    "BVU-Trường Đại Học Bà Rịa – Vũng Tàu",
+    "/diem-chuan/dai-hoc-ba-ria-vung-tau-BVU.html"
+  ],
+  "DHN": [
+    "dai-hoc-nghe-thuat-hue-DHN",
+    "DHN-Trường Đại Học Nghệ Thuật Huế",
+    "/diem-chuan/dai-hoc-nghe-thuat-hue-DHN.html"
+  ],
+  "MIT": [
+    "dai-hoc-cong-nghe-mien-dong-MIT",
+    "MIT-Trường Đại học Công nghệ Miền Đông",
+    "/diem-chuan/dai-hoc-cong-nghe-mien-dong-MIT.html"
+  ],
+  "FPT": [
+    "dai-hoc-fpt-FPT",
+    "FPT-Trường Đại Học FPT",
+    "/diem-chuan/dai-hoc-fpt-FPT.html"
+  ],
+  "DKB": [
+    "dai-hoc-kinh-te-ky-thuat-binh-duong-DKB",
+    "DKB-Trường Đại Học Kinh Tế Kỹ Thuật Bình Dương",
+    "/diem-chuan/dai-hoc-kinh-te-ky-thuat-binh-duong-DKB.html"
+  ],
+  "UEF": [
+    "dai-hoc-kinh-te-tai-chinh-tphcm-UEF",
+    "UEF-Trường Đại Học Kinh Tế Tài Chính TPHCM",
+    "/diem-chuan/dai-hoc-kinh-te-tai-chinh-tphcm-UEF.html"
+  ],
+  "DFA": [
+    "dai-hoc-tai-chinh-quan-tri-kinh-doanh-DFA",
+    "DFA-Trường Đại học Tài chính Quản trị kinh doanh",
+    "/diem-chuan/dai-hoc-tai-chinh-quan-tri-kinh-doanh-DFA.html"
+  ],
+  "TTG": [
+    "dai-hoc-tien-giang-TTG",
+    "TTG-Trường Đại Học Tiền Giang",
+    "/diem-chuan/dai-hoc-tien-giang-TTG.html"
+  ],
+  "DTE": [
+    "dai-hoc-kinh-te-quan-tri-kinh-doanh-thai-nguyen-DTE",
+    "DTE-Trường Đại học Kinh tế và Quản trị kinh doanh Thái Nguyên",
+    "/diem-chuan/dai-hoc-kinh-te-quan-tri-kinh-doanh-thai-nguyen-DTE.html"
+  ],
+  "PVU": [
+    "dai-hoc-dau-khi-viet-nam-PVU",
+    "PVU-Trường Đại Học Dầu Khí Việt Nam",
+    "/diem-chuan/dai-hoc-dau-khi-viet-nam-PVU.html"
+  ],
+  "DNT": [
+    "dai-hoc-ngoai-ngu-tin-hoc-tphcm-DNT",
+    "DNT-Trường Đại Học Ngoại Ngữ Tin Học TPHCM",
+    "/diem-chuan/dai-hoc-ngoai-ngu-tin-hoc-tphcm-DNT.html"
+  ],
+  "SKV": [
+    "dai-hoc-su-pham-ky-thuat-vinh-SKV",
+    "SKV-Trường Đại Học Sư Phạm Kỹ Thuật Vinh",
+    "/diem-chuan/dai-hoc-su-pham-ky-thuat-vinh-SKV.html"
+  ],
+  "CEA": [
+    "dai-hoc-nghe-an-CEA",
+    "CEA-Trường Đại học Nghệ An",
+    "/diem-chuan/dai-hoc-nghe-an-CEA.html"
+  ],
+  "LNH": [
+    "dai-hoc-lam-nghiep-LNH",
+    "LNH-Trường Đại Học Lâm nghiệp",
+    "/diem-chuan/dai-hoc-lam-nghiep-LNH.html"
+  ],
+  "DVH": [
+    "dai-hoc-van-hien-DVH",
+    "DVH-Trường Đại Học Văn Hiến",
+    "/diem-chuan/dai-hoc-van-hien-DVH.html"
+  ],
+  "DQT": [
+    "dai-hoc-quang-trung-DQT",
+    "DQT-Trường Đại Học Quang Trung",
+    "/diem-chuan/dai-hoc-quang-trung-DQT.html"
+  ],
+  "HSU": [
+    "dai-hoc-hoa-sen-HSU",
+    "HSU-Trường Đại Học Hoa Sen",
+    "/diem-chuan/dai-hoc-hoa-sen-HSU.html"
+  ],
+  "DPT": [
+    "dai-hoc-phan-thiet-DPT",
+    "DPT-Trường Đại Học Phan Thiết",
+    "/diem-chuan/dai-hoc-phan-thiet-DPT.html"
+  ],
+  "DVP": [
+    "dai-hoc-trung-vuong-DVP",
+    "DVP-Trường Đại Học Trưng Vương",
+    "/diem-chuan/dai-hoc-trung-vuong-DVP.html"
+  ],
+  "YDD": [
+    "dai-hoc-dieu-duong-nam-dinh-YDD",
+    "YDD-Trường Đại Học Điều Dưỡng Nam Định",
+    "/diem-chuan/dai-hoc-dieu-duong-nam-dinh-YDD.html"
+  ],
+  "THU": [
+    "dai-hoc-y-khoa-tokyo-viet-nam-THU",
+    "THU-Trường Đại học Y khoa Tokyo Việt Nam",
+    "/diem-chuan/dai-hoc-y-khoa-tokyo-viet-nam-THU.html"
+  ],
+  "DCD": [
+    "dai-hoc-cong-nghe-dong-nai-DCD",
+    "DCD-Trường Đại Học Công Nghệ Đồng Nai",
+    "/diem-chuan/dai-hoc-cong-nghe-dong-nai-DCD.html"
+  ],
+  "EIU": [
+    "dai-hoc-quoc-te-mien-dong-EIU",
+    "EIU-Trường Đại Học Quốc Tế Miền Đông",
+    "/diem-chuan/dai-hoc-quoc-te-mien-dong-EIU.html"
+  ],
+  "DDV": [
+    "vien-nghien-cuu-va-dao-tao-viet-anh-dai-hoc-da-nang-DDV",
+    "DDV-Viện nghiên cứu và đào tạo Việt Anh - Đại học Đà Nẵng",
+    "/diem-chuan/vien-nghien-cuu-va-dao-tao-viet-anh-dai-hoc-da-nang-DDV.html"
+  ],
+  "TDB": [
+    "dai-hoc-the-duc-the-thao-bac-ninh-TDB",
+    "TDB-Trường Đại Học Thể Dục Thể Thao Bắc Ninh",
+    "/diem-chuan/dai-hoc-the-duc-the-thao-bac-ninh-TDB.html"
+  ],
+  "DHE": [
+    "khoa-ky-thuat-va-cong-nghe-dai-hoc-hue-DHE",
+    "DHE-Khoa Kỹ thuật và Công nghệ - Đại học Huế",
+    "/diem-chuan/khoa-ky-thuat-va-cong-nghe-dai-hoc-hue-DHE.html"
+  ],
+  "DTB": [
+    "dai-hoc-thai-binh-DTB",
+    "DTB-Trường Đại Học Thái Bình",
+    "/diem-chuan/dai-hoc-thai-binh-DTB.html"
+  ],
+  "HVD": [
+    "hoc-vien-dan-toc-HVD",
+    "HVD-Học Viện Dân Tộc",
+    "/diem-chuan/hoc-vien-dan-toc-HVD.html"
+  ],
+  "DHT": [
+    "dai-hoc-khoa-hoc-hue-DHT",
+    "DHT-Trường Đại Học Khoa Học Huế",
+    "/diem-chuan/dai-hoc-khoa-hoc-hue-DHT.html"
+  ],
+  "DTZ": [
+    "dai-hoc-khoa-hoc-thai-nguyen-DTZ",
+    "DTZ-Trường Đại Học Khoa Học Thái Nguyên",
+    "/diem-chuan/dai-hoc-khoa-hoc-thai-nguyen-DTZ.html"
+  ],
+  "HDT": [
+    "dai-hoc-hong-duc-HDT",
+    "HDT-Trường Đại Học Hồng Đức",
+    "/diem-chuan/dai-hoc-hong-duc-HDT.html"
+  ],
+  "DNU": [
+    "dai-hoc-dong-nai-DNU",
+    "DNU-Trường Đại Học Đồng Nai",
+    "/diem-chuan/dai-hoc-dong-nai-DNU.html"
+  ],
+  "LNS": [
+    "phan-hieu-dai-hoc-lam-nghiep-tai-dong-nai-LNS",
+    "LNS-Phân hiệu Đại Học Lâm nghiệp tại Đồng Nai",
+    "/diem-chuan/phan-hieu-dai-hoc-lam-nghiep-tai-dong-nai-LNS.html"
+  ],
+  "DTM": [
+    "dai-hoc-tai-nguyen-va-moi-truong-tphcm-DTM",
+    "DTM-Trường Đại học Tài Nguyên và Môi Trường TPHCM",
+    "/diem-chuan/dai-hoc-tai-nguyen-va-moi-truong-tphcm-DTM.html"
+  ],
+  "NTU": [
+    "dai-hoc-nguyen-trai-NTU",
+    "NTU-Trường Đại Học Nguyễn Trãi",
+    "/diem-chuan/dai-hoc-nguyen-trai-NTU.html"
+  ],
+  "CCM": [
+    "dai-hoc-cong-nghiep-va-thuong-mai-ha-noi-CCM",
+    "CCM-Trường Đại học Công nghiệp và Thương mại Hà Nội",
+    "/diem-chuan/dai-hoc-cong-nghiep-va-thuong-mai-ha-noi-CCM.html"
+  ],
+  "VUI": [
+    "dai-hoc-cong-nghiep-viet-tri-VUI",
+    "VUI-Trường Đại Học Công Nghiệp Việt Trì",
+    "/diem-chuan/dai-hoc-cong-nghiep-viet-tri-VUI.html"
+  ],
+  "QSP": [
+    "phan-hieu-dai-hoc-quoc-gia-tphcm-tai-ben-tre-QSP",
+    "QSP-Phân hiệu Đại học Quốc gia TPHCM tại Bến Tre",
+    "/diem-chuan/phan-hieu-dai-hoc-quoc-gia-tphcm-tai-ben-tre-QSP.html"
+  ],
+  "DHL": [
+    "dai-hoc-nong-lam-hue-DHL",
+    "DHL-Trường Đại Học Nông Lâm Huế",
+    "/diem-chuan/dai-hoc-nong-lam-hue-DHL.html"
+  ],
+  "DTQ": [
+    "khoa-quoc-te-dai-hoc-thai-nguyen-DTQ",
+    "DTQ-Khoa Quốc Tế - Đại Học Thái Nguyên",
+    "/diem-chuan/khoa-quoc-te-dai-hoc-thai-nguyen-DTQ.html"
+  ],
+  "SIU": [
+    "dai-hoc-quoc-te-sai-gon-SIU",
+    "SIU-Trường Đại học Quốc Tế Sài Gòn",
+    "/diem-chuan/dai-hoc-quoc-te-sai-gon-SIU.html"
+  ],
+  "DCA": [
+    "dai-hoc-chu-van-an-DCA",
+    "DCA-Trường Đại học Intracom",
+    "/diem-chuan/dai-hoc-chu-van-an-DCA.html"
+  ],
+  "DLA": [
+    "dai-hoc-kinh-te-cong-nghiep-long-an-DLA",
+    "DLA-Trường Đại Học Kinh Tế Công Nghiệp Long An",
+    "/diem-chuan/dai-hoc-kinh-te-cong-nghiep-long-an-DLA.html"
+  ],
+  "DBH": [
+    "dai-hoc-quoc-te-bac-ha-DBH",
+    "DBH-Trường Đại Học Quốc Tế Bắc Hà",
+    "/diem-chuan/dai-hoc-quoc-te-bac-ha-DBH.html"
+  ],
+  "SKN": [
+    "dai-hoc-su-pham-ky-thuat-nam-dinh-SKN",
+    "SKN-Trường Đại Học Sư Phạm Kỹ Thuật Nam Định",
+    "/diem-chuan/dai-hoc-su-pham-ky-thuat-nam-dinh-SKN.html"
+  ],
+  "NLG": [
+    "phan-hieu-dai-hoc-nong-lam-tphcm-tai-gia-lai-NLG",
+    "NLG-Phân hiệu Đại học Nông Lâm TPHCM tại Gia Lai",
+    "/diem-chuan/phan-hieu-dai-hoc-nong-lam-tphcm-tai-gia-lai-NLG.html"
+  ],
+  "DTN": [
+    "dai-hoc-nong-lam-thai-nguyen-DTN",
+    "DTN-Trường Đại Học Nông Lâm Thái Nguyên",
+    "/diem-chuan/dai-hoc-nong-lam-thai-nguyen-DTN.html"
+  ],
+  "UMT": [
+    "dai-hoc-quan-ly-va-cong-nghe-tphcm-UMT",
+    "UMT-Trường Đại học Quản lý và công nghệ TPHCM",
+    "/diem-chuan/dai-hoc-quan-ly-va-cong-nghe-tphcm-UMT.html"
+  ],
+  "DCQ": [
+    "dai-hoc-cong-nghe-va-quan-ly-huu-nghi-DCQ",
+    "DCQ-Trường Đại Học Công Nghệ và Quản Lý Hữu Nghị",
+    "/diem-chuan/dai-hoc-cong-nghe-va-quan-ly-huu-nghi-DCQ.html"
+  ],
+  "DHQ": [
+    "phan-hieu-dai-hoc-hue-tai-quang-tri-DHQ",
+    "DHQ-Phân Hiệu Đại Học Huế tại Quảng Trị",
+    "/diem-chuan/phan-hieu-dai-hoc-hue-tai-quang-tri-DHQ.html"
+  ],
+  "TBD": [
+    "dai-hoc-thai-binh-duong-TBD",
+    "TBD-Trường Đại Học Thái Bình Dương",
+    "/diem-chuan/dai-hoc-thai-binh-duong-TBD.html"
+  ],
+  "DHV": [
+    "dai-hoc-hung-vuong-tphcm-DHV",
+    "DHV-Trường Đại học Hùng Vương TPHCM",
+    "/diem-chuan/dai-hoc-hung-vuong-tphcm-DHV.html"
+  ],
+  "DVB": [
+    "dai-hoc-kinh-te-cong-nghe-thai-nguyen-DVB",
+    "DVB-Trường Đại Học Kinh tế công nghệ Thái Nguyên",
+    "/diem-chuan/dai-hoc-kinh-te-cong-nghe-thai-nguyen-DVB.html"
+  ],
+  "DPX": [
+    "dai-hoc-phu-xuan-DPX",
+    "DPX-Trường Đại Học Phú Xuân",
+    "/diem-chuan/dai-hoc-phu-xuan-DPX.html"
+  ],
+  "HPU": [
+    "dai-hoc-quan-ly-va-cong-nghe-hai-phong-HPU",
+    "HPU-Trường Đại học Quản lý và Công nghệ Hải Phòng",
+    "/diem-chuan/dai-hoc-quan-ly-va-cong-nghe-hai-phong-HPU.html"
+  ],
+  "MTU": [
+    "dai-hoc-xay-dung-mien-tay-MTU",
+    "MTU-Trường Đại Học Xây Dựng Miền Tây",
+    "/diem-chuan/dai-hoc-xay-dung-mien-tay-MTU.html"
+  ],
+  "VHD": [
+    "dai-hoc-cong-nghiep-viet-hung-VHD",
+    "VHD-Trường Đại Học Công Nghiệp Việt - Hung",
+    "/diem-chuan/dai-hoc-cong-nghiep-viet-hung-VHD.html"
+  ],
+  "LNA": [
+    "phan-hieu-dai-hoc-lam-nghiep-tinh-gia-lai-LNA",
+    "LNA-Phân hiệu Đại học Lâm nghiệp tỉnh Gia Lai",
+    "/diem-chuan/phan-hieu-dai-hoc-lam-nghiep-tinh-gia-lai-LNA.html"
+  ],
+  "NHP": [
+    "hoc-vien-ngan-hang-phan-vien-phu-yen-NHP",
+    "NHP-Học Viện Ngân Hàng (Phân Viện Phú Yên)",
+    "/diem-chuan/hoc-vien-ngan-hang-phan-vien-phu-yen-NHP.html"
+  ],
+  "UFA": [
+    "-UFA",
+    "UFA-Trường Đại học Tài Chính Kế Toán",
+    "/diem-chuan/-UFA.html"
+  ],
+  "GDU": [
+    "dai-hoc-gia-dinh-GDU",
+    "GDU-Trường Đại Học Gia Định",
+    "/diem-chuan/dai-hoc-gia-dinh-GDU.html"
+  ],
+  "DDM": [
+    "dai-hoc-cong-nghiep-quang-ninh-DDM",
+    "DDM-Trường Đại Học Công Nghiệp Quảng Ninh",
+    "/diem-chuan/dai-hoc-cong-nghiep-quang-ninh-DDM.html"
+  ],
+  "XDT": [
+    "dai-hoc-xay-dung-mien-trung-XDT",
+    "XDT-Trường Đại Học Xây Dựng Miền Trung",
+    "/diem-chuan/dai-hoc-xay-dung-mien-trung-XDT.html"
+  ],
+  "DSG": [
+    "dai-hoc-cong-nghe-sai-gon-DSG",
+    "DSG-Trường Đại Học Công Nghệ Sài Gòn",
+    "/diem-chuan/dai-hoc-cong-nghe-sai-gon-DSG.html"
+  ],
+  "XDN": [
+    "phan-hieu-dai-hoc-xay-dung-mien-trung-tai-da-nang-XDN",
+    "XDN-Phân hiệu Đại học Xây dựng miền Trung tại Đà Nẵng",
+    "/diem-chuan/phan-hieu-dai-hoc-xay-dung-mien-trung-tai-da-nang-XDN.html"
+  ],
+  "DBG": [
+    "dai-hoc-nong-lam-bac-giang-DBG",
+    "DBG-Trường Đại học Nông Lâm Bắc Giang",
+    "/diem-chuan/dai-hoc-nong-lam-bac-giang-DBG.html"
+  ],
+  "TTB": [
+    "dai-hoc-tay-bac-TTB",
+    "TTB-Trường Đại Học Tây Bắc",
+    "/diem-chuan/dai-hoc-tay-bac-TTB.html"
+  ],
+  "TDL": [
+    "dai-hoc-da-lat-TDL",
+    "TDL-Trường Đại Học Đà Lạt",
+    "/diem-chuan/dai-hoc-da-lat-TDL.html"
+  ],
+  "DTP": [
+    "phan-hieu-dai-hoc-thai-nguyen-tai-lao-cai-DTP",
+    "DTP-Phân Hiệu Đại Học Thái Nguyên Tại Lào Cai",
+    "/diem-chuan/phan-hieu-dai-hoc-thai-nguyen-tai-lao-cai-DTP.html"
+  ],
+  "TQU": [
+    "dai-hoc-tan-trao-TQU",
+    "TQU-Trường Đại học Tân Trào",
+    "/diem-chuan/dai-hoc-tan-trao-TQU.html"
+  ],
+  "TKG": [
+    "dai-hoc-kien-giang-TKG",
+    "TKG-Trường Đại học Kiên Giang",
+    "/diem-chuan/dai-hoc-kien-giang-TKG.html"
+  ],
+  "DVD": [
+    "dai-hoc-van-hoa-the-thao-va-du-lich-thanh-hoa-DVD",
+    "DVD-Trường Đại Học Văn Hóa, Thể Thao Và Du Lịch Thanh Hóa",
+    "/diem-chuan/dai-hoc-van-hoa-the-thao-va-du-lich-thanh-hoa-DVD.html"
+  ],
+  "DTG": [
+    "phan-hieu-dai-hoc-thai-nguyen-tai-ha-giang-DTG",
+    "DTG-Phân hiệu Đại học Thái Nguyên tại Hà Giang",
+    "/diem-chuan/phan-hieu-dai-hoc-thai-nguyen-tai-ha-giang-DTG.html"
+  ],
+  "DNB": [
+    "dai-hoc-hoa-lu-DNB",
+    "DNB-Trường Đại Học Hoa Lư",
+    "/diem-chuan/dai-hoc-hoa-lu-DNB.html"
+  ],
+  "LBS": [
+    "dai-hoc-nguyen-hue-LBS",
+    "LBS-Trường Đại học Nguyễn Huệ",
+    "/diem-chuan/dai-hoc-nguyen-hue-LBS.html"
+  ],
+  "HVA": [
+    "hoc-vien-am-nhac-hue-HVA",
+    "HVA-Học Viện Âm Nhạc Huế",
+    "/diem-chuan/hoc-vien-am-nhac-hue-HVA.html"
+  ],
+  "NVH": [
+    "hoc-vien-am-nhac-quoc-gia-viet-nam-NVH",
+    "NVH-Học Viện Âm Nhạc Quốc Gia Việt Nam",
+    "/diem-chuan/hoc-vien-am-nhac-quoc-gia-viet-nam-NVH.html"
+  ],
+  "NVS": [
+    "nhac-vien-tphcm-NVS",
+    "NVS-Nhạc Viện TPHCM",
+    "/diem-chuan/nhac-vien-tphcm-NVS.html"
+  ],
+  "DVX": [
+    "dai-hoc-cong-nghe-van-xuan-DVX",
+    "DVX-Trường Đại Học Công Nghệ Vạn Xuân",
+    "/diem-chuan/dai-hoc-cong-nghe-van-xuan-DVX.html"
+  ],
+  "DHH": [
+    "dai-hoc-ha-hoa-tien-DHH",
+    "DHH-Trường Đại Học Hà Hoa Tiên",
+    "/diem-chuan/dai-hoc-ha-hoa-tien-DHH.html"
+  ],
+  "MTC": [
+    "dai-hoc-my-thuat-cong-nghiep-MTC",
+    "MTC-Trường Đại Học Mỹ Thuật Công Nghiệp",
+    "/diem-chuan/dai-hoc-my-thuat-cong-nghiep-MTC.html"
+  ],
+  "MTS": [
+    "dai-hoc-my-thuat-tphcm-MTS",
+    "MTS-Trường Đại Học Mỹ Thuật TPHCM",
+    "/diem-chuan/dai-hoc-my-thuat-tphcm-MTS.html"
+  ],
+  "MTH": [
+    "dai-hoc-my-thuat-viet-nam-MTH",
+    "MTH-Trường Đại Học Mỹ Thuật Việt Nam",
+    "/diem-chuan/dai-hoc-my-thuat-viet-nam-MTH.html"
+  ],
+  "YHT": [
+    "phan-hieu-dai-hoc-y-ha-noi-tai-thanh-hoa-YHT",
+    "YHT-Phân hiệu Đại học Y Hà Nội tại Thanh Hóa",
+    "/diem-chuan/phan-hieu-dai-hoc-y-ha-noi-tai-thanh-hoa-YHT.html"
+  ],
+  "RMU": [
+    "dai-hoc-quoc-te-rmit-viet-nam-RMU",
+    "RMU-Trường Đại Học Quốc Tế RMIT Việt Nam",
+    "/diem-chuan/dai-hoc-quoc-te-rmit-viet-nam-RMU.html"
+  ],
+  "RHM": [
+    "dai-hoc-rang-ham-mat-RHM",
+    "RHM-Trường Đại Học Răng – Hàm – Mặt",
+    "/diem-chuan/dai-hoc-rang-ham-mat-RHM.html"
+  ],
+  "SKD": [
+    "dai-hoc-san-khau-dien-anh-ha-noi-SKD",
+    "SKD-Trường Đại Học Sân Khấu Điện Ảnh Hà Nội",
+    "/diem-chuan/dai-hoc-san-khau-dien-anh-ha-noi-SKD.html"
+  ],
+  "CIV": [
+    "hoc-vien-cong-giao-viet-nam-CIV",
+    "CIV-Học viện Công giáo Việt Nam",
+    "/diem-chuan/hoc-vien-cong-giao-viet-nam-CIV.html"
+  ],
+  "ZNH": [
+    "dai-hoc-van-hoa-nghe-thuat-quan-doi-ZNH",
+    "ZNH-Trường Đại học Văn hóa Nghệ thuật Quân đội",
+    "/diem-chuan/dai-hoc-van-hoa-nghe-thuat-quan-doi-ZNH.html"
+  ],
+  "LCDF": [
+    "hoc-vien-thiet-ke-va-thoi-trang-london-ha-noi-LCDF",
+    "LCDF-Học viện Thiết kế và Thời trang London Hà Nội",
+    "/diem-chuan/hoc-vien-thiet-ke-va-thoi-trang-london-ha-noi-LCDF.html"
+  ],
+  "DNV": [
+    "dai-hoc-noi-vu-ha-noi-DNV",
+    "DNV-Trường Đại học Nội vụ Hà Nội",
+    "/diem-chuan/dai-hoc-noi-vu-ha-noi-DNV.html"
+  ],
+  "VPH": [
+    "truong-si-quan-ki-thuat-quan-su-he-quan-su-dai-hoc-tran-dai-nghia-VPH",
+    "VPH-Trường Sĩ Quan Kĩ Thuật Quân Sự -  Hệ Quân sự - Đại Học Trần Đại Nghĩa",
+    "/diem-chuan/truong-si-quan-ki-thuat-quan-su-he-quan-su-dai-hoc-tran-dai-nghia-VPH.html"
+  ],
+  "DSD": [
+    "dai-hoc-san-khau-dien-anh-tphcm-DSD",
+    "DSD-Trường Đại Học Sân Khấu Điện Ảnh TPHCM",
+    "/diem-chuan/dai-hoc-san-khau-dien-anh-tphcm-DSD.html"
+  ],
+  "DDA": [
+    "dai-hoc-cong-nghe-dong-a-DDA",
+    "DDA-Trường Đại Học Công Nghệ Đông Á",
+    "/diem-chuan/dai-hoc-cong-nghe-dong-a-DDA.html"
+  ],
+  "BUV": [
+    "dai-hoc-anh-quoc-viet-nam-BUV",
+    "BUV-Trường Đại Học Anh Quốc Việt Nam",
+    "/diem-chuan/dai-hoc-anh-quoc-viet-nam-BUV.html"
+  ],
+  "BMU": [
+    "dai-hoc-y-duoc-buon-ma-thuot-BMU",
+    "BMU-Trường Đại học Y Dược Buôn Ma Thuột",
+    "/diem-chuan/dai-hoc-y-duoc-buon-ma-thuot-BMU.html"
+  ],
+  "DDG": [
+    "khoa-giao-duc-the-chat-da-nang-DDG",
+    "DDG-Khoa Giáo dục thể chất Đà Nẵng",
+    "/diem-chuan/khoa-giao-duc-the-chat-da-nang-DDG.html"
+  ],
+  "VKU": [
+    "dai-hoc-cong-nghe-thong-tin-va-truyen-thong-viet-han-dai-hoc-da-nang-VKU",
+    "VKU-Trường Đại học Công nghệ Thông tin và Truyền thông Việt Hàn - Đại học Đà Nẵng",
+    "/diem-chuan/dai-hoc-cong-nghe-thong-tin-va-truyen-thong-viet-han-dai-hoc-da-nang-VKU.html"
+  ]
+}

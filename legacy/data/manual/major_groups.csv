@@ -1,0 +1,13 @@
+major_group,major_group_vi,subject_profile_toan,subject_profile_ly,subject_profile_hoa,subject_profile_sinh,subject_profile_van,subject_profile_anh,subject_profile_su,subject_profile_dia
+cntt,Công nghệ thông tin / Máy tính,0.95,0.75,0.20,0.10,0.10,0.40,0.05,0.10
+ky_thuat,Kỹ thuật / Cơ khí / Điện / Xây dựng,0.90,0.90,0.55,0.10,0.10,0.25,0.05,0.15
+kinh_te,Kinh tế / Quản trị / Tài chính,0.70,0.20,0.10,0.05,0.45,0.60,0.15,0.20
+luat,Luật,0.35,0.05,0.05,0.05,0.85,0.40,0.55,0.20
+ngon_ngu,Ngôn ngữ,0.15,0.05,0.05,0.05,0.70,0.95,0.25,0.15
+y_duoc,Y Dược / Sức khoẻ,0.55,0.35,0.90,0.90,0.20,0.30,0.05,0.10
+su_pham,Sư phạm,0.55,0.30,0.25,0.25,0.60,0.40,0.30,0.25
+xa_hoi,Xã hội / Báo chí / Tâm lý,0.20,0.05,0.05,0.15,0.85,0.45,0.55,0.35
+du_lich,Du lịch / Khách sạn / Dịch vụ,0.30,0.05,0.05,0.10,0.45,0.65,0.20,0.55
+nong_lam,Nông Lâm Ngư nghiệp,0.40,0.30,0.60,0.85,0.15,0.15,0.05,0.35
+kien_truc,Kiến trúc / Mỹ thuật,0.65,0.50,0.10,0.05,0.30,0.20,0.05,0.15
+the_thao,Thể dục Thể thao,0.20,0.10,0.10,0.35,0.30,0.15,0.05,0.10

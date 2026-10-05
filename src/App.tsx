@@ -13,9 +13,10 @@ import { routes as keHoach } from "@/features/ke-hoach/routes";
 import { routes as tuHoc } from "@/features/tu-hoc/routes";
 import { useNhacNho } from "@/features/tu-hoc/dung-nhac-nho";
 import { routes as thietKe } from "@/features/thiet-ke/routes";
+import { routes as tuVan } from "@/features/tu-van/routes";
 
 // Thêm slice mới: import `routes` của nó rồi thêm vào mảng này. Không sửa gì khác.
-const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe];
+const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan];
 
 function Goc() {
   const { pathname } = useLocation();

@@ -65,7 +65,7 @@ export default function HoSo() {
   }
 
   const x = hieuEm(s);
-  const thongTin = [h.khoi && `Lớp ${h.khoi}`, h.tinh].filter(Boolean).join(" · ") || "Chưa có lớp và tỉnh";
+  const thongTin = [h.khoi && (h.khoi === 11 ? "Lớp 10 – 11" : `Lớp ${h.khoi}`), h.tinh].filter(Boolean).join(" · ") || "Chưa có lớp và tỉnh";
   const mucLuuY = s.mucTieu ? DUONG_DAN.monKeoDiem() : DUONG_DAN.batDau(2);
   const nganSach = [h.nganSach && `học phí ${TEN_NGAN_SACH[h.nganSach].toLowerCase()}/năm`, h.choO && TEN_CHO_O[h.choO]].filter(Boolean).join(", ");
 

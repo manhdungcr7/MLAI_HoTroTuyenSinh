@@ -30,15 +30,13 @@ export const LOI_DIEM: Record<"khongPhaiSo" | "ngoaiKhoang", string> = {
 export const vietDiem = (so: number | null) => (so === null ? "" : String(so).replace(".", ","));
 
 // ---------- Kiểm tra bước 1 ----------
-export type TruongBatBuoc = "hoTen" | "khoi" | "tinh" | "nganhQuanTam";
-export const THU_TU_BAT_BUOC: TruongBatBuoc[] = ["hoTen", "khoi", "tinh", "nganhQuanTam"];
+export type TruongBatBuoc = "khoi" | "tinh" | "nganhQuanTam";
+export const THU_TU_BAT_BUOC: TruongBatBuoc[] = ["khoi", "tinh", "nganhQuanTam"];
 
 /** Các trường bắt buộc còn thiếu, theo thứ tự trên màn. Trả về lời nhắc dễ hiểu cho từng trường. */
 export function kiemTraBuoc1(h: HoSo): Partial<Record<TruongBatBuoc, string>> {
   const loi: Partial<Record<TruongBatBuoc, string>> = {};
-  if (!h.hoTen.trim()) loi.hoTen = "Em điền họ và tên nhé.";
-  else if (h.hoTen.trim().length < 2) loi.hoTen = "Tên hơi ngắn, em kiểm tra lại nhé.";
-  if (!h.khoi) loi.khoi = "Em chọn đang học lớp 11 hay lớp 12.";
+  if (!h.khoi) loi.khoi = "Em chọn đang học lớp 10–11 hay lớp 12.";
   if (!h.tinh) loi.tinh = "Em chọn tỉnh/thành phố đang sống.";
   if (!h.nganhQuanTam.length) loi.nganhQuanTam = "Em chọn ít nhất một nhóm ngành (chưa chắc cũng được).";
   return loi;

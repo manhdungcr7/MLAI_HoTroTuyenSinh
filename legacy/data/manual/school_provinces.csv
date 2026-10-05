@@ -1,0 +1,120 @@
+school_code,school_name,province,region
+ANS,Học viện An ninh Nhân dân,Hà Nội,bac
+BKA,ĐH Bách Khoa Hà Nội,Hà Nội,bac
+C19,Trường Cao đẳng Sư phạm Bắc Ninh,Bắc Ninh,bac
+C23,Trường Cao đẳng Sư phạm Hòa Bình,Hòa Bình,bac
+C25,Trường Cao đẳng Sư phạm Nam Định,Nam Định,bac
+CSS,Trường Đại học Cảnh sát Nhân dân,TP.HCM,nam
+D61,Học viện Ngân hàng,Hà Nội,bac
+D64,ĐH Thương mại,Hà Nội,bac
+DBL,ĐH Bạc Liêu,Bạc Liêu,nam
+DCN,ĐH Công nghiệp Hà Nội,Hà Nội,bac
+DDF,ĐH Ngoại ngữ - ĐH Đà Nẵng,Đà Nẵng,trung
+DDP,ĐH Sư phạm Kỹ thuật - ĐH Đà Nẵng,Đà Nẵng,trung
+DDQ,ĐH Kinh tế - ĐH Đà Nẵng,Đà Nẵng,trung
+DDS,ĐH Sư phạm - ĐH Đà Nẵng,Đà Nẵng,trung
+DDY,Khoa Y Dược - ĐH Đà Nẵng,Đà Nẵng,trung
+DFA,ĐH Tài chính - Marketing,TP.HCM,nam
+DHC,ĐH Nông Lâm - ĐH Huế,Huế,trung
+DHD,ĐH Ngoại ngữ - ĐH Huế,Huế,trung
+DHK,ĐH Kinh tế - ĐH Huế,Huế,trung
+DHL,ĐH Luật - ĐH Huế,Huế,trung
+DHN,ĐH Nghệ thuật - ĐH Huế,Huế,trung
+DHS,ĐH Sư phạm - ĐH Huế,Huế,trung
+DHY,ĐH Y Dược - ĐH Huế,Huế,trung
+DPY,ĐH Phú Yên,Phú Yên,trung
+DQB,ĐH Quảng Bình,Quảng Bình,trung
+DQH,ĐH Hồng Đức,Thanh Hóa,trung
+DTL,ĐH Thăng Long,Hà Nội,bac
+DTN,ĐH Nông Lâm - ĐH Thái Nguyên,Thái Nguyên,bac
+DTV,ĐH Trà Vinh,Trà Vinh,nam
+DVL,ĐH Văn Lang,TP.HCM,nam
+GHA,ĐH Giao thông Vận tải,Hà Nội,bac
+GSA,ĐH Giao thông Vận tải Cơ sở 2,TP.HCM,nam
+GTA,ĐH Giao thông Vận tải,Hà Nội,bac
+HCB,Học viện Cán bộ TP.HCM,TP.HCM,nam
+HCN,ĐH Công nghiệp TP.HCM,TP.HCM,nam
+HCS,Học viện Chính sách và Phát triển,Hà Nội,bac
+HHT,Học viện Hậu cần,Hà Nội,bac
+HTC,Học viện Tài chính,Hà Nội,bac
+LPH,ĐH Luật Hà Nội,Hà Nội,bac
+QHI,ĐH Công nghệ - ĐHQGHN,Hà Nội,bac
+QHL,ĐH Luật - ĐHQGHN,Hà Nội,bac
+QHQ,ĐH Kinh tế - ĐHQGHN,Hà Nội,bac
+QHY,ĐH Y Dược - ĐHQGHN,Hà Nội,bac
+QST,ĐH Khoa học Tự nhiên - ĐHQG TP.HCM,TP.HCM,nam
+QSX,ĐH KHXH&NV - ĐHQG TP.HCM,TP.HCM,nam
+QSY,Khoa Y - ĐHQG TP.HCM,TP.HCM,nam
+SDU,ĐH Sao Đỏ,Hải Dương,bac
+SPD,ĐH Đồng Tháp,Đồng Tháp,nam
+SPS,ĐH Sư phạm TP.HCM,TP.HCM,nam
+TDV,ĐH Vinh,Nghệ An,trung
+TSN,ĐH Nha Trang,Khánh Hòa,trung
+TTN,ĐH Tiền Giang,Tiền Giang,nam
+TTU,ĐH Tân Tạo,Long An,nam
+TYS,ĐH Y tế Công cộng,Hà Nội,bac
+VHH,ĐH Văn Hiến,TP.HCM,nam
+XDA,ĐH Xây dựng Hà Nội,Hà Nội,bac
+YHB,ĐH Y Hà Nội,Hà Nội,bac
+DCL,ĐH Cửu Long,Vĩnh Long,nam
+DKH,ĐH Dược Hà Nội,Hà Nội,bac
+DMT,ĐH Tài nguyên và Môi trường Hà Nội,Hà Nội,bac
+DNB,ĐH Hoa Lư,Ninh Bình,bac
+DNU,ĐH Đồng Nai,Đồng Nai,nam
+DPQ,ĐH Phạm Văn Đồng,Quảng Ngãi,trung
+DQU,ĐH Quảng Nam,Quảng Nam,trung
+DTF,Trường Ngoại ngữ - ĐH Thái Nguyên,Thái Nguyên,bac
+DTQ,Trường Quốc tế - ĐH Thái Nguyên,Thái Nguyên,bac
+DVD,ĐH Văn hóa Thể thao và Du lịch Thanh Hóa,Thanh Hóa,bac
+HCH,Học viện Hành chính Quốc gia,Hà Nội,bac
+KSA,ĐH Kinh tế TP.HCM,TP.HCM,nam
+LNH,ĐH Lâm nghiệp,Hà Nội,bac
+NHP,Học viện Ngân hàng (Phân viện Phú Yên),Phú Yên,trung
+QHS,ĐH Giáo dục - ĐHQGHN,Hà Nội,bac
+QHT,ĐH Khoa học Tự nhiên - ĐHQGHN,Hà Nội,bac
+QSC,ĐH Công nghệ Thông tin - ĐHQG TP.HCM,TP.HCM,nam
+SP2,ĐH Sư phạm Hà Nội 2,Vĩnh Phúc,bac
+SPH,ĐH Sư phạm Hà Nội,Hà Nội,bac
+VUI,ĐH Công nghiệp Việt Trì,Phú Thọ,bac
+XDT,ĐH Xây dựng Miền Trung,Phú Yên,trung
+YDS,ĐH Y Dược TP.HCM,TP.HCM,nam
+HQT,Học viện Ngoại giao,Hà Nội,bac
+KMA,Học viện Kỹ thuật Mật mã,Hà Nội,bac
+NHF,Đại học Hà Nội,Hà Nội,bac
+QHX,ĐH Khoa học Xã hội & Nhân văn - ĐHQGHN,Hà Nội,bac
+QHE,ĐH Kinh tế - ĐHQGHN,Hà Nội,bac
+DDK,ĐH Bách Khoa - ĐH Đà Nẵng,Đà Nẵng,trung
+TDD,ĐH Thành Đô,Hà Nội,bac
+DHT,ĐH Khoa học - ĐH Huế,Huế,trung
+NHH,Học viện Ngân hàng,Hà Nội,bac
+TDL,ĐH Đà Lạt,Lâm Đồng,trung
+DKK,ĐH Kinh tế - Kỹ thuật Công nghiệp,Hà Nội,bac
+DQN,ĐH Quy Nhơn,Bình Định,trung
+DVD,ĐH Văn hóa Thể thao và Du lịch Thanh Hóa,Thanh Hóa,bac
+DQK,ĐH Kinh doanh và Công nghệ Hà Nội,Hà Nội,bac
+NLS,ĐH Nông Lâm TP.HCM,TP.HCM,nam
+KHA,Trường Đại học Kinh tế Quốc dân,Hà Nội,bac
+NTH,Trường Đại học Ngoại thương,Hà Nội,bac
+TMU,Trường Đại học Thương mại,Hà Nội,bac
+BVH,Học viện Công nghệ Bưu chính Viễn thông,Hà Nội,bac
+IUH,Trường Đại học Công nghiệp TP.HCM,TP.HCM,nam
+HNM,Trường Đại học Thủ Đô Hà Nội,Hà Nội,bac
+YTB,Trường Đại học Y Dược Thái Bình,Thái Bình,bac
+YPB,Trường Đại học Y Dược Hải Phòng,Hải Phòng,bac
+HPN,Học viện Phụ Nữ Việt Nam,Hà Nội,bac
+DCT,Trường Đại học Công Thương TP.HCM,TP.HCM,nam
+HHK,Học viện Hàng không Việt Nam,TP.HCM,nam
+PKA,Trường Đại học Phenikaa,Hà Nội,bac
+YCT,Trường Đại học Y Dược Cần Thơ,Cần Thơ,nam
+TDM,Trường Đại học Thủ Dầu Một,Bình Dương,nam
+TLA,Trường Đại học Thủy Lợi,Hà Nội,bac
+HVN,Học viện Nông nghiệp Việt Nam,Hà Nội,bac
+QHF,Trường Đại học Ngoại ngữ - ĐHQGHN,Hà Nội,bac
+HBT,Học viện Báo chí và Tuyên truyền,Hà Nội,bac
+DTS,Trường Đại học Sư phạm - Đại học Thái Nguyên,Thái Nguyên,bac
+TCT,Trường Đại học Cần Thơ,Cần Thơ,nam
+DVX,Trường Đại học Công nghệ Vạn Xuân,Nghệ An,trung
+DLA,Trường Đại học Kinh tế Công nghiệp Long An,Long An,nam
+PCH,Trường Đại học Phòng cháy Chữa cháy (Phía Bắc),Hà Nội,bac
+PCS,Trường Đại học Phòng cháy Chữa cháy (Phía Nam),Đồng Nai,nam
+DBH,Trường Đại học Quốc tế Bắc Hà,Bắc Ninh,bac

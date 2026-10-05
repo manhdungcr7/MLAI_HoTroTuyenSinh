@@ -1,0 +1,33 @@
+{
+  "schoolCode": "DKK",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0603/1-thong-bao-tuyen-sinh-dai-hoc-he-chinh-quy-nam-2026-20260424075039-e.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Kinh tế - Kỹ thuật Công nghiệp",
+    "sha256": "6e97c6d9605cd0c7bdd4b34919fdfcc296366169e31e83e5632dfc2c6f36ddac",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 4.2.2: ĐPT2 = (M1×4,5 + M2×3,5 + M3×2)×3/10, thứ tự môn M1, M2, M3 theo từng nhóm tổ hợp của ngành. Ứng dụng chưa mã hóa hệ số theo thứ tự môn nên điểm tính theo công thức chung và được đánh dấu ước lượng."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "approximateReason": "Trường tính điểm theo hệ số 4,5 / 3,5 / 2 cho môn thứ nhất, thứ hai, thứ ba của tổ hợp (thứ tự khác nhau theo nhóm ngành), ứng dụng chưa mã hóa nên điểm của bạn chỉ là ước lượng; hãy tính lại theo đề án."
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "approximateReason": "Trường tính điểm theo hệ số riêng theo thứ tự môn của tổ hợp, ứng dụng chưa mã hóa nên điểm của bạn chỉ là ước lượng; hãy tính lại theo đề án."
+    }
+  }
+}

@@ -1,0 +1,797 @@
+
+<<<PAGE 1>>>
+THÔNG TIN TUYỂN SINH TRƯỜNG ĐẠI HỌC KHOA HỌC TỰ NHIÊN –
+ĐHQG HCM NĂM 2026
+(Cập nhật 5/6/2026)
+Ngành đào tạo, chỉ tiêu, tổ hợp xét tuyển (Cập nhật ngày 05/6/2026)
+Năm 2026, Trường Đại học Khoa học tự nhiên, ĐHQG-HCM dự kiến tuyển sinh 39 ngành/nhóm 
+ngành, chương trình đào tạo bậc đại học chính qui, với 4.926 chỉ tiêu.
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+1 7420101 Sinh học 215
+A02: Toán – Vật lý – Sinh học
+B00: Toán – Hóa học – Sinh học
+B03: Toán – Ngữ Văn – Sinh học
+B08: Toán – Tiếng Anh – Sinh học
+X15: Toán – Công nghệ công nghiệp – Sinh 
+học
+X16: Toán – Công nghệ nông nghiệp – Sinh 
+học
+2 7420101_DKD
+Sinh học (Chương 
+trình tăng cường tiếng 
+Anh)
+90
+A02: Toán – Vật lý – Sinh học
+B00: Toán – Hóa học – Sinh học
+B03: Toán – Ngữ Văn – Sinh học
+B08: Toán – Tiếng Anh – Sinh học
+X15: Toán – Công nghệ công nghiệp – Sinh 
+học
+X16: Toán – Công nghệ nông nghiệp – Sinh 
+học
+<<<PAGE 2>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+3 7420201 Công nghệ Sinh học 200
+A02: Toán – Vật lý – Sinh học
+B00: Toán – Hóa học – Sinh học
+B03: Toán – Ngữ Văn – Sinh học
+B08: Toán – Tiếng Anh – Sinh học
+X15: Toán – Công nghệ công nghiệp – Sinh 
+học
+X16: Toán – Công nghệ nông nghiệp – Sinh 
+học
+4 7420201_DKD
+Công nghệ Sinh học 
+(Chương trình tăng 
+cường tiếng Anh)
+160
+A02: Toán – Vật lý – Sinh học
+B00: Toán – Hóa học – Sinh học
+B03: Toán – Ngữ Văn – Sinh học
+B08: Toán – Tiếng Anh – Sinh học
+X15: Toán – Công nghệ công nghiệp – Sinh 
+học
+X16: Toán – Công nghệ nông nghiệp – Sinh 
+học
+5 7440102_DKD
+Vật lý học (Chương 
+trình tăng cường tiếng 
+Anh)
+140
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+<<<PAGE 3>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+6 7440102_NN
+Nhóm ngành Vật lý 
+học (CT: 145), Công 
+nghệ Vật lý điện tử và 
+tin học (CT: 70)
+215
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+7
+Công nghệ Vật lý điện 
+tử và tin học (Chương 
+trình tăng cường tiếng 
+Anh)
+60
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+8 74401a1 Công nghệ bán dẫn 70
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+9 7440112 Hoá học 230 A00: Toán – Vật lý – Hóa học
+<<<PAGE 4>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+B00: Toán – Hóa học – Sinh học
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+X11: Toán – Hóa học – Công nghệ công 
+nghiệp
+X12: Toán – Hóa học – Công nghệ nông 
+nghiệp
+10 7440112_DKD
+Hóa học (Chương 
+trình tăng cường tiếng 
+Anh)
+150
+A00: Toán – Vật lý – Hóa học
+B00: Toán – Hóa học – Sinh học
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+X11: Toán – Hóa học – Công nghệ công 
+nghiệp
+X12: Toán – Hóa học – Công nghệ nông 
+nghiệp
+11 7440122 Khoa học Vật liệu 148
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+C01: Toán – Ngữ văn – Vật lý
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+<<<PAGE 5>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+12 7440122_DKD
+Khoa học Vật liệu 
+(Chương trình tăng 
+cường tiếng Anh)
+80
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+C01: Toán – Ngữ văn – Vật lý
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+13 7440201_NN Nhóm ngành Địa chất 
+học, Kinh tế đất đai 104
+A00: Toán – Vật lý – Hóa học
+A07: Toán – Lịch sử – Địa lý
+C01: Toán – Ngữ văn – Vật lý
+C04: Toán – Ngữ văn – Địa lý
+D01: Toán – Ngữ văn – Tiếng Anh
+D10: Toán – Địa lý – Tiếng Anh
+14 7440228 Hải dương học 30
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A04: Toán – Vật lý – Địa lý
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+<<<PAGE 6>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+15 7440228_DKD
+Hải dương học 
+(Chương trình tăng 
+cường tiếng Anh)
+30
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A04: Toán – Vật lý – Địa lý
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+16 7440301 Khoa học Môi trường 130
+A00: Toán – Vật lý – Hóa học
+B00: Toán – Sinh học – Hóa học
+D07: Toán – Hóa học – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+X10: Toán – Hóa học – Tin học
+X14: Toán – Sinh học – Tin học
+17 7440301_DKD
+Khoa học Môi trường 
+(Chương trình tăng 
+cường tiếng Anh)
+80
+A00: Toán – Vật lý – Hóa học
+B00: Toán – Sinh học – Hóa học
+D07: Toán – Hóa học – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+X10: Toán – Hóa học – Tin học
+X14: Toán – Sinh học – Tin học
+<<<PAGE 7>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+18 7460101_NN
+Nhóm ngành Toán học 
+(Toán học, Toán ứng 
+dụng, Toán tin)
+180
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+B08: Toán – Sinh học – Tiếng Anh
+D01: Toán – Ngữ Văn – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+19 7460112_DKD
+Toán ứng dụng 
+(Chương trình tăng 
+cường tiếng Anh)
+40
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+B08: Toán – Sinh học – Tiếng Anh
+D01: Toán – Ngữ Văn – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+20 7460117_DKD
+Toán tin (Chương 
+trình tăng cường tiếng 
+Anh)
+40
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+B08: Toán – Sinh học – Tiếng Anh
+D01: Toán – Ngữ Văn – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+<<<PAGE 8>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+21 7460108_NN
+Nhóm ngành Khoa 
+học dữ liệu (CT:40), 
+Thống kê (CT:40)
+80
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+B08: Toán – Sinh học – Tiếng Anh
+D01: Toán – Ngữ Văn – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+22 7460108_DKD
+Khoa học dữ liệu 
+(Chương trình tăng 
+cường tiếng Anh)
+60
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+B08: Toán – Sinh học – Tiếng Anh
+D01: Toán – Ngữ Văn – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+23 7480101_TT
+Khoa học máy tính 
+(Chương trình Tiên 
+tiến)
+90
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+D07: Toán – Hóa học – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tin học – Tiếng Anh
+24 7480107 Trí tuệ nhân tạo 90 A00: Toán – Vật lý – Hóa học
+<<<PAGE 9>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+A01: Toán – Vật lý – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+D07: Toán – Hóa học – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tin học – Tiếng Anh
+25 7480201_DKD
+Công nghệ thông tin 
+(Chương trình tăng 
+cường tiếng Anh)
+530
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+D07: Toán – Hóa học – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tin học – Tiếng Anh
+26 7480201_NN
+Nhóm ngành máy tính 
+và Công nghệ thông 
+tin (CNTT, Kỹ thuật 
+phần mềm, Hệ thống 
+thông tin, Khoa học 
+máy tính)
+490
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+D07: Toán – Hóa học – Tiếng Anh
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tin học – Tiếng Anh
+27 7510401_DKD Công nghệ kỹ thuật 
+Hoá học (Chương 
+150
+A00: Toán – Vật lý – Hóa học
+B00: Toán – Hóa học – Sinh học
+<<<PAGE 10>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+trình tăng cường tiếng 
+Anh)
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+X11: Toán – Hóa học – Công nghệ công 
+nghiệp
+X12: Toán – Hóa học – Công nghệ nông 
+nghiệp
+28 7510402 Công nghệ Vật liệu 147
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+C01: Toán – Ngữ văn – Vật lý
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+29 7510402_DKD
+Công nghệ Vật liệu 
+(Chương trình tăng 
+cường tiếng Anh)
+60
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+C01: Toán – Ngữ văn – Vật lý
+C02: Toán – Hóa học – Ngữ văn
+D07: Toán – Hóa học – Tiếng Anh
+30 7510406 Công nghệ Kỹ thuật 
+Môi trường
+120
+A00: Toán – Vật lý – Hóa học
+B00: Toán – Sinh học – Hóa học
+<<<PAGE 11>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+B08: Toán – Sinh học – Tiếng Anh
+D07: Toán – Hóa học – Tiếng Anh
+X10: Toán – Hóa học – Tin học
+X14: Toán – Sinh học – Tin học
+31 7520207 Kỹ thuật điện tử – viễn 
+thông 150
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+B08: Toán – Tiếng Anh – Sinh học
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tiếng Anh – Tin học
+32 75202a1 Thiết kế vi mạch 80
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+B08: Toán – Tiếng Anh – Sinh học
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tiếng Anh – Tin học
+33 7520207_DKD
+Kỹ thuật điện tử – viễn 
+thông (Chương trình 
+tăng cường tiếng Anh)
+120
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+<<<PAGE 12>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+B08: Toán – Tiếng Anh – Sinh học
+X06: Toán – Vật lý – Tin học
+X26: Toán – Tiếng Anh – Tin học
+34 7520402 Kỹ thuật hạt nhân 55
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+35 7520403 Vật lý y khoa 35
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+36 7520403_DKD
+Vật lý y khoa (chương 
+trình tăng cường tiếng 
+Anh)
+30
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+A02: Toán – Vật lý – Sinh học
+A03: Toán – Vật lý – Lịch Sử
+<<<PAGE 13>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+C01: Toán – Vật lý – Ngữ Văn
+X06: Toán – Vật lý – Tin học
+37 7520501 Kỹ thuật địa chất 38
+A00: Toán – Vật lý – Hóa học
+A07: Toán – Lịch sử – Địa lý
+C01: Toán – Ngữ văn – Vật lý
+C04: Toán – Ngữ văn – Địa lý
+D01: Toán – Ngữ văn – Tiếng Anh
+D10: Toán – Địa lý – Tiếng Anh
+38 7850101 Quản lý tài nguyên và 
+môi trường
+109
+A00: Toán – Vật lý – Hóa học
+B00: Toán – Sinh học – Hóa học
+D07: Toán – Hóa học – Tiếng Anh
+B08: Toán – Sinh học – Tiếng Anh
+X10: Toán – Hóa học – Tin học
+X14: Toán – Sinh học – Tin học
+39 7140103 Công nghệ giáo dục 100
+A00: Toán – Vật lý – Hóa học
+A01: Toán – Vật lý – Tiếng Anh
+B00: Toán – Hóa học – Sinh học
+C01: Toán – Ngữ văn – Vật lý
+D01: Toán – Ngữ văn – Tiếng Anh
+<<<PAGE 14>>>
+STT Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Chỉ
+tiêu 
+2026
+Tổ hợp xét tuyển
+D07: Toán – Hóa học – Tiếng Anh
+Phương thức tuyển sinh (Cập nhật 05/6/2026)
+ Phương thức 1a
+ Phương thức 1b
+ Phương thức 2
+Xét tuyển thẳng, ưu tiên xét tuyển theo quy định của Bộ Giáo dục và Đào tạo.
+Xem thông báo chi tiết tại đây
+Các thông tin cần thiết khác để thí sinh dự tuyển vào Trường Đại học Khoa học tự nhiên, 
+ĐHQG-HCM
+1. Điều kiện tham gia dự tuyển
+Điều kiện chung được tham gia dự tuyển.
+Thí sinh tham gia dự tuyển diện xét tuyển thẳng hoặc ưu tiên xét tuyển phải thỏa các điều kiện 
+chung như sau:
+a. Tại thời điểm xét tuyển trước khi công bố kết quả xét tuyển chính thức đã được công nhận 
+tốt nghiệp THPT, trung học nghề của Việt Nam hoặc của nước ngoài được công nhận trình 
+độ tương đương với THPT, trung học nghề của Việt Nam do các đơn vị chức năng xác 
+định; hoặc đã có bằng tốt nghiệp trung cấp ngành nghề thuộc cùng nhóm ngành dự tuyển 
+và đã hoàn thành đủ yêu cầu khối lượng kiến thức văn hóa cấp THPT theo quy định của 
+pháp luật.
+b. Đối với thí sinh tốt nghiệp năm 2026 và tham dự kỳ thi tốt nghiệp THPT năm 2026, điều 
+kiện để được xét tuyển vào một ngành/nhóm ngành khi thí sinh thỏa 01 trong 02 trường 
+hợp như sau:
+ Trường hợp 1: Có tổng điểm của tổ hợp môn xét tuyển đạt từ 15,00 điểm trở lên 
+(theo thang điểm 30).
+ Trường hợp 2: Có tổng điểm thi của môn Toán, môn Ngữ văn và một môn khác 
+thuộc tổ hợp xét tuyển của ngành/nhóm ngành đạt từ 15 điểm trở lên (theo thang 
+điểm 30).
+<<<PAGE 15>>>
+Lưu ý 1: Điểm các môn được sử dụng để xét tại 02 trường hợp trên là điểm gốc, trước khi 
+quy đổi chứng chỉ ngoại ngữ, không cộng điểm xét thưởng và không cộng điểm ưu tiên khu 
+vực, đối tượng.
+c. Đạt ngưỡng đầu vào theo quy định của quy chế hiện hành đối với chương trình đào tạo 
+đăng ký dự tuyển;
+d. Có đủ sức khoẻ để học tập theo quy định hiện hành;
+e. Có đủ thông tin cá nhân, hồ sơ dự tuyển theo quy định của Trường.
+f. Ngoài ra, thí sinh đăng ký xét tuyển vào ngành Thiết kế vi mạch, ngành Công nghệ bán 
+dẫn và ngành Kỹ thuật hạt nhân phải thỏa các điều kiện như sau:
+ Đối với thí sinh đăng ký vào ngành Thiết kế vi mạch, Ngành Công nghệ bán 
+dẫn theo Quy định 2101/QĐ-BGDĐT ngày 22/7/2025 của Bộ GDĐT về Chuẩn 
+chương trình đào tạo về vi mạch bán dẫn trình độ đại học, thạc sĩ, ngưỡng đảm bảo 
+chất lượng của thí sinh khi đăng ký phải đạt thêm các điều kiện như sau:
+ Nếu thí sinh đăng ký xét tuyển theo Phương thức 1a cần có điểm trung bình 
+cộng môn Toán 03 năm lớp 10, 11, 12 có giá trị lớn hơn hay bằng ngưỡng 
+điểm thuộc nhóm 20% thí sinh có điểm môn Toán cao nhất toàn quốc (theo 
+số liệu do Bộ GDĐT công bố hằng năm).
+ Đối với thí sinh đăng ký vào ngành Kỹ thuật hạt nhân, là ngành được Trường 
+đăng ký tham gia vào chương trình đào tạo trình độ đại học các ngành về điện hạt 
+nhân theo Quyết định 1050/ QĐ-BGDĐT ngày 4/5/2026 về chuẩn Chương trình 
+đào tạo trình độ đại học các ngành về điện hạt nhân. Thí sinh trúng tuyển vào ngành 
+này cần có điều kiện như sau:
+ Đối với điểm THPT và điểm học bạ thì điểm Toán và Vật lý phải từ 7,5 
+điểm trở lên.
+ Đối với điểm thành phần điểm thi ĐGNL, ĐHQG-HCM: Thành phần Toán 
+phải từ 225 điểm trở lên.
+2. Điểm cộng
+Điểm cộng là điểm xét thưởng dành cho các đối tượng thí sinh có thành tích đặc biệt; mức điểm 
+xét thưởng tối đa là 1,50 điểm theo thang điểm 30. Thí sinh chỉ được cộng 01 loại điểm cộng 
+có mức điểm cao nhất. Điểm cộng được quy định như sau:
+ Môn đoạt giải được cộng điểm:
+ Thí sinh đoạt giải các môn sau đều được điểm cộng: Toán, Vật lý, Hóa học, Sinh 
+học, Tin học, Trí tuệ nhân tạo (Kỳ thi Olympic Trí tuệ nhân tạo toàn quốc 
+VOAI/quốc tế), Tiếng Anh. Riêng thí sinh đoạt giải môn Địa lí thì được cộng điểm 
+<<<PAGE 16>>>
+vào các ngành/nhóm ngành như sau: Hải dương học, Nhóm ngành Địa chất học, 
+Kinh tế đất đai, Kỹ thuật địa chất, Khoa học Môi trường, Công nghệ kỹ thuật 
+môi trường, Quản lý tài nguyên môi trường. (*)
+ Kết quả cuộc thi lập trình ICPC Trung học Phổ thông quốc gia / quốc tế.
+ Kết quả cuộc thi kỳ thi Olympic truyền thống 30/4 do trường THPT chuyên Lê 
+Hồng Phong TP.HCM tổ chức.
+ Mức điểm cộng được tính như sau:
+<<<PAGE 17>>>
+
+<<<PAGE 18>>>
+Các giải được xét là giải có thời gian đạt giải không quá 03 năm tính tới thời điểm xét và các 
+giải này là giải đạt được trong 03 năm lớp 10, 11, 12.
+ Đối với các giải học thuật quốc tế khác sẽ do Hội đồng tuyển sinh xem xét và quyết định 
+mức cộng điểm tương ứng với các giải trên theo quy định của Bộ GDĐT và ĐHQG-HCM.
+ Nguyên tắc xét giải để quy ra điểm cộng
+ Trường hợp thí sinh thỏa nhiều điều kiện cộng điểm xét thưởng, thí sinh chỉ được
+cộng một loại điểm xét thưởng cao nhất.
+ Mỗi thí sinh đều có cơ hội đạt mức điểm tối đa của thang điểm xét, nhưng không 
+thí sinh nào có điểm xét (tính cả các loại điểm cộng, điểm ưu tiên) vượt quá mức 
+điểm tối đa (30 điểm theo thang 30).
+ Đối với các giải khoa học kỹ thuật, Hội đồng tuyển sinh sẽ đánh giá nội dung giải 
+thưởng để xác định đúng ngành / nhóm ngành được cộng.
+ Công thức tính điểm cộng đối với thang 30
+ Điểm cộng bằng điểm cộng cơ sở đối với thí sinh có tổng điểm nhỏ hơn 28,5 điểm.
+ Điểm cộng đối với thí sinh có tổng điểm từ 28,5 trở lên được xác định theo công 
+thức sau:
+Điểm cộng = [(30 – Tổng điểm đạt được của thí sinh ) / 1.5] * Điểm cộng cơ sở
+3. Tiêu chí phân ngành, chương trình đào tạo (CSĐT tuyển sinh theo nhóm ngành) (Cập 
+nhật ngày 10/6/2026)
+ Đối với Nhóm ngành Vật lý học (Vật lý học, Công nghệ vật lý điện tử và tin học), 
+Nhóm ngành Địa chất (Địa chất, Kinh tế đất đai): sinh viên học hết năm thứ nhất sau 
+đó dựa trên kết quả học tập của sinh viên năm thứ nhất để phân ngành.
+ Đối với Nhóm ngành Khoa học dữ liệu (Khoa học dữ liệu, Thống kê), Nhóm ngành 
+Toán học, Nhóm ngành Máy tính và công nghệ thông tin sinh viên học hết năm thứ
+nhất, năm thứ hai (có thể thêm học kỳ 1 năm thứ ba) sau đó dựa trên kết quả học tập của 
+sinh viên năm thứ nhất, năm thứ hai (có thể thêm học kỳ 1 năm thứ ba) để phân ngành.
+4. Quy đổi chứng chỉ ngoại ngữ
+<<<PAGE 19>>>
+Học phí khóa 2026
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí 
+năm 2026-
+2027
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí năm 
+2026-2027
+7420101 Sinh học 38,600,000 7460117 Toán tin 40,500,000
+<<<PAGE 20>>>
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí 
+năm 2026-
+2027
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí năm 
+2026-2027
+7420101_DKD
+Sinh học (Chương 
+trình tăng cường 
+tiếng Anh)
+54,600,000 7460117_DKD
+Toán tin (Chương 
+trình tăng cường tiếng 
+Anh)
+50,800,000
+7420201 Công nghệ Sinh 
+học
+38,600,000 7460108 Khoa học dữ liệu 40,500,000
+7420201_DKD
+Công nghệ Sinh 
+học (Chương trình 
+tăng cường tiếng 
+Anh)
+54,600,000 7460108_DKD
+Khoa học dữ liệu 
+(Chương trình tăng 
+cường tiếng Anh)
+50,800,000
+74240102 Vật lý học 32,600,000 7460201 Thống kê 40,500,000
+7440102_DKD
+Vật lý học 
+(Chương trình tăng
+cường tiếng Anh)
+50,800,000 7480101_TT
+Khoa học máy tính 
+(Chương trình Tiên 
+tiến)
+70,000,000
+7440107 Công nghệ Vật lý 
+điện tử và tin học
+38,600,000 7480201_DKD
+Công nghệ thông tin 
+(Chương trình tăng 
+cường tiếng Anh)
+49,500,000
+7440107_DKD
+Công nghệ Vật lý 
+điện tử và tin học 
+(Chương trình tăng 
+cường tiếng Anh)
+50,800,000 7480201_NN
+Nhóm ngành máy tính 
+và Công nghệ thông 
+tin (CNTT, Kỹ thuật 
+phần mềm, Hệ thống 
+thông tin, Khoa học 
+máy tính)
+40,500,000
+<<<PAGE 21>>>
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí 
+năm 2026-
+2027
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí năm 
+2026-2027
+74401a1 Công nghệ bán dẫn 38,600,000 7480107 Trí tuệ nhân tạo 40,500,000
+7440112 Hoá học 38,600,000 7510401_DKD
+Công nghệ kỹ thuật 
+Hoá học (Chương 
+trình tăng cường tiếng 
+Anh)
+59,800,000
+7440112_DKD
+Hóa học (Chương 
+trình tăng cường 
+tiếng Anh)
+58,900,000 7510402 Công nghệ Vật liệu 40,500,000
+7440122 Khoa học Vật liệu 38,600,000 7510402_DKD
+Công nghệ Vật liệu 
+(Chương trình tăng 
+cường tiếng Anh)
+54,600,000
+7440122_DKD
+Khoa học Vật liệu 
+(Chương trình tăng 
+cường tiếng Anh)
+54,600,000 7510406 Công nghệ Kỹ thuật 
+Môi trường
+32,600,000
+7440201 Địa chất học 32,600,000 7520207 Kỹ thuật điện tử –
+viễn thông 40,500,000
+7440206 Kinh tế đất đai 38,600,000 75202a1 Thiết kế vi mạch 40,500,000
+7440228 Hải dương học 32,600,000 7520207_DKD Kỹ thuật điện tử –
+viễn thông (Chương 
+49,000,000
+<<<PAGE 22>>>
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí 
+năm 2026-
+2027
+Mã ngành xét 
+tuyển
+Tên ngành, nhóm 
+ngành
+Học phí năm 
+2026-2027
+trình tăng cường tiếng 
+Anh)
+7440228_DKD
+Hải dương học 
+(Chương trình tăng 
+cường tiếng Anh)
+45,000,000 7520402 Kỹ thuật hạt nhân 32,600,000
+7440301 Khoa học Môi 
+trường
+32,600,000 7520403 Vật lý y khoa 37,000,000
+7440301_DKD
+Khoa học Môi 
+trường (Chương 
+trình tăng cường 
+tiếng Anh)
+54,600,000 7520403_DKD
+Vật lý y khoa (chương 
+trình tăng cường tiếng 
+Anh)
+50,800,000
+7460101 Toán học 40,500,000 7520501 Kỹ thuật địa chất 32,600,000
+7460112 Toán ứng dụng 40,500,000 7850101 Quản lý tài nguyên và 
+môi trường
+32,600,000
+7460112_DKD
+Toán ứng dụng 
+(Chương trình tăng 
+cường tiếng Anh)
+50,800,000 7140103 Công nghệ giáo dục 35,800,000
+Học bổng
+ Thí sinh trúng tuyển vào Trường được xét cấp các suất học bổng toàn phần (cấp năm đầu 
+tiên và có điều kiện duy trì ở mỗi học kỳ tiếp theo) đối với Thí sinh đạt thành tích cao trong 
+cuộc thi Khoa học kỹ thuật, Kỳ thi Olympic, Kỳ thi học sinh giỏi các môn học Toán, Vật 
+<<<PAGE 23>>>
+Lý, Hóa học, Sinh học, Tin học (giải nhất cấp quốc gia; huy chương Vàng, Bạc, Đồng cấp 
+quốc tế) và các thí sinh có điểm trúng tuyển cao nhất trong kỳ xét tuyển
+ Các suất học bổng từ 50 – 100% học phí năm đầu tiên dành cho thí sinh có thành tích tuyển 
+sinh cao theo quy định của Trường vào các ngành phục vụ mục tiêu phát triển bền vững và 
+chiến lược quốc gia (gồm các ngành Địa chất học, Hải dương học, Khoa học Môi trường 
+chương trình chuẩn, Công nghệ Kỹ thuật Môi trường, Kỹ thuật Địa chất, Kỹ thuật Hạt 
+nhân, Vật lý học chương trình chuẩn) và nhiều loại học bổng khác dành cho tân sinh viên.
+ Ngoài ra sinh viên của Trường sẽ được xét cấp học bổng khuyến khích học tập trong từng 
+học kỳ dựa vào kết quả học tập theo quy định của Nhà nước với giá trị 100%, 110% và 
+120% học phí trong kỳ; các loại học bổng tài trợ do cựu SV Trường, đơn vị đối tác của 
+Trường cấp và các hình thức hỗ trợ tài chính khác.

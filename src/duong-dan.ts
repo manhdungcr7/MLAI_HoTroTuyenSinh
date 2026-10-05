@@ -29,6 +29,7 @@ export const MAU = {
   caiDatTuHoc: "/ke-hoach/cai-dat/tu-hoc",
   nhacNho: "/ke-hoach/cai-dat/nhac-nho",
   thietKe: "/thiet-ke",
+  tuVan: "/tu-van",
 } as const;
 
 export type BuocBatDau = 1 | 2 | 3;
@@ -63,6 +64,7 @@ export const DUONG_DAN = {
   caiDatTuHoc: () => "/ke-hoach/cai-dat/tu-hoc",
   nhacNho: () => "/ke-hoach/cai-dat/nhac-nho",
   thietKe: () => "/thiet-ke",
+  tuVan: () => "/tu-van",
 } as const;
 
 /** 5 tab ở thanh dưới. Thứ tự và tên cố định cho cả ứng dụng. */

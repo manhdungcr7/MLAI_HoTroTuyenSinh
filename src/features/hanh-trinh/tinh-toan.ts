@@ -162,7 +162,7 @@ export function hieuEm(s: AppState): HieuEm {
   } else {
     uuTien.push(h.nganhQuanTam.length ? `Tìm hiểu ngành ${noi(h.nganhQuanTam)} để chọn mục tiêu chính` : "Chọn một ngành em muốn theo");
     if (coDiem.length < CAC_MON.length) uuTien.push("Nhập đủ điểm các môn để biết tổ hợp nào hợp với em");
-    if (h.khoi === 11) uuTien.push("Giữ điểm học bạ lớp 11 đều các môn");
+    if (h.khoi === 11) uuTien.push("Giữ điểm học bạ lớp 10–11 đều các môn");
     else if (h.khoi === 12) uuTien.push("Chuẩn bị cho kỳ thi THPT");
   }
 

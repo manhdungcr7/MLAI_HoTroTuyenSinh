@@ -1,0 +1,200 @@
+{
+  "schoolCode": "NHH",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0401/thong-tin-tuyen-sinh-hoc-vien-ngan-hang-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học chính quy năm 2026 – Học viện Ngân hàng",
+    "sha256": "c003ead9666a431ce69e2d4097bd608cccf53d584cb038d7c5e2c6b90b11d30f",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.2–2.4: điểm = (môn chính×2 + môn 2 + môn 3)×3/4 (môn chính là Toán, riêng nhóm Luật là Ngữ văn theo bảng chương trình); chứng chỉ IELTS/TOEFL iBT dùng quy đổi thay điểm Tiếng Anh HOẶC lấy điểm khuyến khích 0,5–1,5, không dùng cả hai (mục 5.b). Học bạ chỉ lấy điểm khuyến khích vì bảng quy đổi học bạ chưa công bố."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1,
+          "subjectWeights": {
+            "toan": 2
+          }
+        }
+      ],
+      "certMode": "either",
+      "ieltsToEnglish": [
+        {
+          "min": 5.5,
+          "score": 8.5
+        },
+        {
+          "min": 6.0,
+          "score": 9.0
+        },
+        {
+          "min": 6.5,
+          "score": 9.5
+        },
+        {
+          "min": 7.0,
+          "score": 9.75
+        },
+        {
+          "min": 7.5,
+          "score": 10
+        }
+      ],
+      "toeflToEnglish": [
+        {
+          "min": 46,
+          "score": 8.5
+        },
+        {
+          "min": 60,
+          "score": 9.0
+        },
+        {
+          "min": 79,
+          "score": 9.5
+        },
+        {
+          "min": 94,
+          "score": 9.75
+        },
+        {
+          "min": 102,
+          "score": 10
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.5,
+            "points": 0.5
+          },
+          {
+            "min": 6.0,
+            "points": 0.75
+          },
+          {
+            "min": 6.5,
+            "points": 1.0
+          },
+          {
+            "min": 7.0,
+            "points": 1.25
+          },
+          {
+            "min": 7.5,
+            "points": 1.5
+          }
+        ],
+        "toefl": [
+          {
+            "min": 46,
+            "points": 0.5
+          },
+          {
+            "min": 60,
+            "points": 0.75
+          },
+          {
+            "min": 79,
+            "points": 1.0
+          },
+          {
+            "min": 94,
+            "points": 1.25
+          },
+          {
+            "min": 102,
+            "points": 1.5
+          }
+        ]
+      },
+      "majorGroupOverrides": {
+        "luat": {
+          "components": [
+            {
+              "source": "exam_combo",
+              "weight": 1,
+              "subjectWeights": {
+                "van": 2
+              }
+            }
+          ]
+        }
+      }
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1,
+          "subjectWeights": {
+            "toan": 2
+          }
+        }
+      ],
+      "certBonus": {
+        "ielts": [
+          {
+            "min": 5.5,
+            "points": 0.5
+          },
+          {
+            "min": 6.0,
+            "points": 0.75
+          },
+          {
+            "min": 6.5,
+            "points": 1.0
+          },
+          {
+            "min": 7.0,
+            "points": 1.25
+          },
+          {
+            "min": 7.5,
+            "points": 1.5
+          }
+        ],
+        "toefl": [
+          {
+            "min": 46,
+            "points": 0.5
+          },
+          {
+            "min": 60,
+            "points": 0.75
+          },
+          {
+            "min": 79,
+            "points": 1.0
+          },
+          {
+            "min": 94,
+            "points": 1.25
+          },
+          {
+            "min": 102,
+            "points": 1.5
+          }
+        ]
+      },
+      "majorGroupOverrides": {
+        "luat": {
+          "components": [
+            {
+              "source": "hocba_combo",
+              "weight": 1,
+              "subjectWeights": {
+                "van": 2
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

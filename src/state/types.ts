@@ -71,6 +71,9 @@ export interface LuaChon {
   canLuuY: string[];
   nguon: string;
   daKiemChung: boolean;
+  ngayCapNhat?: string;
+  linkNguon?: string;
+  donViXacThuc?: string;
 }
 
 export interface MucTieuChinh {

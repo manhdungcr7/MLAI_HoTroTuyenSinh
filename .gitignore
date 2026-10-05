@@ -1,6 +1,13 @@
-﻿node_modules
+node_modules
 dist
 *.tsbuildinfo
 .DS_Store
 .playwright-cli
 .agent-browser
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+legacy/**/node_modules/
+legacy/**/dist/
+

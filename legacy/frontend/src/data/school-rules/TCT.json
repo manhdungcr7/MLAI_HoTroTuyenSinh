@@ -1,0 +1,27 @@
+{
+  "schoolCode": "TCT",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0407/thong-bao-tuyen-sinh-truong-dai-hoc-can-tho-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học chính quy năm 2026 – Trường Đại học Cần Thơ",
+    "sha256": "f78fe6322caac2b032a9a94b9a1e4e94567be9de918cb32651592ecf8f889f82",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Phương thức 2 và 3: không nhân hệ số, không sử dụng điểm miễn môn ngoại ngữ (không quy đổi chứng chỉ); học bạ quy đổi tương đương điểm thi THPT theo quy tắc quy đổi riêng."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [],
+      "unsupportedReason": "Trường quy đổi điểm trung bình môn học bạ về điểm thi THPT theo quy tắc quy đổi chưa công bố trong đề án"
+    }
+  }
+}

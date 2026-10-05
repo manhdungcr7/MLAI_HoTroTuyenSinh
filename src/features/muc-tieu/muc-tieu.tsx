@@ -14,6 +14,7 @@ import { TEN_MON, TO_HOP, type MaToHop, type MucTieuChinh } from "@/state/types"
 import { docMucTieu, type DuLieuMucTieu } from "./du-lieu";
 import { SuaMucTieu } from "./sua-muc-tieu";
 import { diem1, ngayVN, nhanDinhMucTieu, tenToHop } from "./tinh-toan";
+import { NutTuVan } from "@/features/tu-van/tu-van";
 
 type PhuongThuc = MucTieuChinh["phuongThuc"];
 const CAC_PHUONG_THUC: { gia: PhuongThuc; nhan: string; day: string }[] = [
@@ -38,6 +39,7 @@ export default function MucTieu() {
         <DauTrangChinh tieuDe="Mục tiêu chính" moTa="Ngành, trường em muốn vào và chặng đường tới đó." />
         <ThanhPhuKeHoach />
         <NoiDung>
+          <NutTuVan nguCanh="Mục tiêu học tập" />
           <TrangThaiTrong bieuTuong={<Target size={28} />}
             tieuDe={mucTieuCu ? "Không tìm thấy mục tiêu cũ" : "Em chưa chọn mục tiêu chính"}
             moTa={mucTieuCu ? "Ngành em chọn trước đây không còn trong danh sách. Em chọn lại một mục tiêu nhé." : "Chọn một ngành, trường em muốn vào. Mình sẽ tính em còn cách bao xa và nên tập trung môn nào."}>
@@ -56,6 +58,7 @@ export default function MucTieu() {
       <DauTrangChinh tieuDe="Mục tiêu chính" moTa="Nguyện vọng em đã chọn và chặng đường tới đó." />
       <ThanhPhuKeHoach />
       <NoiDung>
+        <NutTuVan nguCanh="Mục tiêu học tập" />
         <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(d.lc.id))}
           className="w-full text-left rounded-the bg-trang border border-vien shadow-the p-3.5 flex items-center gap-3 active:bg-xanh-nhat">
           <HuyHieuTruong ten={d.lc.truong} tone={d.lc.tone} kichThuoc={56} />

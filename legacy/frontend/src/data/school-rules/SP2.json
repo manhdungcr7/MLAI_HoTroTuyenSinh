@@ -1,0 +1,31 @@
+{
+  "schoolCode": "SP2",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0707/thong-tin-tuyen-sinh-dh-su-pham-ha-noi-2-nam-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Sư phạm Hà Nội 2",
+    "sha256": "3e6f92bbb796593a410d874a8689ff4b7b94cbc46476af0065b3ee1403e41fc5",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Điểm xét = Môn 1 + Môn 2 + Môn 3 + ĐƯT; học bạ: trung bình (lớp 10 + 11 + 12)/3 của từng môn, chỉ áp dụng một số ngành; chứng chỉ ngoại ngữ quy đổi theo Bảng 1 chưa mã hóa. Trùng công thức chung."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,506 @@
+Xét học 25: 5
+Xét học 30: 5
+Xét học 32: 5
+Xét học 5: 5
+Xét học bạ 15: 5
+Xét điểm 5: 5
+- Đông phương học 20: 5
+- Đảm bảo chất lượng và an toàn 20: 5
+Xét 15: 5
+Xét 20: 5
+Xét 25: 5
+Xét học 10: 5
+Xét học 15: 5
+Xét học 20: 5
+- Bảo vệ thực vật 20: 5
+- Bệnh học thuỷ sản 25: 5
+- Giáo dục công dân 44: 5
+- Khoa học cây trồng 20: 5
+- Khoa học dữ liệu và trí tuệ nhân 15: 5
+- Khoa học dữ liệu và trí tuệ nhân 20: 5
+- Kiểm toán (chất lượng cao) 15: 5
+- Kiểm toán chất lượng cao 10: 5
+- Quản lý nhà nước 15: 5
+- Quản lý tài nguyên rừng 20: 5
+- Quốc tế học 33: 5
+- Quốc tế học điểm thi 33: 5
+- Việt Nam học Xét học bạ 35: 5
+7310601 Quốc tế học: 3
+7310630 Việt Nam học: 3
+7340302 Kiểm toán: 3
+7140233 SP Tiếng Pháp: 3
+Miền Nam 70: 2
+Tổ hợp 2: D01: 2
+Tổ hợp 1: A01: 2
+Tổ hợp 2: A01: 2
+Miền Bắc 67: 2
+HB THPT: 2
+7340302 Kiểm toán 7340302 Kiểm toán TTN - KH: 2
+7340302QT10.01 Kiểm toán (Theo định hướng ICAEW CFAB) 7340302 Kiểm toán TTN - KH: 2
+Xét kết quả thi tốt nghiệp THPT: 2
+7860100 Nghiệp vụ an ninh 7860100 Nghiệp vụ an ninh PT2: 1
+7860100 Nghiệp vụ an ninh 7860100 Nghiệp vụ an ninh PT3: 1
+(Chương trình Việt - Pháp PFIEV) THPT: 1
+- Tự động hoá (CT tiên tiến) THPT: 1
+Viễn thông (CT tiên tiến) THPT: 1
+406 Xét kết quả học tập cấp THPT (học bạ) kết hợp với điểm thi năng khiếu: 1
+500 Xét điểm TBC học tập hệ TC kết hợp với điểm thi năng khiếu: 1
+Tổ hợp A01: 1
+Tổ hợp C03: 1
+Tổ hợp D01: 1
+406 Phương thức 2: 1
+7140206 Giáo dục Thể chất 7140206 Giáo dục Thể chất Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển: 1
+7140206 Giáo dục Thể chất 7140206 Giáo dục Thể chất Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển: 1
+7229001 Triết học 7229001 Triết học Sử dụng kết quả thi đánh giá năng lực của Đại học Quốc gia TP. Hồ Chí Minh: 1
+7229001 Triết học 7229001 Triết học Xét kết quả học tập cấp THPT (học bạ): 1
+7229001 Triết học 7229001 Triết học Xét kết quả thi tốt nghiệp THPT: 1
+7229030 Văn học 7229030 Văn học Xét kết quả học tập cấp THPT (học bạ): 1
+7229030 Văn học 7229030 Văn học Xét kết quả thi tốt nghiệp THPT: 1
+7620110 Khoa học cây trồng 7620110 Khoa học cây trồng Xét kết quả học tập cấp THPT (học bạ): 1
+7620110 Khoa học cây trồng 7620110 Khoa học cây trồng Xét kết quả thi tốt nghiệp THPT: 1
+7620112 Bảo vệ thực vật 7620112 Bảo vệ thực vật Xét kết quả học tập cấp THPT (học bạ): 1
+7620112 Bảo vệ thực vật 7620112 Bảo vệ thực vật Xét kết quả thi tốt nghiệp THPT: 1
+7640101 Thú y 7640101 Thú y Sử dụng kết quả thi đánh giá năng lực của Đại học Quốc gia TP. Hồ Chí Minh: 1
+7640101 Thú y 7640101 Thú y Xét kết quả học tập cấp THPT (học bạ): 1
+7640101 Thú y 7640101 Thú y Xét kết quả thi tốt nghiệp THPT: 1
+Kết quả kỳ thi tốt nghiệp THPT: 1
+Xét kết quả học tập cấp THPT (Học bạ) 0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 11 25.05/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 15 24.79/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 19 25.63/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 28 27.95/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 39 26.82/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 40 23.28/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 41 24.22/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 49 24.26/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 56 24.60/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 576 25.86/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 6 26.69/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 68 25.86/30.0: 1
+Xét kết quả học tập cấp THPT (Học bạ) 8 29.20/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 106 23.65/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 13 18.95/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 13 27.10/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 2 27.25/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 22 20.05/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 26 17.25/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 27 18.30/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 39 18.25/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 46 20.35/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 486 20.35/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 5 21.45/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 63 18.75/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 69 21.65/30.0: 1
+Xét kết quả thi tốt nghiệp THPT 7 19.30/30.0: 1
++ Ngữ văn, Lịch sử, GDKT&PL (X70): 1
++ Ngữ văn, Lịch sử, Địa lý (C00): 1
++ Ngữ văn, Địa lí, GDKT&PL (X74): 1
++ Toán, Ngữ văn, GDKT&PL (X01): 1
++ Toán, Ngữ văn, Lịch sử (C03): 1
++ Toán, Ngữ văn, Sinh học (B03): 1
++ Toán, Ngữ văn, Địa lí (C04): 1
++ Toán, Vật lý, Hóa học (A00): 1
++ Toán, Địa lý, GDCD (A09): 1
+Lĩnh vực Khoa học giáo dục và: 1
+Ngữ Văn + Năng khiếu 1 (Kể chuyện, đọc diễn cảm) + Năng: 1
+Ngữ Văn + Năng khiếu 1 (Kể chuyện, đọc diễn cảm) + Năng khiếu 2 (Hát, Nhạc) (M01): 1
+Toán + Năng khiếu 1 (Kể chuyện, đọc diễn cảm) + Năng khiếu 2 (Hát, Nhạc) (M09): 1
+Tuyển sinh riêng theo Đề án: 1
+Tuyển sinh riêng theo Đề án của: 1
+Tuyển sinh riêng theo Đề án của CSĐT: 1
+Tổ hợp 1: Toán, Vật lí, Hóa học Xét kết quả học tập cấp THPT: 1
+Tổ hợp 1: Toán, Vật lí, Hóa học Xét kết quả học tập cấp THPT (học bạ): 1
+Tổ hợp 1: Toán, Vật lí, Hóa học Xét kết quả thi tốt nghiệp THPT: 1
+Xét kết quả học tập cấp THPT (học bạ): 1
+7140204 Giáo dục Công dân 7140204 Xét kết quả thi THPT: 1
+7140205 Giáo dục Chính trị 7140205 Xét kết quả thi THPT: 1
+7140206 Giáo dục thể chất 7140206 Xét kết quả thi THPT: 1
+7140250 7140250 Xét kết quả thi THPT: 1
+7229010 Lịch sử (chuyên ngành Quan hệ quốc tế) 7229010 Khác/Nhân văn Xét kết quả thi THPT: 1
+7229030 Văn học 7229030 Khác/Nhân văn Xét kết quả thi THPT: 1
+7229040 Văn hoá học 7229040 Khác/Nhân văn Xét kết quả thi THPT: 1
+7460108 Khoa học dữ liệu 7460108 Toán học/Toán và thống kê Xét kết quả thi THPT: 1
+7760101 Công tác xã hội 7760101 Công tác xã hội/Dịch vụ xã hội Xét kết quả thi THPT: 1
+7850101 Quản lý tài nguyên và môi trường 7850101 Quản lý tài nguyên và môi trường/Môi trường và bảo vệ môi trường Xét kết quả thi THPT: 1
+Xét kết quả hoc tập THPT (Học bạ): 1
+Xét kết quả thi ĐGNL của Trường ĐHSP Hà Nội: 1
+Xét kết quả thi ĐGNL của Trường ĐHSP Hà Nội/HCM: 1
+Xét tuyển sinh riêng theo đề án của trường: 1
+- Phương thức 1: 1
+DDY 7720501 45 47: 1
+Răng-Hàm- Răng-Hàm- - Phương thức 1: 1
+7140204 Giáo dục Công dân NL: 1
+7140205 Giáo dục Chính trị THPT: 1
+7140206 Giáo dục thể chất THPT: 1
+7140208 Giáo dục Quốc phòng - An ninh HB: 1
+7140247 SP khoa học tự nhiên NL: 1
+7140249 SP Lịch sử - Địa lí HB: 1
+7210103 Hội họa: 1
+7210105 Điêu khắc: 1
+7220104 Hán - Nôm HB: 1
+7229001 Triết học HB: 1
+7229010 Lịch sử HB: 1
+7229030 Văn học HB: 1
+7229042 Quản lý văn hóa HB: 1
+7310107 Hệ thống TT Quản lý: 1
+7310205 Quản lý nhà nước HB: 1
+7310206 Quan hệ quốc tế HB THPT: 1
+7310608 Đông phương học HB: 1
+7340116 Bất động sản THPT HB: 1
+7440102 Vật lý học HB: 1
+7440112 Hóa học HB: 1
+7440301 Khoa học môi trường HB: 1
+7540106 Đảm bảo chất lượng và an toàn thực phẩm THPT HB: 1
+7620110 Khoa học cây trồng THPT HB: 1
+7620112 Bảo vệ thực vật THPT HB: 1
+7620211 Quản lý tài nguyên rừng THPT HB: 1
+7640101 Thú y THPT HB: 1
+7720302 Hộ sinh: 1
+7720401 Dinh dưỡng: 1
+7720501 Răng - Hàm - Mặt: 1
+7720701 Y tế công cộng: 1
+7760101 Công tác xã hội HB: 1
+7850101 Quản lý tài nguyên và môi trường HB: 1
+7850103 Quản lý đất đai THPT HB: 1
+7850105 Quản lý an toàn, sức khỏe và môi trường HB: 1
+7720302 Hộ sinh 7720302 Hộ sinh: 1
+7720401 Dinh dưỡng 7720401 Dinh dưỡng: 1
+7720501 Răng - Hàm - Mặt 7720501 Răng - Hàm - Mặt: 1
+7720701 Y tế công cộng 7720701 Y tế công cộng: 1
+200 Việt Nam học 7310630 Việt Nam học Xét tuyển: 1
+7310630 Việt Nam học 7310630 Việt Nam học Tốt nghiệp THPT: 1
+Học bạ: 1
+Kết hợp học bạ và xét tuyển: 1
+- [200]: Kết hợp kết quả học tập cấp THPT với điểm thi năng khiếu để xét tuyển: 1
+7140206 Giáo dục Thể chất 7140206 Giáo dục Thể chất [100]: Xét kết quả thi tốt nghiệp THPT: 1
+[200]: Xét kết quả học tập cấp THPT (học bạ): 1
+7210205 Thanh nhạc (Tổ hợp xét tuyển: N00): 1
+7310630 Việt Nam học (Tổ hợp xét tuyển: C00, C03, C04, D01, D14, D15): 1
+7540106 100: 1
+7549002 100: 1
+7850101 100: 1
+7904492 100: 1
+Khoa học cây trồng 7620110 100: 1
+Khoa học môi trường 7440301 100: 1
+Quản lý thông tin 7320205 100: 1
+Quản lý tài nguyên rừng 7620211 100: 1
+Quản lý đất đai 7850103 100: 1
+Thú y 7640101 100: 1
+D TV- 7640101 Thú y 7640101 Thú y 100: 1
+Ngành Bất động sản Tổ hợp A00, A01, C04, D01 70 15 16,00 45 6 16,00: 1
+Ngành Khoa học dữ liệu Tổ hợp A00, A01, C01, D01 37 7 16,00 18 12 16,00: 1
+Ngành Piano (*) Tổ hợp N00 10 0 18,00 8 0 18,00: 1
+Ngành Răng - Hàm - Mặt Tổ hợp A00, B00, D07, D08 50 41 22,00 35 17 24,00: 1
+Ngành Thanh nhạc (*) Tổ hợp N00 17 5 18,00 17 1 18,00: 1
+Ngành Văn học Tổ hợp C00, D01, D14, D66 23 16 16,00 18 11 16,00: 1
+Ngành Đông phương học Tổ hợp A01, C00, D01, D04 125 48 16,00 75 21 16,00: 1
+KQT ĐGNL-: 1
+Kết hợp: 1
+Ngành Hệ thống giao thông thông KQ thi THPT: 1
+Ngành tuyển sinh từ năm 2025 về sau: HB THPT: 1
+7310201- Hà Nội Chính trị học 731; 73102 Khoa học xã hội và hành vi; Khoa học chính trị: 1
+7310205- Hà Nội Quản lý nhà nước 731; 73102 Khoa học xã hội và hành vi; Khoa học chính trị: 1
+7310205- Đắk Lắk Quản lý nhà nước 731; 73102 Khoa học xã hội và hành vi; Khoa học chính trị: 1
+7320303- 01-Hà Nội Chuyên ngành Văn thư – Lưu trữ thuộc ngành Lưu trữ học: 1
+7320303- 01-TP- HCM Chuyên ngành Văn thư – Lưu trữ thuộc ngành Lưu trữ học: 1
+7310201 Chính trị học 7310201 Chính trị học 100, 200: 1
+7640101 Thú y 7640101 Thú y 100, 200: 1
+Tổ hợp 1: A00: 1
+Tổ hợp 1: A00 Xét kết quả học tập bậc THPT: 1
+Tổ hợp 1: A00 Xét kết quả kỳ thi tốt nghiệp THPT/ THPTQG: 1
+Tổ hợp 1: A01 Xét kết quả học tập bậc THPT: 1
+Tổ hợp 1: A01 Xét kết quả kỳ thi tốt nghiệp THPT/ THPTQG: 1
+Tổ hợp 3: C00: 1
+Tổ hợp 4: D01: 1
+Tổ hợp 5: D02: 1
+Tổ hợp 6: D03: 1
+Tổ hợp 7: D05: 1
+Tổ hợp 8: D06: 1
+Xét tuyển A00: 1
+Xét tuyển dựa trên kết quả học tập bậc THPT A00: 1
+Xét tuyển dựa trên kết quả học tập bậc THPT A01: 1
+Xét tuyển dựa trên kết quả Kỳ thi tốt nghiệp THPT A00: 1
+Xét tuyển dựa trên kết quả Kỳ thi tốt nghiệp THPT A01: 1
+CN16 7480201 CNTT định hướng thị trường Nhật Bản: 1
+Tổ hợp 1: C00: 1
+Tổ hợp 3: D01: 1
+Tổ hợp 3: D78: 1
+Tổ hợp 4: D03: 1
+Tổ hợp 5: D78: 1
+Tổ hợp 6: D82: 1
+Kỹ sư Tự động hóa và Tin học: 1
+Quản lý (song bằng VNU-Keuka): 1
+7420101 Sinh học 7420101 Sinh học 100: 1
+7420101 Sinh học 7420101 Sinh học 302: 1
+7420101 Sinh học 7420101 Sinh học 303: 1
+7440112 Hoá học 7440112 Hoá học 100: 1
+7440112 Hoá học 7440112 Hoá học 302: 1
+7440112 Hoá học 7440112 Hoá học 303: 1
+7440122 Khoa học Vật liệu 7440122 Khoa học Vật liệu 100: 1
+7440122 Khoa học Vật liệu 7440122 Khoa học Vật liệu 302: 1
+7440122 Khoa học Vật liệu 7440122 Khoa học Vật liệu 303: 1
+7440201_NN Nhóm ngành Địa chất học 7440201 Nhóm ngành Địa chất học 100: 1
+7440201_NN Nhóm ngành Địa chất học 7440201 Nhóm ngành Địa chất học 302: 1
+7440201_NN Nhóm ngành Địa chất học 7440201 Nhóm ngành Địa chất học 303: 1
+7440228 Hải dương học 7440228 Hải dương học 100: 1
+7440228 Hải dương học 7440228 Hải dương học 302: 1
+7440228 Hải dương học 7440228 Hải dương học 303: 1
+7440301 Khoa học Môi trường 7440301 Khoa học Môi trường 100: 1
+7440301 Khoa học Môi trường 7440301 Khoa học Môi trường 302: 1
+7440301 Khoa học Môi trường 7440301 Khoa học Môi trường 303: 1
+7460101_NN Nhóm ngành Toán học, Toán ứng dụng, Toán tin 7460101 Nhóm ngành Toán học, Toán Ứng dụng, Toán tin 100: 1
+7460101_NN Nhóm ngành Toán học, Toán ứng dụng, Toán tin 7460101 Nhóm ngành Toán học, Toán Ứng dụng, Toán tin 302: 1
+7460101_NN Nhóm ngành Toán học, Toán ứng dụng, Toán tin 7460101 Nhóm ngành Toán học, Toán Ứng dụng, Toán tin 303: 1
+7460108 Khoa học dữ liệu 7460108 Khoa học dữ liệu 100: 1
+7460108 Khoa học dữ liệu 7460108 Khoa học dữ liệu 302: 1
+7460108 Khoa học dữ liệu 7460108 Khoa học dữ liệu 303: 1
+7850101 Quản lý tài nguyên và môi trường 7850101 Quản lý tài nguyên và môi trường 100: 1
+7850101 Quản lý tài nguyên và môi trường 7850101 Quản lý tài nguyên và môi trường 302: 1
+7850101 Quản lý tài nguyên và môi trường 7850101 Quản lý tài nguyên và môi trường 303: 1
+7140101 CT chuẩn 7140101 Giáo dục học 302 302: 1
+7140101 CT chuẩn 7140101 Giáo dục học 500 500: 1
+7140101 CT chuẩn 7140101 Giáo dục học B00 100: 1
+7140101 CT chuẩn 7140101 Giáo dục học C00 100: 1
+7140101 CT chuẩn 7140101 Giáo dục học C01 100: 1
+7140101 CT chuẩn 7140101 Giáo dục học D01 100: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục 302 302: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục 303 303: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục 500 500: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục A01 100: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục C00 100: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục D01 100: 1
+7140114 CT chuẩn 7140114 Quản lý giáo dục D14 100: 1
+7210213 CT chuẩn 7210213 Nghệ thuật học 302 302: 1
+7210213 CT chuẩn 7210213 Nghệ thuật học 500 500: 1
+7210213 CT chuẩn 7210213 Nghệ thuật học C00 100: 1
+7210213 CT chuẩn 7210213 Nghệ thuật học D01 100: 1
+7210213 CT chuẩn 7210213 Nghệ thuật học D14 100: 1
+7229001 CT chuẩn 7229001 Triết học 302 302: 1
+7229001 CT chuẩn 7229001 Triết học 500 500: 1
+7229001 CT chuẩn 7229001 Triết học A01 100: 1
+7229001 CT chuẩn 7229001 Triết học C00 100: 1
+7229001 CT chuẩn 7229001 Triết học D01 100: 1
+7229001 CT chuẩn 7229001 Triết học D14 100: 1
+7229009 CT chuẩn 7229009 Tôn giáo học 302 302: 1
+7229009 CT chuẩn 7229009 Tôn giáo học 500 500: 1
+7229009 CT chuẩn 7229009 Tôn giáo học C00 100: 1
+7229009 CT chuẩn 7229009 Tôn giáo học D01 100: 1
+7229009 CT chuẩn 7229009 Tôn giáo học D14 100: 1
+7229010 CT chuẩn 7229010 Lịch sử 302 302: 1
+7229010 CT chuẩn 7229010 Lịch sử 500 500: 1
+7229010 CT chuẩn 7229010 Lịch sử C00 100: 1
+7229010 CT chuẩn 7229010 Lịch sử D01 100: 1
+7229010 CT chuẩn 7229010 Lịch sử D14 100: 1
+7229010 CT chuẩn 7229010 Lịch sử D15 100: 1
+7229030 CT chuẩn 7229030 Văn học 302 302: 1
+7229030 CT chuẩn 7229030 Văn học 303 303: 1
+7229030 CT chuẩn 7229030 Văn học 500 500: 1
+7229030 CT chuẩn 7229030 Văn học C00 100: 1
+7229030 CT chuẩn 7229030 Văn học D01 100: 1
+7229030 CT chuẩn 7229030 Văn học D14 100: 1
+7229040 CT chuẩn 7229040 Văn hóa học 302 302: 1
+7229040 CT chuẩn 7229040 Văn hóa học 303 303: 1
+7229040 CT chuẩn 7229040 Văn hóa học 500 500: 1
+7229040 CT chuẩn 7229040 Văn hóa học C00 100: 1
+7229040 CT chuẩn 7229040 Văn hóa học D01 100: 1
+7229040 CT chuẩn 7229040 Văn hóa học D14 100: 1
+7229040 CT chuẩn 7229040 Văn hóa học D15 100: 1
+7310206 CT chuẩn 7310206 Quan hệ quốc tế 302 302: 1
+7310206 CT chuẩn 7310206 Quan hệ quốc tế 303 303: 1
+7310206 CT chuẩn 7310206 Quan hệ quốc tế 500 500: 1
+7310206 CT chuẩn 7310206 Quan hệ quốc tế D01 100: 1
+7310206 CT chuẩn 7310206 Quan hệ quốc tế D14 100: 1
+7310206_CLC Chuẩn QT 7310206_CLC Quan hệ quốc tế _ Chuẩn quốc tế 302 302: 1
+7310206_CLC Chuẩn QT 7310206_CLC Quan hệ quốc tế _ Chuẩn quốc tế 303 303: 1
+7310206_CLC Chuẩn QT 7310206_CLC Quan hệ quốc tế _ Chuẩn quốc tế 500 500: 1
+7310206_CLC Chuẩn QT 7310206_CLC Quan hệ quốc tế _ Chuẩn quốc tế D01 100: 1
+7310206_CLC Chuẩn QT 7310206_CLC Quan hệ quốc tế _ Chuẩn quốc tế D14 100: 1
+7310302 CT chuẩn 7310302 Nhân học 302 302: 1
+7310302 CT chuẩn 7310302 Nhân học 500 500: 1
+7310302 CT chuẩn 7310302 Nhân học C00 100: 1
+7310302 CT chuẩn 7310302 Nhân học D01 100: 1
+7310302 CT chuẩn 7310302 Nhân học D14 100: 1
+7310302 CT chuẩn 7310302 Nhân học D15 100: 1
+7310501 CT chuẩn 7310501 Địa lý học 302 302: 1
+7310501 CT chuẩn 7310501 Địa lý học 303 303: 1
+7310501 CT chuẩn 7310501 Địa lý học 500 500: 1
+7310501 CT chuẩn 7310501 Địa lý học A01 100: 1
+7310501 CT chuẩn 7310501 Địa lý học C00 100: 1
+7310501 CT chuẩn 7310501 Địa lý học D01 100: 1
+7310501 CT chuẩn 7310501 Địa lý học D15 100: 1
+7310601 CT chuẩn 7310601 Quốc tế học 302 302: 1
+7310601 CT chuẩn 7310601 Quốc tế học 303 303: 1
+7310601 CT chuẩn 7310601 Quốc tế học 500 500: 1
+7310601 CT chuẩn 7310601 Quốc tế học D01 100: 1
+7310601 CT chuẩn 7310601 Quốc tế học D09 100: 1
+7310601 CT chuẩn 7310601 Quốc tế học D14 100: 1
+7310601 CT chuẩn 7310601 Quốc tế học D15 100: 1
+7310608 CT chuẩn 7310608 Đông phương học 302 302: 1
+7310608 CT chuẩn 7310608 Đông phương học 303 303: 1
+7310608 CT chuẩn 7310608 Đông phương học 500 500: 1
+7310608 CT chuẩn 7310608 Đông phương học D01 100: 1
+7310608 CT chuẩn 7310608 Đông phương học D04 100: 1
+7310608 CT chuẩn 7310608 Đông phương học D14 100: 1
+7310613 CT chuẩn 7310613 Nhật Bản học 302 302: 1
+7310613 CT chuẩn 7310613 Nhật Bản học 303 303: 1
+7310613 CT chuẩn 7310613 Nhật Bản học 500 500: 1
+7310613 CT chuẩn 7310613 Nhật Bản học D01 100: 1
+7310613 CT chuẩn 7310613 Nhật Bản học D06 100: 1
+7310613 CT chuẩn 7310613 Nhật Bản học D14 100: 1
+7310613 CT chuẩn 7310613 Nhật Bản học D63 100: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế 302 302: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế 303 303: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế 500 500: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế D01 100: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế D06 100: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế D14 100: 1
+7310613_CLC Chuẩn QT 7310613_CLC Nhật Bản học_ Chuẩn quốc tế D63 100: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học 302 302: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học 303 303: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học 500 500: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học D01 100: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học D14 100: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học DD2 100: 1
+7310614 CT chuẩn 7310614 Hàn Quốc học DH5 100: 1
+7310630 CT chuẩn 7310630 Việt Nam học 302 302: 1
+7310630 CT chuẩn 7310630 Việt Nam học 303 303: 1
+7310630 CT chuẩn 7310630 Việt Nam học 500 500: 1
+7310630 CT chuẩn 7310630 Việt Nam học C00 100: 1
+7310630 CT chuẩn 7310630 Việt Nam học D01 100: 1
+7310630 CT chuẩn 7310630 Việt Nam học D14 100: 1
+7310630 CT chuẩn 7310630 Việt Nam học D15 100: 1
+7320201 CT chuẩn 7320201 Thông tin – thư viện 302 302: 1
+7320201 CT chuẩn 7320201 Thông tin – thư viện 500 500: 1
+7320201 CT chuẩn 7320201 Thông tin – thư viện A01 100: 1
+7320201 CT chuẩn 7320201 Thông tin – thư viện C00 100: 1
+7320201 CT chuẩn 7320201 Thông tin – thư viện D01 100: 1
+7320201 CT chuẩn 7320201 Thông tin – thư viện D14 100: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin 302 302: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin 303 303: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin 500 500: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin A01 100: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin C00 100: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin D01 100: 1
+7320205 CT chuẩn 7320205 Quản lý thông tin D14 100: 1
+7320303 CT chuẩn 7320303 Lưu trữ học 302 302: 1
+7320303 CT chuẩn 7320303 Lưu trữ học 500 500: 1
+7320303 CT chuẩn 7320303 Lưu trữ học C00 100: 1
+7320303 CT chuẩn 7320303 Lưu trữ học D01 100: 1
+7320303 CT chuẩn 7320303 Lưu trữ học D14 100: 1
+7320303 CT chuẩn 7320303 Lưu trữ học D15 100: 1
+7580112 CT chuẩn 7580112 Đô thị học 302 302: 1
+7580112 CT chuẩn 7580112 Đô thị học 303 303: 1
+7580112 CT chuẩn 7580112 Đô thị học 500 500: 1
+7580112 CT chuẩn 7580112 Đô thị học A01 100: 1
+7580112 CT chuẩn 7580112 Đô thị học C00 100: 1
+7580112 CT chuẩn 7580112 Đô thị học D01 100: 1
+7580112 CT chuẩn 7580112 Đô thị học D14 100: 1
+7760101 CT chuẩn 7760101 Công tác xã hội 302 302: 1
+7760101 CT chuẩn 7760101 Công tác xã hội 500 500: 1
+7760101 CT chuẩn 7760101 Công tác xã hội C00 100: 1
+7760101 CT chuẩn 7760101 Công tác xã hội D01 100: 1
+7760101 CT chuẩn 7760101 Công tác xã hội D14 100: 1
+7760101 CT chuẩn 7760101 Công tác xã hội D15 100: 1
+QSY Răng - Hàm - 7720501 Răng - Hàm - kết quả thi tốt: 1
+Xét tổng điểm trung bình 3 môn lớp 12 theo tổ hợp môn xét tuyển: 1
+Xét tổng điểm trung bình học tập các môn cả năm lớp 10, lớp 11, học kỳ 1 lớp 12 Kết quả học tập THPT: 1
+7140204 Giáo dục Công dân 100: 1
+7140205 Giáo dục Chính trị 100: 1
+7140206 Giáo dục Thể chất 100: 1
+7229042 Quản lý văn hóa 100: 1
+7310501 Địa lý học 100: 1
+7310630 Việt Nam học 100: 1
+7340403 Quản lý công 100: 1
+7440301 Khoa học môi trường 100: 1
+7620103 Khoa học đất 100: 1
+7640101 Thú y 100: 1
+7760101 Công tác xã hội 100: 1
+7850101 Quản lý tài nguyên và môi trường 100: 1
+7850103 Quản lý đất đai 100: 1
+(đào tạo tại cơ sở chính) 200: 1
+01 thông tin 201 thông tin: 1
+05 Chính trị 205 Chính trị: 1
+12 Hoá học 212 Hoá học: 1
+401- NK: 1
+500- UTX TVA TT: 1
+71401 01 Giáo dục học 7140 101 Giáo dục học 100: 1
+71401 14 Quản lý giáo dục 7140 114 Quản lý giáo dục 100: 1
+71402 03 Giáo dục Đặc biệt 7140 203 Giáo dục Đặc biệt 100: 1
+71402 04 Giáo dục Công dân 7140 204 Giáo dục Công dân 100: 1
+71402 06 Giáo dục Thể chất (đào tạo tại cơ sở chính) 7140 206 Giáo dục Thể chất 301: 1
+71402 06_L A Giáo dục Thể chất (đào tạo tại phân hiệu Long An) 7140 206 Giáo dục Thể chất 401- NK: 1
+71402 08 Giáo dục Quốc phòng - An ninh 7140 208 Giáo dục Quốc phòng - An ninh 100: 1
+71402 08_L A Giáo dục Quốc phòng - An ninh (đào tạo tại phân hiệu Long An) 7140 208 Giáo dục Quốc phòng - An ninh 401- NK: 1
+72290 30 Văn học 7229 030 Văn học 100: 1
+73105 01 Địa lý học 7310 501 Địa lý học 100: 1
+73106 01 Quốc tế học 7310 601 Quốc tế học 100: 1
+74202 03 Sinh học ứng dụng 7420 203 Sinh học ứng dụng 100: 1
+74401 02 Vật lý học 7440 102 Vật lý học 100: 1
+74401 12 Hoá học 7440 112 Hoá học 100: 1
+74601 12 Toán ứng dụng 7460 112 Toán ứng dụng 100: 1
+77601 01 Công tác xã hội 7760 101 Công tác xã hội 100: 1
+7 140114 Quản lý giáo dục 7140114 Quản lý giáo dục 100, 200, 301, 303: 1
+7 140205 Giáo dục Chính trị 7140205 Giáo dục Chính trị 100, 301, 303: 1
+7 140206 Giáo dục Thể chất 7140206 Giáo dục Thể chất 100, 301, 303: 1
+7 140208 Giáo dục Quốc phòng - An ninh 7140208 Giáo dục Quốc phòng - An ninh 100, 301, 303: 1
+7 229042 Quản lý văn hoá 7229042 Quản lý văn hoá 100, 200, 301, 303: 1
+7 310201 Chính trị học 7310201 Chính trị học 100, 200 301, 303: 1
+7 310205 Quản lý nhà nước 7310205 Quản lý nhà nước 100, 200, 301, 303: 1
+7 310601 Quốc tế học 7310601 Quốc tế học 100, 200, 301, 303: 1
+7 310630 Việt Nam học 7310630 Việt Nam học 100, 200, 301, 303: 1
+7 620110 Khoa học cây trồng 7620110 Khoa học cây trồng 100, 200, 301, 303: 1
+7 620301 Nuôi trồng thuỷ sản 7620301 Nuôi trồng thuỷ sản 100, 200, 301, 303: 1
+7 640101 Thú y 7640101 Thú y 100, 200, 301, 303: 1
+7 760101 Công tác xã hội 7760101 Công tác xã hội 100, 200, 301, 303: 1
+7 850101 Quản lý tài nguyên và môi trường 7850101 Quản lý tài nguyên và môi trường 100, 200, 301, 303: 1
+7 850103 Quản lý đất đai 7850103 Quản lý đất đai 100, 200, 301, 303: 1
+- Công nghê ̣chế biến thủy sản A00; A01; B00; D07: 1
+- Công nghê ̣chế taọ máy A00; A01; C01; D07: 1
+- Công nghê ̣thông tin A01; D01; D07; D96: 1
+- Công nghê ̣thưc̣ phẩm A00; A01; B00; D07: 1
+- Khoa học hàng hải A00; A01; C01; D07: 1
+- Kỹ thuâṭ hóa học A00; A01; B00; D07: 1
+- Kỹ thuâṭ tàu thủy A00; A01; C01; D07: 1
+- Kỹ thuâṭ điêṇ A00; A01; C01; D07: 1
+- Kỹ thuâṭ cơ điêṇ tử A00; A01; C01; D07: 1
+- Kỹ thuâṭ môi trường A00; A01; B00; D07: 1
+- Kỹ thuâṭ nhiêṭ A00; A01; C01; D07: 1
+- Kỹ thuâṭ xây dưṇ g A00; A01; C01; D07: 1
+- Nuôi trồng thủy sản A01; B00; D01; D96: 1
+14 7520114 7520114 Kỹ thuâṭ cơ điêṇ tử Điểm thi TN THPT 92: 1
+17 7520122 7520122 Kỹ thuâṭ tàu thủy Điểm thi TN THPT 50: 1
+22 7520301 7520301 Kỹ thuâṭ hóa học Điểm thi TN THPT 67: 1
+6 7340202 7340202 Kiểm toán Điểm thi TN THPT 33: 1
+7140205 Giáo dục Chính trị 7140205 Giáo dục Chính trị Xét kết quả học tập cấp THPT (học bạ): 1
+7140205 Giáo dục Chính trị 7140205 Giáo dục Chính trị Xét kết quả thi tốt nghiệp THPT: 1
+Kết hợp kết quả học tập cấp THPT (học bạ) với điểm thi năng khiếu để xét tuyển: 1
+Kết hợp kết quả thi tốt nghiệp THPT với điểm thi năng khiếu để xét tuyển: 1
+Xét kết quả học tập cấp THPT (học bạ): 1
+dưỡng học tập cấp THPT (học bạ): 1
+Dinh dưỡng: 1
+Khúc xạ nhãn khoa: 1
+Y tế công cộng: 1
+7340409 Quản lý dự án 7340409 Quản lý dự án - Phương thức 100 - Phương thức 200 - Phương thức 301 - Phương thức 402 - Phương thức 415 - Phương thức 417: 1
+7460108 Khoa học dữ liệu 7460108 Khoa học dữ liệu - Phương thức 100 - Phương thức 200 - Phương thức 301 - Phương thức 402 - Phương thức 415 - Phương thức 417: 1
+7580105 Quy hoạch vùng và đô thị 7580105 Quy hoạch vùng và đô thị - Phương thức 100 - Phương thức 301 - Phương thức 415: 1
+7720302 Hộ sinh 100; 301: 1
+7720401 Dinh dưỡng 100; 301: 1
+7720501 Răng- Hàm-Mặt 100; 301: 1
+7720699 Khúc xạ nhãn khoa 100; 301: 1
+7850103 Quản lý đất đai 7850103 Quản lý đất đai Xét kết quả học tập cấp THPT (học bạ): 1
+7850103 Quản lý đất đai 7850103 Quản lý đất đai Xét kết quả thi tốt nghiệp THPT: 1
+406: Xét tuyển dựa vào tổ hợp các môn học của học bạ lớp 12 và thi năng khiếu.: 1
+thi tốt nghiệp THPT với điểm: 1
+điểm ghi trong học bạ THPT: 1
+7220101 Chương trình đào tạo ngành Tiếng Việt và Văn hóa Việt Nam 7220101 Tiếng Việt và Văn hóa Việt Nam Xét KQ thi TNTHPT: 1
+7440301 Chương trình đào tạo ngành Khoa học môi trường 7440301 Khoa học môi trường Xét KQ thi TNTHPT: 1
+7620112 Chương trình đào tạo ngành Bảo vệ thực vật 7620112 Bảo vệ thực vật Xét KQ thi TNTHPT: 1
+Kết hợp KQHT cấp THPT với điểm thi NK: 1
+Sử dụng KQ Kỳ thi V-SAT: 1
+Xét học bạ: 1
+(2) (3) (4) (5) (6): 1
+Trung Quốc học Trung Quốc học PT2: 1
+7310601 Quốc tế học 7310601 Quốc tế học: 1
+7310608 Đông phương học 7310608 Đông phương học: 1
+7310614 Hàn Quốc học 7310614 Hàn Quốc học: 1
+7720701 Y tế công cộng 100; 301: 1

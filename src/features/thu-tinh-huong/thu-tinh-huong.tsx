@@ -201,7 +201,7 @@ export default function ThuTinhHuong() {
             <GhiChuDuLieu />
 
             {/* Thanh hành động dính trên thanh tab */}
-            <div className="sticky bottom-[76px] z-20 -mx-4 px-4 pt-2 pb-1 bg-nen/95 backdrop-blur space-y-2">
+            <div className="sticky bottom-[76px] z-20 -mx-4 px-4 pt-2 pb-1 bg-nen border-t border-vien/60 space-y-2">
               <BaoNho bao={bao} />
               <div className="grid grid-cols-2 gap-2">
                 <Nut kieu="vien" bieuTuong={Bookmark} onClick={luu} className="px-2">Lưu tình huống</Nut>

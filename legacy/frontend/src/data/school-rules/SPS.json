@@ -1,0 +1,22 @@
+{
+  "schoolCode": "SPS",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0416/thong-tin-tuyen-sinh-truong-dai-hoc-su-pham-tphcm-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Sư phạm TP.HCM",
+    "sha256": "d492448cbeb3509360e37a7a5311cc6ebc7ba044445a445f06f97d8b0e306818",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Xét điểm thi THPT: ĐXT = ĐM1 + ĐM2 + ĐM3 + ĐUT (điểm từng môn thang 10), trùng công thức chung. Phương thức học bạ kết hợp ĐGNL chuyên biệt ((0,5×ĐMC + 0,35×ĐHB1 + 0,15×ĐHB2)×3) chưa mã hóa."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

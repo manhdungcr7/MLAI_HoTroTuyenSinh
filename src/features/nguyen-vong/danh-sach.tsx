@@ -17,6 +17,7 @@ import { useApp } from "@/state/store";
 import { useKeoTha } from "./dung-keo-tha";
 import { CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, xetCoCau, type DongNV } from "./tinh-toan";
+import { NutTuVan } from "@/features/tu-van/tu-van";
 
 const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lựa chọn này");
 
@@ -58,6 +59,7 @@ export default function DanhSachNguyenVong() {
     <>
       <DauTrangChinh tieuDe="Danh sách nguyện vọng" moTa="Sắp xếp thứ tự ưu tiên. NV1 là trường em muốn vào nhất." />
       <NoiDung>
+        <NutTuVan nguCanh="Danh sách nguyện vọng" />
         {ds.length === 0 ? (
           <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Em chưa có nguyện vọng nào"
             moTa="Vào Khám phá, mở một trường em thích rồi bấm “Thêm vào nguyện vọng”. Danh sách sẽ hiện ở đây để em sắp xếp.">

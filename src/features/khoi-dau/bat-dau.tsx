@@ -9,6 +9,7 @@ import { CAC_MON, type HoSo, type MonId } from "@/state/types";
 import Buoc1, { ID_TRUONG } from "./buoc-1";
 import Buoc2, { idDiem } from "./buoc-2";
 import Buoc3 from "./buoc-3";
+import { ManHinhPhanTichAI } from "./man-hinh-phan-tich";
 import { DaLuuTam, ThanhBuoc } from "./thanh-phan";
 import { THU_TU_BAT_BUOC, docDiem, kiemTraBuoc1, vietDiem } from "./tinh-toan";
 
@@ -32,12 +33,11 @@ export default function BatDau() {
 
   const [daSua, setDaSua] = useState(() => !!s.hoSo.hoTen); // mở lại hồ sơ đang điền dở cũng là đã lưu
   const [daThuBuoc1, setDaThuBuoc1] = useState(false); // chỉ báo thiếu sau khi em bấm Tiếp tục
-  const [canBuoc1, setCanBuoc1] = useState(false); // bấm Hoàn tất khi bước 1 còn thiếu
   // Chữ điểm đang gõ. Giữ riêng để "7," gõ dở không bị mất; số hợp lệ được ghi ngay vào hồ sơ.
   const [chuDiem, setChuDiem] = useState<Record<MonId, string>>(() =>
     Object.fromEntries(CAC_MON.map((m) => [m, vietDiem(h.diem[m])])) as Record<MonId, string>);
 
-  useEffect(() => { window.scrollTo(0, 0); setCanBuoc1(false); }, [so]);
+  useEffect(() => { window.scrollTo(0, 0); }, [so]);
 
   if (!hopLe) return <Navigate to={DUONG_DAN.batDau(1)} replace />;
 
@@ -53,28 +53,38 @@ export default function BatDau() {
   const thieu1 = THU_TU_BAT_BUOC.filter((k) => loi1[k]);
   const monSai = CAC_MON.filter((m) => { const k = docDiem(chuDiem[m]).loai; return k === "khongPhaiSo" || k === "ngoaiKhoang"; });
 
+  const [dangPhanTich, setDangPhanTich] = useState(false);
+
   const denBuoc = (b: BuocBatDau) => nav(DUONG_DAN.batDau(b));
+
+  const chuyenSangKhamPha = () => {
+    capNhatHoSo({ hoanTat: true });
+    setDangPhanTich(true);
+  };
 
   const tiepTuc = () => {
     if (so === 1) {
       setDaThuBuoc1(true);
       if (thieu1.length) return denO(ID_TRUONG[thieu1[0]]);
-      return denBuoc(2);
+      chuyenSangKhamPha();
+      return;
     }
     if (so === 2) {
       if (monSai.length) return denO(idDiem(monSai[0]));
       return denBuoc(3);
     }
-    if (thieu1.length) { setDaThuBuoc1(true); setCanBuoc1(true); return; }
-    capNhatHoSo({ hoanTat: true });
-    nav(DUONG_DAN.hoSo());
+    chuyenSangKhamPha();
   };
+
+  if (dangPhanTich) {
+    return <ManHinhPhanTichAI onHoanTat={() => nav(DUONG_DAN.khamPha())} />;
+  }
 
   return (
     <div className="min-h-dvh flex flex-col">
       <DauTrangCoQuayLai tieuDe="Tạo hồ sơ" buoc={`Bước ${so}/3`} quayLai={so === 1 ? DUONG_DAN.chao() : DUONG_DAN.batDau((so - 1) as BuocBatDau)} />
       <ThanhBuoc hien={so} denBuoc={denBuoc} />
-      <NoiDung className="flex-1 !space-y-5 pt-1">
+      <NoiDung className="flex-1 !space-y-5 pt-1 !pb-36">
         {so === 1 && <Buoc1 h={h} sua={sua} loi={daThuBuoc1 ? loi1 : {}} />}
         {so === 2 && <Buoc2 h={h} sua={sua} chuDiem={chuDiem} goDiem={goDiem} />}
         {so === 3 && <Buoc3 h={h} sua={sua} />}
@@ -85,27 +95,20 @@ export default function BatDau() {
             <ul className="mt-1 ml-6 list-disc space-y-0.5 font-semibold">{thieu1.map((k) => <li key={k}>{loi1[k]}</li>)}</ul>
           </div>
         )}
-        {so === 3 && canBuoc1 && (
-          <div role="alert" className="rounded-the bg-do-nhat p-3.5 text-[13px] text-do-chu">
-            <p className="flex items-center gap-1.5 font-extrabold text-[14px]"><CircleAlert size={17} />Bước 1 còn thiếu thông tin</p>
-            <ul className="mt-1 ml-6 list-disc space-y-0.5 font-semibold">{thieu1.map((k) => <li key={k}>{loi1[k]}</li>)}</ul>
-            <Nut kieu="nguyHiem" className="mt-2.5" onClick={() => denBuoc(1)}>Về bước 1 để điền</Nut>
-          </div>
-        )}
         {so === 2 && (
-          <button type="button" onClick={() => denBuoc(3)} className="w-full min-h-12 text-[14px] font-bold text-xanh">
-            Chưa nhớ điểm? Bỏ qua tạm, bổ sung sau
+          <button type="button" onClick={chuyenSangKhamPha} className="w-full min-h-12 text-[14px] font-bold text-xanh">
+            Chưa nhớ điểm? Xem gợi ý trước
           </button>
         )}
       </NoiDung>
 
-      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen/95 backdrop-blur px-4 pt-2.5 vung-an-toan-duoi">
+      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 vung-an-toan-duoi">
         <DaLuuTam daSua={daSua} />
         <div className="grid grid-cols-[1fr_1.5fr] gap-2.5 mt-2 mb-1.5">
           {so === 1
-            ? <Nut kieu="vien" onClick={() => denBuoc(2)}>Bỏ qua tạm</Nut>
+            ? <Nut kieu="vien" onClick={() => denBuoc(2)}>Bổ sung điểm</Nut>
             : <Nut kieu="vien" onClick={() => denBuoc((so - 1) as BuocBatDau)}>Quay lại</Nut>}
-          <Nut muiTen onClick={tiepTuc}>{so === 3 ? "Hoàn tất hồ sơ" : "Tiếp tục"}</Nut>
+          <Nut muiTen onClick={tiepTuc}>{so === 1 ? "Xem gợi ý" : so === 3 ? "Hoàn tất" : "Tiếp tục"}</Nut>
         </div>
       </div>
     </div>

@@ -1,0 +1,23 @@
+{
+  "schoolCode": "NHF",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0406/thong-tin-tuyen-sinh-dai-hoc-ha-noi-2026.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Hà Nội (bản ảnh, đọc qua nhận dạng chữ trang 2)",
+    "sha256": "5fd5c037aa8ef9695fb8812459766710fab12887c170f5bd56d6f166537f2e25",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Quy tắc tính điểm: môn ngoại ngữ nhân hệ số 2, và tùy ngành Toán hoặc Ngữ văn nhân hệ số 2; tổng tối đa 50 điểm quy đổi về thang 40; ngưỡng đầu vào 22 điểm. Chưa mã hóa vì chưa đối chiếu được bảng ngành; điểm tính theo công thức chung."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "approximateReason": "Trường nhân hệ số 2 cho môn ngoại ngữ (và Toán hoặc Ngữ văn tùy ngành) rồi quy về thang 40; ứng dụng chưa mã hóa nên điểm của bạn chỉ là ước lượng, hãy tính lại theo đề án."
+    }
+  }
+}

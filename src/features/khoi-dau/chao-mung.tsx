@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChartColumn, Clock, Compass, GraduationCap, Landmark, Layers, ShieldCheck, Sparkles, Sprout, Target, type LucideIcon } from "lucide-react";
+import { ChartColumn, Clock, GraduationCap, Landmark, Layers, ShieldCheck, Sparkles, Sprout, Target, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
@@ -24,20 +24,16 @@ const BIEN: { nhan: string; icon: LucideIcon; tone: ToneTen; lech: string }[] = 
 /** Minh họa bằng gradient thay cho ảnh nhân vật: mũ tốt nghiệp ở giữa, ba tấm biển chỉ đường bên phải. */
 function MinhHoa() {
   return (
-    <div aria-hidden className="relative h-[190px] mt-2">
-      <span className="absolute left-2 top-4 size-[150px] rounded-full bg-white/55" />
-      <span className="absolute left-[38px] top-[40px]"><BieuTuongTron icon={GraduationCap} tone="xanh" kichThuoc={96} /></span>
-      <span className="absolute left-0 top-[118px] shadow-the rounded-full"><BieuTuongTron icon={Compass} tone="tim" kichThuoc={40} /></span>
-      <span className="absolute left-[128px] top-3 shadow-the rounded-full"><BieuTuongTron icon={Target} tone="cam" kichThuoc={34} /></span>
-      <span className="absolute left-[138px] top-[132px] size-3 rounded-full bg-xanh/30" />
-      <span className="absolute left-[20px] top-6 size-2 rounded-full bg-luc/40" />
-      {/* cột biển chỉ đường */}
+    <div aria-hidden className="relative h-[180px] mt-2">
+      <span className="absolute left-4 top-3 size-[145px] rounded-full bg-white/60" />
+      <span className="absolute left-[40px] top-[35px]"><BieuTuongTron icon={GraduationCap} tone="xanh" kichThuoc={96} /></span>
+      {/* Cột và các biển định hướng */}
       <span className="absolute right-[68px] top-2 bottom-0 w-2 rounded-full bg-white/80" />
       <ul className="absolute right-1 top-3 flex flex-col items-end gap-3">
         {BIEN.map((b) => {
           const Icon = b.icon;
           return (
-            <li key={b.nhan} className={gop("inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-white text-[14px] font-extrabold shadow-nut", TONE_GD[b.tone], b.lech)}>
+            <li key={b.nhan} className={gop("inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-white text-[14px] font-extrabold shadow-nut", TONE_GD[b.tone], b.lech)}>
               <Icon size={16} strokeWidth={2.4} />{b.nhan}
             </li>
           );
@@ -49,27 +45,40 @@ function MinhHoa() {
 
 export default function ChaoMung() {
   const nav = useNavigate();
-  const { s, dungHoSoMau } = useApp();
+  const { s, dungHoSoMau, lamLai } = useApp();
   const [hoiThay, setHoiThay] = useState(false);
   const h = s.hoSo;
-  const dangDienDo = !!h.hoTen && !h.hoanTat;
+  const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
+  // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải dữ liệu mẫu Nguyễn Minh Anh) và chưa bấm hoàn tất
+  const dangDienDo = daCoThongTin && !h.hoanTat && h.hoTen !== "Nguyễn Minh Anh";
 
   const xemMau = () => { dungHoSoMau(); nav(DUONG_DAN.homNay()); };
   // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu em đã nhập gì đó.
-  const bamXemMau = () => (h.hoTen ? setHoiThay(true) : xemMau());
+  const bamXemMau = () => (daCoThongTin ? setHoiThay(true) : xemMau());
+
+  const batDauMoi = () => {
+    if (dangDienDo) {
+      nav(DUONG_DAN.batDau(1));
+    } else {
+      lamLai();
+      nav(DUONG_DAN.batDau(1));
+    }
+  };
 
   return (
     <div className="min-h-dvh pb-6">
       <NenHero tone="xanh" className="!rounded-t-none px-4 pt-4 pb-6">
         <div className="flex items-center justify-between gap-2">
           <Logo />
-          <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1 text-[12px] font-bold text-luc-chu"><Sparkles size={13} />Miễn phí</span>
         </div>
         <MinhHoa />
-        <h1 className="mt-3 text-[32px] leading-[1.12] font-extrabold text-muc">
-          Chọn đúng trường,<br /><span className="text-xanh">đỡ chọn sai</span>
+        <h1 className="mt-4 text-[32px] leading-[1.15] font-extrabold text-muc">
+          Chắp cánh ước mơ<br />
+          <span className="text-xanh">Vững bước tương lai</span>
         </h1>
-        <p className="text-[15px] text-chu mt-2.5 max-w-[330px]">Ứng dụng đồng hành giúp em khám phá ngành học phù hợp và xây dựng nguyện vọng vững vàng.</p>
+        <p className="text-[14.5px] text-chu mt-2 max-w-[340px] leading-relaxed">
+          Khám phá ngành phù hợp, cân nhắc trường vừa sức và xây dựng lộ trình để tiến gần mục tiêu.
+        </p>
       </NenHero>
 
       <ul className="px-4 mt-4 space-y-2.5">
@@ -89,22 +98,22 @@ export default function ChaoMung() {
       <p className="flex items-center justify-center gap-1.5 text-[13px] font-semibold text-chu-phu mt-4"><Clock size={16} className="text-xanh" />Bắt đầu trong khoảng 60 giây</p>
 
       <div className="px-4 mt-3 space-y-2.5">
-        <Nut muiTen onClick={() => nav(DUONG_DAN.batDau(1))}>{dangDienDo ? "Điền tiếp hồ sơ" : "Bắt đầu nhanh"}</Nut>
-        <Nut kieu="vien" bieuTuong={Sparkles} onClick={bamXemMau}>Xem thử bằng hồ sơ mẫu</Nut>
+        <Nut muiTen onClick={batDauMoi}>{dangDienDo ? "Điền tiếp hồ sơ" : "Bắt đầu ngay"}</Nut>
+        <Nut kieu="vien" bieuTuong={Sparkles} onClick={bamXemMau}>Xem hồ sơ mẫu</Nut>
         {h.hoanTat && (
-          <button type="button" onClick={() => nav(DUONG_DAN.homNay())} className="w-full min-h-12 text-[14px] font-bold text-xanh">Em đã có hồ sơ? Vào trang Hôm nay</button>
+          <button type="button" onClick={() => nav(DUONG_DAN.homNay())} className="w-full min-h-12 text-[14px] font-bold text-xanh">Vào trang Hôm nay</button>
         )}
       </div>
 
       <p className="mx-4 mt-4 flex items-start justify-center gap-1.5 text-center text-[13px] text-chu-phu">
-        <ShieldCheck size={16} className="text-luc shrink-0 mt-px" />Không cần tài khoản. Thông tin của em chỉ lưu trên điện thoại này.
+        <ShieldCheck size={16} className="text-luc shrink-0 mt-px" />Không cần tài khoản. Thông tin chỉ lưu trên thiết bị này.
       </p>
 
       <HopTruot mo={hoiThay} dong={() => setHoiThay(false)} tieuDe="Dùng hồ sơ mẫu?">
         <p className="text-[14px] text-chu">Hồ sơ mẫu "Minh Anh" sẽ <b>thay toàn bộ</b> thông tin em đã nhập trên máy này (hồ sơ, nguyện vọng, kế hoạch).</p>
         <div className="mt-4 space-y-2.5">
-          <Nut kieu="nguyHiem" onClick={xemMau}>Thay bằng hồ sơ mẫu</Nut>
-          <Nut kieu="vien" onClick={() => setHoiThay(false)}>Giữ hồ sơ của em</Nut>
+          <Nut kieu="nguyHiem" onClick={xemMau}>Dùng hồ sơ mẫu</Nut>
+          <Nut kieu="vien" onClick={() => setHoiThay(false)}>Giữ hồ sơ cũ</Nut>
         </div>
       </HopTruot>
     </div>

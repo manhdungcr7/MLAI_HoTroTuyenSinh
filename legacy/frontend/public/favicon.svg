@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="50%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#4F46E5" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+  <!-- Background squircle -->
+  <rect width="36" height="36" rx="9" fill="url(#bgGrad)" />
+  
+  <!-- Mũ cử nhân (Graduation Cap) -->
+  <path d="M18 9L5.5 15.5L18 22L30.5 15.5L18 9Z" fill="#FFFFFF" />
+  <path d="M9.5 18.5V23C9.5 25.8 13.3 28 18 28C22.7 28 26.5 25.8 26.5 23V18.5L18 22.8L9.5 18.5Z" fill="#E0E7FF" opacity="0.95" />
+  
+  <!-- Tua rua mũ cử nhân (Golden Tassel) -->
+  <path d="M27.5 17V23.5" stroke="url(#goldGrad)" stroke-width="1.8" stroke-linecap="round" />
+  <circle cx="27.5" cy="24.5" r="1.5" fill="#F59E0B" />
+  
+  <!-- Ngôi sao AI bứt phá (Decision Intelligence Star) -->
+  <path d="M29 5L29.8 7.2L32 8L29.8 8.8L29 11L28.2 8.8L26 8L28.2 7.2L29 5Z" fill="#FACC15" />
+</svg>

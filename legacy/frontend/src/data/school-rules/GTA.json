@@ -1,0 +1,44 @@
+{
+  "schoolCode": "GTA",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0406/cngtvt-thong-tin-tuyen-sinh-2026.pdf",
+    "document": "Thông tin tuyển sinh năm 2026 – Trường Đại học Công nghệ Giao thông vận tải",
+    "sha256": "fdfbaec78d97fa7ab9ef370b2bad0c1f8501fa41f3291b4ac55f6ec21278e44e",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.2, Bảng 1: điểm Tiếng Anh quy đổi từ IELTS; nếu điểm thi cao hơn thì lấy điểm thi (hệ thống cũng lấy điểm cao hơn)."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.5,
+          "score": 8.0
+        },
+        {
+          "min": 5.0,
+          "score": 8.5
+        },
+        {
+          "min": 5.5,
+          "score": 9.0
+        },
+        {
+          "min": 6.0,
+          "score": 9.5
+        },
+        {
+          "min": 7.0,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

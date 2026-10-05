@@ -102,12 +102,12 @@ export default function ManBoLoc() {
         </Muc>
 
         {/* Thanh nút dính ngay trên thanh tab (cao khoảng 72px) để luôn thấy số kết quả khi chỉnh. */}
-        <div className="sticky bottom-[72px] z-20 -mx-4 px-4 pt-3 pb-3 bg-nen/95 backdrop-blur border-t border-vien">
+        <div className="sticky bottom-[72px] z-20 -mx-4 px-4 pt-3 pb-3 bg-nen border-t border-vien">
           {soKq === 0 && <p className="text-[13px] text-cam-chu font-semibold mb-2" role="status">Chưa có trường nào khớp. Thử nới bớt tiêu chí nhé.</p>}
-          <div className="grid grid-cols-[104px_1fr] gap-2">
+          <div className="grid grid-cols-[96px_1fr] gap-2">
             <Nut kieu="vien" onClick={datLai} disabled={macDinh}>Đặt lại</Nut>
             <Nut onClick={() => nav(DUONG_DAN.khamPha())}>
-              Áp dụng bộ lọc<span className="min-w-7 h-6 px-1.5 rounded-full bg-trang/25 text-[13px] grid place-items-center" aria-label={`${soKq} kết quả`}>{soKq}</span>
+              Áp dụng ({soKq})
             </Nut>
           </div>
         </div>

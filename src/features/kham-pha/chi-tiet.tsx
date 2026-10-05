@@ -14,6 +14,7 @@ import { useApp } from "@/state/store";
 import type { LuaChon, ToneTen } from "@/state/types";
 import { TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
+import { NutTuVan } from "@/features/tu-van/tu-van";
 
 const MO_TA_VIEC_LAM: Record<LuaChon["coHoiViecLam"], string> = {
   "Rất cao": "Theo dữ liệu mẫu, ngành có nhiều chỗ tuyển.",
@@ -174,16 +175,29 @@ export default function ChiTiet() {
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
               {lc.nguon}.{!lc.daKiemChung && " Số liệu chưa được đối chiếu với trường, em hãy xem lại trên trang tuyển sinh chính thức trước khi quyết định."}
             </p>
+            {lc.ngayCapNhat ? (
+              <p className="mt-1 text-[12px] text-chu-phu">
+                Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}
+              </p>
+            ) : (
+              <p className="mt-1 text-[12px] text-chu-phu">Ngày cập nhật từ nguồn: chưa có thông tin.</p>
+            )}
+            {lc.linkNguon && (
+              <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-1 text-[12px] font-bold text-xanh hover:underline">
+                Xem trang tuyển sinh chính thức
+              </a>
+            )}
           </div>
         </section>
 
         <div className="space-y-2 pt-1">
-          <Nut bieuTuong={trongDs ? Check : Plus} onClick={themVao}>{trongDs ? "Đã có trong nguyện vọng" : "Thêm vào nguyện vọng"}</Nut>
-          <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh với trường khác</Nut>
+          <NutTuVan nguCanh={`Chi tiết ngành ${lc.nganh}`} />
+          <Nut bieuTuong={trongDs ? Check : Plus} onClick={themVao}>{trongDs ? "Đã trong danh sách" : "Thêm nguyện vọng"}</Nut>
+          <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh ngành này</Nut>
         </div>
       </NoiDung>
 
-      <HopTruot mo={hoiTiep !== null} dong={() => setHoiTiep(null)} tieuDe={hoiTiep === "daCo" ? "Đã có trong danh sách" : "Đã thêm vào nguyện vọng"}>
+      <HopTruot mo={hoiTiep !== null} dong={() => setHoiTiep(null)} tieuDe={hoiTiep === "daCo" ? "Đã có trong danh sách" : "Đã thêm nguyện vọng"}>
         <div className="flex items-center gap-3 rounded-the bg-luc-nhat p-3">
           <HuyHieuTruong ten={kyHieu(lc.truong)} tone={lc.tone} kichThuoc={44} />
           <div className="min-w-0">
@@ -195,8 +209,8 @@ export default function ChiTiet() {
         </div>
         <p className="text-[14px] text-chu my-3">Em muốn xem danh sách nguyện vọng và kiểm tra đã cân đối chưa?</p>
         <div className="space-y-2">
-          <Nut bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem danh sách nguyện vọng</Nut>
-          <Nut kieu="nhe" onClick={() => setHoiTiep(null)}>Ở lại xem tiếp</Nut>
+          <Nut bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
+          <Nut kieu="nhe" onClick={() => setHoiTiep(null)}>Ở lại xem</Nut>
         </div>
       </HopTruot>
 

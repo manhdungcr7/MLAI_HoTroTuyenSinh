@@ -1,0 +1,446 @@
+[
+ {
+  "id": "p01_hsg_quocte",
+  "title": "HSG quốc gia/quốc tế môn Toán, thi dự kiến rất cao, muốn CNTT top",
+  "exam": {
+   "toan": 9.8,
+   "ly": 9.5,
+   "hoa": 9.5,
+   "anh": 9.0,
+   "van": 8.0
+  },
+  "hocba": {
+   "toan": 10,
+   "ly": 9.8,
+   "hoa": 9.6,
+   "anh": 9.2,
+   "van": 8.5
+  },
+  "cert": {
+   "ielts": 7.5
+  },
+  "province": "Hà Nội",
+  "reloc": "Cả nước",
+  "interest": [
+   "Công nghệ thông tin"
+  ],
+  "budget": "Không giới hạn",
+  "award": "Quốc tế"
+ },
+ {
+  "id": "p02_hsg_tinh",
+  "title": "HSG cấp tỉnh môn Văn, khối C, thích báo chí/luật",
+  "exam": {
+   "van": 8.5,
+   "su": 8.5,
+   "dia": 8.0
+  },
+  "hocba": {
+   "van": 8.8,
+   "su": 8.6,
+   "dia": 8.4
+  },
+  "province": "Nghệ An",
+  "reloc": "Cùng vùng miền với bạn",
+  "interest": [
+   "Luật",
+   "Xã hội, báo chí, tâm lý"
+  ],
+  "budget": "Dưới 40 triệu / năm",
+  "award": "Tỉnh – giải nhất",
+  "rank": "Giỏi"
+ },
+ {
+  "id": "p03_ielts_75",
+  "title": "IELTS 7.5, học bạ đẹp, điểm thi vừa, thích ngôn ngữ/kinh tế",
+  "exam": {
+   "toan": 7.0,
+   "van": 7.5,
+   "anh": 9.0
+  },
+  "hocba": {
+   "toan": 8.5,
+   "van": 8.8,
+   "anh": 9.4
+  },
+  "cert": {
+   "ielts": 7.5
+  },
+  "province": "TP.HCM",
+  "reloc": "Cả nước",
+  "interest": [
+   "Ngôn ngữ",
+   "Kinh tế, quản trị, tài chính"
+  ],
+  "budget": "Dưới 100 triệu / năm"
+ },
+ {
+  "id": "p04_thpt_cao",
+  "title": "Thi THPT 28.5 khối A00, thích kỹ thuật, muốn Bách khoa",
+  "exam": {
+   "toan": 9.8,
+   "ly": 9.5,
+   "hoa": 9.2
+  },
+  "hocba": {
+   "toan": 9.5,
+   "ly": 9.4,
+   "hoa": 9.3
+  },
+  "province": "Hà Nội",
+  "reloc": "Cả nước",
+  "interest": [
+   "Kỹ thuật, xây dựng",
+   "Công nghệ thông tin"
+  ],
+  "budget": "Không giới hạn",
+  "search": [
+   "bach khoa"
+  ]
+ },
+ {
+  "id": "p05_trung_binh_kha",
+  "title": "Trung bình khá 6.5, không nổi bật, chưa biết học gì",
+  "exam": {
+   "toan": 6.5,
+   "van": 6.5,
+   "anh": 6.0
+  },
+  "hocba": {
+   "toan": 6.8,
+   "van": 6.9,
+   "anh": 6.5
+  },
+  "province": "Thanh Hóa",
+  "reloc": "Cùng vùng miền với bạn",
+  "budget": "Dưới 40 triệu / năm"
+ },
+ {
+  "id": "p06_trung_binh_yeu",
+  "title": "Trung bình yếu ~5, nhà nghèo KV1",
+  "exam": {
+   "toan": 5.0,
+   "van": 5.5,
+   "anh": 4.5
+  },
+  "hocba": {
+   "toan": 5.4,
+   "van": 5.8,
+   "anh": 5.2
+  },
+  "province": "Lai Châu",
+  "reloc": "Chỉ ở tỉnh nhà",
+  "budget": "Dưới 20 triệu / năm",
+  "area": "KV1",
+  "object": "Nhóm ưu tiên 2"
+ },
+ {
+  "id": "p07_yeu",
+  "title": "Học yếu ~3.5-4 (dưới sàn 15)",
+  "exam": {
+   "toan": 4.0,
+   "van": 4.5,
+   "anh": 3.5
+  },
+  "hocba": {
+   "toan": 4.8,
+   "van": 5.0,
+   "anh": 4.5
+  },
+  "province": "Cà Mau",
+  "reloc": "Cả nước",
+  "budget": "Dưới 20 triệu / năm"
+ },
+ {
+  "id": "p08_chua_thi_lop11",
+  "title": "Lớp 11 chưa thi, chỉ có học bạ, năm 2028",
+  "year": 2028,
+  "hocba": {
+   "toan": 8.0,
+   "ly": 7.8,
+   "hoa": 7.5
+  },
+  "province": "Đà Nẵng",
+  "reloc": "Cả nước",
+  "interest": [
+   "Y, dược, sức khỏe"
+  ],
+  "budget": "Dưới 60 triệu / năm"
+ },
+ {
+  "id": "p09_chi_hoc_ba_lop12",
+  "title": "Chỉ nhập học bạ, muốn Y",
+  "hocba": {
+   "toan": 9.0,
+   "hoa": 9.2,
+   "sinh": 9.0
+  },
+  "province": "Huế",
+  "reloc": "Cả nước",
+  "interest": [
+   "Y, dược, sức khỏe"
+  ],
+  "budget": "Không giới hạn"
+ },
+ {
+  "id": "p10_dgnl_hcm",
+  "title": "Chỉ có ĐGNL HCM 1000, chưa có điểm thi",
+  "cert": {
+   "dgnl_hcm": 1000
+  },
+  "province": "Đồng Nai",
+  "reloc": "Cả nước",
+  "budget": "Dưới 60 triệu / năm"
+ },
+ {
+  "id": "p11_dgnl_hn",
+  "title": "ĐGNL HN 115 + điểm thi, thích Bách khoa/KHTN",
+  "exam": {
+   "toan": 9.0,
+   "ly": 8.5,
+   "hoa": 8.5
+  },
+  "cert": {
+   "dgnl_hn": 115,
+   "dgtd_bk": 75
+  },
+  "province": "Hà Nội",
+  "reloc": "Cả nước",
+  "interest": [
+   "Kỹ thuật, xây dựng"
+  ],
+  "budget": "Không giới hạn"
+ },
+ {
+  "id": "p12_khoi_C_xa_hoi",
+  "title": "Khối C, điểm 24, thích sư phạm Sử/Văn",
+  "exam": {
+   "van": 8.5,
+   "su": 8.0,
+   "dia": 7.8
+  },
+  "hocba": {
+   "van": 8.4,
+   "su": 8.2,
+   "dia": 8.0
+  },
+  "province": "Thái Nguyên",
+  "reloc": "Cùng vùng miền với bạn",
+  "interest": [
+   "Sư phạm"
+  ],
+  "budget": "Dưới 20 triệu / năm",
+  "rank": "Khá",
+  "conduct": "Trung bình"
+ },
+ {
+  "id": "p13_y_khoa",
+  "title": "Muốn làm bác sĩ, điểm B00 26.5",
+  "exam": {
+   "toan": 9.0,
+   "hoa": 9.0,
+   "sinh": 8.5
+  },
+  "hocba": {
+   "toan": 9.0,
+   "hoa": 9.2,
+   "sinh": 9.0
+  },
+  "province": "Hà Nội",
+  "reloc": "Cả nước",
+  "interest": [],
+  "budget": "Không giới hạn",
+  "search": [
+   "y khoa"
+  ]
+ },
+ {
+  "id": "p14_y_khoa_thap",
+  "title": "Muốn bác sĩ nhưng điểm B00 21",
+  "exam": {
+   "toan": 7.0,
+   "hoa": 7.0,
+   "sinh": 7.0
+  },
+  "province": "Quảng Ngãi",
+  "reloc": "Cả nước",
+  "interest": [
+   "Y, dược, sức khỏe"
+  ],
+  "budget": "Dưới 60 triệu / năm"
+ },
+ {
+  "id": "p15_game_cntt",
+  "title": "Đam mê game/lập trình, điểm A01 24",
+  "exam": {
+   "toan": 8.5,
+   "ly": 7.5,
+   "anh": 8.0
+  },
+  "hocba": {
+   "toan": 8.4,
+   "ly": 7.6,
+   "anh": 8.1
+  },
+  "province": "Đà Nẵng",
+  "reloc": "Cả nước",
+  "interest": [
+   "Công nghệ thông tin"
+  ],
+  "budget": "Dưới 60 triệu / năm"
+ },
+ {
+  "id": "p16_nang_khieu_ve",
+  "title": "Năng khiếu vẽ, muốn kiến trúc",
+  "exam": {
+   "toan": 7.5,
+   "van": 7.0,
+   "ly": 7.0
+  },
+  "hocba": {
+   "toan": 7.8,
+   "van": 7.5,
+   "ly": 7.4
+  },
+  "province": "TP.HCM",
+  "reloc": "Cả nước",
+  "interest": [
+   "Kiến trúc, mỹ thuật"
+  ],
+  "budget": "Dưới 60 triệu / năm"
+ },
+ {
+  "id": "p17_the_thao",
+  "title": "Năng khiếu thể thao, muốn TDTT",
+  "exam": {
+   "toan": 6.0,
+   "van": 6.5,
+   "sinh": 6.5
+  },
+  "province": "Hải Phòng",
+  "reloc": "Cả nước",
+  "interest": [
+   "Thể dục thể thao"
+  ],
+  "budget": "Dưới 40 triệu / năm"
+ },
+ {
+  "id": "p18_nong_lam",
+  "title": "Nhà làm nông, muốn học nông nghiệp, điểm thấp",
+  "exam": {
+   "toan": 6.0,
+   "hoa": 6.5,
+   "sinh": 7.0
+  },
+  "hocba": {
+   "toan": 6.8,
+   "hoa": 7.0,
+   "sinh": 7.4
+  },
+  "province": "An Giang",
+  "reloc": "Chỉ ở tỉnh nhà",
+  "interest": [
+   "Nông, lâm, ngư nghiệp"
+  ],
+  "budget": "Dưới 20 triệu / năm",
+  "area": "KV2-NT"
+ },
+ {
+  "id": "p19_du_lich",
+  "title": "Thích du lịch khách sạn, IELTS 6.0",
+  "exam": {
+   "toan": 6.5,
+   "van": 7.0,
+   "anh": 8.0
+  },
+  "cert": {
+   "ielts": 6.0
+  },
+  "province": "Khánh Hòa",
+  "reloc": "Cả nước",
+  "interest": [
+   "Du lịch, khách sạn"
+  ],
+  "budget": "Dưới 60 triệu / năm"
+ },
+ {
+  "id": "p20_chi_tinh_nha",
+  "title": "Điểm tốt nhưng chỉ được học ở tỉnh nhà Cao Bằng",
+  "exam": {
+   "toan": 8.5,
+   "ly": 8.0,
+   "hoa": 8.0
+  },
+  "province": "Cao Bằng",
+  "reloc": "Chỉ ở tỉnh nhà",
+  "budget": "Dưới 40 triệu / năm",
+  "area": "KV1"
+ },
+ {
+  "id": "p21_uu_tien_1",
+  "title": "Con thương binh (ưu tiên 1) KV1, điểm 21",
+  "exam": {
+   "toan": 7.0,
+   "ly": 7.0,
+   "hoa": 7.0
+  },
+  "province": "Sơn La",
+  "reloc": "Cả nước",
+  "budget": "Dưới 40 triệu / năm",
+  "area": "KV1",
+  "object": "Nhóm ưu tiên 1"
+ },
+ {
+  "id": "p22_tb_kha_hoc_ba_dep",
+  "title": "Học bạ giỏi 8.8 nhưng thi dự kiến chỉ 6.5, muốn xét học bạ",
+  "exam": {
+   "toan": 6.5,
+   "van": 6.5,
+   "anh": 6.5
+  },
+  "hocba": {
+   "toan": 8.8,
+   "van": 8.9,
+   "anh": 8.7
+  },
+  "province": "Bắc Ninh",
+  "reloc": "Cùng vùng miền với bạn",
+  "budget": "Dưới 40 triệu / năm"
+ },
+ {
+  "id": "p23_diem_gioi_khong_chon_nganh",
+  "title": "Điểm A00 27 chưa biết học gì",
+  "exam": {
+   "toan": 9.5,
+   "ly": 9.0,
+   "hoa": 8.8
+  },
+  "province": "Hải Phòng",
+  "reloc": "Cả nước",
+  "budget": "Không giới hạn"
+ },
+ {
+  "id": "p24_cong_an_quan_doi",
+  "title": "Muốn thi Công an/Quân đội, điểm 25",
+  "exam": {
+   "toan": 8.5,
+   "ly": 8.5,
+   "hoa": 8.0
+  },
+  "province": "Hà Tĩnh",
+  "reloc": "Cả nước",
+  "budget": "Dưới 20 triệu / năm"
+ },
+ {
+  "id": "p25_nghe_cao_dang",
+  "title": "Muốn học nghề/cao đẳng, điểm thấp 5.5",
+  "exam": {
+   "toan": 5.5,
+   "van": 5.5,
+   "anh": 5.0
+  },
+  "province": "Đồng Tháp",
+  "reloc": "Cùng vùng miền với bạn",
+  "budget": "Dưới 20 triệu / năm"
+ }
+]

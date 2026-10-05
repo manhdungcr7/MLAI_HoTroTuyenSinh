@@ -15,7 +15,7 @@ export function KhungCoThanhDuoi() {
   return (
     <div className="khung-ung-dung pb-24">
       <Outlet />
-      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang/95 backdrop-blur border-t border-vien vung-an-toan-duoi">
+      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang border-t border-vien vung-an-toan-duoi">
         <ul className="grid grid-cols-5">
           {CAC_TAB.map((t) => {
             const dang = t.khop(pathname);
@@ -75,10 +75,10 @@ export function DauTrangChinh({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?
 export function DauTrangCoQuayLai({ tieuDe, buoc, quayLai, phai }: { tieuDe: string; buoc?: string; quayLai?: string; phai?: ReactNode }) {
   const nav = useNavigate();
   return (
-    <header className="sticky top-0 z-30 bg-nen/95 backdrop-blur grid grid-cols-[48px_1fr_48px] items-center min-h-14 px-2">
-      <button type="button" onClick={() => (quayLai ? nav(quayLai) : nav(-1))} aria-label="Quay lại" className="size-11 grid place-items-center rounded-full active:bg-xanh-nhat"><ArrowLeft size={22} /></button>
-      <h1 className="text-center text-[15px] font-extrabold text-muc line-clamp-2 leading-tight">{tieuDe}</h1>
-      <span className="text-right text-[13px] font-bold text-xanh pr-2 whitespace-nowrap">{phai ?? buoc}</span>
+    <header className="sticky top-0 z-30 bg-nen border-b border-vien/60 grid grid-cols-[auto_1fr_auto] items-center min-h-14 px-3 gap-2">
+      <button type="button" onClick={() => (quayLai ? nav(quayLai) : nav(-1))} aria-label="Quay lại" className="size-11 grid place-items-center rounded-full active:bg-xanh-nhat shrink-0"><ArrowLeft size={22} /></button>
+      <h1 className="text-center text-[15px] font-extrabold text-muc line-clamp-2 leading-tight px-1">{tieuDe}</h1>
+      <span className="min-w-[44px] text-right text-[13px] font-bold text-xanh whitespace-nowrap shrink-0">{phai ?? buoc}</span>
     </header>
   );
 }

@@ -1,0 +1,99 @@
+{
+  "schoolCode": "TTN",
+  "year": 2026,
+  "source": {
+    "url": "https://images.tuyensinh247.com/picture/2026/0415/thong-tin-tuyen-sinh-truong-dai-hoc-tay-nguyen-2026.pdf",
+    "document": "Thông tin tuyển sinh năm 2026 – Trường Đại học Tây Nguyên",
+    "sha256": "8c4637a59b2fd0da640e916beade628ee1b8928707c21b0fd80a06dbc1917c88",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Mục 2.3: bảng quy đổi chứng chỉ ngoại ngữ sang điểm môn Tiếng Anh, áp dụng cho phương thức 100 và 200; học bạ là TB cả năm ba lớp 10-11-12 chia 3."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 6.5
+        },
+        {
+          "min": 4.5,
+          "score": 7.0
+        },
+        {
+          "min": 5.0,
+          "score": 7.5
+        },
+        {
+          "min": 5.5,
+          "score": 8.0
+        },
+        {
+          "min": 6.0,
+          "score": 8.5
+        },
+        {
+          "min": 6.5,
+          "score": 9.0
+        },
+        {
+          "min": 7.0,
+          "score": 9.5
+        },
+        {
+          "min": 7.5,
+          "score": 10
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ],
+      "ieltsToEnglish": [
+        {
+          "min": 4.0,
+          "score": 6.5
+        },
+        {
+          "min": 4.5,
+          "score": 7.0
+        },
+        {
+          "min": 5.0,
+          "score": 7.5
+        },
+        {
+          "min": 5.5,
+          "score": 8.0
+        },
+        {
+          "min": 6.0,
+          "score": 8.5
+        },
+        {
+          "min": 6.5,
+          "score": 9.0
+        },
+        {
+          "min": 7.0,
+          "score": 9.5
+        },
+        {
+          "min": 7.5,
+          "score": 10
+        }
+      ]
+    }
+  }
+}

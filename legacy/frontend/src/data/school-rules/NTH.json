@@ -1,0 +1,31 @@
+{
+  "schoolCode": "NTH",
+  "year": 2026,
+  "source": {
+    "url": "https://cdn.tuyensinh247.com/picture/2026/0711/ftu-thong-tin-tuyen-sinh-dhcq-2026-8426.pdf",
+    "document": "Thông tin tuyển sinh đại học năm 2026 – Trường Đại học Ngoại thương (cơ sở phía Bắc)",
+    "sha256": "90bb4518da2b85d5b7e883bb66e2186d9c74cc71f5651e70a9d2c49a1d90a768",
+    "verifiedAt": "2026-10-03",
+    "verifiedBy": "Claude Sonnet 5.5 đối chiếu nguyên văn bản thông tin tuyển sinh 2026 của trường (cần người rà soát lại trước khi coi là chính thức). Chương trình tiêu chuẩn, ĐHNN&PTQT và Luật dân sự: M1 + M2 + M3 + điểm ưu tiên, điểm thưởng; học bạ lấy trung bình cả năm lớp 10, 11, 12. Các chương trình tích hợp có môn nhân hệ số trên thang 40 không nằm trong dữ liệu nên không mã hóa. Chứng chỉ ngoại ngữ chỉ dùng cho phương thức kết hợp riêng."
+  },
+  "methods": {
+    "THPT": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "exam_combo",
+          "weight": 1
+        }
+      ]
+    },
+    "HOC_BA": {
+      "priority": "standard",
+      "components": [
+        {
+          "source": "hocba_combo",
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

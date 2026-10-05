@@ -1,10 +1,16 @@
-# Nguyện Vọng AI
+# Nguyện Vọng AI — Cẩm nang phát triển (CLAUDE & Team)
 
-Đọc `.agents/AGENTS.md` trước khi làm bất cứ việc gì: cấu trúc thư mục, ai sở hữu slice nào, quy tắc sắt (route, theme, chữ Việt, dữ liệu thật, mobile), bẫy đã gặp, git.
+Đọc kỹ `.agents/AGENTS.md` (SSOT) và `dean.md` trước khi code bất cứ trang nào.
 
-Ngắn gọn:
-- Chỉ sửa trong `src/features/<slice>/` của mình. File dùng chung đổi bằng PR riêng.
-- Đường dẫn chỉ qua `DUONG_DAN`/`MAU` (`src/duong-dan.ts`). Màu/gradient chỉ qua token theme. Mọi nút phải đi tới đâu đó.
-- Thuần Việt, gọi học sinh là "em", không thuật ngữ. Không bịa số liệu.
-- Xong việc: `npx tsc --noEmit`, `npm run kiem-tra`, `npm test` đều xanh; đo 390px và 360px bằng `agent-browser`, tối đa 1 ảnh chụp cuối.
-- Thêm màn mới: skill `them-man-hinh`. Rà UI trước khi báo xong: skill `kiem-tra-ui`.
+## 🎯 Tư duy phát triển từng trang (Page Engineering Mindset)
+1. **Đối chiếu đề án (`dean.md`)**: Trang này trả lời câu hỏi nào (*Mình đang ở đâu? Muốn đi tới đâu? Còn cách bao xa? Hôm nay làm gì?*).
+2. **Audit hiện trạng**: Trang đã đáp ứng đủ chưa? Có thiếu tính năng quan trọng hay bị rườm rà thừa thãi không?
+3. **Quy trình 3 bước chuẩn**:
+   - **Bước 1 — UI Hoàn thiện**: Mobile 390/360px, Light mode solid (không glassmorphism), nút 2-3 từ chia cột gọn, chữ không rớt dòng. Đủ 4 trạng thái (*Có dữ liệu / Trống / Đang tải / Báo lỗi*).
+   - **Bước 2 — Frontend & Flow**: State qua `useApp()`, tách bạch dứt điểm Form trắng và Hồ sơ mẫu (không nạp đè dữ liệu demo vào form thật).
+   - **Bước 3 — Data Engine & Backend**: Thuật toán TS thuần trong `tinh-toan.ts` / `engine/` (không lẫn React hooks vào core logic), dữ liệu có link kiểm chứng minh bạch, không bịa số.
+4. **Code Clean & Lean**: Code tối thiểu giải quyết triệt để vấn đề, không over-engineer, dọn sạch biến mồ côi.
+
+## ⚡ Cổng kiểm tra bắt buộc trước khi báo xong:
+`npx tsc --noEmit` && `npm run kiem-tra` && `npm test` && `npm run build`
+

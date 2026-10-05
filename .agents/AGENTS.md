@@ -33,7 +33,18 @@ src/features/<slice>/   mỗi slice một thư mục + routes.tsx
 
 **Chỉ sửa trong thư mục slice của mình.** File dùng chung (`components/`, `state/`, `engine/`, `data/`, `styles/`, `duong-dan.ts`, `App.tsx`) đổi bằng PR riêng, nhỏ, có báo cả nhóm, vì ai cũng dựa vào nó.
 
-## 3. Quy tắc sắt (cổng `kiem-tra` bắt phần lớn)
+## 3. Tư duy làm từng trang & Quy trình 3 bước (Page Engineering Mindset)
+
+Trước khi code hoặc review bất kỳ trang nào, mỗi thành viên phải tự soi theo 4 câu hỏi tư duy:
+1. **Đối chiếu `dean.md`**: Trang này sinh ra để trả lời câu hỏi nào trong 4 câu hỏi cốt lõi (*Mình đang ở đâu? Muốn đi tới đâu? Còn cách bao xa? Hôm nay làm gì?*). Có phục vụ đúng mục tiêu đề án không?
+2. **Hiện trạng & Audit tính năng**: Trang này hiện tại đã đáp ứng đủ chưa? Có thiếu tính năng quan trọng nào không? Có nút/luồng nào bị thừa hay gây rối không?
+3. **Quy trình phát triển 3 bước rõ ràng**:
+   - **Bước 1 — UI Hoàn thiện (Visual & UX First)**: Mobile 390px/360px chuẩn, Light mode solid (không glassmorphism), nút 2-3 từ chia cột gọn, chữ không rớt/cắt dòng. Đủ 4 trạng thái: *Có dữ liệu · Trống (Empty) · Đang tải (Loading) · Báo lỗi/nhập sai (Error)*.
+   - **Bước 2 — Frontend & Tương tác (State & Flow)**: Kết nối state qua `useApp()` / `useLuuCucBo`. **Phân định dứt điểm Form trắng và Hồ sơ mẫu** (không để dữ liệu demo nạp đè vào form cá nhân của học sinh). Thao tác mượt mà, phản hồi ngay lập tức.
+   - **Bước 3 — Data Engine & Backend (Thuật toán & Dữ liệu thật)**: Logic tính toán là **hàm TS thuần** đặt trong `tinh-toan.ts` hoặc `engine/`, tuyệt đối KHÔNG lồng React hooks vào thuật toán lõi. Dữ liệu tuyển sinh lấy từ nguồn kiểm chứng (link đề án trường), không bịa số.
+4. **Code Clean & Lean (Simplicity First)**: Viết lượng code tối thiểu, không suy đoán tương lai, không tạo abstraction thừa cho code chỉ dùng 1 lần, dọn sạch import và biến mồ côi.
+
+## 4. Quy tắc sắt (cổng `kiem-tra` bắt phần lớn)
 1. **Đường dẫn**: luôn `DUONG_DAN.xxx()`; khai báo route bằng `MAU.xxx` trong `features/<slice>/routes.tsx`. Không viết tay `"/..."`.
 2. **Mọi nút phải đi tới đúng nơi.** Không `onClick={() => {}}`, không link chết.
 3. **Theme**: không viết `#xxxxxx`, không gradient tay. Dùng token Tailwind (`text-xanh`, `bg-luc-nhat`, `text-cam-chu`, `border-vien`, `rounded-the`, `shadow-the`) và `gd-*` / `nen-*`. Tông: `xanh luc cam tim do muc`.
@@ -47,7 +58,7 @@ src/features/<slice>/   mỗi slice một thư mục + routes.tsx
 11. **Đủ trạng thái**: có dữ liệu · trống (nói vì sao và làm gì tiếp) · đang tải · lỗi/nhập sai (báo bằng lời dễ hiểu). Chạy được với hồ sơ mẫu lẫn hồ sơ trống.
 12. **Hành động phá huỷ** (xóa, ghi đè) phải xác nhận bằng `HopTruot`, không `window.confirm`; nếu được thì cho hoàn tác.
 
-## 4. Bẫy đã gặp (đừng lặp lại)
+## 5. Bẫy đã gặp (đừng lặp lại)
 - CSS reset phải nằm trong `@layer base`, nếu không nó đè mọi class màu chữ (chữ nút ra xanh đậm thay vì trắng).
 - `Truong` bọc `<label>` làm bấm chữ tiêu đề kích hoạt nút đầu của nhóm chip: dùng `fieldset/legend` cho nhóm lựa chọn.
 - Gọi `xepLai` ngay sau `datTamTrang` đọc tâm trạng cũ: đợi state mới (useEffect) rồi mới xếp.
@@ -55,13 +66,15 @@ src/features/<slice>/   mỗi slice một thư mục + routes.tsx
 - Mọi so sánh điểm hiện giả định tổ hợp A01; đừng ngầm định A01 ở chỗ mới, đọc `s.mucTieu.maToHop`.
 - Windows/Git Bash: dùng `/` trong đường dẫn lệnh; không dán chuỗi có `\n` qua heredoc Python khi sửa file TS (hỏng escape), dùng công cụ Edit.
 
-## 5. Git
-- Không push thẳng `main`. Nhánh `feat/<slice>-<việc>`, `fix/…`. Commit nhỏ, Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `test:`).
-- Mỗi PR chỉ chạm thư mục slice của mình (trừ PR dùng chung). Mô tả PR: Mục tiêu, Thay đổi, Kiểm thử (lệnh đã chạy).
+## 6. Kỷ luật Git, Pull Request (PR) & Quản lý Backlog
+- **Không push thẳng `main`**. Luôn tạo nhánh `feat/<slice>-<việc>`, `fix/<slice>-<việc>`. Commit nhỏ, Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `test:`).
+- **Chống xung đột (Zero-Conflict Isolation)**: Mỗi PR chỉ chạm thư mục slice của mình (`src/features/<slice>/`). File dùng chung (`components/`, `state/`, `data/`, `engine/`, `duong-dan.ts`) phải làm PR riêng biệt nhỏ, thông báo cho cả nhóm trước khi merge.
+- **Checklist bắt buộc trước khi tạo PR**: Chạy trọn vẹn bộ 4 lệnh kiểm tra: `npx tsc --noEmit && npm run kiem-tra && npm test && npm run build`. Cả 4 đều xanh mới được tạo PR.
+- **Cập nhật chéo Backlog (`docs/BACKLOG.md`)**: Bất kỳ thành viên nào khi phát hiện vấn đề/ý tưởng (kể cả thuộc phần của bạn khác) đều phải cập nhật hoặc tạo Issue mới vào `docs/BACKLOG.md` và gán đúng Owner & Slice để cả nhóm đồng bộ.
 - Không commit `node_modules`, `dist`, ảnh chụp tạm.
 
-## 6. Thêm màn hình mới
+## 7. Thêm màn hình mới
 Dùng quy trình ở `.claude/skills/them-man-hinh/SKILL.md`. Tóm tắt: thêm `MAU`/`DUONG_DAN` → đăng ký trong `routes.tsx` của slice → viết trang bằng khung + thành phần có sẵn → nối mọi nút → `kiem-tra` → đo 390/360px.
 
-## 7. Phần còn lại sau UI (backend)
+## 8. Phần còn lại sau UI (backend)
 `useApp()` hiện lưu localStorage. Khi có máy chủ (gợi ý Cloudflare Workers + D1), chỉ thay ruột `state/store.tsx`; giao diện không đổi. Dữ liệu trường thật có nguồn thay `data/lua-chon-mau.ts`, giữ kiểu `LuaChon`.
