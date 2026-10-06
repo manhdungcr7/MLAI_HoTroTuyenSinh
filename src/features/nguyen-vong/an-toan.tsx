@@ -17,6 +17,7 @@ import { DUONG_DAN } from "@/duong-dan";
 import { tongA01 } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
+import { coHocPhi } from "@/data/lua-chon-phu";
 import { GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import {
   cacBuocDoiCho, chamDiem, demNhan, dungDanhSach, giongNhau, goiYHanhDong, ketLuan, sapTheoVuaSuc, xetCoCau, type DiemDanhGia, type GoiY,
@@ -202,7 +203,7 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
           {g.truong.map(({ lc, nhan }) => (
             <li key={lc.id}>
               <DongTruong onClick={() => nav(DUONG_DAN.chiTiet(lc.id))} truong={lc.truong} tone={lc.tone} ten={lc.nganh}
-                phu={`${lc.truong} · ${lc.diemMin.toFixed(1)} điểm (${lc.namDiem}) · ${lc.hocPhiMin}–${lc.hocPhiMax} tr/năm · ${lc.khuVuc}`}
+                phu={`${lc.truong} · ${lc.diemMin.toFixed(1)} điểm (${lc.namDiem}) · ${coHocPhi(lc) ? `${lc.hocPhiMin}–${lc.hocPhiMax} tr/năm` : "chưa có học phí"} · ${lc.khuVuc}`}
                 nhan={<NhanNguyenVongTag nhan={nhan} />} />
             </li>
           ))}
@@ -215,7 +216,7 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
         </ul>
       )}
       {g.loai !== "giamThuSuc" && g.truong.length === 0 && (
-        <p className="mt-2 text-[13px] text-chu-phu">Chưa có trường mẫu nào vừa điểm và vừa ngân sách của em. Em vào Khám phá để xem thêm nhé.</p>
+        <p className="mt-2 text-[13px] text-chu-phu">Chưa có ngành nào vừa điểm và vừa ngân sách của em. Em vào Khám phá để xem thêm nhé.</p>
       )}
 
       <Nut kieu="vien" muiTen className="mt-3" onClick={() => nav(den)}>{k.nut}</Nut>
@@ -249,7 +250,7 @@ function HopGiaiThich({ giaiThich, dong }: { giaiThich: DiemDanhGia | "nhan" | n
           <ul className="space-y-2">
             {CAC_NHAN.map((n) => <li key={n} className="flex items-center gap-2"><NhanNguyenVongTag nhan={n} /><span>{MO_TA_NHAN[n]}</span></li>)}
           </ul>
-          <p className="text-chu-phu text-[13px]">Nhãn là gợi ý, không phải cam kết trúng tuyển. Điểm chuẩn mỗi năm có thể đổi. Điểm của trường hiện là dữ liệu mẫu.</p>
+          <p className="text-chu-phu text-[13px]">Nhãn là gợi ý, không phải cam kết trúng tuyển. Điểm chuẩn mỗi năm có thể đổi. Điểm của trường là điểm chuẩn các năm trước.</p>
         </div>
       ) : giaiThich ? (
         <div className="space-y-2 text-[14px] text-chu">

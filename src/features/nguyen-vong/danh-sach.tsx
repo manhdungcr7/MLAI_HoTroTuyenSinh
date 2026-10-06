@@ -1,5 +1,6 @@
 // Màn 11 · Danh sách nguyện vọng: NV1..NVn, nhãn tính từ điểm của em, kéo thả + nút lên/xuống, sửa/xóa có hoàn tác.
 import { useCallback, useMemo, useState } from "react";
+import { coHocPhi } from "@/data/lua-chon-phu";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowDown, ArrowUp, ChevronRight, ClipboardPen, Eye, GraduationCap, GripVertical, Heart, ListPlus, Pencil, Plus, ShieldCheck, Trash2, TrendingUp, Wallet,
@@ -226,7 +227,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
               ) : (
                 <>
                   <b className="block text-[15px] text-muc">Chưa có dữ liệu</b>
-                  <span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong dữ liệu mẫu. Em có thể xóa đi.</span>
+                  <span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong danh mục. Em có thể xóa đi.</span>
                 </>
               )}
             </span>
@@ -234,7 +235,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
           {d.lc && (
             <span className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
               <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{d.lc.diemMin.toFixed(1)}</b></span>
-              <span className="inline-flex items-center gap-1"><Wallet size={14} /><b className="text-chu">{d.lc.hocPhiMin}–{d.lc.hocPhiMax}</b> tr/năm</span>
+              <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{d.lc.hocPhiMin}–{d.lc.hocPhiMax}</b> tr/năm</> : "Chưa có học phí"}</span>
             </span>
           )}
         </button>

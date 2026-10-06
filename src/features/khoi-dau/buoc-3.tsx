@@ -65,8 +65,8 @@ export default function Buoc3({ h, sua }: P) {
             <p className="text-[16px] font-extrabold text-luc-chu leading-snug">{goiY.khoang}</p>
             {goiY.ghiChu && <p className="mt-1">{goiY.ghiChu}</p>}
             <p className="mt-1 text-chu-phu">
-              {soVua > 0 ? `${soVua}/${LUA_CHON_MAU.length} lựa chọn trong dữ liệu mẫu có học phí vừa mức này.` : "Chưa có lựa chọn nào trong dữ liệu mẫu vừa mức này."}
-              {" "}Học phí là dữ liệu mẫu, chưa kiểm chứng.
+              {soVua > 0 ? `${soVua}/${LUA_CHON_MAU.length} lựa chọn có học phí vừa mức này (chỉ tính ngành đã có học phí).` : "Chưa có ngành nào có học phí vừa mức này."}
+              {" "}Nhiều ngành chưa có học phí, em xem thêm trên trang của trường.
             </p>
           </div>
         ) : (

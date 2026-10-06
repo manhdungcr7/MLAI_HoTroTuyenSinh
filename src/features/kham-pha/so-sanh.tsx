@@ -1,4 +1,5 @@
 import { useMemo, useState, type ReactNode } from "react";
+import { coHocPhi } from "@/data/lua-chon-phu";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -133,8 +134,8 @@ export default function SoSanh() {
                 a={<><b className="text-[15px] text-muc">{khoangDiem(a!)}</b><span className="text-[12px] text-chu-phu">điểm{a!.namDiem !== b!.namDiem && ` (${a!.namDiem})`}</span></>}
                 b={<><b className="text-[15px] text-muc">{khoangDiem(b!)}</b><span className="text-[12px] text-chu-phu">điểm{a!.namDiem !== b!.namDiem && ` (${b!.namDiem})`}</span></>} />
               <Hang icon={Wallet} nhan="Học phí / năm" phu="dự kiến" tot={ss.tot.hocPhi}
-                a={<><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></>}
-                b={<><b className="text-[15px] text-muc">{khoangHocPhi(b!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></>} />
+                a={coHocPhi(a!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>}
+                b={coHocPhi(b!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(b!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
               <Hang icon={MapPin} nhan="Khu vực" tot={ss.tot.khuVuc}
                 a={<><b className="text-muc">{a!.khuVuc}</b><span className="text-[12px] text-chu-phu">{a!.diaChi?.split(",")[0]}</span></>}
                 b={<><b className="text-muc">{b!.khuVuc}</b><span className="text-[12px] text-chu-phu">{b!.diaChi?.split(",")[0]}</span></>} />

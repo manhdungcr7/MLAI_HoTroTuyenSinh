@@ -81,7 +81,7 @@ export function GhiChuDuLieuMau({ className }: { className?: string }) {
   return (
     <p className={gop("flex items-start gap-2 rounded-xl bg-cam-nhat px-3 py-2.5 text-[13px] text-chu leading-snug", className)}>
       <Info size={16} className="text-cam-chu shrink-0 mt-0.5" />
-      <span><b className="text-cam-chu">Dữ liệu mẫu, chưa kiểm chứng.</b> Điểm và học phí chỉ để dựng giao diện, em hãy xem lại trên trang tuyển sinh của trường.</span>
+      <span><b className="text-cam-chu">Điểm chuẩn là số các năm trước.</b> Điểm năm nay có thể khác, và một số ngành chưa có học phí. Em hãy đối chiếu với đề án của trường trước khi quyết định.</span>
     </p>
   );
 }

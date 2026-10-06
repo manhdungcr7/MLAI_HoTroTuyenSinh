@@ -43,7 +43,7 @@ export function GhiChuDuLieu() {
   return (
     <p className="flex gap-2 text-[13px] text-chu-phu leading-snug px-1">
       <Info size={16} className="shrink-0 mt-0.5" />
-      <span>Nhãn là gợi ý theo điểm tham khảo năm trước, không phải cam kết trúng tuyển. Điểm và học phí của trường là dữ liệu mẫu, chưa kiểm chứng.</span>
+      <span>Nhãn là gợi ý theo điểm tham khảo năm trước, không phải cam kết trúng tuyển. Điểm là điểm chuẩn các năm trước; em đối chiếu với đề án của trường.</span>
     </p>
   );
 }

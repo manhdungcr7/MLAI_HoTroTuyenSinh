@@ -148,7 +148,7 @@ export default function ThuTinhHuong() {
                   </li>
                 ))}
               </ul>
-              <p className="text-[12px] text-chu-phu mt-1">Tính trên {LUA_CHON_MAU.length} lựa chọn mẫu.</p>
+              <p className="text-[12px] text-chu-phu mt-1">Tính trên {LUA_CHON_MAU.length} lựa chọn trong danh mục.</p>
             </The>
 
             {/* Thêm điều kiện (thu gọn) */}

@@ -75,7 +75,7 @@ export function GhiChuDuLieu({ children }: { children?: ReactNode }) {
   return (
     <p className="text-[12px] leading-relaxed text-chu-phu flex gap-1.5">
       <Info size={14} className="shrink-0 mt-0.5" />
-      <span>{children ?? "Điểm phù hợp là điểm gợi ý trên thang 100, KHÔNG phải xác suất đậu."} Số liệu trường là dữ liệu mẫu, chưa kiểm chứng.</span>
+      <span>{children ?? "Điểm phù hợp là điểm gợi ý trên thang 100, KHÔNG phải xác suất đậu."} Điểm chuẩn là số các năm trước, em đối chiếu với đề án của trường.</span>
     </p>
   );
 }

@@ -57,8 +57,8 @@ export default function CaiDat() {
         <section>
           <TieuDeMuc>Về dữ liệu</TieuDeMuc>
           <div className="space-y-2">
-            <DongThongBao tone="cam" icon={Database} tieuDe="Số liệu trường và ngành là dữ liệu mẫu"
-              moTa="Điểm tham khảo, học phí và thông tin trường chưa được kiểm chứng. Em luôn xem lại trên trang tuyển sinh chính thức của trường trước khi quyết định." />
+            <DongThongBao tone="cam" icon={Database} tieuDe="Điểm chuẩn là số của các năm trước"
+              moTa="Điểm chuẩn lấy từ đề án tuyển sinh của trường hoặc trang tổng hợp, mỗi ngành đều ghi nguồn. Học phí và việc làm nhiều ngành chưa có. Em luôn đối chiếu với đề án chính thức của trường trước khi quyết định." />
             <DongThongBao tone="xanh" icon={Info} tieuDe="Điểm phù hợp không phải khả năng đậu"
               moTa="Điểm phù hợp là điểm gợi ý trên 100, tính từ điểm, học phí, khu vực và cơ hội việc làm. Nó giúp em so sánh, không dự đoán kết quả xét tuyển." />
           </div>

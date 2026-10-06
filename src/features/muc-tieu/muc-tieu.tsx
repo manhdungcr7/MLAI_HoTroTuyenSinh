@@ -159,7 +159,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
           </div>
         )}
         <p className="text-[12px] text-chu-phu mt-2 pt-2 border-t border-vien">
-          Mức tham khảo {d.lc.namDiem} của ngành: {diem1(d.lc.diemMin)}–{diem1(d.lc.diemMax)} điểm (dữ liệu mẫu, chưa kiểm chứng).
+          Mức tham khảo {d.lc.namDiem} của ngành: {diem1(d.lc.diemMin)}–{diem1(d.lc.diemMax)} điểm (điểm chuẩn các năm trước).
         </p>
       </div>
 
