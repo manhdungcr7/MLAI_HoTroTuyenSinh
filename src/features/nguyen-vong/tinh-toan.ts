@@ -3,7 +3,7 @@
 // Mọi câu chữ sinh ra ở đây là lời thường cho học sinh; không dùng lại câu canhBao của engine
 // vì vài câu trong đó có từ ngữ dự án đã bỏ.
 import { NGAN_SACH_TOI_DA, nhanNguyenVong, phanTichDanhSach } from "@/engine/phan-tich";
-import type { HoSo, LuaChon, MonId, NhanNguyenVong, ToneTen } from "@/state/types";
+import type { DiemDayDu, HoSo, LuaChon, NhanNguyenVong, ToneTen } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -21,7 +21,7 @@ export interface DongNV {
   nhan: NhanNguyenVong | null;
 }
 
-type DiemMon = Record<MonId, number | null>;
+type DiemMon = DiemDayDu;
 
 /** Tổ hợp tốt nhất của em trong các tổ hợp tính được từ điểm đã nhập. */
 export const toHopTotNhat = (diem: DiemMon) => tongChoLuaChon({ toHopXet: [] }, diem);

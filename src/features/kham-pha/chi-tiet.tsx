@@ -20,9 +20,9 @@ import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } 
 import { NutTuVan } from "@/features/tu-van/tu-van";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
-  "Rất cao": "Theo dữ liệu việc làm đã đo, tỷ lệ có việc rất cao.",
-  Cao: "Theo dữ liệu việc làm đã đo, tỷ lệ có việc cao.",
-  Khá: "Theo dữ liệu việc làm đã đo, tỷ lệ có việc ở mức khá, nên chủ động thực tập sớm.",
+  "Rất cao": "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc rất cao.",
+  Cao: "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc cao.",
+  Khá: "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc ở mức khá, nên chủ động thực tập sớm.",
 };
 
 function DongThongTin({ icon, tone, nhan, giaTri, phu }: { icon: LucideIcon; tone: ToneTen; nhan: ReactNode; giaTri: ReactNode; phu?: ReactNode }) {
@@ -256,10 +256,10 @@ export default function ChiTiet() {
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
             <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? (bc.nganSach !== null ? `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm.` : undefined) : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
+              phu={coHocPhi(lc) ? <>{bc.nganSach !== null && `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm. `}{lc.nguonHocPhi && <a href={`${lc.nguonHocPhi.url}#page=${lc.nguonHocPhi.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Theo đề án {lc.nguonHocPhi.nam}, trang {lc.nguonHocPhi.trang}</a>}</> : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
-              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.coHoiViecLam} phu={MO_TA_VIEC_LAM[lc.coHoiViecLam]} />
+              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{lc.coHoiViecLam}. {MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <a href={`${lc.nguonViecLam.url}#page=${lc.nguonViecLam.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem trong đề án {lc.nguonViecLam.nam}, trang {lc.nguonViecLam.trang}</a></>}</>} />
             ) : (
               <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri="Chưa có dữ liệu" phu="Trường chưa công bố tỷ lệ việc làm của ngành này." />
             )}

@@ -3,6 +3,7 @@ import { ChevronDown, Database, Heart, NotebookPen, Pencil, Sparkles, ThumbsUp, 
 import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { CAC_MON, TEN_MON_NGAN, type HoSo, type MonId } from "@/state/types";
 import { CACH_HOC, CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, NGUON_DIEM, TONE_MON, TONE_TO_HOP } from "./lua-chon";
+import DiemMonThem from "./diem-mon-them";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop } from "./tinh-toan";
 
@@ -67,6 +68,8 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
         )}
         <p className="mt-2 text-[12px] text-chu-phu">Chưa nhớ chính xác thì để trống, em bổ sung sau. Gõ "7,5" hay "7.5" đều được.</p>
       </fieldset>
+
+      <DiemMonThem h={h} sua={sua} />
 
       <section aria-labelledby="tieu-de-to-hop">
         <div className="flex items-center justify-between gap-2 mb-2">

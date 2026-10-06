@@ -11,6 +11,17 @@ export const TEN_MON_NGAN: Record<MonId, string> = {
   toan: "Toán", vatLy: "Lý", hoaHoc: "Hóa", sinh: "Sinh", nguVan: "Văn", tiengAnh: "Anh",
 };
 
+// Các môn thêm (không bắt buộc): để tính các tổ hợp xã hội và tổ hợp mới (C00, D14, X70, X26...). Lưu riêng ở HoSo.diemThem.
+export type MonThem = "lichSu" | "diaLy" | "gdktpl" | "tinHoc" | "congNghe";
+export const CAC_MON_THEM: MonThem[] = ["lichSu", "diaLy", "gdktpl", "tinHoc", "congNghe"];
+export const TEN_MON_THEM: Record<MonThem, string> = {
+  lichSu: "Lịch sử", diaLy: "Địa lý", gdktpl: "GD kinh tế và pháp luật", tinHoc: "Tin học", congNghe: "Công nghệ",
+};
+export const TEN_MON_THEM_NGAN: Record<MonThem, string> = { lichSu: "Sử", diaLy: "Địa", gdktpl: "GDKT&PL", tinHoc: "Tin", congNghe: "C.nghệ" };
+export type MonKhoi = MonId | MonThem;
+/** Điểm đủ 11 môn (6 môn chính + 5 môn thêm); môn chưa có là null. */
+export type DiemDayDu = Record<MonKhoi, number | null>;
+
 export type MaToHop = "A00" | "A01" | "D01" | "B00";
 export const TO_HOP: Record<MaToHop, MonId[]> = {
   A00: ["toan", "vatLy", "hoaHoc"],
@@ -30,6 +41,7 @@ export interface HoSo {
   mucTieuHienTai: "chuaChonTruong" | "daCoMoUoc" | "soSanh" | null;
   nguonDiem: NguonDiem;
   diem: Record<MonId, number | null>;
+  diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)
   diemManh: string[];
   canCaiThien: string[];
   cachHoc: string[];
@@ -89,6 +101,9 @@ export interface LuaChon {
   diemTheoNam?: Record<string, number>; // điểm chuẩn từng năm có thật
   diemDuKien?: number | null; // điểm chuẩn dự kiến năm tới (bằng năm gần nhất)
   nguonCap?: "official_pdf" | "aggregator_verified"; // đề án chính thức hay trang tổng hợp
+  tiLeViecLam?: number; // phần trăm sinh viên có việc làm theo khảo sát trong đề án của trường
+  nguonViecLam?: { nam: string; url: string; trang: number }; // trang đề án nêu tỷ lệ có việc làm (nếu trích được)
+  nguonHocPhi?: { nam: string; url: string; trang: number }; // trang đề án nêu học phí của ngành này
   nguonTheoNam?: NguonNam[]; // liên kết tới tài liệu gốc của từng năm (đề án PDF, có số trang nếu tìm được)
 }
 

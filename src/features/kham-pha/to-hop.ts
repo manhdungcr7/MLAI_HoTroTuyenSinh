@@ -1,33 +1,44 @@
-// Tính tổng điểm 3 môn theo đúng tổ hợp của từng ngành (đề án ghi), từ điểm 6 môn em đã nhập. TypeScript thuần.
-import type { LuaChon, MonId } from "@/state/types";
+// Tính tổng điểm 3 môn theo đúng tổ hợp của từng ngành (đề án ghi), từ điểm hồ sơ (6 môn chính + 5 môn thêm). TypeScript thuần.
+import { MON_CUA_TO_HOP, TO_HOP_NANG_KHIEU } from "@/data/to-hop-chinh-thuc";
+import { diemHienTaiCuaTungMon, type AppState } from "@/state/store";
+import { CAC_MON_THEM, type DiemDayDu, type LuaChon, type MonKhoi } from "@/state/types";
 
-/** Chỉ các tổ hợp mà 6 môn của hồ sơ đủ để tính. Tổ hợp có Sử, Địa, Tin... chưa tính được vì hồ sơ chưa có các môn đó. */
-export const MON_CUA_TO_HOP: Record<string, MonId[]> = {
-  A00: ["toan", "vatLy", "hoaHoc"], A01: ["toan", "vatLy", "tiengAnh"], A02: ["toan", "vatLy", "sinh"],
-  B00: ["toan", "hoaHoc", "sinh"], B03: ["toan", "sinh", "nguVan"], B08: ["toan", "sinh", "tiengAnh"],
-  C01: ["nguVan", "toan", "vatLy"], C02: ["nguVan", "toan", "hoaHoc"], C05: ["nguVan", "vatLy", "hoaHoc"], C08: ["nguVan", "hoaHoc", "sinh"],
-  D01: ["toan", "nguVan", "tiengAnh"], D07: ["toan", "hoaHoc", "tiengAnh"], D08: ["toan", "sinh", "tiengAnh"],
-  D11: ["nguVan", "vatLy", "tiengAnh"], D12: ["nguVan", "hoaHoc", "tiengAnh"], D13: ["nguVan", "sinh", "tiengAnh"],
-};
+export { MON_CUA_TO_HOP };
+
+/** Điểm hiện tại của em ở cả 11 môn: 6 môn chính (ưu tiên lần thi thử gần nhất) và các môn thêm trong hồ sơ. */
+export function diemDayDu(s: AppState): DiemDayDu {
+  const them = s.hoSo.diemThem ?? {};
+  const ra = { ...diemHienTaiCuaTungMon(s) } as DiemDayDu;
+  for (const m of CAC_MON_THEM) ra[m] = them[m] ?? null;
+  return ra;
+}
 
 export interface TongToHop {
   tong: number | null; // null = em chưa nhập đủ điểm cho tổ hợp nào của ngành
   toHop: string | null; // tổ hợp được dùng
   suyRa: boolean; // đề án chưa ghi tổ hợp, đã lấy tổ hợp cao nhất của em
-  khongTinhDuoc?: string[]; // đề án ghi tổ hợp nhưng hồ sơ chưa có các môn đó (Sử, Địa, Tin...): chưa so được
+  khongTinhDuoc?: string[]; // đề án ghi tổ hợp nhưng chưa tính được (môn năng khiếu, ngoại ngữ khác)
+  thieuMon?: MonKhoi[]; // tổ hợp tính được nhưng em chưa nhập các môn này
 }
 
-export function tongChoLuaChon(lc: Pick<LuaChon, "toHopXet">, diem: Record<MonId, number | null>): TongToHop {
+type DiemTuyY = Partial<Record<MonKhoi, number | null>>;
+
+export function tongChoLuaChon(lc: Pick<LuaChon, "toHopXet">, diem: DiemTuyY): TongToHop {
   const daGhi = lc.toHopXet ?? [];
   const khaiBao = daGhi.filter((c) => MON_CUA_TO_HOP[c]);
   if (daGhi.length > 0 && khaiBao.length === 0) return { tong: null, toHop: null, suyRa: false, khongTinhDuoc: daGhi };
   const suyRa = khaiBao.length === 0;
   let tot: { tong: number; toHop: string } | null = null;
+  const thieu = new Set<MonKhoi>();
   for (const ma of suyRa ? Object.keys(MON_CUA_TO_HOP) : khaiBao) {
     const mon = MON_CUA_TO_HOP[ma];
-    if (mon.some((m) => diem[m] === null || diem[m] === undefined)) continue;
+    const thieuMon = mon.filter((m) => diem[m] === null || diem[m] === undefined);
+    if (thieuMon.length) { if (!suyRa) thieuMon.forEach((m) => thieu.add(m)); continue; }
     const tong = Math.round(mon.reduce((s, m) => s + (diem[m] as number), 0) * 100) / 100;
     if (!tot || tong > tot.tong) tot = { tong, toHop: ma };
   }
-  return tot ? { tong: tot.tong, toHop: tot.toHop, suyRa } : { tong: null, toHop: null, suyRa };
+  if (tot) return { tong: tot.tong, toHop: tot.toHop, suyRa };
+  return { tong: null, toHop: null, suyRa, ...(thieu.size ? { thieuMon: [...thieu] } : {}) };
 }
+
+export const laToHopNangKhieu = (ma: string) => TO_HOP_NANG_KHIEU.includes(ma);

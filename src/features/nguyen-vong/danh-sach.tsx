@@ -1,6 +1,6 @@
 // Màn 11 · Danh sách nguyện vọng: NV1..NVn, nhãn tính từ điểm của em, kéo thả + nút lên/xuống, sửa/xóa có hoàn tác.
 import { useCallback, useMemo, useState } from "react";
-import { coHocPhi } from "@/data/lua-chon-phu";
+import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowDown, ArrowUp, ChevronRight, ClipboardPen, Eye, GraduationCap, GripVertical, Heart, ListPlus, Pencil, Plus, ShieldCheck, Trash2, TrendingUp, Wallet,
@@ -13,7 +13,8 @@ import { HangBam, Nhan, Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
-import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
+import { useApp } from "@/state/store";
 import { useKeoTha } from "./dung-keo-tha";
 import { CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
@@ -24,7 +25,7 @@ const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lự
 export default function DanhSachNguyenVong() {
   const nav = useNavigate();
   const { s, themNguyenVong, xoaNguyenVong, doiViTri } = useApp();
-  const diemMon = diemHienTaiCuaTungMon(s);
+  const diemMon = diemDayDu(s);
   const tongTot = toHopTotNhat(diemMon);
   const tong = tongTot.tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -236,7 +237,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
           {d.lc && (
             <span className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
               <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{d.lc.diemMin.toFixed(1)}</b></span>
-              <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{d.lc.hocPhiMin}–{d.lc.hocPhiMax}</b> tr/năm</> : "Chưa có học phí"}</span>
+              <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</> : "Chưa có học phí"}</span>
             </span>
           )}
         </button>

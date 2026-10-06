@@ -3,14 +3,14 @@
 import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongA01 } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
-import { tongChoLuaChon } from "./to-hop";
-import { diemHienTaiCuaTungMon, type AppState } from "@/state/store";
-import type { LuaChon, MucPhuHop, ToneTen } from "@/state/types";
+import { diemDayDu, tongChoLuaChon } from "./to-hop";
+import type { AppState } from "@/state/store";
+import { TEN_MON, TEN_MON_NGAN, TEN_MON_THEM, TEN_MON_THEM_NGAN, type DiemDayDu, type LuaChon, type MonId, type MonThem, type MucPhuHop, type ToneTen } from "@/state/types";
 import { cungNoi } from "./bo-loc";
 
 export interface BoiCanh {
   tong: number | null; // tổng Toán + Lý + Anh hiện tại, null nếu chưa nhập đủ (cho các màn chưa tính theo tổ hợp từng ngành)
-  diem: ReturnType<typeof diemHienTaiCuaTungMon>; // điểm từng môn hiện tại, để tính theo đúng tổ hợp của từng ngành
+  diem: DiemDayDu; // điểm từng môn hiện tại, để tính theo đúng tổ hợp của từng ngành
   nganSach: number | null; // triệu đồng / năm
   khuVucUuTien: string[];
   tinh: string;
@@ -23,7 +23,7 @@ export function boiCanhTu(s: AppState): BoiCanh {
   const h = s.hoSo;
   return {
     tong: tongA01(s),
-    diem: diemHienTaiCuaTungMon(s),
+    diem: diemDayDu(s),
     nganSach: h.nganSach ? NGAN_SACH_TOI_DA[h.nganSach] : null,
     khuVucUuTien: h.khuVuc,
     tinh: h.tinh === "Tỉnh khác" ? "" : h.tinh,
@@ -102,10 +102,13 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   if (tong === null || chenh === null) {
     return {
       muc: null, tong: null, chenh: null, diemGoiY: null, chacChan: null, vuotNganSach, ngoaiKhuVuc, tot, luuY,
-      tomTat: tl.khongTinhDuoc ? `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa so được` : "Nhập đủ điểm 3 môn của một tổ hợp để so",
+      tomTat: tl.khongTinhDuoc ? `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa so được`
+        : tl.thieuMon ? `Thêm điểm ${tl.thieuMon.map((m) => TEN_MON_THEM_NGAN[m as MonThem] ?? TEN_MON_NGAN[m as MonId]).slice(0, 3).join(", ")} để so` : "Nhập đủ điểm 3 môn của một tổ hợp để so",
       giaiThich: tl.khongTinhDuoc
-        ? `Ngành này xét tổ hợp ${tl.khongTinhDuoc.join(", ")}. Hồ sơ của em chưa có điểm các môn đó (Sử, Địa, Tin...) nên mình chưa so được. Em so điểm chuẩn ở bảng bên dưới với điểm tổ hợp của em.`
-        : "Em chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
+        ? `Ngành này xét tổ hợp ${tl.khongTinhDuoc.join(", ")} (có môn năng khiếu hoặc ngoại ngữ khác), mình chưa tính được. Em so điểm chuẩn ở bảng bên dưới với điểm của em.`
+        : tl.thieuMon
+          ? `Ngành này xét tổ hợp cần điểm ${tl.thieuMon.map((m) => TEN_MON[m as MonId] ?? TEN_MON_THEM[m as MonThem]).join(", ")}. Em thêm điểm các môn đó ở Hồ sơ (bước Điểm các môn) để mình so.`
+          : "Em chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
     };
   }
 
@@ -163,14 +166,11 @@ export function sapXep(ds: LuaChon[], kieu: KieuSapXep, bc: BoiCanh): LuaChon[] 
     const pt = (l: LuaChon) => (l.phuongThuc && l.phuongThuc !== "THPT" ? 1 : 0);
     const dau = nganh(a) - nganh(b) || pt(a) - pt(b);
     if (dau) return dau;
-    if (ka.muc && kb.muc) {
-      // 3) Mức phù hợp. 4) Trong cùng mức: trường điểm chuẩn sát điểm của em nhất (sát mà vẫn đủ điểm) lên trước,
-      //    để em thấy trường tốt nhất mình với tới, không phải trường dễ nhất. Điểm gợi ý ở mức tối đa nên không đủ để phân biệt.
-      const gan = (k: KetQuaPhuHop) => (k.chenh === null ? 999 : k.chenh >= 0 ? k.chenh : 100 - k.chenh);
-      return THU_TU_MUC[ka.muc] - THU_TU_MUC[kb.muc] || kv(a) - kv(b) || gan(ka) - gan(kb);
-    }
-    // Chưa có điểm: khu vực, rồi điểm tham khảo thấp hơn.
-    return kv(a) - kv(b) || a.diemMin - b.diemMin;
+    // 3) Mức phù hợp (ngành chưa so được xếp cuối). 4) Trong cùng mức: trường điểm chuẩn sát điểm của em nhất (sát mà vẫn đủ điểm) lên trước,
+    //    để em thấy trường tốt nhất mình với tới, không phải trường dễ nhất. Điểm gợi ý ở mức tối đa nên không đủ để phân biệt.
+    const gan = (k: KetQuaPhuHop) => (k.chenh === null ? 999 : k.chenh >= 0 ? k.chenh : 100 - k.chenh);
+    const hang = (k: KetQuaPhuHop) => (k.muc ? THU_TU_MUC[k.muc] : 3);
+    return hang(ka) - hang(kb) || kv(a) - kv(b) || (ka.muc ? gan(ka) - gan(kb) : a.diemMin - b.diemMin);
   });
 }
 

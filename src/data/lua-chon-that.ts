@@ -1,7 +1,9 @@
 // Danh mục lựa chọn thật, sinh từ du-lieu-that.json (xuất bằng scripts/xuat-du-lieu-that.py từ pipeline trong legacy/).
 // Chỉ có số liệu đo được từ đề án: điểm chuẩn từng năm, tổ hợp, tỉnh, nguồn. Học phí, địa chỉ, môi trường học không có thì để trống.
 import raw from "./du-lieu-that.json";
-import type { LuaChon, MonId, NguonNam, ToneTen } from "@/state/types";
+import viecLamMoi from "./viec-lam.json"; // tỷ lệ có việc làm trích thêm từ đề án (scripts/trich-viec-lam.py), chỉ bổ sung ngành chưa có
+import hocPhi from "./hoc-phi.json"; // học phí theo năm trích từ đề án (scripts/trich-hoc-phi.py), chỉ vài chục ngành
+import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
 import { nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 
@@ -17,7 +19,8 @@ const TEN_PT: Record<string, string> = {
 const TONES: ToneTen[] = ["xanh", "luc", "cam", "tim", "do"];
 const toneCua = (ma: string): ToneTen => TONES[[...ma].reduce((s, c) => s + c.charCodeAt(0), 0) % TONES.length];
 
-const viecLam = (rate: number | null): LuaChon["coHoiViecLam"] => (rate === null ? undefined : rate >= 0.95 ? "Rất cao" : rate >= 0.85 ? "Cao" : "Khá");
+// `viec` là phần trăm (71–100), không phải tỉ lệ 0–1.
+const viecLam = (phanTram: number | null): LuaChon["coHoiViecLam"] => (phanTram === null ? undefined : phanTram >= 95 ? "Rất cao" : phanTram >= 85 ? "Cao" : "Khá");
 
 const khongDau = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 // Phần đứng trước " - " chỉ là loại chương trình (không phải tên ngành): hiện tên ngành, giữ phần kia ở dòng mô tả.
@@ -36,7 +39,14 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
+const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string }>;
+
+const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
+
 function chuyen(d: Dong): LuaChon {
+  const hp = HOC_PHI[d.id];
+  const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
+  const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
   const laCaoDang = /cao đẳng/i.test(d.nganh) || /cao đẳng/i.test(d.truong);
   const nam = Object.keys(d.diem).sort();
@@ -58,13 +68,16 @@ function chuyen(d: Dong): LuaChon {
     diemMin: Math.min(...haiNam),
     diemMax: Math.max(...haiNam),
     namDiem: Number(moiNhat),
-    coHoiViecLam: viecLam(d.viec),
+    coHoiViecLam: viecLam(viec),
+    ...(viec !== null ? { tiLeViecLam: viec } : {}),
+    ...(vm ? { nguonViecLam: { nam: vm.nam, url: vm.url, trang: vm.trang } } : {}),
     tone: toneCua(d.ma),
     lyDoPhuHop: [],
     canLuuY: luuY,
     nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: d.tier === "official_pdf",
     linkNguon: d.nguon ?? undefined,
+    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang } } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,
@@ -95,7 +108,7 @@ export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
  * Danh sách nguyện vọng cho hồ sơ mẫu "Minh Anh": ngành CNTT ở TP.HCM, chọn theo nhãn tính từ chính điểm mẫu
  * (1 Thử sức, 2 Vừa sức, 1 An toàn, 1 Dự phòng) để màn Nguyện vọng có đủ các nhóm. Lấy theo dữ liệu, không gõ tay mã.
  */
-export function idHoSoMau(diem: Record<MonId, number | null>): string[] {
+export function idHoSoMau(diem: Partial<Record<MonKhoi, number | null>>): string[] {
   const ung = LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.khuVuc === "TP.HCM" && l.phuongThuc === "THPT" && Object.keys(l.diemTheoNam ?? {}).length >= 2)
     .map((l) => ({ l, tong: tongChoLuaChon(l, diem).tong }))
     .filter((x): x is { l: LuaChon; tong: number } => x.tong !== null)

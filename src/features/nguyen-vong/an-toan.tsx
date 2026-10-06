@@ -14,10 +14,10 @@ import { HangBam, Nut, TONE_CHU, TONE_NEN, The, gop } from "@/components/ui/nut-
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { LUA_CHON_MAU, tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
-import { diemHienTaiCuaTungMon } from "@/state/store";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
-import { coHocPhi } from "@/data/lua-chon-phu";
+import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
 import { GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import {
   cacBuocDoiCho, chamDiem, toHopTotNhat, demNhan, dungDanhSach, giongNhau, goiYHanhDong, ketLuan, sapTheoVuaSuc, xetCoCau, type DiemDanhGia, type GoiY,
@@ -29,7 +29,7 @@ const VIEN_KHUNG: Record<ToneTen, string> = { do: "border-do/30", cam: "border-c
 export default function DanhSachAnToan() {
   const nav = useNavigate();
   const { s, doiViTri } = useApp();
-  const diemMon = diemHienTaiCuaTungMon(s);
+  const diemMon = diemDayDu(s);
   const tong = toHopTotNhat(diemMon).tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
   const dem = demNhan(ds);
@@ -204,7 +204,7 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
           {g.truong.map(({ lc, nhan }) => (
             <li key={lc.id}>
               <DongTruong onClick={() => nav(DUONG_DAN.chiTiet(lc.id))} truong={lc.truong} tone={lc.tone} ten={lc.nganh}
-                phu={`${lc.truong} · ${lc.diemMin.toFixed(1)} điểm (${lc.namDiem}) · ${coHocPhi(lc) ? `${lc.hocPhiMin}–${lc.hocPhiMax} tr/năm` : "chưa có học phí"} · ${lc.khuVuc}`}
+                phu={`${lc.truong} · ${lc.diemMin.toFixed(1)} điểm (${lc.namDiem}) · ${coHocPhi(lc) ? `${hocPhiChu(lc)} tr/năm` : "chưa có học phí"} · ${lc.khuVuc}`}
                 nhan={<NhanNguyenVongTag nhan={nhan} />} />
             </li>
           ))}

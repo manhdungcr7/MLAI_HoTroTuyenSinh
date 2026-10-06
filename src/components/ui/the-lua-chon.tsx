@@ -2,7 +2,7 @@ import { Building2, MapPin, Wallet } from "lucide-react";
 import type { LuaChon, MucPhuHop, ToneTen } from "@/state/types";
 import { HuyHieuTruong } from "./hinh-nen";
 import { Nhan } from "./nut-the";
-import { coHocPhi } from "@/data/lua-chon-phu";
+import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
 
 export const TONE_PHU_HOP: Record<MucPhuHop, ToneTen> = { "Phù hợp": "luc", "Có thể thử sức": "tim", "Cần cân nhắc": "cam" };
 
@@ -24,7 +24,7 @@ export function TheLuaChon({ l, onClick, phai }: { l: LuaChon; onClick?: () => v
       <span className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-chu-phu border-t border-vien pt-2">
         <span className="inline-flex items-center gap-1"><Building2 size={14} />{l.bac}</span>
         <span className="inline-flex items-center gap-1"><MapPin size={14} />{l.khuVuc}</span>
-        <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(l) ? `${l.hocPhiMin} – ${l.hocPhiMax} tr/năm` : "Chưa có học phí"}</span>
+        <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(l) ? `${hocPhiChu(l)} tr/năm` : "Chưa có học phí"}</span>
       </span>
     </Goc>
   );

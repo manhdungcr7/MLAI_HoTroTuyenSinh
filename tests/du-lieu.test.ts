@@ -7,13 +7,13 @@ import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
 import { boiCanhTu, coDiemDeSo, danhGia, sapXep } from "../src/features/kham-pha/phu-hop";
 import { dungDanhSach, demNhan } from "../src/features/nguyen-vong/tinh-toan";
 import { taoHoSoMau } from "../src/state/mau";
-import type { MonId } from "../src/state/types";
+import type { DiemDayDu, MonKhoi } from "../src/state/types";
 import deAnTruong from "../src/data/de-an-truong.json";
 import nguonNam from "../src/data/nguon-nam.json";
 import chuongTrinh from "../src/data/chuong-trinh.json";
 
-const diem = (o: Partial<Record<MonId, number>>): Record<MonId, number | null> =>
-  ({ toan: null, vatLy: null, hoaHoc: null, sinh: null, nguVan: null, tiengAnh: null, ...o });
+const diem = (o: Partial<Record<MonKhoi, number>>): DiemDayDu =>
+  ({ toan: null, vatLy: null, hoaHoc: null, sinh: null, nguVan: null, tiengAnh: null, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...o });
 
 // 1) Toàn vẹn dữ liệu
 assert.ok(LUA_CHON.length > 2000, "phải có hơn 2000 chương trình");
@@ -55,8 +55,17 @@ const d = diem({ toan: 8, vatLy: 7, hoaHoc: 6, tiengAnh: 9, nguVan: 5, sinh: 4 }
 assert.equal(tongChoLuaChon({ toHopXet: ["A00"] }, d).tong, 21);
 assert.equal(tongChoLuaChon({ toHopXet: ["A00", "A01"] }, d).toHop, "A01", "nhiều tổ hợp thì lấy tổ hợp cao nhất của em");
 const khong = tongChoLuaChon({ toHopXet: ["C00"] }, d);
-assert.equal(khong.tong, null, "C00 cần Sử, Địa: chưa tính được");
-assert.deepEqual(khong.khongTinhDuoc, ["C00"]);
+assert.equal(khong.tong, null, "C00 cần Sử, Địa: em chưa nhập thì chưa tính được");
+assert.deepEqual(khong.thieuMon, ["lichSu", "diaLy"]);
+// nhập thêm Sử, Địa thì tính được C00, D14, X70...
+const dXH = diem({ toan: 6, nguVan: 8, tiengAnh: 7, lichSu: 9, diaLy: 8.5, gdktpl: 9, tinHoc: 7 });
+assert.equal(tongChoLuaChon({ toHopXet: ["C00"] }, dXH).tong, 25.5);
+assert.equal(tongChoLuaChon({ toHopXet: ["D14"] }, dXH).tong, 24);
+assert.equal(tongChoLuaChon({ toHopXet: ["X70"] }, dXH).tong, 26, "X70 = Văn, Sử, GDKT&PL");
+assert.equal(tongChoLuaChon({ toHopXet: ["X26"] }, dXH).tong, 20, "X26 = Toán, Tin, Anh");
+assert.equal(tongChoLuaChon({ toHopXet: ["C00", "D01"] }, dXH).toHop, "C00", "chọn tổ hợp cao nhất trong các tổ hợp ngành cho xét");
+// tổ hợp năng khiếu / vẽ: không tính từ điểm hồ sơ
+assert.deepEqual(tongChoLuaChon({ toHopXet: ["V00"] }, dXH).khongTinhDuoc, ["V00"]);
 const suy = tongChoLuaChon({ toHopXet: [] }, d);
 assert.ok(suy.suyRa && suy.tong === 24 && suy.toHop === "A01", "đề án chưa ghi tổ hợp thì suy ra và báo suyRa");
 assert.equal(tongChoLuaChon({ toHopXet: ["A00"] }, diem({ toan: 8 })).tong, null, "thiếu môn thì không so");
@@ -90,6 +99,13 @@ if (kq.muc === "Cần cân nhắc") assert.ok((kq.diemGoiY ?? 0) < NGUONG_PHU_HO
 
 // 8) Ngành chỉ xét tổ hợp chưa có môn (Sử, Địa) không bị so nhầm
 const chiC00 = LUA_CHON.find((l) => l.toHopXet?.length && l.toHopXet.every((c) => ["C00", "C03", "C04", "D14", "D15"].includes(c)));
-if (chiC00) { const k = danhGia(chiC00, bcGioi); assert.equal(k.muc, null); assert.match(k.giaiThich, /chưa có điểm/); }
+if (chiC00) {
+  const k = danhGia(chiC00, bcGioi); assert.equal(k.muc, null); assert.match(k.giaiThich, /Em thêm điểm/);
+  const kx = danhGia(chiC00, { ...bcGioi, diem: diem({ nguVan: 8, lichSu: 9, diaLy: 8.5, toan: 6, tiengAnh: 7 }) });
+  assert.notEqual(kx.muc, null, "nhập đủ Sử, Địa thì phải so được");
+}
+// số ngành so được tăng khi có điểm Sử, Địa, Tin
+const soSoDuoc = (dd: DiemDayDu) => LUA_CHON.filter((l) => tongChoLuaChon(l, dd).tong !== null).length;
+assert.ok(soSoDuoc(dXH) > soSoDuoc(diem({ toan: 6, nguVan: 8, tiengAnh: 7 })), "thêm môn phải mở thêm ngành so được");
 
 console.log("du-lieu: tất cả kiểm tra đều qua");
