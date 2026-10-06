@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -8,7 +8,8 @@ import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { AnhBia, BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
-import { tim } from "@/data/lua-chon-mau";
+import { tim as timGoc } from "@/data/lua-chon-mau";
+import { taiNguonNam } from "@/data/lua-chon-that";
 import { mucTieuTuLuaChon } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN } from "@/duong-dan";
@@ -114,11 +115,34 @@ function NguonTungNam({ lc }: { lc: LuaChon }) {
   );
 }
 
+/** Khung chương trình học. Mình chưa có link chính thức từng ngành nên nói thẳng, kèm đường tìm kiếm (không phải nguồn dữ liệu). */
+function ChuongTrinhHoc({ lc }: { lc: LuaChon }) {
+  const truyVan = `khung chương trình đào tạo ngành ${lc.nganh} ${lc.tenTruong}`;
+  return (
+    <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Chương trình học">
+      <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-tim-nhat text-tim"><GraduationCap size={20} /></span>
+      <div className="flex-1 min-w-0">
+        <b className="text-[14px] text-muc">Chương trình học của ngành</b>
+        <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
+          Mình chưa có dữ liệu chương trình học (môn từng học kỳ, số tín chỉ) của ngành này. Em xem khung chương trình trên trang của trường trước khi chọn.
+        </p>
+        <a href={`https://www.google.com/search?q=${encodeURIComponent(truyVan)}`} target="_blank" rel="noreferrer"
+          className="inline-flex items-center gap-1 mt-1 text-[12px] font-bold text-xanh hover:underline">
+          Tìm khung chương trình của ngành này (mở trang tìm kiếm)
+        </a>
+      </div>
+    </section>
+  );
+}
+
 export default function ChiTiet() {
   const { id = "" } = useParams();
   const nav = useNavigate();
   const { s, themNguyenVong, datMucTieu } = useApp();
-  const lc = tim(id);
+  const [nguonNam, setNguonNam] = useState<Awaited<ReturnType<typeof taiNguonNam>> | null>(null);
+  useEffect(() => { let con = true; taiNguonNam().then((m) => con && setNguonNam(m)).catch(() => {}); return () => { con = false; }; }, []);
+  const lcGoc = timGoc(id);
+  const lc = useMemo(() => (lcGoc ? { ...lcGoc, nguonTheoNam: nguonNam?.[lcGoc.id] } : undefined), [lcGoc, nguonNam]);
   const bc = useMemo(() => boiCanhTu(s), [s]);
   const [hoiTiep, setHoiTiep] = useState<null | "vuaThem" | "daCo">(null);
   const [chonThem, setChonThem] = useState(false);
@@ -148,7 +172,7 @@ export default function ChiTiet() {
   const laMucTieu = s.mucTieu?.luaChonId === lc.id;
   const datLamMucTieu = () => { datMucTieu(mucTieuTuLuaChon(lc, bc.diem)); nav(DUONG_DAN.mucTieu()); };
   const soSanh = () => {
-    const khac = s.soSanh.find((x) => x !== lc.id && tim(x));
+    const khac = s.soSanh.find((x) => x !== lc.id && timGoc(x));
     if (khac) nav(DUONG_DAN.soSanh(lc.id, khac));
     else setChonThem(true);
   };
@@ -226,6 +250,8 @@ export default function ChiTiet() {
 
         <DanhSachY tone="luc" icon={ThumbsUp} tieuDe="Vì sao nên cân nhắc" cuaEm={kq.tot} chung={lc.lyDoPhuHop} />
         <DanhSachY tone="cam" icon={AlertTriangle} tieuDe="Điều cần lưu ý" cuaEm={kq.luuY} chung={lc.canLuuY} />
+
+        <ChuongTrinhHoc lc={lc} />
 
         {/* Nguồn dữ liệu: không bịa đường link */}
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">

@@ -51,7 +51,7 @@ export default function KhamPha() {
         <NutTuVan nguCanh="Khám phá ngành học" />
         <div className="relative">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu pointer-events-none" />
-          <input type="search" value={tuKhoa} onChange={(e) => setTuKhoa(e.target.value)} placeholder="Tìm trường hoặc ngành..." aria-label="Tìm trường hoặc ngành"
+          <input type="search" value={tuKhoa} onChange={(e) => { setTuKhoa(e.target.value); if (e.target.value.trim() && b.nhom) sua({ nhom: "" }); /* tìm theo tên thì tìm trong mọi nhóm ngành */ }} placeholder="Tìm trường hoặc ngành..." aria-label="Tìm trường hoặc ngành"
             className="w-full min-h-12 rounded-xl border border-vien bg-trang pl-10 pr-12 text-[15px] focus:border-xanh [&::-webkit-search-cancel-button]:hidden" />
           {tuKhoa && (
             <button type="button" onClick={() => setTuKhoa("")} aria-label="Xóa ô tìm" className="absolute right-0.5 top-1/2 -translate-y-1/2 size-11 grid place-items-center rounded-full text-chu-phu">

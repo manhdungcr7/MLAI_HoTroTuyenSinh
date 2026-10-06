@@ -2,7 +2,6 @@
 // Chỉ có số liệu đo được từ đề án: điểm chuẩn từng năm, tổ hợp, tỉnh, nguồn. Học phí, địa chỉ, môi trường học không có thì để trống.
 import raw from "./du-lieu-that.json";
 import type { LuaChon, NguonNam, ToneTen } from "@/state/types";
-import nguonNam from "./nguon-nam.json";
 
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
@@ -34,8 +33,6 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   }
   return { ten: t };
 }
-
-const NGUON_THEO_NAM = nguonNam as Record<string, NguonNam[]>;
 
 function chuyen(d: Dong): LuaChon {
   const gon = tenGon(d.nganh);
@@ -72,12 +69,14 @@ function chuyen(d: Dong): LuaChon {
     diemTheoNam: d.diem,
     diemDuKien: d.dk,
     nguonCap: d.tier === "official_pdf" ? "official_pdf" : "aggregator_verified",
-    nguonTheoNam: NGUON_THEO_NAM[d.id],
   };
 }
 
 export const LUA_CHON: LuaChon[] = (raw as unknown as Dong[]).map(chuyen);
 const THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
+/** Liên kết tới đề án từng năm (file lớn, chỉ tải khi mở trang chi tiết). */
+export const taiNguonNam = (): Promise<Record<string, NguonNam[]>> => import("./nguon-nam.json").then((m) => m.default as unknown as Record<string, NguonNam[]>);
+
 export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
 
 /** Vài lựa chọn CNTT ở TP.HCM có điểm nhiều năm, dùng cho hồ sơ mẫu "Minh Anh". Lấy theo dữ liệu, không gõ tay mã. */
