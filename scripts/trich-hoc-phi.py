@@ -11,6 +11,7 @@ import fitz
 ROOT = Path(__file__).resolve().parents[1]
 GOC = ROOT.parent / "nguyen-vong"
 deanh = json.loads((ROOT / "src/data/de-an-truong.json").read_text(encoding="utf-8"))
+deanh.update(json.loads((ROOT / "src/data/de-an-truong-thu-cap.json").read_text(encoding="utf-8")))  # trường chỉ có điểm từ trang tổng hợp
 catalog = json.loads((GOC / "frontend/src/data/programs-catalog.json").read_text(encoding="utf-8"))
 
 
@@ -24,8 +25,6 @@ THEO_THANG_TC = re.compile(r"/\s*(tháng|tín chỉ|TC)", re.I)
 
 theo_truong = {}
 for r in catalog:
-    if r["sourceTier"] != "official_pdf":
-        continue
     pid = r["schoolCode"].lower() + "-" + hashlib.sha1(r["programKey"].encode("utf-8")).hexdigest()[:8]
     t = r["majorName"]
     theo_truong.setdefault(r["schoolCode"], {})[pid] = chuan(t.split(" - ")[-1] if " - " in t else t)

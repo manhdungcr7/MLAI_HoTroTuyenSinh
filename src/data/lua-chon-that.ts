@@ -96,10 +96,19 @@ export interface NguonTaiSau {
   nam: Record<string, NguonNam[]>; // id chương trình -> liên kết điểm chuẩn từng năm
   truong: Record<string, DeAnTruong>; // mã trường -> đề án các năm và trang học phí
   nganh: Record<string, TrangNganh>; // id chương trình -> trang của ngành trên website trường
+  truongNganh: Record<string, TrangNganh>; // mã trường -> trang danh sách ngành / chương trình đào tạo của trường (khi chưa có trang riêng của ngành)
 }
 export const taiNguon = async (): Promise<NguonTaiSau> => {
-  const [nam, truong, nganh] = await Promise.all([import("./nguon-nam.json"), import("./de-an-truong.json"), import("./chuong-trinh.json")]);
-  return { nam: nam.default as unknown as NguonTaiSau["nam"], truong: truong.default as unknown as NguonTaiSau["truong"], nganh: nganh.default as unknown as NguonTaiSau["nganh"] };
+  const [nam, truong, nganh, namTC, truongTC, truongNganh] = await Promise.all([
+    import("./nguon-nam.json"), import("./de-an-truong.json"), import("./chuong-trinh.json"),
+    import("./nguon-nam-thu-cap.json"), import("./de-an-truong-thu-cap.json"), import("./trang-nganh-truong.json"), // trường chỉ có điểm từ trang tổng hợp: đề án của trường và các điểm khớp được
+  ]);
+  return {
+    nam: { ...(nam.default as unknown as NguonTaiSau["nam"]), ...(namTC.default as unknown as NguonTaiSau["nam"]) },
+    truong: { ...(truong.default as unknown as NguonTaiSau["truong"]), ...(truongTC.default as unknown as NguonTaiSau["truong"]) },
+    nganh: nganh.default as unknown as NguonTaiSau["nganh"],
+    truongNganh: truongNganh.default as unknown as NguonTaiSau["truongNganh"],
+  };
 };
 
 export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);

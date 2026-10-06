@@ -11,6 +11,11 @@ import type { DiemDayDu, MonKhoi } from "../src/state/types";
 import deAnTruong from "../src/data/de-an-truong.json";
 import nguonNam from "../src/data/nguon-nam.json";
 import chuongTrinh from "../src/data/chuong-trinh.json";
+import nguonNamTC from "../src/data/nguon-nam-thu-cap.json";
+import deAnTruongTC from "../src/data/de-an-truong-thu-cap.json";
+import hocPhi from "../src/data/hoc-phi.json";
+import trangTruong from "../src/data/trang-nganh-truong.json";
+import viecLam from "../src/data/viec-lam.json";
 
 const diem = (o: Partial<Record<MonKhoi, number>>): DiemDayDu =>
   ({ toan: null, vatLy: null, hoaHoc: null, sinh: null, nguVan: null, tiengAnh: null, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...o });
@@ -42,6 +47,23 @@ for (const [ma, v] of Object.entries(deAnTruong as Record<string, { docs: { url:
 for (const [id, v] of Object.entries(chuongTrinh as Record<string, { url: string; tieuDe: string }>)) {
   assert.ok(ids.has(id), `chuong-trinh trỏ tới id không có: ${id}`);
   assert.ok(/^https?:\/\//.test(v.url) && v.tieuDe.length > 2);
+}
+
+for (const id of Object.keys(nguonNamTC)) assert.ok(ids.has(id), `nguon-nam-thu-cap trỏ tới id không có: ${id}`);
+for (const ma of Object.keys(deAnTruongTC)) assert.ok(LUA_CHON.some((l) => l.maTruong === ma));
+// học phí và việc làm trích từ đề án: số hợp lý, có trang nguồn, và gắn đúng vào dữ liệu
+for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang: number }>)) {
+  assert.ok(ids.has(id) && v.trieuNam >= 5 && v.trieuNam <= 400 && v.trang >= 1);
+  const l = timLuaChon(id)!; assert.equal(l.hocPhiMin, v.trieuNam); assert.ok(l.nguonHocPhi);
+}
+for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number }>)) assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
+// tỷ lệ việc làm là phần trăm: mức "Rất cao" chỉ khi từ 95% trở lên (từng bị đọc nhầm như tỉ lệ 0–1)
+for (const l of LUA_CHON) if (l.tiLeViecLam !== undefined) assert.equal(l.coHoiViecLam, l.tiLeViecLam >= 95 ? "Rất cao" : l.tiLeViecLam >= 85 ? "Cao" : "Khá", l.id);
+assert.ok(LUA_CHON.filter((l) => l.coHoiViecLam === "Rất cao").length < LUA_CHON.filter((l) => l.tiLeViecLam !== undefined).length, "không được để mọi ngành đều Rất cao");
+
+for (const [ma, v] of Object.entries(trangTruong as Record<string, { url: string; tieuDe: string }>)) {
+  assert.ok(LUA_CHON.some((l) => l.maTruong === ma), `trang-nganh-truong có mã trường lạ: ${ma}`);
+  assert.ok(/^https?:\/\//.test(v.url) && v.tieuDe.length > 3);
 }
 
 // 3) Tên ngành gọn

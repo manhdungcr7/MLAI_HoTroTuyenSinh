@@ -9,6 +9,11 @@ Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **2.529
 | `nguon-nam.json` | Với mỗi chương trình và mỗi năm có điểm: link file đề án PDF và **số trang** có điểm đó | `scripts/sinh-nguon-nam.py` (cần `tim-url-de-an.py` chạy trước) |
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
+| `nguon-nam-thu-cap.json`, `de-an-truong-thu-cap.json` | Như hai tệp trên nhưng cho các trường chỉ có điểm từ trang tổng hợp: toàn văn đề án của trường, và những điểm tìm thấy đúng số trong đề án | `scripts/doi-chieu-thu-cap.py` |
+| `hoc-phi.json` | Học phí theo năm của vài chục ngành, trích từ trang học phí của đề án (tên ngành đứng ngay trước số tiền theo năm; không đổi từ tín chỉ/tháng) | `scripts/trich-hoc-phi.py` |
+| `viec-lam.json` | Tỷ lệ có việc làm bổ sung (hàng có đúng một số %), chỉ dùng cho ngành chưa có số liệu cũ | `scripts/trich-viec-lam.py` |
+| `trang-nganh-truong.json` | Trang danh sách ngành/chương trình đào tạo của từng trường (đã mở thử), dùng khi chưa có trang riêng của ngành | `scripts/trang-nganh-truong.py` (danh sách ứng viên tìm bằng tìm kiếm giới hạn tên miền trường) |
+| `to-hop-chinh-thuc.ts` | 73 tổ hợp xét tuyển chính thức (ba môn mỗi tổ hợp) từ `legacy/common/data/shared_rules.json` | tạo từ tệp trên |
 | `lua-chon-that.ts` | Chuyển các tệp trên thành kiểu `LuaChon` của app; tên ngành gọn (`tenGon`); chọn nguyện vọng cho hồ sơ mẫu | viết tay |
 | `tham-khao/lua-chon-mau-cu.ts` | 14 trường mẫu cũ, chỉ để làm dữ liệu cố định cho `tests/thu-tinh-huong.test.ts` | viết tay |
 
@@ -34,7 +39,8 @@ npm test
 
 ## Giới hạn đã biết
 - 962 chương trình chỉ có nguồn thứ cấp (trang tổng hợp `tuyensinh247`), chưa có PDF chính thức.
-- Link trang ngành của trường: khoảng một phần tư số chương trình. Còn lại do website trường không quét được hoặc tên ngành trên web khác đề án.
+- Link trang riêng của ngành trên website trường: khoảng một phần tư số chương trình; thêm 26 trường có trang danh sách ngành chung (`trang-nganh-truong.json`). Còn lại do website trường không quét được hoặc tên ngành trên web khác đề án.
 - Khung chương trình học chi tiết (môn từng học kỳ) **chưa có dữ liệu**; trang chi tiết dẫn tới trang ngành của trường nếu có, không thì nói thẳng và cho đường tìm kiếm.
-- Hồ sơ chỉ có 6 môn (Toán, Lý, Hóa, Sinh, Văn, Anh). Thêm Sử, Địa, Tin, GDKT&PL cần sửa chung `state/types.ts`, bước nhập điểm và `to-hop.ts`.
+- Hồ sơ có 6 môn chính + 5 môn thêm không bắt buộc (Sử, Địa, GDKT&PL, Tin, Công nghệ; `HoSo.diemThem`). Tổ hợp có môn năng khiếu / vẽ (V00, T00, M01...) và ngoại ngữ khác (D02-D06...) không tính được từ điểm hồ sơ nên app ghi 'chưa so được'.
+- Học phí: chỉ khoảng 30 ngành có số theo năm; các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
 - Điểm chuẩn năm nay chưa có; app dùng năm gần nhất và luôn ghi "điểm chuẩn các năm trước".

@@ -22,3 +22,5 @@ legacy/**/dist/
 # kết quả trung gian của các lượt quét song song (gộp bằng scripts/gop-chuong-trinh.py)
 src/data/chuong-trinh.*of*.json
 scripts/chuong-trinh-bao-cao.*of*.json
+src/data/chuong-trinh.sm.*.json
+scripts/chuong-trinh-bao-cao.sm.*.json

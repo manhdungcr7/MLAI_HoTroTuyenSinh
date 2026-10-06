@@ -21,8 +21,6 @@ def norm(s):
 
 truong = {}
 for r in catalog:
-    if r["sourceTier"] != "official_pdf":
-        continue
     pid = r["schoolCode"].lower() + "-" + hashlib.sha1(r["programKey"].encode("utf-8")).hexdigest()[:8]
     t = r["majorName"]
     truong.setdefault(r["schoolCode"], {})[pid] = (norm(t.split(" - ")[-1] if " - " in t else t), r.get("employmentRate"))

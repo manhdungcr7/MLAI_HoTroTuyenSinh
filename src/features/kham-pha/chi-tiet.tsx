@@ -125,7 +125,7 @@ function NguonTungNam({ lc, docs }: { lc: LuaChon; docs?: { nam: string; url: st
 }
 
 /** Trang của ngành trên website chính thức của trường (nếu tìm được và đã kiểm tra mở được). Không có thì nói thẳng. */
-function ChuongTrinhHoc({ lc, trang }: { lc: LuaChon; trang?: { url: string; tieuDe: string } }) {
+function ChuongTrinhHoc({ lc, trang, chungTruong }: { lc: LuaChon; trang?: { url: string; tieuDe: string }; chungTruong?: { url: string; tieuDe: string } }) {
   const truyVan = `khung chương trình đào tạo ngành ${lc.nganh} ${lc.tenTruong}`;
   return (
     <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Chương trình học">
@@ -142,8 +142,13 @@ function ChuongTrinhHoc({ lc, trang }: { lc: LuaChon; trang?: { url: string; tie
         ) : (
           <>
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
-              Mình chưa có link chương trình học của ngành này. Em xem khung chương trình trên trang của trường trước khi chọn.
+              Mình chưa có trang riêng của ngành này. Em xem khung chương trình trên trang của trường trước khi chọn.
             </p>
+            {chungTruong && (
+              <a href={chungTruong.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
+                Trang chung của trường: {chungTruong.tieuDe}
+              </a>
+            )}
             <a href={`https://www.google.com/search?q=${encodeURIComponent(truyVan)}`} target="_blank" rel="noreferrer"
               className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
               Tìm khung chương trình của ngành này (mở trang tìm kiếm)
@@ -162,7 +167,13 @@ export default function ChiTiet() {
   const [nguon, setNguon] = useState<NguonTaiSau | null>(null);
   useEffect(() => { let con = true; taiNguon().then((m) => con && setNguon(m)).catch(() => {}); return () => { con = false; }; }, []);
   const lcGoc = timGoc(id);
-  const lc = useMemo(() => (lcGoc ? { ...lcGoc, nguonTheoNam: nguon?.nam[lcGoc.id] } : undefined), [lcGoc, nguon]);
+  const lc = useMemo(() => {
+    if (!lcGoc) return undefined;
+    const theoNam = nguon?.nam[lcGoc.id];
+    // Điểm lấy từ trang tổng hợp nhưng tìm thấy đúng con số đó trong đề án của trường (năm mới nhất): coi là đã đối chiếu.
+    const khop = lcGoc.nguonCap === "aggregator_verified" && !!theoNam?.some((x) => x.nam === String(lcGoc.namDiem));
+    return { ...lcGoc, nguonTheoNam: theoNam, ...(khop ? { daKiemChung: true, nguon: "Điểm lấy từ trang tổng hợp, đã đối chiếu: đúng con số này có trong đề án tuyển sinh của trường (file PDF)" } : {}) };
+  }, [lcGoc, nguon]);
   const bc = useMemo(() => boiCanhTu(s), [s]);
   const [hoiTiep, setHoiTiep] = useState<null | "vuaThem" | "daCo">(null);
   const [chonThem, setChonThem] = useState(false);
@@ -272,7 +283,7 @@ export default function ChiTiet() {
         <DanhSachY tone="luc" icon={ThumbsUp} tieuDe="Vì sao nên cân nhắc" cuaEm={kq.tot} chung={lc.lyDoPhuHop} />
         <DanhSachY tone="cam" icon={AlertTriangle} tieuDe="Điều cần lưu ý" cuaEm={kq.luuY} chung={lc.canLuuY} />
 
-        <ChuongTrinhHoc lc={lc} trang={nguon?.nganh[lc.id]} />
+        <ChuongTrinhHoc lc={lc} trang={nguon?.nganh[lc.id]} chungTruong={nguon?.truongNganh[lc.maTruong ?? ""]} />
 
         {/* Nguồn dữ liệu: không bịa đường link */}
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">
