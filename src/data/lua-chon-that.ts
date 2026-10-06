@@ -1,7 +1,9 @@
 // Danh mục lựa chọn thật, sinh từ du-lieu-that.json (xuất bằng scripts/xuat-du-lieu-that.py từ pipeline trong legacy/).
 // Chỉ có số liệu đo được từ đề án: điểm chuẩn từng năm, tổ hợp, tỉnh, nguồn. Học phí, địa chỉ, môi trường học không có thì để trống.
 import raw from "./du-lieu-that.json";
-import type { LuaChon, NguonNam, ToneTen } from "@/state/types";
+import type { LuaChon, MonId, NguonNam, ToneTen } from "@/state/types";
+import { nhanNguyenVong } from "@/engine/phan-tich";
+import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
@@ -28,7 +30,7 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   for (let i = t.indexOf(" - "); i >= 0; i = t.indexOf(" - ", i + 1)) cat.push(i);
   for (const i of cat) {
     const trai = t.slice(0, i).trim(), phai = t.slice(i + 3).trim();
-    if (khongDau(trai) === khongDau(phai)) return { ten: trai };
+    if (khongDau(trai) === khongDau(phai) || khongDau(trai).startsWith(khongDau(phai) + " ")) return { ten: trai }; // "X (CT tiên tiến) - X" -> "X (CT tiên tiến)"
     if (TIEN_TO_CHUNG.test(trai)) return { ten: phai, them: trai };
   }
   return { ten: t };
@@ -89,11 +91,20 @@ export const taiNguon = async (): Promise<NguonTaiSau> => {
 
 export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
 
-/** Vài lựa chọn CNTT ở TP.HCM có điểm nhiều năm, dùng cho hồ sơ mẫu "Minh Anh". Lấy theo dữ liệu, không gõ tay mã. */
-export function idHoSoMau(): string[] {
-  return LUA_CHON
-    .filter((l) => l.nhomNganh === "CNTT" && l.khuVuc === "TP.HCM" && l.phuongThuc === "THPT" && Object.keys(l.diemTheoNam ?? {}).length >= 2)
-    .sort((a, b) => b.diemMin - a.diemMin)
-    .slice(0, 6)
-    .map((l) => l.id);
+/**
+ * Danh sách nguyện vọng cho hồ sơ mẫu "Minh Anh": ngành CNTT ở TP.HCM, chọn theo nhãn tính từ chính điểm mẫu
+ * (1 Thử sức, 2 Vừa sức, 1 An toàn, 1 Dự phòng) để màn Nguyện vọng có đủ các nhóm. Lấy theo dữ liệu, không gõ tay mã.
+ */
+export function idHoSoMau(diem: Record<MonId, number | null>): string[] {
+  const ung = LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.khuVuc === "TP.HCM" && l.phuongThuc === "THPT" && Object.keys(l.diemTheoNam ?? {}).length >= 2)
+    .map((l) => ({ l, tong: tongChoLuaChon(l, diem).tong }))
+    .filter((x): x is { l: LuaChon; tong: number } => x.tong !== null)
+    .map((x) => ({ ...x, nhan: nhanNguyenVong(x.l, x.tong) }))
+    .sort((a, b) => b.l.diemMin - a.l.diemMin);
+  const chon: LuaChon[] = [];
+  for (const nhan of ["Thử sức", "Vừa sức", "Vừa sức", "An toàn", "Dự phòng"] as const) {
+    const x = ung.find((u) => u.nhan === nhan && !chon.includes(u.l) && !chon.some((c) => c.truong === u.l.truong && c.nganh === u.l.nganh));
+    if (x) chon.push(x.l);
+  }
+  return chon.map((l) => l.id);
 }

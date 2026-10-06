@@ -6,9 +6,9 @@ import { Nut, TONE_GD, gop } from "./nut-the";
 const MAU_THANH: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", do: "bg-do", tim: "bg-tim", muc: "bg-muc" };
 const MAU_VONG: Record<ToneTen, string> = { xanh: "stroke-xanh", luc: "stroke-luc", cam: "stroke-cam", do: "stroke-do", tim: "stroke-tim", muc: "stroke-muc" };
 
-export function ThanhTienDo({ phanTram, tone = "xanh", cao = "h-2" }: { phanTram: number; tone?: ToneTen; cao?: string }) {
+export function ThanhTienDo({ phanTram, tone = "xanh", cao = "h-2", nhan = "Tiến độ" }: { phanTram: number; tone?: ToneTen; cao?: string; nhan?: string }) {
   return (
-    <div className={gop("w-full rounded-full bg-vien overflow-hidden", cao)} role="progressbar" aria-valuenow={Math.round(phanTram)} aria-valuemin={0} aria-valuemax={100}>
+    <div className={gop("w-full rounded-full bg-vien overflow-hidden", cao)} role="progressbar" aria-label={nhan} aria-valuenow={Math.round(phanTram)} aria-valuemin={0} aria-valuemax={100}>
       <div className={gop("h-full rounded-full transition-all", MAU_THANH[tone])} style={{ width: `${Math.min(100, Math.max(0, phanTram))}%` }} />
     </div>
   );

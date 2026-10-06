@@ -9,7 +9,7 @@
   --font-sans: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Màu chính và chữ */
-  --color-xanh: #1664f5;
+  --color-xanh: #1560ee;
   --color-xanh-dam: #0f4fc7;
   --color-xanh-nhat: #e8f0ff;
   --color-muc: #0b1f4d;       /* tiêu đề */
@@ -21,7 +21,7 @@
 
   /* Bốn tông phụ, mỗi tông có màu đậm + nền nhạt + chữ trên nền nhạt */
   --color-luc: #12a37f;   --color-luc-nhat: #e3f7f0;   --color-luc-chu: #0b7d61;
-  --color-cam: #f59e0b;   --color-cam-nhat: #fff3dc;   --color-cam-chu: #a85f00;
+  --color-cam: #f59e0b;   --color-cam-nhat: #fff3dc;   --color-cam-chu: #a05900;
   --color-do: #e5484d;    --color-do-nhat: #ffe9ea;    --color-do-chu: #c02f34;
   --color-tim: #6d5bf0;   --color-tim-nhat: #eeebff;   --color-tim-chu: #5444d6;
 

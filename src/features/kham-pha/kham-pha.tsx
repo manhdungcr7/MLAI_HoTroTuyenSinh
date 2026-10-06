@@ -89,7 +89,7 @@ export default function KhamPha() {
         )}
 
         <div className="flex items-center justify-between gap-2 pt-1">
-          <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{ds.length}</b> trường phù hợp</p>
+          <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{ds.length}</b> ngành phù hợp</p>
           <label className="relative inline-flex items-center gap-1 min-h-11 pl-2 pr-1 rounded-xl text-[13px] font-bold text-xanh active:bg-xanh-nhat">
             <ArrowUpDown size={15} aria-hidden />
             <span className="sr-only">Sắp xếp theo</span>

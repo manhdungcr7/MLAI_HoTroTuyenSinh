@@ -3,7 +3,7 @@ import { coHocPhi } from "@/data/lua-chon-phu";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
-  ArrowLeftRight, BarChart3, Bookmark, BookmarkCheck, Briefcase, CheckCircle2, Lightbulb, MapPin, PencilLine, Plus, Scale, ShieldCheck, Target, Users, Wallet,
+  ArrowLeftRight, BarChart3, Bookmark, BookmarkCheck, Briefcase, CheckCircle2, GraduationCap, Lightbulb, MapPin, PencilLine, Plus, Scale, ShieldCheck, Target, Users, Wallet,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
@@ -26,7 +26,7 @@ function DauCot({ l, onDoi, onChon }: { l?: LuaChon; onDoi: () => void; onChon: 
   if (!l) {
     return (
       <button type="button" onClick={onChon} className="w-full min-h-36 rounded-the border-2 border-dashed border-xanh/40 bg-xanh-nhat/50 text-xanh font-bold text-[14px] flex flex-col items-center justify-center gap-2 active:bg-xanh-nhat">
-        <span className="size-11 rounded-full gd-xanh text-white grid place-items-center"><Plus size={22} /></span>Chọn trường
+        <span className="size-11 rounded-full gd-xanh text-white grid place-items-center"><Plus size={22} /></span>Chọn ngành
       </button>
     );
   }
@@ -35,12 +35,12 @@ function DauCot({ l, onDoi, onChon }: { l?: LuaChon; onDoi: () => void; onChon: 
       <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(l.id))} aria-label={`Xem chi tiết ${l.nganh} – ${l.truong}`}
         className="w-full flex flex-col items-center rounded-the px-1 py-2 active:bg-xanh-nhat">
         <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={52} />
-        <b className="mt-1.5 text-[16px] text-muc leading-tight break-words">{l.truong}</b>
-        <span className="text-[13px] text-chu leading-snug">{l.nganh}</span>
+        <b className="mt-1.5 text-[16px] text-muc leading-tight break-words">{l.nganh}</b>
+        <span className="text-[13px] text-chu leading-snug">{l.truong}</span>
         <span className="text-[12px] text-chu-phu leading-snug">{l.bac} · {l.khuVuc}</span>
       </button>
       <button type="button" onClick={onDoi} className="min-h-11 px-3 rounded-xl text-[13px] font-bold text-xanh inline-flex items-center gap-1 active:bg-xanh-nhat">
-        <ArrowLeftRight size={14} />Đổi trường
+        <ArrowLeftRight size={14} />Đổi ngành
       </button>
     </div>
   );
@@ -107,7 +107,7 @@ export default function SoSanh() {
 
   return (
     <>
-      <DauTrangCoQuayLai tieuDe="So sánh 2 trường" />
+      <DauTrangCoQuayLai tieuDe="So sánh 2 ngành" />
       <NoiDung>
         <section className="rounded-lon bg-trang border border-vien shadow-the p-3" aria-label="Hai lựa chọn đang so sánh">
           <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-1">
@@ -121,9 +121,9 @@ export default function SoSanh() {
 
         {!ss ? (
           <TrangThaiTrong bieuTuong={<Scale size={26} />} tieuDe={a || b ? "Chọn thêm một trường nữa" : "Chưa có trường để so sánh"}
-            moTa={a || b ? "So sánh cần đủ hai trường. Bấm ô “Chọn trường” ở trên hoặc chọn ngay bên dưới." : "Chọn hai trường em đang phân vân để xem khác nhau ở điểm, học phí, khu vực và việc làm."}>
+            moTa={a || b ? "So sánh cần đủ hai ngành. Bấm ô “Chọn ngành” ở trên hoặc chọn ngay bên dưới." : "Chọn hai ngành em đang phân vân để xem khác nhau ở điểm, học phí, khu vực và việc làm."}>
             <div className="space-y-2">
-              <Nut bieuTuong={Plus} onClick={() => setKhe(a ? 1 : 0)}>Chọn trường</Nut>
+              <Nut bieuTuong={Plus} onClick={() => setKhe(a ? 1 : 0)}>Chọn ngành</Nut>
               <Nut kieu="vien" onClick={() => nav(DUONG_DAN.khamPha())}>Xem gợi ý ở Khám phá</Nut>
             </div>
           </TrangThaiTrong>
@@ -133,16 +133,28 @@ export default function SoSanh() {
               <Hang icon={BarChart3} nhan="Điểm đầu vào" phu={a!.namDiem === b!.namDiem ? `tham khảo ${a!.namDiem}` : "tham khảo"} tot={ss.tot.diem}
                 a={<><b className="text-[15px] text-muc">{khoangDiem(a!)}</b><span className="text-[12px] text-chu-phu">điểm{a!.namDiem !== b!.namDiem && ` (${a!.namDiem})`}</span></>}
                 b={<><b className="text-[15px] text-muc">{khoangDiem(b!)}</b><span className="text-[12px] text-chu-phu">điểm{a!.namDiem !== b!.namDiem && ` (${b!.namDiem})`}</span></>} />
-              <Hang icon={Wallet} nhan="Học phí / năm" phu="dự kiến" tot={ss.tot.hocPhi}
+              {(coHocPhi(a!) || coHocPhi(b!)) && (
+                <Hang icon={Wallet} nhan="Học phí / năm" phu="dự kiến" tot={ss.tot.hocPhi}
                 a={coHocPhi(a!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>}
                 b={coHocPhi(b!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(b!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
+              )}
+              <Hang icon={GraduationCap} nhan="Tổ hợp xét tuyển" tot={null}
+                a={<span className="text-[13px] text-chu">{a!.toHopXet?.length ? a!.toHopXet.slice(0, 4).join(", ") : "Đề án chưa ghi"}</span>}
+                b={<span className="text-[13px] text-chu">{b!.toHopXet?.length ? b!.toHopXet.slice(0, 4).join(", ") : "Đề án chưa ghi"}</span>} />
               <Hang icon={MapPin} nhan="Khu vực" tot={ss.tot.khuVuc}
                 a={<><b className="text-muc">{a!.khuVuc}</b><span className="text-[12px] text-chu-phu">{a!.diaChi?.split(",")[0]}</span></>}
                 b={<><b className="text-muc">{b!.khuVuc}</b><span className="text-[12px] text-chu-phu">{b!.diaChi?.split(",")[0]}</span></>} />
-              <Hang icon={Briefcase} nhan="Cơ hội việc làm" tot={ss.tot.viecLam} a={a!.coHoiViecLam ? <b className="text-muc">{a!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} b={b!.coHoiViecLam ? <b className="text-muc">{b!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
-              <Hang icon={Users} nhan="Môi trường học" tot={null} a={<span className="text-[13px] text-chu">{a!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} b={<span className="text-[13px] text-chu">{b!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} />
+              {(a!.coHoiViecLam || b!.coHoiViecLam) && (
+                <Hang icon={Briefcase} nhan="Cơ hội việc làm" tot={ss.tot.viecLam} a={a!.coHoiViecLam ? <b className="text-muc">{a!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} b={b!.coHoiViecLam ? <b className="text-muc">{b!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
+              )}
+              {(a!.moiTruongHoc || b!.moiTruongHoc) && (
+                <Hang icon={Users} nhan="Môi trường học" tot={null} a={<span className="text-[13px] text-chu">{a!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} b={<span className="text-[13px] text-chu">{b!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} />
+              )}
               <Hang icon={CheckCircle2} nhan="Mức phù hợp với em" tot={ss.tot.phuHop} a={<NhanPhuHop kq={ss.kqA} xuongDong />} b={<NhanPhuHop kq={ss.kqB} xuongDong />} />
               <Hang icon={ShieldCheck} nhan="Mức chắc chắn" tot={ss.tot.chacChan} a={<ChacChan kq={ss.kqA} />} b={<ChacChan kq={ss.kqB} />} />
+              {!coHocPhi(a!) && !coHocPhi(b!) && !a!.coHoiViecLam && !b!.coHoiViecLam && (
+                <p className="text-[12px] text-chu-phu py-1.5 border-t border-vien mt-1">Học phí và việc làm của hai ngành này chưa có trong dữ liệu. Em xem trên trang của trường.</p>
+              )}
               <p className="flex items-start gap-1.5 text-[12px] text-chu-phu pt-1.5 pb-1 border-t border-vien mt-1">
                 <span className="mt-0.5 size-3 rounded bg-luc-nhat ring-1 ring-luc/30 shrink-0" aria-hidden />
                 Ô nền xanh lá là bên có lợi hơn cho em ở tiêu chí đó (điểm và học phí thấp hơn thì dễ hơn).
@@ -177,7 +189,7 @@ export default function SoSanh() {
         )}
       </NoiDung>
 
-      <HopChonLuaChon mo={khe !== null} dong={() => setKhe(null)} tieuDe={khe === 1 ? "Chọn trường thứ hai" : "Chọn trường thứ nhất"}
+      <HopChonLuaChon mo={khe !== null} dong={() => setKhe(null)} tieuDe={khe === 1 ? "Chọn ngành thứ hai" : "Chọn ngành thứ nhất"}
         boQua={[a?.id, b?.id].filter((x): x is string => !!x)} onChon={(l) => khe !== null && chon(khe, l)} />
 
       <HopTruot mo={hopMucTieu} dong={() => setHopMucTieu(false)} tieuDe="Chọn làm mục tiêu chính">

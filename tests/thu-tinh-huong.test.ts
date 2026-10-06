@@ -1,6 +1,6 @@
 // Chạy: npx tsx tests/thu-tinh-huong.test.ts
 import assert from "node:assert/strict";
-import { LUA_CHON_MAU, tim } from "../src/data/lua-chon-mau";
+import { LUA_CHON_MAU, tim } from "../src/data/tham-khao/lua-chon-mau-cu";
 import { NGUONG_PHU_HOP } from "../src/engine/phan-tich";
 import { TO_HOP, type MonId } from "../src/state/types";
 import {

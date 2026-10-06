@@ -1,6 +1,6 @@
 // Tính mức phù hợp của một lựa chọn với hồ sơ của em. TypeScript thuần, không React.
 // Mức phù hợp và điểm gợi ý /100 chỉ để em sắp xếp, so sánh. KHÔNG phải xác suất đậu.
-import { NGAN_SACH_TOI_DA, diemPhuHop, nhanNguyenVong } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongA01 } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { tongChoLuaChon } from "./to-hop";
@@ -119,10 +119,13 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const chacChan: MucChacChan = nhan === "Thử sức" ? "Thấp" : nhan === "Vừa sức" ? "Vừa" : "Cao";
 
   const khuVucSo = bc.khuVucUuTien.find((k) => cungNoi(lc.khuVuc, k)) ?? bc.khuVucUuTien[0] ?? "";
-  const diemGoiY = diemPhuHop(lc, {
+  const diemTho = diemPhuHop(lc, {
     tong, nganSachTrieu: bc.nganSach ?? lc.hocPhiMax ?? 0, khuVuc: khuVucSo === "Tỉnh khác" ? "" : khuVucSo,
     uuTien: bc.uuTienViecLam ? "viecLam" : "hocPhi",
   });
+
+  // Mức "Cần cân nhắc" (khác ngành, vượt ngân sách, ở xa...) thì điểm gợi ý không được vượt ngưỡng phù hợp, để hai con số không mâu thuẫn nhau.
+  const diemGoiY = muc === "Cần cân nhắc" ? Math.min(diemTho, NGUONG_PHU_HOP - 1) : diemTho;
 
   const phanDiem = chenh >= 0 ? (chenh < 0.05 ? "bằng mức tham khảo" : `cao hơn mức tham khảo ${so(chenh)} điểm`) : `thấp hơn mức tham khảo ${so(-chenh)} điểm`;
   const tomTat = vuotNganSach ? "Học phí vượt ngân sách của em" : ngoaiKhuVuc ? "Ở xa nơi em muốn học"

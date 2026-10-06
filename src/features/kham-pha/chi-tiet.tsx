@@ -85,7 +85,7 @@ function BangDiemChuan({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
             <li key={n} className="flex items-center justify-between gap-3 py-2">
               <span className="text-[14px] text-chu">Năm {n}</span>
               <span className="flex items-center gap-3">
-                {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="text-[12px] font-bold text-xanh hover:underline">Xem trong đề án {link.tai ?? ""}{link.trang ? `, trang ${link.trang}` : ""}</a>}
+                {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 text-[13px] font-bold text-xanh hover:underline">Xem trong đề án {link.tai ?? ""}{link.trang ? `, trang ${link.trang}` : ""}</a>}
                 <b className="text-[16px] text-muc tabular-nums">{d.toFixed(2)}</b>
               </span>
             </li>
@@ -108,14 +108,14 @@ function NguonTungNam({ lc, docs }: { lc: LuaChon; docs?: { nam: string; url: st
     <ul className="mt-1.5 space-y-0.5">
       {ds.map((x) => (
         <li key={`${x.nam}-${x.url}`}>
-          <a href={x.trang ? `${x.url}#page=${x.trang}` : x.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[12px] font-bold text-xanh hover:underline">
+          <a href={x.trang ? `${x.url}#page=${x.trang}` : x.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
             {x.loai === "deAn" ? `Điểm chuẩn ${x.nam} trong đề án ${x.tai ?? x.nam}` : `Bảng điểm chuẩn ${x.nam}`}{x.trang ? `, trang ${x.trang}` : ""}
           </a>
         </li>
       ))}
       {conLai.map((d) => (
         <li key={d.url}>
-          <a href={d.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[12px] font-bold text-xanh hover:underline">
+          <a href={d.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
             Đề án tuyển sinh {d.nam} của trường (toàn văn)
           </a>
         </li>
@@ -135,7 +135,7 @@ function ChuongTrinhHoc({ lc, trang }: { lc: LuaChon; trang?: { url: string; tie
         {trang ? (
           <>
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Trang giới thiệu ngành trên website chính thức của trường (mình đã mở thử, đúng tên ngành). Em tìm khung chương trình, tức môn học từng kỳ, ngay trong trang này hoặc ở mục Chương trình đào tạo của trường.</p>
-            <a href={trang.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-1 text-[12px] font-bold text-xanh hover:underline">
+            <a href={trang.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
               {trang.tieuDe || "Xem trang ngành của trường"}
             </a>
           </>
@@ -145,7 +145,7 @@ function ChuongTrinhHoc({ lc, trang }: { lc: LuaChon; trang?: { url: string; tie
               Mình chưa có link chương trình học của ngành này. Em xem khung chương trình trên trang của trường trước khi chọn.
             </p>
             <a href={`https://www.google.com/search?q=${encodeURIComponent(truyVan)}`} target="_blank" rel="noreferrer"
-              className="inline-flex items-center gap-1 mt-1 text-[12px] font-bold text-xanh hover:underline">
+              className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
               Tìm khung chương trình của ngành này (mở trang tìm kiếm)
             </a>
           </>
@@ -256,7 +256,7 @@ export default function ChiTiet() {
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
             <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? (bc.nganSach !== null ? `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm.` : undefined) : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
+              phu={coHocPhi(lc) ? (bc.nganSach !== null ? `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm.` : undefined) : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
               <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.coHoiViecLam} phu={MO_TA_VIEC_LAM[lc.coHoiViecLam]} />
@@ -293,7 +293,7 @@ export default function ChiTiet() {
               <p className="mt-1 text-[12px] text-chu-phu">Ngày cập nhật từ nguồn: chưa có thông tin.</p>
             )}
             {lc.linkNguon && (
-              <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-1 text-[12px] font-bold text-xanh hover:underline">
+              <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
                 {lc.nguonCap === "aggregator_verified" ? "Xem bảng điểm chuẩn của trường (trang tổng hợp)" : "Xem trang tuyển sinh chính thức"}
               </a>
             )}

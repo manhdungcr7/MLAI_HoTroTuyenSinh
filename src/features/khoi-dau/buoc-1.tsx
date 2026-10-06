@@ -92,7 +92,7 @@ export default function Buoc1({ h, sua, loi }: P) {
                   <button
                     type="button"
                     onClick={() => sua({ nganhQuanTam: h.nganhQuanTam.filter((x) => x !== g) })}
-                    className="size-5 rounded-full hover:bg-xanh/20 grid place-items-center text-xanh"
+                    className="relative size-5 rounded-full hover:bg-xanh/20 grid place-items-center text-xanh after:absolute after:-inset-3 after:content-['']" /* vùng bấm rộng 44px */
                     aria-label={`Xóa ngành ${g}`}
                   >
                     ×
@@ -126,7 +126,7 @@ export default function Buoc1({ h, sua, loi }: P) {
                     }
                   }}
                   className={gop(
-                    "inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[13px] font-bold border transition active:scale-95",
+                    "inline-flex items-center gap-1.5 px-3 min-h-11 rounded-lg text-[13px] font-bold border transition active:scale-95",
                     daChon
                       ? "bg-xanh text-white border-xanh"
                       : "bg-trang text-chu border-vien hover:border-xanh/40",

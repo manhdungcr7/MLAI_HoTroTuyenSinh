@@ -49,8 +49,7 @@ export function NutTim({ id, ten, className }: { id: string; ten: string; classN
 export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; onClick: () => void }) {
   return (
     <article className="relative rounded-the bg-trang border border-vien shadow-the">
-      <button type="button" onClick={onClick} aria-label={`${l.nganh}, ${l.tenTruong}. Xem chi tiết`}
-        className="w-full text-left block p-3.5 rounded-the active:bg-xanh-nhat">
+      <button type="button" onClick={onClick} className="w-full text-left block p-3.5 rounded-the active:bg-xanh-nhat">
         <span className="flex items-start gap-3 pr-9">
           <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={48} />
           <span className="flex-1 min-w-0">
@@ -63,8 +62,8 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
           </span>
         </span>
         <span className="mt-3 flex items-center gap-2 border-t border-vien pt-2.5">
-          <span className="flex-1 min-w-0 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[13px] text-chu">
-            <span className="inline-flex items-center gap-1.5 min-w-0"><BarChart3 size={15} className="text-xanh shrink-0" /><span className="truncate"><b>{khoangDiem(l)}</b> <span className="text-chu-phu">({l.namDiem})</span></span></span>
+          <span className="flex-1 min-w-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-[13px] text-chu">
+            <span className="inline-flex items-center gap-1.5 min-w-0"><BarChart3 size={15} className="text-xanh shrink-0" /><span className="truncate"><b>{khoangDiem(l).replace(" – ", "–")}</b> <span className="text-chu-phu">({l.namDiem})</span></span></span>
             <span className="inline-flex items-center gap-1.5 min-w-0"><Wallet size={15} className="text-cam shrink-0" /><span className="truncate">{coHocPhi(l) ? `${khoangHocPhi(l)} tr/năm` : "Chưa có học phí"}</span></span>
             <span className="inline-flex items-center gap-1.5 min-w-0"><MapPin size={15} className="text-do shrink-0" /><span className="truncate">{l.khuVuc}</span></span>
             <span className="inline-flex items-center gap-1.5 min-w-0"><GraduationCap size={15} className="text-tim shrink-0" /><span className="truncate">{l.bac}{phuongThucNgan(l) ? ` · ${phuongThucNgan(l)}` : ""}</span></span>

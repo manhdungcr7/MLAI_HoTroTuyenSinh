@@ -205,7 +205,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
     <div className={gop("flex rounded-the bg-trang border border-vien shadow-the overflow-hidden transition-shadow", dangKeo && "ring-2 ring-xanh shadow-nut scale-[1.02]")}>
       <button type="button" {...tayNam} aria-label={`Kéo để đổi thứ tự ${nv}`} aria-roledescription="tay nắm kéo thả"
         onKeyDown={(e) => { if (e.key === "ArrowUp") { e.preventDefault(); onLen(); } if (e.key === "ArrowDown") { e.preventDefault(); onXuong(); } }}
-        className={gop("w-8 shrink-0 grid place-items-center bg-nen text-chu-phu touch-none", dangKeo ? "cursor-grabbing text-xanh" : "cursor-grab")}>
+        className={gop("w-11 shrink-0 grid place-items-center bg-nen text-chu-phu touch-none", dangKeo ? "cursor-grabbing text-xanh" : "cursor-grab")}>
         <GripVertical size={18} />
       </button>
 

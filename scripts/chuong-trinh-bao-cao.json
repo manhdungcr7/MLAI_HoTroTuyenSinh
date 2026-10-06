@@ -1,0 +1,772 @@
+{
+ "DDF": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 22,
+  "coLink": 0
+ },
+ "DDS": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 34,
+  "coLink": 0
+ },
+ "HNM": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 35,
+  "coLink": 0
+ },
+ "HVN": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 22,
+  "coLink": 0
+ },
+ "QHF": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 16,
+  "coLink": 0
+ },
+ "TDM": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 50,
+  "coLink": 0
+ },
+ "YDS": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 26,
+  "coLink": 0
+ },
+ "BKA": {
+  "mien": [
+   "hust.edu.vn"
+  ],
+  "trangQuet": 15,
+  "tong": 2,
+  "coLink": 0
+ },
+ "DBL": {
+  "mien": [
+   "tuyensinh.blu.edu.vn",
+   "blu.edu.vn"
+  ],
+  "trangQuet": 18,
+  "tong": 13,
+  "coLink": 10
+ },
+ "DNU": {
+  "mien": [
+   "dongnaiuni.edu.vn",
+   "lldnpu.edu.vn"
+  ],
+  "trangQuet": 10,
+  "tong": 20,
+  "coLink": 17
+ },
+ "DTF": {
+  "mien": [
+   "sfl.tnu.edu.vn",
+   "tnu.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 4,
+  "coLink": 0
+ },
+ "GHA": {
+  "mien": [
+   "tuyensinh.utc.edu.vn",
+   "tuyensinh.utc2.edu.vn"
+  ],
+  "trangQuet": 3,
+  "tong": 55,
+  "coLink": 45
+ },
+ "LNH": {
+  "mien": [
+   "tuyensinh.vnuf.edu.vn",
+   "vnuf.edu.vn"
+  ],
+  "trangQuet": 47,
+  "tong": 24,
+  "coLink": 16
+ },
+ "QSC": {
+  "mien": [
+   "tuyensinh.uit.edu.vn",
+   "www.uit.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 13,
+  "coLink": 10
+ },
+ "SPS": {
+  "mien": [
+   "tuyensinh.hcmue.edu.vn",
+   "xettuyen.hcmue.edu.vn"
+  ],
+  "trangQuet": 6,
+  "tong": 47,
+  "coLink": 0
+ },
+ "TSN": {
+  "mien": [
+   "tuyensinh.ntu.edu.vn",
+   "ctdt.ntu.edu.vn"
+  ],
+  "trangQuet": 39,
+  "tong": 47,
+  "coLink": 0
+ },
+ "BVH": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 37,
+  "coLink": 0
+ },
+ "DDK": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 62,
+  "coLink": 0
+ },
+ "DLA": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 9,
+  "coLink": 0
+ },
+ "HCN": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 2,
+  "coLink": 0
+ },
+ "HPN": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 16,
+  "coLink": 0
+ },
+ "IUH": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 53,
+  "coLink": 0
+ },
+ "DCL": {
+  "mien": [
+   "mku.edu.vn",
+   "tuyensinh.mku.edu.vn"
+  ],
+  "trangQuet": 15,
+  "tong": 16,
+  "coLink": 6
+ },
+ "DDY": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 7,
+  "coLink": 0
+ },
+ "DPQ": {
+  "mien": [
+   "pdu.edu.vn",
+   "www.tuyensinh.pdu.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 26,
+  "coLink": 0
+ },
+ "DTL": {
+  "mien": [
+   "thanglong.edu.vn"
+  ],
+  "trangQuet": 8,
+  "tong": 19,
+  "coLink": 16
+ },
+ "GSA": {
+  "mien": [
+   "www.utc.edu.vn",
+   "utc.edu.vn"
+  ],
+  "trangQuet": 51,
+  "tong": 85,
+  "coLink": 0
+ },
+ "LPH": {
+  "mien": [
+   "hlu.edu.vn"
+  ],
+  "trangQuet": 20,
+  "tong": 7,
+  "coLink": 5
+ },
+ "QHI": {
+  "mien": [
+   "tuyensinh.uet.vnu.edu.vn",
+   "uet.vnu.edu.vn"
+  ],
+  "trangQuet": 16,
+  "tong": 20,
+  "coLink": 1
+ },
+ "QST": {
+  "mien": [
+   "tuyensinh.hcmus.edu.vn",
+   "www.hcmus.edu.vn"
+  ],
+  "trangQuet": 26,
+  "tong": 63,
+  "coLink": 36
+ },
+ "TCT": {
+  "mien": [
+   "tuyensinh.ctu.edu.vn",
+   "www.ctu.edu.vn"
+  ],
+  "trangQuet": 41,
+  "tong": 126,
+  "coLink": 81
+ },
+ "TTN": {
+  "mien": [
+   "www.ttn.edu.vn",
+   "tuyensinh.ttn.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 79,
+  "coLink": 0
+ },
+ "YHB": {
+  "mien": [
+   "hmu.edu.vn",
+   "nhaphoc.hmu.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 24,
+  "coLink": 0
+ },
+ "DDP": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 19,
+  "coLink": 0
+ },
+ "DVL": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 21,
+  "coLink": 0
+ },
+ "KHA": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 99,
+  "coLink": 0
+ },
+ "NHF": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 22,
+  "coLink": 0
+ },
+ "TLA": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 43,
+  "coLink": 0
+ },
+ "YPB": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 7,
+  "coLink": 0
+ },
+ "C19": {
+  "mien": [
+   "cdspbacninh.edu.vn",
+   "www.cdspbacninh.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 2,
+  "coLink": 0
+ },
+ "DCN": {
+  "mien": [
+   "xettuyen.haui.edu.vn",
+   "haui.edu.vn"
+  ],
+  "trangQuet": 17,
+  "tong": 4,
+  "coLink": 0
+ },
+ "DHY": {
+  "mien": [
+   "huemed-univ.edu.vn",
+   "tuyensinh.hueuni.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 13,
+  "coLink": 10
+ },
+ "DPY": {
+  "mien": [
+   "tuyensinh.pyu.edu.vn",
+   "pyu.edu.vn"
+  ],
+  "trangQuet": 25,
+  "tong": 10,
+  "coLink": 0
+ },
+ "DTN": {
+  "mien": [
+   "tuaf.edu.vn"
+  ],
+  "trangQuet": 50,
+  "tong": 19,
+  "coLink": 7
+ },
+ "GTA": {
+  "mien": [
+   "utt.edu.vn",
+   "tuyensinh.utt.edu.vn"
+  ],
+  "trangQuet": 41,
+  "tong": 5,
+  "coLink": 0
+ },
+ "HQT": {
+  "mien": [
+   "dav.edu.vn",
+   "www.dav.edu.vn"
+  ],
+  "trangQuet": 45,
+  "tong": 11,
+  "coLink": 0
+ },
+ "QHL": {
+  "mien": [
+   "law.vnu.edu.vn",
+   "tuyensinh.law.vnu.edu.vn"
+  ],
+  "trangQuet": 25,
+  "tong": 3,
+  "coLink": 2
+ },
+ "QSX": {
+  "mien": [
+   "hcmussh.edu.vn",
+   "tuyensinhdh.hcmussh.edu.vn"
+  ],
+  "trangQuet": 14,
+  "tong": 78,
+  "coLink": 0
+ },
+ "TDD": {
+  "mien": [
+   "www.thanhdo.edu.vn"
+  ],
+  "trangQuet": 27,
+  "tong": 1,
+  "coLink": 0
+ },
+ "TTU": {
+  "mien": [
+   "tuyensinh.ttu.edu.vn",
+   "ttu.edu.vn"
+  ],
+  "trangQuet": 12,
+  "tong": 19,
+  "coLink": 0
+ },
+ "DTS": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 18,
+  "coLink": 0
+ },
+ "HBT": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 27,
+  "coLink": 0
+ },
+ "HHK": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 34,
+  "coLink": 0
+ },
+ "TMU": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 51,
+  "coLink": 0
+ },
+ "YCT": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 14,
+  "coLink": 0
+ },
+ "YTB": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 6,
+  "coLink": 0
+ },
+ "C23": {
+  "mien": [
+   "cdsphoabinh.edu.vn",
+   "www.cdsphoabinh.edu.vn"
+  ],
+  "trangQuet": 22,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DCT": {
+  "mien": [
+   "ts.huit.edu.vn",
+   "tuyensinh.huit.edu.vn"
+  ],
+  "trangQuet": 35,
+  "tong": 43,
+  "coLink": 33
+ },
+ "DKH": {
+  "mien": [
+   "tuyensinh.hup.edu.vn",
+   "hup.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 4,
+  "coLink": 4
+ },
+ "DQB": {
+  "mien": [
+   "qbu.edu.vn",
+   "tuyensinh.qbu.edu.vn"
+  ],
+  "trangQuet": 13,
+  "tong": 6,
+  "coLink": 0
+ },
+ "HTC": {
+  "mien": [
+   "xettuyen.hvtc.edu.vn",
+   "hvtc.edu.vn"
+  ],
+  "trangQuet": 12,
+  "tong": 2,
+  "coLink": 0
+ },
+ "NHH": {
+  "mien": [
+   "hvnh.edu.vn",
+   "xettuyen.hvnh.edu.vn"
+  ],
+  "trangQuet": 21,
+  "tong": 24,
+  "coLink": 0
+ },
+ "QHQ": {
+  "mien": [
+   "www.is.vnu.edu.vn",
+   "vnuis.edu.vn"
+  ],
+  "trangQuet": 26,
+  "tong": 12,
+  "coLink": 8
+ },
+ "QSY": {
+  "mien": [
+   "tuyensinh.uhsvnu.edu.vn",
+   "dangky.tuyensinh.vnuhcm.edu.vn"
+  ],
+  "trangQuet": 4,
+  "tong": 5,
+  "coLink": 4
+ },
+ "TDL": {
+  "mien": [
+   "dlu.edu.vn",
+   "tuyensinh.dlu.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 39,
+  "coLink": 0
+ },
+ "TYS": {
+  "mien": [
+   "www.pnt.edu.vn",
+   "pqldt.pnt.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 12,
+  "coLink": 11
+ },
+ "C25": {
+  "mien": [
+   "cdspnd.edu.vn"
+  ],
+  "trangQuet": 52,
+  "tong": 2,
+  "coLink": 2
+ },
+ "DKK": {
+  "mien": [
+   "www.uneti.edu.vn",
+   "uneti.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 25,
+  "coLink": 0
+ },
+ "DQH": {
+  "mien": [
+   "www.mta.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 2,
+  "coLink": 0
+ },
+ "DTV": {
+  "mien": [
+   "ultv.edu.vn",
+   "ltvu.edu.vn"
+  ],
+  "trangQuet": 21,
+  "tong": 6,
+  "coLink": 3
+ },
+ "HCB": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 2,
+  "coLink": 0
+ },
+ "NHP": {
+  "mien": [
+   "bap.edu.vn",
+   "xettuven.hvnh.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 2,
+  "coLink": 0
+ },
+ "QHS": {
+  "mien": [
+   "education.vnu.edu.vn",
+   "vnu.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 13,
+  "coLink": 9
+ },
+ "SDU": {
+  "mien": [
+   "saodo.edu.vn",
+   "tuyensinh.saodo.edu.vn"
+  ],
+  "trangQuet": 30,
+  "tong": 12,
+  "coLink": 0
+ },
+ "VHH": {
+  "mien": [
+   "huc.edu.vn",
+   "www.huc.edu.vn"
+  ],
+  "trangQuet": 2,
+  "tong": 6,
+  "coLink": 0
+ },
+ "D61": {
+  "mien": [
+   "www.cmcc.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DQK": {
+  "mien": [
+   "tuyensinh.hubt.edu.vn",
+   "hubt.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 25,
+  "coLink": 0
+ },
+ "DVD": {
+  "mien": [
+   "tuyensinh.tucst.edu.vn",
+   "tucst.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 5,
+  "coLink": 0
+ },
+ "NTH": {
+  "mien": [
+   "ftu.edu.vn",
+   "www.ftu.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 32,
+  "coLink": 0
+ },
+ "QHT": {
+  "mien": [
+   "hus.vnu.edu.vn",
+   "tuyensinh.hus.vnu.edu.vn"
+  ],
+  "trangQuet": 31,
+  "tong": 24,
+  "coLink": 18
+ },
+ "SP2": {
+  "mien": [
+   "hpu2.edu.vn",
+   "tuyensinh.hpu2.edu.vn"
+  ],
+  "trangQuet": 35,
+  "tong": 44,
+  "coLink": 0
+ },
+ "TDV": {
+  "mien": [
+   "vinhuni.edu.vn",
+   "tuyensinhchinhquy.vinhuni.edu.vn"
+  ],
+  "trangQuet": 17,
+  "tong": 62,
+  "coLink": 0
+ },
+ "XDA": {
+  "mien": [
+   "tuyensinh.huce.edu.vn",
+   "huce.edu.vn"
+  ],
+  "trangQuet": 51,
+  "tong": 41,
+  "coLink": 30
+ },
+ "D64": {
+  "mien": [
+   "hgcc.edu.vn",
+   "tuyensinh.hgcc.edu.vn"
+  ],
+  "trangQuet": 4,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DMT": {
+  "mien": [
+   "hunre.edu.vn",
+   "tuyensinh.hunre.edu.vn"
+  ],
+  "trangQuet": 51,
+  "tong": 23,
+  "coLink": 0
+ },
+ "DQN": {
+  "mien": [
+   "qnu.edu.vn",
+   "tsd.qnu.edu.vn"
+  ],
+  "trangQuet": 18,
+  "tong": 51,
+  "coLink": 0
+ },
+ "HCS": {
+  "mien": [
+   "apag.edu.vn"
+  ],
+  "trangQuet": 19,
+  "tong": 9,
+  "coLink": 0
+ },
+ "PKA": {
+  "mien": [
+   "tuyensinh.phenikaa-uni.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 84,
+  "coLink": 0
+ },
+ "QHX": {
+  "mien": [
+   "tuyensinh.ussh.edu.vn",
+   "ussh.vnu.edu.vn"
+  ],
+  "trangQuet": 38,
+  "tong": 29,
+  "coLink": 0
+ },
+ "SPD": {
+  "mien": [
+   "qao.dthu.edu.vn",
+   "www.tuyensinh.dthu.edu.vn"
+  ],
+  "trangQuet": 54,
+  "tong": 121,
+  "coLink": 118
+ },
+ "XDT": {
+  "mien": [
+   "muce.edu.vn",
+   "tuyensinh.muce.edu.vn"
+  ],
+  "trangQuet": 50,
+  "tong": 44,
+  "coLink": 25
+ },
+ "DBH": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 8,
+  "coLink": 0
+ },
+ "DDQ": {
+  "mien": [
+   "due.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DNB": {
+  "mien": [
+   "hluv.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 11,
+  "coLink": 0
+ },
+ "DQU": {
+  "mien": [
+   "qnamuni.edu.vn",
+   "www.qnamuni.edu.vn"
+  ],
+  "trangQuet": 13,
+  "tong": 12,
+  "coLink": 0
+ },
+ "DVX": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 3,
+  "coLink": 0
+ },
+ "KMA": {
+  "mien": [
+   "tuyensinh.actvn.edu.vn",
+   "actvn.edu.vn"
+  ],
+  "trangQuet": 8,
+  "tong": 5,
+  "coLink": 0
+ },
+ "QHE": {
+  "mien": [
+   "xettuyendaihoc.ueb.edu.vn",
+   "ueb.vnu.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 6,
+  "coLink": 0
+ },
+ "QHY": {
+  "mien": [
+   "ump.vnu.edu.vn"
+  ],
+  "trangQuet": 4,
+  "tong": 5,
+  "coLink": 0
+ },
+ "SPH": {
+  "mien": [
+   "ts2025.hnue.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 57,
+  "coLink": 0
+ }
+}

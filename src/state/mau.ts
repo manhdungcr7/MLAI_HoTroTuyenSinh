@@ -31,7 +31,7 @@ export function taoHoSoMau(): AppState {
     ["toan", [7.2, 7.6, 8.0]], ["vatLy", [8.0, 8.3, 8.5]], ["tiengAnh", [7.0, 7.5, 8.0]],
     ["hoaHoc", [7.0, 7.2, 7.2]], ["nguVan", [7.6, 7.5, 7.6]], ["sinh", [8.0, 8.2, 8.3]],
   ] as [MonId, number[]][]).flatMap(([mon, d]) => d.map((diem, i) => ({ mon, diem, ngay: ngay((2 - i) * 14 + 1) })));
-  const ids = idHoSoMau();
+  const ids = idHoSoMau({ toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 });
   const nen: AppState = {
     ...TRANG_THAI_BAN_DAU,
     hoSo: {

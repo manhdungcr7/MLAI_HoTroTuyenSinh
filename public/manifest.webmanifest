@@ -1,0 +1,13 @@
+{
+  "name": "Nguyện Vọng AI",
+  "short_name": "Nguyện Vọng",
+  "description": "Chọn ngành, chọn trường và lập kế hoạch ôn thi cho học sinh THPT.",
+  "lang": "vi",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f7ff",
+  "theme_color": "#1560ee",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

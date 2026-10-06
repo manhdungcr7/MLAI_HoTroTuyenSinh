@@ -114,3 +114,25 @@
 - Tự động gán khối học cho môn cần kéo điểm trước, các môn duy trì sau.
 
 
+
+---
+
+## 📌 Issue #07: Hồ sơ chỉ có 6 môn nên chưa so được ngành xét Sử, Địa, Tin
+- 👤 **Phụ trách (Owner):** Tuấn (`khoi-dau`) & Dũng (`kham-pha`), cần PR riêng ở `state/`
+- ⏳ **Trạng thái:** `Ghi nhận (Backlog)`
+- Hiện 106 trong 2.529 ngành chỉ xét tổ hợp có Sử, Địa, GDKT&PL, Tin (C00, D14, X70...). App ghi "chưa so được" thay vì so sai. Muốn so được cần thêm các môn này vào `MonId`, `HoSo.diem`, bước nhập điểm và bảng `MON_CUA_TO_HOP` ở `features/kham-pha/to-hop.ts`. Thử tình huống vẫn chỉ có 4 tổ hợp A00, A01, D01, B00.
+
+## 📌 Issue #08: Khung chương trình học chi tiết của từng ngành
+- 👤 **Phụ trách (Owner):** Dũng (`kham-pha`)
+- ⏳ **Trạng thái:** `Ghi nhận (cần nguồn dữ liệu)`
+- Chưa có dữ liệu môn từng học kỳ. Hiện có link trang ngành của trường cho khoảng một phần tư số chương trình (`chuong-trinh.json`). Cần quyết định nguồn (website từng trường, hay nhập tay các ngành lớn) trước khi làm.
+
+## 📌 Issue #09: Nâng cấp nguồn cho 962 chương trình chỉ có trang tổng hợp
+- 👤 **Phụ trách (Owner):** Dũng (`kham-pha`)
+- ⏳ **Trạng thái:** `Ghi nhận (Backlog)`
+- Các chương trình lấy từ `tuyensinh247` chưa có đề án PDF chính thức. Cần tìm đề án của từng trường (xem `docs/DU-LIEU.md`).
+
+## 📌 Issue #10: Chia nhỏ gói dữ liệu khi lên bản có máy chủ
+- 👤 **Phụ trách (Owner):** cả nhóm, khi làm phần máy chủ
+- ⏳ **Trạng thái:** `Ghi nhận (Backlog)`
+- `du-lieu-that.json` (khoảng 800 KB) nằm trong gói chính (gzip khoảng 157 KB). Khi có máy chủ, nên tải danh mục theo trang và tìm kiếm phía máy chủ.
