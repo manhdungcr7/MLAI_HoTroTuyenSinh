@@ -13,11 +13,10 @@ import { HangBam, Nhan, Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
-import { tongA01 } from "@/state/chon";
-import { useApp } from "@/state/store";
+import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
 import { useKeoTha } from "./dung-keo-tha";
 import { CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
-import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, xetCoCau, type DongNV } from "./tinh-toan";
+import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 
 const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lựa chọn này");
@@ -25,8 +24,10 @@ const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lự
 export default function DanhSachNguyenVong() {
   const nav = useNavigate();
   const { s, themNguyenVong, xoaNguyenVong, doiViTri } = useApp();
-  const tong = tongA01(s);
-  const ds = useMemo(() => dungDanhSach(s.nguyenVong, tong, tim), [s.nguyenVong, tong]);
+  const diemMon = diemHienTaiCuaTungMon(s);
+  const tongTot = toHopTotNhat(diemMon);
+  const tong = tongTot.tong;
+  const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
   const coCau = xetCoCau(demNhan(ds));
   const kl = ketLuan(coCau);
   const { tin, bao, an } = useHoanTac();
@@ -81,7 +82,7 @@ export default function DanhSachNguyenVong() {
                 moTa={`Giữ khoảng 5–${SO_NV_GOI_Y} nguyện vọng giúp em dễ cân nhắc hơn. Em vẫn có thể giữ nhiều hơn nếu muốn.`} />
             )}
 
-            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Điểm Toán + Lý + Anh: ${tong.toFixed(1)}` : `${ds.length} nguyện vọng`}</span>}>
+            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Tổ hợp cao nhất của em: ${tong.toFixed(1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
               Thứ tự của em
             </TieuDeMuc>
             <p className="-mt-1 text-[13px] text-chu-phu flex items-center gap-1">
@@ -164,7 +165,7 @@ function TheTomTat({ tong, kl, dem, onClick }: { tong: number | null; kl: Return
           <ChevronRight size={20} className="text-chu-phu shrink-0" />
         </span>
         {tong === null ? (
-          <span className="block mt-3 text-[14px] text-chu">Cần đủ điểm Toán, Lý, Anh để xếp nhãn và trả lời câu này.</span>
+          <span className="block mt-3 text-[14px] text-chu">Cần đủ điểm 3 môn của một tổ hợp để xếp nhãn và trả lời câu này.</span>
         ) : (
           <>
             <span className="block mt-3"><CoCauMini dem={dem} /></span>

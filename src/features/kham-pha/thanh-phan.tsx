@@ -5,6 +5,7 @@ import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { OInput } from "@/components/ui/nhap-lieu";
 import { Nhan, gop } from "@/components/ui/nut-the";
+import { coHocPhi, phuongThucNgan } from "@/data/lua-chon-phu";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { hocPhiChu } from "@/data/lua-chon-phu";
 import { useApp } from "@/state/store";
@@ -17,11 +18,11 @@ import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
  */
 export function kyHieu(truong: string): string {
   const tu = truong.trim().split(/\s+/);
-  if (tu.length > 1) return /^[A-Z]{2,4}$/.test(tu[0]) ? tu[0] : tu.map((t) => t[0]).join("").toUpperCase();
+  if (tu.length > 1) return /^[A-Z0-9]{2,4}$/.test(tu[0]) ? tu[0] : tu.map((t) => t[0]).join("").toUpperCase();
   return /^HCM[A-Z]{2,}$/.test(truong) ? truong.slice(3) : truong;
 }
 
-export const khoangDiem =(l: LuaChon) => `${l.diemMin.toFixed(1)} – ${l.diemMax.toFixed(1)}`;
+export const khoangDiem = (l: LuaChon) => (l.diemMin.toFixed(1) === l.diemMax.toFixed(1) ? l.diemMin.toFixed(1) : `${l.diemMin.toFixed(1)} – ${l.diemMax.toFixed(1)}`);
 export const khoangHocPhi = (l: LuaChon) => hocPhiChu(l);
 
 /** Nhãn mức phù hợp tính từ hồ sơ. Chưa có điểm thì nói rõ là chưa so được. */
@@ -64,9 +65,9 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
         <span className="mt-3 flex items-center gap-2 border-t border-vien pt-2.5">
           <span className="flex-1 min-w-0 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[13px] text-chu">
             <span className="inline-flex items-center gap-1.5 min-w-0"><BarChart3 size={15} className="text-xanh shrink-0" /><span className="truncate"><b>{khoangDiem(l)}</b> <span className="text-chu-phu">({l.namDiem})</span></span></span>
-            <span className="inline-flex items-center gap-1.5 min-w-0"><Wallet size={15} className="text-cam shrink-0" /><span className="truncate">{khoangHocPhi(l)} tr/năm</span></span>
+            <span className="inline-flex items-center gap-1.5 min-w-0"><Wallet size={15} className="text-cam shrink-0" /><span className="truncate">{coHocPhi(l) ? `${khoangHocPhi(l)} tr/năm` : "Chưa có học phí"}</span></span>
             <span className="inline-flex items-center gap-1.5 min-w-0"><MapPin size={15} className="text-do shrink-0" /><span className="truncate">{l.khuVuc}</span></span>
-            <span className="inline-flex items-center gap-1.5 min-w-0"><GraduationCap size={15} className="text-tim shrink-0" /><span className="truncate">{l.bac}</span></span>
+            <span className="inline-flex items-center gap-1.5 min-w-0"><GraduationCap size={15} className="text-tim shrink-0" /><span className="truncate">{l.bac}{phuongThucNgan(l) ? ` · ${phuongThucNgan(l)}` : ""}</span></span>
           </span>
           <ChevronRight size={18} className="text-chu-phu shrink-0" aria-hidden />
         </span>

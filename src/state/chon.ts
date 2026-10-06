@@ -3,7 +3,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { isoNgay, thuHaiCuaTuan, bayNgayCuaTuan, soNgayTu } from "@/engine/xep-lich";
 import { khoangCachTheoMon, tongDiem } from "@/engine/phan-tich";
 import { diemHienTaiCuaTungMon, type AppState } from "./store";
-import { TO_HOP, type LuaChon, type MonId } from "./types";
+import { TO_HOP, type LuaChon, type MaToHop, type MonId } from "./types";
 
 export const homNay = () => isoNgay(new Date());
 export const tuanHienTai = () => thuHaiCuaTuan(homNay());
@@ -64,7 +64,16 @@ export function tongA01(s: AppState): number | null {
   return tongDiem(d, TO_HOP.A01);
 }
 
-export const mucTieuTuLuaChon = (lc: LuaChon) => ({
-  luaChonId: lc.id, phuongThuc: "THPT" as const, maToHop: "A01" as const, toHop: TO_HOP.A01, diemMucTieu: lc.diemMin,
+/** Tổ hợp của app (A00, A01, D01, B00) mà đề án của ngành cho xét; em có điểm thì chọn tổ hợp cao nhất, không thì A01 nếu ngành cho xét. */
+function toHopChoMucTieu(lc: LuaChon, diem?: Record<MonId, number | null>): MaToHop {
+  const cho = (Object.keys(TO_HOP) as MaToHop[]).filter((ma) => !lc.toHopXet?.length || lc.toHopXet.includes(ma));
+  const ung = cho.length ? cho : (["A01"] as MaToHop[]);
+  if (!diem) return ung.includes("A01") ? "A01" : ung[0];
+  const tong = (ma: MaToHop) => (TO_HOP[ma].some((m) => diem[m] === null || diem[m] === undefined) ? -1 : TO_HOP[ma].reduce((t, m) => t + (diem[m] as number), 0));
+  return [...ung].sort((a, b) => tong(b) - tong(a))[0];
+}
+
+export const mucTieuTuLuaChon = (lc: LuaChon, diem?: Record<MonId, number | null>) => ({
+  luaChonId: lc.id, phuongThuc: "THPT" as const, maToHop: toHopChoMucTieu(lc, diem), toHop: TO_HOP[toHopChoMucTieu(lc, diem)], diemMucTieu: lc.diemMin,
   ngayThi: isoNgay(new Date(new Date().getFullYear() + (new Date().getMonth() > 5 ? 1 : 0), 5, 26)),
 });

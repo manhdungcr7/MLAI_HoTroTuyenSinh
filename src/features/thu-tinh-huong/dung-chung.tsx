@@ -16,8 +16,12 @@ export function useTinhHuong() {
   const app = useApp();
   const { s } = app;
   const diem = useMemo(() => diemHienTaiCuaTungMon(s), [s]);
-  const maToHop: MaToHop = s.mucTieu?.maToHop ?? "A01";
-  const toHop: MonId[] = s.mucTieu?.toHop ?? TO_HOP.A01;
+  // Chưa có mục tiêu thì dùng tổ hợp (trong 4 tổ hợp của app) em đã đủ điểm và cao nhất, không mặc định A01 cho mọi em.
+  const maTotNhat = (["A01", "A00", "D01", "B00"] as MaToHop[])
+    .filter((ma) => TO_HOP[ma].every((m) => diem[m] !== null && diem[m] !== undefined))
+    .sort((a, b) => TO_HOP[b].reduce((t, m) => t + (diem[m] as number), 0) - TO_HOP[a].reduce((t, m) => t + (diem[m] as number), 0))[0];
+  const maToHop: MaToHop = s.mucTieu?.maToHop ?? maTotNhat ?? "A01";
+  const toHop: MonId[] = s.mucTieu?.toHop ?? TO_HOP[maToHop];
   const dkGoc = useMemo(() => dieuKienTuHoSo(s.hoSo), [s.hoSo]);
   const [dangThu, datDangThu] = useLuuCucBo<TinhHuongDangThu>("thu-tinh-huong-dang-thu", DANG_THU_MAC_DINH);
   const thieu = monThieu(diem, toHop);

@@ -2,13 +2,14 @@ import { useMemo, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
-  AlertTriangle, BarChart3, Briefcase, Check, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, ThumbsUp, Users, Wallet,
+  AlertTriangle, BarChart3, Briefcase, Check, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, Target, ThumbsUp, Users, Wallet,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { AnhBia, BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { tim } from "@/data/lua-chon-mau";
+import { mucTieuTuLuaChon } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
@@ -116,7 +117,7 @@ function NguonTungNam({ lc }: { lc: LuaChon }) {
 export default function ChiTiet() {
   const { id = "" } = useParams();
   const nav = useNavigate();
-  const { s, themNguyenVong } = useApp();
+  const { s, themNguyenVong, datMucTieu } = useApp();
   const lc = tim(id);
   const bc = useMemo(() => boiCanhTu(s), [s]);
   const [hoiTiep, setHoiTiep] = useState<null | "vuaThem" | "daCo">(null);
@@ -144,6 +145,8 @@ export default function ChiTiet() {
     themNguyenVong(lc.id);
     setHoiTiep("vuaThem");
   };
+  const laMucTieu = s.mucTieu?.luaChonId === lc.id;
+  const datLamMucTieu = () => { datMucTieu(mucTieuTuLuaChon(lc, bc.diem)); nav(DUONG_DAN.mucTieu()); };
   const soSanh = () => {
     const khac = s.soSanh.find((x) => x !== lc.id && tim(x));
     if (khac) nav(DUONG_DAN.soSanh(lc.id, khac));
@@ -255,6 +258,7 @@ export default function ChiTiet() {
           <NutTuVan nguCanh={`Chi tiết ngành ${lc.nganh}`} />
           <Nut bieuTuong={trongDs ? Check : Plus} onClick={themVao}>{trongDs ? "Đã trong danh sách" : "Thêm nguyện vọng"}</Nut>
           <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh ngành này</Nut>
+          {!laMucTieu && <Nut kieu="vien" bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu chính sang ngành này" : "Đặt làm mục tiêu chính"}</Nut>}
         </div>
       </NoiDung>
 

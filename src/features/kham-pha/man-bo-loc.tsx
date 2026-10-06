@@ -7,6 +7,7 @@ import { ChonNhanh } from "@/components/ui/nhap-lieu";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { tongChoLuaChon } from "./to-hop";
 import { BO_LOC_MAC_DINH, CAC_KHU_VUC, CAC_MUC_HOC_PHI, CAC_NHOM, loc, type BoLoc } from "./bo-loc";
 import { useBoLoc } from "./dung-bo-loc";
 import { boiCanhTu } from "./phu-hop";
@@ -26,6 +27,7 @@ export default function ManBoLoc() {
   const nav = useNavigate();
   const { s } = useApp();
   const bc = useMemo(() => boiCanhTu(s), [s]);
+  const tongEm = tongChoLuaChon({ toHopXet: [] }, bc.diem).tong; // tổ hợp cao nhất của em
   const [b, sua, datLai] = useBoLoc(CAC_KHU_VUC.includes(s.hoSo.khuVuc[0]) ? s.hoSo.khuVuc[0] : undefined);
   const soKq = loc(LUA_CHON_MAU, b, bc.tinh || undefined).length;
   const macDinh = JSON.stringify(b) === JSON.stringify(BO_LOC_MAC_DINH);
@@ -59,13 +61,13 @@ export default function ManBoLoc() {
             <input type="range" min={0} max={30} step={0.5} value={b.diemDen} aria-valuetext={`${b.diemDen} điểm`}
               onChange={(e) => sua({ diemDen: Math.max(Number(e.target.value), b.diemTu) })} className="w-full accent-xanh h-11" />
           </label>
-          {bc.tong !== null ? (
-            <button type="button" onClick={() => sua({ diemTu: Math.max(0, lam(bc.tong! - 3)), diemDen: Math.min(30, lam(bc.tong! + 2)) })}
+          {tongEm !== null ? (
+            <button type="button" onClick={() => sua({ diemTu: Math.max(0, lam(tongEm! - 3)), diemDen: Math.min(30, lam(tongEm! + 2)) })}
               className="w-full min-h-12 rounded-xl bg-xanh-nhat text-xanh text-[14px] font-bold inline-flex items-center justify-center gap-2 active:brightness-95">
-              <Target size={17} />Lấy quanh điểm của em ({bc.tong.toFixed(1)})
+              <Target size={17} />Lấy quanh điểm của em ({tongEm.toFixed(1)})
             </button>
           ) : (
-            <p className="text-[13px] text-chu-phu">Nhập điểm Toán, Lý, Anh trong hồ sơ để lọc nhanh quanh điểm của em.</p>
+            <p className="text-[13px] text-chu-phu">Nhập điểm 3 môn của một tổ hợp trong hồ sơ để lọc nhanh quanh điểm của em.</p>
           )}
         </Muc>
 

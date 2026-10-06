@@ -18,9 +18,28 @@ const toneCua = (ma: string): ToneTen => TONES[[...ma].reduce((s, c) => s + c.ch
 
 const viecLam = (rate: number | null): LuaChon["coHoiViecLam"] => (rate === null ? undefined : rate >= 0.95 ? "Rất cao" : rate >= 0.85 ? "Cao" : "Khá");
 
+const khongDau = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+// Phần đứng trước " - " chỉ là loại chương trình (không phải tên ngành): hiện tên ngành, giữ phần kia ở dòng mô tả.
+const TIEN_TO_CHUNG = /^(CT chuẩn|Chuẩn QT|Đại học chính quy|Khoa học giáo dục và đào tạo giáo viên|Chương trình GD Mầm non|Chương trình GD [^-]+)$/i;
+
+/** Tên ngành gọn cho người đọc; phần bỏ đi (nếu có) trả ở `them`. Không đổi nghĩa: chỉ bỏ chữ lặp và nhãn loại chương trình. */
+export function tenGon(goc: string): { ten: string; them?: string } {
+  let t = goc.replace(/^Chương trình đào tạo (ngành )?/i, "").trim();
+  const cat: number[] = [];
+  for (let i = t.indexOf(" - "); i >= 0; i = t.indexOf(" - ", i + 1)) cat.push(i);
+  for (const i of cat) {
+    const trai = t.slice(0, i).trim(), phai = t.slice(i + 3).trim();
+    if (khongDau(trai) === khongDau(phai)) return { ten: trai };
+    if (TIEN_TO_CHUNG.test(trai)) return { ten: phai, them: trai };
+  }
+  return { ten: t };
+}
+
 const NGUON_THEO_NAM = nguonNam as Record<string, NguonNam[]>;
 
 function chuyen(d: Dong): LuaChon {
+  const gon = tenGon(d.nganh);
+  const laCaoDang = /cao đẳng/i.test(d.nganh) || /cao đẳng/i.test(d.truong);
   const nam = Object.keys(d.diem).sort();
   const moiNhat = nam[nam.length - 1];
   const haiNam = nam.slice(-2).map((n) => d.diem[n]);
@@ -32,10 +51,10 @@ function chuyen(d: Dong): LuaChon {
     id: d.id,
     truong: d.ma,
     tenTruong: d.truong,
-    nganh: d.nganh,
+    nganh: gon.ten,
     nhomNganh: d.nhom,
-    moTa: `${TEN_PT[d.pt] ?? d.pt}${d.toHop.length ? ` · Tổ hợp ${d.toHop.slice(0, 6).join(", ")}${d.toHop.length > 6 ? "…" : ""}` : ""}`,
-    bac: "Đại học",
+    moTa: `${TEN_PT[d.pt] ?? d.pt}${d.toHop.length ? ` · Tổ hợp ${d.toHop.slice(0, 6).join(", ")}${d.toHop.length > 6 ? "…" : ""}` : ""}${gon.them ? ` · ${gon.them}` : ""}`,
+    bac: laCaoDang ? "Cao đẳng" : "Đại học",
     khuVuc: d.tinh,
     diemMin: Math.min(...haiNam),
     diemMax: Math.max(...haiNam),

@@ -15,7 +15,7 @@ import { DUONG_DAN } from "@/duong-dan";
 import { mucTieuTuLuaChon } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
-import { TONE_CHAC_CHAN, boiCanhTu, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
+import { TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
 import { GhiChuDuLieuMau, HopChonLuaChon, NhanPhuHop, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 
 type Khe = 0 | 1;
@@ -102,7 +102,7 @@ export default function SoSanh() {
   const ss = a && b ? soSanhHai(a, b, bc) : null;
   const daLuu = !!(a && b && s.soSanh.length === 2 && s.soSanh.includes(a.id) && s.soSanh.includes(b.id));
   const luu = () => { if (a && b) { datSoSanh([a.id, b.id]); setVuaLuu(true); } };
-  const chonMucTieu = (l: LuaChon) => { datMucTieu(mucTieuTuLuaChon(l)); setHopMucTieu(false); nav(DUONG_DAN.mucTieu()); };
+  const chonMucTieu = (l: LuaChon) => { datMucTieu(mucTieuTuLuaChon(l, bc.diem)); setHopMucTieu(false); nav(DUONG_DAN.mucTieu()); };
   const mucTieuCu = s.mucTieu ? tim(s.mucTieu.luaChonId) : undefined;
 
   return (
@@ -149,8 +149,8 @@ export default function SoSanh() {
               </p>
             </section>
 
-            {bc.tong === null && (
-              <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để so mức phù hợp" moTa="Em chưa nhập đủ điểm Toán, Lý, Anh nên chưa so được mức phù hợp và mức chắc chắn."
+            {!coDiemDeSo(bc) && (
+              <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để so mức phù hợp" moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp nên chưa so được mức phù hợp và mức chắc chắn."
                 hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
             )}
 

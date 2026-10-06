@@ -14,13 +14,13 @@ import { HangBam, Nut, TONE_CHU, TONE_NEN, The, gop } from "@/components/ui/nut-
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { LUA_CHON_MAU, tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
-import { tongA01 } from "@/state/chon";
+import { diemHienTaiCuaTungMon } from "@/state/store";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import {
-  cacBuocDoiCho, chamDiem, demNhan, dungDanhSach, giongNhau, goiYHanhDong, ketLuan, sapTheoVuaSuc, xetCoCau, type DiemDanhGia, type GoiY,
+  cacBuocDoiCho, chamDiem, toHopTotNhat, demNhan, dungDanhSach, giongNhau, goiYHanhDong, ketLuan, sapTheoVuaSuc, xetCoCau, type DiemDanhGia, type GoiY,
 } from "./tinh-toan";
 
 const ICON_DIEM: Record<DiemDanhGia["khoa"], LucideIcon> = { canBang: Scale, taiChinh: Wallet, khuVuc: MapPin };
@@ -29,13 +29,14 @@ const VIEN_KHUNG: Record<ToneTen, string> = { do: "border-do/30", cam: "border-c
 export default function DanhSachAnToan() {
   const nav = useNavigate();
   const { s, doiViTri } = useApp();
-  const tong = tongA01(s);
-  const ds = useMemo(() => dungDanhSach(s.nguyenVong, tong, tim), [s.nguyenVong, tong]);
+  const diemMon = diemHienTaiCuaTungMon(s);
+  const tong = toHopTotNhat(diemMon).tong;
+  const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
   const dem = demNhan(ds);
   const coCau = xetCoCau(dem);
   const kl = ketLuan(coCau);
   const diem = chamDiem(ds, s.hoSo, tong !== null);
-  const goiY = tong === null ? [] : goiYHanhDong(ds, { tong, hoSo: s.hoSo, tatCa: LUA_CHON_MAU, daCo: s.nguyenVong });
+  const goiY = tong === null ? [] : goiYHanhDong(ds, { diem: diemMon, hoSo: s.hoSo, tatCa: LUA_CHON_MAU, daCo: s.nguyenVong });
   const { tin, bao, an } = useHoanTac(6000);
   const [giaiThich, setGiaiThich] = useState<DiemDanhGia | "nhan" | null>(null);
 
@@ -246,7 +247,7 @@ function HopGiaiThich({ giaiThich, dong }: { giaiThich: DiemDanhGia | "nhan" | n
     <HopTruot mo={giaiThich !== null} dong={dong} tieuDe={laNhan ? "Cách xếp nhãn" : giaiThich ? `Cách tính: ${giaiThich.ten}` : ""}>
       {laNhan ? (
         <div className="space-y-3 text-[14px] text-chu">
-          <p>Mình so tổng điểm Toán + Lý + Anh hiện tại của em với điểm tham khảo năm trước của từng ngành:</p>
+          <p>Mình so tổng điểm hiện tại của em, tính theo đúng tổ hợp xét tuyển của từng ngành, với điểm chuẩn năm trước:</p>
           <ul className="space-y-2">
             {CAC_NHAN.map((n) => <li key={n} className="flex items-center gap-2"><NhanNguyenVongTag nhan={n} /><span>{MO_TA_NHAN[n]}</span></li>)}
           </ul>

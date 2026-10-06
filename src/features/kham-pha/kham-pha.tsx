@@ -8,16 +8,26 @@ import { TrangThaiTrong } from "@/components/ui/hien-thi";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
-import { CAC_KHU_VUC, CAC_NHOM, dem, loc } from "./bo-loc";
+import { BO_LOC_MAC_DINH, CAC_KHU_VUC, CAC_NHOM, dem, loc } from "./bo-loc";
 import { useBoLoc } from "./dung-bo-loc";
-import { CAC_KIEU_SAP_XEP, boiCanhTu, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
+import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
+
+/** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để em mở ra thấy trống. */
+function boLocBanDau(khuVuc: string | undefined, nganh: string[]): [string | undefined, string | undefined] {
+  const kv = khuVuc && CAC_KHU_VUC.includes(khuVuc) ? khuVuc : undefined;
+  const nhom = nganh.length === 1 && CAC_NHOM.includes(nganh[0]) ? nganh[0] : undefined;
+  const co = (k?: string, n?: string) => loc(LUA_CHON_MAU, { ...BO_LOC_MAC_DINH, khuVuc: k ?? "", nhom: n ?? "" }).length > 0;
+  if (co(kv, nhom)) return [kv, nhom];
+  if (co(undefined, nhom)) return [undefined, nhom];
+  return [co(kv) ? kv : undefined, undefined];
+}
 
 export default function KhamPha() {
   const nav = useNavigate();
   const { s } = useApp();
-  const [b, sua, datLai] = useBoLoc(CAC_KHU_VUC.includes(s.hoSo.khuVuc[0]) ? s.hoSo.khuVuc[0] : undefined);
+  const [b, sua, datLai] = useBoLoc(...boLocBanDau(s.hoSo.khuVuc[0], s.hoSo.nganhQuanTam));
   const [tuKhoa, setTuKhoa] = useState("");
   const [kieu, setKieu] = useState<KieuSapXep>("phuHop");
   const [soHien, setSoHien] = useState(30);
@@ -72,9 +82,9 @@ export default function KhamPha() {
           </button>
         </div>
 
-        {bc.tong === null && (
+        {!coDiemDeSo(bc) && (
           <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để biết mức phù hợp"
-            moTa="Em chưa nhập đủ điểm Toán, Lý, Anh. Có điểm, mình sẽ so với điểm tham khảo của từng trường."
+            moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp (ví dụ Toán, Lý, Anh). Có điểm, mình sẽ so với điểm chuẩn của từng ngành."
             hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
         )}
 

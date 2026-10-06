@@ -3,7 +3,10 @@
 // Mọi câu chữ sinh ra ở đây là lời thường cho học sinh; không dùng lại câu canhBao của engine
 // vì vài câu trong đó có từ ngữ dự án đã bỏ.
 import { NGAN_SACH_TOI_DA, nhanNguyenVong, phanTichDanhSach } from "@/engine/phan-tich";
-import type { HoSo, LuaChon, NhanNguyenVong, ToneTen } from "@/state/types";
+import type { HoSo, LuaChon, MonId, NhanNguyenVong, ToneTen } from "@/state/types";
+import { coHocPhi } from "@/data/lua-chon-phu";
+import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
+import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 
 /** Gợi ý giữ khoảng 5–6 nguyện vọng; vượt thì nhắc nhẹ, không chặn. */
 export const SO_NV_GOI_Y = 6;
@@ -18,9 +21,18 @@ export interface DongNV {
   nhan: NhanNguyenVong | null;
 }
 
-export function dungDanhSach(ids: string[], tong: number | null, tim: (id: string) => LuaChon | undefined): DongNV[] {
+type DiemMon = Record<MonId, number | null>;
+
+/** Tổ hợp tốt nhất của em trong các tổ hợp tính được từ điểm đã nhập. */
+export const toHopTotNhat = (diem: DiemMon) => tongChoLuaChon({ toHopXet: [] }, diem);
+
+/** Tổng điểm của em theo đúng tổ hợp của ngành này (đề án ghi); đề án chưa ghi thì lấy tổ hợp cao nhất của em. */
+export const tongChoNganh = (lc: LuaChon, diem: DiemMon): number | null => tongChoLuaChon(lc, diem).tong;
+
+export function dungDanhSach(ids: string[], diem: DiemMon, tim: (id: string) => LuaChon | undefined): DongNV[] {
   return ids.map((id, viTri) => {
     const lc = tim(id);
+    const tong = lc ? tongChoNganh(lc, diem) : null;
     return { id, viTri, lc, nhan: lc && tong !== null ? nhanNguyenVong(lc, tong) : null };
   });
 }
@@ -123,22 +135,28 @@ export function chamDiem(ds: DongNV[], hoSo: Pick<HoSo, "nganSach" | "khuVuc">, 
         "• Từ 3 nguyện vọng trở lên mà không có Thử sức nào: trừ 5.",
       ],
     }
-    : { khoa: "canBang", ten: "Độ cân bằng", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Cần đủ điểm Toán, Lý, Anh để xếp nhãn cho từng nguyện vọng.", cachTinh: ["Cần đủ điểm 3 môn Toán, Lý, Anh để xếp nhãn rồi mới chấm được."] };
+    : { khoa: "canBang", ten: "Độ cân bằng", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Cần đủ điểm 3 môn của một tổ hợp để xếp nhãn cho từng nguyện vọng.", cachTinh: ["Cần đủ điểm 3 môn của một tổ hợp để xếp nhãn rồi mới chấm được."] };
 
-  const taiChinh: DiemDanhGia = ns === null
+  const coPhiNao = coDuLieu.some((d) => coHocPhi(d.lc));
+  const taiChinh: DiemDanhGia = ns !== null && coDuLieu.length > 0 && !coPhiNao
+    ? { khoa: "taiChinh", ten: "Phù hợp tài chính", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Các nguyện vọng này chưa có học phí trong dữ liệu, nên chưa so được với ngân sách. Em xem học phí trên trang của trường.", cachTinh: ["Cần ít nhất một nguyện vọng có học phí trong dữ liệu mới chấm được."] }
+    : ns === null
     ? { khoa: "taiChinh", ten: "Phù hợp tài chính", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Em chưa chọn mức học phí gia đình có thể lo.", cachTinh: ["Cần em chọn ngân sách học phí ở bước Mục tiêu & ưu tiên."] }
     : {
       khoa: "taiChinh", ten: "Phù hợp tài chính", diem: pt.taiChinh.diem, nhanXet: pt.taiChinh.nhanXet, tone: toneDiem(pt.taiChinh.diem), chiTiet: pt.taiChinh.chiTiet,
       cachTinh: [
         `Điểm = số nguyện vọng có học phí thấp nhất không vượt ${ns} triệu/năm, chia cho tổng số nguyện vọng, nhân 100.`,
-        "Học phí lấy từ dữ liệu mẫu, có thể khác học phí thật của năm em vào học.",
+        "Chỉ tính các nguyện vọng đã có học phí trong dữ liệu; học phí có thể khác ở năm em vào học.",
       ],
     };
 
+  const dungKV = coDuLieu.filter((d) => dungKhuVuc(d.lc, hoSo.khuVuc) === true).length;
+  const diemKV = coDuLieu.length ? Math.round((dungKV / coDuLieu.length) * 100) : 0;
   const khuVuc: DiemDanhGia = hoSo.khuVuc.length === 0
     ? { khoa: "khuVuc", ten: "Phù hợp khu vực", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Em chưa chọn nơi muốn học.", cachTinh: ["Cần em chọn nơi muốn học ở bước Mục tiêu & ưu tiên."] }
     : {
-      khoa: "khuVuc", ten: "Phù hợp khu vực", diem: pt.khuVuc.diem, nhanXet: pt.khuVuc.nhanXet, tone: toneDiem(pt.khuVuc.diem), chiTiet: pt.khuVuc.chiTiet,
+      khoa: "khuVuc", ten: "Phù hợp khu vực", diem: diemKV, nhanXet: diemKV >= 85 ? "Rất phù hợp" : diemKV >= 70 ? "Phù hợp" : diemKV >= 50 ? "Khá xa" : "Rất xa", tone: toneDiem(diemKV),
+      chiTiet: `${dungKV}/${coDuLieu.length} nguyện vọng ở khu vực em ưu tiên.`,
       cachTinh: [`Điểm = số nguyện vọng ở nơi em muốn học (${hoSo.khuVuc.join(", ")}), chia cho tổng số nguyện vọng, nhân 100.`],
     };
 
@@ -157,16 +175,19 @@ export interface GoiY {
   thuSuc: DongNV[];
 }
 
-interface DkGoiY { tong: number; hoSo: Pick<HoSo, "nganSach" | "khuVuc" | "nganhQuanTam">; tatCa: LuaChon[]; daCo: string[] }
+interface DkGoiY { diem: DiemMon; hoSo: Pick<HoSo, "nganSach" | "khuVuc" | "nganhQuanTam">; tatCa: LuaChon[]; daCo: string[] }
 
-const trongKhuVuc = (lc: LuaChon, kv: string[]) => kv.some((k) => lc.khuVuc.replace(/\s/g, "").includes(k.replace(/\s/g, "")));
+// "Tỉnh khác" nghĩa là mọi nơi ngoài 4 thành phố lớn: dùng đúng hàm của Khám phá thay vì so chuỗi.
+const trongKhuVuc = (lc: LuaChon, kv: string[]) => dungKhuVuc(lc, kv) === true;
 
 /** Chọn trường mẫu chưa có trong danh sách, có nhãn thuộc `nhans` và vừa ngân sách; ưu tiên đúng khu vực, đúng nhóm ngành. */
 export function chonTruong(dk: DkGoiY, nhans: NhanNguyenVong[], soLuong: number, boQua: string[] = []) {
   const ns = dk.hoSo.nganSach ? NGAN_SACH_TOI_DA[dk.hoSo.nganSach] : Infinity;
   return dk.tatCa
     .filter((lc) => !dk.daCo.includes(lc.id) && !boQua.includes(lc.id) && (lc.hocPhiMin ?? 0) <= ns)
-    .map((lc) => ({ lc, nhan: nhanNguyenVong(lc, dk.tong) }))
+    .map((lc) => ({ lc, tong: tongChoNganh(lc, dk.diem) }))
+    .filter((x): x is { lc: LuaChon; tong: number } => x.tong !== null)
+    .map((x) => ({ lc: x.lc, nhan: nhanNguyenVong(x.lc, x.tong) }))
     .filter((x) => nhans.includes(x.nhan))
     .sort((a, b) =>
       Number(trongKhuVuc(b.lc, dk.hoSo.khuVuc)) - Number(trongKhuVuc(a.lc, dk.hoSo.khuVuc))

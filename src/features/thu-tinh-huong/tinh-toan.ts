@@ -148,7 +148,7 @@ export function tinhTinhHuong(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc:
   const dem: Record<NhomLoc, number> = { moiMo: 0, tang: 0, khongDoi: 0, giam: 0 };
   dong.forEach((d) => dem[d.nhom]++);
   const demDat = (t: number) => lcs.filter((l) => t >= l.diemMin).length;
-  const demVua = (ns: number) => lcs.filter((l) => (l.hocPhiMin ?? 0) <= ns).length;
+  const demVua = (ns: number) => lcs.filter((l) => typeof l.hocPhiMin === "number" && l.hocPhiMin <= ns).length;
   const lon = ss.thayDoiLonNhat ? dong.find((d) => d.lc.id === ss.thayDoiLonNhat.lc.id) ?? null : null;
   return {
     tongTruoc, tongSau, dkGoc, dkMoi, dong, dem,
