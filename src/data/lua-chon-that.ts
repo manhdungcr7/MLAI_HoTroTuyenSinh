@@ -75,7 +75,17 @@ function chuyen(d: Dong): LuaChon {
 export const LUA_CHON: LuaChon[] = (raw as unknown as Dong[]).map(chuyen);
 const THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
 /** Liên kết tới đề án từng năm (file lớn, chỉ tải khi mở trang chi tiết). */
-export const taiNguonNam = (): Promise<Record<string, NguonNam[]>> => import("./nguon-nam.json").then((m) => m.default as unknown as Record<string, NguonNam[]>);
+export interface DeAnTruong { docs: { nam: string; url: string }[]; hocPhi?: { nam: string; url: string; trang: number } }
+export interface TrangNganh { url: string; tieuDe: string }
+export interface NguonTaiSau {
+  nam: Record<string, NguonNam[]>; // id chương trình -> liên kết điểm chuẩn từng năm
+  truong: Record<string, DeAnTruong>; // mã trường -> đề án các năm và trang học phí
+  nganh: Record<string, TrangNganh>; // id chương trình -> trang của ngành trên website trường
+}
+export const taiNguon = async (): Promise<NguonTaiSau> => {
+  const [nam, truong, nganh] = await Promise.all([import("./nguon-nam.json"), import("./de-an-truong.json"), import("./chuong-trinh.json")]);
+  return { nam: nam.default as unknown as NguonTaiSau["nam"], truong: truong.default as unknown as NguonTaiSau["truong"], nganh: nganh.default as unknown as NguonTaiSau["nganh"] };
+};
 
 export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
 

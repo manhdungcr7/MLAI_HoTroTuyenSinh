@@ -102,8 +102,10 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   if (tong === null || chenh === null) {
     return {
       muc: null, tong: null, chenh: null, diemGoiY: null, chacChan: null, vuotNganSach, ngoaiKhuVuc, tot, luuY,
-      tomTat: "Nhập đủ điểm 3 môn của một tổ hợp để so",
-      giaiThich: "Em chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
+      tomTat: tl.khongTinhDuoc ? `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa so được` : "Nhập đủ điểm 3 môn của một tổ hợp để so",
+      giaiThich: tl.khongTinhDuoc
+        ? `Ngành này xét tổ hợp ${tl.khongTinhDuoc.join(", ")}. Hồ sơ của em chưa có điểm các môn đó (Sử, Địa, Tin...) nên mình chưa so được. Em so điểm chuẩn ở bảng bên dưới với điểm tổ hợp của em.`
+        : "Em chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
     };
   }
 

@@ -1,0 +1,50 @@
+{
+ "DTS": {
+  "mien": [
+   "dhsptn.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 18,
+  "coLink": 0
+ },
+ "HBT": {
+  "mien": [
+   "ajc.edu.vn"
+  ],
+  "trangQuet": 24,
+  "tong": 27,
+  "coLink": 0
+ },
+ "HHK": {
+  "mien": [
+   "vaa.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 34,
+  "coLink": 0
+ },
+ "TMU": {
+  "mien": [
+   "tmu.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 51,
+  "coLink": 0
+ },
+ "YCT": {
+  "mien": [
+   "ctump.edu.vn"
+  ],
+  "trangQuet": 22,
+  "tong": 14,
+  "coLink": 0
+ },
+ "YTB": {
+  "mien": [
+   "tbump.edu.vn"
+  ],
+  "trangQuet": 22,
+  "tong": 6,
+  "coLink": 0
+ }
+}

@@ -1,0 +1,92 @@
+{
+ "D64": {
+  "mien": [
+   "hgcc.edu.vn",
+   "tuyensinh.hgcc.edu.vn"
+  ],
+  "trangQuet": 4,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DDP": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 19,
+  "coLink": 0
+ },
+ "DMT": {
+  "mien": [
+   "hunre.edu.vn",
+   "tuyensinh.hunre.edu.vn"
+  ],
+  "trangQuet": 51,
+  "tong": 23,
+  "coLink": 0
+ },
+ "DQN": {
+  "mien": [
+   "qnu.edu.vn",
+   "tsd.qnu.edu.vn"
+  ],
+  "trangQuet": 18,
+  "tong": 51,
+  "coLink": 0
+ },
+ "DVL": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 21,
+  "coLink": 0
+ },
+ "HCS": {
+  "mien": [
+   "apag.edu.vn"
+  ],
+  "trangQuet": 19,
+  "tong": 9,
+  "coLink": 0
+ },
+ "KHA": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 99,
+  "coLink": 0
+ },
+ "PKA": {
+  "mien": [
+   "tuyensinh.phenikaa-uni.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 84,
+  "coLink": 0
+ },
+ "QHX": {
+  "mien": [
+   "tuyensinh.ussh.edu.vn",
+   "ussh.vnu.edu.vn"
+  ],
+  "trangQuet": 38,
+  "tong": 29,
+  "coLink": 0
+ },
+ "SPD": {
+  "mien": [
+   "qao.dthu.edu.vn",
+   "www.tuyensinh.dthu.edu.vn"
+  ],
+  "trangQuet": 54,
+  "tong": 121,
+  "coLink": 118
+ },
+ "TLA": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 43,
+  "coLink": 0
+ },
+ "XDT": {
+  "mien": [
+   "muce.edu.vn",
+   "tuyensinh.muce.edu.vn"
+  ],
+  "trangQuet": 50,
+  "tong": 44,
+  "coLink": 25
+ }
+}

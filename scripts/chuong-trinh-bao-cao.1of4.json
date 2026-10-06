@@ -1,0 +1,52 @@
+{
+ "BVH": {
+  "mien": [
+   "ptit.edu.vn",
+   "tuyensinh.ptit.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 37,
+  "coLink": 24
+ },
+ "DDK": {
+  "mien": [
+   "dut.udn.vn",
+   "tuyensinh.dut.udn.vn"
+  ],
+  "trangQuet": 14,
+  "tong": 62,
+  "coLink": 5
+ },
+ "DLA": {
+  "mien": [
+   "dla.edu.vn"
+  ],
+  "trangQuet": 8,
+  "tong": 9,
+  "coLink": 8
+ },
+ "HCN": {
+  "mien": [
+   "iuh.edu.vn"
+  ],
+  "trangQuet": 18,
+  "tong": 2,
+  "coLink": 0
+ },
+ "HPN": {
+  "mien": [
+   "hvpnvn.edu.vn"
+  ],
+  "trangQuet": 57,
+  "tong": 16,
+  "coLink": 13
+ },
+ "IUH": {
+  "mien": [
+   "iuh.edu.vn"
+  ],
+  "trangQuet": 18,
+  "tong": 53,
+  "coLink": 0
+ }
+}

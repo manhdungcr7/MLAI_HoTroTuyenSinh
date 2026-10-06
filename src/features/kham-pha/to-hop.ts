@@ -14,10 +14,13 @@ export interface TongToHop {
   tong: number | null; // null = em chưa nhập đủ điểm cho tổ hợp nào của ngành
   toHop: string | null; // tổ hợp được dùng
   suyRa: boolean; // đề án chưa ghi tổ hợp, đã lấy tổ hợp cao nhất của em
+  khongTinhDuoc?: string[]; // đề án ghi tổ hợp nhưng hồ sơ chưa có các môn đó (Sử, Địa, Tin...): chưa so được
 }
 
 export function tongChoLuaChon(lc: Pick<LuaChon, "toHopXet">, diem: Record<MonId, number | null>): TongToHop {
-  const khaiBao = (lc.toHopXet ?? []).filter((c) => MON_CUA_TO_HOP[c]);
+  const daGhi = lc.toHopXet ?? [];
+  const khaiBao = daGhi.filter((c) => MON_CUA_TO_HOP[c]);
+  if (daGhi.length > 0 && khaiBao.length === 0) return { tong: null, toHop: null, suyRa: false, khongTinhDuoc: daGhi };
   const suyRa = khaiBao.length === 0;
   let tot: { tong: number; toHop: string } | null = null;
   for (const ma of suyRa ? Object.keys(MON_CUA_TO_HOP) : khaiBao) {

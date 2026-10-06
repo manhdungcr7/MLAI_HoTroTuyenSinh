@@ -1,0 +1,93 @@
+{
+ "D61": {
+  "mien": [
+   "www.cmcc.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DDK": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 62,
+  "coLink": 0
+ },
+ "DLA": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 9,
+  "coLink": 0
+ },
+ "DQK": {
+  "mien": [
+   "tuyensinh.hubt.edu.vn",
+   "hubt.edu.vn"
+  ],
+  "trangQuet": 60,
+  "tong": 25,
+  "coLink": 0
+ },
+ "DVD": {
+  "mien": [
+   "tuyensinh.tucst.edu.vn",
+   "tucst.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 5,
+  "coLink": 0
+ },
+ "HCN": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 2,
+  "coLink": 0
+ },
+ "IUH": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 53,
+  "coLink": 0
+ },
+ "NTH": {
+  "mien": [
+   "ftu.edu.vn",
+   "www.ftu.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 32,
+  "coLink": 0
+ },
+ "QHT": {
+  "mien": [
+   "hus.vnu.edu.vn",
+   "tuyensinh.hus.vnu.edu.vn"
+  ],
+  "trangQuet": 31,
+  "tong": 24,
+  "coLink": 18
+ },
+ "SP2": {
+  "mien": [
+   "hpu2.edu.vn",
+   "tuyensinh.hpu2.edu.vn"
+  ],
+  "trangQuet": 35,
+  "tong": 44,
+  "coLink": 0
+ },
+ "TDV": {
+  "mien": [
+   "vinhuni.edu.vn",
+   "tuyensinhchinhquy.vinhuni.edu.vn"
+  ],
+  "trangQuet": 17,
+  "tong": 62,
+  "coLink": 0
+ },
+ "XDA": {
+  "mien": [
+   "tuyensinh.huce.edu.vn",
+   "huce.edu.vn"
+  ],
+  "trangQuet": 51,
+  "tong": 41,
+  "coLink": 30
+ }
+}

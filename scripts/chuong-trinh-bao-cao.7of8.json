@@ -1,0 +1,86 @@
+{
+ "DBH": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 8,
+  "coLink": 0
+ },
+ "DDQ": {
+  "mien": [
+   "due.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 1,
+  "coLink": 0
+ },
+ "DNB": {
+  "mien": [
+   "hluv.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 11,
+  "coLink": 0
+ },
+ "DQU": {
+  "mien": [
+   "qnamuni.edu.vn",
+   "www.qnamuni.edu.vn"
+  ],
+  "trangQuet": 13,
+  "tong": 12,
+  "coLink": 0
+ },
+ "DVX": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 3,
+  "coLink": 0
+ },
+ "HHK": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 34,
+  "coLink": 0
+ },
+ "KMA": {
+  "mien": [
+   "tuyensinh.actvn.edu.vn",
+   "actvn.edu.vn"
+  ],
+  "trangQuet": 8,
+  "tong": 5,
+  "coLink": 0
+ },
+ "QHE": {
+  "mien": [
+   "xettuyendaihoc.ueb.edu.vn",
+   "ueb.vnu.edu.vn"
+  ],
+  "trangQuet": 1,
+  "tong": 6,
+  "coLink": 0
+ },
+ "QHY": {
+  "mien": [
+   "ump.vnu.edu.vn"
+  ],
+  "trangQuet": 4,
+  "tong": 5,
+  "coLink": 0
+ },
+ "SPH": {
+  "mien": [
+   "ts2025.hnue.edu.vn"
+  ],
+  "trangQuet": 0,
+  "tong": 57,
+  "coLink": 0
+ },
+ "TMU": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 51,
+  "coLink": 0
+ },
+ "YCT": {
+  "ghiChu": "chưa tìm được tên miền",
+  "tong": 14,
+  "coLink": 0
+ }
+}
