@@ -9,7 +9,7 @@ import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
 import { bayNgayCuaTuan, congNgay } from "@/engine/xep-lich";
-import { homNay, tuanHienTai } from "@/state/chon";
+import { homNay, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { CheDoLich } from "./che-do-lich";
 import { CheDoViec } from "./che-do-viec";
@@ -78,7 +78,7 @@ export default function KeHoachTuan() {
     return ra;
   }, [s.khoiHoc, ngays]);
 
-  const conViec = s.viec.filter((v) => !daKetThuc(s.trangThaiViec[v.id])).length;
+  const conViec = viecCuaTuan(s.viec, tuan).filter((v) => !daKetThuc(s.trangThaiViec[v.id])).length;
   const nenGoiYXep = !quaKhu && soBuoiTuHoc(s.khoiHoc, ngays) === 0 && s.coDinh.length > 0 && conViec > 0;
 
   return (

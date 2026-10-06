@@ -41,7 +41,8 @@ export function khoangCachTheoMon(diem: Record<MonId, number | null>, toHop: Mon
 }
 
 export function nhanNguyenVong(lc: LuaChon, tong: number): NhanNguyenVong {
-  const x = tong - lc.diemMin;
+  // Làm tròn 2 chữ số: điểm chuẩn có 2 số lẻ, phép trừ số thực có thể lệch 1e-15 và xếp sai nhãn ở đúng ngưỡng.
+  const x = Math.round((tong - lc.diemMin) * 100) / 100;
   if (x < 0) return "Thử sức";
   if (x < 1.5) return "Vừa sức";
   if (x < 4) return "An toàn";

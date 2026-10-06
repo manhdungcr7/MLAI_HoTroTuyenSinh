@@ -3,7 +3,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { isoNgay, thuHaiCuaTuan, bayNgayCuaTuan, soNgayTu } from "@/engine/xep-lich";
 import { khoangCachTheoMon, tongDiem } from "@/engine/phan-tich";
 import { diemHienTaiCuaTungMon, type AppState } from "./store";
-import { TO_HOP, type LuaChon, type MaToHop, type MonId } from "./types";
+import { TO_HOP, type LuaChon, type MaToHop, type MonId, type ViecCanHoc } from "./types";
 
 export const homNay = () => isoNgay(new Date());
 export const tuanHienTai = () => thuHaiCuaTuan(homNay());
@@ -30,16 +30,20 @@ export function khoangCachCuaToi(s: AppState) {
 
 const THU_TU = { cao: 0, vua: 1, thap: 2 } as const;
 
+/** Việc của một tuần (thứ 2 = `thuHai`). Việc không ghi tuần (dữ liệu cũ) tính cho mọi tuần. */
+export const viecCuaTuan = (viec: ViecCanHoc[], thuHai: string): ViecCanHoc[] => viec.filter((v) => !v.tuan || v.tuan === thuHai);
+
 export function viecConLai(s: AppState) {
-  return s.viec
+  return viecCuaTuan(s.viec, tuanHienTai())
     .filter((v) => !["xong", "boQua"].includes(s.trangThaiViec[v.id] ?? ""))
     .sort((a, b) => THU_TU[a.mucUuTien] - THU_TU[b.mucUuTien]);
 }
 
 /** Tiến độ tuần: việc đã xong / tổng số việc của tuần. */
 export function tienDoTuan(s: AppState) {
-  const tong = s.viec.length;
-  const xong = s.viec.filter((v) => s.trangThaiViec[v.id] === "xong").length;
+  const viec = viecCuaTuan(s.viec, tuanHienTai());
+  const tong = viec.length;
+  const xong = viec.filter((v) => s.trangThaiViec[v.id] === "xong").length;
   return { tong, xong, phanTram: tong ? Math.round((xong / tong) * 100) : 0 };
 }
 
@@ -71,6 +75,13 @@ function toHopChoMucTieu(lc: LuaChon, diem?: Record<MonId, number | null>): MaTo
   if (!diem) return ung.includes("A01") ? "A01" : ung[0];
   const tong = (ma: MaToHop) => (TO_HOP[ma].some((m) => diem[m] === null || diem[m] === undefined) ? -1 : TO_HOP[ma].reduce((t, m) => t + (diem[m] as number), 0));
   return [...ung].sort((a, b) => tong(b) - tong(a))[0];
+}
+
+/** Mục tiêu chính chỉ lập kế hoạch học cho phương thức thi tốt nghiệp THPT và 4 tổ hợp A00, A01, D01, B00. Ngành khác thì nói rõ lý do, không đặt bừa. */
+export function coTheDatMucTieu(lc: LuaChon): { ok: true } | { ok: false; lyDo: string } {
+  if (lc.phuongThuc && lc.phuongThuc !== "THPT") return { ok: false, lyDo: "Điểm chuẩn này thuộc phương thức xét khác (học bạ, đánh giá năng lực...), không so được với điểm thi tốt nghiệp nên mình chưa lập kế hoạch ôn thi cho nó." };
+  if (lc.toHopXet?.length && !lc.toHopXet.some((c) => c in TO_HOP)) return { ok: false, lyDo: `Ngành này xét tổ hợp ${lc.toHopXet.slice(0, 4).join(", ")}. Kế hoạch ôn thi hiện hỗ trợ A00, A01, D01, B00, nên mình chưa đặt được làm mục tiêu chính.` };
+  return { ok: true };
 }
 
 export const mucTieuTuLuaChon = (lc: LuaChon, diem?: Record<MonId, number | null>) => ({

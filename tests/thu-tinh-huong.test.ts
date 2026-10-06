@@ -1,6 +1,6 @@
 // Chạy: npx tsx tests/thu-tinh-huong.test.ts
 import assert from "node:assert/strict";
-import { LUA_CHON_MAU, tim } from "../src/data/tham-khao/lua-chon-mau-cu";
+import { LUA_CHON_MAU as MAU_CU } from "../src/data/tham-khao/lua-chon-mau-cu";
 import { NGUONG_PHU_HOP } from "../src/engine/phan-tich";
 import { TO_HOP, type MonId } from "../src/state/types";
 import {
@@ -8,6 +8,9 @@ import {
   tinhTinhHuong, tomTatTruocSau, tongCacToHop, trungTinhHuong, taoTinhHuongLuu, vietCong,
 } from "../src/features/thu-tinh-huong/tinh-toan";
 
+// Dữ liệu cố định: mọi mục mẫu xét tổ hợp A01 (từng ngành được tính theo tổ hợp của chính nó).
+const LUA_CHON_MAU = MAU_CU.map((l) => ({ ...l, toHopXet: ["A01"] }));
+const tim = (id: string) => LUA_CHON_MAU.find((l) => l.id === id);
 const diem: Record<MonId, number | null> = { toan: 8.0, vatLy: 8.5, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.0 };
 const hoSo = { nganSach: "30-60" as const, khuVuc: ["TP.HCM"], quanTamViecLam: "rat" as const, hocXaNha: true };
 const dk = dieuKienTuHoSo(hoSo);
@@ -83,5 +86,21 @@ assert.equal(tt[0].loai, "len");
 const anh2 = chupTruocSau({ lcs: nv, nguon: "nguyenVong", diemTruoc: { ...diem, vatLy: null }, diemSau: diem, maToHop: "A01", toHop: TO_HOP.A01, dk, luc: "x" });
 assert.equal(anh2.coTruoc, false);
 assert.ok(tomTatTruocSau(anh2, tim)[0].tieuDe.startsWith("Lần đầu"));
+
+// Mỗi ngành so theo tổ hợp của chính nó: ngành chỉ xét A00 và ngành chỉ xét D01 cho kết quả khác nhau với cùng một điểm
+const sinhVien = { toan: 9, vatLy: 9, hoaHoc: 9, sinh: 5, nguVan: 5, tiengAnh: 5 };
+const chiA00 = { ...LUA_CHON_MAU[0], id: "chi-a00", toHopXet: ["A00"], diemMin: 26 };
+const chiD01 = { ...LUA_CHON_MAU[0], id: "chi-d01", toHopXet: ["D01"], diemMin: 26 };
+const kqTC = tinhTinhHuong([chiA00, chiD01], sinhVien, TO_HOP.A00, dieuKienTuHoSo({ nganSach: null, khuVuc: [], quanTamViecLam: null, hocXaNha: null }), DANG_THU_MAC_DINH);
+assert.equal(kqTC.dong.length, 2);
+assert.ok(kqTC.dong.find((d) => d.lc.id === "chi-a00")!.goc > kqTC.dong.find((d) => d.lc.id === "chi-d01")!.goc, "A00 = 27 điểm vượt 26, D01 = 19 điểm thì không");
+assert.deepEqual(kqTC.datThamKhao, [1, 1], "chỉ ngành A00 đạt điểm chuẩn");
+// Ngành xét tổ hợp có môn em chưa có điểm thì không bị tính nhầm bằng tổ hợp khác
+const chiC00 = { ...LUA_CHON_MAU[0], id: "chi-c00", toHopXet: ["C00"] };
+assert.equal(tinhTinhHuong([chiC00], sinhVien, TO_HOP.A00, dieuKienTuHoSo({ nganSach: null, khuVuc: [], quanTamViecLam: null, hocXaNha: null }), DANG_THU_MAC_DINH).dong.length, 0);
+// Khu vực: "Tỉnh khác" hoặc nhiều nơi thì không phạt oan
+assert.equal(dieuKienTuHoSo({ nganSach: null, khuVuc: ["Tỉnh khác"], quanTamViecLam: null, hocXaNha: null }).khuVuc, "");
+assert.equal(dieuKienTuHoSo({ nganSach: null, khuVuc: ["TP.HCM", "Hà Nội"], quanTamViecLam: null, hocXaNha: null }).khuVuc, "");
+assert.equal(dieuKienTuHoSo({ nganSach: null, khuVuc: ["Đà Nẵng"], quanTamViecLam: null, hocXaNha: null }).khuVuc, "Đà Nẵng");
 
 console.log("thu-tinh-huong: tất cả kiểm tra đều qua");

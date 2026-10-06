@@ -1,5 +1,6 @@
 import { CAU_HINH_MAC_DINH, congNgay, isoNgay, thuHaiCuaTuan, xepLichTuan } from "@/engine/xep-lich";
-import { LICH_CO_DINH_MAU, VIEC_MAU } from "@/data/lich-mau";
+import { LICH_CO_DINH_MAU } from "@/data/lich-mau";
+import { viecChoTuan } from "@/features/ke-hoach/tao-viec-tuan";
 import type { AppState } from "./store";
 import { idHoSoMau } from "@/data/lua-chon-that";
 import { TO_HOP, type DiemThi, type HoSo, type MonId } from "./types";
@@ -45,7 +46,7 @@ export function taoHoSoMau(): AppState {
     nguyenVong: ids.slice(0, 5),
     yeuThich: ids.slice(0, 1), soSanh: ids.slice(0, 2),
     diemThi,
-    coDinh: LICH_CO_DINH_MAU, viec: VIEC_MAU,
+    coDinh: LICH_CO_DINH_MAU,
     lichSu: [
       { viecId: "v-x1", ten: "Hoàn thành bài tập Toán (Chương 3)", luc: new Date(hom.getTime() - 3_600_000).toISOString(), trangThai: "xong" },
       { viecId: "v-x2", ten: "Ôn lại công thức Vật lý", luc: new Date(hom.getTime() - 7_200_000).toISOString(), trangThai: "xong" },
@@ -53,7 +54,10 @@ export function taoHoSoMau(): AppState {
       { viecId: "v-x4", ten: "Hoàn thành đề Hóa học", luc: new Date(hom.getTime() - 90_000_000).toISOString(), trangThai: "xong" },
     ],
   };
-  // Xếp sẵn lịch tự học cho tuần hiện tại để các màn Lịch/Hôm nay có dữ liệu ngay.
-  const r = xepLichTuan({ tuanBatDau: thuHaiCuaTuan(isoNgay(hom)), coDinh: nen.coDinh, viec: nen.viec, cfg: nen.cauHinh });
-  return { ...nen, khoiHoc: r.khoi };
+  // Việc của tuần này do chính bộ sinh việc tạo từ mục tiêu và điểm của hồ sơ mẫu (không phải danh sách viết sẵn), rồi xếp sẵn vào lịch.
+  const tuan = thuHaiCuaTuan(isoNgay(hom));
+  const kq = viecChoTuan(nen, tuan);
+  const viec = kq.ok ? kq.viec : [];
+  const r = xepLichTuan({ tuanBatDau: tuan, coDinh: nen.coDinh, viec, cfg: nen.cauHinh });
+  return { ...nen, viec, khoiHoc: r.khoi };
 }

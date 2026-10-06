@@ -140,6 +140,7 @@ export interface CauHinhTuHoc {
 
 export interface ViecCanHoc {
   id: string;
+  tuan?: string; // thứ 2 của tuần mà việc này thuộc về; không có = việc dùng cho mọi tuần (dữ liệu cũ)
   mon: MonId;
   tieuDe: string;
   chiTiet: string;

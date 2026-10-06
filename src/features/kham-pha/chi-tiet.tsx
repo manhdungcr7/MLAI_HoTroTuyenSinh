@@ -10,7 +10,7 @@ import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { tim as timGoc } from "@/data/lua-chon-mau";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
-import { mucTieuTuLuaChon } from "@/state/chon";
+import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
@@ -202,6 +202,7 @@ export default function ChiTiet() {
     setHoiTiep("vuaThem");
   };
   const laMucTieu = s.mucTieu?.luaChonId === lc.id;
+  const dat = coTheDatMucTieu(lc);
   const datLamMucTieu = () => { datMucTieu(mucTieuTuLuaChon(lc, bc.diem)); nav(DUONG_DAN.mucTieu()); };
   const soSanh = () => {
     const khac = s.soSanh.find((x) => x !== lc.id && timGoc(x));
@@ -316,7 +317,9 @@ export default function ChiTiet() {
           <NutTuVan nguCanh={`Chi tiết ngành ${lc.nganh}`} />
           <Nut bieuTuong={trongDs ? Check : Plus} onClick={themVao}>{trongDs ? "Đã trong danh sách" : "Thêm nguyện vọng"}</Nut>
           <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh ngành này</Nut>
-          {!laMucTieu && <Nut kieu="vien" bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu chính sang ngành này" : "Đặt làm mục tiêu chính"}</Nut>}
+          {!laMucTieu && (dat.ok
+            ? <Nut kieu="vien" bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu chính sang ngành này" : "Đặt làm mục tiêu chính"}</Nut>
+            : <p className="text-[13px] text-chu-phu rounded-xl bg-nen p-3">{dat.lyDo}</p>)}
         </div>
       </NoiDung>
 

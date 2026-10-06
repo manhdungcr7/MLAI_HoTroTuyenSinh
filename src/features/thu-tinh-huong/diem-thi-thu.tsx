@@ -6,13 +6,14 @@ import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
-import { LUA_CHON_MAU, tim } from "@/data/lua-chon-mau";
+import { tim } from "@/data/lua-chon-mau";
+import { goiYDanhSach } from "@/features/nguyen-vong/goi-y-danh-sach";
 import { DUONG_DAN } from "@/duong-dan";
 import { homNay } from "@/state/chon";
 import { useLuuCucBo } from "@/state/luu-cuc-bo";
 import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type LuaChon, type MaToHop, type MonId, type ToneTen } from "@/state/types";
-import { ANH_TRONG, CAC_TO_HOP, chupTruocSau, dieuKienTuHoSo, docODiem, tongCacToHop, vietDiem, type AnhTruocSau, type Diem } from "./tinh-toan";
+import { ANH_TRONG, CAC_TO_HOP, chonToHopHienThi, chupTruocSau, dieuKienTuHoSo, docODiem, tongCacToHop, vietDiem, type AnhTruocSau, type Diem } from "./tinh-toan";
 
 const O_MON: { mon: MonId; icon: LucideIcon; tone: ToneTen; neuCo?: boolean }[] = [
   { mon: "toan", icon: Calculator, tone: "xanh" },
@@ -43,7 +44,7 @@ export default function DiemThiThu() {
     return d;
   }, [doc, diemTruoc]);
   const toHopTruoc = tongCacToHop(diemTruoc), toHopSau = tongCacToHop(diemSau);
-  const maMucTieu: MaToHop = s.mucTieu?.maToHop ?? "A01";
+  const { ma: maMucTieu, toHop: toHopMucTieu } = chonToHopHienThi(diemSau, s.mucTieu);
   const soLoi = CAC_MON.filter((m) => doc[m].loi).length;
 
   const capNhat = () => {
@@ -51,10 +52,11 @@ export default function DiemThiThu() {
     const doi = CAC_MON.filter((m) => doc[m].gia !== null && doc[m].gia !== diemTruoc[m]);
     if (!doi.length) return setBao({ tone: "cam", chu: "Điểm chưa thay đổi so với lần trước, nên chưa có gì để cập nhật." });
     const coNv = s.nguyenVong.length > 0;
-    const lcs = coNv ? s.nguyenVong.map(tim).filter((l): l is LuaChon => !!l) : LUA_CHON_MAU;
+    // Chưa có nguyện vọng thì so trên 8 ngành mình gợi ý theo điểm mới (không phải cả danh mục, để kết quả gọn và đọc được).
+    const lcs = coNv ? s.nguyenVong.map(tim).filter((l): l is LuaChon => !!l) : goiYDanhSach({ ...diemSau, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...s.hoSo.diemThem }, s.hoSo).map((d) => d.lc);
     datAnh(chupTruocSau({
-      lcs, nguon: coNv ? "nguyenVong" : "goiY", diemTruoc, diemSau, maToHop: maMucTieu, toHop: s.mucTieu?.toHop ?? TO_HOP.A01,
-      dk: dieuKienTuHoSo(s.hoSo), luc: new Date().toISOString(),
+      lcs, nguon: coNv ? "nguyenVong" : "goiY", diemTruoc, diemSau, maToHop: maMucTieu, toHop: toHopMucTieu,
+      dk: dieuKienTuHoSo(s.hoSo), luc: new Date().toISOString(), them: s.hoSo.diemThem,
     }));
     const ngay = homNay();
     for (const m of doi) themDiemThi({ mon: m, diem: diemSau[m]!, ngay });

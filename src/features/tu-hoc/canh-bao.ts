@@ -2,6 +2,7 @@
 // Nguyên tắc: chỉ báo khi thật sự có ích, mỗi loại tối đa một dòng, tối đa 4 dòng, lời lẽ không phán xét.
 import { DUONG_DAN } from "@/duong-dan";
 import { congNgay, isoNgay, phatHienTrung, phutTuGio, thuCuaNgay, thuHaiCuaTuan, type Doan } from "@/engine/xep-lich";
+import { viecCuaTuan } from "@/state/chon";
 import type { AppState } from "@/state/store";
 import { TEN_MON, type CanhBao, type ToneTen } from "@/state/types";
 import { NHAN_THU, buoiBoLo, monTangLienTiep, ngayThang, phutHienTai } from "./tinh-tien-do";
@@ -22,6 +23,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
   const hom = isoNgay(bayGio);
   const thu = thuCuaNgay(hom);
   const tt = (id: string) => s.trangThaiViec[id];
+  const viecTuan = viecCuaTuan(s.viec, thuHaiCuaTuan(hom));
 
   // 1) Bỏ lỡ từ 2 buổi của cùng một môn trong tuần
   const boLo = buoiBoLo(s, bayGio);
@@ -73,7 +75,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
   }
 
   // 3) Đã qua giữa tuần mà còn nhiều việc quan trọng chưa làm
-  const quanTrongChua = s.viec.filter((v) => v.mucUuTien === "cao" && (!tt(v.id) || tt(v.id) === "chua" || tt(v.id) === "doi"));
+  const quanTrongChua = viecTuan.filter((v) => v.mucUuTien === "cao" && (!tt(v.id) || tt(v.id) === "chua" || tt(v.id) === "doi"));
   if (thu >= 3 && quanTrongChua.length >= 2) {
     const conNgay = 8 - thu;
     ra.push({
@@ -85,7 +87,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
   }
 
   // 4) Việc em đã bỏ qua (lấy việc bỏ qua gần nhất, còn trong danh sách tuần)
-  const boQua = s.viec.filter((v) => tt(v.id) === "boQua");
+  const boQua = viecTuan.filter((v) => tt(v.id) === "boQua");
   if (boQua.length) {
     const ganNhat = s.lichSu.find((l) => l.trangThai === "boQua" && boQua.some((v) => v.id === l.viecId));
     const v = boQua.find((x) => x.id === ganNhat?.viecId) ?? boQua[0];
@@ -98,7 +100,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
   }
 
   // 5) Có việc cần học mà chưa nhập lịch học: lịch tự học dễ trùng giờ ở trường
-  if (s.viec.length && !s.coDinh.length) {
+  if (viecTuan.length && !s.coDinh.length) {
     ra.push({
       id: "chuaLich:coDinh", tone: "xanh",
       tieuDe: "Em chưa nhập lịch học",

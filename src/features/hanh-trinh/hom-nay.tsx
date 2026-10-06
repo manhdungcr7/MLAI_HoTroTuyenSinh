@@ -8,7 +8,7 @@ import { HangBam, Nut, The, gop } from "@/components/ui/nut-the";
 import { ThanhTienDo } from "@/components/ui/hien-thi";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
-import { homNay, mucTieuDayDu, tenGoi, tienDoTuan, viecConLai } from "@/state/chon";
+import { homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
@@ -24,7 +24,7 @@ export default function HomNay() {
   const m = mucTieuDayDu(s);
   const ten = s.hoSo.hoTen.trim() ? tenGoi(s.hoSo.hoTen) : "em";
   const goiY = goiYChoEm(s);
-  const coKeHoach = s.viec.length > 0 || s.khoiHoc.length > 0;
+  const coKeHoach = viecCuaTuan(s.viec, tuanHienTai()).length > 0 || s.khoiHoc.length > 0;
   const thieuMon = m ? monThieuDiem(s, m.toHop).map((x) => TEN_MON_NGAN[x]) : [];
 
   return (
@@ -143,7 +143,7 @@ function ViecHomNay() {
     </div>
   );
 
-  if (s.viec.length === 0) {
+  if (viecCuaTuan(s.viec, tuanHienTai()).length === 0) {
     return (
       <The className="space-y-3">
         {dauMuc}

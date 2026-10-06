@@ -5,7 +5,7 @@ import { Frown, Meh, Quote, RefreshCw, Smile, type LucideIcon } from "lucide-rea
 import { The, gop } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
-import { homNay, mucTieuDayDu, tuanHienTai } from "@/state/chon";
+import { homNay, mucTieuDayDu, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import type { TamTrang, ToneTen } from "@/state/types";
 import { CAU_NOI, TEN_NHOM_CAU_NOI, chonCauNoi, type NhomCauNoi } from "./cau-noi";
 
@@ -33,8 +33,8 @@ export function TamTrangHomNay() {
   useEffect(() => {
     if (!canXep.current) return;
     canXep.current = false;
-    if (s.viec.length) { xepLai(tuanHienTai(), homNay()); setVuaDoi(true); }
-  }, [s.tamTrang, s.viec.length, xepLai]);
+    if (viecCuaTuan(s.viec, tuanHienTai()).length) { xepLai(tuanHienTai(), homNay()); setVuaDoi(true); }
+  }, [s.tamTrang, s.viec, xepLai]);
 
   const chon = (t: TamTrang) => {
     if (t === s.tamTrang) return;
@@ -61,7 +61,7 @@ export function TamTrangHomNay() {
       <p aria-live="polite" className={gop("rounded-xl px-3 py-2 text-[13px] font-semibold leading-snug", NEN_LOI_NHAN[hienTai.tone])}>
         {hienTai.loiNhan}
       </p>
-      {vuaDoi && s.viec.length > 0 && (
+      {vuaDoi && viecCuaTuan(s.viec, tuanHienTai()).length > 0 && (
         <button type="button" onClick={() => nav(DUONG_DAN.tuan("lich"))} className="w-full min-h-11 rounded-xl border border-xanh/40 text-[14px] font-bold text-xanh active:bg-xanh-nhat">
           Lịch tuần đã xếp lại · Xem lịch
         </button>

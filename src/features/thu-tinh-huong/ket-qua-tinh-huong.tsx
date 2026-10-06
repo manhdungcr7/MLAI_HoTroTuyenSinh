@@ -125,7 +125,7 @@ export function SoSanhDaLuu({ t, onLuu }: { t: ReturnType<typeof useTinhHuong>; 
   const moiNhat = daLuu[daLuu.length - 1]?.id;
   useEffect(() => { if (moiNhat) setChon((c) => (c.includes(moiNhat) ? c : [...c, moiNhat].slice(-2))); }, [moiNhat]);
   const chonCon = chon.filter((id) => daLuu.some((x) => x.id === id));
-  const bang = useMemo(() => bangSoSanh(LUA_CHON_MAU, diem, toHop, dkGoc, daLuu.filter((x) => chonCon.includes(x.id))), [daLuu, chonCon, diem, toHop, dkGoc]);
+  const bang = useMemo(() => bangSoSanh(LUA_CHON_MAU, diem, toHop, dkGoc, daLuu.filter((x) => chonCon.includes(x.id)), 3, t.them), [daLuu, chonCon, diem, toHop, dkGoc, t.them]);
   const doiChon = (id: string) => setChon((c) => (c.includes(id) ? c.filter((x) => x !== id) : [...c.filter((x) => chonCon.includes(x)), id].slice(-2)));
 
   return (

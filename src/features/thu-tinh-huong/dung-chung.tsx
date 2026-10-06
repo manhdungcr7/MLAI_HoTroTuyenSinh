@@ -8,25 +8,22 @@ import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useLuuCucBo } from "@/state/luu-cuc-bo";
 import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
-import { TEN_MON, TO_HOP, type MaToHop, type MonId } from "@/state/types";
-import { DANG_THU_MAC_DINH, dieuKienTuHoSo, monThieu, taoTinhHuongLuu, tinhTinhHuong, trungTinhHuong, type TinhHuongDangThu } from "./tinh-toan";
+import { TEN_MON, type MaToHop, type MonId } from "@/state/types";
+import { DANG_THU_MAC_DINH, chonToHopHienThi, dieuKienTuHoSo, monThieu, taoTinhHuongLuu, tinhTinhHuong, trungTinhHuong, type TinhHuongDangThu } from "./tinh-toan";
 
 /** Mọi thứ hai màn Thử tình huống cần: điểm hiện tại, tổ hợp đang dùng, điều kiện gốc và tình huống đang chỉnh. */
 export function useTinhHuong() {
   const app = useApp();
   const { s } = app;
   const diem = useMemo(() => diemHienTaiCuaTungMon(s), [s]);
-  // Chưa có mục tiêu thì dùng tổ hợp (trong 4 tổ hợp của app) em đã đủ điểm và cao nhất, không mặc định A01 cho mọi em.
-  const maTotNhat = (["A01", "A00", "D01", "B00"] as MaToHop[])
-    .filter((ma) => TO_HOP[ma].every((m) => diem[m] !== null && diem[m] !== undefined))
-    .sort((a, b) => TO_HOP[b].reduce((t, m) => t + (diem[m] as number), 0) - TO_HOP[a].reduce((t, m) => t + (diem[m] as number), 0))[0];
-  const maToHop: MaToHop = s.mucTieu?.maToHop ?? maTotNhat ?? "A01";
-  const toHop: MonId[] = s.mucTieu?.toHop ?? TO_HOP[maToHop];
+  // Tổ hợp hiện tổng điểm: theo mục tiêu, không có thì tổ hợp cao nhất em đủ điểm. Từng ngành vẫn được so theo tổ hợp của chính nó.
+  const { ma: maToHop, toHop } = chonToHopHienThi(diem, s.mucTieu);
+  const them = s.hoSo.diemThem;
   const dkGoc = useMemo(() => dieuKienTuHoSo(s.hoSo), [s.hoSo]);
   const [dangThu, datDangThu] = useLuuCucBo<TinhHuongDangThu>("thu-tinh-huong-dang-thu", DANG_THU_MAC_DINH);
   const thieu = monThieu(diem, toHop);
-  const kq = useMemo(() => tinhTinhHuong(LUA_CHON_MAU, diem, toHop, dkGoc, dangThu), [diem, toHop, dkGoc, dangThu]);
-  return { app, diem, maToHop, toHop, dkGoc, dangThu, datDangThu, thieu, kq };
+  const kq = useMemo(() => tinhTinhHuong(LUA_CHON_MAU, diem, toHop, dkGoc, dangThu, them), [diem, toHop, dkGoc, dangThu, them]);
+  return { app, diem, maToHop, toHop, dkGoc, dangThu, datDangThu, thieu, kq, them };
 }
 
 /** Lưu tình huống đang thử (không lưu trùng, không lưu khi chưa đổi gì) và trả về câu báo kết quả. */

@@ -139,7 +139,7 @@ export default function ThuTinhHuong() {
                 {([
                   { icon: GraduationCap, nhan: `Trường phù hợp (từ ${NGUONG_PHU_HOP} điểm)`, ab: kq.phuHop },
                   { icon: School, nhan: "Đạt mức điểm tham khảo", ab: kq.datThamKhao },
-                  { icon: Wallet, nhan: "Học phí trong ngân sách", ab: kq.hocPhiVua },
+                  { icon: Wallet, nhan: "Học phí trong ngân sách (ngành đã có học phí)", ab: kq.hocPhiVua },
                 ] as const).map((d) => (
                   <li key={d.nhan} className="flex items-center gap-2.5 py-2">
                     <d.icon size={18} className="text-xanh shrink-0" />
@@ -148,7 +148,7 @@ export default function ThuTinhHuong() {
                   </li>
                 ))}
               </ul>
-              <p className="text-[12px] text-chu-phu mt-1">Tính trên {LUA_CHON_MAU.length} lựa chọn trong danh mục.</p>
+              <p className="text-[12px] text-chu-phu mt-1">Tính trên {kq.dong.length} ngành mình so được với điểm của em (mỗi ngành theo đúng tổ hợp xét tuyển của nó).</p>
             </The>
 
             {/* Thêm điều kiện (thu gọn) */}

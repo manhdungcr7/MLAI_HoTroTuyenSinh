@@ -12,7 +12,7 @@ import { routes as thuTinhHuong } from "@/features/thu-tinh-huong/routes";
 import { routes as mucTieu } from "@/features/muc-tieu/routes";
 import { routes as keHoach } from "@/features/ke-hoach/routes";
 import { routes as tuHoc } from "@/features/tu-hoc/routes";
-import { useNhacNho } from "@/features/tu-hoc/dung-nhac-nho";
+import { NhacNhoNen } from "@/features/tu-hoc/nhac-nho-nen";
 import { routes as thietKe } from "@/features/thiet-ke/routes";
 import { routes as tuVan } from "@/features/tu-van/routes";
 
@@ -48,8 +48,6 @@ const router = createHashRouter([
   },
 ]);
 
-/** Đặt các nhắc việc trong lúc ứng dụng đang mở. */
-function NhacNhoNen() { useNhacNho(); return null; }
 
 export default function App() {
   return <><NhacNhoNen /><RouterProvider router={router} /></>;

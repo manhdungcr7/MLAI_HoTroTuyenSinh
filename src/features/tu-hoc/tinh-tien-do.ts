@@ -2,6 +2,7 @@
 import {
   bayNgayCuaTuan, congNgay, isoNgay, khungTrongTrongNgay, phutTuGio, taoNgay, thuCuaNgay, thuHaiCuaTuan,
 } from "@/engine/xep-lich";
+import { viecCuaTuan } from "@/state/chon";
 import type { AppState } from "@/state/store";
 import { TEN_MON, type CauHinhTuHoc, type KhoiHoc, type LichSuHoanThanh, type MonId, type TietCoDinh } from "@/state/types";
 
@@ -40,10 +41,11 @@ export function buoiBoLo(s: TrangThaiTienDo, bayGio: Date): KhoiHoc[] {
 /** Bốn ô đếm của "Tiến độ tuần". Còn lại = chưa xong và chưa bỏ qua; Quá hạn, Đã dời là một phần của Còn lại. */
 export function demTienDo(s: TrangThaiTienDo, bayGio: Date) {
   const tt = (id: string) => s.trangThaiViec[id];
-  const tong = s.viec.length;
-  const xong = s.viec.filter((v) => tt(v.id) === "xong").length;
-  const boQua = s.viec.filter((v) => tt(v.id) === "boQua").length;
-  const daDoi = s.viec.filter((v) => tt(v.id) === "doi").length;
+  const viec = viecCuaTuan(s.viec, thuHaiCuaTuan(isoNgay(bayGio))); // tiến độ chỉ tính việc của tuần này
+  const tong = viec.length;
+  const xong = viec.filter((v) => tt(v.id) === "xong").length;
+  const boQua = viec.filter((v) => tt(v.id) === "boQua").length;
+  const daDoi = viec.filter((v) => tt(v.id) === "doi").length;
   const quaHan = new Set(buoiBoLo(s, bayGio).map((k) => k.viecId)).size;
   return { tong, xong, boQua, daDoi, quaHan, conLai: tong - xong - boQua, phanTram: tong ? Math.round((xong / tong) * 100) : 0 };
 }

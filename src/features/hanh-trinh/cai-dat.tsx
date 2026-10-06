@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, BookOpenCheck, CalendarDays, Database, Info, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
+import { Bell, BookOpenCheck, CalendarDays, Database, Download, Info, Upload, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
 import { DauTrangCoQuayLai, Logo, NoiDung } from "@/components/layout/khung";
 import { HangBam, Nhan, Nut, The } from "@/components/ui/nut-the";
 import { HopTruot, TieuDeMuc } from "@/components/ui/hien-thi";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { docBanSaoLuu, taoBanSaoLuu } from "@/state/sao-luu";
 
 // Giữ khớp với "version" trong package.json.
 const PHIEN_BAN = "0.1.0";
@@ -14,7 +15,9 @@ const PHIEN_BAN = "0.1.0";
 type HoiLai = null | "mau" | "xoa";
 
 export default function CaiDat() {
-  const { s, dungHoSoMau, lamLai } = useApp();
+  const { s, dungHoSoMau, lamLai, khoiPhuc } = useApp();
+  const oTep = useRef<HTMLInputElement>(null);
+  const [tin, setTin] = useState<{ ok: boolean; chu: string } | null>(null);
   const nav = useNavigate();
   const [hoi, setHoi] = useState<HoiLai>(null);
   const dong = () => setHoi(null);
@@ -23,6 +26,20 @@ export default function CaiDat() {
   const c = s.cauHinh;
 
   const dungMau = () => { dungHoSoMau(); setHoi(null); nav(DUONG_DAN.homNay()); };
+  const xuat = () => {
+    const url = URL.createObjectURL(new Blob([taoBanSaoLuu(s)], { type: "application/json" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = `nguyen-vong-ai-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    setTin({ ok: true, chu: "Đã tải tệp sao lưu về máy. Em giữ tệp này ở nơi an toàn." });
+  };
+  const nhap = async (f: File | undefined) => {
+    if (!f) return;
+    const kq = f.size > 5_000_000 ? { ok: false as const, lyDo: "Tệp quá lớn so với một bản sao lưu." } : docBanSaoLuu(await f.text());
+    if (kq.ok) { khoiPhuc(kq.s); setTin({ ok: true, chu: "Đã khôi phục dữ liệu từ tệp sao lưu." }); }
+    else setTin({ ok: false, chu: kq.lyDo });
+    if (oTep.current) oTep.current.value = "";
+  };
   const xoaHet = () => { lamLai(); setHoi(null); nav(DUONG_DAN.chao()); };
 
   return (
@@ -49,6 +66,10 @@ export default function CaiDat() {
               <ShieldCheck size={22} className="text-luc shrink-0" />
               <span>Mọi thông tin em nhập chỉ lưu trên điện thoại này, chưa gửi lên máy chủ nào. Nếu xóa dữ liệu trình duyệt, hồ sơ cũng mất theo.</span>
             </p>
+            <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu về máy</Nut>
+            <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục từ tệp sao lưu</Nut>
+            <input ref={oTep} type="file" accept="application/json,.json" className="sr-only" tabIndex={-1} aria-label="Chọn tệp sao lưu" onChange={(e) => void nhap(e.target.files?.[0])} />
+            <p role="status" className={tin ? (tin.ok ? "text-[13px] text-luc-chu" : "text-[13px] text-do-chu") : "sr-only"}>{tin?.chu}</p>
             <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Dùng hồ sơ mẫu</Nut>
             <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết và làm lại</Nut>
           </The>

@@ -4,14 +4,14 @@ import { BarChart3, CalendarDays, CheckCircle2, ChevronRight, Clock, Flame, List
 import { ThanhTienDo, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
-import { VIEC_MAU } from "@/data/lich-mau";
 import { DUONG_DAN } from "@/duong-dan";
-import { homNay, khoangCachCuaToi, mucTieuDayDu } from "@/state/chon";
+import { homNay, khoangCachCuaToi, mucTieuDayDu, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { ToneTen, ViecCanHoc } from "@/state/types";
 import { tenNgay, tenThu, ngayThang, soPhut, thoiLuong } from "./dinh-dang";
 import { NhanUuTien, OTichTron } from "./thanh-phan";
 import { buoiNenHien, daKetThuc, khoiCuaViec, nhomViec, tienDoNgay, type IdNhom } from "./tinh-toan";
+import { viecChoTuan } from "./tao-viec-tuan";
 
 const DANG_NHOM: Record<IdNhom, { icon: LucideIcon; tone: ToneTen }> = {
   cao: { icon: Flame, tone: "do" },
@@ -21,38 +21,44 @@ const DANG_NHOM: Record<IdNhom, { icon: LucideIcon; tone: ToneTen }> = {
 };
 
 export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: string[]; ngayChon: string; quaKhu: boolean; hienThongBao: (c: string) => void }) {
-  const { s, datViec } = useApp();
+  const { s, xepLai } = useApp();
   const nav = useNavigate();
   const hom = homNay();
+  const tuan = ngays[0];
+  const viecTuan = viecCuaTuan(s.viec, tuan);
 
-  if (s.viec.length === 0) {
+  /** Tạo việc cho tuần đang xem từ mục tiêu và điểm hiện tại, rồi xếp ngay vào các khung giờ trống (chỉ từ hôm nay trở đi). */
+  const taoVaXep = () => {
+    const tuNgay = ngays.includes(hom) ? hom : undefined;
+    const kq = viecChoTuan(s, tuan, tuNgay);
+    if (!kq.ok) return hienThongBao(kq.lyDo);
+    const r = xepLai(tuan, tuNgay, kq.viec);
+    hienThongBao(r.chuaXep ? `Đã tạo ${kq.moi} việc, còn ${r.chuaXep} việc chưa có chỗ trong tuần` : `Đã tạo ${kq.moi} việc và xếp vào lịch tuần này`);
+  };
+
+  if (viecTuan.length === 0) {
     return s.mucTieu ? (
       <TrangThaiTrong bieuTuong={<ListPlus size={26} />} tieuDe="Tuần này chưa có việc cần học"
-        moTa={`Mình có sẵn một bộ việc ôn tập cho tổ hợp ${s.mucTieu.maToHop}. Em thêm vào rồi bấm Xếp lịch giúp em.`}>
+        moTa={`Mình sẽ tạo việc ôn cho tổ hợp ${s.mucTieu.maToHop} theo môn em còn thiếu điểm và thời gian tự học còn trống, rồi xếp vào lịch giúp em.`}>
         <div className="space-y-2">
-          <Nut bieuTuong={ListPlus} onClick={() => {
-            const theoToHop = VIEC_MAU.filter((v) => s.mucTieu!.toHop.includes(v.mon));
-            datViec(theoToHop.length >= 3 ? theoToHop : VIEC_MAU);
-            hienThongBao("Đã thêm việc gợi ý cho tuần này");
-          }}>Thêm việc gợi ý</Nut>
+          <Nut bieuTuong={ListPlus} onClick={taoVaXep}>Tạo việc và xếp lịch cho tuần này</Nut>
           <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn nên ưu tiên</Nut>
         </div>
       </TrangThaiTrong>
     ) : (
       <TrangThaiTrong bieuTuong={<Target size={26} />} tieuDe="Em chưa có mục tiêu"
-        moTa="Chọn một mục tiêu trước, mình sẽ gợi ý việc cần học mỗi tuần theo môn còn thiếu điểm.">
+        moTa="Chọn một mục tiêu trước, mình sẽ tạo việc cần học mỗi tuần theo môn còn thiếu điểm.">
         <div className="space-y-2">
-          <Nut muiTen onClick={() => nav(DUONG_DAN.mucTieu())}>Chọn mục tiêu</Nut>
-          <Nut kieu="vien" onClick={() => { datViec(VIEC_MAU); hienThongBao("Đã thêm việc gợi ý cho tuần này"); }}>Dùng việc gợi ý</Nut>
+          <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Chọn mục tiêu ở Khám phá</Nut>
         </div>
       </TrangThaiTrong>
     );
   }
 
   // Tuần đã qua: chỉ xem lại các việc từng có giờ trong tuần đó.
-  const viecHienThi = quaKhu ? s.viec.filter((v) => khoiCuaViec(s.khoiHoc, v.id, ngays).length > 0) : s.viec;
+  const viecHienThi = quaKhu ? viecTuan.filter((v) => khoiCuaViec(s.khoiHoc, v.id, ngays).length > 0) : viecTuan;
   const nhom = nhomViec(viecHienThi, s.trangThaiViec);
-  const td = tienDoNgay(s.viec, s.khoiHoc, s.trangThaiViec, ngayChon);
+  const td = tienDoNgay(viecTuan, s.khoiHoc, s.trangThaiViec, ngayChon);
 
   return (
     <>
@@ -85,6 +91,13 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
           </section>
         );
       })}
+
+      {!quaKhu && s.mucTieu && (
+        <div className="pt-1">
+          <Nut kieu="vien" bieuTuong={ListPlus} onClick={taoVaXep}>Cập nhật việc theo điểm mới</Nut>
+          <p className="mt-1.5 text-[12px] text-chu-phu">Giữ lại việc đã xong, tạo lại phần còn lại theo điểm hiện tại và giờ tự học còn trống.</p>
+        </div>
+      )}
     </>
   );
 }
@@ -96,7 +109,7 @@ function MucTieuHomNay() {
   const m = mucTieuDayDu(s);
   const mon = khoangCachCuaToi(s).filter((x) => x.thieu > 0).sort((a, b) => b.thieu - a.thieu)[0];
   if (!m || !mon) return null;
-  const viecMon = s.viec.find((v) => v.mon === mon.mon && !daKetThuc(s.trangThaiViec[v.id]));
+  const viecMon = viecCuaTuan(s.viec, tuanHienTai()).find((v) => v.mon === mon.mon && !daKetThuc(s.trangThaiViec[v.id]));
   return (
     <button type="button" onClick={() => nav(DUONG_DAN.monKeoDiem())} className="w-full text-left rounded-the bg-trang border border-vien shadow-the p-3.5 flex items-center gap-3 active:bg-xanh-nhat">
       <BieuTuongTron icon={Target} tone="do" kichThuoc={46} />

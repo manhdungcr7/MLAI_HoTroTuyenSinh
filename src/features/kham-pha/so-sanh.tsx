@@ -12,7 +12,7 @@ import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut, TONE_CHU, gop } from "@/components/ui/nut-the";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
-import { mucTieuTuLuaChon } from "@/state/chon";
+import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
@@ -199,12 +199,12 @@ export default function SoSanh() {
         </p>
         <div className="space-y-2">
           {ss && [{ l: a!, kq: ss.kqA }, { l: b!, kq: ss.kqB }].map(({ l, kq }) => (
-            <button key={l.id} type="button" onClick={() => chonMucTieu(l)}
-              className="w-full min-h-16 flex items-center gap-3 rounded-the border border-vien bg-trang p-3 text-left active:bg-xanh-nhat">
+            <button key={l.id} type="button" disabled={!coTheDatMucTieu(l).ok} onClick={() => chonMucTieu(l)}
+              className="w-full min-h-16 flex items-center gap-3 rounded-the border border-vien bg-trang p-3 text-left active:bg-xanh-nhat disabled:opacity-60">
               <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={44} />
               <span className="flex-1 min-w-0">
                 <b className="block text-[15px] text-muc leading-snug">{l.nganh} – {l.truong}</b>
-                <span className="text-[13px] text-chu-phu">Mục tiêu {l.diemMin.toFixed(1)} điểm</span>
+                <span className="text-[13px] text-chu-phu">{(() => { const d = coTheDatMucTieu(l); return d.ok ? `Mục tiêu ${l.diemMin.toFixed(1)} điểm` : d.lyDo; })()}</span>
               </span>
               <NhanPhuHop kq={kq} />
             </button>

@@ -1,6 +1,7 @@
 // Tính tổng điểm 3 môn theo đúng tổ hợp của từng ngành (đề án ghi), từ điểm hồ sơ (6 môn chính + 5 môn thêm). TypeScript thuần.
 import { MON_CUA_TO_HOP, TO_HOP_NANG_KHIEU } from "@/data/to-hop-chinh-thuc";
-import { diemHienTaiCuaTungMon, type AppState } from "@/state/store";
+import { diemHienTaiCuaTungMon } from "@/state/diem-hien-tai";
+import type { AppState } from "@/state/store";
 import { CAC_MON_THEM, type DiemDayDu, type LuaChon, type MonKhoi } from "@/state/types";
 
 export { MON_CUA_TO_HOP };

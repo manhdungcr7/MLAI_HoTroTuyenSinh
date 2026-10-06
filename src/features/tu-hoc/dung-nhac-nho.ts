@@ -24,8 +24,10 @@ export async function guiThongBao(tieuDe: string, noiDung: string, the?: string)
   if (docQuyenThongBao() !== "daChoPhep") return false;
   const tuyChon: NotificationOptions = { body: noiDung, tag: the, icon: "/favicon.svg" };
   try {
-    // Trên điện thoại (Android), chỉ service worker mới tạo được thông báo.
-    const dk = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : undefined;
+    // Trên điện thoại (Android), chỉ service worker mới tạo được thông báo. Chờ tối đa 3 giây cho service worker sẵn sàng.
+    const dk = "serviceWorker" in navigator
+      ? await Promise.race([navigator.serviceWorker.ready, new Promise<undefined>((r) => window.setTimeout(() => r(undefined), 3000))])
+      : undefined;
     if (dk) { await dk.showNotification(tieuDe, tuyChon); return true; }
     new Notification(tieuDe, tuyChon);
     return true;

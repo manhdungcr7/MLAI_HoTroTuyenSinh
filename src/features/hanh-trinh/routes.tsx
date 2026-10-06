@@ -7,5 +7,6 @@ export const routes: RoutesCuaSlice = {
     { path: MAU.homNay, ...trang(() => import("./hom-nay")) },
     { path: MAU.hoSo, ...trang(() => import("./ho-so")) },
     { path: MAU.hoSoCaiDat, ...trang(() => import("./cai-dat")) },
+    { path: MAU.chiaSe, ...trang(() => import("./chia-se")) },
   ],
 };

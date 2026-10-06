@@ -15,7 +15,7 @@ export function nhanNgay(iso: string) {
 }
 const ngayNgan = (iso: string) => { const d = taoNgay(iso); return `${d.getDate()}/${d.getMonth() + 1}`; };
 export const ngayDayDu = (iso: string) => { const d = taoNgay(iso); return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`; };
-const lam1 = (n: number) => (Math.round(n * 10) / 10).toFixed(1);
+const lam1 = (n: number) => (Math.round(n * 10) / 10).toFixed(1).replace(".", ",");
 const viThuong = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
 const noi = (a: string[]) => (a.length <= 1 ? a.join("") : `${a.slice(0, -1).join(", ")} và ${a[a.length - 1]}`);
 

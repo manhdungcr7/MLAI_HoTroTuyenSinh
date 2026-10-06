@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Settings, Sparkles, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
+import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NenHero } from "@/components/ui/hinh-nen";
 import { HangBam, Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -7,6 +7,7 @@ import { ThanhTienDo, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
+import { ChiSoTheoDoi } from "./chi-so-theo-doi";
 import { TEN_CHO_O, TEN_NGAN_SACH, chuDaiDien, hieuEm } from "./tinh-toan";
 
 const CHAM: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", do: "bg-do", tim: "bg-tim", muc: "bg-muc" };
@@ -99,8 +100,13 @@ export default function HoSo() {
           onClick={() => nav(x.boSung[0]?.den ?? DUONG_DAN.batDau(1))}
           trong="Hồ sơ đã có đủ thông tin chính. Khi có gì thay đổi, em cập nhật lại nhé." />
 
+        <TieuDeMuc>Tiến bộ của em</TieuDeMuc>
+        <ChiSoTheoDoi s={s} />
+
         <TieuDeMuc>Hành động nhanh</TieuDeMuc>
         <div className="space-y-2">
+          <HangBam bieuTuong={Users} tone="tim" tieuDe="Chia sẻ với phụ huynh, thầy cô" onClick={() => nav(DUONG_DAN.chiaSe())}
+            phu="Bản tóm tắt và những điều nên trao đổi cùng người đồng hành" />
           <HangBam bieuTuong={Wallet} tone="cam" tieuDe="Bổ sung ngân sách sinh hoạt" onClick={() => nav(DUONG_DAN.batDau(3))}
             phu={nganSach ? `Đang chọn: ${nganSach}` : "Giúp gợi ý trường hợp khả năng tài chính"}
             nhan={<Nhan tone={h.nganSach ? "luc" : "cam"}>{h.nganSach ? "Đã có" : "Còn thiếu"}</Nhan>} />

@@ -12,7 +12,7 @@ import { DongThongBao } from "@/components/ui/thong-bao";
 import { DuongXuHuong } from "@/components/ui/xu-huong";
 import { DUONG_DAN } from "@/duong-dan";
 import { congNgay } from "@/engine/xep-lich";
-import { tuanHienTai } from "@/state/chon";
+import { tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { LichSuHoanThanh, ToneTen, TrangThaiViec } from "@/state/types";
 import { loaiCuaCanhBao, taoCanhBao, type LoaiCanhBao } from "./canh-bao";
@@ -40,7 +40,7 @@ export default function TienDo() {
   const ghiNhan = loiGhiNhan(s, bayGio);
   const xuHuong = xuHuongCacMon(s);
   const canhBao = taoCanhBao(s, bayGio);
-  const trongHet = !s.viec.length && !s.lichSu.length && !s.diemThi.length;
+  const trongHet = !viecCuaTuan(s.viec, tuanHienTai()).length && !s.lichSu.length && !s.diemThi.length;
 
   return (
     <>
@@ -92,7 +92,7 @@ export default function TienDo() {
               )}
             </section>
 
-            {s.viec.length > 0 && (
+            {viecCuaTuan(s.viec, tuanHienTai()).length > 0 && (
               <Nut muiTen bieuTuong={CalendarClock} onClick={() => nav(DUONG_DAN.tuan("lich"))}>Xem đề xuất điều chỉnh</Nut>
             )}
           </>

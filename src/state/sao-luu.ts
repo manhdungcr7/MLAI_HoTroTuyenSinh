@@ -1,0 +1,26 @@
+// Xuất và khôi phục dữ liệu của em (một tệp JSON). Dữ liệu chỉ nằm trên máy em, nên đây là cách duy nhất để chuyển sang máy khác hoặc giữ bản dự phòng.
+import { TRANG_THAI_BAN_DAU } from "./mau";
+import type { AppState } from "./store";
+
+const NHAN = "nguyen-vong-ai";
+const PHIEN_BAN = 2;
+
+export function taoBanSaoLuu(s: AppState, luc = new Date()): string {
+  return JSON.stringify({ app: NHAN, phienBan: PHIEN_BAN, luc: luc.toISOString(), duLieu: s }, null, 2);
+}
+
+export type KetQuaDoc = { ok: true; s: AppState } | { ok: false; lyDo: string };
+
+/** Đọc tệp sao lưu. Chỉ nhận tệp do chính app tạo ra; trường thiếu được điền giá trị mặc định để bản cũ vẫn dùng được. */
+export function docBanSaoLuu(text: string): KetQuaDoc {
+  let j: unknown;
+  try { j = JSON.parse(text); } catch { return { ok: false, lyDo: "Tệp này không đọc được. Em chọn đúng tệp sao lưu của Nguyện Vọng AI nhé." }; }
+  const o = j as { app?: unknown; phienBan?: unknown; duLieu?: Partial<AppState> } | null;
+  if (!o || o.app !== NHAN || typeof o.duLieu !== "object" || o.duLieu === null) return { ok: false, lyDo: "Đây không phải tệp sao lưu của Nguyện Vọng AI." };
+  if (typeof o.phienBan !== "number" || o.phienBan > PHIEN_BAN) return { ok: false, lyDo: "Tệp sao lưu này tạo bởi phiên bản mới hơn, em cập nhật ứng dụng rồi thử lại." };
+  const d = o.duLieu;
+  const dangMang = (k: keyof AppState) => d[k] === undefined || Array.isArray(d[k]);
+  if (!(["nguyenVong", "yeuThich", "soSanh", "diemThi", "tinhHuong", "coDinh", "viec", "khoiHoc", "lichSu"] as const).every(dangMang) || typeof d.hoSo !== "object" || d.hoSo === null)
+    return { ok: false, lyDo: "Tệp sao lưu bị hỏng hoặc thiếu dữ liệu." };
+  return { ok: true, s: { ...TRANG_THAI_BAN_DAU, ...d, hoSo: { ...TRANG_THAI_BAN_DAU.hoSo, ...d.hoSo } } as AppState };
+}

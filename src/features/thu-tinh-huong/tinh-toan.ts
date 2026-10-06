@@ -1,9 +1,26 @@
 // Tính toán cho "Thử tình huống" và "Điểm thi thử". TypeScript thuần, không import React.
 // Điểm "phù hợp" lấy từ engine/phan-tich (thang 100, là điểm gợi ý, KHÔNG phải xác suất đậu).
-import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong, soSanhTinhHuong, type DieuKienThu } from "@/engine/phan-tich";
-import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type LuaChon, type MaToHop, type MonId, type NhanNguyenVong, type TinhHuongDaLuu } from "@/state/types";
+import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong, type DieuKienThu } from "@/engine/phan-tich";
+import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
+import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type LuaChon, type MaToHop, type MonId, type MonThem, type NhanNguyenVong, type TinhHuongDaLuu } from "@/state/types";
 
 export type Diem = Record<MonId, number | null>;
+/** Điểm các môn thêm (Sử, Địa, Tin...) trong hồ sơ: không đổi khi em kéo thử điểm, nhưng cần để tính đúng tổ hợp của từng ngành. */
+export type DiemThem = Partial<Record<MonThem, number | null>>;
+
+/**
+ * Tổng điểm của em theo ĐÚNG tổ hợp của ngành này (đề án ghi); đề án chưa ghi thì lấy tổ hợp cao nhất của em.
+ * null = chưa tính được (thiếu điểm môn của tổ hợp, hoặc tổ hợp có môn năng khiếu). Dùng cho mọi phép so với điểm chuẩn.
+ */
+export const tongTheoNganh = (lc: LuaChon, diem: Diem, them?: DiemThem): number | null => tongChoLuaChon(lc, { ...diem, ...them }).tong;
+
+/** Tổ hợp (trong 4 tổ hợp của app) dùng để hiện tổng điểm: theo mục tiêu nếu có, không thì tổ hợp em đủ điểm và cao nhất. */
+export function chonToHopHienThi(diem: Diem, mucTieu: { maToHop: MaToHop; toHop: MonId[] } | null): { ma: MaToHop; toHop: MonId[] } {
+  if (mucTieu) return { ma: mucTieu.maToHop, toHop: mucTieu.toHop };
+  const du = (["A01", "A00", "D01", "B00"] as MaToHop[]).filter((ma) => TO_HOP[ma].every((m) => diem[m] !== null && diem[m] !== undefined));
+  const tot = du.sort((a, b) => TO_HOP[b].reduce((t, m) => t + diem[m]!, 0) - TO_HOP[a].reduce((t, m) => t + diem[m]!, 0))[0] ?? "A01";
+  return { ma: tot, toHop: TO_HOP[tot] };
+}
 export type UuTien = DieuKienThu["uuTien"];
 export type DieuKien = Omit<DieuKienThu, "tong">;
 
@@ -32,7 +49,8 @@ export function dieuKienTuHoSo(h: Pick<HoSo, "nganSach" | "khuVuc" | "quanTamVie
   return {
     nganSachTrieu: h.nganSach ? NGAN_SACH_TOI_DA[h.nganSach] : NGAN_SACH_KHONG_GIOI_HAN,
     coNganSach: !!h.nganSach,
-    khuVuc: h.khuVuc[0] ?? "",
+    // Một nơi cụ thể thì ràng buộc theo nơi đó. Nhiều nơi hoặc "Tỉnh khác" thì không ràng buộc (tránh phạt oan trường ở nơi em đã chọn).
+    khuVuc: h.khuVuc.length === 1 && h.khuVuc[0] !== "Tỉnh khác" ? h.khuVuc[0] : "",
     uuTien,
   };
 }
@@ -135,25 +153,30 @@ export interface KetQuaTinhHuong {
   coThayDoi: boolean;
 }
 
-export function tinhTinhHuong(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc: DieuKien, dangThu: Pick<TinhHuongDangThu, "congMon" | "nganSachTrieu" | "khuVuc" | "uuTien">): KetQuaTinhHuong {
+export function tinhTinhHuong(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc: DieuKien, dangThu: Pick<TinhHuongDangThu, "congMon" | "nganSachTrieu" | "khuVuc" | "uuTien">, them?: DiemThem): KetQuaTinhHuong {
   const cong = gonCongMon(dangThu.congMon);
+  const diemSau = apDungCong(diem, cong);
   const tongTruoc = tongDiem(diem, toHop);
-  const tongSau = tongDiem(apDungCong(diem, cong), toHop);
+  const tongSau = tongDiem(diemSau, toHop);
   const dkMoi = dieuKienMoi(dkGoc, dangThu);
-  const ss = soSanhTinhHuong(lcs, { ...dkGoc, tong: tongTruoc }, { ...dkMoi, tong: tongSau });
-  const dong: DongKetQua[] = ss.dong.map(({ lc, goc, moi }) => {
+  // Mỗi ngành so bằng tổng điểm theo tổ hợp của chính ngành đó; ngành chưa tính được thì không đưa vào so sánh.
+  const hang = lcs.flatMap((lc) => {
+    const tt = tongTheoNganh(lc, diem, them), ts = tongTheoNganh(lc, diemSau, them);
+    return tt === null || ts === null ? [] : [{ lc, tt, ts }];
+  });
+  const dong: DongKetQua[] = hang.map(({ lc, tt, ts }) => {
+    const goc = diemPhuHop(lc, { ...dkGoc, tong: tt }), moi = diemPhuHop(lc, { ...dkMoi, tong: ts });
     const chenh = moi - goc;
-    return { lc, goc, moi, chenh, ...phanLoai(goc, moi), lyDo: lyDoThay(lc, tongTruoc, tongSau, dkGoc, dkMoi, goc, chenh) };
+    return { lc, goc, moi, chenh, ...phanLoai(goc, moi), lyDo: lyDoThay(lc, tt, ts, dkGoc, dkMoi, goc, chenh) };
   }).sort((a, b) => THU_TU_TRANG_THAI[a.trangThai] - THU_TU_TRANG_THAI[b.trangThai] || b.chenh - a.chenh || b.moi - a.moi);
   const dem: Record<NhomLoc, number> = { moiMo: 0, tang: 0, khongDoi: 0, giam: 0 };
   dong.forEach((d) => dem[d.nhom]++);
-  const demDat = (t: number) => lcs.filter((l) => t >= l.diemMin).length;
-  const demVua = (ns: number) => lcs.filter((l) => typeof l.hocPhiMin === "number" && l.hocPhiMin <= ns).length;
-  const lon = ss.thayDoiLonNhat ? dong.find((d) => d.lc.id === ss.thayDoiLonNhat.lc.id) ?? null : null;
+  const demVua = (ns: number) => hang.filter(({ lc }) => typeof lc.hocPhiMin === "number" && lc.hocPhiMin <= ns).length;
+  const lon = [...dong].sort((x, y) => Math.abs(y.chenh) - Math.abs(x.chenh))[0] ?? null;
   return {
     tongTruoc, tongSau, dkGoc, dkMoi, dong, dem,
     phuHop: [dong.filter((d) => d.goc >= NGUONG_PHU_HOP).length, dong.filter((d) => d.moi >= NGUONG_PHU_HOP).length],
-    datThamKhao: [demDat(tongTruoc), demDat(tongSau)],
+    datThamKhao: [hang.filter((x) => x.tt >= x.lc.diemMin).length, hang.filter((x) => x.ts >= x.lc.diemMin).length],
     hocPhiVua: [demVua(dkGoc.nganSachTrieu), demVua(dkMoi.nganSachTrieu)],
     thayDoiLonNhat: lon && lon.chenh !== 0 ? lon : null,
     coThayDoi: Object.keys(cong).length > 0 || dkMoi.nganSachTrieu !== dkGoc.nganSachTrieu || dkMoi.khuVuc !== dkGoc.khuVuc || dkMoi.uuTien !== dkGoc.uuTien,
@@ -207,19 +230,21 @@ export interface DongSoSanh { lc: LuaChon; diem: number[] }
  * Bảng so sánh "Hiện tại | tình huống 1 | tình huống 2…" cho top lựa chọn.
  * Tính lại điểm từ congMon trên điểm hiện tại (để bảng vẫn đúng khi em vừa nhập điểm mới).
  */
-export function bangSoSanh(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc: DieuKien, cacTh: TinhHuongDaLuu[], soDong = 3): { cot: CotSoSanh[]; dong: DongSoSanh[] } {
+export function bangSoSanh(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc: DieuKien, cacTh: TinhHuongDaLuu[], soDong = 3, them?: DiemThem): { cot: CotSoSanh[]; dong: DongSoSanh[] } {
   const tongGoc = tongDiem(diem, toHop);
-  const cot: (CotSoSanh & { dk: DieuKienThu })[] = [
-    { id: "hien-tai", ten: "Hiện tại", tong: tongGoc, nganSachTrieu: dkGoc.nganSachTrieu, dk: { ...dkGoc, tong: tongGoc } },
+  const cot: (CotSoSanh & { dk: Omit<DieuKienThu, "tong">; diem: Diem })[] = [
+    { id: "hien-tai", ten: "Hiện tại", tong: tongGoc, nganSachTrieu: dkGoc.nganSachTrieu, dk: dkGoc, diem },
     ...cacTh.map((t) => {
-      const tong = tongDiem(apDungCong(diem, t.congMon), toHop);
-      return { id: t.id, ten: t.ten, tong, nganSachTrieu: t.nganSachTrieu, dk: { tong, nganSachTrieu: t.nganSachTrieu, khuVuc: t.khuVuc, uuTien: t.uuTien } };
+      const d = apDungCong(diem, t.congMon);
+      return { id: t.id, ten: t.ten, tong: tongDiem(d, toHop), nganSachTrieu: t.nganSachTrieu, dk: { nganSachTrieu: t.nganSachTrieu, khuVuc: t.khuVuc, uuTien: t.uuTien }, diem: d };
     }),
   ];
-  const dong = lcs.map((lc) => ({ lc, diem: cot.map((c) => diemPhuHop(lc, c.dk)) }))
-    .sort((a, b) => Math.max(...b.diem) - Math.max(...a.diem) || b.diem[0] - a.diem[0])
-    .slice(0, soDong);
-  return { cot: cot.map(({ dk: _bo, ...c }) => c), dong };
+  // Mỗi cột tính từng ngành theo tổng điểm của đúng tổ hợp ngành đó (ngành chưa tính được thì bỏ).
+  const dong = lcs.flatMap((lc) => {
+    const diemCot = cot.map((c) => { const t = tongTheoNganh(lc, c.diem, them); return t === null ? null : diemPhuHop(lc, { ...c.dk, tong: t }); });
+    return diemCot.some((x) => x === null) ? [] : [{ lc, diem: diemCot as number[] }];
+  }).sort((a, b) => Math.max(...b.diem) - Math.max(...a.diem) || b.diem[0] - a.diem[0]).slice(0, soDong);
+  return { cot: cot.map(({ dk: _dk, diem: _d, ...c }) => c), dong };
 }
 
 // ---------- Điểm thi thử ----------
@@ -247,6 +272,9 @@ export const HANG_NHAN: Record<NhanNguyenVong, number> = { "Thử sức": 0, "V�
 
 export interface DongTruocSau {
   id: string;
+  tongTruoc: number; // tổng điểm của em theo tổ hợp của ngành này, trước và sau
+  tongSau: number;
+  coTruoc: boolean; // false: trước đó em chưa đủ điểm tổ hợp của ngành này
   nhanTruoc: NhanNguyenVong;
   nhanSau: NhanNguyenVong;
   phuHopTruoc: number;
@@ -273,19 +301,26 @@ export const ANH_TRONG: AnhTruocSau = { luc: null, maToHop: "A01", tongTruoc: 0,
 
 export function chupTruocSau(p: {
   lcs: LuaChon[]; nguon: AnhTruocSau["nguon"]; diemTruoc: Diem; diemSau: Diem; maToHop: MaToHop; toHop: MonId[];
-  dk: DieuKien & { coNganSach: boolean }; luc: string;
+  dk: DieuKien & { coNganSach: boolean }; luc: string; them?: DiemThem;
 }): AnhTruocSau {
   const tongTruoc = tongDiem(p.diemTruoc, p.toHop), tongSau = tongDiem(p.diemSau, p.toHop);
   const monDoi = CAC_MON.filter((m) => p.diemSau[m] !== null && p.diemSau[m] !== p.diemTruoc[m]).map((m) => ({ mon: m, truoc: p.diemTruoc[m], sau: p.diemSau[m]! }));
+  // Nhãn từng nguyện vọng tính theo tổ hợp của chính ngành đó; ngành chưa tính được (thiếu điểm) thì bỏ khỏi so sánh.
+  const dong = p.lcs.flatMap((lc): DongTruocSau[] => {
+    const tt = tongTheoNganh(lc, p.diemTruoc, p.them), ts = tongTheoNganh(lc, p.diemSau, p.them);
+    if (ts === null) return [];
+    const tTruoc = tt ?? ts; // chưa đủ điểm trước đó: nhãn "trước" không có ý nghĩa (coTruoc = false)
+    return [{
+      id: lc.id, tongTruoc: tTruoc, tongSau: ts, coTruoc: tt !== null,
+      nhanTruoc: nhanNguyenVong(lc, tTruoc), nhanSau: nhanNguyenVong(lc, ts),
+      phuHopTruoc: diemPhuHop(lc, { ...p.dk, tong: tTruoc }), phuHopSau: diemPhuHop(lc, { ...p.dk, tong: ts }),
+    }];
+  });
   return {
     luc: p.luc, maToHop: p.maToHop, tongTruoc, tongSau, nguon: p.nguon, monDoi,
-    coTruoc: monThieu(p.diemTruoc, p.toHop).length === 0, thieuSau: monThieu(p.diemSau, p.toHop),
+    coTruoc: dong.length > 0 ? dong.every((d) => d.coTruoc) : monThieu(p.diemTruoc, p.toHop).length === 0, thieuSau: monThieu(p.diemSau, p.toHop),
     nganSachTrieu: p.dk.coNganSach ? p.dk.nganSachTrieu : null,
-    dong: p.lcs.map((lc) => ({
-      id: lc.id,
-      nhanTruoc: nhanNguyenVong(lc, tongTruoc), nhanSau: nhanNguyenVong(lc, tongSau),
-      phuHopTruoc: diemPhuHop(lc, { ...p.dk, tong: tongTruoc }), phuHopSau: diemPhuHop(lc, { ...p.dk, tong: tongSau }),
-    })),
+    dong,
   };
 }
 
@@ -336,7 +371,7 @@ export function tomTatTruocSau(a: AnhTruocSau, tim: (id: string) => LuaChon | un
   else ra.push({ loai: "anToan", tieuDe: `${giuChac} ${ten} an toàn`, moTa: "vẫn giữ nguyên" });
   // 3) Trường nên xem lại: học phí vượt ngân sách, rồi tới trường còn cách xa mức tham khảo
   const vuotPhi = a.nganSachTrieu === null ? [] : a.dong.filter((d) => (tim(d.id)?.hocPhiMin ?? 0) > a.nganSachTrieu!);
-  const xa = a.dong.filter((d) => { const lc = tim(d.id); return lc && lc.diemMin - a.tongSau > 2; });
+  const xa = a.dong.filter((d) => { const lc = tim(d.id); return lc && lc.diemMin - d.tongSau > 2; });
   if (vuotPhi.length) ra.push({ loai: "xemLai", tieuDe: `Nên xem lại ${vuotPhi.length} trường`, moTa: "có học phí cao so với điều kiện hiện tại", id: vuotPhi[0].id });
   else if (xa.length) ra.push({ loai: "xemLai", tieuDe: `Nên xem lại ${xa.length} trường`, moTa: "điểm mới còn cách mức tham khảo hơn 2 điểm", id: xa[0].id });
   else ra.push({ loai: "on", tieuDe: "Chưa thấy trường nào cần xem lại", moTa: "học phí và điểm đều nằm trong tầm" });

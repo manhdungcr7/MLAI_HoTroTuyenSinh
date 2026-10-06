@@ -52,7 +52,7 @@ export interface KetQuaPhuHop {
   luuY: string[]; // điều cần lưu ý sinh từ hồ sơ của em
 }
 
-const so = (n: number) => (Math.round(n * 10) / 10).toFixed(1);
+const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? n.toFixed(2) : (Math.round(n * 10) / 10).toFixed(1));
 
 /** Trường có nằm trong khu vực em ưu tiên không. "Tỉnh khác" khớp mọi nơi ngoài 3 thành phố lớn. */
 export function dungKhuVuc(lc: LuaChon, uuTien: string[]): boolean | null {
@@ -68,7 +68,7 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   // 1) Điểm: tính theo tổ hợp đề án ghi cho ngành này; đề án chưa ghi thì lấy tổ hợp cao nhất của em.
   const tl = tongChoLuaChon(lc, bc.diem);
   const tong = tl.tong;
-  const chenh = tong === null ? null : Math.round((tong - lc.diemMin) * 10) / 10;
+  const chenh = tong === null ? null : Math.round((tong - lc.diemMin) * 100) / 100; // 2 chữ số: quyết định mức theo số thật, chỉ khi hiển thị mới làm tròn 1 chữ số
   const moNhom = tl.toHop ? ` (tổ hợp ${tl.toHop})` : "";
   if (tong !== null && chenh !== null) {
     if (tong >= lc.diemMax) tot.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, đã cao hơn cả mức tham khảo cao nhất ${so(lc.diemMax)} của năm ${lc.namDiem}.`);

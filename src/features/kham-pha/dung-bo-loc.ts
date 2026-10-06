@@ -5,6 +5,7 @@ const KHOA = "nvai:bo-loc";
 // Bộ lọc nhớ trong phiên làm việc, dùng chung giữa màn Khám phá và màn Bộ lọc.
 const nguoiNghe = new Set<(b: BoLoc) => void>();
 let hienTai: BoLoc | null = null;
+if (typeof window !== "undefined") window.addEventListener("nvai-lam-lai", () => { hienTai = null; nguoiNghe.forEach((f) => f({ ...BO_LOC_MAC_DINH })); });
 
 function doc(khuVucMacDinh?: string, nhomMacDinh?: string): BoLoc {
   if (hienTai) return hienTai;

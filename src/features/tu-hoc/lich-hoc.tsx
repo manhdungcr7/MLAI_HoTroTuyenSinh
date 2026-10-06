@@ -10,7 +10,7 @@ import { Nhan, Nut, The, gop } from "@/components/ui/nut-the";
 import { LICH_CO_DINH_MAU } from "@/data/lich-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { phatHienTrung, phutTuGio } from "@/engine/xep-lich";
-import { homNay, tuanHienTai } from "@/state/chon";
+import { homNay, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { CAC_MON, TEN_MON, type MonId, type TietCoDinh } from "@/state/types";
 import { LOAI_TIET, NhomChon, OGio } from "./thanh-phan";
@@ -51,8 +51,8 @@ export default function LichHoc() {
         {daDoi && (
           <div role="status" className="rounded-the bg-xanh-nhat p-4 space-y-3">
             <p className="text-[14px] text-chu"><b className="block text-xanh text-[15px]">{daDoi}</b>
-              {s.viec.length ? "Xếp lại lịch tự học giúp em để không bị trùng giờ?" : "Khi có việc cần học, mình sẽ xếp giờ tự học tránh các tiết này."}</p>
-            {s.viec.length > 0 && (
+              {viecCuaTuan(s.viec, tuanHienTai()).length ? "Xếp lại lịch tự học giúp em để không bị trùng giờ?" : "Khi có việc cần học, mình sẽ xếp giờ tự học tránh các tiết này."}</p>
+            {viecCuaTuan(s.viec, tuanHienTai()).length > 0 && (
               <div className="grid grid-cols-2 gap-2">
                 <Nut kieu="vien" onClick={() => setDaDoi(null)}>Để sau</Nut>
                 <Nut bieuTuong={Wand2} onClick={xepLaiGiupEm}>Xếp lại</Nut>

@@ -6,7 +6,7 @@ import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
-import { homNay } from "@/state/chon";
+import { homNay, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { tenNgay, thoiLuong } from "./dinh-dang";
 import { soBuoiTuHoc, viecChuaCoCho } from "./tinh-toan";
@@ -24,8 +24,9 @@ export function HopXepLich({ ketQua, ngays, dong, xemLich, daXepCaBoQua }: {
   const tongBuoi = soBuoiTuHoc(s.khoiHoc, ngays, ketQua.tuNgay);
   const soXemTruoc = s.khoiHoc.filter((k) => k.loai === "tuHoc" && !k.viecId && k.id.startsWith("auto-") && ngays.includes(k.ngay) && (!ketQua.tuNgay || k.ngay >= ketQua.tuNgay)).length;
   const soBuoi = tongBuoi - soXemTruoc;
-  const chuaCoCho = viecChuaCoCho(s.viec, s.trangThaiViec, s.khoiHoc, ngays);
-  const boQua = s.viec.filter((v) => s.trangThaiViec[v.id] === "boQua");
+  const viecTuan = viecCuaTuan(s.viec, ngays[0]);
+  const chuaCoCho = viecChuaCoCho(viecTuan, s.trangThaiViec, s.khoiHoc, ngays);
+  const boQua = viecTuan.filter((v) => s.trangThaiViec[v.id] === "boQua");
   const tuDau = ketQua.tuNgay && ketQua.tuNgay > ngays[0] ? ` từ ${tenNgay(ketQua.tuNgay, hom).toLowerCase()}` : "";
 
   return (
