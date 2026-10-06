@@ -1,5 +1,6 @@
 // Thành phần riêng của slice Khám phá: thẻ lựa chọn có nút tim, nhãn phù hợp tính từ hồ sơ, hộp chọn trường.
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { BarChart3, ChevronRight, GraduationCap, Heart, Info, MapPin, Search, Wallet } from "lucide-react";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
@@ -8,6 +9,7 @@ import { Nhan, gop } from "@/components/ui/nut-the";
 import { coHocPhi, phuongThucNgan } from "@/data/lua-chon-phu";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { hocPhiChu } from "@/data/lua-chon-phu";
+import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
@@ -81,7 +83,7 @@ export function GhiChuDuLieuMau({ className }: { className?: string }) {
   return (
     <p className={gop("flex items-start gap-2 rounded-xl bg-cam-nhat px-3 py-2.5 text-[13px] text-chu leading-snug", className)}>
       <Info size={16} className="text-cam-chu shrink-0 mt-0.5" />
-      <span><b className="text-cam-chu">Điểm chuẩn là số các năm trước.</b> Điểm năm nay có thể khác, và một số ngành chưa có học phí. Em hãy đối chiếu với đề án của trường trước khi quyết định.</span>
+      <span><b className="text-cam-chu">Điểm chuẩn là số các năm trước.</b> Điểm năm nay có thể khác, và một số ngành chưa có học phí. Em hãy đối chiếu với đề án của trường trước khi quyết định. <Link to={DUONG_DAN.veDuLieu()} className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Số liệu từ đâu ra?</Link></span>
     </p>
   );
 }

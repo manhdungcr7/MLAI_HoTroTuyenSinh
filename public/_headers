@@ -1,0 +1,13 @@
+# Trang chính luôn hỏi lại máy chủ để người dùng thấy bản mới ngay sau mỗi lần cập nhật.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
+# Tệp trong /assets có mã băm trong tên nên giữ lâu được.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

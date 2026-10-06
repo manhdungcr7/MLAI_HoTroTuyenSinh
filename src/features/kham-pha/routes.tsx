@@ -6,6 +6,7 @@ export const routes: RoutesCuaSlice = {
   coThanh: [
     { path: MAU.khamPha, ...trang(() => import("./kham-pha")) },
     { path: MAU.boLoc, ...trang(() => import("./man-bo-loc")) },
+    { path: MAU.veDuLieu, ...trang(() => import("./ve-du-lieu")) },
     { path: MAU.chiTiet, ...trang(() => import("./chi-tiet")) },
     { path: MAU.soSanh, ...trang(() => import("./so-sanh")) },
   ],

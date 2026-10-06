@@ -11,6 +11,7 @@ export const MAU = {
   hoSoCaiDat: "/ho-so/cai-dat",
   khamPha: "/kham-pha",
   boLoc: "/kham-pha/bo-loc",
+  veDuLieu: "/kham-pha/ve-du-lieu",
   chiTiet: "/kham-pha/:id",
   soSanh: "/so-sanh",
   nguyenVong: "/nguyen-vong",
@@ -43,6 +44,7 @@ export const DUONG_DAN = {
   hoSoCaiDat: () => "/ho-so/cai-dat",
   khamPha: () => "/kham-pha",
   boLoc: () => "/kham-pha/bo-loc",
+  veDuLieu: () => "/kham-pha/ve-du-lieu",
   chiTiet: (id: string) => `/kham-pha/${id}`,
   /** So sánh 2 lựa chọn; bỏ trống thì dùng cặp em đã chọn gần nhất. */
   soSanh: (a?: string, b?: string) => (a && b ? `/so-sanh?a=${a}&b=${b}` : "/so-sanh"),

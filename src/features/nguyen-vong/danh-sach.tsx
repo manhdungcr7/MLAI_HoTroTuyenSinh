@@ -15,6 +15,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
+import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
 import { CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
@@ -34,6 +35,7 @@ export default function DanhSachNguyenVong() {
   const { tin, bao, an } = useHoanTac();
   const [dangSua, setDangSua] = useState<string | null>(null);
   const [dangXoa, setDangXoa] = useState<string | null>(null);
+  const [moGoiY, setMoGoiY] = useState(false);
 
   /** Chuyển một nguyện vọng tới vị trí mới, báo kèm nút hoàn tác. */
   const chuyen = useCallback((tu: number, den: number) => {
@@ -66,7 +68,8 @@ export default function DanhSachNguyenVong() {
         {ds.length === 0 ? (
           <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Em chưa có nguyện vọng nào"
             moTa="Vào Khám phá, mở một trường em thích rồi bấm “Thêm vào nguyện vọng”. Danh sách sẽ hiện ở đây để em sắp xếp.">
-            <Nut bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Thêm nguyện vọng</Nut>
+            <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
+            <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Tự chọn trong Khám phá</Nut>
           </TrangThaiTrong>
         ) : (
           <>
@@ -101,6 +104,7 @@ export default function DanhSachNguyenVong() {
             </ol>
 
             <Nut bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Thêm nguyện vọng</Nut>
+            <NutGoiYDanhSach kieu="vien" onMo={() => setMoGoiY(true)} />
 
             <TieuDeMuc>Nếu điểm của em thay đổi</TieuDeMuc>
             <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Nếu tăng điểm thì sao?" phu="Thử cộng điểm từng môn, xem nhãn các trường đổi ra sao" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
@@ -150,6 +154,7 @@ export default function DanhSachNguyenVong() {
         )}
       </HopTruot>
 
+      <GoiYSheet mo={moGoiY} dong={() => setMoGoiY(false)} />
       <ThanhHoanTac tin={tin} an={an} />
     </>
   );

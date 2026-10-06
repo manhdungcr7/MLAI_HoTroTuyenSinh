@@ -8,6 +8,8 @@ import { boiCanhTu, coDiemDeSo, danhGia, sapXep } from "../src/features/kham-pha
 import { dungDanhSach, demNhan } from "../src/features/nguyen-vong/tinh-toan";
 import { taoHoSoMau } from "../src/state/mau";
 import type { DiemDayDu, MonKhoi } from "../src/state/types";
+import { goiYDanhSach } from "../src/features/nguyen-vong/goi-y-danh-sach";
+import { tinhCoHoi } from "../src/features/kham-pha/co-hoi";
 import deAnTruong from "../src/data/de-an-truong.json";
 import nguonNam from "../src/data/nguon-nam.json";
 import chuongTrinh from "../src/data/chuong-trinh.json";
@@ -129,5 +131,21 @@ if (chiC00) {
 // số ngành so được tăng khi có điểm Sử, Địa, Tin
 const soSoDuoc = (dd: DiemDayDu) => LUA_CHON.filter((l) => tongChoLuaChon(l, dd).tong !== null).length;
 assert.ok(soSoDuoc(dXH) > soSoDuoc(diem({ toan: 6, nguVan: 8, tiengAnh: 7 })), "thêm môn phải mở thêm ngành so được");
+
+// 9) Cơ hội của em và gợi ý danh sách nguyện vọng
+const dGioi = diem({ toan: 9, vatLy: 8.5, hoaHoc: 8, sinh: 7, nguVan: 7.5, tiengAnh: 8.5 });
+const ch = tinhCoHoi(dGioi)!;
+assert.ok(ch.tong >= 25 && ch.soDuDiem > ch.soThuSuc && ch.soDuDiem + ch.soThuSuc <= ch.soNganh && ch.theoNhom.length > 0);
+assert.equal(tinhCoHoi(diem({})), null, "chưa có điểm thì không tính cơ hội");
+const hsGoiY = { nganSach: "30-60" as const, khuVuc: ["TP.HCM"], nganhQuanTam: ["CNTT"], tinh: "TP. Hồ Chí Minh" };
+const gy = goiYDanhSach(dGioi, hsGoiY);
+const nhanGY = new Set(gy.map((x) => x.nhan));
+assert.ok(gy.length >= 6 && nhanGY.has("Thử sức") && nhanGY.has("Vừa sức") && (nhanGY.has("An toàn") || nhanGY.has("Dự phòng")), "danh sách gợi ý phải cân bằng");
+assert.equal(new Set(gy.map((x) => x.lc.id)).size, gy.length, "không trùng ngành");
+assert.ok(gy.every((x) => !coHocPhi(x.lc) || (x.lc.hocPhiMin as number) <= 60), "không vượt ngân sách");
+assert.ok(gy.every((x) => x.lyDo.length >= 1), "mỗi gợi ý có lý do");
+assert.ok(gy.filter((x) => x.lc.nhomNganh === "CNTT").length >= gy.length - 2, "ưu tiên đúng nhóm ngành em chọn");
+assert.ok(goiYDanhSach(dGioi, hsGoiY, gy.map((x) => x.lc.id)).every((x) => !gy.some((g) => g.lc.id === x.lc.id)), "không gợi ý lại ngành đã có");
+assert.deepEqual(goiYDanhSach(diem({}), hsGoiY), [], "chưa có điểm thì không gợi ý");
 
 console.log("du-lieu: tất cả kiểm tra đều qua");

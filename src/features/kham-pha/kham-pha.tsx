@@ -9,6 +9,7 @@ import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { BO_LOC_MAC_DINH, CAC_KHU_VUC, CAC_NHOM, dem, loc } from "./bo-loc";
+import { tinhCoHoi } from "./co-hoi";
 import { useBoLoc } from "./dung-bo-loc";
 import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
@@ -39,6 +40,7 @@ export default function KhamPha() {
       .filter((l) => !k || `${l.truong} ${l.tenTruong} ${l.nganh} ${l.nhomNganh}`.toLowerCase().includes(k));
     return sapXep(daLoc, kieu, bc);
   }, [b, tuKhoa, kieu, bc]);
+  const coHoi = useMemo(() => tinhCoHoi(bc.diem), [bc.diem]);
   const hien = useMemo(() => ds.slice(0, soHien).map((l) => ({ l, kq: danhGia(l, bc) })), [ds, soHien, bc]);
 
   const soLoc = dem(b);
@@ -81,6 +83,25 @@ export default function KhamPha() {
             {soLoc > 0 && <span className="min-w-5 h-5 px-1 rounded-full gd-xanh text-white text-[11px] grid place-items-center">{soLoc}</span>}
           </button>
         </div>
+
+        {coHoi && (
+          <section aria-label="Cơ hội của em" className="rounded-the nen-xanh p-3.5">
+            <p className="text-[13px] font-bold text-xanh">Với điểm của em</p>
+            <p className="mt-0.5 text-[15px] text-chu leading-snug">
+              Tổ hợp <b>{coHoi.toHop}</b> được <b>{coHoi.tong.toFixed(1).replace(".", ",")}</b> điểm: đủ điểm chuẩn năm gần nhất của <b className="text-luc-chu">{coHoi.soDuDiem}</b> ngành, thử sức thêm <b className="text-cam-chu">{coHoi.soThuSuc}</b> ngành (trong {coHoi.soNganh} ngành mình so được).
+            </p>
+            {coHoi.theoNhom.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Nhóm ngành nhiều cơ hội">
+                {coHoi.theoNhom.slice(0, 4).map((g) => (
+                  <button key={g.nhom} type="button" onClick={() => sua({ nhom: g.nhom })} className="min-h-11 px-3 rounded-xl bg-trang border border-vien text-[13px] font-semibold text-chu active:bg-xanh-nhat">
+                    {g.nhom} <span className="text-chu-phu">· {g.duDiem} đủ điểm</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            <p className="mt-2 text-[12px] text-chu-phu">Chỉ tính điểm thi tốt nghiệp THPT, dựa trên điểm chuẩn các năm trước. Điểm chuẩn năm nay có thể khác.</p>
+          </section>
+        )}
 
         {!coDiemDeSo(bc) && (
           <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để biết mức phù hợp"
