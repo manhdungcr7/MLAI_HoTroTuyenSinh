@@ -1,5 +1,6 @@
 // Bản tóm tắt để em đưa cho phụ huynh, thầy cô hoặc người tư vấn xem, và 4 chỉ số theo dõi tiến bộ. TypeScript thuần, không React.
 // Mọi câu đều sinh từ dữ liệu của em; không có câu nào viết sẵn cho mọi người.
+import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { tim } from "@/data/lua-chon-mau";
 import { NGAN_SACH_TOI_DA, tongDiem } from "@/engine/phan-tich";
@@ -12,7 +13,7 @@ import { TEN_CHO_O, TEN_NGAN_SACH, hieuEm } from "./tinh-toan";
 
 const so = (n: number) => (Math.round(n * 10) / 10).toFixed(1).replace(".", ",");
 
-// ---------- 4 chỉ số theo dõi (slide "Tính khả thi & tác động") ----------
+// ---------- 4 chỉ số theo dõi (slide "Chỉ số nên theo dõi") ----------
 
 export interface ChiSo {
   khoa: "hoSo" | "nguyenVong" | "nhiemVu" | "khoangCach";
@@ -116,6 +117,7 @@ export function tomTatChiaSe(s: AppState, bayGio: Date): { muc: MucTomTat[]; van
 
   const thongTin = [h.khoi && `Lớp ${h.khoi === 11 ? "10 – 11" : h.khoi}`, h.tinh, h.giaiDoan].filter(Boolean) as string[];
   if (h.nganhQuanTam.length) thongTin.push(`Quan tâm: ${h.nganhQuanTam.join(", ")}`);
+  if (h.soThich) thongTin.push(`Trắc nghiệm hướng nghiệp: nghiêng về ${moTaTop(h.soThich).toLowerCase()}`);
   if (h.nganSach) thongTin.push(`Học phí gia đình dự kiến: ${TEN_NGAN_SACH[h.nganSach].toLowerCase()} mỗi năm`);
   if (h.choO) thongTin.push(`Chỗ ở: ${TEN_CHO_O[h.choO]}`);
   if (h.khuVuc.length) thongTin.push(`Nơi muốn học: ${h.khuVuc.join(", ")}`);

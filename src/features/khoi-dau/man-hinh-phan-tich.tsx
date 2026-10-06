@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Brain, CheckCircle2, Database, Sparkles, Target } from "lucide-react";
 import { gop } from "@/components/ui/nut-the";
+import { LUA_CHON } from "@/data/lua-chon-that";
+
+const SO_TRUONG = new Set(LUA_CHON.map((l) => l.maTruong ?? l.truong)).size;
 
 const CAC_BUOC_AI = [
   { icon: Brain, tieu: "Đối chiếu năng lực & tổ hợp điểm", phu: "Phân tích thế mạnh các môn học..." },
-  { icon: Database, tieu: "Quét dữ liệu 200+ trường ĐH & CĐ", phu: "So sánh điểm chuẩn & mức học phí..." },
+  { icon: Database, tieu: `Đối chiếu ${LUA_CHON.length.toLocaleString("vi-VN")} chương trình của ${SO_TRUONG} trường`, phu: "So sánh điểm chuẩn & mức học phí..." },
   { icon: Target, tieu: "Xếp nhóm nguyện vọng vừa sức", phu: "Phân loại Thử sức · Vừa sức · An toàn..." },
 ];
 

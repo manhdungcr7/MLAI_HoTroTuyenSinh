@@ -20,7 +20,10 @@ export function docBanSaoLuu(text: string): KetQuaDoc {
   if (typeof o.phienBan !== "number" || o.phienBan > PHIEN_BAN) return { ok: false, lyDo: "Tệp sao lưu này tạo bởi phiên bản mới hơn, em cập nhật ứng dụng rồi thử lại." };
   const d = o.duLieu;
   const dangMang = (k: keyof AppState) => d[k] === undefined || Array.isArray(d[k]);
-  if (!(["nguyenVong", "yeuThich", "soSanh", "diemThi", "tinhHuong", "coDinh", "viec", "khoiHoc", "lichSu"] as const).every(dangMang) || typeof d.hoSo !== "object" || d.hoSo === null)
+  if (!(["nguyenVong", "yeuThich", "soSanh", "diemThi", "tinhHuong", "coDinh", "viec", "khoiHoc", "lichSu", "loiNhan"] as const).every(dangMang) || typeof d.hoSo !== "object" || d.hoSo === null)
     return { ok: false, lyDo: "Tệp sao lưu bị hỏng hoặc thiếu dữ liệu." };
+  const st = (d.hoSo as { soThich?: { diem?: Record<string, unknown>; top?: unknown } | null }).soThich;
+  if (st && (typeof st.diem !== "object" || st.diem === null || !["R", "I", "A", "S", "E", "C"].every((k) => typeof st.diem![k] === "number") || !Array.isArray(st.top)))
+    return { ok: false, lyDo: "Kết quả trắc nghiệm trong tệp sao lưu bị hỏng." };
   return { ok: true, s: { ...TRANG_THAI_BAN_DAU, ...d, hoSo: { ...TRANG_THAI_BAN_DAU.hoSo, ...d.hoSo } } as AppState };
 }

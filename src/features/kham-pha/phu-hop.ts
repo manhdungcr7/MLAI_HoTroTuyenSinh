@@ -6,7 +6,9 @@ import { coHocPhi } from "@/data/lua-chon-phu";
 import { diemDayDu, tongChoLuaChon } from "./to-hop";
 import type { AppState } from "@/state/store";
 import { TEN_MON, TEN_MON_NGAN, TEN_MON_THEM, TEN_MON_THEM_NGAN, type DiemDayDu, type LuaChon, type MonId, type MonThem, type MucPhuHop, type ToneTen } from "@/state/types";
+import { khongRoNet, nhomNganhGoiY } from "@/features/huong-nghiep/cau-hoi";
 import { cungNoi } from "./bo-loc";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export interface BoiCanh {
   tong: number | null; // tổng Toán + Lý + Anh hiện tại, null nếu chưa nhập đủ (cho các màn chưa tính theo tổ hợp từng ngành)
@@ -16,6 +18,8 @@ export interface BoiCanh {
   tinh: string;
   hocXaNha: boolean | null;
   nganhQuanTam: string[];
+  /** Nhóm ngành hợp kết quả trắc nghiệm sở thích (rỗng nếu em chưa làm). */
+  nganhHopSoThich: string[];
   uuTienViecLam: boolean;
 }
 
@@ -29,6 +33,7 @@ export function boiCanhTu(s: AppState): BoiCanh {
     tinh: h.tinh === "Tỉnh khác" ? "" : h.tinh,
     hocXaNha: h.hocXaNha,
     nganhQuanTam: h.nganhQuanTam,
+    nganhHopSoThich: h.soThich && !khongRoNet(h.soThich) ? nhomNganhGoiY(h.soThich, 4).map((g) => g.nhom) : [],
     uuTienViecLam: h.quanTamViecLam === "rat",
   };
 }
@@ -52,7 +57,7 @@ export interface KetQuaPhuHop {
   luuY: string[]; // điều cần lưu ý sinh từ hồ sơ của em
 }
 
-const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? n.toFixed(2) : (Math.round(n * 10) / 10).toFixed(1));
+const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? dinhDang(n, 2) : (Math.round(n * 10) / 10).toFixed(1));
 
 /** Trường có nằm trong khu vực em ưu tiên không. "Tỉnh khác" khớp mọi nơi ngoài 3 thành phố lớn. */
 export function dungKhuVuc(lc: LuaChon, uuTien: string[]): boolean | null {
@@ -98,6 +103,7 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const khacNganh = bc.nganhQuanTam.length > 0 && !bc.nganhQuanTam.includes(lc.nhomNganh);
   if (bc.nganhQuanTam.includes(lc.nhomNganh)) tot.push(`Đúng nhóm ngành ${lc.nhomNganh} em quan tâm.`);
   else if (khacNganh) luuY.push(`Khác nhóm ngành em đã chọn (${bc.nganhQuanTam.join(", ")}).`);
+  if (bc.nganhHopSoThich.includes(lc.nhomNganh)) tot.push("Nhóm ngành này hợp với sở thích em đã chọn trong trắc nghiệm hướng nghiệp.");
 
   if (tong === null || chenh === null) {
     return {

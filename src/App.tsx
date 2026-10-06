@@ -15,9 +15,11 @@ import { routes as tuHoc } from "@/features/tu-hoc/routes";
 import { NhacNhoNen } from "@/features/tu-hoc/nhac-nho-nen";
 import { routes as thietKe } from "@/features/thiet-ke/routes";
 import { routes as tuVan } from "@/features/tu-van/routes";
+import { routes as huongNghiep } from "@/features/huong-nghiep/routes";
+import { routes as dongHanh } from "@/features/dong-hanh/routes";
 
 // Thêm slice mới: import `routes` của nó rồi thêm vào mảng này. Không sửa gì khác.
-const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan];
+const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan, huongNghiep, dongHanh];
 
 // Tiêu đề tab trình duyệt theo màn (khớp theo đầu đường dẫn, dài nhất thắng).
 const TIEU_DE: [string, string][] = [
@@ -25,7 +27,7 @@ const TIEU_DE: [string, string][] = [
   ["/nguyen-vong/an-toan", "Danh sách có an toàn không?"], ["/nguyen-vong", "Nguyện vọng"],
   ["/thu-tinh-huong", "Thử tình huống"], ["/diem-thi-thu", "Điểm thi thử"],
   ["/ke-hoach/tuan", "Kế hoạch tuần"], ["/ke-hoach/tien-do", "Tiến độ"], ["/ke-hoach/viec", "Chi tiết việc"], ["/ke-hoach/cai-dat", "Cài đặt"], ["/ke-hoach", "Mục tiêu"],
-  ["/ho-so", "Hồ sơ"], ["/tu-van", "Tư vấn"], ["/bat-dau", "Tạo hồ sơ"], ["/chao", "Chào mừng"],
+  ["/ho-so/chia-se", "Chia sẻ với người đồng hành"], ["/ho-so", "Hồ sơ"], ["/huong-nghiep", "Trắc nghiệm hướng nghiệp"], ["/dong-hanh", "Người đồng hành"], ["/loi-nhan", "Lời nhắn cho em"], ["/tu-van", "Tư vấn"], ["/bat-dau", "Tạo hồ sơ"], ["/chao", "Chào mừng"],
 ];
 const tieuDeCua = (p: string) => (p === "/" ? "Hôm nay" : [...TIEU_DE].sort((a, b) => b[0].length - a[0].length).find(([d]) => p.startsWith(d))?.[1]);
 

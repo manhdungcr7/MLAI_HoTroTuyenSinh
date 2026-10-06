@@ -13,6 +13,7 @@ import { NGUONG_PHU_HOP } from "@/engine/phan-tich";
 import type { ToneTen } from "@/state/types";
 import { BaoNho, GhiChuDuLieu, ThieuDiem, TruocSau, useLuuTinhHuong, useTinhHuong } from "./dung-chung";
 import { TEN_TRANG_THAI, bangSoSanh, moTaCongDiem, tenTinhHuong, type DongKetQua, type NhomLoc, type TrangThaiThay } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const TONE_TRANG_THAI: Record<TrangThaiThay, ToneTen> = { moiPhuHop: "luc", tangCoHoi: "xanh", giuNguyen: "muc", vanKho: "cam", giamDi: "do" };
 type Loc = "tatCa" | NhomLoc;
@@ -51,7 +52,7 @@ export default function KetQuaTinhHuong() {
             <div>
               <h2 className="text-[21px] leading-tight font-extrabold text-muc">{tieuDe}</h2>
               {moTa && ten.includes(" · ") && <p className="text-[13px] text-chu mt-1">Tình huống: <b className="text-xanh">{ten}</b></p>}
-              <p className="text-[13px] text-chu-phu mt-1">Tổng {maToHop}: <TruocSau truoc={kq.tongTruoc} sau={kq.tongSau} viet={(n) => n.toFixed(2)} /></p>
+              <p className="text-[13px] text-chu-phu mt-1">Tổng {maToHop}: <TruocSau truoc={kq.tongTruoc} sau={kq.tongSau} viet={(n) => dinhDang(n, 2)} /></p>
             </div>
 
             <NenHero tone={kq.dem.moiMo > 0 ? "luc" : "xanh"} className="p-4">
@@ -147,7 +148,7 @@ export function SoSanhDaLuu({ t, onLuu }: { t: ReturnType<typeof useTinhHuong>; 
             <ul className="flex gap-2 w-max pb-1">
               <li className="w-[128px] rounded-xl border border-vien bg-trang p-2.5">
                 <b className="block text-[14px] text-muc">Hiện tại</b>
-                <span className="block text-[12px] text-chu-phu">{bang.cot[0].tong.toFixed(2)} điểm</span>
+                <span className="block text-[12px] text-chu-phu">{dinhDang(bang.cot[0].tong, 2)} điểm</span>
                 <span className="block text-[12px] text-chu-phu">{dkGoc.nganSachTrieu} triệu/năm</span>
               </li>
               {daLuu.map((th) => {
@@ -169,7 +170,7 @@ export function SoSanhDaLuu({ t, onLuu }: { t: ReturnType<typeof useTinhHuong>; 
             <table className="w-full text-[13px] table-fixed">
               <caption className="sr-only">Điểm phù hợp của top 3 lựa chọn theo từng tình huống</caption>
               <thead>
-                <tr className="text-[11px] text-chu-phu">
+                <tr className="text-[12px] text-chu-phu">
                   <th scope="col" className="text-left font-semibold pb-1.5">Top lựa chọn</th>
                   {bang.cot.map((c, i) => (
                     <th key={c.id} scope="col" className={gop("w-[62px] font-semibold pb-1.5 px-0.5 leading-tight", i > 0 && "text-xanh")}>
@@ -183,10 +184,10 @@ export function SoSanhDaLuu({ t, onLuu }: { t: ReturnType<typeof useTinhHuong>; 
                   <tr key={d.lc.id} className="border-t border-vien">
                     <th scope="row" className="text-left font-normal py-2 pr-1">
                       <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(d.lc.id))} className="flex items-start gap-1.5 text-left min-h-11 w-full">
-                        <span className="size-5 shrink-0 rounded-full gd-xanh text-white text-[11px] font-bold grid place-items-center mt-0.5">{i + 1}</span>
+                        <span className="size-5 shrink-0 rounded-full gd-xanh text-white text-[12px] font-bold grid place-items-center mt-0.5">{i + 1}</span>
                         <span className="min-w-0">
                           <b className="block text-[13px] text-muc leading-snug line-clamp-2">{d.lc.nganh}</b>
-                          <span className="block text-[11px] text-chu-phu truncate">{d.lc.truong}</span>
+                          <span className="block text-[12px] text-chu-phu truncate">{d.lc.truong}</span>
                         </span>
                       </button>
                     </th>
@@ -195,7 +196,7 @@ export function SoSanhDaLuu({ t, onLuu }: { t: ReturnType<typeof useTinhHuong>; 
                       return (
                         <td key={j} className={gop("text-center align-middle", j > 0 && "bg-xanh-nhat/60")}>
                           <b className={gop("block text-[15px]", x >= NGUONG_PHU_HOP ? "text-luc-chu" : "text-muc")}>{x}</b>
-                          {j > 0 && <span className={gop("block text-[11px] font-bold", c > 0 ? "text-luc-chu" : c < 0 ? "text-do-chu" : "text-chu-phu")}>{c > 0 ? `▲ +${c}` : c < 0 ? `▼ ${c}` : "="}</span>}
+                          {j > 0 && <span className={gop("block text-[12px] font-bold", c > 0 ? "text-luc-chu" : c < 0 ? "text-do-chu" : "text-chu-phu")}>{c > 0 ? `▲ +${c}` : c < 0 ? `▼ ${c}` : "="}</span>}
                         </td>
                       );
                     })}

@@ -12,6 +12,7 @@ import { homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viec
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const SO_DONG_GON = 3;
 
@@ -58,7 +59,7 @@ export default function HomNay() {
 
 function TheMucTieu({ nganh, truong, tenTruong, conThieu, onClick }: { nganh: string; truong: string; tenTruong: string; conThieu: number | null; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} aria-label={`Mục tiêu mơ ước: ${nganh} – ${truong}. Xem chi tiết mục tiêu`} className="block w-full text-left rounded-lon shadow-the active:opacity-90">
+    <button type="button" onClick={onClick} className="block w-full text-left rounded-lon shadow-the active:opacity-90">
       <NenHero tone="xanh" className="p-4">
         <span className="flex items-center gap-3">
           <BieuTuongTron icon={Target} tone="xanh" kichThuoc={54} />
@@ -73,7 +74,7 @@ function TheMucTieu({ nganh, truong, tenTruong, conThieu, onClick }: { nganh: st
           {conThieu === null ? (
             <span className="text-[14px] text-chu">Cần đủ điểm 3 môn của tổ hợp để tính em còn thiếu bao nhiêu.</span>
           ) : conThieu > 0 ? (
-            <span className="text-[14px] text-chu">Còn thiếu <b className="text-[20px] font-extrabold text-do-chu">{conThieu.toFixed(1)}</b> <b className="text-do-chu">điểm</b> so với mục tiêu</span>
+            <span className="text-[14px] text-chu">Còn thiếu <b className="text-[20px] font-extrabold text-do-chu">{dinhDang(conThieu, 1)}</b> <b className="text-do-chu">điểm</b> so với mục tiêu</span>
           ) : (
             <span className="text-[14px] font-bold text-luc-chu">Em đã chạm điểm mục tiêu, giữ vững nhé!</span>
           )}
@@ -91,14 +92,14 @@ function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: num
         <span className="size-10 rounded-xl bg-xanh-nhat text-xanh grid place-items-center shrink-0"><BarChart3 size={20} /></span>
         <span className="min-w-0">
           <span className="block text-[12px] text-chu-phu leading-tight">Điểm hiện tại</span>
-          <b className="text-[22px] font-extrabold text-muc leading-tight">{hienTai.toFixed(1)}</b><span className="text-[13px] text-chu-phu"> / 30</span>
+          <b className="text-[22px] font-extrabold text-muc leading-tight">{dinhDang(hienTai, 1)}</b><span className="text-[13px] text-chu-phu"> / 30</span>
         </span>
       </The>
       <The className="!p-3 flex items-center gap-2.5">
         <span className="size-10 rounded-xl bg-do-nhat text-do grid place-items-center shrink-0"><Flag size={20} /></span>
         <span className="min-w-0">
           <span className="block text-[12px] text-chu-phu leading-tight">Điểm mục tiêu</span>
-          <b className="text-[22px] font-extrabold text-muc leading-tight">{mucTieu.toFixed(1)}</b><span className="text-[13px] text-chu-phu"> / 30</span>
+          <b className="text-[22px] font-extrabold text-muc leading-tight">{dinhDang(mucTieu, 1)}</b><span className="text-[13px] text-chu-phu"> / 30</span>
         </span>
       </The>
       {thieuMon.length > 0 && (

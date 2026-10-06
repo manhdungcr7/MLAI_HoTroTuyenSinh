@@ -7,6 +7,7 @@ import { cungNoi } from "@/features/kham-pha/bo-loc";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, HoSo, LuaChon, NhanNguyenVong } from "@/state/types";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export interface DongGoiY { lc: LuaChon; nhan: NhanNguyenVong; tong: number; toHop: string | null; lyDo: string[] }
 
@@ -46,7 +47,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
     soTruong.set(dung.lc.truong, (soTruong.get(dung.lc.truong) ?? 0) + 1);
     const lyDo: string[] = [];
     const chenh = Math.round((dung.tong - dung.lc.diemMin) * 10) / 10;
-    lyDo.push(chenh >= 0 ? `Điểm của em ${dung.toHop ? `(${dung.toHop}) ` : ""}cao hơn điểm chuẩn ${dung.lc.namDiem} ${chenh.toFixed(1).replace(".", ",")} điểm` : `Điểm của em ${dung.toHop ? `(${dung.toHop}) ` : ""}thấp hơn điểm chuẩn ${dung.lc.namDiem} ${(-chenh).toFixed(1).replace(".", ",")} điểm`);
+    lyDo.push(chenh >= 0 ? `Điểm của em ${dung.toHop ? `(${dung.toHop}) ` : ""}cao hơn điểm chuẩn ${dung.lc.namDiem} ${dinhDang(chenh, 1).replace(".", ",")} điểm` : `Điểm của em ${dung.toHop ? `(${dung.toHop}) ` : ""}thấp hơn điểm chuẩn ${dung.lc.namDiem} ${(-chenh).toFixed(1).replace(".", ",")} điểm`);
     if (hoSo.nganhQuanTam.includes(dung.lc.nhomNganh)) lyDo.push(`Đúng nhóm ngành em quan tâm (${dung.lc.nhomNganh})`);
     if (tinh && cungNoi(dung.lc.khuVuc, tinh)) lyDo.push(`Ở ${dung.lc.khuVuc}, gần nơi em sống`);
     else if (dungKhuVuc(dung.lc, hoSo.khuVuc) === true) lyDo.push(`Ở ${dung.lc.khuVuc}, đúng khu vực em ưu tiên`);

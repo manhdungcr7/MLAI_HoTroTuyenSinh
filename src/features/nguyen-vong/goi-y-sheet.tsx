@@ -10,6 +10,7 @@ import { coDiemDeSo, boiCanhTu } from "@/features/kham-pha/phu-hop";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import { goiYDanhSach } from "./goi-y-danh-sach";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export function NutGoiYDanhSach({ onMo, kieu = "mac-dinh" }: { onMo: () => void; kieu?: "mac-dinh" | "vien" }) {
   const { s } = useApp();
@@ -41,7 +42,7 @@ export function GoiYSheet({ mo, dong }: { mo: boolean; dong: () => void }) {
                     <b className="text-[15px] text-muc leading-snug">{d.lc.nganh}</b>
                     <NhanNguyenVongTag nhan={d.nhan} />
                   </div>
-                  <p className="text-[13px] text-chu-phu">{d.lc.truong} · {d.lc.khuVuc} · điểm chuẩn {d.lc.diemMin.toFixed(1).replace(".", ",")} ({d.lc.namDiem})</p>
+                  <p className="text-[13px] text-chu-phu">{d.lc.truong} · {d.lc.khuVuc} · điểm chuẩn {dinhDang(d.lc.diemMin, 1).replace(".", ",")} ({d.lc.namDiem})</p>
                   <ul className="mt-1 space-y-0.5">
                     {d.lyDo.map((r) => <li key={r} className="text-[12px] text-chu-phu">• {r}</li>)}
                   </ul>

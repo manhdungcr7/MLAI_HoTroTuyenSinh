@@ -13,6 +13,7 @@ import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
+import { dinhDang } from "@/engine/dinh-dang";
 
 /**
  * Chữ trên huy hiệu. HuyHieuTruong lấy 4 chữ cái đầu nên HCMUTE, HCMUE, HCMUS, HCMUT đều thành "HCMU";
@@ -24,7 +25,7 @@ export function kyHieu(truong: string): string {
   return /^HCM[A-Z]{2,}$/.test(truong) ? truong.slice(3) : truong;
 }
 
-export const khoangDiem = (l: LuaChon) => (l.diemMin.toFixed(1) === l.diemMax.toFixed(1) ? l.diemMin.toFixed(1) : `${l.diemMin.toFixed(1)} – ${l.diemMax.toFixed(1)}`);
+export const khoangDiem = (l: LuaChon) => (dinhDang(l.diemMin, 1) === dinhDang(l.diemMax, 1) ? dinhDang(l.diemMin, 1) : `${dinhDang(l.diemMin, 1)} – ${dinhDang(l.diemMax, 1)}`);
 export const khoangHocPhi = (l: LuaChon) => hocPhiChu(l);
 
 /** Nhãn mức phù hợp tính từ hồ sơ. Chưa có điểm thì nói rõ là chưa so được. */

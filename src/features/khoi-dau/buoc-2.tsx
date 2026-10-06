@@ -6,6 +6,7 @@ import { CACH_HOC, CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, NGUON_DIEM, 
 import DiemMonThem from "./diem-mon-them";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export const idDiem = (m: MonId) => `bd-diem-${m}`;
 
@@ -55,7 +56,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
                     aria-describedby={sai ? "loi-diem" : undefined}
                     className={gop("w-full min-w-0 min-h-11 sm:min-h-12 rounded-xl border bg-trang px-1 text-center text-[15px] sm:text-[17px] font-bold text-muc placeholder:text-chu-phu/60 focus:border-xanh",
                       sai ? "border-do text-do-chu" : "border-vien")} />
-                  <span className="text-[11px] sm:text-[12px] text-chu-phu shrink-0">/10</span>
+                  <span className="text-[12px] text-chu-phu shrink-0">/10</span>
                 </div>
               </div>
             );
@@ -92,7 +93,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
                 </div>
                 {t.tong !== null ? (
                   <p className="mt-2 flex items-end justify-between gap-1">
-                    <span><b className="text-[24px] font-extrabold text-muc leading-none">{t.tong.toFixed(1).replace(".", ",")}</b><span className="text-[13px] text-chu-phu"> / 30</span></span>
+                    <span><b className="text-[24px] font-extrabold text-muc leading-none">{dinhDang(t.tong, 1).replace(".", ",")}</b><span className="text-[13px] text-chu-phu"> / 30</span></span>
                     {nhat && <Nhan tone="xanh" className="!bg-trang !px-1.5">Cao nhất</Nhan>}
                   </p>
                 ) : (

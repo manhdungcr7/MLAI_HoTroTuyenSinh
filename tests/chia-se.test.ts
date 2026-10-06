@@ -28,7 +28,7 @@ assert.ok(cauHoiTraoDoi(TRANG_THAI_BAN_DAU as never).length >= 1, "hồ sơ tr�
 
 // Sao lưu: ghi rồi đọc lại phải giống hệt; tệp sai thì bị từ chối rõ ràng
 const r = docBanSaoLuu(taoBanSaoLuu(mau));
-assert.ok(r.ok && JSON.stringify(r.s) === JSON.stringify(mau));
+assert.ok(r.ok); assert.deepEqual(r.ok && r.s, mau);
 assert.equal(docBanSaoLuu("không phải json").ok, false);
 assert.equal(docBanSaoLuu(JSON.stringify({ app: "khac", phienBan: 2, duLieu: {} })).ok, false);
 assert.equal(docBanSaoLuu(JSON.stringify({ app: "nguyen-vong-ai", phienBan: 99, duLieu: {} })).ok, false, "phiên bản mới hơn");

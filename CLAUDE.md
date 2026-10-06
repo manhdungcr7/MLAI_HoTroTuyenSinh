@@ -16,7 +16,8 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Mục tiêu và khoảng cách | `src/features/muc-tieu` |
 | Kế hoạch học theo tuần | `src/features/ke-hoach`, `src/features/tu-hoc` |
 | Hỏi tư vấn AI có căn cứ | `src/features/tu-van`, `functions/api/tu-van.ts` |
-| Phụ huynh/thầy cô đồng hành | `src/features/hanh-trinh/chia-se.tsx` (bản tóm tắt chia sẻ) |
+| Hiểu sở thích (hướng nghiệp) | `src/features/huong-nghiep` (trắc nghiệm Holland 18 câu → nhóm ngành gợi ý, lưu `HoSo.soThich`) |
+| Phụ huynh/thầy cô đồng hành | `src/features/hanh-trinh/chia-se.tsx` (tóm tắt + tạo liên kết), `src/features/dong-hanh` (người đồng hành xem, viết lời nhắn; em nhận lời nhắn) |
 | 4 chỉ số theo dõi (slide 9) | `src/features/hanh-trinh/chi-so-theo-doi.tsx`, logic ở `tom-tat.ts` |
 | Quyền riêng tư, local-first (slide 8) | `localStorage`, xuất/khôi phục ở Cài đặt, `src/state/sao-luu.ts` |
 
@@ -30,7 +31,7 @@ npm install
 npm run dev          # chạy thử
 npx tsc --noEmit     # kiểm tra kiểu (gồm cả thư mục functions)
 npm run kiem-tra     # kiểm tra route, màu, từ cấm
-npm test             # toàn bộ test (xep-lich, muc-tieu, thu-tinh-huong, tu-hoc, du-lieu, tu-van, ke-hoach, chia-se, kiem-tra-route)
+npm test             # toàn bộ test (xep-lich, muc-tieu, thu-tinh-huong, tu-hoc, du-lieu, tu-van, ke-hoach, chia-se, dong-hanh, kiem-tra-route)
 npm run build
 ```
 
@@ -92,12 +93,18 @@ Giai đoạn 3 — đối chiếu slide thuyết trình (6–10/10) và bổ sun
 - Slide 8 "người dùng kiểm soát dữ liệu": thêm tải bản sao lưu JSON và khôi phục (`src/state/sao-luu.ts`, kiểm tra tệp sai/phiên bản mới hơn/thiếu trường).
 - Test mới: `tests/chia-se.test.ts`.
 
+Giai đoạn 4 — hoàn thiện phần còn thiếu của các slice khác và rà giao diện:
+- **Trắc nghiệm hướng nghiệp** (`/huong-nghiep`): 18 câu mô hình Holland (RIASEC), mỗi nhóm 3 câu xen kẽ. Kết quả là điểm 6 nhóm và nhóm ngành gợi ý (chỉ dùng nhóm có trong dữ liệu thật, test kiểm tra). Kết quả đi vào: nhận xét ở Hồ sơ, dòng "hợp sở thích" ở thẻ ngành trong Khám phá (không đổi mức phù hợp theo điểm), bản tóm tắt chia sẻ. Khi các nhóm điểm gần nhau thì nói "chưa nổi bật nhóm nào" thay vì chọn bừa.
+- **Đồng hành không cần tài khoản** (`/dong-hanh`, `/loi-nhan`): hệ thống chưa có máy chủ lưu dữ liệu, nên dữ liệu đi theo phần `#` của liên kết (không gửi lên máy chủ). Em tạo liên kết (tùy chọn kèm tên) → phụ huynh/thầy cô mở xem, viết lời nhắn → họ gửi lại một liên kết → em mở và bấm lưu vào Hồ sơ (`AppState.loiNhan`, tối đa 30). Mọi dữ liệu đọc từ liên kết được kiểm tra hình dạng, cắt độ dài, chỉ hiển thị dạng chữ (`dong-hanh/goi-tin.ts`, có test cho dữ liệu xấu). Giới hạn: ai có liên kết đều xem được; không có thông báo tự động khi có lời nhắn mới.
+- Sao lưu/khôi phục kiểm tra thêm `loiNhan` và `soThich`.
+- Giao diện: dấu thập phân thống nhất bằng dấu phẩy qua `engine/dinh-dang.ts` (không dùng `.toFixed` trực tiếp để hiển thị); màn chờ onboarding hiện số chương trình/trường thật thay vì con số viết tay.
+
 ## 7. Giới hạn đã biết và việc còn lại
 
 - Điểm chuẩn là số năm trước; điểm năm nay có thể khác. Học phí và việc làm mới có cho một phần chương trình. Danh sách đầy đủ ở `docs/DU-LIEU.md` và `docs/BACKLOG.md`.
-- Hồ sơ "sở thích, hoàn cảnh" mới ở mức chọn ngành quan tâm, ngân sách, nơi ở; chưa có bài trắc nghiệm hướng nghiệp.
+- Trắc nghiệm hướng nghiệp là công cụ gợi ý để tìm hiểu, chưa được kiểm định tâm lý; kết quả chỉ nên dùng cùng điểm số và trao đổi với người lớn.
 - Chưa có tài khoản, đăng nhập hay đồng bộ nhiều thiết bị (đúng với hướng local-first của MVP); chuyển máy dùng tệp sao lưu.
-- Phụ huynh/thầy cô chưa có tài khoản riêng; hiện đồng hành bằng bản tóm tắt chia sẻ.
+- Phụ huynh/thầy cô không có tài khoản riêng, đồng hành bằng liên kết hai chiều (xem mục 6, giai đoạn 4). Muốn có tài khoản, thông báo đẩy và đồng bộ thật cần một máy chủ lưu dữ liệu (Cloudflare D1/KV) và đăng nhập, chưa làm.
 - Chưa bật AI thật cho đến khi có khóa API trên Cloudflare.
 - Thông báo đẩy khi tắt app phụ thuộc trình duyệt; nhắc trong app luôn hoạt động.
 

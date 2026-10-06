@@ -13,6 +13,7 @@ import { useLuuCucBo } from "@/state/luu-cuc-bo";
 import { TEN_MON, TEN_MON_NGAN, type ToneTen } from "@/state/types";
 import { GhiChuDuLieu, TruocSau } from "./dung-chung";
 import { ANH_TRONG, dongDangChuY, huongThay, tomTatTruocSau, vietDiem, type AnhTruocSau, type DongTomTat, type HuongThay } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const KIEU_TOM_TAT: Record<DongTomTat["loai"], { icon: LucideIcon; tone: ToneTen }> = {
   len: { icon: ArrowUp, tone: "luc" }, xuong: { icon: ArrowDown, tone: "do" }, giu: { icon: Equal, tone: "xanh" },
@@ -74,7 +75,7 @@ export default function KetQuaDiemThi() {
           {anh.thieuSau.length === 0 && (
             <span className="inline-flex items-center gap-1.5 rounded-xl bg-xanh-nhat px-2.5 py-1.5 text-[13px]">
               <b className="text-xanh">{anh.maToHop}</b>
-              {anh.coTruoc ? <TruocSau truoc={anh.tongTruoc} sau={anh.tongSau} viet={(n) => n.toFixed(2)} /> : <b className="text-luc-chu">{anh.tongSau.toFixed(2)}</b>}
+              {anh.coTruoc ? <TruocSau truoc={anh.tongTruoc} sau={anh.tongSau} viet={(n) => dinhDang(n, 2)} /> : <b className="text-luc-chu">{dinhDang(anh.tongSau, 2)}</b>}
             </span>
           )}
         </div>

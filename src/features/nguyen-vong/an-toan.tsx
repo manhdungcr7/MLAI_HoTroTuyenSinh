@@ -22,6 +22,7 @@ import { GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import {
   cacBuocDoiCho, chamDiem, toHopTotNhat, demNhan, dungDanhSach, giongNhau, goiYHanhDong, ketLuan, sapTheoVuaSuc, xetCoCau, type DiemDanhGia, type GoiY,
 } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const ICON_DIEM: Record<DiemDanhGia["khoa"], LucideIcon> = { canBang: Scale, taiChinh: Wallet, khuVuc: MapPin };
 const VIEN_KHUNG: Record<ToneTen, string> = { do: "border-do/30", cam: "border-cam/40", luc: "border-luc/30", xanh: "border-xanh/30", tim: "border-tim/30", muc: "border-vien" };
@@ -204,14 +205,14 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
           {g.truong.map(({ lc, nhan }) => (
             <li key={lc.id}>
               <DongTruong onClick={() => nav(DUONG_DAN.chiTiet(lc.id))} truong={lc.truong} tone={lc.tone} ten={lc.nganh}
-                phu={`${lc.truong} · ${lc.diemMin.toFixed(1)} điểm (${lc.namDiem}) · ${coHocPhi(lc) ? `${hocPhiChu(lc)} tr/năm` : "chưa có học phí"} · ${lc.khuVuc}`}
+                phu={`${lc.truong} · ${dinhDang(lc.diemMin, 1)} điểm (${lc.namDiem}) · ${coHocPhi(lc) ? `${hocPhiChu(lc)} tr/năm` : "chưa có học phí"} · ${lc.khuVuc}`}
                 nhan={<NhanNguyenVongTag nhan={nhan} />} />
             </li>
           ))}
           {g.thuSuc.map((d) => d.lc && (
             <li key={d.id}>
               <DongTruong onClick={() => nav(DUONG_DAN.chiTiet(d.id))} truong={d.lc.truong} tone={d.lc.tone} ten={`NV${d.viTri + 1} · ${d.lc.nganh}`}
-                phu={`${d.lc.truong} · ${d.lc.diemMin.toFixed(1)} điểm (${d.lc.namDiem})`} nhan={<NhanNguyenVongTag nhan="Thử sức" />} />
+                phu={`${d.lc.truong} · ${dinhDang(d.lc.diemMin, 1)} điểm (${d.lc.namDiem})`} nhan={<NhanNguyenVongTag nhan="Thử sức" />} />
             </li>
           ))}
         </ul>

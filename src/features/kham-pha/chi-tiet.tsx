@@ -18,6 +18,7 @@ import type { LuaChon, ToneTen } from "@/state/types";
 import { TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
   "Rất cao": "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc rất cao.",
@@ -86,14 +87,14 @@ function BangDiemChuan({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
               <span className="text-[14px] text-chu">Năm {n}</span>
               <span className="flex items-center gap-3">
                 {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 text-[13px] font-bold text-xanh hover:underline">Xem trong đề án {link.tai ?? ""}{link.trang ? `, trang ${link.trang}` : ""}</a>}
-                <b className="text-[16px] text-muc tabular-nums">{d.toFixed(2)}</b>
+                <b className="text-[16px] text-muc tabular-nums">{dinhDang(d, 2)}</b>
               </span>
             </li>
           );
         })}
       </ul>
-      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em theo tổ hợp của ngành: <b className="text-chu">{diemEm.toFixed(2)}</b></p>}
-      {lc.diemDuKien != null && <p className="mt-1 text-[12px] text-chu-phu">Điểm chuẩn dự kiến năm tới lấy bằng năm gần nhất ({lc.diemDuKien.toFixed(2)}); điểm thật có thể lệch vài điểm.</p>}
+      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em theo tổ hợp của ngành: <b className="text-chu">{dinhDang(diemEm, 2)}</b></p>}
+      {lc.diemDuKien != null && <p className="mt-1 text-[12px] text-chu-phu">Điểm chuẩn dự kiến năm tới lấy bằng năm gần nhất ({dinhDang(lc.diemDuKien, 2)}); điểm thật có thể lệch vài điểm.</p>}
     </section>
   );
 }

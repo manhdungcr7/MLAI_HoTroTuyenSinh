@@ -3,6 +3,7 @@
 import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong, type DieuKienThu } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type LuaChon, type MaToHop, type MonId, type MonThem, type NhanNguyenVong, type TinhHuongDaLuu } from "@/state/types";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export type Diem = Record<MonId, number | null>;
 /** Điểm các môn thêm (Sử, Địa, Tin...) trong hồ sơ: không đổi khi em kéo thử điểm, nhưng cần để tính đúng tổ hợp của từng ngành. */
@@ -28,7 +29,7 @@ export const lam = (n: number, so = 2) => Math.round(n * 10 ** so) / 10 ** so;
 const kep = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n));
 
 /** Viết số điểm: 8 → "8.0", 7.25 → "7.25". */
-export const vietDiem = (n: number) => (Math.abs(n * 10 - Math.round(n * 10)) < 1e-9 ? n.toFixed(1) : lam(n).toFixed(2));
+export const vietDiem = (n: number) => (Math.abs(n * 10 - Math.round(n * 10)) < 1e-9 ? dinhDang(n, 1) : lam(n).toFixed(2));
 /** Viết mức cộng/trừ: +1.0, −0.25, 0. */
 export const vietCong = (n: number) => (n === 0 ? "0" : `${n > 0 ? "+" : "−"}${vietDiem(Math.abs(n))}`);
 
@@ -343,7 +344,7 @@ const phoBien = (ds: DongTruocSau[]) => {
 function dongChuyenNhom(a: AnhTruocSau, ten: string): DongTomTat {
   if (!a.coTruoc) {
     const vua = a.dong.filter((d) => d.nhanSau !== "Thử sức").length;
-    return { loai: "len", tieuDe: `Lần đầu đủ điểm ${a.maToHop}: ${a.tongSau.toFixed(2)}`, moTa: `${vua}/${a.dong.length} ${ten} ở mức Vừa sức trở lên` };
+    return { loai: "len", tieuDe: `Lần đầu đủ điểm ${a.maToHop}: ${dinhDang(a.tongSau, 2)}`, moTa: `${vua}/${a.dong.length} ${ten} ở mức Vừa sức trở lên` };
   }
   const len = a.dong.filter((d) => HANG_NHAN[d.nhanSau] > HANG_NHAN[d.nhanTruoc]);
   const xuong = a.dong.filter((d) => HANG_NHAN[d.nhanSau] < HANG_NHAN[d.nhanTruoc]);

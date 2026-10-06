@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { bayNgayCuaTuan, isoNgay, xepLichTuan } from "@/engine/xep-lich";
 import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau } from "./mau";
 import type {
-  CauHinhTuHoc, DiemThi, HoSo, KhoiHoc, MucTieuChinh, NhacNho, TamTrang, TietCoDinh, TinhHuongDaLuu, TrangThaiViec, ViecCanHoc, LichSuHoanThanh,
+  CauHinhTuHoc, DiemThi, HoSo, KhoiHoc, MucTieuChinh, NhacNho, TamTrang, TietCoDinh, TinhHuongDaLuu, TrangThaiViec, ViecCanHoc, LichSuHoanThanh, LoiNhan,
 } from "./types";
 
 export interface AppState {
@@ -23,6 +23,7 @@ export interface AppState {
   nhacNho: NhacNho;
   lichSu: LichSuHoanThanh[];
   cauNoiHomNay: number;
+  loiNhan: LoiNhan[]; // lời nhắn từ người đồng hành, em chủ động lưu
 }
 
 const KHOA = "nvai:v2";
@@ -65,6 +66,8 @@ interface Ctx {
   xoaTinhHuong: (id: string) => void;
   dungHoSoMau: () => void;
   lamLai: () => void;
+  themLoiNhan: (l: LoiNhan) => void;
+  xoaLoiNhan: (id: string) => void;
   /** Thay toàn bộ dữ liệu bằng bản đã khôi phục từ tệp sao lưu. */
   khoiPhuc: (s: AppState) => void;
   datTrangThaiViec: (v: ViecCanHoc, tt: TrangThaiViec) => void;
@@ -117,6 +120,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     xoaTinhHuong: (id) => cap((x) => ({ ...x, tinhHuong: x.tinhHuong.filter((t) => t.id !== id) })),
     dungHoSoMau: () => { xoaDuLieuPhu(); setS(taoHoSoMau()); },
     lamLai: () => { xoaDuLieuPhu(); setS({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
+    themLoiNhan: (l) => cap((x) => (x.loiNhan.some((k) => k.id === l.id) ? x : { ...x, loiNhan: [l, ...x.loiNhan].slice(0, 30) })),
+    xoaLoiNhan: (id) => cap((x) => ({ ...x, loiNhan: x.loiNhan.filter((k) => k.id !== id) })),
     khoiPhuc: (n) => { xoaDuLieuPhu(); setS(n); },
     datTrangThaiViec: (v, tt) => cap((x) => ({
       ...x,

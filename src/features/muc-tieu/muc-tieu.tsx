@@ -146,9 +146,9 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
             <span className="flex items-center gap-1.5 text-[13px] text-chu-phu"><BarChart3 size={15} className="text-xanh" />Điểm hiện tại</span>
             <p className="mt-0.5"><b className="text-[28px] leading-tight font-extrabold text-xanh">{duDiem ? diem1(d.hienTai) : "—"}</b><span className="text-[14px] text-chu-phu"> / 30</span></p>
           </div>
-          <button type="button" onClick={moSua} aria-label={`Điểm mục tiêu ${diem1(d.mucTieu)}. Bấm để sửa`}
+          <button type="button" onClick={moSua}
             className="pl-3 text-left min-w-0 rounded-r-lg active:bg-xanh-nhat">
-            <span className="flex items-center gap-1.5 text-[13px] text-chu-phu"><Target size={15} className="text-do" />Điểm mục tiêu<Pencil size={14} className="text-xanh ml-auto" /></span>
+            <span className="flex items-center gap-1.5 text-[13px] text-chu-phu"><Target size={15} className="text-do" />Điểm mục tiêu<Pencil size={14} className="text-xanh ml-auto" aria-hidden /><span className="sr-only">(bấm để sửa)</span></span>
             <p className="mt-0.5"><b className="text-[28px] leading-tight font-extrabold text-muc">{diem1(d.mucTieu)}</b><span className="text-[14px] text-chu-phu"> / 30</span></p>
           </button>
         </div>
@@ -181,7 +181,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
         </div>
       ))}
 
-      <button type="button" onClick={moSua} aria-label="Sửa ngày thi dự kiến"
+      <button type="button" onClick={moSua}
         className="w-full text-left rounded-the bg-cam-nhat p-4 flex items-center gap-4 active:brightness-95">
         <BieuTuongTron icon={CalendarDays} tone="cam" kichThuoc={56} />
         <span className="flex-1 min-w-0">

@@ -1,4 +1,5 @@
 // Tính toán thuần (không React) cho Hôm nay và Hồ sơ. Đầu vào là AppState, đầu ra là dữ liệu để vẽ.
+import { khongRoNet, moTaTop } from "@/features/huong-nghiep/cau-hoi";
 import { congNgay, isoNgay, phutTuGio, taoNgay, thuCuaNgay } from "@/engine/xep-lich";
 import { DUONG_DAN } from "@/duong-dan";
 import { diemHienTaiCuaTungMon, type AppState } from "@/state/store";
@@ -127,6 +128,7 @@ export function hieuEm(s: AppState): HieuEm {
   const monTot = coDiem.filter((x) => diem[x]! >= 8).slice(0, 2);
   if (monTot.length) manh.push(`${noi(monTot.map((x) => TEN_MON[x]))} đang vững (${monTot.map((x) => lam1(diem[x]!)).join(" và ")} điểm)`);
   else if (coDiem.length) manh.push(`${TEN_MON[coDiem[0]]} là môn tốt nhất của em lúc này (${lam1(diem[coDiem[0]]!)} điểm)`);
+  if (h.soThich && !khongRoNet(h.soThich)) manh.push(`Trắc nghiệm cho thấy em nghiêng về ${moTaTop(h.soThich).toLowerCase()}`);
   const tangNhat = xu.filter((x) => x.tongTang >= 0.3).sort((a, b) => b.tongTang - a.tongTang)[0];
   if (tangNhat) manh.push(`${TEN_MON[tangNhat.mon]} tăng ${lam1(tangNhat.tongTang)} điểm qua ${tangNhat.soLan} lần thi thử`);
   if (h.diemManh.length) manh.push(`Em thấy mình mạnh về ${noi(h.diemManh.slice(0, 3).map(viThuong))}`);
@@ -176,6 +178,7 @@ export function hieuEm(s: AppState): HieuEm {
     [h.nganhQuanTam.length > 0, { ten: "Nhóm ngành quan tâm", den: b1 }],
     [chuaCoDiem.length === 0, { ten: chuaCoDiem.length === CAC_MON.length ? "Điểm các môn" : `Điểm ${chuaCoDiem.map((x) => TEN_MON_NGAN[x]).join(", ")}`, den: b2 }],
     [h.diemManh.length > 0, { ten: "Điểm mạnh của em", den: b2 }],
+    [!!h.soThich, { ten: "Trắc nghiệm hướng nghiệp", den: DUONG_DAN.tracNghiem() }],
     [h.nganSach !== null, { ten: "Mức học phí gia đình chi trả được", den: b3 }],
     [h.khuVuc.length > 0, { ten: "Nơi em muốn học", den: b3 }],
     [h.choO !== null, { ten: "Chỗ ở dự kiến", den: b3 }],

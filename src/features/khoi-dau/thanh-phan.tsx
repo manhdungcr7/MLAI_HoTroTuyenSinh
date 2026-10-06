@@ -20,13 +20,13 @@ export function ThanhBuoc({ hien, denBuoc }: { hien: BuocBatDau; denBuoc: (b: Bu
               {/* đường nối từ tâm vòng trước tới tâm vòng này, chừa 26px quanh mỗi vòng */}
               {b > 1 && <span aria-hidden className={gop("absolute top-[17px] h-[3px] rounded-full", b <= hien ? "bg-xanh" : "bg-vien")} style={{ left: "calc(-50% + 26px)", right: "calc(50% + 26px)" }} />}
               <button type="button" disabled={b > hien} onClick={() => denBuoc(b)} aria-current={dang ? "step" : undefined}
-                aria-label={`Bước ${b}: ${TEN_BUOC[b]}${xong ? " (đã qua, bấm để sửa)" : ""}`}
                 className="flex flex-col items-center gap-1 min-h-12 px-1 disabled:cursor-default">
                 <span className={gop("relative size-9 rounded-full grid place-items-center text-[14px] font-extrabold transition-colors",
                   dang ? "gd-xanh text-white ring-4 ring-xanh/15" : xong ? "bg-xanh text-white" : "bg-trang border-2 border-vien text-chu-phu")}>
                   {xong ? <Check size={17} strokeWidth={3.2} /> : b}
                 </span>
                 <span className={gop("text-[12px] font-bold leading-tight text-center", dang ? "text-xanh" : xong ? "text-chu" : "text-chu-phu")}>{TEN_BUOC[b]}</span>
+                {xong && <span className="sr-only">(đã qua, bấm để sửa)</span>}
               </button>
             </li>
           );

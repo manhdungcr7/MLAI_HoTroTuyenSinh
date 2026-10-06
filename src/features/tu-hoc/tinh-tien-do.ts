@@ -5,6 +5,7 @@ import {
 import { viecCuaTuan } from "@/state/chon";
 import type { AppState } from "@/state/store";
 import { TEN_MON, type CauHinhTuHoc, type KhoiHoc, type LichSuHoanThanh, type MonId, type TietCoDinh } from "@/state/types";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export const NHAN_THU = ["", "T2", "T3", "T4", "T5", "T6", "T7", "CN"] as const;
 export const TEN_THU = ["", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"] as const;
@@ -138,4 +139,4 @@ export function dangGio(phut: number): string {
 }
 
 /** Số thập phân kiểu Việt: 2.5 → "2,5" */
-export const soViet = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1).replace(".", ","));
+export const soViet = (n: number) => (Number.isInteger(n) ? String(n) : dinhDang(n, 1).replace(".", ","));

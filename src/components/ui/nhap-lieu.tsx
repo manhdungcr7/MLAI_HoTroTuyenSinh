@@ -93,7 +93,7 @@ export function OTich({ dang, onChange, nhan }: { dang: boolean; onChange: (v: b
 export function CongTac({ dang, onChange, nhan }: { dang: boolean; onChange: (v: boolean) => void; nhan: string }) {
   return (
     <button type="button" role="switch" aria-checked={dang} aria-label={nhan} onClick={() => onChange(!dang)}
-      className={gop("w-12 h-7 rounded-full p-0.5 transition-colors shrink-0", dang ? "bg-xanh" : "bg-chu-phu/40")}>
+      className={gop("relative w-12 h-7 rounded-full p-0.5 transition-colors shrink-0 after:absolute after:-inset-y-2 after:inset-x-0 after:content-['']", dang ? "bg-xanh" : "bg-chu-phu/40")}>
       <span className={gop("block size-6 rounded-full bg-white shadow transition-transform", dang && "translate-x-5")} />
     </button>
   );

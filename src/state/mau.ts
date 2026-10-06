@@ -22,6 +22,7 @@ export const TRANG_THAI_BAN_DAU: AppState = {
   nhacNho: { bat: false, truocPhut: 15, nhacChuanBiBai: true, gioChuanBiBai: "20:00" },
   lichSu: [],
   cauNoiHomNay: 0,
+  loiNhan: [],
 };
 
 /** Hồ sơ mẫu "Minh Anh" – để thử giao diện và cho nhóm dev đi nhanh. Số liệu là mẫu, không phải người thật. */
@@ -38,6 +39,7 @@ export function taoHoSoMau(): AppState {
     hoSo: {
       hoTen: "Nguyễn Minh Anh", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "Ôn thi THPT", nganhQuanTam: ["CNTT"], mucTieuHienTai: "daCoMoUoc",
       nguonDiem: "thiThu", diem: { toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 },
+      soThich: { diem: { R: 4, I: 8, A: 4, S: 5, E: 4, C: 6 }, top: ["I", "C", "S"], luc: new Date().toISOString() },
       diemManh: ["Tư duy logic", "Giải quyết vấn đề", "Tiếng Anh"], canCaiThien: ["Vật lý", "Diễn đạt", "Quản lý thời gian"],
       cachHoc: ["Học qua bài tập", "Học theo dự án"], nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"], ghiChuChiPhi: "",
       hocXaNha: true, quanTamViecLam: "rat", conDuong: "daiHoc", hoanTat: true,

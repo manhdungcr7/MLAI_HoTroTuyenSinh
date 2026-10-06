@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpDown, ChevronDown, PencilLine, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Compass, PencilLine, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut, gop } from "@/components/ui/nut-the";
@@ -14,6 +14,7 @@ import { useBoLoc } from "./dung-bo-loc";
 import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
+import { dinhDang } from "@/engine/dinh-dang";
 
 /** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để em mở ra thấy trống. */
 function boLocBanDau(khuVuc: string | undefined, nganh: string[]): [string | undefined, string | undefined] {
@@ -77,10 +78,10 @@ export default function KhamPha() {
               })}
             </div>
           </div>
-          <button type="button" onClick={() => nav(DUONG_DAN.boLoc())} aria-label={soLoc ? `Bộ lọc, đang bật ${soLoc}` : "Bộ lọc"}
+          <button type="button" onClick={() => nav(DUONG_DAN.boLoc())}
             className="min-h-11 px-3 rounded-xl bg-trang border border-xanh text-[14px] font-bold text-xanh inline-flex items-center gap-1.5 shrink-0 active:bg-xanh-nhat">
             <SlidersHorizontal size={16} />Bộ lọc
-            {soLoc > 0 && <span className="min-w-5 h-5 px-1 rounded-full gd-xanh text-white text-[11px] grid place-items-center">{soLoc}</span>}
+            {soLoc > 0 && <span className="min-w-5 h-5 px-1 rounded-full gd-xanh text-white text-[11px] grid place-items-center">{soLoc}<span className="sr-only"> bộ lọc đang bật</span></span>}
           </button>
         </div>
 
@@ -88,7 +89,7 @@ export default function KhamPha() {
           <section aria-label="Cơ hội của em" className="rounded-the nen-xanh p-3.5">
             <p className="text-[13px] font-bold text-xanh">Với điểm của em</p>
             <p className="mt-0.5 text-[15px] text-chu leading-snug">
-              Tổ hợp <b>{coHoi.toHop}</b> được <b>{coHoi.tong.toFixed(1).replace(".", ",")}</b> điểm: đủ điểm chuẩn năm gần nhất của <b className="text-luc-chu">{coHoi.soDuDiem}</b> ngành, thử sức thêm <b className="text-cam-chu">{coHoi.soThuSuc}</b> ngành (trong {coHoi.soNganh} ngành mình so được).
+              Tổ hợp <b>{coHoi.toHop}</b> được <b>{dinhDang(coHoi.tong, 1).replace(".", ",")}</b> điểm: đủ điểm chuẩn năm gần nhất của <b className="text-luc-chu">{coHoi.soDuDiem}</b> ngành, thử sức thêm <b className="text-cam-chu">{coHoi.soThuSuc}</b> ngành (trong {coHoi.soNganh} ngành mình so được).
             </p>
             {coHoi.theoNhom.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Nhóm ngành nhiều cơ hội">
@@ -107,6 +108,12 @@ export default function KhamPha() {
           <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để biết mức phù hợp"
             moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp (ví dụ Toán, Lý, Anh). Có điểm, mình sẽ so với điểm chuẩn của từng ngành."
             hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
+        )}
+
+        {!s.hoSo.soThich && (
+          <DongThongBao tone="cam" icon={Compass} tieuDe="Chưa biết mình hợp ngành nào?"
+            moTa="Làm trắc nghiệm 18 câu, khoảng 3 phút. Mình gợi ý nhóm ngành hợp sở thích của em, bên cạnh điểm số."
+            hanhDong="Làm trắc nghiệm" onClick={() => nav(DUONG_DAN.tracNghiem())} />
         )}
 
         <div className="flex items-center justify-between gap-2 pt-1">

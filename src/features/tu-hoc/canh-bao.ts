@@ -6,6 +6,7 @@ import { viecCuaTuan } from "@/state/chon";
 import type { AppState } from "@/state/store";
 import { TEN_MON, type CanhBao, type ToneTen } from "@/state/types";
 import { NHAN_THU, buoiBoLo, monTangLienTiep, ngayThang, phutHienTai } from "./tinh-tien-do";
+import { dinhDang } from "@/engine/dinh-dang";
 
 export type DuLieuCanhBao = Pick<AppState, "viec" | "trangThaiViec" | "khoiHoc" | "coDinh" | "diemThi" | "lichSu">;
 
@@ -118,7 +119,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
     ra.push({
       id: `tangDiem:${tang.map((t) => t.mon).join("-")}`, tone: "luc",
       tieuDe: tang.length === 1 ? `Điểm ${TEN_MON[t0.mon]} tăng 3 lần liền` : `Điểm ${danhSach} đều tăng 3 lần liền`,
-      moTa: `${TEN_MON[t0.mon]}: ${t0.ba.map((d) => d.toFixed(1)).join(" → ")}. Em đang đi đúng hướng, giữ nhịp này nhé!`,
+      moTa: `${TEN_MON[t0.mon]}: ${t0.ba.map((d) => dinhDang(d, 1)).join(" → ")}. Em đang đi đúng hướng, giữ nhịp này nhé!`,
     });
   }
 

@@ -32,6 +32,14 @@ export const TO_HOP: Record<MaToHop, MonId[]> = {
 
 export type NguonDiem = "hocBa" | "thiThu" | "danhGiaNangLuc" | "tuDanhGia";
 
+export type LoaiSoThich = "R" | "I" | "A" | "S" | "E" | "C";
+/** Kết quả trắc nghiệm sở thích nghề nghiệp (Holland). diem: 0–9 mỗi nhóm; top: 3 nhóm cao nhất. */
+export interface KetQuaSoThich { diem: Record<LoaiSoThich, number>; top: LoaiSoThich[]; luc: string }
+
+export type VaiDongHanh = "phuHuynh" | "giaoVien" | "tuVan";
+/** Lời nhắn của phụ huynh, thầy cô hoặc người tư vấn gửi cho em qua liên kết. */
+export interface LoiNhan { id: string; tu: string; vai: VaiDongHanh; noiDung: string; luc: string }
+
 export interface HoSo {
   hoTen: string;
   khoi: 11 | 12 | null;
@@ -42,6 +50,7 @@ export interface HoSo {
   nguonDiem: NguonDiem;
   diem: Record<MonId, number | null>;
   diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)
+  soThich?: KetQuaSoThich | null; // trắc nghiệm hướng nghiệp, chưa làm thì để trống
   diemManh: string[];
   canCaiThien: string[];
   cachHoc: string[];

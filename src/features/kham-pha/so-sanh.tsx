@@ -17,6 +17,7 @@ import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
 import { GhiChuDuLieuMau, HopChonLuaChon, NhanPhuHop, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 type Khe = 0 | 1;
 
@@ -32,7 +33,7 @@ function DauCot({ l, onDoi, onChon }: { l?: LuaChon; onDoi: () => void; onChon: 
   }
   return (
     <div className="flex flex-col items-center text-center min-w-0">
-      <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(l.id))} aria-label={`Xem chi tiết ${l.nganh} – ${l.truong}`}
+      <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(l.id))} 
         className="w-full flex flex-col items-center rounded-the px-1 py-2 active:bg-xanh-nhat">
         <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={52} />
         <b className="mt-1.5 text-[16px] text-muc leading-tight break-words">{l.nganh}</b>
@@ -204,7 +205,7 @@ export default function SoSanh() {
               <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={44} />
               <span className="flex-1 min-w-0">
                 <b className="block text-[15px] text-muc leading-snug">{l.nganh} – {l.truong}</b>
-                <span className="text-[13px] text-chu-phu">{(() => { const d = coTheDatMucTieu(l); return d.ok ? `Mục tiêu ${l.diemMin.toFixed(1)} điểm` : d.lyDo; })()}</span>
+                <span className="text-[13px] text-chu-phu">{(() => { const d = coTheDatMucTieu(l); return d.ok ? `Mục tiêu ${dinhDang(l.diemMin, 1)} điểm` : d.lyDo; })()}</span>
               </span>
               <NhanPhuHop kq={kq} />
             </button>

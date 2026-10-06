@@ -89,7 +89,7 @@ export default function TuVan() {
                         })}
                       </div>
                     )}
-                    <p className="mt-1.5 text-[11px] text-chu-phu">{t.cheDo === "ai" ? "Trả lời bởi AI, chỉ dùng số liệu trong app" : "Trả lời tự động từ số liệu trong app"}</p>
+                    <p className="mt-1.5 text-[12px] text-chu-phu">{t.cheDo === "ai" ? "Trả lời bởi AI, chỉ dùng số liệu trong app" : "Trả lời tự động từ số liệu trong app"}</p>
                   </>
                 )}
               </div>
@@ -106,14 +106,14 @@ export default function TuVan() {
 
         <div className="rounded-the border border-vien bg-trang p-3.5">
           <label className="flex items-start gap-3 min-h-11">
-            <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="mt-1 size-5 accent-[var(--color-xanh)]" />
+            <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="mt-1 size-5 shrink-0 accent-[var(--color-xanh)]" />
             <span className="text-[14px] text-chu"><b className="text-muc">Cho mình dùng hồ sơ của em</b> (điểm tổ hợp, nhóm ngành, ngân sách, khu vực) để trả lời sát hơn. Không gửi tên và thông tin liên hệ.</span>
           </label>
           <button type="button" onClick={() => setXemGui(!xemGui)} aria-expanded={xemGui} className="mt-1 inline-flex items-center gap-1.5 min-h-11 text-[13px] font-bold text-xanh">
             <Eye size={16} />{xemGui ? "Ẩn dữ liệu sẽ gửi" : "Xem dữ liệu sẽ gửi đi"}
           </button>
           {xemGui && (
-            <pre className="mt-1 max-h-56 overflow-auto rounded-xl bg-nen p-2.5 text-[11px] leading-snug text-chu whitespace-pre-wrap break-words" aria-label="Dữ liệu sẽ gửi">
+            <pre className="mt-1 max-h-56 overflow-auto rounded-xl bg-nen p-2.5 text-[12px] leading-snug text-chu whitespace-pre-wrap break-words" aria-label="Dữ liệu sẽ gửi">
               {xemTruoc ? JSON.stringify({ cauHoi: xemTruoc.cauHoi, hoSo: xemTruoc.hoSo, nganhKemTheo: xemTruoc.duLieu.map((d) => `${d.nganh} · ${d.truong}`) }, null, 1) : "Em gõ câu hỏi để xem mình sẽ gửi những gì."}
             </pre>
           )}

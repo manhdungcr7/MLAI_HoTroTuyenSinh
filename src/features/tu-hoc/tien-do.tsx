@@ -17,6 +17,7 @@ import { useApp } from "@/state/store";
 import type { LichSuHoanThanh, ToneTen, TrangThaiViec } from "@/state/types";
 import { loaiCuaCanhBao, taoCanhBao, type LoaiCanhBao } from "./canh-bao";
 import { demTienDo, loiGhiNhan, ngayThang, nhanThoiDiem, soViet, soVoiTuanTruoc, xuHuongCacMon, type XuHuongMon } from "./tinh-tien-do";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const ICON_CANH_BAO: Record<LoaiCanhBao, LucideIcon> = {
   boLo: CircleAlert, trung: CalendarX2, dieuChinh: Lightbulb, boQua: SkipForward, chuaLich: CalendarPlus, tangDiem: TrendingUp,
@@ -186,11 +187,11 @@ function KetQuaHocTap({ xuHuong, nhapDiem }: { xuHuong: XuHuongMon[]; nhapDiem: 
                   ? <DuongXuHuong gia={x.gia} tone={tone} rong={76} cao={34} />
                   : <span aria-hidden className="block w-full border-t-2 border-dashed border-vien" />}
               </div>
-              <p className="text-[20px] font-extrabold text-muc leading-tight">{x.moiNhat !== null ? x.moiNhat.toFixed(1) : "–"}</p>
+              <p className="text-[20px] font-extrabold text-muc leading-tight">{x.moiNhat !== null ? dinhDang(x.moiNhat, 1) : "–"}</p>
               <p className={gop("text-[12px] font-bold flex items-center gap-0.5 whitespace-nowrap", x.chenh === null ? "text-chu-phu" : TONE_CHU[tone])}>
                 {x.chenh === null ? "Chưa đủ dữ liệu"
-                  : x.chenh > 0 ? <><TrendingUp size={14} />+{x.chenh.toFixed(1)}</>
-                  : x.chenh < 0 ? <><TrendingDown size={14} />{x.chenh.toFixed(1)}</>
+                  : x.chenh > 0 ? <><TrendingUp size={14} />+{dinhDang(x.chenh, 1)}</>
+                  : x.chenh < 0 ? <><TrendingDown size={14} />{dinhDang(x.chenh, 1)}</>
                   : <><ArrowRight size={14} />Ổn định</>}
               </p>
             </li>

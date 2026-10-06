@@ -10,6 +10,9 @@ export const MAU = {
   hoSo: "/ho-so",
   hoSoCaiDat: "/ho-so/cai-dat",
   chiaSe: "/ho-so/chia-se",
+  tracNghiem: "/huong-nghiep",
+  dongHanh: "/dong-hanh",
+  nhanLoiNhan: "/loi-nhan",
   khamPha: "/kham-pha",
   boLoc: "/kham-pha/bo-loc",
   veDuLieu: "/kham-pha/ve-du-lieu",
@@ -44,6 +47,11 @@ export const DUONG_DAN = {
   hoSo: () => "/ho-so",
   hoSoCaiDat: () => "/ho-so/cai-dat",
   chiaSe: () => "/ho-so/chia-se",
+  tracNghiem: () => "/huong-nghiep",
+  /** Trang người đồng hành xem bản tóm tắt; `d` là gói đã mã hóa. */
+  dongHanh: (d?: string) => (d ? `/dong-hanh?d=${d}` : "/dong-hanh"),
+  /** Trang em nhận lời nhắn; `d` là lời nhắn đã mã hóa. */
+  nhanLoiNhan: (d?: string) => (d ? `/loi-nhan?d=${d}` : "/loi-nhan"),
   khamPha: () => "/kham-pha",
   boLoc: () => "/kham-pha/bo-loc",
   veDuLieu: () => "/kham-pha/ve-du-lieu",

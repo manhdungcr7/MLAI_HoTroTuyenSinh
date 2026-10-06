@@ -2,11 +2,12 @@
 // Mọi con số "công sức" ở đây là ƯỚC TÍNH từ điểm thi thử, không phải cam kết hay xác suất.
 import type { KhoangCachMon } from "@/engine/phan-tich";
 import { TEN_MON, type DiemThi, type MonId } from "@/state/types";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const lam1 = (n: number) => Math.round(n * 10) / 10;
 
 /** Hiển thị điểm luôn 1 chữ số thập phân. */
-export const diem1 = (n: number) => lam1(n).toFixed(1);
+export const diem1 = (n: number) => dinhDang(lam1(n), 1);
 
 /** yyyy-mm-dd → dd/mm/yyyy. */
 export function ngayVN(iso: string): string {

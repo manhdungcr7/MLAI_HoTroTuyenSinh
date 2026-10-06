@@ -13,6 +13,7 @@ import { TEN_MON, TEN_MON_NGAN, type MonId } from "@/state/types";
 import { NGUONG_PHU_HOP } from "@/engine/phan-tich";
 import { BaoNho, GhiChuDuLieu, ThanhTruot, ThieuDiem, TruocSau, useLuuTinhHuong, useTinhHuong } from "./dung-chung";
 import { DANG_THU_MAC_DINH, MO_TA_UU_TIEN, NGAN_SACH_KHONG_GIOI_HAN, TEN_UU_TIEN, apDungCong, vietCong, vietDiem, type UuTien } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 // Thứ tự nút môn theo ref: các môn hay thi trước.
 const THU_TU_MON: MonId[] = ["toan", "nguVan", "tiengAnh", "vatLy", "hoaHoc", "sinh"];
@@ -120,14 +121,14 @@ export default function ThuTinhHuong() {
               <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
                 <div className="rounded-xl bg-nen p-2.5 text-center">
                   <p className="text-[12px] text-chu-phu">Hiện tại</p>
-                  <p className="text-[24px] font-extrabold text-muc leading-tight">{kq.tongTruoc.toFixed(2)}</p>
-                  <p className="text-[11px] text-chu-phu leading-snug">{toHop.map((m) => `${TEN_MON_NGAN[m]} ${vietDiem(diem[m]!)}`).join(" + ")}</p>
+                  <p className="text-[24px] font-extrabold text-muc leading-tight">{dinhDang(kq.tongTruoc, 2)}</p>
+                  <p className="text-[12px] text-chu-phu leading-snug">{toHop.map((m) => `${TEN_MON_NGAN[m]} ${vietDiem(diem[m]!)}`).join(" + ")}</p>
                 </div>
                 <ArrowRight size={20} className="text-chu-phu" aria-label="thành" />
                 <div className={gop("rounded-xl p-2.5 text-center", kq.tongSau > kq.tongTruoc ? "bg-luc-nhat" : kq.tongSau < kq.tongTruoc ? "bg-do-nhat" : "bg-nen")}>
                   <p className="text-[12px] text-chu-phu">Sau khi thử</p>
-                  <p className={gop("text-[24px] font-extrabold leading-tight", kq.tongSau > kq.tongTruoc ? "text-luc-chu" : kq.tongSau < kq.tongTruoc ? "text-do-chu" : "text-muc")}>{kq.tongSau.toFixed(2)}</p>
-                  <p className="text-[11px] text-chu-phu leading-snug">{toHop.map((m) => `${TEN_MON_NGAN[m]} ${vietDiem(sauCong[m]!)}`).join(" + ")}</p>
+                  <p className={gop("text-[24px] font-extrabold leading-tight", kq.tongSau > kq.tongTruoc ? "text-luc-chu" : kq.tongSau < kq.tongTruoc ? "text-do-chu" : "text-muc")}>{dinhDang(kq.tongSau, 2)}</p>
+                  <p className="text-[12px] text-chu-phu leading-snug">{toHop.map((m) => `${TEN_MON_NGAN[m]} ${vietDiem(sauCong[m]!)}`).join(" + ")}</p>
                 </div>
               </div>
             </The>

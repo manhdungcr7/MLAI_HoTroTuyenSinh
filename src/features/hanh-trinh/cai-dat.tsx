@@ -68,7 +68,7 @@ export default function CaiDat() {
             </p>
             <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu về máy</Nut>
             <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục từ tệp sao lưu</Nut>
-            <input ref={oTep} type="file" accept="application/json,.json" className="sr-only" tabIndex={-1} aria-label="Chọn tệp sao lưu" onChange={(e) => void nhap(e.target.files?.[0])} />
+            <input ref={oTep} type="file" accept="application/json,.json" className="hidden" aria-hidden="true" tabIndex={-1} onChange={(e) => void nhap(e.target.files?.[0])} />
             <p role="status" className={tin ? (tin.ok ? "text-[13px] text-luc-chu" : "text-[13px] text-do-chu") : "sr-only"}>{tin?.chu}</p>
             <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Dùng hồ sơ mẫu</Nut>
             <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết và làm lại</Nut>

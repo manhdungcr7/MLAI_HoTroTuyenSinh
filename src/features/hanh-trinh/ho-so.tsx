@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
+import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Compass, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NenHero } from "@/components/ui/hinh-nen";
 import { HangBam, Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -7,6 +7,7 @@ import { ThanhTienDo, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
+import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
 import { ChiSoTheoDoi } from "./chi-so-theo-doi";
 import { TEN_CHO_O, TEN_NGAN_SACH, chuDaiDien, hieuEm } from "./tinh-toan";
 
@@ -105,8 +106,11 @@ export default function HoSo() {
 
         <TieuDeMuc>Hành động nhanh</TieuDeMuc>
         <div className="space-y-2">
+          <HangBam bieuTuong={Compass} tone="cam" tieuDe="Trắc nghiệm hướng nghiệp" onClick={() => nav(DUONG_DAN.tracNghiem())}
+            phu={h.soThich ? `Kết quả: ${moTaTop(h.soThich)}` : "18 câu, khoảng 3 phút, gợi ý nhóm ngành hợp sở thích"}
+            nhan={<Nhan tone={h.soThich ? "luc" : "cam"}>{h.soThich ? "Đã làm" : "Chưa làm"}</Nhan>} />
           <HangBam bieuTuong={Users} tone="tim" tieuDe="Chia sẻ với phụ huynh, thầy cô" onClick={() => nav(DUONG_DAN.chiaSe())}
-            phu="Bản tóm tắt và những điều nên trao đổi cùng người đồng hành" />
+            phu={s.loiNhan.length ? `Có ${s.loiNhan.length} lời nhắn từ người đồng hành` : "Gửi liên kết cho phụ huynh, thầy cô và nhận lời nhắn lại"} />
           <HangBam bieuTuong={Wallet} tone="cam" tieuDe="Bổ sung ngân sách sinh hoạt" onClick={() => nav(DUONG_DAN.batDau(3))}
             phu={nganSach ? `Đang chọn: ${nganSach}` : "Giúp gợi ý trường hợp khả năng tài chính"}
             nhan={<Nhan tone={h.nganSach ? "luc" : "cam"}>{h.nganSach ? "Đã có" : "Còn thiếu"}</Nhan>} />

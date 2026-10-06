@@ -11,6 +11,7 @@ import { tongChoLuaChon } from "./to-hop";
 import { BO_LOC_MAC_DINH, CAC_KHU_VUC, CAC_MUC_HOC_PHI, CAC_NHOM, loc, type BoLoc } from "./bo-loc";
 import { useBoLoc } from "./dung-bo-loc";
 import { boiCanhTu } from "./phu-hop";
+import { dinhDang } from "@/engine/dinh-dang";
 
 function Muc({ tieuDe, phu, children }: { tieuDe: string; phu?: ReactNode; children: ReactNode }) {
   return (
@@ -50,7 +51,7 @@ export default function ManBoLoc() {
 
         <Muc tieuDe="Khoảng điểm tổ hợp" phu="(thang 30)">
           <div className="flex items-end justify-between">
-            <p className="text-[24px] font-extrabold text-xanh leading-none">{b.diemTu.toFixed(1)} <span className="text-chu-phu text-[18px]">–</span> {b.diemDen.toFixed(1)}</p>
+            <p className="text-[24px] font-extrabold text-xanh leading-none">{dinhDang(b.diemTu, 1)} <span className="text-chu-phu text-[18px]">–</span> {dinhDang(b.diemDen, 1)}</p>
             <p className="text-[12px] text-chu-phu">điểm tham khảo</p>
           </div>
           <label className="block text-[13px] font-semibold text-chu">Thấp nhất
@@ -64,7 +65,7 @@ export default function ManBoLoc() {
           {tongEm !== null ? (
             <button type="button" onClick={() => sua({ diemTu: Math.max(0, lam(tongEm! - 3)), diemDen: Math.min(30, lam(tongEm! + 2)) })}
               className="w-full min-h-12 rounded-xl bg-xanh-nhat text-xanh text-[14px] font-bold inline-flex items-center justify-center gap-2 active:brightness-95">
-              <Target size={17} />Lấy quanh điểm của em ({tongEm.toFixed(1)})
+              <Target size={17} />Lấy quanh điểm của em ({dinhDang(tongEm, 1)})
             </button>
           ) : (
             <p className="text-[13px] text-chu-phu">Nhập điểm 3 môn của một tổ hợp trong hồ sơ để lọc nhanh quanh điểm của em.</p>

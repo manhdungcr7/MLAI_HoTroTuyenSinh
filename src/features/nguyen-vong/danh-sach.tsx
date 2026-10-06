@@ -20,6 +20,7 @@ import { useKeoTha } from "./dung-keo-tha";
 import { CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lựa chọn này");
 
@@ -86,7 +87,7 @@ export default function DanhSachNguyenVong() {
                 moTa={`Giữ khoảng 5–${SO_NV_GOI_Y} nguyện vọng giúp em dễ cân nhắc hơn. Em vẫn có thể giữ nhiều hơn nếu muốn.`} />
             )}
 
-            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Tổ hợp cao nhất của em: ${tong.toFixed(1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
+            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Tổ hợp cao nhất của em: ${dinhDang(tong, 1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
               Thứ tự của em
             </TieuDeMuc>
             <p className="-mt-1 text-[13px] text-chu-phu flex items-center gap-1">
@@ -241,7 +242,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
           </span>
           {d.lc && (
             <span className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
-              <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{d.lc.diemMin.toFixed(1)}</b></span>
+              <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
               <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</> : "Chưa có học phí"}</span>
             </span>
           )}

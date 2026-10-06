@@ -12,6 +12,7 @@ import { tenNgay, tenThu, ngayThang, soPhut, thoiLuong } from "./dinh-dang";
 import { NhanUuTien, OTichTron } from "./thanh-phan";
 import { buoiNenHien, daKetThuc, khoiCuaViec, nhomViec, tienDoNgay, type IdNhom } from "./tinh-toan";
 import { viecChoTuan } from "./tao-viec-tuan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const DANG_NHOM: Record<IdNhom, { icon: LucideIcon; tone: ToneTen }> = {
   cao: { icon: Flame, tone: "do" },
@@ -118,7 +119,7 @@ function MucTieuHomNay() {
           <span className="text-[13px] font-semibold text-chu-phu">Mục tiêu hôm nay</span>
           <span className="text-[13px] font-bold text-xanh whitespace-nowrap">Xem chi tiết</span>
         </span>
-        <b className="block text-[18px] text-muc leading-tight mt-0.5">Bù +{mon.thieu.toFixed(1)} điểm cho {mon.ten}</b>
+        <b className="block text-[18px] text-muc leading-tight mt-0.5">Bù +{dinhDang(mon.thieu, 1)} điểm cho {mon.ten}</b>
         <span className="block text-[13px] text-chu-phu leading-snug mt-0.5">
           {viecMon ? `Việc giúp em nhất: ${viecMon.tieuDe}.` : `${mon.ten} là môn còn thiếu nhiều điểm nhất so với mục tiêu ${m.lc.truong}.`}
         </span>

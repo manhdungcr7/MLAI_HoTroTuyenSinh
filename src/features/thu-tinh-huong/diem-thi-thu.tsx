@@ -14,6 +14,7 @@ import { useLuuCucBo } from "@/state/luu-cuc-bo";
 import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type LuaChon, type MaToHop, type MonId, type ToneTen } from "@/state/types";
 import { ANH_TRONG, CAC_TO_HOP, chonToHopHienThi, chupTruocSau, dieuKienTuHoSo, docODiem, tongCacToHop, vietDiem, type AnhTruocSau, type Diem } from "./tinh-toan";
+import { dinhDang } from "@/engine/dinh-dang";
 
 const O_MON: { mon: MonId; icon: LucideIcon; tone: ToneTen; neuCo?: boolean }[] = [
   { mon: "toan", icon: Calculator, tone: "xanh" },
@@ -82,7 +83,7 @@ export default function DiemThiThu() {
                 <div key={mon} className={gop("rounded-the bg-trang border p-3 shadow-the", loi ? "border-do" : doi ? "border-luc/50" : "border-vien")}>
                   <label htmlFor={`dtt-${mon}`} className="flex items-center gap-2 mb-2">
                     <BieuTuongTron icon={icon} tone={tone} kichThuoc={32} />
-                    <span className="text-[14px] font-bold text-chu leading-tight">{TEN_MON[mon]}{neuCo && <span className="block text-[11px] font-semibold text-chu-phu">nếu có</span>}</span>
+                    <span className="text-[14px] font-bold text-chu leading-tight">{TEN_MON[mon]}{neuCo && <span className="block text-[12px] font-semibold text-chu-phu">nếu có</span>}</span>
                   </label>
                   <input id={`dtt-${mon}`} inputMode="decimal" autoComplete="off" placeholder="Ví dụ 7,5" value={chuoi[mon]}
                     aria-invalid={!!loi} aria-describedby={`dtt-${mon}-goi-y`}
@@ -107,11 +108,11 @@ export default function DiemThiThu() {
               const chenh = sau.tong !== null && truoc !== null ? Math.round((sau.tong - truoc) * 100) / 100 : null;
               return (
                 <div key={ma} className={gop("rounded-the bg-trang border p-3 text-center shadow-the", ma === maMucTieu ? "border-xanh" : "border-vien")}>
-                  <p className="text-[15px] font-extrabold text-muc">{ma}{ma === maMucTieu && <span className="ml-1 align-middle rounded-md bg-xanh-nhat px-1.5 text-[11px] text-xanh">mục tiêu</span>}</p>
+                  <p className="text-[15px] font-extrabold text-muc">{ma}{ma === maMucTieu && <span className="ml-1 align-middle rounded-md bg-xanh-nhat px-1.5 text-[12px] text-xanh">mục tiêu</span>}</p>
                   <p className="text-[12px] text-chu-phu">{TO_HOP[ma].map((m) => TEN_MON_NGAN[m]).join(" – ")}</p>
                   {sau.tong === null
                     ? <p className="mt-1 text-[13px] font-semibold text-cam-chu">Thiếu {sau.thieu.map((m) => TEN_MON_NGAN[m]).join(", ")}</p>
-                    : <p className={gop("mt-0.5 text-[24px] leading-tight font-extrabold", MAU_TO_HOP[ma])}>{sau.tong.toFixed(2)}</p>}
+                    : <p className={gop("mt-0.5 text-[24px] leading-tight font-extrabold", MAU_TO_HOP[ma])}>{dinhDang(sau.tong, 2)}</p>}
                   {chenh !== null && chenh !== 0 && (
                     <p className={gop("text-[12px] font-bold", chenh > 0 ? "text-luc-chu" : "text-do-chu")}>{chenh > 0 ? "▲ +" : "▼ "}{chenh} so với trước</p>
                   )}
