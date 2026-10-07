@@ -72,13 +72,48 @@ export function kiemTraNguon(raw: unknown, email: string, luc: string): NguonKie
 }
 
 /** data phải là đối tượng thường; maTruong trong data (nếu có) phải khớp mã trường suy ra từ entityId. */
-export function kiemTraData(data: unknown, entityId: string): Record<string, unknown> {
+export function kiemTraData(data: unknown, entityId: string, entityType?: string): Record<string, unknown> {
   if (typeof data !== "object" || data === null || Array.isArray(data)) throw sai("data phải là một đối tượng JSON", "data");
   const chu = JSON.stringify(data);
   if (chu.length > DO_DAI_DATA_TOI_DA) throw sai(`data quá dài (tối đa ${DO_DAI_DATA_TOI_DA} ký tự)`, "data");
   const d = data as Record<string, unknown>;
   if (d.maTruong !== undefined && (typeof d.maTruong !== "string" || d.maTruong.toUpperCase() !== maTruongCua(entityId))) throw sai("data.maTruong không khớp mã trường trong entityId", "data.maTruong");
+  if (entityType === "noi_luu_tru" || entityType === "luu_y") kiemTraNoiDungTheoLoai(entityType, d);
   return d;
+}
+
+const chuToiDa = (d: Record<string, unknown>, k: string, toiDa: number, batBuoc: boolean, nhan: string) => {
+  const v = d[k];
+  if (v === undefined || v === null || v === "") { if (batBuoc) throw sai(`${nhan} là bắt buộc`, `data.${k}`); return; }
+  if (typeof v !== "string") throw sai(`${nhan} phải là chuỗi`, `data.${k}`);
+  const dai = v.trim().length;
+  if (dai > toiDa || (batBuoc && dai < 3)) throw sai(`${nhan} cần ${batBuoc ? "3" : "0"} đến ${toiDa} ký tự`, `data.${k}`);
+};
+const chonMot = (d: Record<string, unknown>, k: string, tap: readonly string[], batBuoc: boolean, nhan: string) => {
+  const v = d[k];
+  if (v === undefined || v === null || v === "") { if (batBuoc) throw sai(`${nhan} là bắt buộc`, `data.${k}`); return; }
+  if (typeof v !== "string" || !tap.includes(v)) throw sai(`${nhan} phải là một trong: ${tap.join(", ")}`, `data.${k}`);
+};
+const khoangSo = (d: Record<string, unknown>, k: string, nhan: string) => {
+  const v = d[k];
+  if (v === undefined || v === null) return;
+  if (!Array.isArray(v) || v.length !== 2 || v.some((x) => typeof x !== "number" || !Number.isFinite(x) || x < 0 || x > 100_000) || v[0] > v[1]) throw sai(`${nhan} phải là [thấp, cao] từ 0 đến 100000, thấp không lớn hơn cao`, `data.${k}`);
+};
+
+/** Kiểu và độ dài các trường nội dung của nơi lưu trú và lưu ý, kiểm ở máy chủ (không tin biểu mẫu ở trình duyệt). */
+export function kiemTraNoiDungTheoLoai(loai: "noi_luu_tru" | "luu_y", d: Record<string, unknown>): void {
+  if (loai === "luu_y") {
+    chuToiDa(d, "tieuDe", 120, true, "Tiêu đề");
+    chuToiDa(d, "noiDung", 600, true, "Nội dung");
+    return;
+  }
+  chonMot(d, "coKyTucXa", ["co", "khong", "chua_ro"], true, "Ký túc xá");
+  chonMot(d, "khuTroXungQuanh", ["nhieu", "it", "khong", "chua_ro"], true, "Khu trọ xung quanh");
+  khoangSo(d, "giaKyTucThang", "Giá ký túc xá");
+  khoangSo(d, "giaTroThang", "Giá trọ");
+  const km = d.khoangCachKm;
+  if (km !== undefined && km !== null && (typeof km !== "number" || !Number.isFinite(km) || km < 0 || km > 500)) throw sai("Khoảng cách phải là số từ 0 đến 500", "data.khoangCachKm");
+  chuToiDa(d, "ghiChu", 300, false, "Ghi chú");
 }
 
 export const cauChenBanGhi = (d1: KhoD1, b: BanGhiCms): KhoD1Cau =>

@@ -12,6 +12,7 @@
     "kiem-tra": "tsx tests/kiem-tra-route.ts",
     "cms:dev": "vite --config cms/vite.config.ts --port 3031 --host",
     "cms:build": "vite build --config cms/vite.config.ts",
+    "cms:api": "node cms/chay-api-local.mjs",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {

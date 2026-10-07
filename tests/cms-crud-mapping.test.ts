@@ -1,219 +1,104 @@
+// Logic thuần của CMS (không dữ liệu mẫu, không mạng): biểu mẫu -> data, tiến độ từ bản ghi, lọc/sắp xếp danh sách trường, so sánh bản.
 import assert from "node:assert/strict";
-import {
-  kiemTraBanGhiTruong, dungBanChup,
-  type BanGhiTruong, type ThongTinTruong,
-} from "../src/data/dong-gop-kiem-tra";
-import {
-  formTrong, bodyTuForm, kiemTraForm, type FormThongTin
-} from "../cms/src/du-lieu-truong/bieu-mau";
-import { DANH_SACH_TRUONG, truongTheoMa } from "../cms/src/du-lieu/danh-sach-truong";
-import { xuLyDuLieuMau } from "../cms/src/may-chu/gia-lap";
-import type { ChiTietTruongApi, ThongTinCms } from "../cms/src/may-chu/kieu";
+import { formTrong, bodyTuForm, kiemTraForm, type FormThongTin } from "../cms/src/du-lieu-truong/bieu-mau";
+import { banDaiDien, dataTuForm, entityIdCho, maTruongCua, nhomTheoTruong, tienDoTuBanGhi } from "../cms/src/du-lieu-truong/mo-hinh";
+import { gopTruong, locTruong, sapXepTruong, tiLeDu } from "../cms/src/du-lieu-truong/loc-truong";
+import { soSanhBan } from "../cms/src/du-lieu-truong/so-sanh";
+import { layDanhSachTenTruong } from "../cms/src/trang-thai/ten-truong";
+import type { BanGhiCms } from "../src/engine/du-lieu-tuyen-sinh/kieu";
 
-console.log("--- BẮT ĐẦU KIỂM THỬ TOÀN DIỆN CRUD & MAPPING CMS ---");
+let n = 0;
+const ok = (ten: string) => console.log(`✓ ${++n}. ${ten}`);
 
-// =========================================================================
-// TEST 1: Mapping Dataset 100 trường đại học
-// =========================================================================
-assert.ok(DANH_SACH_TRUONG.length >= 100, `Cần ít nhất 100 trường, hiện có: ${DANH_SACH_TRUONG.length}`);
-const uit = truongTheoMa("QSC");
-assert.ok(uit, "Trường QSC (ĐH Công nghệ Thông tin - ĐHQG TP.HCM) phải tồn tại");
-assert.equal(uit.ma, "QSC");
-assert.equal(uit.khuVuc, "TP.HCM");
-console.log("✓ Test 1 Passed: Dataset 100 trường hợp lệ.");
+const ban = (o: Partial<BanGhiCms> & { entityType: string; entityId: string }): BanGhiCms => ({
+  id: `${o.entityType}-${o.entityId}-${o.version ?? 1}`, version: 1, status: "DRAFT", data: {},
+  source: { url: "https://example.edu.vn/a", tieuDe: "Nguồn", donViCongBo: "Trường", ngayKiemChung: "2026-01-01T00:00:00Z", nguoiKiemChung: "a@b.c" },
+  importance: "normal", changeNote: "", createdBy: "a@b.c", createdAt: "2026-01-01T00:00:00Z", updatedBy: "a@b.c", updatedAt: "2026-01-01T00:00:00Z", ...o,
+} as BanGhiCms);
 
-// =========================================================================
-// TEST 2: CRUD Kênh chính thức của trường (BanGhiTruong)
-// =========================================================================
-const kenhRaw = {
-  maTruong: "QSC",
-  websiteTuyenSinhUrl: "https://tuyensinh.uit.edu.vn",
-  fanpageUrl: "https://facebook.com/uit.edu.vn",
-  nhomTuyenSinhChinhThucUrl: "https://zalo.me/g/uit2026",
-  nhomCongDongUrl: "https://facebook.com/groups/uit.k21",
-};
-const kqKenh = kiemTraBanGhiTruong(kenhRaw);
-assert.ok(kqKenh.ok, "Kênh chính thức phải hợp lệ");
-assert.equal(kqKenh.duLieu.websiteTuyenSinhUrl, "https://tuyensinh.uit.edu.vn/");
+// 1. Tập trường lấy từ cùng tệp với máy chủ
+const ds = await layDanhSachTenTruong();
+assert.ok(ds.length >= 50);
+assert.ok(ds.every((t) => t.maTruong && t.ten));
+assert.equal(ds.find((t) => t.maTruong === "BKA")?.ten, "ĐH Bách Khoa Hà Nội");
+ok("danh sách trường khớp tệp máy chủ");
 
-// Cập nhật kênh qua API giả lập CMS
-const resKenh = await xuLyDuLieuMau("PUT", "/truong/QSC", {}, kenhRaw);
-assert.ok(resKenh, "PUT /truong/QSC thành công");
-console.log("✓ Test 2 Passed: CRUD Kênh chính thức thành công.");
+// 2. Mã trường từ entityId
+assert.equal(maTruongCua("BKA"), "BKA");
+assert.equal(maTruongCua("bka-HP2026-x"), "BKA");
+ok("mã trường từ entityId");
 
-// =========================================================================
-// TEST 3: CRUD Học phí (hoc_phi) - Form -> Body -> Validation -> Create -> Approve
-// =========================================================================
-const formHocPhi: FormThongTin = {
-  ...formTrong("hoc_phi"),
-  nam: "2026",
-  linkNguon: "https://tuyensinh.uit.edu.vn/hoc-phi-2026",
-  donVi: "trieu_nam",
-  mucThap: "35",
-  mucCao: "45",
-  phamVi: "Chương trình chuẩn",
-  loTrinhTang: "Không quá 10%/năm",
-};
+// 3. Học phí: form -> kiểm tra -> body -> data
+const hp: FormThongTin = { ...formTrong("hoc_phi"), nam: "2026", linkNguon: "https://tuyensinh.uit.edu.vn/hoc-phi", donVi: "trieu_nam", mucThap: "35", mucCao: "45", phamVi: "Chương trình chuẩn" };
+assert.deepEqual(kiemTraForm("hoc_phi", hp), {});
+const b = bodyTuForm("hoc_phi", hp);
+assert.equal(b.nam, 2026);
+assert.equal((b.duLieu as { mucThap: number }).mucThap, 35);
+const id = entityIdCho("hoc_phi", "QSC", hp);
+assert.equal(id, "QSC-HP2026-chuongtrinhchuan");
+const d = dataTuForm("hoc_phi", "QSC", id, hp);
+assert.equal(d.maTruong, "QSC");
+assert.equal(d.id, id);
+assert.equal(d.mucCao, 45);
+assert.ok(Object.keys(kiemTraForm("hoc_phi", { ...hp, mucThap: "50", mucCao: "40" })).length > 0, "mức cao < mức thấp phải báo lỗi");
+ok("học phí: form, kiểm tra, entityId, data");
 
-// 1. Kiểm tra validation form
-const loiHocPhi = kiemTraForm("hoc_phi", formHocPhi);
-assert.equal(Object.keys(loiHocPhi).length, 0, "Form học phí phải hợp lệ 100%");
+// 4. Nơi lưu trú và lưu ý
+const nlt: FormThongTin = { ...formTrong("noi_luu_tru"), linkNguon: "https://ktx.edu.vn/gia", coKyTucXa: "co", ktxThap: "300", ktxCao: "600", khuTro: "nhieu", troThap: "1500", troCao: "3000", khoangCachKm: "2,5" };
+assert.deepEqual(kiemTraForm("noi_luu_tru", nlt), {});
+assert.equal(entityIdCho("noi_luu_tru", "QSC", nlt), "QSC-NLT");
+assert.equal((dataTuForm("noi_luu_tru", "QSC", "QSC-NLT", nlt)).khoangCachKm, 2.5);
+assert.ok(Object.keys(kiemTraForm("noi_luu_tru", { ...nlt, coKyTucXa: "" as never })).length > 0);
+const ly: FormThongTin = { ...formTrong("luu_y"), linkNguon: "https://tuyensinh.edu.vn/ly", tieuDe: "Hạn nộp hồ sơ", noiDung: "Nộp trước ngày 30/6 để kịp xét tuyển." };
+assert.deepEqual(kiemTraForm("luu_y", ly), {});
+assert.ok(entityIdCho("luu_y", "QSC", ly).startsWith("QSC-LY"));
+ok("nơi lưu trú và lưu ý");
 
-// 2. Chuyển đổi Form -> Body
-const bodyHocPhi = bodyTuForm("hoc_phi", formHocPhi);
-assert.equal(bodyHocPhi.nam, 2026);
-assert.equal((bodyHocPhi.duLieu as any).mucThap, 35);
-assert.equal((bodyHocPhi.duLieu as any).mucCao, 45);
+// 5. Tiến độ và bản đại diện
+const bgs = [
+  ban({ entityType: "school", entityId: "QSC", status: "APPROVED", data: { websiteTuyenSinhUrl: "https://uit.edu.vn" } }),
+  ban({ entityType: "tuition", entityId: "QSC-HP2026-a", status: "PUBLISHED" }),
+  ban({ entityType: "scholarship", entityId: "QSC-HB-a", status: "DRAFT" }),
+  ban({ entityType: "noi_luu_tru", entityId: "QSC-NLT", status: "SUBMITTED" }),
+  ban({ entityType: "review", entityId: "QSC-RV-1", status: "ARCHIVED" }),
+  ban({ entityType: "tuition", entityId: "BKA-HP2026-a", status: "PUBLISHED" }),
+];
+const td = tienDoTuBanGhi("QSC", bgs);
+assert.deepEqual([...td.co].sort(), ["hoc_phi", "kenh", "noi_luu_tru"]);
+assert.deepEqual([...td.thieu].sort(), ["hoc_bong", "review"]);
+assert.equal(td.du, false);
+assert.equal(tiLeDu(td), 60);
+assert.equal(nhomTheoTruong(bgs).get("QSC")?.length, 5);
+const cu = ban({ entityType: "tuition", entityId: "QSC-HP2026-a", status: "PUBLISHED", version: 1 });
+const moi = ban({ entityType: "tuition", entityId: "QSC-HP2026-a", status: "DRAFT", version: 2 });
+const dd = banDaiDien([cu, moi, ban({ entityType: "review", entityId: "QSC-RV-1", status: "SUPERSEDED" })]);
+assert.equal(dd.length, 1);
+assert.equal(dd[0].status, "DRAFT");
+ok("tiến độ, nhóm theo trường, bản đại diện");
 
-// 3. Tạo mới qua API
-const taoHocPhiRes = await xuLyDuLieuMau("POST", "/thong-tin", {}, {
-  maTruong: "QSC",
-  loai: "hoc_phi",
-  nam: 2026,
-  linkNguon: formHocPhi.linkNguon,
-  duLieu: bodyHocPhi.duLieu,
-  trangThai: "cho",
-}) as ThongTinCms;
-
-assert.ok(taoHocPhiRes.id, "Phải sinh ID cho bản ghi học phí");
-assert.equal(taoHocPhiRes.trangThai, "cho");
-
-// 4. QTV Phê duyệt bản ghi
-const duyetHocPhiRes = await xuLyDuLieuMau("PATCH", `/thong-tin/${taoHocPhiRes.id}`, {}, {
-  phienBan: taoHocPhiRes.phienBan ?? 1,
-  trangThai: "duyet",
-}) as ThongTinCms;
-assert.equal(duyetHocPhiRes.trangThai, "duyet");
-console.log("✓ Test 3 Passed: CRUD Học phí hoàn tất.");
-
-// =========================================================================
-// TEST 4: CRUD Học bổng (hoc_bong) - Create -> Reject with Reason -> Edit -> Approve
-// =========================================================================
-const formHocBong: FormThongTin = {
-  ...formTrong("hoc_bong"),
-  linkNguon: "https://tuyensinh.uit.edu.vn/hoc-bong",
-  ten: "Học bổng Thủ khoa Tuyển sinh",
-  giaTri: "100% học phí toàn khóa",
-  dieuKien: "Thủ khoa đầu vào khối A00/A01",
-};
-
-const loiHocBong = kiemTraForm("hoc_bong", formHocBong);
-assert.equal(Object.keys(loiHocBong).length, 0);
-
-const bodyHocBong = bodyTuForm("hoc_bong", formHocBong);
-const taoHocBongRes = await xuLyDuLieuMau("POST", "/thong-tin", {}, {
-  maTruong: "QSC",
-  loai: "hoc_bong",
-  linkNguon: formHocBong.linkNguon,
-  duLieu: bodyHocBong.duLieu,
-  trangThai: "cho",
-}) as ThongTinCms;
-
-// QTV Từ chối trả về nháp kèm lý do
-const tuChoiHocBong = await xuLyDuLieuMau("PATCH", `/thong-tin/${taoHocBongRes.id}`, {}, {
-  phienBan: taoHocBongRes.phienBan ?? 1,
-  trangThai: "nhap",
-  lyDo: "Cần bổ sung chi tiết điều kiện duy trì học bổng các năm sau.",
-}) as ThongTinCms;
-assert.equal(tuChoiHocBong.trangThai, "nhap");
-assert.equal(tuChoiHocBong.lyDoTuChoi, "Cần bổ sung chi tiết điều kiện duy trì học bổng các năm sau.");
-
-// CTV Sửa lại và gửi duyệt lại
-const suaHocBongRes = await xuLyDuLieuMau("PATCH", `/thong-tin/${taoHocBongRes.id}`, {}, {
-  phienBan: (tuChoiHocBong.phienBan ?? 1) + 1,
-  duLieu: { ...(bodyHocBong.duLieu as any), dieuKien: "Thủ khoa đầu vào và duy trì GPA >= 8.0" },
-  trangThai: "duyet",
-}) as ThongTinCms;
-assert.equal(suaHocBongRes.trangThai, "duyet");
-console.log("✓ Test 4 Passed: CRUD Học bổng + Luồng Trả về nháp kèm lý do thành công.");
-
-// =========================================================================
-// TEST 5: CRUD Nơi lưu trú (noi_luu_tru) & Đánh giá (review)
-// =========================================================================
-const formLuuTru: FormThongTin = {
-  ...formTrong("noi_luu_tru"),
-  linkNguon: "https://ktxdhqg.edu.vn",
-  coKyTucXa: "co",
-  ktxThap: "0.5",
-  ktxCao: "1.2",
-  khuTro: "nhieu",
-  troThap: "1.5",
-  troCao: "3.5",
-  khoangCachKm: "1.5",
-  ghiChu: "Ký túc xá Khu A và Khu B ĐHQG-HCM, xe buýt đưa đón tận trường.",
-};
-const loiLuuTru = kiemTraForm("noi_luu_tru", formLuuTru);
-assert.equal(Object.keys(loiLuuTru).length, 0);
-
-const bodyLuuTru = bodyTuForm("noi_luu_tru", formLuuTru);
-const taoLuuTruRes = await xuLyDuLieuMau("POST", "/thong-tin", {}, {
-  maTruong: "QSC",
-  loai: "noi_luu_tru",
-  linkNguon: formLuuTru.linkNguon,
-  duLieu: bodyLuuTru.duLieu,
-  trangThai: "duyet",
-}) as ThongTinCms;
-assert.equal(taoLuuTruRes.trangThai, "duyet");
-
-const formReview: FormThongTin = {
-  ...formTrong("review"),
-  linkNguon: "https://facebook.com/groups/uit.k21",
-  tieuDe: "Môi trường học tập năng động và cơ sở vật chất hiện đại",
-  noiDung: "Trường có trang thiết bị thực hành đầy đủ, giảng viên hỗ trợ tận tình.",
-  nguoiVietLa: "sinh_vien",
-};
-const loiReview = kiemTraForm("review", formReview);
-assert.equal(Object.keys(loiReview).length, 0);
-
-const bodyReview = bodyTuForm("review", formReview);
-const taoReviewRes = await xuLyDuLieuMau("POST", "/thong-tin", {}, {
-  maTruong: "QSC",
-  loai: "review",
-  linkNguon: formReview.linkNguon,
-  duLieu: bodyReview.duLieu,
-  trangThai: "duyet",
-}) as ThongTinCms;
-assert.equal(taoReviewRes.trangThai, "duyet");
-console.log("✓ Test 5 Passed: CRUD Nơi lưu trú và Đánh giá thành công.");
-
-// =========================================================================
-// TEST 6: Kiểm tra Tính toán Tiến độ & Đạt Chuẩn 5/5 Mục
-// =========================================================================
-const chiTietQSC = await xuLyDuLieuMau("GET", "/truong/QSC", {}) as ChiTietTruongApi;
-assert.ok(chiTietQSC.kenh, "Phải có kênh thông tin");
-assert.equal(chiTietQSC.thongTin.filter((t) => t.trangThai === "duyet").length >= 4, true);
-assert.equal(chiTietQSC.tienDo.du, true, "Trường QSC phải đạt chuẩn 100% (5/5 mục)");
-assert.equal(chiTietQSC.tienDo.thieu.length, 0, "Không còn mục nào bị thiếu");
-console.log("✓ Test 6 Passed: Tiến độ 5/5 mục tính toán chính xác.");
-
-// =========================================================================
-// TEST 7: Snapshot Mapping sang Web Học Sinh
-// =========================================================================
-const banGhiDaDuyet: ThongTinTruong[] = chiTietQSC.thongTin
-  .filter((t) => t.trangThai === "duyet")
-  .map((t) => ({
-    id: t.id,
-    maTruong: t.maTruong,
-    loai: t.loai,
-    nam: t.nam,
-    linkNguon: t.linkNguon,
-    trangThai: "duyet" as const,
-    phienBan: t.phienBan ?? 1,
-    luc: t.luc,
-    duLieu: t.duLieu as any,
-  }));
-
-const banChup = dungBanChup(
-  [chiTietQSC.kenh as BanGhiTruong],
-  banGhiDaDuyet,
-  new Date()
+// 6. Gộp, lọc, sắp xếp danh sách trường
+const dong = gopTruong(
+  [
+    { maTruong: "QSC", ten: "ĐH Công nghệ Thông tin", tienDo: td },
+    { maTruong: "BKA", ten: "ĐH Bách Khoa Hà Nội", tienDo: tienDoTuBanGhi("BKA", bgs) },
+  ],
+  ["BKA"],
 );
-assert.equal(banChup.phienBan, 1);
-assert.ok(banChup.truong.QSC.websiteTuyenSinhUrl);
-console.log("Các loại bản ghi trong banChup:", banChup.thongTin.QSC.map((x) => x.loai));
-assert.ok(banChup.thongTin.QSC.length >= 4, `Số bản ghi: ${banChup.thongTin.QSC?.length}`);
+assert.equal(dong.find((x) => x.ma === "BKA")?.giaoChoToi, true);
+assert.equal(dong.find((x) => x.ma === "QSC")?.giaoChoToi, false);
+assert.deepEqual(locTruong(dong, "bach khoa", new Set()).map((x) => x.ma), ["BKA"]);
+assert.deepEqual(locTruong(dong, "", new Set(["giaoChoToi"])).map((x) => x.ma), ["BKA"]);
+assert.deepEqual(locTruong(dong, "", new Set(["thieuHocPhi"])).map((x) => x.ma), []);
+assert.equal(sapXepTruong(dong, "thieu")[0].ma, "BKA");
+ok("gộp, lọc, sắp xếp danh sách trường");
 
-console.log("✓ Test 7 Passed: Snapshot JSON map 100% sang Web Học Sinh.");
-console.log("\n=======================================================");
-console.log("🎉 TẤT CẢ 7 TEST SUITES CRUD & DATA MAPPING ĐỀU PASS 100%!");
-console.log("=======================================================");
+// 7. So sánh bản cũ - mới
+const kq = soSanhBan(
+  ban({ entityType: "tuition", entityId: "QSC-HP2026-a", data: { mucThap: 35, mucCao: 45, donVi: "trieu_nam" } }),
+  ban({ entityType: "tuition", entityId: "QSC-HP2026-a", version: 2, data: { mucThap: 35, mucCao: 50, donVi: "trieu_nam" } }),
+);
+assert.ok(kq.some((x) => x.khoa === "mucCao" && x.cu.includes("45") && x.moi.includes("50")));
+assert.ok(!kq.some((x) => x.khoa === "mucThap"));
+ok("so sánh bản cũ và mới");
+
+console.log(`\nXong ${n}/7 nhóm kiểm thử logic CMS.`);

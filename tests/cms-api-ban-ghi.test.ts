@@ -65,7 +65,7 @@ assert.equal((await goi(phanCong, "PUT", "/api/phan-cong", CTV, { email: CTV, ma
 assert.equal((await goi(nguoi, "DELETE", `/api/nguoi?email=${QTV}`, QTV)).status, 400, "không tự xóa mình");
 
 // 2. Tạo: nguồn bắt buộc, loại hợp lệ, trường được giao
-const tao = (extra: Record<string, unknown> = {}) => ({ entityType: "noi_luu_tru", entityId: "BKA-ktx", data: { maTruong: "BKA", coKyTucXa: "co" }, source: nguon, ...extra });
+const tao = (extra: Record<string, unknown> = {}) => ({ entityType: "noi_luu_tru", entityId: "BKA-ktx", data: { maTruong: "BKA", coKyTucXa: "co", khuTroXungQuanh: "nhieu" }, source: nguon, ...extra });
 assert.equal((await goi(banGhi, "POST", "/api/ban-ghi", CTV, tao({ source: undefined }))).status, 400, "thiếu nguồn");
 assert.equal((await goi(banGhi, "POST", "/api/ban-ghi", CTV, tao({ source: { ...nguon, url: "javascript:alert(1)" } }))).status, 400, "link nguồn phải http(s)");
 assert.equal((await goi(banGhi, "POST", "/api/ban-ghi", CTV, tao({ entityType: "xxx" }))).status, 400);
@@ -89,7 +89,7 @@ assert.equal((await doi(QTV, "REJECTED")).status, 400, "từ chối phải có l
 const tc = await doi(QTV, "REJECTED", { rejectionReason: "Cần link nguồn chính thức hơn" });
 assert.equal(tc.json.status, "REJECTED");
 assert.equal(tc.json.rejectionReason, "Cần link nguồn chính thức hơn");
-const sua = await goi(banGhi, "PUT", "/api/ban-ghi", CTV, { id, data: { maTruong: "BKA", coKyTucXa: "co", ghiChu: "bổ sung" }, source: nguon });
+const sua = await goi(banGhi, "PUT", "/api/ban-ghi", CTV, { id, data: { maTruong: "BKA", coKyTucXa: "co", khuTroXungQuanh: "nhieu", ghiChu: "bổ sung" }, source: nguon });
 assert.equal(sua.status, 200);
 assert.equal(sua.json.version, 2, "sửa bản bị từ chối tăng version");
 assert.equal((await goi(banGhi, "GET", `/api/ban-ghi?id=${id}`, QTV)).json.data.ghiChu, "bổ sung");
@@ -115,7 +115,7 @@ assert.equal((await goi(banGhi, "GET", `/api/ban-ghi?id=${id}`, QTV)).json.statu
 assert.equal((await goi(xuatBan, "POST", "/api/xuat-ban-snapshot", QTV, {})).status, 409, "không còn gì để xuất bản");
 
 // 5. Bản sửa đổi: v3, xuất bản xong bản cũ thành SUPERSEDED, phiên bản snapshot tăng
-const mod = await goi(banGhi, "POST", "/api/ban-ghi", CTV, { action: "CREATE_MODIFICATION", currentId: id, duLieuMoi: { maTruong: "BKA", coKyTucXa: "khong" }, changeNote: "cập nhật" });
+const mod = await goi(banGhi, "POST", "/api/ban-ghi", CTV, { action: "CREATE_MODIFICATION", currentId: id, duLieuMoi: { maTruong: "BKA", coKyTucXa: "khong", khuTroXungQuanh: "it" }, changeNote: "cập nhật" });
 assert.equal(mod.status, 201);
 assert.equal(mod.json.version, 3);
 assert.equal(mod.json.previousVersionId, id);
@@ -145,5 +145,38 @@ assert.equal((await goi(nhatKy, "GET", "/api/nhat-ky", CTV)).status, 403);
 // 7. Khóa xuất bản: người khác đang giữ thì 409
 db.prepare("INSERT INTO khoa_xuat_ban VALUES ('publish_lock', 'khac@test.local', '2026-10-07T03:00:00.000Z', '2099-01-01T00:00:00.000Z')").run();
 assert.equal((await goi(xuatBan, "POST", "/api/xuat-ban-snapshot", QTV, {})).status, 409);
+
+// 8. Lọc ?truong= phía máy chủ và kiểm tra nội dung noi_luu_tru, luu_y
+const taoMoi = (b: Record<string, unknown>) => goi(banGhi, "POST", "/api/ban-ghi", QTV, { source: nguon, ...b });
+const nlt = (data: Record<string, unknown>) => taoMoi({ entityType: "noi_luu_tru", entityId: "QSC-NLT", data: { maTruong: "QSC", ...data } });
+assert.equal((await nlt({ coKyTucXa: "co" })).status, 400, "thiếu khuTroXungQuanh");
+assert.equal((await nlt({ coKyTucXa: "maybe", khuTroXungQuanh: "it" })).status, 400, "enum sai");
+assert.equal((await nlt({ coKyTucXa: "co", khuTroXungQuanh: "it", giaKyTucThang: [900, 300] })).status, 400, "khoảng giá ngược");
+assert.equal((await nlt({ coKyTucXa: "co", khuTroXungQuanh: "it", giaTroThang: ["1", "2"] })).status, 400, "giá phải là số");
+assert.equal((await nlt({ coKyTucXa: "co", khuTroXungQuanh: "it", khoangCachKm: "2" })).status, 400, "khoảng cách phải là số");
+assert.equal((await nlt({ coKyTucXa: "co", khuTroXungQuanh: "it", ghiChu: "x".repeat(301) })).status, 400, "ghi chú quá dài");
+const loiNlt = await nlt({ coKyTucXa: "co", khuTroXungQuanh: "it", ghiChu: 5 });
+assert.equal(loiNlt.json.chiTiet[0].truong, "data.ghiChu");
+assert.equal((await nlt({ coKyTucXa: "co", khuTroXungQuanh: "it", giaKyTucThang: [300, 900], khoangCachKm: 2.5, ghiChu: "gần cổng" })).status, 201);
+const ly = (data: Record<string, unknown>, entityId = "QSC-LY2026-han") => taoMoi({ entityType: "luu_y", entityId, data: { maTruong: "QSC", ...data } });
+assert.equal((await ly({ tieuDe: "Hạn nộp" })).status, 400, "thiếu nội dung");
+assert.equal((await ly({ tieuDe: "x".repeat(121), noiDung: "Nộp trước 30/6" })).status, 400, "tiêu đề quá dài");
+assert.equal((await ly({ tieuDe: "Hạn nộp", noiDung: 123 })).status, 400, "nội dung phải là chuỗi");
+assert.equal((await ly({ tieuDe: "Hạn nộp", noiDung: "x".repeat(601) })).status, 400, "nội dung quá dài");
+assert.equal((await ly({ tieuDe: "Hạn nộp", noiDung: "Nộp trước 30/6" })).status, 201);
+await taoMoi({ entityType: "luu_y", entityId: "bka-ly-x", data: { maTruong: "BKA", tieuDe: "Chữ thường", noiDung: "Mã trường viết thường vẫn thuộc BKA" } });
+const theoTruong = await goi(banGhi, "GET", "/api/ban-ghi?truong=QSC", QTV);
+assert.equal(theoTruong.status, 200);
+assert.equal(theoTruong.json.tong, 2, "chỉ bản ghi của QSC");
+assert.ok(theoTruong.json.items.every((x: { entityId: string }) => x.entityId.startsWith("QSC")));
+assert.ok((await goi(banGhi, "GET", "/api/ban-ghi?truong=bka", QTV)).json.items.some((x: { entityId: string }) => x.entityId === "bka-ly-x"), "mã viết thường vẫn khớp");
+assert.equal((await goi(banGhi, "GET", "/api/ban-ghi?truong=QSC&entityType=luu_y", QTV)).json.tong, 1);
+assert.equal((await goi(banGhi, "GET", "/api/ban-ghi?truong=QSC&status=PUBLISHED", QTV)).json.tong, 0);
+assert.equal((await goi(banGhi, "GET", "/api/ban-ghi?truong=QS", QTV)).json.tong, 0, "không khớp tiền tố một phần");
+assert.equal((await goi(banGhi, "GET", "/api/ban-ghi?truong=Q%25", QTV)).status, 400, "mã trường sai định dạng");
+const plan = db.prepare("EXPLAIN QUERY PLAN SELECT * FROM ban_ghi_cms WHERE (entity_id IN (?, ?) OR (entity_id >= ? AND entity_id < ?)) AND status = ?").all("A", "a", "A-", "A.", "DRAFT").map((r) => String((r as { detail: string }).detail)).join(" | ");
+assert.ok(/USING (COVERING )?INDEX/.test(plan) && !/^SCAN ban_ghi_cms$/m.test(plan), `truy vấn theo trường phải dùng chỉ mục: ${plan}`);
+// ctv chỉ thấy bản của mình và bản đã xuất bản khi lọc theo trường
+assert.equal((await goi(banGhi, "GET", "/api/ban-ghi?truong=QSC", CTV)).json.tong, 0);
 
 console.log("tests/cms-api-ban-ghi.test.ts: tất cả đều qua");

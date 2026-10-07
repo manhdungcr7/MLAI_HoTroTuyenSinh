@@ -48,6 +48,14 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       const t = docTrang(c.url);
       const dk: string[] = gioiHan ? [gioiHan] : [];
       const gt: unknown[] = [...gtGioiHan];
+      // ?truong=BKA: mọi bản ghi của một trường (entity_id = BKA hoặc BKA-...), dùng khoảng trên chỉ mục idx_ban_ghi_version (entity_id, version), không quét bảng.
+      const truong = c.url.searchParams.get("truong");
+      if (truong) {
+        if (!/^[A-Za-z0-9]{1,32}$/.test(truong)) throw sai("truong phải là mã trường (chữ và số)", "truong");
+        const hoa = truong.toUpperCase(), thuong = truong.toLowerCase();
+        dk.push("(entity_id IN (?, ?) OR (entity_id >= ? AND entity_id < ?) OR (entity_id >= ? AND entity_id < ?))");
+        gt.push(hoa, thuong, `${hoa}-`, `${hoa}.`, `${thuong}-`, `${thuong}.`);
+      }
       const loai = c.url.searchParams.get("entityType");
       if (loai) { dk.push("entity_type = ?"); gt.push(loai); }
       const eid = c.url.searchParams.get("entityId");
@@ -72,7 +80,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       if (action === "CREATE") {
         const { entityType, entityId } = kiemTraEntity(body.entityType, body.entityId);
         await kiemQuyenTruong(c, entityType, entityId);
-        const data = kiemTraData(body.data, entityId);
+        const data = kiemTraData(body.data, entityId, entityType);
         const source = kiemTraNguon(body.source, c.email, c.luc);
         const importance = kiemTraMucDo(body.importance);
         const changeNote = kiemTraGhiChu(body.changeNote, "Tạo mới bản ghi");
@@ -94,7 +102,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
         const hienTai = mapTuD1(cur);
         const kq = taoPhienBanSuaDoi({
           newId: (c.o.taoId ?? (() => crypto.randomUUID()))(), banGhiHienTai: hienTai,
-          duLieuMoi: kiemTraData(body.duLieuMoi ?? hienTai.data, cur.entity_id),
+          duLieuMoi: kiemTraData(body.duLieuMoi ?? hienTai.data, cur.entity_id, cur.entity_type),
           sourceMoi: kiemTraNguon(body.sourceMoi ?? hienTai.source, c.email, c.luc),
           changeNote: kiemTraGhiChu(body.changeNote, "Chỉnh sửa dữ liệu"), importance: kiemTraMucDo(body.importance, hienTai.importance),
           actorEmail: c.email, actorRole: vaiTroCms, now: c.luc,
@@ -115,7 +123,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       if (cur.status !== "DRAFT" && cur.status !== "REJECTED") throw sai(`Chỉ sửa được bản ở trạng thái DRAFT hoặc REJECTED, hiện là ${cur.status}`, "id");
       await kiemQuyenTruong(c, cur.entity_type, cur.entity_id);
       const hienTai = mapTuD1(cur);
-      const data = body.data === undefined ? hienTai.data : kiemTraData(body.data, cur.entity_id);
+      const data = body.data === undefined ? hienTai.data : kiemTraData(body.data, cur.entity_id, cur.entity_type);
       const nguon = body.source === undefined ? hienTai.source : kiemTraNguon(body.source, c.email, c.luc);
       const importance = kiemTraMucDo(body.importance, hienTai.importance);
       const ghiChu = kiemTraGhiChu(body.changeNote, cur.change_note);

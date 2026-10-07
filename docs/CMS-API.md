@@ -29,11 +29,17 @@ Hình dạng bản ghi (`BanGhiCms`, xem `src/engine/du-lieu-tuyen-sinh/kieu.ts`
 ### `/api/ban-ghi`
 | Method | Vai | Body / query | Kết quả |
 |---|---|---|---|
-| GET | qtv (tất cả), ctv (của mình + PUBLISHED) | `?id=` hoặc lọc `?entityType=&entityId=&status=&createdBy=(qtv)` + phân trang | `{ items: BanGhiCms[], tong }` hoặc một `BanGhiCms` |
+| GET | qtv (tất cả), ctv (của mình + PUBLISHED) | `?id=` hoặc lọc `?truong=<maTruong>&entityType=&entityId=&status=&createdBy=(qtv)` + phân trang | `{ items: BanGhiCms[], tong }` hoặc một `BanGhiCms` |
 | POST `{action:"CREATE"}` (mặc định) | qtv, ctv (trường được giao) | `{ entityType, entityId, data, source, changeNote?, importance? }` | 201 `BanGhiCms` DRAFT v1. 409 nếu đã có bản |
 | POST `{action:"CREATE_MODIFICATION"}` | qtv, ctv | `{ currentId (bản PUBLISHED), duLieuMoi?, sourceMoi?, changeNote?, importance? }` | 201 bản DRAFT, `version` = cũ + 1, `previousVersionId`. 409 nếu đã có bản nháp mở |
 | PUT | chủ bản ghi (ctv) hoặc qtv | `{ id, data?, source?, changeNote?, importance? }` chỉ khi DRAFT/REJECTED | `BanGhiCms`, `version` tăng 1 mỗi lần sửa. 409 nếu lệch |
 | PATCH | ctv: chỉ `SUBMITTED` bản của mình; qtv: `IN_REVIEW/APPROVED/REJECTED/ARCHIVED/SUBMITTED` | `{ id, status, rejectionReason? }` | `BanGhiCms`. Header `x-thong-bao`: `da-gui/chua-cau-hinh/loi/khong-can` (Telegram). 409 `chuyen-trang-thai-khong-hop-le` hoặc `lech-trang-thai` |
+
+`?truong=BKA` trả mọi bản ghi của một trường (entity_id là `BKA` hoặc bắt đầu `BKA-`, không phân biệt hoa thường), truy vấn khoảng trên chỉ mục `idx_ban_ghi_version (entity_id, version)` nên không quét bảng; mã sai định dạng (chữ và số, tối đa 32) trả 400. Kết hợp được với `entityType`, `status`. UI chi tiết trường dùng bộ lọc này, không tải 1000 dòng rồi lọc ở trình duyệt.
+
+Kiểm nội dung ở máy chủ (400, khóa lỗi `data.<trường>`) cho hai loại có form cố định:
+- `noi_luu_tru`: `coKyTucXa` (`co|khong|chua_ro`) và `khuTroXungQuanh` (`nhieu|it|khong|chua_ro`) bắt buộc; `giaKyTucThang`, `giaTroThang` là `[thấp, cao]` số 0 đến 100000, thấp không lớn hơn cao; `khoangCachKm` số 0 đến 500; `ghiChu` chuỗi tối đa 300.
+- `luu_y`: `tieuDe` (3 đến 120 ký tự) và `noiDung` (3 đến 600 ký tự) bắt buộc, kiểu chuỗi.
 
 Mọi thao tác ghi đều ghi `nhat_ky_kiem_toan` cùng giao dịch.
 
@@ -55,9 +61,8 @@ Snapshot: 7 tệp JSON theo miền `schools, tuition, scholarships, admissions, 
 Secret `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (`wrangler pages secret put ...` hoặc `cms/.dev.vars`). Máy chủ tự gửi khi gửi duyệt, duyệt, từ chối, xuất bản; lỗi gửi không làm hỏng thao tác. Trình duyệt không còn giữ token: `cms/src/may-chu/telegram.ts` chỉ gọi `/api/telegram`, các hàm `thongBao*` là no-op.
 
 ## Việc UI cần làm theo
-- Chế độ thật là mặc định. Dữ liệu mẫu chỉ khi build đặt `VITE_GIA_LAP=1` (`che-do.ts`). Không còn bật bằng URL hay localhost.
-- Ở chế độ thật `layTaiKhoanHienTai()` trả quyền thấp nhất cho đến khi gọi `napTaiKhoanTuMayChu()` (`xac-thuc/phien-lam-viec.ts`, gọi `/api/toi`); lỗi 401/403 thì hiện màn báo lỗi. Đổi vai trò ở trình duyệt không còn tác dụng.
-- Nhóm `/api/thong-tin`, `/api/truong` (kênh) là pipeline cũ (A): đã bỏ tự động phát hành KV, header `x-phat-hanh` luôn là `khong-tu-dong`. Dữ liệu mới nên đi qua `/api/ban-ghi`. Sau khi UI chuyển hết, xóa A (`thong-tin*.ts`, `phat-hanh.ts`, `_thu-vien/phat-hanh.ts`).
+- CMS chỉ có một chế độ: gọi máy chủ thật. Đã xóa dữ liệu mẫu (`gia-lap.ts`, `che-do.ts`, `du-lieu/`) và `xac-thuc/`. Phiên lấy từ `/api/toi` (`trang-thai/phien.tsx`); lỗi 401/403 thì hiện màn báo lỗi. Đổi vai trò ở trình duyệt không có tác dụng.
+- Pipeline cũ (A) đã xóa: không còn `/api/thong-tin`, `/api/truong`, `/api/phat-hanh`, `/api/tien-do`. Mọi dữ liệu trường đi qua `/api/ban-ghi` và `/api/xuat-ban-snapshot`. Danh sách mã/tên trường của UI đọc từ `cms/functions/_thu-vien/tap-truong.json` (cùng tệp máy chủ dùng để kiểm mã). Các bảng cũ (`thong_tin_truong`, `truong_kenh`...) còn trong migrations nhưng không có mã nào đọc.
 - Thông tin cộng đồng cũ ánh xạ: `hoc_phi` -> `tuition`, `hoc_bong` -> `scholarship`, `noi_luu_tru` -> `noi_luu_tru`, `review` -> `review`, `luu_y` -> `luu_y`; link nguồn bắt buộc.
 
 ## Khớp với app học sinh
@@ -69,5 +74,6 @@ Secret `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (`wrangler pages secret put ...`
 - D1 `nguyenvongai_db`: tài khoản Cloudflare hiện đã đạt giới hạn số D1 (lỗi `maximum number of D1 databases`). Cần xóa một DB không dùng hoặc nâng gói, rồi `wrangler d1 create nguyenvongai_db`, dán `database_id` vào `wrangler.jsonc` và `cms/wrangler.jsonc`, chạy `wrangler d1 migrations apply nguyenvongai_db --remote` (0001-0004).
 - KV `KV_CONG_DONG` đã tạo (id trong hai file wrangler).
 - Nạp dữ liệu thật: `npx tsx scripts/khoi-tao-d1-that.ts` sinh `.wrangler/seed-d1.sql` (50 trường và 24 mức học phí, đều có link nguồn thật, không có số suy diễn), nạp bằng `wrangler d1 execute nguyenvongai_db --local|--remote --file=.wrangler/seed-d1.sql`, rồi qtv gọi `POST /api/xuat-ban-snapshot`.
-- Chạy thử local: `wrangler pages dev` ở `cms/` bị vướng cấu hình gốc `../.wrangler/deploy/config.json` và đường dẫn dài trên Windows; chạy từ một bản sao ngắn (ví dụ `C:\tmp\nv`) với `--d1 DB=00000000-0000-0000-0000-000000000000 --kv KV_CONG_DONG`.
+- Chạy thử local: `npm run cms:build` rồi `npm run cms:api` (`cms/chay-api-local.mjs`), API ở `http://127.0.0.1:8788`; giao diện `npm run cms:dev` (cổng 3031, proxy /api sang 8788). Đặt `GIA_DANH_DEV=1` và `QTV_DAU_TIEN=<email>` trong `cms/.dev.vars`, gọi API với header `X-Gia-Danh: <email>`.
+  - Vì sao không chạy `wrangler pages dev` thẳng trong `cms/`: wrangler đi lên thư mục cha, đọc `wrangler.jsonc` GỐC (Worker app học sinh, `assets` thiếu `directory`) và dừng với lỗi `The assets property ... missing the required directory`. Tệp `.wrangler/deploy/config.json` ở gốc chỉ là sản phẩm sinh ra bởi `npm run build` (gitignored, không có trong repo; xóa được nhưng build sẽ sinh lại) và không phải nguyên nhân chính. Script `cms:api` copy `cms/functions`, `cms/dist`, `src`, `migrations` sang `<thư mục tạm>/nv-cms` (không có wrangler.jsonc ở phía trên), dùng wrangler của repo, tự áp migrations cục bộ, ghi đè `compatibility_date` trong bản copy về 2026-07-01 nếu workerd cục bộ cũ hơn. Dữ liệu D1 cục bộ nằm ở `<tmp>/nv-cms/cms/.wrangler/state` và được giữ giữa các lần chạy.
 - Test: `npx tsx tests/cms-api-ban-ghi.test.ts` (SQLite thật trong bộ nhớ, migrations thật, không mạng).
