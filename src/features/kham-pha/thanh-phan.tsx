@@ -32,7 +32,7 @@ export const khoangHocPhi = (l: LuaChon) => hocPhiChu(l);
 export function NhanPhuHop({ kq, xuongDong }: { kq: KetQuaPhuHop; xuongDong?: boolean }) {
   // xuongDong: cho phép chữ xuống dòng khi nhãn nằm trong ô hẹp (bảng so sánh ở màn 360px).
   const dong = xuongDong ? "whitespace-normal text-center" : "whitespace-nowrap";
-  if (!kq.muc) return <span className={gop("inline-flex items-center rounded-lg px-2 py-0.5 text-[12px] font-bold bg-nen text-chu-phu border border-vien", dong)}>Chưa đủ điểm để so</span>;
+  if (!kq.muc) return <span className={gop("inline-flex items-center rounded-lg px-2 py-0.5 text-[12px] font-bold bg-nen text-chu-phu border border-vien", dong)}>{kq.lyDoKhongSo ? "Khác phương thức" : "Chưa đủ điểm để so"}</span>;
   return <Nhan tone={TONE_MUC[kq.muc]} className={xuongDong ? "!whitespace-normal text-center" : undefined}>{kq.muc}</Nhan>;
 }
 

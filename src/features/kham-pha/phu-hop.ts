@@ -1,6 +1,6 @@
 // Tính mức phù hợp của một lựa chọn với hồ sơ của em. TypeScript thuần, không React.
 // Mức phù hợp và điểm gợi ý /100 chỉ để em sắp xếp, so sánh. KHÔNG phải xác suất đậu.
-import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongA01 } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { diemDayDu, tongChoLuaChon } from "./to-hop";
@@ -40,6 +40,8 @@ export function boiCanhTu(s: AppState): BoiCanh {
 
 export type MucChacChan = "Cao" | "Vừa" | "Thấp";
 export const TONE_CHAC_CHAN: Record<MucChacChan, ToneTen> = { Cao: "luc", "Vừa": "cam", "Thấp": "do" };
+/** Chữ hiển thị cho `chacChan`: chỉ mô tả vị trí điểm của em so với điểm chuẩn, không hứa kết quả. */
+export const CHU_SO_VOI_DIEM_CHUAN: Record<MucChacChan, string> = { Cao: "Vượt điểm chuẩn", "Vừa": "Sát điểm chuẩn", "Thấp": "Thấp hơn điểm chuẩn" };
 export const TONE_MUC: Record<MucPhuHop, ToneTen> = { "Phù hợp": "luc", "Có thể thử sức": "tim", "Cần cân nhắc": "cam" };
 const THU_TU_MUC: Record<MucPhuHop, number> = { "Phù hợp": 0, "Có thể thử sức": 1, "Cần cân nhắc": 2 };
 
@@ -48,7 +50,9 @@ export interface KetQuaPhuHop {
   tong: number | null; // điểm của em theo tổ hợp của ngành (null = chưa đủ điểm)
   chenh: number | null; // điểm của em trừ điểm tham khảo thấp nhất
   diemGoiY: number | null; // /100, điểm gợi ý, không phải xác suất đậu
-  chacChan: MucChacChan | null;
+  chacChan: MucChacChan | null; // null = chưa so được (thiếu điểm hoặc khác phương thức)
+  /** Có chữ khi điểm chuẩn thuộc phương thức khác THPT nên không so được với điểm thi của em. */
+  lyDoKhongSo: string | null;
   vuotNganSach: boolean;
   ngoaiKhuVuc: boolean;
   tomTat: string; // một dòng ngắn cho thẻ
@@ -71,13 +75,13 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const luuY: string[] = [];
 
   // 1) Điểm: tính theo tổ hợp đề án ghi cho ngành này; đề án chưa ghi thì lấy tổ hợp cao nhất của em.
+  const khac = lyDoKhacPhuongThuc(lc);
   const tl = tongChoLuaChon(lc, bc.diem);
   const tong = tl.tong;
   const chenh = tong === null ? null : Math.round((tong - lc.diemMin) * 100) / 100; // 2 chữ số: quyết định mức theo số thật, chỉ khi hiển thị mới làm tròn 1 chữ số
   const moNhom = tl.toHop ? ` (tổ hợp ${tl.toHop})` : "";
-  if (tong !== null && chenh !== null) {
-    if (tong >= lc.diemMax) tot.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, đã cao hơn cả mức tham khảo cao nhất ${so(lc.diemMax)} của năm ${lc.namDiem}.`);
-    else if (chenh >= 0) tot.push(chenh < 0.05 ? `Điểm hiện tại của em${moNhom} là ${so(tong)}, đúng bằng mức tham khảo thấp nhất, chưa có chỗ dự phòng.` : `Điểm hiện tại của em${moNhom} là ${so(tong)}, cao hơn mức tham khảo thấp nhất ${so(chenh)} điểm.`);
+  if (!khac && tong !== null && chenh !== null) {
+    if (chenh >= 0) tot.push(chenh < 0.05 ? `Điểm hiện tại của em${moNhom} là ${so(tong)}, đúng bằng mức tham khảo thấp nhất, chưa có chỗ dự phòng.` : `Điểm hiện tại của em${moNhom} là ${so(tong)}, cao hơn mức tham khảo thấp nhất ${so(chenh)} điểm.`);
     else luuY.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, thấp hơn mức tham khảo ${so(-chenh)} điểm. Em cần tăng khoảng ${so(-chenh)} điểm ở 3 môn của tổ hợp.`);
     if (tl.suyRa) luuY.push(`Đề án chưa ghi tổ hợp xét tuyển của ngành này nên đã lấy tổ hợp cao nhất của em (${tl.toHop}). Hãy kiểm tra đề án.`);
   }
@@ -105,12 +109,12 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   else if (khacNganh) luuY.push(`Khác nhóm ngành em đã chọn (${bc.nganhQuanTam.join(", ")}).`);
   if (bc.nganhHopSoThich.includes(lc.nhomNganh)) tot.push("Nhóm ngành này hợp với sở thích em đã chọn trong trắc nghiệm hướng nghiệp.");
 
-  if (tong === null || chenh === null) {
+  if (khac || tong === null || chenh === null) {
     return {
-      muc: null, tong: null, chenh: null, diemGoiY: null, chacChan: null, vuotNganSach, ngoaiKhuVuc, tot, luuY,
-      tomTat: tl.khongTinhDuoc ? `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa so được`
+      muc: null, tong: null, chenh: null, diemGoiY: null, chacChan: null, lyDoKhongSo: khac, vuotNganSach, ngoaiKhuVuc, tot, luuY,
+      tomTat: khac ? "Khác phương thức, chưa so được điểm" : tl.khongTinhDuoc ? `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa so được`
         : tl.thieuMon ? `Thêm điểm ${tl.thieuMon.map((m) => TEN_MON_THEM_NGAN[m as MonThem] ?? TEN_MON_NGAN[m as MonId]).slice(0, 3).join(", ")} để so` : "Nhập đủ điểm 3 môn của một tổ hợp để so",
-      giaiThich: tl.khongTinhDuoc
+      giaiThich: khac ? `${khac} Em xem điểm chuẩn ở bảng bên dưới theo đúng phương thức đó.` : tl.khongTinhDuoc
         ? `Ngành này xét tổ hợp ${tl.khongTinhDuoc.join(", ")} (có môn năng khiếu hoặc ngoại ngữ khác), mình chưa tính được. Em so điểm chuẩn ở bảng bên dưới với điểm của em.`
         : tl.thieuMon
           ? `Ngành này xét tổ hợp cần điểm ${tl.thieuMon.map((m) => TEN_MON[m as MonId] ?? TEN_MON_THEM[m as MonThem]).join(", ")}. Em thêm điểm các môn đó ở Hồ sơ (bước Điểm các môn) để mình so.`
@@ -148,7 +152,7 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
           : khacNganh ? `Ngành này khác nhóm ngành em quan tâm. Điểm của em ${phanDiem}.`
             : `Điểm của em ${phanDiem}, khoảng cách còn khá xa.`;
 
-  return { muc, tong, chenh, diemGoiY, chacChan, vuotNganSach, ngoaiKhuVuc, tomTat, giaiThich, tot, luuY };
+  return { muc, tong, chenh, diemGoiY, chacChan, lyDoKhongSo: null, vuotNganSach, ngoaiKhuVuc, tomTat, giaiThich, tot, luuY };
 }
 
 export type KieuSapXep = "phuHop" | "hocPhi" | "diem";

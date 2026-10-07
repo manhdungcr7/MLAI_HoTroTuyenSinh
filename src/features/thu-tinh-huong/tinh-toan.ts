@@ -1,6 +1,6 @@
 // Tính toán cho "Thử tình huống" và "Điểm thi thử". TypeScript thuần, không import React.
 // Điểm "phù hợp" lấy từ engine/phan-tich (thang 100, là điểm gợi ý, KHÔNG phải xác suất đậu).
-import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, nhanNguyenVong, type DieuKienThu } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, lyDoKhacPhuongThuc, nhanNguyenVong, type DieuKienThu } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type LuaChon, type MaToHop, type MonId, type MonThem, type NhanNguyenVong, type TinhHuongDaLuu } from "@/state/types";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -13,7 +13,8 @@ export type DiemThem = Partial<Record<MonThem, number | null>>;
  * Tổng điểm của em theo ĐÚNG tổ hợp của ngành này (đề án ghi); đề án chưa ghi thì lấy tổ hợp cao nhất của em.
  * null = chưa tính được (thiếu điểm môn của tổ hợp, hoặc tổ hợp có môn năng khiếu). Dùng cho mọi phép so với điểm chuẩn.
  */
-export const tongTheoNganh = (lc: LuaChon, diem: Diem, them?: DiemThem): number | null => tongChoLuaChon(lc, { ...diem, ...them }).tong;
+/** Tổng điểm của em theo tổ hợp của ngành; null khi chưa đủ điểm hoặc điểm chuẩn thuộc phương thức khác THPT (không so được). */
+export const tongTheoNganh = (lc: LuaChon, diem: Diem, them?: DiemThem): number | null => (lyDoKhacPhuongThuc(lc) ? null : tongChoLuaChon(lc, { ...diem, ...them }).tong);
 
 /** Tổ hợp (trong 4 tổ hợp của app) dùng để hiện tổng điểm: theo mục tiêu nếu có, không thì tổ hợp em đủ điểm và cao nhất. */
 export function chonToHopHienThi(diem: Diem, mucTieu: { maToHop: MaToHop; toHop: MonId[] } | null): { ma: MaToHop; toHop: MonId[] } {
@@ -127,7 +128,7 @@ function lyDoThay(lc: LuaChon, tongTruoc: number, tongSau: number, dkGoc: DieuKi
     if (tongTruoc < lc.diemMin && tongSau >= lc.diemMin) return `Điểm sau khi tăng (${vietDiem(tongSau)}) đã chạm mức tham khảo ${vietDiem(lc.diemMin)}.`;
     if (tongSau >= lc.diemMin && goc < NGUONG_PHU_HOP && goc + chenh >= NGUONG_PHU_HOP) return `Điểm phù hợp vượt mốc ${NGUONG_PHU_HOP} nhờ tổng điểm cao hơn mức tham khảo ${vietDiem(lam(tongSau - lc.diemMin, 1))}.`;
     if (tongSau < lc.diemMin) return `Còn thiếu ${vietDiem(lam(lc.diemMin - tongSau, 1))} điểm so với mức tham khảo ${vietDiem(lc.diemMin)}.`;
-    return `Điểm cao hơn mức tham khảo ${vietDiem(lam(tongSau - lc.diemMin, 1))} điểm, chắc chắn hơn.`;
+    return `Điểm cao hơn mức tham khảo ${vietDiem(lam(tongSau - lc.diemMin, 1))} điểm.`;
   }
   if (tongSau < tongTruoc && tongSau < lc.diemMin) return `Điểm sau khi giảm thấp hơn mức tham khảo ${vietDiem(lc.diemMin)}.`;
   if (nsDoi && typeof lc.hocPhiMax === "number" && ns >= lc.hocPhiMax && chenh > 0) return `Học phí ${lc.hocPhiMin}–${lc.hocPhiMax} triệu/năm nằm gọn trong ngân sách.`;
@@ -145,6 +146,8 @@ export interface KetQuaTinhHuong {
   dkGoc: DieuKien;
   dkMoi: DieuKien;
   dong: DongKetQua[];
+  /** Số chương trình không đưa vào so sánh vì điểm chuẩn thuộc phương thức khác THPT. */
+  khacPhuongThuc: number;
   dem: Record<NhomLoc, number>;
   /** [trước, sau] */
   phuHop: [number, number];
@@ -175,7 +178,7 @@ export function tinhTinhHuong(lcs: LuaChon[], diem: Diem, toHop: MonId[], dkGoc:
   const demVua = (ns: number) => hang.filter(({ lc }) => typeof lc.hocPhiMin === "number" && lc.hocPhiMin <= ns).length;
   const lon = [...dong].sort((x, y) => Math.abs(y.chenh) - Math.abs(x.chenh))[0] ?? null;
   return {
-    tongTruoc, tongSau, dkGoc, dkMoi, dong, dem,
+    tongTruoc, tongSau, dkGoc, dkMoi, dong, dem, khacPhuongThuc: lcs.filter((lc) => lyDoKhacPhuongThuc(lc)).length,
     phuHop: [dong.filter((d) => d.goc >= NGUONG_PHU_HOP).length, dong.filter((d) => d.moi >= NGUONG_PHU_HOP).length],
     datThamKhao: [hang.filter((x) => x.tt >= x.lc.diemMin).length, hang.filter((x) => x.ts >= x.lc.diemMin).length],
     hocPhiVua: [demVua(dkGoc.nganSachTrieu), demVua(dkMoi.nganSachTrieu)],
@@ -350,7 +353,7 @@ function dongChuyenNhom(a: AnhTruocSau, ten: string): DongTomTat {
   const xuong = a.dong.filter((d) => HANG_NHAN[d.nhanSau] < HANG_NHAN[d.nhanTruoc]);
   if (len.length) {
     const [k, n] = phoBien(len);
-    return { loai: "len", tieuDe: `${len.length} ${ten} lên nhóm chắc chắn hơn`, moTa: n === len.length ? `chuyển từ ${k}` : `nhiều nhất là ${k} (${n})` };
+    return { loai: "len", tieuDe: `${len.length} ${ten} lên nhóm có điểm chuẩn thấp hơn điểm em`, moTa: n === len.length ? `chuyển từ ${k}` : `nhiều nhất là ${k} (${n})` };
   }
   if (xuong.length) return { loai: "xuong", tieuDe: `${xuong.length} ${ten} xuống nhóm khó hơn`, moTa: `chuyển từ ${phoBien(xuong)[0]}` };
   return { loai: "giu", tieuDe: `Chưa có ${ten} nào đổi nhóm`, moTa: "nhãn của danh sách vẫn như trước" };
@@ -362,12 +365,12 @@ export function tomTatTruocSau(a: AnhTruocSau, tim: (id: string) => LuaChon | un
   const ten = a.nguon === "nguyenVong" ? "nguyện vọng" : "lựa chọn";
   const chac = (n: NhanNguyenVong) => n === "An toàn" || n === "Dự phòng";
   ra.push(dongChuyenNhom(a, ten));
-  // 2) Nguyện vọng chắc chắn (An toàn / Dự phòng)
+  // 2) Nguyện vọng An toàn / Dự phòng
   const giuChac = a.dong.filter((d) => chac(d.nhanTruoc) && chac(d.nhanSau)).length;
   const moiChac = a.dong.filter((d) => !chac(d.nhanTruoc) && chac(d.nhanSau)).length;
   const soChacSau = a.dong.filter((d) => chac(d.nhanSau)).length;
-  if (!a.coTruoc) ra.push(soChacSau ? { loai: "anToan", tieuDe: `${soChacSau} ${ten} an toàn`, moTa: "với điểm vừa nhập" } : { loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "nên thêm ít nhất 1 lựa chọn chắc chắn" });
-  else if (soChacSau === 0) ra.push({ loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "nên thêm ít nhất 1 lựa chọn chắc chắn" });
+  if (!a.coTruoc) ra.push(soChacSau ? { loai: "anToan", tieuDe: `${soChacSau} ${ten} an toàn`, moTa: "với điểm vừa nhập" } : { loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "em có thể thêm ít nhất 1 lựa chọn có điểm chuẩn thấp hơn điểm em" });
+  else if (soChacSau === 0) ra.push({ loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "em có thể thêm ít nhất 1 lựa chọn có điểm chuẩn thấp hơn điểm em" });
   else if (moiChac) ra.push({ loai: "anToan", tieuDe: `${soChacSau} ${ten} an toàn`, moTa: giuChac ? `${giuChac} vẫn giữ nguyên, thêm ${moiChac} mới` : `thêm ${moiChac} so với trước` });
   else ra.push({ loai: "anToan", tieuDe: `${giuChac} ${ten} an toàn`, moTa: "vẫn giữ nguyên" });
   // 3) Trường nên xem lại: học phí vượt ngân sách, rồi tới trường còn cách xa mức tham khảo

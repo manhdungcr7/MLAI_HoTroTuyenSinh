@@ -31,7 +31,7 @@ export default function DanhSachNguyenVong() {
   const tongTot = toHopTotNhat(diemMon);
   const tong = tongTot.tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
-  const coCau = xetCoCau(demNhan(ds));
+  const coCau = xetCoCau(demNhan(ds), ds.length);
   const kl = ketLuan(coCau);
   const { tin, bao, an } = useHoanTac();
   const [dangSua, setDangSua] = useState<string | null>(null);
@@ -161,14 +161,14 @@ export default function DanhSachNguyenVong() {
   );
 }
 
-/** Thẻ đầu trang: "Danh sách của em có an toàn không?" + cơ cấu mini + một câu kết luận. */
+/** Thẻ đầu trang: "Cơ cấu danh sách của em" + cơ cấu mini + một câu kết luận. */
 function TheTomTat({ tong, kl, dem, onClick }: { tong: number | null; kl: ReturnType<typeof ketLuan>; dem: ReturnType<typeof demNhan>; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="w-full text-left active:opacity-90">
       <NenHero tone={tong === null ? "xanh" : kl.tone} className="p-4">
         <span className="flex items-center gap-3">
           <BieuTuongTron icon={ShieldCheck} tone={tong === null ? "xanh" : kl.tone} kichThuoc={40} />
-          <b className="flex-1 min-w-0 text-[16px] leading-snug text-muc">Danh sách của em có an toàn không?</b>
+          <b className="flex-1 min-w-0 text-[16px] leading-snug text-muc">Cơ cấu danh sách của em</b>
           <ChevronRight size={20} className="text-chu-phu shrink-0" />
         </span>
         {tong === null ? (
@@ -177,7 +177,7 @@ function TheTomTat({ tong, kl, dem, onClick }: { tong: number | null; kl: Return
           <>
             <span className="block mt-3"><CoCauMini dem={dem} /></span>
             <span className="block mt-2.5 text-[14px] text-chu leading-snug">
-              <b className="text-muc">{kl.tieuDe}.</b> {kl.nenLam ? `${kl.nenLam}.` : "Em xem chi tiết để chắc hơn nhé."}
+              <b className="text-muc">{kl.tieuDe}.</b> {kl.nenLam ? `${kl.nenLam}.` : "Em xem chi tiết để biết thêm nhé."}
             </span>
           </>
         )}
@@ -225,12 +225,13 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
                 <>
                   <span className="flex items-start justify-between gap-2">
                     <b className="text-[16px] text-muc leading-snug">{d.lc.nganh}</b>
-                    {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <Nhan tone="muc">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa có nhãn"}</Nhan>}
+                    {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <Nhan tone="muc">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa so được"}</Nhan>}
                   </span>
                   <span className="mt-1 flex items-center gap-1.5 min-w-0">
                     <HuyHieuTruong ten={d.lc.truong} tone={d.lc.tone} kichThuoc={22} />
                     <span className="text-[13px] text-chu-phu leading-snug truncate"><b className="text-chu">{d.lc.truong}</b> · {d.lc.tenTruong}</span>
                   </span>
+                  {d.lyDoKhongNhan && <span className="mt-1 block text-[13px] text-chu-phu leading-snug">{d.lyDoKhongNhan}</span>}
                 </>
               ) : (
                 <>
@@ -243,6 +244,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
           {d.lc && (
             <span className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
               <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
+              {d.toHop && <span className="inline-flex items-center rounded-full bg-nen px-2 py-0.5 text-[12px]">tổ hợp {d.toHop}{d.suyRa ? " · suy ra" : ""}</span>}
               <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</> : "Chưa có học phí"}</span>
             </span>
           )}

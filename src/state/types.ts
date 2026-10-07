@@ -47,6 +47,7 @@ export interface HoSo {
   giaiDoan: string;
   nganhQuanTam: string[]; // chọn 1 hoặc nhiều
   mucTieuHienTai: "chuaChonTruong" | "daCoMoUoc" | "soSanh" | null;
+  truongMoUoc?: string; // Tên trường hoặc ngành mơ ước của em (khi chọn daCoMoUoc)
   nguonDiem: NguonDiem;
   diem: Record<MonId, number | null>;
   diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)

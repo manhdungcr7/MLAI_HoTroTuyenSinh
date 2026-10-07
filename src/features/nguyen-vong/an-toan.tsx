@@ -1,4 +1,4 @@
-// Màn 12 · Danh sách có an toàn không? Khung cảnh báo sinh từ danh sách thật, cơ cấu 4 nhãn,
+// Màn 12 · Cơ cấu danh sách của em. Khung cảnh báo sinh từ danh sách thật, cơ cấu 4 nhãn,
 // 3 điểm đánh giá, gợi ý hành động có tên trường cụ thể, tác vụ nhanh.
 import { useMemo, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ export default function DanhSachAnToan() {
   const tong = toHopTotNhat(diemMon).tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
   const dem = demNhan(ds);
-  const coCau = xetCoCau(dem);
+  const coCau = xetCoCau(dem, ds.length);
   const kl = ketLuan(coCau);
   const diem = chamDiem(ds, s.hoSo, tong !== null);
   const goiY = tong === null ? [] : goiYHanhDong(ds, { diem: diemMon, hoSo: s.hoSo, tatCa: LUA_CHON_MAU, daCo: s.nguyenVong });
@@ -52,7 +52,7 @@ export default function DanhSachAnToan() {
     bao("Đã xếp: Vừa sức → Thử sức → An toàn → Dự phòng", () => datThuTu(moi, cu));
   };
 
-  const dau = <DauTrangCoQuayLai tieuDe="Danh sách có an toàn không?" quayLai={DUONG_DAN.nguyenVong()}
+  const dau = <DauTrangCoQuayLai tieuDe="Cơ cấu danh sách của em" quayLai={DUONG_DAN.nguyenVong()}
     phai={<button type="button" onClick={() => setGiaiThich("nhan")} aria-label="Cách xếp nhãn" className="size-11 grid place-items-center rounded-full text-chu-phu active:bg-xanh-nhat"><Info size={21} /></button>} />;
 
   if (ds.length === 0) {
@@ -60,7 +60,7 @@ export default function DanhSachAnToan() {
       <>
         {dau}
         <NoiDung>
-          <TrangThaiTrong bieuTuong={<ListChecks size={26} />} tieuDe="Chưa có gì để xem" moTa="Em cần thêm ít nhất 1 nguyện vọng thì mình mới xem được danh sách có an toàn không.">
+          <TrangThaiTrong bieuTuong={<ListChecks size={26} />} tieuDe="Chưa có gì để xem" moTa="Em cần thêm ít nhất 1 nguyện vọng thì mình mới xem được cơ cấu danh sách.">
             <Nut bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Thêm nguyện vọng</Nut>
           </TrangThaiTrong>
         </NoiDung>
@@ -81,9 +81,31 @@ export default function DanhSachAnToan() {
           <KhungCanhBao kl={kl} />
         )}
 
+        {tong !== null && ds.some((d) => d.lyDoKhongNhan) && (
+          <The>
+            <TieuDeMuc>Nguyện vọng chưa xếp được nhãn</TieuDeMuc>
+            <ul className="space-y-2 text-[13px] text-chu-phu">
+              {ds.filter((d) => d.lyDoKhongNhan).map((d) => (
+                <li key={d.id}><b className="text-chu">NV{d.viTri + 1}{d.lc ? ` · ${d.lc.truong} – ${d.lc.nganh}` : ""}</b>: {d.lyDoKhongNhan}</li>
+              ))}
+            </ul>
+          </The>
+        )}
+
+        {tong !== null && ds.some((d) => d.toHop) && (
+          <The>
+            <TieuDeMuc>Tổ hợp dùng để tính điểm</TieuDeMuc>
+            <ul className="space-y-1 text-[13px] text-chu-phu">
+              {ds.filter((d) => d.toHop && d.lc).map((d) => (
+                <li key={d.id}>NV{d.viTri + 1} · {d.lc!.truong}: tổ hợp {d.toHop}{d.suyRa ? " · suy ra (đề án chưa ghi tổ hợp, mình lấy tổ hợp cao nhất của em)" : ""}</li>
+              ))}
+            </ul>
+          </The>
+        )}
+
         {tong !== null && (
           <The>
-            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{ds.length} nguyện vọng</span>}>Cơ cấu mức chắc chắn</TieuDeMuc>
+            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{ds.length} nguyện vọng</span>}>So với điểm chuẩn</TieuDeMuc>
             <ThanhCoCau dem={dem} />
             <ul className="mt-3 space-y-1 text-[13px] text-chu-phu border-t border-vien pt-2.5">
               {CAC_NHAN.map((n) => (
@@ -104,13 +126,13 @@ export default function DanhSachAnToan() {
             <TieuDeMuc>Gợi ý điều chỉnh cho em</TieuDeMuc>
             {goiY.length === 0 ? (
               <DongThongBao tone="luc" icon={CheckCircle2} tieuDe="Chưa cần điều chỉnh thêm"
-                moTa="Có trường để thử sức lẫn chỗ chắc chân. Khi có điểm thi thử mới, em quay lại đây xem nhãn có đổi không nhé." />
+                moTa="Có trường để thử sức lẫn nguyện vọng điểm chuẩn thấp hơn điểm em. Khi có điểm thi thử mới, em quay lại đây xem nhãn có đổi không nhé." />
             ) : goiY.map((g, i) => <TheGoiY key={g.loai} g={g} so={i + 1} nav={nav} />)}
           </>
         )}
 
         <TieuDeMuc>Tác vụ nhanh</TieuDeMuc>
-        <HangBam bieuTuong={ShieldPlus} tone="luc" tieuDe="Thêm trường an toàn" phu="Tìm trường có điểm tham khảo thấp hơn điểm em" onClick={() => nav(DUONG_DAN.khamPha())} />
+        <HangBam bieuTuong={ShieldPlus} tone="luc" tieuDe="Thêm nguyện vọng An toàn" phu="Tìm trường có điểm tham khảo thấp hơn điểm em" onClick={() => nav(DUONG_DAN.khamPha())} />
         {tong !== null && ds.length > 1 && (
           <HangBam bieuTuong={ArrowDownUp} tone="cam" tieuDe="Sắp xếp lại theo mức vừa sức" phu="Vừa sức lên trước, rồi Thử sức, An toàn, Dự phòng" onClick={sapXepLai} />
         )}
@@ -179,7 +201,7 @@ function TheDiem({ d, moGiaiThich, boSung }: { d: DiemDanhGia; moGiaiThich: () =
 }
 
 const DANG_GOI_Y: Record<GoiY["loai"], { icon: LucideIcon; tone: ToneTen; nut: string }> = {
-  themAnToan: { icon: ShieldPlus, tone: "luc", nut: "Tìm thêm trường an toàn" },
+  themAnToan: { icon: ShieldPlus, tone: "luc", nut: "Tìm thêm nguyện vọng An toàn" },
   giamThuSuc: { icon: TrendingDown, tone: "xanh", nut: "Sửa danh sách" },
   themPhuHop: { icon: School, tone: "cam", nut: "Xem thêm trường phù hợp" },
 };

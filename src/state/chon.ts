@@ -1,22 +1,26 @@
 // Các hàm đọc dữ liệu dẫn xuất từ state. Dùng chung cho nhiều màn.
 import { tim } from "@/data/lua-chon-mau";
 import { isoNgay, thuHaiCuaTuan, bayNgayCuaTuan, soNgayTu } from "@/engine/xep-lich";
-import { khoangCachTheoMon, tongDiem } from "@/engine/phan-tich";
+import { khoangCachTheoMon, monThieuCuaToHop, tongDiem } from "@/engine/phan-tich";
 import { diemHienTaiCuaTungMon, type AppState } from "./store";
 import { TO_HOP, type LuaChon, type MaToHop, type MonId, type ViecCanHoc } from "./types";
 
 export const homNay = () => isoNgay(new Date());
 export const tuanHienTai = () => thuHaiCuaTuan(homNay());
 
-export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; toHop: MonId[]; monThieu: MonId[] } | null {
+/**
+ * `hienTai` và `conThieu` chỉ là điểm thật khi `duDiem` (tức `monThieu` rỗng). Có môn thiếu thì `hienTai` chỉ là tổng các môn đã nhập
+ * (môn chưa nhập tính 0): nơi hiển thị phải nói "chưa đủ điểm", không đưa số này ra như khoảng cách tới mục tiêu.
+ */
+export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; toHop: MonId[]; monThieu: MonId[]; duDiem: boolean } | null {
   if (!s.mucTieu) return null;
   const lc = tim(s.mucTieu.luaChonId);
   if (!lc) return null;
   const diem = diemHienTaiCuaTungMon(s);
   const hienTai = tongDiem(diem, s.mucTieu.toHop);
-  const monThieu = s.mucTieu.toHop.filter((m) => diem[m] === null);
+  const monThieu = monThieuCuaToHop(diem, s.mucTieu.toHop);
   return {
-    lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, toHop: s.mucTieu.toHop, monThieu,
+    lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, toHop: s.mucTieu.toHop, monThieu, duDiem: monThieu.length === 0,
     conThieu: Math.max(0, Math.round((s.mucTieu.diemMucTieu - hienTai) * 10) / 10),
     soNgayCon: Math.max(0, soNgayTu(homNay(), s.mucTieu.ngayThi)),
   };

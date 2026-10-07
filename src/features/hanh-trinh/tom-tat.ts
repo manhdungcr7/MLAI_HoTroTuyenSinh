@@ -52,11 +52,11 @@ export function chiSoTheoDoi(s: AppState): ChiSo[] {
     const gapDau = dau === null ? null : Math.max(0, Math.round((m.mucTieu - dau) * 10) / 10);
     const thuHep = gapDau === null ? null : Math.round((gapDau - m.conThieu) * 10) / 10;
     khoang = {
-      khoa: "khoangCach", ten: "Khoảng cách tới mục tiêu", giaTri: m.conThieu === 0 ? "Đã đủ" : `${so(m.conThieu)} điểm`,
-      phanTram: gapDau && gapDau > 0 ? Math.max(0, Math.min(100, Math.round(((gapDau - m.conThieu) / gapDau) * 100))) : (m.conThieu === 0 ? 100 : null),
+      khoa: "khoangCach", ten: "Khoảng cách tới mục tiêu", giaTri: !m.duDiem ? "—" : m.conThieu === 0 ? "Đã đủ" : `${so(m.conThieu)} điểm`,
+      phanTram: !m.duDiem ? null : gapDau && gapDau > 0 ? Math.max(0, Math.min(100, Math.round(((gapDau - m.conThieu) / gapDau) * 100))) : (m.conThieu === 0 ? 100 : null),
       tone: "tim",
       moTa: m.monThieu.length
-        ? `Chưa có điểm ${m.monThieu.map((k) => TEN_MON[k]).join(", ")} nên khoảng cách đang tính thiếu.`
+        ? `Chưa đủ điểm: em chưa nhập ${m.monThieu.map((k) => TEN_MON[k]).join(", ")} nên chưa tính được khoảng cách.`
         : thuHep === null || gapDau === null ? `Cần thêm ${so(m.conThieu)} điểm để đạt ${so(m.mucTieu)}. Em nhập thêm điểm thi thử để thấy mình thu hẹp được bao nhiêu.`
           : thuHep > 0 ? `Đã thu hẹp ${so(thuHep)} điểm so với lần thi thử đầu (từ ${so(gapDau)} xuống ${so(m.conThieu)}).`
             : thuHep < 0 ? `Đang xa hơn ${so(-thuHep)} điểm so với lần thi thử đầu. Xem môn kéo điểm để chỉnh lại kế hoạch.`
@@ -99,16 +99,17 @@ export function cauHoiTraoDoi(s: AppState): string[] {
   else if (h.choO === "oNha" && lc.some((l) => h.khuVuc.length > 0 && !h.khuVuc.includes(l.khuVuc))) ra.push("Em chọn ở nhà nhưng có nguyện vọng ở nơi khác. Em có đi lại hằng ngày được không, hay cần chỗ ở?");
   if (h.hocXaNha === null) ra.push("Gia đình có đồng ý cho em học xa nhà không?");
 
-  const c = xetCoCau(demNhan(ds));
-  if (c.n > 0 && c.chacChan === 0) ra.push("Danh sách chưa có trường an toàn hay dự phòng. Em nên cân nhắc thêm với thầy cô để có phương án chắc chân.");
+  const c = xetCoCau(demNhan(ds), ds.length);
+  if (c.chuaDuCanCu > 0) ra.push(`Chưa đủ căn cứ cho ${c.chuaDuCanCu} nguyện vọng (thiếu điểm môn hoặc điểm thuộc phương thức khác), nên chưa nhận xét được cơ cấu danh sách.`);
+  if (c.n > 0 && c.chuaDuCanCu === 0 && c.chacChan === 0) ra.push("Danh sách chưa có nguyện vọng An toàn hay Dự phòng (điểm chuẩn thấp hơn điểm của em từ 1,5 điểm). Em hỏi thầy cô xem có nên thêm không.");
   if (c.thuSucNhieu) ra.push("Hơn một nửa nguyện vọng đang ở mức thử sức. Em hỏi thầy cô xem nên giữ hay đổi bớt.");
   const m = mucTieuDayDu(s);
-  if (m && m.conThieu > 0 && !m.monThieu.length) ra.push(`Em còn thiếu khoảng ${so(m.conThieu)} điểm để đạt mục tiêu. Thầy cô hoặc gia đình có thể giúp em chọn cách ôn nào?`);
+  if (m && m.conThieu > 0 && m.duDiem) ra.push(`Em còn thiếu khoảng ${so(m.conThieu)} điểm để đạt mục tiêu. Thầy cô hoặc gia đình có thể giúp em chọn cách ôn nào?`);
   if (m && m.monThieu.length) ra.push(`Em chưa có điểm ${m.monThieu.map((k) => TEN_MON[k]).join(", ")}. Thầy cô cho em xin điểm học bạ hoặc điểm thi thử gần nhất.`);
   return ra.slice(0, 5);
 }
 
-export function tomTatChiaSe(s: AppState, bayGio: Date): { muc: MucTomTat[]; vanBan: string } {
+export function tomTatChiaSe(s: AppState, bayGio: Date, kemTen: boolean = false): { muc: MucTomTat[]; vanBan: string } {
   const h = s.hoSo;
   const diem = diemDayDu(s);
   const m = mucTieuDayDu(s);
@@ -121,7 +122,8 @@ export function tomTatChiaSe(s: AppState, bayGio: Date): { muc: MucTomTat[]; van
   if (h.nganSach) thongTin.push(`Học phí gia đình dự kiến: ${TEN_NGAN_SACH[h.nganSach].toLowerCase()} mỗi năm`);
   if (h.choO) thongTin.push(`Chỗ ở: ${TEN_CHO_O[h.choO]}`);
   if (h.khuVuc.length) thongTin.push(`Nơi muốn học: ${h.khuVuc.join(", ")}`);
-  muc.push({ tieuDe: h.hoTen.trim() ? `Hồ sơ của ${h.hoTen.trim()}` : "Hồ sơ", dong: thongTin.length ? thongTin : ["Em chưa điền thông tin cơ bản."] });
+  const tieuDeHoSo = kemTen && h.hoTen.trim() ? `Hồ sơ của ${h.hoTen.trim()}` : "Hồ sơ";
+  muc.push({ tieuDe: tieuDeHoSo, dong: thongTin.length ? thongTin : ["Em chưa điền thông tin cơ bản."] });
 
   const dongDiem = CAC_MON.filter((k) => diem[k] !== null).map((k) => `${TEN_MON[k]} ${so(diem[k]!)}`);
   muc.push({ tieuDe: "Điểm hiện tại", dong: dongDiem.length ? [dongDiem.join(" · ")] : ["Chưa nhập điểm môn nào."] });
@@ -129,7 +131,9 @@ export function tomTatChiaSe(s: AppState, bayGio: Date): { muc: MucTomTat[]; van
   if (m && s.mucTieu) {
     muc.push({ tieuDe: "Mục tiêu chính", dong: [
       `${m.lc.nganh} – ${m.lc.tenTruong}`,
-      `Tổ hợp ${s.mucTieu.maToHop}: đang ${so(m.hienTai)}, cần ${so(m.mucTieu)}${m.conThieu > 0 ? ` (còn thiếu ${so(m.conThieu)})` : " (đã đủ)"}`,
+      m.duDiem
+        ? `Tổ hợp ${s.mucTieu.maToHop}: đang ${so(m.hienTai)}, cần ${so(m.mucTieu)}${m.conThieu > 0 ? ` (còn thiếu ${so(m.conThieu)})` : " (đã đủ)"}`
+        : `Tổ hợp ${s.mucTieu.maToHop}: cần ${so(m.mucTieu)}; chưa đủ điểm (em chưa nhập ${m.monThieu.map((k) => TEN_MON[k]).join(", ")}) nên chưa tính được còn thiếu bao nhiêu`,
       ...(m.soNgayCon > 0 ? [`Còn ${m.soNgayCon} ngày đến kỳ thi`] : []),
     ] });
   } else muc.push({ tieuDe: "Mục tiêu chính", dong: ["Em chưa chọn mục tiêu chính."] });
@@ -137,8 +141,8 @@ export function tomTatChiaSe(s: AppState, bayGio: Date): { muc: MucTomTat[]; van
   const ds = dungDanhSach(s.nguyenVong, diem, tim);
   muc.push({ tieuDe: `Danh sách nguyện vọng (${s.nguyenVong.length})`, dong: ds.length ? ds.map((d) => {
     if (!d.lc) return `NV${d.viTri + 1}: lựa chọn không còn trong dữ liệu`;
-    const nhan: NhanNguyenVong | "chưa đủ điểm" = d.nhan ?? "chưa đủ điểm";
-    return `NV${d.viTri + 1}: ${d.lc.truong} – ${d.lc.nganh} (${nhan}; điểm chuẩn ${so(d.lc.diemMin)} năm ${d.lc.namDiem})`;
+    const nhan: NhanNguyenVong | string = d.nhan ?? `chưa so được: ${d.lyDoKhongNhan ?? "thiếu điểm"}`;
+    return `NV${d.viTri + 1}: ${d.lc.truong} – ${d.lc.nganh} (${nhan}${d.suyRa ? " (suy ra)" : ""}; điểm chuẩn ${so(d.lc.diemMin)} năm ${d.lc.namDiem})`;
   }) : ["Chưa lưu nguyện vọng nào."] });
 
   const cs = chiSoTheoDoi(s);

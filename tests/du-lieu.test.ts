@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { LUA_CHON, idHoSoMau, tenGon, timLuaChon } from "../src/data/lua-chon-that";
 import { coHocPhi } from "../src/data/lua-chon-phu";
-import { NGUONG_PHU_HOP } from "../src/engine/phan-tich";
+import { NGUONG_PHU_HOP, nhanNguyenVong } from "../src/engine/phan-tich";
 import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
 import { boiCanhTu, coDiemDeSo, danhGia, sapXep } from "../src/features/kham-pha/phu-hop";
 import { dungDanhSach, demNhan } from "../src/features/nguyen-vong/tinh-toan";
@@ -147,5 +147,31 @@ assert.ok(gy.every((x) => x.lyDo.length >= 1), "mỗi gợi ý có lý do");
 assert.ok(gy.filter((x) => x.lc.nhomNganh === "CNTT").length >= gy.length - 2, "ưu tiên đúng nhóm ngành em chọn");
 assert.ok(goiYDanhSach(dGioi, hsGoiY, gy.map((x) => x.lc.id)).every((x) => !gy.some((g) => g.lc.id === x.lc.id)), "không gợi ý lại ngành đã có");
 assert.deepEqual(goiYDanhSach(diem({}), hsGoiY), [], "chưa có điểm thì không gợi ý");
+
+// 9) Điểm dùng để dán nhãn, đặt mục tiêu và hiển thị là điểm của đúng năm `namDiem` (năm mới nhất), không phải mức thấp nhất của hai năm
+for (const l of LUA_CHON) {
+  const nam = Object.keys(l.diemTheoNam ?? {}).sort();
+  assert.equal(l.namDiem, Number(nam[nam.length - 1]), `namDiem phải là năm mới nhất: ${l.id}`);
+  assert.equal(l.diemMin, l.diemTheoNam![String(l.namDiem)], `điểm dán nhãn phải khớp điểm năm ${l.namDiem}: ${l.id}`);
+  assert.equal(l.diemMax, l.diemMin, `diemMax cùng năm với diemMin: ${l.id}`);
+  if (l.diemDuKien != null) assert.equal(l.diemDuKien, l.diemMin, `điểm dự kiến bằng điểm năm gần nhất: ${l.id}`);
+}
+assert.equal(nhanNguyenVong(LUA_CHON[0], LUA_CHON[0].diemMin), "Vừa sức");
+
+// 10) Điểm của phương thức khác THPT không được dán nhãn Thử sức/Vừa sức/An toàn/Dự phòng
+const khacPT = LUA_CHON.filter((l) => l.phuongThuc && l.phuongThuc !== "THPT");
+assert.ok(khacPT.length > 100, "dữ liệu có nhiều chương trình phương thức khác");
+const dDu = diem({ toan: 9, vatLy: 9, hoaHoc: 9, sinh: 9, nguVan: 9, tiengAnh: 9, lichSu: 9, diaLy: 9, gdktpl: 9, tinHoc: 9, congNghe: 9 });
+for (const l of khacPT.slice(0, 200)) {
+  const k = danhGia(l, { ...bcGioi, diem: dDu });
+  assert.equal(k.muc, null, `khác phương thức không có mức phù hợp: ${l.id}`);
+  assert.equal(k.chacChan, null);
+  assert.ok(k.lyDoKhongSo && k.giaiThich.includes("phương thức"), `phải nói lý do: ${l.id}`);
+  assert.equal(k.tot.some((t) => /mức tham khảo/.test(t)) || k.luuY.some((t) => /mức tham khảo/.test(t)), false, "không so điểm với điểm chuẩn khác thang");
+}
+const dsKhac = dungDanhSach(khacPT.slice(0, 5).map((l) => l.id), dDu, timLuaChon);
+assert.ok(dsKhac.every((x) => x.nhan === null && /phương thức/.test(x.lyDoKhongNhan ?? "")), "dungDanhSach: khác phương thức thì không có nhãn, kèm lý do");
+const thptNhan = LUA_CHON.find((l) => l.phuongThuc === "THPT" && l.toHopXet?.length === 1 && l.toHopXet[0] === "A01")!;
+assert.ok(danhGia(thptNhan, { ...bcGioi, diem: dDu }).muc !== null, "THPT vẫn so bình thường");
 
 console.log("du-lieu: tất cả kiểm tra đều qua");

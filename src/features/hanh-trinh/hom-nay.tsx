@@ -42,7 +42,11 @@ export default function HomNay() {
             <ViecHomNay />
           </>
         ) : (
-          <ChuaCoMucTieu onClick={() => nav(DUONG_DAN.khamPha())} />
+          <ChuaCoMucTieu
+            onClick={() => nav(DUONG_DAN.khamPha())}
+            soNguyenVong={s.nguyenVong.length}
+            onNguyenVong={() => nav(DUONG_DAN.nguyenVong())}
+          />
         )}
 
         <TamTrangHomNay />
@@ -92,7 +96,9 @@ function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: num
         <span className="size-10 rounded-xl bg-xanh-nhat text-xanh grid place-items-center shrink-0"><BarChart3 size={20} /></span>
         <span className="min-w-0">
           <span className="block text-[12px] text-chu-phu leading-tight">Điểm hiện tại</span>
-          <b className="text-[22px] font-extrabold text-muc leading-tight">{dinhDang(hienTai, 1)}</b><span className="text-[13px] text-chu-phu"> / 30</span>
+          {thieuMon.length > 0
+            ? <><b className="text-[22px] font-extrabold text-muc leading-tight">—</b><span className="block text-[12px] text-chu-phu leading-tight">chưa đủ điểm</span></>
+            : <><b className="text-[22px] font-extrabold text-muc leading-tight">{dinhDang(hienTai, 1)}</b><span className="text-[13px] text-chu-phu"> / 30</span></>}
         </span>
       </The>
       <The className="!p-3 flex items-center gap-2.5">
@@ -111,7 +117,7 @@ function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: num
   );
 }
 
-function ChuaCoMucTieu({ onClick }: { onClick: () => void }) {
+function ChuaCoMucTieu({ onClick, soNguyenVong, onNguyenVong }: { onClick: () => void; soNguyenVong?: number; onNguyenVong?: () => void }) {
   return (
     <NenHero tone="cam" className="p-5">
       <span className="flex items-start gap-3">
@@ -121,7 +127,12 @@ function ChuaCoMucTieu({ onClick }: { onClick: () => void }) {
           <span className="block text-[14px] text-chu mt-1">Chọn một ngành và trường em muốn theo. Sau đó, việc cần làm mỗi ngày sẽ hiện ở đây.</span>
         </span>
       </span>
-      <Nut className="mt-4" muiTen onClick={onClick}>Khám phá ngành học</Nut>
+      <div className="mt-4 space-y-2">
+        <Nut muiTen onClick={onClick}>Khám phá ngành học</Nut>
+        {Boolean(soNguyenVong && soNguyenVong > 0 && onNguyenVong) && (
+          <Nut kieu="vien" onClick={onNguyenVong}>Chọn từ {soNguyenVong} nguyện vọng đã lưu</Nut>
+        )}
+      </div>
     </NenHero>
   );
 }

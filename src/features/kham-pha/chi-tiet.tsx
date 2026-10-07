@@ -15,7 +15,7 @@ import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { LuaChon, ToneTen } from "@/state/types";
-import { TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
+import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -247,8 +247,8 @@ export default function ChiTiet() {
           {kq.muc ? (
             <div className="mt-3 grid grid-cols-2 gap-2">
               <div className="rounded-xl bg-trang/80 p-2.5">
-                <p className="text-[12px] text-chu-phu">Mức chắc chắn</p>
-                <p className={gop("text-[16px] font-extrabold", TONE_CHU[TONE_CHAC_CHAN[kq.chacChan!]])}>{kq.chacChan}</p>
+                <p className="text-[12px] text-chu-phu">So với điểm chuẩn</p>
+                <p className={gop("text-[16px] font-extrabold", TONE_CHU[TONE_CHAC_CHAN[kq.chacChan!]])}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan!]}</p>
               </div>
               <div className="rounded-xl bg-trang/80 p-2.5">
                 <p className="text-[12px] text-chu-phu">Điểm gợi ý</p>
@@ -256,7 +256,7 @@ export default function ChiTiet() {
               </div>
               <p className="col-span-2 text-[12px] text-chu-phu leading-snug">Điểm gợi ý tính từ điểm, học phí, khu vực và cơ hội việc làm để em dễ so sánh. Đây không phải xác suất đậu.</p>
             </div>
-          ) : (
+          ) : kq.lyDoKhongSo ? null : (
             <Nut className="mt-3" kieu="vien" bieuTuong={PencilLine} onClick={() => nav(DUONG_DAN.batDau(2))}>Nhập điểm của em</Nut>
           )}
         </section>

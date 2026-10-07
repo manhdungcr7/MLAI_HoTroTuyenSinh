@@ -11,8 +11,23 @@ export const NGAN_SACH_TOI_DA: Record<NonNullable<HoSo["nganSach"]>, number> = {
 const lam = (n: number, so = 1) => Math.round(n * 10 ** so) / 10 ** so;
 const kep = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n));
 
+/** Tổng điểm các môn của tổ hợp. Môn chưa nhập đang tính là 0: nơi nào hiển thị số này phải kiểm `monThieuCuaToHop` trước, không đưa số đó ra như điểm thật. */
 export function tongDiem(diem: Record<MonId, number | null>, toHop: MonId[]): number {
   return lam(toHop.reduce((s, m) => s + (diem[m] ?? 0), 0));
+}
+
+/** Các môn của tổ hợp em chưa nhập điểm. Rỗng nghĩa là `tongDiem` là điểm thật. */
+export const monThieuCuaToHop = (diem: Record<MonId, number | null>, toHop: MonId[]): MonId[] => toHop.filter((m) => diem[m] === null || diem[m] === undefined);
+
+export const TEN_PHUONG_THUC: Record<string, string> = {
+  THPT: "Điểm thi tốt nghiệp THPT", HOC_BA: "Học bạ THPT", DGNL_HCM: "ĐGNL ĐHQG TP.HCM", DGNL_HN: "ĐGNL ĐHQG Hà Nội",
+  DGNL_KHAC: "Đánh giá năng lực (khác)", DGTD: "Đánh giá tư duy", KET_HOP: "Kết hợp nhiều tiêu chí", NANG_KHIEU: "Có thi năng khiếu",
+};
+
+/** Điểm chuẩn của phương thức khác (học bạ, ĐGNL, năng khiếu...) không cùng thang với điểm thi tốt nghiệp: trả lý do, hoặc null nếu so được. Dữ liệu cũ không ghi phương thức coi là THPT. */
+export function lyDoKhacPhuongThuc(lc: Pick<LuaChon, "phuongThuc">): string | null {
+  if (!lc.phuongThuc || lc.phuongThuc === "THPT") return null;
+  return `Điểm này thuộc phương thức "${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}", chưa so được với điểm thi THPT.`;
 }
 
 export type MucUuTienMon = "cao" | "vua" | "duyTri";
@@ -40,6 +55,7 @@ export function khoangCachTheoMon(diem: Record<MonId, number | null>, toHop: Mon
   });
 }
 
+/** Chỉ gọi khi `tong` là số hữu hạn và `lc` là điểm THPT. Màn hình nên gọi `nhanChoLuaChon` (trả null khi không so được). */
 export function nhanNguyenVong(lc: LuaChon, tong: number): NhanNguyenVong {
   // Làm tròn 2 chữ số: điểm chuẩn có 2 số lẻ, phép trừ số thực có thể lệch 1e-15 và xếp sai nhãn ở đúng ngưỡng.
   const x = Math.round((tong - lc.diemMin) * 100) / 100;
@@ -47,6 +63,12 @@ export function nhanNguyenVong(lc: LuaChon, tong: number): NhanNguyenVong {
   if (x < 1.5) return "Vừa sức";
   if (x < 4) return "An toàn";
   return "Dự phòng";
+}
+
+/** Nhãn nếu so được; null khi điểm khác phương thức THPT hoặc tổng điểm không phải số. Không bao giờ đoán. */
+export function nhanChoLuaChon(lc: LuaChon, tong: number | null): NhanNguyenVong | null {
+  if (tong === null || !Number.isFinite(tong) || lyDoKhacPhuongThuc(lc)) return null;
+  return nhanNguyenVong(lc, tong);
 }
 
 export interface PhanTichDanhSach {
@@ -70,8 +92,8 @@ export function phanTichDanhSach(ds: { lc: LuaChon; nhan: NhanNguyenVong }[], ho
   let diemCB = 100;
   if (ds.length === 0) { diemCB = 0; canhBao.push("Em chưa thêm nguyện vọng nào."); }
   else {
-    if (dem["An toàn"] + dem["Dự phòng"] === 0) { diemCB -= 40; canhBao.push("Danh sách chưa có nguyện vọng an toàn. Nên thêm ít nhất 1 nguyện vọng chắc chân."); }
-    if (dem["Thử sức"] / n > 0.5) { diemCB -= 20; canhBao.push("Hơn một nửa danh sách là thử sức, mức chắc chắn còn thấp."); }
+    if (dem["An toàn"] + dem["Dự phòng"] === 0) { diemCB -= 40; canhBao.push("Danh sách chưa có nguyện vọng An toàn hay Dự phòng. Em có thể thêm ít nhất 1 nguyện vọng có điểm chuẩn thấp hơn điểm của em."); }
+    if (dem["Thử sức"] / n > 0.5) { diemCB -= 20; canhBao.push("Hơn một nửa danh sách là thử sức (điểm chuẩn cao hơn điểm của em)."); }
     if (dem["Vừa sức"] === 0) { diemCB -= 15; canhBao.push("Chưa có nguyện vọng vừa sức với điểm hiện tại."); }
     if (dem["Dự phòng"] === 0 && dem["An toàn"] < 2) diemCB -= 5;
     if (dem["Thử sức"] === 0 && ds.length >= 3) { diemCB -= 5; canhBao.push("Danh sách hơi an toàn, em có thể thêm một nguyện vọng thử sức."); }

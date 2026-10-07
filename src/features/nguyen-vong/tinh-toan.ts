@@ -2,23 +2,30 @@
 // Dựa trên nhanNguyenVong / phanTichDanhSach của engine, KHÔNG sửa engine.
 // Mọi câu chữ sinh ra ở đây là lời thường cho học sinh; không dùng lại câu canhBao của engine
 // vì vài câu trong đó có từ ngữ dự án đã bỏ.
-import { NGAN_SACH_TOI_DA, nhanNguyenVong, phanTichDanhSach } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, lyDoKhacPhuongThuc, nhanChoLuaChon, phanTichDanhSach } from "@/engine/phan-tich";
 import type { DiemDayDu, HoSo, LuaChon, NhanNguyenVong, ToneTen } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
-import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
+import { tongChoLuaChon, type TongToHop } from "@/features/kham-pha/to-hop";
+import { TEN_MON, TEN_MON_THEM, type MonId, type MonThem } from "@/state/types";
 
 /** Gợi ý giữ khoảng 5–6 nguyện vọng; vượt thì nhắc nhẹ, không chặn. */
 export const SO_NV_GOI_Y = 6;
 
 export const THU_TU_NHAN: NhanNguyenVong[] = ["Thử sức", "Vừa sức", "An toàn", "Dự phòng"];
 
-/** Một hàng trong danh sách. lc = undefined khi id không còn trong dữ liệu (dữ liệu mẫu đổi). nhan = null khi em chưa đủ điểm. */
+/** Một hàng trong danh sách. lc = undefined khi id không còn trong dữ liệu (dữ liệu mẫu đổi). nhan = null khi không xếp được nhãn (xem lyDoKhongNhan). */
 export interface DongNV {
   id: string;
   viTri: number; // 0 = NV1
   lc: LuaChon | undefined;
   nhan: NhanNguyenVong | null;
+  /** Tổ hợp dùng để tính tổng điểm (null khi chưa tính được). */
+  toHop: string | null;
+  /** true = đề án chưa ghi tổ hợp, đã lấy tổ hợp cao nhất của em. */
+  suyRa: boolean;
+  /** Vì sao hàng này không có nhãn (khác phương thức THPT, thiếu điểm môn, tổ hợp chưa tính được); null khi đã có nhãn. */
+  lyDoKhongNhan: string | null;
 }
 
 type DiemMon = DiemDayDu;
@@ -29,11 +36,25 @@ export const toHopTotNhat = (diem: DiemMon) => tongChoLuaChon({ toHopXet: [] }, 
 /** Tổng điểm của em theo đúng tổ hợp của ngành này (đề án ghi); đề án chưa ghi thì lấy tổ hợp cao nhất của em. */
 export const tongChoNganh = (lc: LuaChon, diem: DiemMon): number | null => tongChoLuaChon(lc, diem).tong;
 
+const tenMon = (m: string) => TEN_MON[m as MonId] ?? TEN_MON_THEM[m as MonThem] ?? m;
+
+/** Lý do không so được điểm của em với điểm chuẩn của chương trình này (null = so được). */
+export function lyDoChuaSoDuoc(lc: LuaChon, tl: TongToHop): string | null {
+  const khac = lyDoKhacPhuongThuc(lc);
+  if (khac) return khac;
+  if (tl.tong !== null) return null;
+  if (tl.khongTinhDuoc) return `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa tính được điểm này.`;
+  if (tl.thieuMon) return `Em chưa nhập điểm ${tl.thieuMon.map(tenMon).join(", ")}.`;
+  return "Em chưa nhập đủ điểm 3 môn của một tổ hợp.";
+}
+
 export function dungDanhSach(ids: string[], diem: DiemMon, tim: (id: string) => LuaChon | undefined): DongNV[] {
   return ids.map((id, viTri) => {
     const lc = tim(id);
-    const tong = lc ? tongChoNganh(lc, diem) : null;
-    return { id, viTri, lc, nhan: lc && tong !== null ? nhanNguyenVong(lc, tong) : null };
+    if (!lc) return { id, viTri, lc, nhan: null, toHop: null, suyRa: false, lyDoKhongNhan: "Lựa chọn này không còn trong dữ liệu." };
+    const tl = tongChoLuaChon(lc, diem);
+    const nhan = nhanChoLuaChon(lc, tl.tong);
+    return { id, viTri, lc, nhan, toHop: nhan ? tl.toHop : null, suyRa: nhan ? tl.suyRa : false, lyDoKhongNhan: nhan ? null : lyDoChuaSoDuoc(lc, tl) };
   });
 }
 
@@ -48,24 +69,30 @@ export function demNhan(ds: DongNV[]): Record<NhanNguyenVong, number> {
 export interface CoCau {
   n: number;
   dem: Record<NhanNguyenVong, number>;
-  /** Số chỗ chắc chân = An toàn + Dự phòng. */
+  /** Số nguyện vọng có điểm chuẩn thấp hơn điểm em từ 1,5 điểm (An toàn + Dự phòng). */
   chacChan: number;
+  /** Số hàng không có nhãn (thiếu điểm môn, phương thức khác...). > 0 thì chưa đủ căn cứ để kết luận về cả danh sách. */
+  chuaDuCanCu: number;
   canThemAnToan: boolean;
   thuSucNhieu: boolean;
   thieuVuaSuc: boolean;
   danhSachNgan: boolean;
 }
 
-export function xetCoCau(dem: Record<NhanNguyenVong, number>): CoCau {
+/** `soHang` = tổng số hàng trong danh sách (kể cả hàng không có nhãn). Bỏ trống nghĩa là mọi hàng đều có nhãn. */
+export function xetCoCau(dem: Record<NhanNguyenVong, number>, soHang?: number): CoCau {
   const n = THU_TU_NHAN.reduce((s, k) => s + dem[k], 0);
   const chacChan = dem["An toàn"] + dem["Dự phòng"];
+  const chuaDuCanCu = Math.max(0, (soHang ?? n) - n);
+  // Còn hàng chưa có nhãn thì không kết luận gì về cơ cấu: dựa vào một phần danh sách sẽ ra kết luận sai.
+  const duCanCu = chuaDuCanCu === 0;
   return {
-    n, dem, chacChan,
-    // Cần ít nhất 1 chỗ chắc chân; danh sách từ 3 nguyện vọng thì nên có 2.
-    canThemAnToan: n > 0 && (chacChan === 0 || (chacChan < 2 && n >= 3)),
-    thuSucNhieu: n >= 2 && (dem["Thử sức"] >= 3 || dem["Thử sức"] / n > 0.5),
-    thieuVuaSuc: n > 0 && dem["Vừa sức"] === 0,
-    danhSachNgan: n > 0 && n < 4,
+    n, dem, chacChan, chuaDuCanCu,
+    // Nên có ít nhất 1 nguyện vọng điểm chuẩn thấp hơn điểm em; danh sách từ 3 nguyện vọng thì nên có 2.
+    canThemAnToan: duCanCu && n > 0 && (chacChan === 0 || (chacChan < 2 && n >= 3)),
+    thuSucNhieu: duCanCu && n >= 2 && (dem["Thử sức"] >= 3 || dem["Thử sức"] / n > 0.5),
+    thieuVuaSuc: duCanCu && n > 0 && dem["Vừa sức"] === 0,
+    danhSachNgan: duCanCu && n > 0 && n < 4,
   };
 }
 
@@ -89,15 +116,17 @@ export interface KetLuan {
 
 export function ketLuan(c: CoCau): KetLuan {
   const hienTrang = c.n ? `Hiện em có ${moTaSoLuong(c.dem)}.` : "Em chưa có nguyện vọng nào.";
+  if (c.chuaDuCanCu > 0)
+    return { tone: "muc", onDinh: false, tieuDe: "Chưa đủ căn cứ để nhận xét cả danh sách", hienTrang, nenLam: null, lyDo: `Chưa đủ căn cứ cho ${c.chuaDuCanCu} nguyện vọng (thiếu điểm môn hoặc điểm thuộc phương thức khác). Em bổ sung điểm để mình xếp nhãn.` };
   if (c.chacChan === 0)
-    return { tone: "do", onDinh: false, tieuDe: "Danh sách chưa có chỗ chắc chân", hienTrang, nenLam: "Em nên thêm ít nhất 1 nguyện vọng an toàn", lyDo: "để vẫn có chỗ học nếu điểm thi không như mong đợi." };
+    return { tone: "do", onDinh: false, tieuDe: "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm em", hienTrang, nenLam: "Em có thể thêm ít nhất 1 nguyện vọng có điểm chuẩn thấp hơn điểm của em từ 1,5 điểm", lyDo: "để danh sách có chỗ cho trường hợp điểm thi thấp hơn dự kiến." };
   if (c.thuSucNhieu)
     return { tone: "cam", onDinh: false, tieuDe: "Thử sức đang hơi nhiều", hienTrang, nenLam: "Em có thể đổi bớt 1 nguyện vọng thử sức sang trường vừa sức", lyDo: "để danh sách cân hơn giữa ước mơ và khả năng hiện tại." };
   if (c.canThemAnToan)
-    return { tone: "cam", onDinh: false, tieuDe: "Mới có 1 chỗ chắc chân", hienTrang, nenLam: "Em nên thêm ít nhất 1 nguyện vọng an toàn nữa", lyDo: "để có thêm lựa chọn chắc chắn phía sau." };
+    return { tone: "cam", onDinh: false, tieuDe: "Mới có 1 nguyện vọng điểm chuẩn thấp hơn điểm em", hienTrang, nenLam: "Em có thể thêm 1 nguyện vọng An toàn hoặc Dự phòng nữa", lyDo: "để có thêm lựa chọn ở phía sau." };
   if (c.thieuVuaSuc)
-    return { tone: "cam", onDinh: false, tieuDe: "Chưa có nguyện vọng vừa sức", hienTrang, nenLam: "Em nên thêm 1 trường có điểm gần với điểm của em", lyDo: "vì đây thường là nhóm em có cơ hội tốt nhất." };
-  return { tone: "luc", onDinh: true, tieuDe: "Danh sách của em đang khá cân đối", hienTrang, nenLam: null, lyDo: "Có cả trường để thử sức lẫn chỗ chắc chân. Em cứ giữ nhịp học là được." };
+    return { tone: "cam", onDinh: false, tieuDe: "Chưa có nguyện vọng vừa sức", hienTrang, nenLam: "Em có thể thêm 1 trường có điểm chuẩn gần với điểm của em", lyDo: "vì nhóm này sát với điểm hiện tại của em." };
+  return { tone: "luc", onDinh: true, tieuDe: "Cơ cấu danh sách đủ các nhóm", hienTrang, nenLam: null, lyDo: "Có cả trường để thử sức lẫn nguyện vọng điểm chuẩn thấp hơn điểm em. Nhãn chỉ so với điểm chuẩn các năm trước, không dự đoán kết quả." };
 }
 
 // ---------- Ba điểm đánh giá ----------
@@ -120,12 +149,12 @@ export function chamDiem(ds: DongNV[], hoSo: Pick<HoSo, "nganSach" | "khuVuc">, 
   // Khi chưa có nhãn, gán tạm "Vừa sức" chỉ để engine chấm tài chính/khu vực; điểm cân bằng không dùng.
   const pt = phanTichDanhSach(coDuLieu.map((d) => ({ lc: d.lc, nhan: d.nhan ?? "Vừa sức" })), hoSo);
   const ns = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : null;
-  const c = xetCoCau(demNhan(coDuLieu));
+  const c = xetCoCau(demNhan(coDuLieu), coDuLieu.length);
 
   const canBang: DiemDanhGia = coNhan
     ? {
       khoa: "canBang", ten: "Độ cân bằng", diem: pt.canBang.diem, nhanXet: pt.canBang.nhanXet, tone: toneDiem(pt.canBang.diem),
-      chiTiet: c.chacChan === 0 ? "Chưa có trường an toàn hay dự phòng." : c.thuSucNhieu ? "Tỉ lệ thử sức đang cao." : c.thieuVuaSuc ? "Chưa có trường vừa sức." : c.canThemAnToan ? "Đã có đủ các nhóm chính. Thêm 1 chỗ chắc chân nữa sẽ yên tâm hơn." : "Có cả trường thử sức, vừa sức lẫn chỗ chắc chân.",
+      chiTiet: c.chuaDuCanCu > 0 ? `Chưa đủ căn cứ cho ${c.chuaDuCanCu} nguyện vọng (thiếu điểm môn hoặc phương thức khác).` : c.chacChan === 0 ? "Chưa có trường An toàn hay Dự phòng." : c.thuSucNhieu ? "Tỉ lệ thử sức đang cao." : c.thieuVuaSuc ? "Chưa có trường vừa sức." : c.canThemAnToan ? "Đã có đủ các nhóm chính. Có thể thêm 1 nguyện vọng An toàn hoặc Dự phòng nữa." : "Có cả trường thử sức, vừa sức, An toàn hoặc Dự phòng.",
       cachTinh: [
         "Bắt đầu từ 100 điểm, rồi trừ khi:",
         "• Chưa có nguyện vọng An toàn hay Dự phòng: trừ 40.",
@@ -185,10 +214,8 @@ export function chonTruong(dk: DkGoiY, nhans: NhanNguyenVong[], soLuong: number,
   const ns = dk.hoSo.nganSach ? NGAN_SACH_TOI_DA[dk.hoSo.nganSach] : Infinity;
   return dk.tatCa
     .filter((lc) => !dk.daCo.includes(lc.id) && !boQua.includes(lc.id) && (lc.hocPhiMin ?? 0) <= ns)
-    .map((lc) => ({ lc, tong: tongChoNganh(lc, dk.diem) }))
-    .filter((x): x is { lc: LuaChon; tong: number } => x.tong !== null)
-    .map((x) => ({ lc: x.lc, nhan: nhanNguyenVong(x.lc, x.tong) }))
-    .filter((x) => nhans.includes(x.nhan))
+    .map((lc) => ({ lc, nhan: nhanChoLuaChon(lc, tongChoNganh(lc, dk.diem)) }))
+    .filter((x): x is { lc: LuaChon; nhan: NhanNguyenVong } => x.nhan !== null && nhans.includes(x.nhan))
     .sort((a, b) =>
       Number(trongKhuVuc(b.lc, dk.hoSo.khuVuc)) - Number(trongKhuVuc(a.lc, dk.hoSo.khuVuc))
       || Number(dk.hoSo.nganhQuanTam.includes(b.lc.nhomNganh)) - Number(dk.hoSo.nganhQuanTam.includes(a.lc.nhomNganh))
@@ -199,15 +226,15 @@ export function chonTruong(dk: DkGoiY, nhans: NhanNguyenVong[], soLuong: number,
 
 /** Chỉ trả về gợi ý đang thật sự cần. Rỗng nghĩa là danh sách ổn. */
 export function goiYHanhDong(ds: DongNV[], dk: DkGoiY): GoiY[] {
-  const c = xetCoCau(demNhan(ds));
+  const c = xetCoCau(demNhan(ds), ds.length);
   const ra: GoiY[] = [];
   if (c.canThemAnToan) {
     const truong = chonTruong(dk, ["An toàn", "Dự phòng"], 2);
     ra.push({
-      loai: "themAnToan", tieuDe: "Nên thêm 1 trường an toàn", thuSuc: [], truong,
+      loai: "themAnToan", tieuDe: "Nên thêm 1 nguyện vọng An toàn", thuSuc: [], truong,
       moTa: c.chacChan === 0
-        ? "Danh sách chưa có trường nào điểm tham khảo thấp hơn rõ so với điểm của em."
-        : `Em mới có ${c.chacChan} chỗ chắc chân. Thêm 1 trường điểm tham khảo thấp hơn điểm em từ 1,5 điểm trở lên.`,
+        ? "Danh sách chưa có trường nào có điểm tham khảo thấp hơn rõ so với điểm của em."
+        : `Em mới có ${c.chacChan} nguyện vọng An toàn hoặc Dự phòng. Thêm 1 trường điểm tham khảo thấp hơn điểm em từ 1,5 điểm trở lên.`,
     });
   }
   if (c.thuSucNhieu) {

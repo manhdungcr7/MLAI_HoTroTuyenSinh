@@ -44,6 +44,9 @@ export default function MucTieu() {
             tieuDe={mucTieuCu ? "Không tìm thấy mục tiêu cũ" : "Em chưa chọn mục tiêu chính"}
             moTa={mucTieuCu ? "Ngành em chọn trước đây không còn trong danh sách. Em chọn lại một mục tiêu nhé." : "Chọn một ngành, trường em muốn vào. Mình sẽ tính em còn cách bao xa và nên tập trung môn nào."}>
             <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá ngành học</Nut>
+            {s.nguyenVong.length > 0 && (
+              <Nut kieu="vien" onClick={() => nav(DUONG_DAN.nguyenVong())}>Chọn từ {s.nguyenVong.length} nguyện vọng đã lưu</Nut>
+            )}
           </TrangThaiTrong>
         </NoiDung>
       </>
@@ -159,7 +162,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
           </div>
         )}
         <p className="text-[12px] text-chu-phu mt-2 pt-2 border-t border-vien">
-          Mức tham khảo {d.lc.namDiem} của ngành: {diem1(d.lc.diemMin)}–{diem1(d.lc.diemMax)} điểm (điểm chuẩn các năm trước).
+          Điểm chuẩn năm {d.lc.namDiem} của ngành: {diem1(d.lc.diemMin)} điểm (số của năm trước, năm nay có thể khác).
         </p>
       </div>
 

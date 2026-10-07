@@ -4,7 +4,7 @@ import raw from "./du-lieu-that.json";
 import viecLamMoi from "./viec-lam.json"; // tỷ lệ có việc làm trích thêm từ đề án (scripts/trich-viec-lam.py), chỉ bổ sung ngành chưa có
 import hocPhi from "./hoc-phi.json"; // học phí theo năm trích từ đề án (scripts/trich-hoc-phi.py), chỉ vài chục ngành
 import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
-import { nhanNguyenVong } from "@/engine/phan-tich";
+import { TEN_PHUONG_THUC as TEN_PT, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 
 interface Dong {
@@ -12,10 +12,6 @@ interface Dong {
   toHop: string[]; diem: Record<string, number>; dk: number | null; viec: number | null; nguon: string | null; tier: string | null;
 }
 
-const TEN_PT: Record<string, string> = {
-  THPT: "Điểm thi tốt nghiệp THPT", HOC_BA: "Học bạ THPT", DGNL_HCM: "ĐGNL ĐHQG TP.HCM", DGNL_HN: "ĐGNL ĐHQG Hà Nội",
-  DGNL_KHAC: "Đánh giá năng lực (khác)", DGTD: "Đánh giá tư duy", KET_HOP: "Kết hợp nhiều tiêu chí", NANG_KHIEU: "Có thi năng khiếu",
-};
 const TONES: ToneTen[] = ["xanh", "luc", "cam", "tim", "do"];
 const toneCua = (ma: string): ToneTen => TONES[[...ma].reduce((s, c) => s + c.charCodeAt(0), 0) % TONES.length];
 
@@ -51,7 +47,7 @@ function chuyen(d: Dong): LuaChon {
   const laCaoDang = /cao đẳng/i.test(d.nganh) || /cao đẳng/i.test(d.truong);
   const nam = Object.keys(d.diem).sort();
   const moiNhat = nam[nam.length - 1];
-  const haiNam = nam.slice(-2).map((n) => d.diem[n]);
+  const diemMoiNhat = d.diem[moiNhat]; // mọi nhãn, mục tiêu và chữ hiển thị đều dựa vào điểm của đúng năm này (namDiem)
   const luuY: string[] = [];
   if (nam.length === 1) luuY.push(`Mới có điểm chuẩn của một năm (${moiNhat}), độ tin cậy còn thấp.`);
   if (d.tier === "aggregator_verified") luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường.");
@@ -65,8 +61,8 @@ function chuyen(d: Dong): LuaChon {
     moTa: `${TEN_PT[d.pt] ?? d.pt}${d.toHop.length ? ` · Tổ hợp ${d.toHop.slice(0, 6).join(", ")}${d.toHop.length > 6 ? "…" : ""}` : ""}${gon.them ? ` · ${gon.them}` : ""}`,
     bac: laCaoDang ? "Cao đẳng" : "Đại học",
     khuVuc: d.tinh,
-    diemMin: Math.min(...haiNam),
-    diemMax: Math.max(...haiNam),
+    diemMin: diemMoiNhat,
+    diemMax: diemMoiNhat, // một năm duy nhất; các năm khác xem ở diemTheoNam
     namDiem: Number(moiNhat),
     coHoiViecLam: viecLam(viec),
     ...(viec !== null ? { tiLeViecLam: viec } : {}),

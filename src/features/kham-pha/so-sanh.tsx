@@ -15,7 +15,7 @@ import { DUONG_DAN } from "@/duong-dan";
 import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
-import { TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
+import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
 import { GhiChuDuLieuMau, HopChonLuaChon, NhanPhuHop, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { dinhDang } from "@/engine/dinh-dang";
 
@@ -70,7 +70,7 @@ function Hang({ icon: Icon, nhan, phu, tot, a, b }: { icon: LucideIcon; nhan: st
 }
 
 const ChacChan = ({ kq }: { kq: KetQuaPhuHop }) =>
-  kq.chacChan ? <b className={TONE_CHU[TONE_CHAC_CHAN[kq.chacChan]]}>{kq.chacChan}</b> : <span className="text-[13px] text-chu-phu">Cần nhập điểm</span>;
+  kq.chacChan ? <b className={TONE_CHU[TONE_CHAC_CHAN[kq.chacChan]]}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan]}</b> : <span className="text-[13px] text-chu-phu">{kq.lyDoKhongSo ? "Khác phương thức" : "Cần nhập điểm"}</span>;
 
 export default function SoSanh() {
   const nav = useNavigate();
@@ -152,7 +152,7 @@ export default function SoSanh() {
                 <Hang icon={Users} nhan="Môi trường học" tot={null} a={<span className="text-[13px] text-chu">{a!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} b={<span className="text-[13px] text-chu">{b!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} />
               )}
               <Hang icon={CheckCircle2} nhan="Mức phù hợp với em" tot={ss.tot.phuHop} a={<NhanPhuHop kq={ss.kqA} xuongDong />} b={<NhanPhuHop kq={ss.kqB} xuongDong />} />
-              <Hang icon={ShieldCheck} nhan="Mức chắc chắn" tot={ss.tot.chacChan} a={<ChacChan kq={ss.kqA} />} b={<ChacChan kq={ss.kqB} />} />
+              <Hang icon={ShieldCheck} nhan="So với điểm chuẩn" tot={ss.tot.chacChan} a={<ChacChan kq={ss.kqA} />} b={<ChacChan kq={ss.kqB} />} />
               {!coHocPhi(a!) && !coHocPhi(b!) && !a!.coHoiViecLam && !b!.coHoiViecLam && (
                 <p className="text-[12px] text-chu-phu py-1.5 border-t border-vien mt-1">Học phí và việc làm của hai ngành này chưa có trong dữ liệu. Em xem trên trang của trường.</p>
               )}
@@ -163,7 +163,7 @@ export default function SoSanh() {
             </section>
 
             {!coDiemDeSo(bc) && (
-              <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để so mức phù hợp" moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp nên chưa so được mức phù hợp và mức chắc chắn."
+              <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để so mức phù hợp" moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp nên chưa so được mức phù hợp và vị trí điểm của em so với điểm chuẩn."
                 hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
             )}
 
