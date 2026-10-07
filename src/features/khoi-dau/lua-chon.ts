@@ -3,6 +3,7 @@ import {
   Atom, BedDouble, BookOpen, Building2, Calculator, ChartColumn, CircleHelp, FlaskConical, GraduationCap, HeartPulse,
   House, Languages, Laptop, Leaf, Palette, School, Signpost, Target, Wrench, type LucideIcon,
 } from "lucide-react";
+import { GIAI_DOAN_DA_TOT_NGHIEP } from "@/state/chang";
 import type { HoSo, MaToHop, MonId, NguonDiem, ToneTen } from "@/state/types";
 
 export type LuaChonCoIcon<T> = { gia: T; nhan: string; phu?: string; icon?: LucideIcon };
@@ -86,7 +87,7 @@ export const MUC_TIEU_HIEN_TAI: LuaChonCoIcon<NonNullable<HoSo["mucTieuHienTai"]
   { gia: "soSanh", nhan: "Muốn so sánh vài trường", icon: ChartColumn },
 ];
 
-export const GIAI_DOAN = ["Đang học lớp 11", "Đang học lớp 12", "Ôn thi THPT", "Đã tốt nghiệp THPT"];
+export const GIAI_DOAN = ["Đang học lớp 11", "Đang học lớp 12", "Ôn thi THPT", GIAI_DOAN_DA_TOT_NGHIEP];
 
 export const NGUON_DIEM: LuaChonCoIcon<NguonDiem>[] = [
   { gia: "hocBa", nhan: "Học bạ" }, { gia: "thiThu", nhan: "Thi thử" },
