@@ -1,0 +1,43 @@
+// Kiểu tối thiểu cho Cloudflare D1/KV (repo không dùng @cloudflare/workers-types). Đối tượng thật của Cloudflare khớp cấu trúc này.
+
+export interface KhoD1Cau {
+  bind(...giaTri: unknown[]): KhoD1Cau;
+  first<T = Record<string, unknown>>(): Promise<T | null>;
+  all<T = Record<string, unknown>>(): Promise<{ results: T[] }>;
+  run(): Promise<{ meta?: { changes?: number } }>;
+}
+export interface KhoD1 {
+  prepare(sql: string): KhoD1Cau;
+  /** Chạy nhiều câu lệnh trong một giao dịch. */
+  batch(cau: KhoD1Cau[]): Promise<unknown[]>;
+}
+export interface KhoKV {
+  get(khoa: string): Promise<string | null>;
+  put(khoa: string, giaTri: string, tuyChon?: { expirationTtl?: number }): Promise<void>;
+}
+
+export interface Env {
+  DB?: KhoD1;
+  KV_CONG_DONG?: KhoKV;
+  /** Tên miền nhóm Cloudflare Zero Trust, ví dụ `nhom-cua-ban.cloudflareaccess.com`. */
+  TEAM_DOMAIN?: string;
+  /** Application Audience (AUD) tag của ứng dụng Access. */
+  ACCESS_AUD?: string;
+  /** Danh sách email phân cách dấu phẩy, tự thành qtv khi bảng quan_tri còn rỗng. */
+  QTV_DAU_TIEN?: string;
+  /** Chỉ '1' VÀ chạy ở localhost/127.0.0.1 mới giả danh người dùng (đọc email từ header X-Gia-Danh). */
+  GIA_DANH_DEV?: string;
+}
+
+export interface BoiCanh {
+  request: Request;
+  env: Env;
+  params?: Record<string, string | string[] | undefined>;
+}
+
+/** Phần tiêm được để test: fetch (JWKS), đồng hồ, tạo mã. */
+export interface TuyChon {
+  fetch?: typeof fetch;
+  bayGio?: Date;
+  taoId?: () => string;
+}
