@@ -186,24 +186,66 @@ export default function ChiTietTruong() {
             moTa={loi}
           />
         ) : (
-          <div className="space-y-5">
-            {/* KHỐI 1: KÊNH THÔNG TIN TRƯỜNG */}
-            <The className="space-y-3">
+          <div className="space-y-4">
+            {/* TIẾN ĐỘ & TÓM TẮT MỤC CÒN THIẾU */}
+            <The className="p-3.5 bg-gradient-to-r from-xanh-nhat/50 to-trang border-xanh/30 space-y-2.5">
               <div className="flex items-center justify-between">
-                <h3 className="font-extrabold text-[16px] text-muc flex items-center gap-2">
-                  <Globe size={18} className="text-xanh" /> Kênh chính thức & Cộng đồng
+                <div>
+                  <span className="text-[11.5px] font-bold uppercase tracking-wider text-xanh">Tiến độ thu thập</span>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-[18px] font-extrabold text-muc leading-none">
+                      {data?.tienDo.du ? "5/5 mục hoàn tất" : `${5 - (data?.tienDo.thieu.length ?? 0)}/5 mục`}
+                    </span>
+                    {data?.tienDo.du && (
+                      <span className="px-2 py-0.5 rounded-full bg-luc text-white text-[11px] font-bold">Đạt chuẩn</span>
+                    )}
+                  </div>
+                </div>
+                {!data?.tienDo.du && data?.tienDo.thieu && data.tienDo.thieu.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const firstThieu = data.tienDo.thieu[0];
+                      if (firstThieu === "kenh") setSuaKenh(true);
+                      else moThemMoi(firstThieu as LoaiThemTay);
+                    }}
+
+                    className="px-3 py-1.5 rounded-lg bg-xanh text-white font-bold text-[12.5px] shadow-xs active:scale-95 transition-transform"
+                  >
+                    + Điền mục thiếu
+                  </button>
+                )}
+              </div>
+
+              {!data?.tienDo.du && data?.tienDo.thieu && data.tienDo.thieu.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-vien/60 text-[12px]">
+                  <span className="text-chu-phu font-medium">Còn thiếu:</span>
+                  {data.tienDo.thieu.map((m) => (
+                    <span key={m} className="px-2 py-0.5 rounded-md bg-cam-nhat text-cam-chu font-bold text-[11px]">
+                      {m === "kenh" ? "Kênh chính thức" : nhanLoai(m as LoaiThemTay)}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </The>
+
+            {/* KHỐI 1: KÊNH THÔNG TIN TRƯỜNG */}
+            <The className="p-3.5 space-y-2.5 border-vien">
+              <div className="flex items-center justify-between">
+                <h3 className="font-extrabold text-[15px] text-muc flex items-center gap-2">
+                  <Globe size={17} className="text-xanh" /> Kênh chính thức & Nhóm
                 </h3>
                 <button
                   type="button"
                   onClick={() => setSuaKenh(!suaKenh)}
-                  className="text-[13px] font-bold text-xanh hover:underline flex items-center gap-1"
+                  className="text-[12.5px] font-bold text-xanh hover:underline flex items-center gap-1 p-1"
                 >
-                  <Pencil size={14} /> {suaKenh ? "Đóng" : "Chỉnh sửa"}
+                  <Pencil size={13} /> {suaKenh ? "Đóng" : "Sửa kênh"}
                 </button>
               </div>
 
               {suaKenh ? (
-                <div className="space-y-3 pt-2">
+                <div className="space-y-3 pt-2 border-t border-vien">
                   <Truong nhan="Website Tuyển sinh (URL)" batBuoc={false}>
                     <OInput
                       value={formKenh.websiteTuyenSinhUrl}
@@ -232,13 +274,6 @@ export default function ChiTietTruong() {
                       placeholder="https://facebook.com/groups/..."
                     />
                   </Truong>
-                  <Truong nhan="Ghi chú thêm về kênh" batBuoc={false}>
-                    <OInput
-                      value={formKenh.ghiChu}
-                      onChange={(e) => setFormKenh({ ...formKenh, ghiChu: e.target.value })}
-                      placeholder="Kênh chính xác tuyển sinh 2026..."
-                    />
-                  </Truong>
                   <div className="pt-2 flex gap-2">
                     <Nut onClick={luuKenhAction} disabled={dangLuuKenh} bieuTuong={Save}>
                       Lưu kênh
@@ -247,88 +282,96 @@ export default function ChiTietTruong() {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-2 text-[14px]">
-                  <div className="flex items-center gap-2">
-                    <Globe size={16} className="text-chu-phu shrink-0" />
-                    <span className="text-chu-phu font-medium min-w-[90px]">Website:</span>
+                <div className="space-y-1.5 text-[13.5px]">
+                  <div className="flex items-center justify-between py-1 border-b border-vien/40">
+                    <span className="text-chu-phu font-medium flex items-center gap-1.5 min-w-[100px]">
+                      <Globe size={14} className="text-chu-phu" /> Website:
+                    </span>
                     {formKenh.websiteTuyenSinhUrl ? (
-                      <a href={formKenh.websiteTuyenSinhUrl} target="_blank" rel="noreferrer" className="text-xanh hover:underline truncate inline-flex items-center gap-1">
-                        {formKenh.websiteTuyenSinhUrl} <ExternalLink size={12} />
+                      <a href={formKenh.websiteTuyenSinhUrl} target="_blank" rel="noreferrer" className="text-xanh font-semibold hover:underline truncate inline-flex items-center gap-1 max-w-[200px]">
+                        {formKenh.websiteTuyenSinhUrl.replace(/^https?:\/\//, "")} <ExternalLink size={11} />
                       </a>
                     ) : (
-                      <span className="text-chu-phu italic">Chưa có</span>
+                      <span className="text-chu-phu italic text-[12px]">Chưa cập nhật</span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Share2 size={16} className="text-chu-phu shrink-0" />
-                    <span className="text-chu-phu font-medium min-w-[90px]">Fanpage:</span>
+                  <div className="flex items-center justify-between py-1 border-b border-vien/40">
+                    <span className="text-chu-phu font-medium flex items-center gap-1.5 min-w-[100px]">
+                      <Share2 size={14} className="text-chu-phu" /> Fanpage:
+                    </span>
                     {formKenh.fanpageUrl ? (
-                      <a href={formKenh.fanpageUrl} target="_blank" rel="noreferrer" className="text-xanh hover:underline truncate inline-flex items-center gap-1">
-                        {formKenh.fanpageUrl} <ExternalLink size={12} />
+                      <a href={formKenh.fanpageUrl} target="_blank" rel="noreferrer" className="text-xanh font-semibold hover:underline truncate inline-flex items-center gap-1 max-w-[200px]">
+                        {formKenh.fanpageUrl.replace(/^https?:\/\/(www\.)?/, "")} <ExternalLink size={11} />
                       </a>
                     ) : (
-                      <span className="text-chu-phu italic">Chưa có</span>
+                      <span className="text-chu-phu italic text-[12px]">Chưa cập nhật</span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <MessageSquare size={16} className="text-chu-phu shrink-0" />
-                    <span className="text-chu-phu font-medium min-w-[90px]">Nhóm TV:</span>
+                  <div className="flex items-center justify-between py-1">
+                    <span className="text-chu-phu font-medium flex items-center gap-1.5 min-w-[100px]">
+                      <MessageSquare size={14} className="text-chu-phu" /> Nhóm TV:
+                    </span>
                     {formKenh.nhomTuyenSinhChinhThucUrl ? (
-                      <a href={formKenh.nhomTuyenSinhChinhThucUrl} target="_blank" rel="noreferrer" className="text-xanh hover:underline truncate inline-flex items-center gap-1">
-                        {formKenh.nhomTuyenSinhChinhThucUrl} <ExternalLink size={12} />
+                      <a href={formKenh.nhomTuyenSinhChinhThucUrl} target="_blank" rel="noreferrer" className="text-xanh font-semibold hover:underline truncate inline-flex items-center gap-1 max-w-[200px]">
+                        {formKenh.nhomTuyenSinhChinhThucUrl.replace(/^https?:\/\//, "")} <ExternalLink size={11} />
                       </a>
                     ) : (
-                      <span className="text-chu-phu italic">Chưa có</span>
+                      <span className="text-chu-phu italic text-[12px]">Chưa cập nhật</span>
                     )}
                   </div>
                 </div>
               )}
             </The>
 
-            {/* KHỐI 2: CÁC MỤC THÔNG TIN (Học phí, Học bổng, Nơi lưu trú, Review, Lưu ý) */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-extrabold text-[17px] text-muc">Nội dung đóng góp</h3>
-                <div className="flex gap-1">
-                  <select
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        moThemMoi(e.target.value as LoaiThemTay);
-                        e.target.value = "";
-                      }
-                    }}
-                    className="bg-xanh text-white rounded-lg px-2.5 py-1 text-[13px] font-bold cursor-pointer"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>+ Thêm mục...</option>
-                    {LOAI_THEM_TAY.map((l) => (
-                      <option key={l} value={l}>{nhanLoai(l)}</option>
-                    ))}
-                  </select>
-                </div>
+            {/* KHỐI 2: CÁC MỤC DỮ LIỆU ĐÓNG GÓP */}
+            <div className="space-y-3.5 pt-1">
+              <div className="flex items-center justify-between px-0.5">
+                <h3 className="font-extrabold text-[16px] text-muc">Dữ liệu chi tiết</h3>
+                <select
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      moThemMoi(e.target.value as LoaiThemTay);
+                      e.target.value = "";
+                    }
+                  }}
+                  className="bg-xanh text-white rounded-lg px-2.5 py-1 text-[12.5px] font-bold cursor-pointer outline-hidden shadow-xs"
+                  defaultValue=""
+                >
+                  <option value="" disabled>+ Thêm nhanh mục...</option>
+                  {LOAI_THEM_TAY.map((l) => (
+                    <option key={l} value={l}>{nhanLoai(l)}</option>
+                  ))}
+                </select>
               </div>
 
               {LOAI_THEM_TAY.map((loai) => {
                 const ds = (data?.thongTin ?? []).filter((t: ThongTinCms) => t.loai === loai);
                 return (
                   <div key={loai} className="space-y-2">
-                    <div className="flex items-center justify-between pt-2">
-                      <span className="font-extrabold text-[15px] text-chu flex items-center gap-2">
+                    <div className="flex items-center justify-between pt-1 px-0.5">
+                      <span className="font-extrabold text-[14.5px] text-muc flex items-center gap-2">
                         {nhanLoai(loai)}
-                        <span className="text-[12px] font-normal text-chu-phu">({ds.length} bản ghi)</span>
+                        <span className="text-[12px] font-semibold text-chu-phu">({ds.length})</span>
                       </span>
                       <button
                         type="button"
                         onClick={() => moThemMoi(loai)}
-                        className="text-[12px] font-bold text-xanh hover:underline inline-flex items-center gap-0.5"
+                        className="text-[12px] font-bold text-xanh hover:underline inline-flex items-center gap-1"
                       >
-                        <Plus size={14} /> Thêm {nhanLoai(loai).toLowerCase()}
+                        <Plus size={13} /> Thêm {nhanLoai(loai).toLowerCase()}
                       </button>
                     </div>
 
                     {ds.length === 0 ? (
-                      <div className="p-3 bg-nen rounded-the text-[13px] text-chu-phu italic border border-dashed border-vien">
-                        Chưa có dữ liệu {nhanLoai(loai).toLowerCase()} cho trường này.
+                      <div className="p-3 bg-trang rounded-xl text-[12.5px] text-chu-phu flex items-center justify-between border border-vien/80">
+                        <span className="italic">Chưa có bản ghi {nhanLoai(loai).toLowerCase()}.</span>
+                        <button
+                          type="button"
+                          onClick={() => moThemMoi(loai)}
+                          className="text-[12px] font-bold text-xanh hover:underline"
+                        >
+                          + Điền ngay
+                        </button>
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -336,33 +379,32 @@ export default function ChiTietTruong() {
                           const lines = dongNoiDung(item);
                           const tone = TONE_TRANG_THAI[item.trangThai];
                           return (
-                            <The key={item.id} className="space-y-2">
+                            <The key={item.id} className="p-3.5 space-y-2 border border-vien shadow-2xs">
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                                    <span className="font-bold text-[14px] text-muc">{tieuDeBanGhi(item)}</span>
+                                    <span className="font-bold text-[14px] text-muc leading-tight">{tieuDeBanGhi(item)}</span>
                                     <Nhan tone={tone}>{NHAN_TRANG_THAI[item.trangThai]}</Nhan>
-                                    {item.nguonGui && <span className="text-[11px] text-chu-phu">({item.nguonGui})</span>}
                                   </div>
-                                  <p className="text-[12px] text-chu-phu">{dinhDangLuc(item.luc)}</p>
+                                  <p className="text-[11.5px] text-chu-phu">{dinhDangLuc(item.luc)}</p>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={() => moSuaBanGhi(item)}
-                                  className="text-[12px] font-bold text-xanh hover:underline p-1 shrink-0"
+                                  className="text-[12.5px] font-bold text-xanh hover:underline p-1 shrink-0"
                                 >
                                   Sửa
                                 </button>
                               </div>
 
-                              <div className="text-[13px] text-chu space-y-1 bg-nen p-2.5 rounded-lg">
+                              <div className="text-[13px] text-chu space-y-1 bg-nen/80 p-2.5 rounded-lg border border-vien/40">
                                 {lines.map((l, i) => (
                                   <p key={i} className="leading-relaxed">{l}</p>
                                 ))}
                               </div>
 
                               {item.linkNguon && (
-                                <p className="text-[12px] text-chu-phu truncate">
+                                <p className="text-[11.5px] text-chu-phu truncate pt-0.5">
                                   Nguồn: <a href={item.linkNguon} target="_blank" rel="noreferrer" className="text-xanh hover:underline inline-flex items-center gap-0.5">{item.linkNguon} <ExternalLink size={10} /></a>
                                 </p>
                               )}
@@ -377,6 +419,7 @@ export default function ChiTietTruong() {
             </div>
           </div>
         )}
+
       </NoiDung>
 
       {/* MODAL THÊM / SỬA BẢN GHI */}

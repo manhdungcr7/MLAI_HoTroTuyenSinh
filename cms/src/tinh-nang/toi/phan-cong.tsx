@@ -87,37 +87,36 @@ export default function PhanCong() {
         ) : loi ? (
           <TrangThaiTrong bieuTuong={<AlertCircle size={24} />} tieuDe="Lỗi tải dữ liệu" moTa={loi} />
         ) : (
-          <div className="space-y-3">
-
+          <div className="space-y-2.5">
             {nguois.map((n) => {
               const truongs = phanCongs.filter((p) => p.email === n.email).map((p) => p.maTruong);
               return (
-                <The key={n.email} className="p-4 space-y-3">
+                <The key={n.email} className="p-3.5 space-y-2.5 border border-vien/90 shadow-2xs">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <BieuTuongTron icon={User} tone={n.vaiTro === "qtv" ? "xanh" : "luc"} kichThuoc={36} />
                       <div>
-                        <span className="font-bold text-[14px] text-muc">{n.email}</span>
-                        <p className="text-[12px] text-chu-phu">Phụ trách: <b>{truongs.length}</b> trường</p>
+                        <span className="font-extrabold text-[14px] text-muc">{n.email}</span>
+                        <p className="text-[11.5px] text-chu-phu">Phụ trách: <b className="text-xanh">{truongs.length}</b> trường</p>
                       </div>
                     </div>
                     <button
                       type="button"
                       onClick={() => moSuaPhanCong(n.email)}
-                      className="text-[13px] font-bold text-xanh hover:underline"
+                      className="px-2.5 py-1 rounded-lg bg-xanh-nhat text-xanh font-bold text-[12px] hover:bg-xanh hover:text-white transition-colors"
                     >
                       Sửa phân công
                     </button>
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5 pt-1 border-t border-vien">
+                  <div className="flex flex-wrap gap-1.5 pt-1.5 border-t border-vien/70">
                     {truongs.length === 0 ? (
                       <span className="text-[12px] text-chu-phu italic">Chưa được giao trường nào.</span>
                     ) : (
                       truongs.map((ma) => (
                         <span
                           key={ma}
-                          className="px-2 py-0.5 rounded bg-nen-dam text-chu text-[12px] font-bold"
+                          className="px-2 py-0.5 rounded-md bg-nen text-chu text-[11.5px] font-bold border border-vien/60"
                         >
                           {ma}
                         </span>
@@ -137,20 +136,30 @@ export default function PhanCong() {
         dong={() => setChinhSuaNguoi(null)}
         tieuDe={`Phân công: ${chinhSuaNguoi}`}
       >
-        <div className="space-y-3.5 pb-4">
+        <div className="space-y-3 pb-4">
           <input
             type="text"
             value={timTruong}
             onChange={(e) => setTimTruong(e.target.value)}
-            placeholder="Tìm theo mã hoặc tên trường..."
-            className="w-full bg-nen border border-vien rounded-lg px-3 py-2 text-[14px] text-chu"
+            placeholder="Tìm theo mã hoặc tên trường (VD: UIT, BK)..."
+            className="w-full bg-trang border border-vien focus:border-xanh rounded-xl px-3 py-2.5 text-[13.5px] text-chu outline-hidden shadow-2xs"
           />
 
-          <div className="text-[12px] text-chu-phu font-semibold">
-            Đã chọn: <b>{truongDaChon.size}</b> trường
+          {/* Preset nhanh */}
+          <div className="flex items-center justify-between text-[12px] text-chu-phu px-0.5">
+            <span>Đã chọn: <b className="text-xanh">{truongDaChon.size}</b> trường</span>
+            {truongDaChon.size > 0 && (
+              <button
+                type="button"
+                onClick={() => setTruongDaChon(new Set())}
+                className="text-do-chu hover:underline font-semibold"
+              >
+                Bỏ chọn hết
+              </button>
+            )}
           </div>
 
-          <div className="max-h-[300px] overflow-y-auto space-y-1 pr-1 border border-vien rounded-lg p-2 bg-nen">
+          <div className="max-h-[320px] overflow-y-auto space-y-1 pr-1 border border-vien rounded-xl p-2 bg-nen/50">
             {DANH_SACH_TRUONG.filter((t) =>
               !timTruong || t.ma.toLowerCase().includes(timTruong.toLowerCase()) || t.ten.toLowerCase().includes(timTruong.toLowerCase())
             ).map((t) => {
@@ -160,12 +169,12 @@ export default function PhanCong() {
                   key={t.ma}
                   type="button"
                   onClick={() => toggleTruong(t.ma)}
-                  className={`w-full text-left p-2 rounded flex items-center justify-between text-[13px] transition-colors ${
-                    chon ? "bg-xanh text-white font-bold" : "hover:bg-trang text-chu font-medium"
+                  className={`w-full text-left p-2.5 rounded-lg flex items-center justify-between text-[13px] transition-colors ${
+                    chon ? "bg-xanh text-white font-bold shadow-2xs" : "bg-trang hover:bg-nen-dam text-chu font-medium border border-vien/50"
                   }`}
                 >
-                  <span className="truncate flex-1">{t.ma} - {t.ten}</span>
-                  {chon && <Check size={16} className="shrink-0 ml-2" />}
+                  <span className="truncate flex-1"><b>{t.ma}</b> - {t.ten}</span>
+                  {chon && <Check size={16} strokeWidth={2.5} className="shrink-0 ml-2" />}
                 </button>
               );
             })}
@@ -173,7 +182,7 @@ export default function PhanCong() {
 
           <div className="flex flex-col gap-2 pt-2">
             <Nut onClick={luuPhanCongAction} disabled={dangXuLy}>
-              Lưu phân công
+              Lưu phân công ({truongDaChon.size} trường)
             </Nut>
             <Nut kieu="vien" onClick={() => setChinhSuaNguoi(null)}>Hủy</Nut>
           </div>
@@ -182,3 +191,4 @@ export default function PhanCong() {
     </div>
   );
 }
+

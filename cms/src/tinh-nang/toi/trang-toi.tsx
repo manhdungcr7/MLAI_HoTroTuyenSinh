@@ -74,34 +74,34 @@ export default function TrangToi() {
         ) : (
           <div className="space-y-4">
             {/* THẺ TÀI KHOẢN */}
-            <The className="p-4 space-y-3">
+            <The className="p-4 space-y-3 border border-vien/90 shadow-2xs">
               <div className="flex items-center gap-3">
-                <BieuTuongTron icon={UserRound} tone={laQtv ? "xanh" : "luc"} kichThuoc={48} />
+                <BieuTuongTron icon={UserRound} tone={laQtv ? "xanh" : "luc"} kichThuoc={44} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-[16px] text-muc truncate">{toi?.email}</span>
+                    <span className="font-extrabold text-[15.5px] text-muc truncate">{toi?.email}</span>
                     <Nhan tone={laQtv ? "xanh" : "luc"}>
-                      {laQtv ? "Quản trị viên" : "Tình nguyện viên"}
+                      {laQtv ? "Quản trị viên" : "Cộng tác viên"}
                     </Nhan>
                   </div>
-                  <p className="text-[13px] text-chu-phu mt-0.5">
-                    Được phân công: <b>{toi?.truongDuocGiao.length ?? 0}</b> trường
+                  <p className="text-[12.5px] text-chu-phu mt-0.5">
+                    Phụ trách: <b>{toi?.truongDuocGiao.length ?? 0}</b> trường
                   </p>
                 </div>
               </div>
 
               {/* Danh sách trường được giao */}
               {toi?.truongDuocGiao && toi.truongDuocGiao.length > 0 && (
-                <div className="pt-2 border-t border-vien">
-                  <span className="text-[12px] font-bold text-chu-phu uppercase tracking-wider block mb-1.5">
-                    Trường phụ trách:
+                <div className="pt-2.5 border-t border-vien/70">
+                  <span className="text-[11px] font-bold text-chu-phu uppercase tracking-wider block mb-1.5">
+                    Trường được giao:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {toi.truongDuocGiao.map((ma: string) => (
                       <Link
                         key={ma}
                         to={DUONG_DAN.chiTietTruong(ma)}
-                        className="px-2.5 py-1 rounded bg-xanh-nhat text-xanh font-extrabold text-[13px] hover:bg-xanh hover:text-white transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-xanh-nhat text-xanh font-bold text-[12.5px] hover:bg-xanh hover:text-white transition-colors"
                       >
                         {ma}
                       </Link>
@@ -111,81 +111,88 @@ export default function TrangToi() {
               )}
             </The>
 
-
             {/* QUẢN TRỊ VIÊN: CÔNG CỤ PHÁT HÀNH KV */}
             {laQtv && (
-              <div className="space-y-2">
-                <h3 className="font-extrabold text-[15px] text-muc">Phát hành dữ liệu cho học sinh</h3>
-                <The className="p-4 space-y-3 bg-gradient-to-br from-luc-nhat/40 to-trang border-luc/30">
+              <div className="space-y-2 pt-1">
+                <h3 className="font-extrabold text-[15px] text-muc px-0.5">Phát hành dữ liệu cho học sinh</h3>
+                <The className="p-4 space-y-3 bg-gradient-to-br from-luc-nhat/40 to-trang border-luc/30 shadow-2xs">
                   <div className="flex items-start gap-3">
-                    <div className="size-10 rounded-xl gd-luc text-white grid place-items-center shrink-0">
-                      <UploadCloud size={20} />
+                    <div className="size-10 rounded-xl gd-luc text-white grid place-items-center shrink-0 shadow-xs">
+                      <UploadCloud size={20} strokeWidth={2.4} />
                     </div>
                     <div>
-                      <h4 className="font-bold text-[15px] text-muc">Dựng bản chụp Snapshot lên Cloudflare KV</h4>
-                      <p className="text-[13px] text-chu mt-0.5 leading-relaxed">
-                        Chỉ các bản ghi <b>Đã duyệt</b> mới được đóng gói và đưa vào CDN cache phục vụ app học sinh.
+                      <h4 className="font-bold text-[14.5px] text-muc">Đồng bộ bản chụp lên Cloudflare KV</h4>
+                      <p className="text-[12.5px] text-chu mt-0.5 leading-relaxed">
+                        Chỉ các bản ghi <b>Đã duyệt</b> mới được đóng gói và cập nhật trực tiếp vào CDN cache cho học sinh toàn quốc.
                       </p>
                     </div>
                   </div>
 
-                  <Nut
-                    bieuTuong={UploadCloud}
+                  <button
+                    type="button"
                     onClick={() => setMoPhatHanh(true)}
-                    className="w-full bg-luc text-white hover:bg-luc-dam"
+                    className="w-full min-h-[46px] px-3 py-2.5 rounded-xl bg-luc text-white font-bold text-[13.5px] inline-flex items-center justify-center gap-2 shadow-2xs active:brightness-95 transition-all"
                   >
-                    Phát hành ngay lên CDN
-                  </Nut>
+                    <UploadCloud size={16} strokeWidth={2.5} />
+                    <span>Phát hành Snapshot lên CDN</span>
+                  </button>
                 </The>
               </div>
             )}
 
             {/* CÁC MỤC QUẢN LÝ DÀNH CHO QTV */}
             {laQtv && (
-              <div className="space-y-2 pt-2">
-                <h3 className="font-extrabold text-[15px] text-muc">Quản lý hệ thống</h3>
+              <div className="space-y-2 pt-1">
+                <h3 className="font-extrabold text-[15px] text-muc px-0.5">Quản trị hệ thống</h3>
                 <div className="space-y-2">
                   <Link to={DUONG_DAN.nguoi()} className="block group">
-                    <The className="p-3.5 flex items-center justify-between group-hover:border-xanh transition-all">
+                    <The className="p-3.5 flex items-center justify-between border border-vien/90 group-hover:border-xanh transition-all">
                       <div className="flex items-center gap-3">
-                        <Users size={20} className="text-xanh" />
+                        <div className="size-9 rounded-lg bg-xanh-nhat text-xanh grid place-items-center shrink-0">
+                          <Users size={18} />
+                        </div>
                         <div>
                           <p className="font-bold text-[14px] text-chu">Quản lý người dùng</p>
-                          <p className="text-[12px] text-chu-phu">Thêm CTV, cấp quyền QTV cho cộng tác viên</p>
+                          <p className="text-[11.5px] text-chu-phu">Thêm thành viên, phân quyền QTV và CTV</p>
                         </div>
                       </div>
-                      <ChevronRight size={18} className="text-chu-phu group-hover:text-xanh group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight size={17} className="text-chu-phu group-hover:text-xanh group-hover:translate-x-0.5 transition-all" />
                     </The>
                   </Link>
 
                   <Link to={DUONG_DAN.phanCong()} className="block group">
-                    <The className="p-3.5 flex items-center justify-between group-hover:border-xanh transition-all">
+                    <The className="p-3.5 flex items-center justify-between border border-vien/90 group-hover:border-xanh transition-all">
                       <div className="flex items-center gap-3">
-                        <ListFilter size={20} className="text-tim-chu" />
+                        <div className="size-9 rounded-lg bg-tim-nhat text-tim-chu grid place-items-center shrink-0">
+                          <ListFilter size={18} />
+                        </div>
                         <div>
-                          <p className="font-bold text-[14px] text-chu">Phân công trường</p>
-                          <p className="text-[12px] text-chu-phu">Gán danh sách trường cho từng tình nguyện viên</p>
+                          <p className="font-bold text-[14px] text-chu">Phân công trường phụ trách</p>
+                          <p className="text-[11.5px] text-chu-phu">Gán danh sách trường cho từng tình nguyện viên</p>
                         </div>
                       </div>
-                      <ChevronRight size={18} className="text-chu-phu group-hover:text-xanh group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight size={17} className="text-chu-phu group-hover:text-xanh group-hover:translate-x-0.5 transition-all" />
                     </The>
                   </Link>
 
                   <Link to={DUONG_DAN.nhatKy()} className="block group">
-                    <The className="p-3.5 flex items-center justify-between group-hover:border-xanh transition-all">
+                    <The className="p-3.5 flex items-center justify-between border border-vien/90 group-hover:border-xanh transition-all">
                       <div className="flex items-center gap-3">
-                        <History size={20} className="text-cam-chu" />
+                        <div className="size-9 rounded-lg bg-cam-nhat text-cam-chu grid place-items-center shrink-0">
+                          <History size={18} />
+                        </div>
                         <div>
-                          <p className="font-bold text-[14px] text-chu">Nhật ký thay đổi</p>
-                          <p className="text-[12px] text-chu-phu">Lịch sử mọi thao tác thêm, sửa, duyệt nội dung</p>
+                          <p className="font-bold text-[14px] text-chu">Nhật ký thao tác</p>
+                          <p className="text-[11.5px] text-chu-phu">Lịch sử mọi hành động thêm, sửa, duyệt dữ liệu</p>
                         </div>
                       </div>
-                      <ChevronRight size={18} className="text-chu-phu group-hover:text-xanh group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight size={17} className="text-chu-phu group-hover:text-xanh group-hover:translate-x-0.5 transition-all" />
                     </The>
                   </Link>
                 </div>
               </div>
             )}
+
           </div>
         )}
       </NoiDung>

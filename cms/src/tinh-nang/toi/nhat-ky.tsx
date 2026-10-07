@@ -35,26 +35,28 @@ export default function NhatKy() {
         quayLai={DUONG_DAN.toi()}
       />
 
-
       <NoiDung>
         {dangTai ? (
+
           <KhungDangTai soKhung={4} cao="h-20" />
         ) : loi ? (
           <TrangThaiTrong bieuTuong={<History size={24} />} tieuDe="Lỗi tải dữ liệu" moTa={loi} />
         ) : danhSach.length === 0 ? (
           <TrangThaiTrong bieuTuong={<Clock size={24} />} tieuDe="Chưa có nhật ký nào" moTa="Các hoạt động trên CMS sẽ xuất hiện ở đây." />
         ) : (
-          <div className="space-y-2.5">
+          <div className="space-y-2">
             {danhSach.map((nk) => (
-              <The key={nk.id} className="p-3.5 space-y-1">
-                <div className="flex items-center justify-between text-[12px] text-chu-phu">
-                  <span className="font-semibold flex items-center gap-1">
-                    <User size={12} /> {nk.ai}
+              <The key={nk.id} className="p-3 space-y-1.5 border border-vien/90 shadow-2xs">
+                <div className="flex items-center justify-between text-[11.5px] text-chu-phu">
+                  <span className="font-bold text-xanh flex items-center gap-1.5 truncate max-w-[190px]">
+                    <User size={13} strokeWidth={2.4} /> {nk.ai}
                   </span>
-                  <span>{dinhDangLuc(nk.luc)}</span>
+                  <span className="shrink-0">{dinhDangLuc(nk.luc)}</span>
                 </div>
-                <p className="font-bold text-[14px] text-muc">{nk.hanhDong}</p>
-                <p className="text-[13px] text-chu">Đối tượng: <b>{nk.doiTuong}</b></p>
+                <p className="font-bold text-[13.5px] text-muc leading-snug">{nk.hanhDong}</p>
+                <div className="text-[12px] text-chu bg-nen/80 px-2 py-1 rounded-md inline-block">
+                  Đối tượng: <b className="font-semibold text-muc">{nk.doiTuong}</b>
+                </div>
               </The>
             ))}
           </div>
@@ -63,4 +65,5 @@ export default function NhatKy() {
     </div>
   );
 }
+
 

@@ -5,8 +5,7 @@ import { layNguoi, themNguoi, xoaNguoi, thongBaoLoi, type NguoiCms, type VaiTro 
 import { DauTrangCoQuayLai, NoiDung } from "@cms/thanh-phan/khung/khung-goc";
 import { KhungDangTai, HopTruot, TrangThaiTrong } from "@cms/thanh-phan/ui/hien-thi";
 import { OInput, OChon, Truong } from "@cms/thanh-phan/ui/nhap-lieu";
-import { BieuTuongTron } from "@cms/thanh-phan/ui/hinh-nen";
-import { Nut, The, Nhan } from "@cms/thanh-phan/ui/nut-the";
+import { Nut, The, Nhan, gop } from "@cms/thanh-phan/ui/nut-the";
 import { DongThongBao } from "@cms/thanh-phan/ui/thong-bao";
 import { dinhDangLuc } from "../truong/dinh-dang";
 
@@ -87,13 +86,18 @@ export default function QuanLyNguoi() {
           <DongThongBao tieuDe={thongBao} tone="luc" onClick={() => setThongBao(null)} />
         )}
 
-        <div className="flex justify-between items-center pb-1">
-          <span className="text-[13px] text-chu-phu font-semibold">
-            Tổng cộng: <b>{danhSach.length}</b> thành viên
+        <div className="flex justify-between items-center pb-0.5 px-0.5">
+          <span className="text-[12.5px] text-chu-phu font-semibold">
+            Tổng số: <b>{danhSach.length}</b> thành viên
           </span>
-          <Nut bieuTuong={UserPlus} rong={false} onClick={() => setMoThem(true)}>
-            Thêm người
-          </Nut>
+          <button
+            type="button"
+            onClick={() => setMoThem(true)}
+            className="px-3 py-1.5 rounded-xl bg-xanh text-white font-bold text-[12.5px] inline-flex items-center gap-1.5 shadow-2xs active:scale-95 transition-all"
+          >
+            <UserPlus size={15} strokeWidth={2.4} />
+            <span>Thêm người</span>
+          </button>
         </div>
 
         {dangTai ? (
@@ -101,28 +105,32 @@ export default function QuanLyNguoi() {
         ) : loi ? (
           <TrangThaiTrong bieuTuong={<User size={24} />} tieuDe="Lỗi tải dữ liệu" moTa={loi} />
         ) : (
-          <div className="space-y-2.5">
-
+          <div className="space-y-2">
             {danhSach.map((n) => {
               const laQtv = n.vaiTro === "qtv";
               return (
-                <The key={n.email} className="p-3.5 flex items-center justify-between gap-2">
+                <The key={n.email} className="p-3 flex items-center justify-between gap-2.5 border border-vien/90 shadow-2xs">
                   <div className="flex items-center gap-3 min-w-0">
-                    <BieuTuongTron icon={laQtv ? Shield : User} tone={laQtv ? "xanh" : "luc"} kichThuoc={40} />
+                    <div className={gop(
+                      "size-10 rounded-xl grid place-items-center shrink-0 shadow-2xs",
+                      laQtv ? "bg-xanh-nhat text-xanh" : "bg-luc-nhat text-luc-chu"
+                    )}>
+                      {laQtv ? <Shield size={18} strokeWidth={2.4} /> : <User size={18} strokeWidth={2.4} />}
+                    </div>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-[14px] text-muc truncate">{n.email}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-extrabold text-[14px] text-muc truncate max-w-[180px]">{n.email}</span>
                         <Nhan tone={laQtv ? "xanh" : "luc"}>
-                          {laQtv ? "Quản trị viên" : "Cộng tác viên"}
+                          {laQtv ? "QTV" : "CTV"}
                         </Nhan>
                       </div>
-                      <p className="text-[12px] text-chu-phu">Tham gia: {dinhDangLuc(n.taoLuc)}</p>
+                      <p className="text-[11.5px] text-chu-phu mt-0.5">Tham gia: {dinhDangLuc(n.taoLuc)}</p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setXoaItem(n)}
-                    className="text-chu-phu hover:text-do-chu p-1.5 transition-colors"
+                    className="size-9 rounded-lg grid place-items-center text-chu-phu hover:text-do-chu hover:bg-do-nhat/50 transition-colors shrink-0"
                     title="Xóa thành viên"
                   >
                     <Trash2 size={16} />
@@ -137,17 +145,17 @@ export default function QuanLyNguoi() {
       {/* MODAL THEM */}
       <HopTruot mo={moThem} dong={() => setMoThem(false)} tieuDe="Thêm thành viên mới">
         <div className="space-y-3.5 pb-4">
-          <Truong nhan="Email Google / Cloudflare Access">
+          <Truong nhan="Email đăng nhập">
             <OInput
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="ten.nguoidung@gmail.com"
             />
           </Truong>
-          <Truong nhan="Vai trò">
+          <Truong nhan="Vai trò hệ thống">
             <OChon value={vaiTro} onChange={(e) => setVaiTro(e.target.value as VaiTro)}>
-              <option value="ctv">Cộng tác viên (Chỉ điền trường được giao, gửi chờ duyệt)</option>
-              <option value="qtv">Quản trị viên (Đầy đủ quyền duyệt bài, phân công, phát hành)</option>
+              <option value="ctv">Cộng tác viên (Điền dữ liệu trường được giao)</option>
+              <option value="qtv">Quản trị viên (Đầy đủ quyền duyệt bài & phát hành)</option>
             </OChon>
           </Truong>
           <div className="flex flex-col gap-2 pt-2">
@@ -156,6 +164,7 @@ export default function QuanLyNguoi() {
           </div>
         </div>
       </HopTruot>
+
 
       {/* MODAL XOA */}
       <HopTruot mo={xoaItem !== null} dong={() => setXoaItem(null)} tieuDe="Xác nhận xóa thành viên?">

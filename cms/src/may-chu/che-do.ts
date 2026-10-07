@@ -11,13 +11,17 @@ function ghi(khoa: string, v: string | null) { try { if (v === null) sessionStor
 export function dangDungDuLieuMau(): boolean {
   if (import.meta.env?.VITE_GIA_LAP === "1") return true;
   try {
-    const q = new URLSearchParams(window.location.search);
-    if (q.get("gia-lap") === "1") ghi(KHOA_GIA_LAP, "1");
-    if (q.get("gia-lap") === "0") ghi(KHOA_GIA_LAP, null);
-    const vai = q.get("vai");
+    const searchParams = new URLSearchParams(window.location.search);
+    const hashQuery = window.location.hash.includes("?") ? window.location.hash.split("?")[1] : "";
+    const hashParams = new URLSearchParams(hashQuery);
+    const giaLap = searchParams.get("gia-lap") ?? hashParams.get("gia-lap");
+    if (giaLap === "1") ghi(KHOA_GIA_LAP, "1");
+    if (giaLap === "0") ghi(KHOA_GIA_LAP, null);
+    const vai = searchParams.get("vai") ?? hashParams.get("vai");
     if (vai === "ctv" || vai === "qtv") ghi(KHOA_VAI, vai);
   } catch { /* không có window */ }
   return doc(KHOA_GIA_LAP) === "1";
 }
+
 
 export function vaiTroMau(): VaiTro { return doc(KHOA_VAI) === "ctv" ? "ctv" : "qtv"; }

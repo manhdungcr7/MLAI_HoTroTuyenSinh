@@ -201,24 +201,26 @@ export default function DanhSachDuyet() {
 
                   {/* Nút hành động phê duyệt */}
                   {laQtv && locTrangThai === "cho" && (
-                    <div className="pt-2 flex gap-2 border-t border-vien">
-                      <Nut
-                        bieuTuong={Check}
+                    <div className="pt-2.5 flex items-center gap-2 border-t border-vien/80">
+                      <button
+                        type="button"
                         onClick={() => duyetNhanh(item)}
                         disabled={dangXuLy}
-                        className="flex-1"
+                        className="flex-1 min-h-[44px] px-3 py-2 rounded-xl bg-luc text-white font-bold text-[13.5px] inline-flex items-center justify-center gap-1.5 shadow-2xs active:brightness-95 disabled:opacity-50"
                       >
-                        Duyệt bài
-                      </Nut>
-                      <Nut
-                        kieu="nguyHiem"
-                        bieuTuong={X}
-                        onClick={() => setTuChoiItem(item)}
+                        <Check size={16} strokeWidth={2.5} /> Duyệt ngay
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTuChoiItem(item);
+                          setLyDoTuChoi("");
+                        }}
                         disabled={dangXuLy}
-                        className="flex-1"
+                        className="flex-1 min-h-[44px] px-3 py-2 rounded-xl bg-trang border border-do/40 text-do-chu font-bold text-[13.5px] inline-flex items-center justify-center gap-1.5 active:bg-do-nhat disabled:opacity-50"
                       >
-                        Trả về nháp
-                      </Nut>
+                        <X size={16} strokeWidth={2.5} /> Trả về nháp
+                      </button>
                     </div>
                   )}
                 </The>
@@ -234,19 +236,45 @@ export default function DanhSachDuyet() {
         dong={() => setTuChoiItem(null)}
         tieuDe="Trả bản ghi về nháp"
       >
-        <div className="space-y-4 pb-4">
-          <p className="text-[14px] text-chu">
-            Ghi rõ lý do từ chối để người đóng góp hoặc CTV biết và cập nhật lại chính xác.
+        <div className="space-y-3.5 pb-4">
+          <p className="text-[13px] text-chu-phu leading-relaxed">
+            Chọn nhanh lý do từ chối để người đóng góp cập nhật lại chính xác:
           </p>
-          <Truong nhan="Lý do từ chối / góp ý">
+
+          {/* Chip lý do nhanh */}
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              "Thiếu đề án 2026 kiểm chứng",
+              "Số tiền/mức học phí chưa rõ",
+              "Link nguồn không mở được",
+              "Cần ghi rõ năm áp dụng",
+            ].map((lyDo) => (
+              <button
+                key={lyDo}
+                type="button"
+                onClick={() => setLyDoTuChoi(lyDo)}
+                className={gop(
+                  "px-2.5 py-1 rounded-lg text-[12px] font-semibold border transition-colors",
+                  lyDoTuChoi === lyDo
+                    ? "bg-do text-white border-do"
+                    : "bg-nen text-chu border-vien hover:bg-nen-dam active:bg-do-nhat"
+                )}
+              >
+                {lyDo}
+              </button>
+            ))}
+          </div>
+
+          <Truong nhan="Lý do chi tiết / Góp ý">
             <OTextArea
               value={lyDoTuChoi}
               onChange={(e) => setLyDoTuChoi(e.target.value)}
-              placeholder="VD: Link nguồn chưa đúng quy chế 2026, mức học phí cần ghi rõ theo năm..."
+              placeholder="Ghi rõ góp ý cụ thể để CTV chỉnh sửa..."
               hang={3}
             />
           </Truong>
-          <div className="flex flex-col gap-2">
+
+          <div className="flex flex-col gap-2 pt-1">
             <Nut kieu="nguyHiem" onClick={xacNhanTuChoi} disabled={dangXuLy}>
               Xác nhận trả về nháp
             </Nut>
@@ -257,3 +285,4 @@ export default function DanhSachDuyet() {
     </div>
   );
 }
+
