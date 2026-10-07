@@ -118,15 +118,19 @@ export function loiGhiNhan(s: Pick<AppState, "lichSu" | "tamTrang" | "viec" | "t
   return null;
 }
 
-/** Ước lượng giờ tự học mỗi tuần theo lịch học cố định và cài đặt (chưa trừ các buổi đã xếp). */
-export function uocLuongGioTuHoc(coDinh: TietCoDinh[], cfg: CauHinhTuHoc, thuHai: string) {
+/**
+ * Ước lượng giờ tự học mỗi tuần theo lịch học cố định và cài đặt (chưa trừ các buổi đã xếp).
+ * Có `tuNgay`: các ngày trước đó tính 0 phút (đã qua, không xếp được nữa).
+ */
+export function uocLuongGioTuHoc(coDinh: TietCoDinh[], cfg: CauHinhTuHoc, thuHai: string, tuNgay?: string) {
   const theoNgay = bayNgayCuaTuan(thuHai).map((ngay) => {
     const thu = thuCuaNgay(ngay);
     const nghi = cfg.ngayNghi.includes(thu);
+    const daQua = tuNgay !== undefined && ngay < tuNgay;
     const trong = khungTrongTrongNgay(ngay, coDinh, cfg).reduce((t, k) => t + k.ketThuc - k.batDau, 0);
     // mỗi buổi kèm thời gian nghỉ giữa buổi, nên phần học thật ít hơn khoảng trống một chút
     const coThe = Math.max(0, trong - cfg.nghiGiuaBuoi * Math.floor(trong / 90));
-    return { ngay, thu, nghi, phut: nghi ? 0 : Math.min(coThe, Math.round(cfg.gioHocToiDaMoiNgay * 60)) };
+    return { ngay, thu, nghi, phut: nghi || daQua ? 0 : Math.min(coThe, Math.round(cfg.gioHocToiDaMoiNgay * 60)) };
   });
   return { theoNgay, tongPhut: theoNgay.reduce((t, n) => t + n.phut, 0) };
 }

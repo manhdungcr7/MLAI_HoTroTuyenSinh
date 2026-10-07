@@ -25,6 +25,19 @@ export interface DauVaoViecTuan {
   phutTuHoc: number; // thời gian tự học còn trống trong tuần
   tamTrang?: TamTrang;
   ngayConDenThi?: number;
+  /** Lớp em đang học; mặc định 12. Lớp 11 không ghi "sách giáo khoa 12". */
+  lop?: 11 | 12;
+  /** Ôn nhẹ khi em chưa có mục tiêu: không nói về phần thiếu điểm, ngân sách tối đa NGAN_SACH_ON_NHE phút. */
+  nhe?: boolean;
+}
+
+export const NGAN_SACH_ON_NHE = 4 * 60;
+
+/** Tiêu đề buổi đầu theo đúng lượng đề em làm được trong thời gian đó (không hứa "1 đề" khi chỉ đủ nửa đề). */
+export function tenPhanDe(phutLamDe: number): string {
+  if (phutLamDe >= 90) return "làm 1 đề tính giờ";
+  if (phutLamDe >= 45) return "làm nửa đề tính giờ";
+  return "làm một phần đề tính giờ";
 }
 
 const lam15 = (n: number) => Math.round(n / 15) * 15;
@@ -37,8 +50,10 @@ export function nganSachPhut(phutTuHoc: number, tam: TamTrang = "binhThuong"): n
 }
 
 export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
-  const kc = khoangCachTheoMon(dv.diem, dv.toHop, dv.diemMucTieu, dv.canCaiThien);
-  const ngan = nganSachPhut(dv.phutTuHoc, dv.tamTrang);
+  const kc = khoangCachTheoMon(dv.diem, dv.toHop, dv.nhe ? 0 : dv.diemMucTieu, dv.canCaiThien);
+  const lop = dv.lop ?? 12;
+  const nganDay = nganSachPhut(dv.phutTuHoc, dv.tamTrang);
+  const ngan = dv.nhe ? Math.min(NGAN_SACH_ON_NHE, nganDay) : nganDay;
   if (ngan < 45 || kc.length === 0) return [];
 
   // Trọng số: phần còn thiếu + một nền nhỏ để môn đã đủ điểm vẫn được giữ nhịp; môn đang đi xuống được cộng thêm.
@@ -71,24 +86,26 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
       con -= phut;
       const deTinhGio = i === 0;
       const chuDe = NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
-      const tieuDe = deTinhGio ? `${TEN_MON[k.mon]} – làm 1 đề tính giờ, chữa câu sai` : `${TEN_MON[k.mon]} – ${chuDe[0].toLowerCase()}${chuDe.slice(1)}`;
+      const tieuDe = deTinhGio ? `${TEN_MON[k.mon]} – ${tenPhanDe(lam15(phut * 0.6))}, chữa câu sai` : `${TEN_MON[k.mon]} – ${chuDe[0].toLowerCase()}${chuDe.slice(1)}`;
       const pLam = deTinhGio ? lam15(phut * 0.6) : lam15(phut * 0.55), pChua = deTinhGio ? lam15(phut * 0.35) : lam15(phut * 0.35);
       const pCuoi = Math.max(5, phut - pLam - pChua);
       const lyDo = x.chuaCoDiem
-        ? `Em chưa có điểm ${TEN_MON[k.mon]}, nên mình chưa biết em thiếu bao nhiêu. Làm một đề tính giờ để có điểm đầu vào cho môn này.`
+        ? `Em chưa có điểm ${TEN_MON[k.mon]}, nên mình chưa biết em thiếu bao nhiêu. Làm đề tính giờ (đủ cả đề càng tốt) để có điểm đầu vào cho môn này.`
+        : dv.nhe
+          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm. Em chưa chọn mục tiêu nên mình chỉ gợi ý ôn nhẹ để giữ nhịp, chưa tính phần còn thiếu.`
         : k.thieu > 0
-          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm, cần khoảng ${so(k.mucTieu)} để tổ hợp đạt ${so(dv.diemMucTieu)} điểm (còn thiếu ${so(k.thieu)}).${x.dangXuong ? " Điểm thi thử gần đây của môn này đang giảm, nên cần ôn đều hơn." : ""}${dv.ngayConDenThi ? ` Còn ${dv.ngayConDenThi} ngày đến kỳ thi.` : ""}`
+          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm, cần khoảng ${so(k.mucTieu)} để tổ hợp đạt ${so(dv.diemMucTieu)} điểm (còn thiếu ${so(k.thieu)}).${x.dangXuong ? " Điểm thi thử gần đây của môn này đang giảm, nên cần ôn đều hơn." : ""}${dv.ngayConDenThi !== undefined && dv.ngayConDenThi > 0 ? ` Còn ${dv.ngayConDenThi} ngày đến kỳ thi.` : ""}`
           : `${TEN_MON[k.mon]} đã đủ mức cần cho mục tiêu (${so(k.hienTai)} điểm). Giữ nhịp để điểm không tụt.`;
       ra.push({
         id: `v-${dv.tuan}-${k.mon}-${i}`, tuan: dv.tuan, mon: k.mon, tieuDe,
         chiTiet: deTinhGio ? `${pLam}' làm đề + ${pChua}' chữa câu sai.` : `${chuDe} · ${pLam}' ôn và làm bài + ${pChua}' chữa lỗi.`,
-        phut, mucUuTien: i === 0 ? mucUuTien : mucUuTien === "cao" ? "vua" : "thap", lyDo,
+        phut, mucUuTien: dv.nhe ? "thap" : i === 0 ? mucUuTien : mucUuTien === "cao" ? "vua" : "thap", lyDo,
         mucTieuBuoi: deTinhGio ? `Biết điểm thật của ${TEN_MON_NGAN[k.mon]} lúc này và các dạng bài hay sai, để biết tuần sau ôn gì.` : `Nắm chắc phần "${chuDe.toLowerCase()}" và làm đúng các câu cơ bản.`,
         cacBuoc: [{ phut: pLam, ten: deTinhGio ? "Làm đề" : "Ôn và làm bài" }, { phut: pChua, ten: "Chữa câu sai" }, { phut: pCuoi, ten: "Tóm tắt lỗi hay gặp" }],
         tieuChi: deTinhGio
-          ? ["Làm xong 1 đề trong đúng thời gian quy định.", "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.", "Đánh dấu 3 dạng bài cần ôn lại."]
+          ? ["Làm xong phần đề đã chọn trong đúng thời gian quy định.", "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.", "Đánh dấu 3 dạng bài cần ôn lại."]
           : ["Nhắc lại được ý chính hoặc công thức mà không nhìn sách.", "Làm đúng ít nhất 80% số câu cơ bản.", "Ghi lại các câu còn sai để ôn lại sau 2 ngày."],
-        taiLieu: [{ ten: `Sách giáo khoa ${TEN_MON[k.mon]} 12` }, { ten: "Đề minh họa và đề thi thử gần nhất em đã có" }],
+        taiLieu: [{ ten: lop === 11 ? `Sách giáo khoa ${TEN_MON[k.mon]} (chương trình em đang học)` : `Sách giáo khoa ${TEN_MON[k.mon]} 12` }, { ten: "Đề minh họa và đề thi thử gần nhất em đã có" }],
       });
     }
   }
