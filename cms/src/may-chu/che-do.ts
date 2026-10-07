@@ -25,3 +25,14 @@ export function dangDungDuLieuMau(): boolean {
 
 
 export function vaiTroMau(): VaiTro { return doc(KHOA_VAI) === "ctv" ? "ctv" : "qtv"; }
+
+export function datVaiTroMau(vai: VaiTro) {
+  ghi(KHOA_VAI, vai);
+  window.dispatchEvent(new Event("cms:vai-doi"));
+}
+
+export function chuyenDoiVaiTroMau(): VaiTro {
+  const moi = vaiTroMau() === "ctv" ? "qtv" : "ctv";
+  datVaiTroMau(moi);
+  return moi;
+}

@@ -145,7 +145,7 @@ export default function DanhSachTruong() {
             moTa="Thử đổi từ khóa tìm kiếm hoặc bỏ bớt các bộ lọc."
           />
         ) : (
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {daLoc.map((t) => {
               const pt = tiLeDu(t.tienDo);
               const du = t.tienDo.du;

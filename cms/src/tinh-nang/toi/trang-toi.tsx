@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   UserRound, UploadCloud, Users, ListFilter,
-  History, ChevronRight
+  History, ChevronRight, School
 } from "lucide-react";
 import { DUONG_DAN } from "@cms/duong-dan";
 import { layToi, phatHanh, thongBaoLoi, type Toi } from "@cms/may-chu/api";
@@ -190,6 +190,33 @@ export default function TrangToi() {
                     </The>
                   </Link>
                 </div>
+              </div>
+            )}
+
+            {/* NẾU LÀ CTV: HƯỚNG DẪN & NHIỆM VỤ */}
+            {!laQtv && (
+              <div className="space-y-3 pt-1">
+                <h3 className="font-extrabold text-[15px] text-muc px-0.5">Nhiệm vụ của bạn</h3>
+                <The className="p-4 space-y-3 bg-gradient-to-br from-xanh-nhat/40 to-trang border-xanh/30 shadow-2xs">
+                  <h4 className="font-bold text-[14px] text-muc">Quy trình đóng góp 3 bước:</h4>
+                  <ul className="space-y-2 text-[12.5px] text-chu">
+                    <li className="flex items-start gap-2">
+                      <span className="size-5 rounded-full bg-xanh text-white font-bold text-[11px] grid place-items-center shrink-0">1</span>
+                      <span>Vào tab <b>Trường</b>, chọn trường được phân công hoặc trường bạn có dữ liệu.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="size-5 rounded-full bg-xanh text-white font-bold text-[11px] grid place-items-center shrink-0">2</span>
+                      <span>Nhập thông tin (Kênh, Học phí, Học bổng, Nơi lưu trú) kèm <b>link đề án/thông báo 2026</b>.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="size-5 rounded-full bg-xanh text-white font-bold text-[11px] grid place-items-center shrink-0">3</span>
+                      <span>Bấm <b>Lưu & Gửi duyệt</b>. Quản trị viên (QTV) sẽ kiểm tra và xuất bản lên hệ thống cho học sinh.</span>
+                    </li>
+                  </ul>
+                  <Link to={DUONG_DAN.truong()} className="block pt-1">
+                    <Nut bieuTuong={School}>Bắt đầu nhập dữ liệu</Nut>
+                  </Link>
+                </The>
               </div>
             )}
 

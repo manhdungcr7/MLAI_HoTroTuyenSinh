@@ -120,7 +120,7 @@ export default function TongQuanTienDo() {
             {/* THỐNG KÊ THEO MỤC */}
             <div className="space-y-2 pt-0.5">
               <h3 className="font-extrabold text-[15px] text-muc px-0.5">Tình trạng theo từng mục</h3>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
                 {MUC_CAN_DU.map((m) => {
                   const thieuCount = thongKe.thieuTheoMuc[m] ?? 0;
                   const duCount = thongKe.tong - thieuCount;
@@ -167,7 +167,7 @@ export default function TongQuanTienDo() {
                   🎉 Tuyệt vời! Tất cả các trường đã đủ 100% dữ liệu.
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {thongKe.conThieu.slice(0, 10).map((t) => {
                     const truong = truongTheoMa(t.maTruong);
                     return (

@@ -101,6 +101,13 @@ export default function DanhSachDuyet() {
           <DongThongBao tieuDe={thongBao} tone="luc" onClick={() => setThongBao(null)} />
         )}
 
+        {!laQtv && (
+          <The tone="cam" className="p-3 text-[12.5px] text-cam-chu flex items-start gap-2 border border-cam/30">
+            <span className="font-extrabold text-[13px] shrink-0">ℹ Phân quyền:</span>
+            <span>Bạn đang xem hàng đợi ở vai trò <b>Tình nguyện viên (CTV)</b>. QTV sẽ duyệt hoặc trả về các bản ghi bạn gửi.</span>
+          </The>
+        )}
+
         {/* Tab lọc trạng thái */}
         <div className="flex gap-2 border-b border-vien pb-2">
           <button

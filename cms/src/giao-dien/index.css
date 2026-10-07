@@ -51,8 +51,13 @@ body {
   :focus-visible { outline: 3px solid #8db4ff; outline-offset: 2px; }
 }
 
-/* Khung điện thoại: trên máy tính, ứng dụng nằm giữa một cột rộng 430px */
-.khung-ung-dung { max-width: 430px; margin: 0 auto; min-height: 100dvh; background: var(--color-nen); position: relative; box-shadow: 0 0 40px rgba(22, 100, 245, .08); overflow-x: clip; }
+/* Khung ứng dụng: trên mobile tối ưu 100%, trên desktop mở rộng layout toàn màn hình */
+.khung-ung-dung {
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--color-nen);
+  position: relative;
+}
 .an-thanh-cuon::-webkit-scrollbar { display: none; }
 .an-thanh-cuon { scrollbar-width: none; }
 .vung-an-toan-duoi { padding-bottom: calc(env(safe-area-inset-bottom) + 6px); }
