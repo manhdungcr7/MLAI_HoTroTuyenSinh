@@ -2,29 +2,25 @@ import { RouterProvider, createHashRouter } from "react-router-dom";
 import { KhungCoThanhDuoi } from "@cms/thanh-phan/khung/khung-goc";
 import { TrangLoi } from "@cms/thanh-phan/khung/trang-loi";
 import { MAU } from "@cms/duong-dan";
+import TongQuanDashboard from "@cms/tong-quan/tong-quan-dashboard";
+import DanhSachTruong from "@cms/du-lieu-truong/danh-sach-truong";
+import ChiTietTruong from "@cms/du-lieu-truong/chi-tiet-truong";
+import DanhSachDuyet from "@cms/phe-duyet/danh-sach-duyet";
+import PublishCenter from "@cms/xuat-ban/publish-center";
+import TrangHeThong from "@cms/he-thong/trang-he-thong";
 
-import DanhSachTruong from "@cms/tinh-nang/truong/danh-sach-truong";
-import ChiTietTruong from "@cms/tinh-nang/truong/chi-tiet-truong";
-import DanhSachDuyet from "@cms/tinh-nang/duyet/danh-sach-duyet";
-import TongQuanTienDo from "@cms/tinh-nang/tien-do/tong-quan-tien-do";
-import TrangToi from "@cms/tinh-nang/toi/trang-toi";
-import QuanLyNguoi from "@cms/tinh-nang/toi/quan-ly-nguoi";
-import PhanCong from "@cms/tinh-nang/toi/phan-cong";
-import NhatKy from "@cms/tinh-nang/toi/nhat-ky";
-
+// Năm mục: Tổng quan, Dữ liệu trường, Phê duyệt, Xuất bản, Hệ thống. Đăng nhập do Cloudflare Access lo, không có trang đăng nhập riêng.
 const router = createHashRouter([
   {
     element: <KhungCoThanhDuoi />,
     errorElement: <TrangLoi />,
     children: [
+      { path: MAU.tongQuan, element: <TongQuanDashboard /> },
       { path: MAU.truong, element: <DanhSachTruong /> },
       { path: MAU.chiTietTruong, element: <ChiTietTruong /> },
       { path: MAU.duyet, element: <DanhSachDuyet /> },
-      { path: MAU.tienDo, element: <TongQuanTienDo /> },
-      { path: MAU.toi, element: <TrangToi /> },
-      { path: MAU.nguoi, element: <QuanLyNguoi /> },
-      { path: MAU.phanCong, element: <PhanCong /> },
-      { path: MAU.nhatKy, element: <NhatKy /> },
+      { path: MAU.xuatBan, element: <PublishCenter /> },
+      { path: MAU.heThong, element: <TrangHeThong /> },
     ],
   },
 ]);

@@ -1,34 +1,31 @@
 // Logic thuần của danh sách trường: gộp, lọc, sắp xếp, tỉ lệ đủ. Không React.
-import { MUC_CAN_DU, tienDoTruong, type BanGhiTruong, type MucTienDo, type TienDoTruong } from "@/data/dong-gop-kiem-tra";
-import type { TruongCoBan } from "@cms/du-lieu/danh-sach-truong";
+import { MUC_CAN_DU, type BanGhiTruong, type MucTienDo, type TienDoTruong } from "@/data/dong-gop-kiem-tra";
 
-export interface DongTruong extends TruongCoBan { tienDo: TienDoTruong; kenh?: BanGhiTruong; giaoChoToi: boolean }
+export interface DongTruong { ma: string; ten: string; tienDo: TienDoTruong; kenh?: BanGhiTruong; giaoChoToi: boolean }
 export type ChipLoc = "thieuHocPhi" | "thieuNoiLuuTru" | "chuaCoKenh" | "giaoChoToi";
-export const CAC_CHIP: { id: ChipLoc; nhan: string }[] = [
-  { id: "thieuHocPhi", nhan: "Thiếu học phí" },
-  { id: "thieuNoiLuuTru", nhan: "Thiếu nơi lưu trú" },
-  { id: "chuaCoKenh", nhan: "Chưa có kênh" },
-  { id: "giaoChoToi", nhan: "Giao cho tôi" },
+export const CAC_CHIP: { id: ChipLoc; nhan: string; tham: string }[] = [
+  { id: "thieuHocPhi", nhan: "Thiếu học phí", tham: "thieu-hoc-phi" },
+  { id: "thieuNoiLuuTru", nhan: "Thiếu nơi ở", tham: "thieu-noi-luu-tru" },
+  { id: "chuaCoKenh", nhan: "Chưa có kênh", tham: "chua-co-kenh" },
+  { id: "giaoChoToi", nhan: "Giao cho tôi", tham: "giao-cho-toi" },
 ];
 const MUC_CUA_CHIP: Partial<Record<ChipLoc, MucTienDo>> = { thieuHocPhi: "hoc_phi", thieuNoiLuuTru: "noi_luu_tru", chuaCoKenh: "kenh" };
+
+/** Đọc ?loc=thieu-hoc-phi từ đường dẫn (các lối tắt ở Tổng quan dùng). */
+export const chipTuThamSo = (tham: string | null): ChipLoc | null => CAC_CHIP.find((c) => c.tham === tham)?.id ?? null;
 
 export const SO_MUC_CAN_DU = MUC_CAN_DU.length;
 
 export const khongDau = (s: string): string =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().trim();
 
-/** Danh sách đầy đủ lấy từ tệp trường; số liệu tiến độ lấy từ API. Trường API chưa trả về coi như còn thiếu mọi mục. */
+/** Danh sách trường lấy hoàn toàn từ máy chủ (tên, kênh, tiến độ). `maGiao` là mã trường giao cho người đang đăng nhập. */
 export function gopTruong(
-  danhSach: readonly TruongCoBan[],
-  tuApi: readonly { maTruong: string; kenh?: BanGhiTruong; tienDo: TienDoTruong }[],
+  tuApi: readonly { maTruong: string; ten?: string; kenh?: BanGhiTruong; tienDo: TienDoTruong }[],
   maGiao: readonly string[] = [],
 ): DongTruong[] {
-  const theoMa = new Map(tuApi.map((x) => [x.maTruong, x]));
   const giao = new Set(maGiao);
-  return danhSach.map((t) => {
-    const a = theoMa.get(t.ma);
-    return { ...t, kenh: a?.kenh, tienDo: a?.tienDo ?? tienDoTruong(t.ma, undefined, []), giaoChoToi: giao.has(t.ma) };
-  });
+  return tuApi.map((a) => ({ ma: a.maTruong, ten: a.ten ?? a.maTruong, kenh: a.kenh, tienDo: a.tienDo, giaoChoToi: giao.has(a.maTruong) }));
 }
 
 /** Lọc theo ô tìm (tên hoặc mã, không phân biệt dấu) và các chip (chọn nhiều chip thì phải thỏa tất cả). */
