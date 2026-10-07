@@ -15,6 +15,7 @@ import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type LuaChon, type MaToHop, type MonId, type ToneTen } from "@/state/types";
 import { ANH_TRONG, CAC_TO_HOP, chonToHopHienThi, chupTruocSau, dieuKienTuHoSo, docODiem, tongCacToHop, vietDiem, type AnhTruocSau, type Diem } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
+import { ngayVN } from "@/features/muc-tieu/tinh-toan";
 
 const O_MON: { mon: MonId; icon: LucideIcon; tone: ToneTen; neuCo?: boolean }[] = [
   { mon: "toan", icon: Calculator, tone: "xanh" },
@@ -28,7 +29,8 @@ const MAU_TO_HOP: Record<MaToHop, string> = { A00: "text-xanh", A01: "text-luc-c
 
 export default function DiemThiThu() {
   const nav = useNavigate();
-  const { s, themDiemThi } = useApp();
+  const { s, themDiemThi, xoaDiemThi } = useApp();
+  const [xoaDang, setXoaDang] = useState<number | null>(null);
   const diemTruoc = useMemo(() => diemHienTaiCuaTungMon(s), [s]);
   const [chuoi, setChuoi] = useState<Record<MonId, string>>(() =>
     Object.fromEntries(CAC_MON.map((m) => [m, diemTruoc[m] === null ? "" : vietDiem(diemTruoc[m]!)])) as Record<MonId, string>);
@@ -124,6 +126,31 @@ export default function DiemThiThu() {
 
         <DongThongBao tone="xanh" icon={Info} tieuDe="Điểm mới sẽ được dùng để cập nhật gợi ý trường và nguyện vọng của em."
           moTa="Mỗi môn có đổi được ghi thành một lần thi thử ngày hôm nay. Môn để trống giữ nguyên điểm cũ." />
+
+        {s.diemThi.length > 0 && (
+          <section aria-labelledby="lich-su-diem">
+            <h2 id="lich-su-diem" className="text-[16px] font-extrabold text-muc mb-2">Các lần thi thử đã nhập</h2>
+            <ul className="space-y-2">
+              {s.diemThi.map((d, i) => ({ d, i })).sort((a, b) => (a.d.ngay === b.d.ngay ? b.i - a.i : a.d.ngay < b.d.ngay ? 1 : -1)).map(({ d, i }) => (
+                <li key={i} className="rounded-xl bg-trang border border-vien px-3 py-2 flex items-center gap-2 min-h-12">
+                  <span className="min-w-0 flex-1 text-[14px] text-chu">
+                    <b className="text-muc">{TEN_MON[d.mon]}</b> {dinhDang(d.diem, 2)} điểm
+                    <span className="block text-[12px] text-chu-phu">{ngayVN(d.ngay)}</span>
+                  </span>
+                  {xoaDang === i ? (
+                    <span className="flex items-center gap-1.5">
+                      <button type="button" onClick={() => { xoaDiemThi(i); setXoaDang(null); }} className="min-h-10 rounded-lg bg-do-nhat px-3 text-[13px] font-bold text-do-chu active:brightness-95">Xóa lần này</button>
+                      <button type="button" onClick={() => setXoaDang(null)} className="min-h-10 rounded-lg border border-vien px-3 text-[13px] font-semibold text-chu">Giữ lại</button>
+                    </span>
+                  ) : (
+                    <button type="button" onClick={() => setXoaDang(i)} aria-label={`Xóa lần thi thử ${TEN_MON[d.mon]} ngày ${ngayVN(d.ngay)}`} className="min-h-10 rounded-lg border border-vien px-3 text-[13px] font-semibold text-do-chu active:bg-do-nhat">Xóa</button>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <p className="text-[12px] text-chu-phu mt-1.5">Xóa một lần nhập nhầm thì điểm hiện tại quay về lần gần nhất còn lại, hoặc điểm trong hồ sơ.</p>
+          </section>
+        )}
 
         <div role="alert" aria-live="assertive" className="empty:hidden">
           {bao && (

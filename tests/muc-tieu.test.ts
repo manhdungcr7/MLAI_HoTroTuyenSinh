@@ -69,4 +69,24 @@ const g = goiYTuanNay([{ mon: "toan", thieu: 1 }, { mon: "vatLy", thieu: 0 }]);
 assert.equal(g.length, 3);
 assert.ok(g.every((x) => x.mon === "toan"), "chỉ gợi ý môn còn thiếu");
 
+// Chọn nguyện vọng làm mục tiêu: bỏ qua ngành không đặt được, hết thì báo lý do
+{
+  const { chonNguyenVongLamMucTieu } = await import("../src/state/chon");
+  const { LUA_CHON_MAU } = await import("../src/data/lua-chon-mau");
+  const { taoHoSoMau } = await import("../src/state/mau");
+  const mau = taoHoSoMau();
+  const tot = LUA_CHON_MAU.find((l) => (!l.phuongThuc || l.phuongThuc === "THPT") && (!l.toHopXet?.length || l.toHopXet.some((c) => ["A00", "A01", "D01", "B00"].includes(c))))!;
+  const hocBa = { ...tot, id: "hb-1", phuongThuc: "hocBa" } as typeof tot;
+  const tim = (id: string) => [hocBa, ...LUA_CHON_MAU].find((l) => l.id === id);
+  const s = (nv: string[]) => ({ nguyenVong: nv, hoSo: mau.hoSo, diemThi: [] as DiemThi[] });
+  const a = chonNguyenVongLamMucTieu(s([tot.id]), tim);
+  assert.ok(a.ok && a.mucTieu.luaChonId === tot.id && a.mucTieu.diemMucTieu === tot.diemMin, "NV1 đặt được thì chọn NV1");
+  const b = chonNguyenVongLamMucTieu(s(["hb-1", tot.id]), tim);
+  assert.ok(b.ok && b.lc.id === tot.id, "NV1 không đặt được thì thử NV kế");
+  const c = chonNguyenVongLamMucTieu(s(["hb-1"]), tim);
+  assert.ok(!c.ok && c.lyDo.includes("phương thức xét khác"), "hết ngành đặt được thì nêu lý do");
+  const d = chonNguyenVongLamMucTieu(s([]), tim);
+  assert.ok(!d.ok && d.lyDo.length > 0, "danh sách trống");
+}
+
 console.log("muc-tieu: tất cả kiểm thử đều qua.");

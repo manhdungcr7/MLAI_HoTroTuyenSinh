@@ -90,6 +90,7 @@ function TheMucTieu({ nganh, truong, tenTruong, conThieu, onClick }: { nganh: st
 
 function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: number; thieuMon: string[] }) {
   const nav = useNavigate();
+  const { s } = useApp();
   return (
     <div className="grid grid-cols-2 gap-3">
       <The className="!p-3 flex items-center gap-2.5">
@@ -109,7 +110,7 @@ function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: num
         </span>
       </The>
       {thieuMon.length > 0 && (
-        <button type="button" onClick={() => nav(DUONG_DAN.batDau(2))} className="col-span-2 min-h-12 rounded-xl bg-cam-nhat px-3 text-left text-[13px] text-chu active:brightness-95">
+        <button type="button" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} className="col-span-2 min-h-12 rounded-xl bg-cam-nhat px-3 text-left text-[13px] text-chu active:brightness-95">
           Chưa có điểm <b>{thieuMon.join(", ")}</b> nên điểm hiện tại đang tính thiếu. <b className="text-xanh">Nhập điểm</b>
         </button>
       )}

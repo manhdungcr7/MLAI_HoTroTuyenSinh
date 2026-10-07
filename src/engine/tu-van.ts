@@ -29,9 +29,43 @@ export interface HoSoTomTat { // không có tên, không có thông tin liên h�
 export interface YeuCauTuVan { cauHoi: string; nguCanh?: string; hoSo?: HoSoTomTat | null; duLieu: SuKien[] }
 export interface TraLoiTuVan { traLoi: string; nguon: string[] }
 
-export const GIOI_HAN = { cauHoi: 1000, suKien: 12, kichThuocBody: 40_000 };
+export const GIOI_HAN = { cauHoi: 1000, suKien: 12, kichThuocBody: 16_000, yeuCauMoiPhutMoiIp: 8 };
 
 const chuoi = (x: unknown, n: number) => String(x ?? "").slice(0, n);
+
+const so = (x: unknown, lo: number, hi: number) => (typeof x === "number" && Number.isFinite(x) && x >= lo && x <= hi ? x : undefined);
+const dsChuoi = (x: unknown, soMuc: number, dai: number) => (Array.isArray(x) ? x.filter((t): t is string => typeof t === "string").slice(0, soMuc).map((t) => t.slice(0, dai)) : undefined);
+
+/** Chỉ giữ các trường đã biết của hồ sơ, đúng kiểu, cắt độ dài. Mọi trường lạ (kể cả tên, liên hệ) bị bỏ. */
+export function lamSachHoSo(x: unknown): HoSoTomTat | null {
+  if (!x || typeof x !== "object" || Array.isArray(x)) return null;
+  const o = x as Record<string, unknown>;
+  const r: HoSoTomTat = {};
+  const lop = so(o.lop, 1, 12); if (lop !== undefined) r.lop = Math.round(lop);
+  if (typeof o.tinh === "string") r.tinh = o.tinh.slice(0, 40);
+  const nq = dsChuoi(o.nganhQuanTam, 8, 60); if (nq) r.nganhQuanTam = nq;
+  const ns = so(o.nganSachToiDaTrieu, 0, 10_000); if (ns !== undefined) r.nganSachToiDaTrieu = ns;
+  const kv = dsChuoi(o.khuVuc, 8, 30); if (kv) r.khuVuc = kv;
+  const th = o.toHopCaoNhat;
+  if (th && typeof th === "object") {
+    const t = th as Record<string, unknown>; const tong = so(t.tong, 0, 30);
+    if (typeof t.ma === "string" && tong !== undefined) r.toHopCaoNhat = { ma: t.ma.slice(0, 6), tong };
+  }
+  return r;
+}
+
+/** Khóa đếm tần suất: theo IP và theo phút. */
+export const khoaTanSuat = (ip: string, nowMs: number) => `tv:${ip.slice(0, 64)}:${Math.floor(nowMs / 60_000)}`;
+
+export interface KhoKV { get(k: string): Promise<string | null>; put(k: string, v: string, o?: { expirationTtl?: number }): Promise<void> }
+/** true nếu còn được gọi. Đếm không nguyên tử (KV), đủ để chặn lạm dụng thô; chặn chặt hơn cần Cloudflare WAF rate limiting. */
+export async function choPhepTanSuat(kv: KhoKV, ip: string, nowMs: number, toiDa = GIOI_HAN.yeuCauMoiPhutMoiIp): Promise<boolean> {
+  const k = khoaTanSuat(ip, nowMs);
+  const dem = Number(await kv.get(k)) || 0;
+  if (dem >= toiDa) return false;
+  await kv.put(k, String(dem + 1), { expirationTtl: 120 });
+  return true;
+}
 
 export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: false; loi: string } {
   if (!x || typeof x !== "object") return { ok: false, loi: "Yêu cầu không hợp lệ" };
@@ -61,7 +95,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
       nguon: chuoi(r.nguon, 120),
     });
   }
-  const hoSo = o.hoSo && typeof o.hoSo === "object" ? (o.hoSo as HoSoTomTat) : null;
+  const hoSo = lamSachHoSo(o.hoSo);
   return { ok: true, v: { cauHoi, nguCanh: typeof o.nguCanh === "string" ? o.nguCanh.slice(0, 80) : undefined, hoSo, duLieu: sach } };
 }
 

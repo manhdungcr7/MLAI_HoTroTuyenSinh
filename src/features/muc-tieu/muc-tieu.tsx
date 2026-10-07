@@ -110,6 +110,7 @@ export default function MucTieu() {
 
 function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaToHop) => void; moSua: () => void }) {
   const nav = useNavigate();
+  const { s } = useApp();
   const duDiem = d.thieuDiem.length === 0;
   const nd = duDiem ? nhanDinhMucTieu(d.khoangCach, d.conThieu, d.hienTai, d.mucTieu, d.goc.maToHop) : null;
   const daQua = d.goc.ngayThi < homNay();
@@ -140,7 +141,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
       {!duDiem && (
         <DongThongBao tone="cam" icon={UserPen} tieuDe={`Chưa có điểm môn ${d.thieuDiem.map((m) => TEN_MON[m]).join(", ")}`}
           moTa={`Cần điểm đủ 3 môn của tổ hợp ${d.goc.maToHop} để tính khoảng cách. Em nhập điểm để mình tính tiếp nhé.`}
-          hanhDong="Nhập điểm các môn" onClick={() => nav(DUONG_DAN.batDau(2))} />
+          hanhDong="Nhập điểm các môn" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} />
       )}
 
       <div className="rounded-the bg-trang border border-vien shadow-the p-4">
