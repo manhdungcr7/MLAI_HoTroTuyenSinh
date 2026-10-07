@@ -27,7 +27,7 @@ export function thongTinTuHang(h: HangThongTin): ThongTinApi {
   if (h.nam !== null) x.nam = h.nam;
   if (h.link_nguon) x.linkNguon = h.link_nguon;
   if (h.tao_boi) x.nguoiDang = h.tao_boi;
-  return x as ThongTinApi;
+  return x as unknown as ThongTinApi;
 }
 
 export function banGhiTruongTuHang(h: HangTruong): BanGhiTruong {
