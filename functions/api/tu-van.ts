@@ -1,10 +1,11 @@
 // Máy chủ nhỏ cho Tư vấn AI (Cloudflare Pages Function). Khóa API nằm ở biến bí mật của Cloudflare, không bao giờ xuống trình duyệt.
 // Bật: Cloudflare Pages > Settings > Variables and Secrets > thêm ANTHROPIC_API_KEY (hoặc OPENAI_API_KEY).
 // Chưa có khóa thì trả 503 và app tự dùng chế độ trả lời từ số liệu có sẵn.
-import { GIOI_HAN, NHAC_HE_THONG, dungNoiDung, kiemTraYeuCau, locNguon } from "../../src/engine/tu-van";
+import { GIOI_HAN, NHAC_HE_THONG, choPhepTanSuat, dungNoiDung, kiemTraYeuCau, locNguon, type KhoKV } from "../../src/engine/tu-van";
 
-export interface Env { ANTHROPIC_API_KEY?: string; OPENAI_API_KEY?: string; AI_MODEL?: string }
+export interface Env { ANTHROPIC_API_KEY?: string; OPENAI_API_KEY?: string; AI_MODEL?: string; RATE_KV?: KhoKV }
 interface Ctx { request: Request; env: Env }
+const HAN_GOI_MS = 20_000;
 
 const json = (v: unknown, status = 200) =>
   new Response(JSON.stringify(v), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -14,6 +15,7 @@ export async function goiMoHinh(env: Env, noiDung: string, f: typeof fetch = fet
     const r = await f("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+      signal: AbortSignal.timeout(HAN_GOI_MS),
       body: JSON.stringify({ model: env.AI_MODEL ?? "claude-haiku-4-5-20251001", max_tokens: 700, temperature: 0.2, system: NHAC_HE_THONG, messages: [{ role: "user", content: noiDung }] }),
     });
     if (!r.ok) throw new Error(`anthropic ${r.status}`);
@@ -24,6 +26,7 @@ export async function goiMoHinh(env: Env, noiDung: string, f: typeof fetch = fet
     const r = await f("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${env.OPENAI_API_KEY}` },
+      signal: AbortSignal.timeout(HAN_GOI_MS),
       body: JSON.stringify({ model: env.AI_MODEL ?? "gpt-4o-mini", temperature: 0.2, max_tokens: 700, messages: [{ role: "system", content: NHAC_HE_THONG }, { role: "user", content: noiDung }] }),
     });
     if (!r.ok) throw new Error(`openai ${r.status}`);
@@ -36,8 +39,16 @@ export async function goiMoHinh(env: Env, noiDung: string, f: typeof fetch = fet
 export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch): Promise<Response> {
   if (request.method !== "POST") return json({ loi: "Chỉ nhận POST" }, 405);
   if (!env.ANTHROPIC_API_KEY && !env.OPENAI_API_KEY) return json({ loi: "chua-cau-hinh" }, 503);
+  const khai = Number(request.headers.get("content-length"));
+  if (Number.isFinite(khai) && khai > GIOI_HAN.kichThuocBody) return json({ loi: "Yêu cầu quá lớn" }, 413);
+  if (env.RATE_KV) {
+    const ip = request.headers.get("cf-connecting-ip") ?? "khong-ro";
+    let cho = true;
+    try { cho = await choPhepTanSuat(env.RATE_KV, ip, Date.now()); } catch { /* KV lỗi thì không chặn người dùng */ }
+    if (!cho) return json({ loi: "Em hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
+  }
   const chu = await request.text();
-  if (chu.length > GIOI_HAN.kichThuocBody) return json({ loi: "Yêu cầu quá lớn" }, 413);
+  if (new TextEncoder().encode(chu).length > GIOI_HAN.kichThuocBody) return json({ loi: "Yêu cầu quá lớn" }, 413);
   let goc: unknown;
   try { goc = JSON.parse(chu); } catch { return json({ loi: "Yêu cầu không hợp lệ" }, 400); }
   const kt = kiemTraYeuCau(goc);

@@ -1,7 +1,7 @@
 // Kiểm thử Tư vấn AI: kiểm tra yêu cầu, lọc nguồn, máy chủ (giả lập mạng), tìm ngành và trả lời tự động. Chạy: npx tsx tests/tu-van.test.ts
 import assert from "node:assert/strict";
 import { xuLy } from "../functions/api/tu-van";
-import { NHAC_HE_THONG, dungNoiDung, kiemTraYeuCau, locNguon } from "../src/engine/tu-van";
+import { GIOI_HAN, NHAC_HE_THONG, choPhepTanSuat, dungNoiDung, kiemTraYeuCau, lamSachHoSo, locNguon, type KhoKV } from "../src/engine/tu-van";
 import { TEN_GOI_TRUONG, chonDuLieuKemTheo, timNganhKhop, traLoiTuDong } from "../src/features/tu-van/lay-du-lieu";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
 import { taoHoSoMau, TRANG_THAI_BAN_DAU } from "../src/state/mau";
@@ -40,6 +40,23 @@ assert.ok(!JSON.stringify(d1).includes("khoa-bi-mat"), "khóa API không đượ
 const spyOA = (async (url: string) => ({ ok: true, status: 200, json: async () => ({ choices: [{ message: { content: `ok ${url}` } }] }) })) as unknown as typeof fetch;
 assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENAI_API_KEY: "k" }, spyOA)).json() as { traLoi: string }).traLoi.startsWith("ok https://api.openai.com"), true);
 assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k" }, gia({}, false))).status, 502, "dịch vụ lỗi thì 502, không lộ chi tiết");
+
+// 3b) Giới hạn: body, hồ sơ whitelist, tần suất
+const lon = new Request("https://x/", { method: "POST", body: "{}", headers: { "content-length": String(GIOI_HAN.kichThuocBody + 1) } });
+assert.equal((await xuLy(lon, { ANTHROPIC_API_KEY: "k" }, gia({}))).status, 413, "content-length quá lớn thì 413");
+assert.equal((await xuLy(new Request("https://x/", { method: "POST", body: "x".repeat(GIOI_HAN.kichThuocBody + 1) }), { ANTHROPIC_API_KEY: "k" }, gia({}))).status, 413);
+const hs = lamSachHoSo({ lop: 12, tinh: "x".repeat(100), hoTen: "Nguyễn Văn A", sdt: "090", nganhQuanTam: ["CNTT", 5, "y".repeat(100)], nganSachToiDaTrieu: -3, toHopCaoNhat: { ma: "A00", tong: 99 }, khuVuc: "sai" });
+assert.deepEqual(hs, { lop: 12, tinh: "x".repeat(40), nganhQuanTam: ["CNTT", "y".repeat(60)] }, "bỏ trường lạ, sai kiểu, ngoài khoảng, cắt độ dài");
+assert.equal(lamSachHoSo("chuỗi"), null); assert.equal(lamSachHoSo([1]), null);
+const kvBo = new Map<string, string>();
+const kv: KhoKV = { get: async (k) => kvBo.get(k) ?? null, put: async (k, v) => { kvBo.set(k, v); } };
+for (let i = 0; i < 3; i++) assert.equal(await choPhepTanSuat(kv, "1.2.3.4", 1_000_000, 3), true);
+assert.equal(await choPhepTanSuat(kv, "1.2.3.4", 1_000_000, 3), false, "quá hạn mức trong phút");
+assert.equal(await choPhepTanSuat(kv, "5.6.7.8", 1_000_000, 3), true, "IP khác không bị ảnh hưởng");
+assert.equal(await choPhepTanSuat(kv, "1.2.3.4", 1_000_000 + 60_000, 3), true, "sang phút mới thì đếm lại");
+const kvDay: KhoKV = { get: async () => "99", put: async () => {} };
+assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { ANTHROPIC_API_KEY: "k", RATE_KV: kvDay }, gia({}))).status, 429);
+assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { OPENAI_API_KEY: "k", RATE_KV: { get: async () => { throw new Error("kv"); }, put: async () => {} } }, spyOA)).status, 200, "KV lỗi thì không chặn");
 
 // 4) Tìm ngành trong dữ liệu thật
 const khop = timNganhKhop("điểm chuẩn Khoa học máy tính UIT");

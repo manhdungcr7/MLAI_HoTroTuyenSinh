@@ -22,7 +22,7 @@ interface TinNhan { vai: "em" | "mayChu"; chu: string; nguon?: string[]; cheDo?:
 /** Gọi dịch vụ AI. Trả null khi dịch vụ chưa bật hoặc không gọi được: khi đó app tự trả lời từ số liệu có sẵn. */
 async function hoiAI(y: YeuCauTuVan): Promise<TraLoiTuVan | null> {
   try {
-    const r = await fetch("/api/tu-van", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(y) });
+    const r = await fetch("/api/tu-van", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(y), signal: AbortSignal.timeout(15000) });
     if (!r.ok) return null;
     const d = (await r.json()) as Partial<TraLoiTuVan>;
     return typeof d.traLoi === "string" && d.traLoi ? { traLoi: d.traLoi, nguon: Array.isArray(d.nguon) ? d.nguon : [] } : null;
@@ -52,10 +52,11 @@ export default function TuVan() {
     if (cau.length < 3 || dang) return;
     setCauHoi(""); setDang(true);
     setTin((t) => [...t, { vai: "em", chu: cau }]);
-    const ai = await hoiAI(dungYeuCau(cau));
-    if (ai) setTin((t) => [...t, { vai: "mayChu", chu: ai.traLoi, nguon: ai.nguon, cheDo: "ai" }]);
-    else { const td = traLoiTuDong(cau, s, nguon); setTin((t) => [...t, { vai: "mayChu", chu: td.traLoi, nguon: td.nguon, cheDo: "tuDong" }]); }
-    setDang(false);
+    try {
+      const ai = await hoiAI(dungYeuCau(cau));
+      if (ai) setTin((t) => [...t, { vai: "mayChu", chu: ai.traLoi, nguon: ai.nguon, cheDo: "ai" }]);
+      else { const td = traLoiTuDong(cau, s, nguon); setTin((t) => [...t, { vai: "mayChu", chu: td.traLoi, nguon: td.nguon, cheDo: "tuDong" }]); }
+    } finally { setDang(false); }
   };
 
   return (
