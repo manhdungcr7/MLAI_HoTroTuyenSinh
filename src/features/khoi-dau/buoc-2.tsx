@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, Database, Heart, NotebookPen, Pencil, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
+import { ChevronDown, NotebookPen, Pencil, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
 import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { CAC_MON, TEN_MON_NGAN, type HoSo, type MonId } from "@/state/types";
-import { CACH_HOC, CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, NGUON_DIEM, TONE_MON, TONE_TO_HOP } from "./lua-chon";
+import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP } from "./lua-chon";
 import DiemMonThem from "./diem-mon-them";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop } from "./tinh-toan";
@@ -24,17 +24,13 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
   const toHop = tinhCacToHop(diemDung);
   const caoNhat = Math.max(...toHop.map((t) => t.tong ?? -1));
   const loiDiem = ketQua.filter(({ kq }) => kq.loai === "khongPhaiSo" || kq.loai === "ngoaiKhoang");
-  const coThem = h.diemManh.length + h.canCaiThien.length + h.cachHoc.length > 0;
+  const coThem = h.diemManh.length + h.canCaiThien.length > 0;
   const [moThem, setMoThem] = useState(coThem);
 
   return (
     <>
       <TieuDeBuoc tieuDe="Nhập điểm nhanh" moTa="Nhập điểm gần nhất, tổ hợp xét tuyển tự tính ngay cho em."
         phai={<span className="mt-1.5 shrink-0 inline-flex items-center gap-1 rounded-lg bg-xanh-nhat px-2 py-1 text-[12px] font-bold text-xanh"><Pencil size={13} />Sửa sau được</span>} />
-
-      <CauHoi tieuDe="Điểm em lấy từ đâu?" icon={Database}>
-        <ChonO nhan="Nguồn điểm" cot={2} cacLua={NGUON_DIEM} giaTri={h.nguonDiem} onChange={(v) => sua({ nguonDiem: v })} />
-      </CauHoi>
 
       <fieldset className="min-w-0">
         <legend className="flex items-center gap-1.5 text-[15px] font-bold text-chu mb-2">
@@ -125,9 +121,6 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             </CauHoi>
             <CauHoi tieuDe="Điều em muốn cải thiện" icon={TrendingUp}>
               <ChonO nhan="Điều muốn cải thiện" nhieu cacLua={CAN_CAI_THIEN.map((x) => ({ gia: x, nhan: x }))} giaTri={h.canCaiThien} onChange={(v) => sua({ canCaiThien: v })} />
-            </CauHoi>
-            <CauHoi tieuDe="Cách học hợp với em" icon={Heart}>
-              <ChonO nhan="Cách học" nhieu cacLua={CACH_HOC.map((x) => ({ gia: x, nhan: x }))} giaTri={h.cachHoc} onChange={(v) => sua({ cachHoc: v })} />
             </CauHoi>
           </div>
         )}

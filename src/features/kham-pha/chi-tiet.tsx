@@ -14,6 +14,7 @@ import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN, EMAIL_BAO_SAI } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { changCuaEm } from "@/state/chang";
 import type { LuaChon, ToneTen } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
@@ -204,7 +205,7 @@ export default function ChiTiet() {
   };
   const laMucTieu = s.mucTieu?.luaChonId === lc.id;
   const dat = coTheDatMucTieu(lc);
-  const datLamMucTieu = () => { datMucTieu(mucTieuTuLuaChon(lc, bc.diem)); nav(DUONG_DAN.mucTieu()); };
+  const datLamMucTieu = () => { datMucTieu(mucTieuTuLuaChon(lc, bc.diem, changCuaEm(s))); nav(DUONG_DAN.mucTieu()); };
   const soSanh = () => {
     const khac = s.soSanh.find((x) => x !== lc.id && timGoc(x));
     if (khac) nav(DUONG_DAN.soSanh(lc.id, khac));

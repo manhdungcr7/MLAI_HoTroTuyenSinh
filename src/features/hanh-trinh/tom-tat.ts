@@ -8,6 +8,7 @@ import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { demNhan, dungDanhSach, xetCoCau } from "@/features/nguyen-vong/tinh-toan";
 import { mucTieuDayDu, tienDoTuan } from "@/state/chon";
 import type { AppState } from "@/state/store";
+import { nhanLop } from "@/state/chang";
 import { CAC_MON, TEN_MON, type MonId, type NhanNguyenVong } from "@/state/types";
 import { TEN_CHO_O, TEN_NGAN_SACH, hieuEm } from "./tinh-toan";
 
@@ -116,7 +117,7 @@ export function tomTatChiaSe(s: AppState, bayGio: Date, kemTen: boolean = false)
   const x = hieuEm(s);
   const muc: MucTomTat[] = [];
 
-  const thongTin = [h.khoi && `Lớp ${h.khoi === 11 ? "10 – 11" : h.khoi}`, h.tinh, h.giaiDoan].filter(Boolean) as string[];
+  const thongTin = [nhanLop(h), h.tinh].filter(Boolean) as string[];
   if (h.nganhQuanTam.length) thongTin.push(`Quan tâm: ${h.nganhQuanTam.join(", ")}`);
   if (h.soThich) thongTin.push(`Trắc nghiệm hướng nghiệp: nghiêng về ${moTaTop(h.soThich).toLowerCase()}`);
   if (h.nganSach) thongTin.push(`Học phí gia đình dự kiến: ${TEN_NGAN_SACH[h.nganSach].toLowerCase()} mỗi năm`);
@@ -134,7 +135,7 @@ export function tomTatChiaSe(s: AppState, bayGio: Date, kemTen: boolean = false)
       m.duDiem
         ? `Tổ hợp ${s.mucTieu.maToHop}: đang ${so(m.hienTai)}, cần ${so(m.mucTieu)}${m.conThieu > 0 ? ` (còn thiếu ${so(m.conThieu)})` : " (đã đủ)"}`
         : `Tổ hợp ${s.mucTieu.maToHop}: cần ${so(m.mucTieu)}; chưa đủ điểm (em chưa nhập ${m.monThieu.map((k) => TEN_MON[k]).join(", ")}) nên chưa tính được còn thiếu bao nhiêu`,
-      ...(m.soNgayCon > 0 ? [`Còn ${m.soNgayCon} ngày đến kỳ thi`] : []),
+      ...(!m.anDemNguoc && m.soNgayCon > 0 ? [`Còn ${m.soNgayCon} ngày đến kỳ thi`] : []),
     ] });
   } else muc.push({ tieuDe: "Mục tiêu chính", dong: ["Em chưa chọn mục tiêu chính."] });
 

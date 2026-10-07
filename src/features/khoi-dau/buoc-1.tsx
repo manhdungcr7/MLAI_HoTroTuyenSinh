@@ -1,8 +1,9 @@
-import { Flag, GraduationCap, Layers, Lightbulb, MapPin, School, UserRound } from "lucide-react";
+import { GraduationCap, Layers, Lightbulb, MapPin, UserRound } from "lucide-react";
 import { OChon, OInput } from "@/components/ui/nhap-lieu";
 import { gop } from "@/components/ui/nut-the";
 import type { HoSo } from "@/state/types";
-import { GIAI_DOAN, MUC_TIEU_HIEN_TAI, NGANH, PHAN_NHOM_NGANH, TAT_CA_NGANH, THANH_PHO, TINH } from "./lua-chon";
+import { GIAI_DOAN_DA_TOT_NGHIEP, changCuaEm, type Chang } from "@/state/chang";
+import { NGANH, PHAN_NHOM_NGANH, TAT_CA_NGANH, THANH_PHO, TINH } from "./lua-chon";
 import { CauHoi, ChonO, TieuDeBuoc } from "./thanh-phan";
 import type { TruongBatBuoc } from "./tinh-toan";
 
@@ -11,10 +12,20 @@ export const ID_TRUONG: Record<TruongBatBuoc, string> = { khoi: "bd-khoi", tinh:
 
 type P = { h: HoSo; sua: (p: Partial<HoSo>) => void; loi: Partial<Record<TruongBatBuoc, string>> };
 
+const CAC_CHANG: { gia: Chang; nhan: string }[] = [
+  { gia: "dinhHuong", nhan: "Lớp 10–11" }, { gia: "nuocRut", nhan: "Lớp 12" }, { gia: "thiLai", nhan: "Đã tốt nghiệp / thi lại" },
+];
+
+/** Lưu chặng em chọn vào hồ sơ; chỉ ô "đã tốt nghiệp" mới giữ dấu giaiDoan, hai ô kia xóa dấu đó nếu đang có. */
+export function hoSoTheoChang(h: Pick<HoSo, "giaiDoan">, c: Chang): Partial<HoSo> {
+  const giaiDoan = h.giaiDoan === GIAI_DOAN_DA_TOT_NGHIEP ? "" : h.giaiDoan;
+  if (c === "thiLai") return { khoi: 12, giaiDoan: GIAI_DOAN_DA_TOT_NGHIEP };
+  return { khoi: c === "nuocRut" ? 12 : 11, giaiDoan };
+}
+
 export default function Buoc1({ h, sua, loi }: P) {
   // Giá trị cũ không còn trong danh sách (ví dụ tỉnh trước sáp nhập) vẫn hiện để em thấy và đổi.
   const tinhLa = h.tinh && !THANH_PHO.includes(h.tinh) && !TINH.includes(h.tinh) ? h.tinh : null;
-  const giaiDoanLa = h.giaiDoan && !GIAI_DOAN.includes(h.giaiDoan) ? h.giaiDoan : null;
   return (
     <>
       <TieuDeBuoc tieuDe={<>Điền nhanh trong <span className="text-xanh">60 giây</span></>}
@@ -29,8 +40,8 @@ export default function Buoc1({ h, sua, loi }: P) {
       </div>
 
       <CauHoi tieuDe="Lớp" icon={GraduationCap} batBuoc loi={loi.khoi}>
-        <ChonO nhan="Lớp" cot={2} idDau={ID_TRUONG.khoi} coLoi={!!loi.khoi}
-          cacLua={[{ gia: 11, nhan: "Lớp 10 – 11" }, { gia: 12, nhan: "Lớp 12" }]} giaTri={h.khoi} onChange={(v) => sua({ khoi: v })} />
+        <ChonO nhan="Lớp" cot={3} kieu="o" idDau={ID_TRUONG.khoi} coLoi={!!loi.khoi}
+          cacLua={CAC_CHANG} giaTri={h.khoi === null ? null : changCuaEm({ hoSo: h })} onChange={(c: Chang) => sua(hoSoTheoChang(h, c))} />
       </CauHoi>
 
       <div className="space-y-1.5">
@@ -141,40 +152,6 @@ export default function Buoc1({ h, sua, loi }: P) {
         </div>
 
         {loi.nganhQuanTam && <p className="text-[13px] font-semibold text-do-chu">{loi.nganhQuanTam}</p>}
-      </div>
-
-      <CauHoi tieuDe="Mục tiêu hiện tại" icon={Flag} phu="chọn 1">
-        <ChonO nhan="Mục tiêu hiện tại" kieu="o" cot={3} cacLua={MUC_TIEU_HIEN_TAI} giaTri={h.mucTieuHienTai} onChange={(v) => sua({ mucTieuHienTai: v })} />
-      </CauHoi>
-
-      {h.mucTieuHienTai === "daCoMoUoc" && (
-        <div className="space-y-1.5 rounded-xl bg-xanh-nhat p-3 animate-hien-len">
-          <label htmlFor="bd-truong-mo-uoc" className="block text-[14px] font-bold text-muc">
-            Trường hoặc ngành mơ ước của em <span className="text-[12px] font-normal text-chu-phu">(không bắt buộc)</span>
-          </label>
-          <OInput
-            id="bd-truong-mo-uoc"
-            value={h.truongMoUoc ?? ""}
-            onChange={(e) => sua({ truongMoUoc: e.target.value })}
-            placeholder="Ví dụ: ĐH Bách Khoa, CNTT, Y Hà Nội..."
-            maxLength={100}
-          />
-          <p className="text-[12px] text-chu-phu">
-            Em có thể chọn đúng ngành này ở bước Khám phá để mình tính khoảng cách điểm.
-          </p>
-        </div>
-      )}
-
-      <div className="space-y-1.5">
-        <label htmlFor="bd-giai-doan" className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
-          <School size={18} className="text-xanh" />Giai đoạn hiện tại
-          <span className="ml-auto text-[12px] font-semibold text-chu-phu">Không bắt buộc</span>
-        </label>
-        <OChon id="bd-giai-doan" value={h.giaiDoan} onChange={(e) => sua({ giaiDoan: e.target.value })} className={gop(!h.giaiDoan && "text-chu-phu")}>
-          <option value="">Chọn giai đoạn</option>
-          {giaiDoanLa && <option value={giaiDoanLa}>{giaiDoanLa}</option>}
-          {GIAI_DOAN.map((t) => <option key={t} value={t}>{t}</option>)}
-        </OChon>
       </div>
 
       <p className="flex gap-2 items-start rounded-the bg-xanh-nhat p-3 text-[13px] text-chu">

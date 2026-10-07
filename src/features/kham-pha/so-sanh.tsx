@@ -14,6 +14,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { useApp } from "@/state/store";
+import { changCuaEm } from "@/state/chang";
 import type { LuaChon } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
 import { GhiChuDuLieuMau, HopChonLuaChon, NhanPhuHop, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
@@ -103,7 +104,7 @@ export default function SoSanh() {
   const ss = a && b ? soSanhHai(a, b, bc) : null;
   const daLuu = !!(a && b && s.soSanh.length === 2 && s.soSanh.includes(a.id) && s.soSanh.includes(b.id));
   const luu = () => { if (a && b) { datSoSanh([a.id, b.id]); setVuaLuu(true); } };
-  const chonMucTieu = (l: LuaChon) => { datMucTieu(mucTieuTuLuaChon(l, bc.diem)); setHopMucTieu(false); nav(DUONG_DAN.mucTieu()); };
+  const chonMucTieu = (l: LuaChon) => { datMucTieu(mucTieuTuLuaChon(l, bc.diem, changCuaEm(s))); setHopMucTieu(false); nav(DUONG_DAN.mucTieu()); };
   const mucTieuCu = s.mucTieu ? tim(s.mucTieu.luaChonId) : undefined;
 
   return (

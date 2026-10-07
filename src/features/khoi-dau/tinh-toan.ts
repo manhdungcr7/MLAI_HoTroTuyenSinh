@@ -36,7 +36,7 @@ export const THU_TU_BAT_BUOC: TruongBatBuoc[] = ["khoi", "tinh", "nganhQuanTam"]
 /** Các trường bắt buộc còn thiếu, theo thứ tự trên màn. Trả về lời nhắc dễ hiểu cho từng trường. */
 export function kiemTraBuoc1(h: HoSo): Partial<Record<TruongBatBuoc, string>> {
   const loi: Partial<Record<TruongBatBuoc, string>> = {};
-  if (!h.khoi) loi.khoi = "Em chọn đang học lớp 10–11 hay lớp 12.";
+  if (!h.khoi) loi.khoi = "Em chọn đang học lớp 10–11, lớp 12 hay đã tốt nghiệp.";
   if (!h.tinh) loi.tinh = "Em chọn tỉnh/thành phố đang sống.";
   if (!h.nganhQuanTam.length) loi.nganhQuanTam = "Em chọn ít nhất một nhóm ngành (chưa chắc cũng được).";
   return loi;

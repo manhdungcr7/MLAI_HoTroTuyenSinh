@@ -14,5 +14,13 @@ export function changCuaEm(s: Pick<AppState, "hoSo">): Chang {
   return "dinhHuong";
 }
 
+/** Nhãn lớp ngắn để hiện ở Hồ sơ và bản tóm tắt; rỗng khi em chưa chọn lớp. */
+export function nhanLop(hoSo: Pick<AppState["hoSo"], "khoi" | "giaiDoan">): string {
+  if (hoSo.giaiDoan === GIAI_DOAN_DA_TOT_NGHIEP) return "Đã tốt nghiệp, thi lại";
+  if (hoSo.khoi === 12) return "Lớp 12";
+  if (hoSo.khoi === 11) return "Lớp 10 – 11";
+  return "";
+}
+
 /** Chỉ chặng đang chuẩn bị thi mới có đếm ngược kỳ thi. */
 export const coDemNguoc = (c: Chang): boolean => c !== "dinhHuong";

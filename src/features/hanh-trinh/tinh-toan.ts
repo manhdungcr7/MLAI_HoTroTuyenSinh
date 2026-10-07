@@ -4,6 +4,11 @@ import { congNgay, isoNgay, phutTuGio, taoNgay, thuCuaNgay } from "@/engine/xep-
 import { DUONG_DAN } from "@/duong-dan";
 import { diemHienTaiCuaTungMon, type AppState } from "@/state/store";
 import { khoangCachCuaToi, khoiTrongNgay, mucTieuDayDu, viecConLai } from "@/state/chon";
+import { changCuaEm, type Chang } from "@/state/chang";
+import { tim } from "@/data/lua-chon-mau";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
+import { THANH_PHO } from "@/features/khoi-dau/lua-chon";
+import { demNhan, dungDanhSach, xetCoCau } from "@/features/nguyen-vong/tinh-toan";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, type MonId, type ViecCanHoc } from "@/state/types";
 
 const TEN_THU = ["", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ nhật"];
@@ -72,19 +77,66 @@ export function lichSapToi(s: AppState, bayGio: Date, soMuc = 2): MucLich[] {
   return ds.sort((a, b) => a.khoa.localeCompare(b.khoa)).slice(0, soMuc).map(({ khoa: _, ...m }) => m);
 }
 
-/** Câu gợi ý ngắn cho em: môn kéo điểm nhiều nhất, hoặc lời giữ nhịp khi đã chạm mục tiêu. */
-export function goiYChoEm(s: AppState): { moTa: string; den: string } | null {
+export interface GoiY { moTa: string; den: string; /** Dòng nhắc lọc học phí ở Khám phá (ngân sách thấp hoặc tỉnh xa), nếu có. */ nhacHocPhi: string | null }
+
+/** Em có ngân sách dưới 30 triệu hoặc ở tỉnh xa trung tâm thì nên lọc học phí và nơi học ngay từ Khám phá. */
+export function nhacLocHocPhi(h: Pick<AppState["hoSo"], "nganSach" | "tinh">): string | null {
+  const tinhXa = !!h.tinh && !THANH_PHO.includes(h.tinh);
+  if (h.nganSach === "duoi30") return "Ngân sách học phí của em còn thấp. Ở Khám phá, em vào Bộ lọc và chọn mức học phí để chỉ xem ngành vừa túi tiền.";
+  if (tinhXa) return "Em ở xa các thành phố lớn nên chi phí ở trọ và đi lại đáng kể. Ở Khám phá, em lọc theo học phí và nơi học để so sánh cho sát.";
+  return null;
+}
+
+const coDiemNaoDo = (s: AppState) => CAC_MON.some((m) => diemHienTaiCuaTungMon(s)[m] !== null);
+
+/** Danh sách đã đủ căn cứ để nhận xét mà chưa có nguyện vọng An toàn hay Dự phòng. */
+function thieuChoAnToan(s: AppState): boolean {
+  if (!s.nguyenVong.length) return false;
+  const ds = dungDanhSach(s.nguyenVong, diemDayDu(s), tim);
+  const c = xetCoCau(demNhan(ds), ds.length);
+  return c.n > 0 && c.chuaDuCanCu === 0 && c.chacChan === 0;
+}
+
+/** Lời chào dưới tên ở trang Hôm nay, theo chặng. Em mệt thì nhẹ nhàng trước. */
+export function loiChaoTheoChang(s: AppState, chang: Chang = changCuaEm(s)): string {
+  if (s.tamTrang === "met") return "Hôm nay mình học nhẹ thôi nhé.";
+  if (chang === "dinhHuong") return "Mình làm từng bước nhỏ để hiểu bản thân và các ngành nhé.";
+  if (chang === "thiLai") return s.mucTieu ? "Năm nay mình làm chắc hơn, từng việc một nhé." : "Mình xem lại điểm năm trước rồi chọn hướng đi cho sát nhé.";
+  return s.mucTieu ? "Cùng cố gắng hôm nay nhé." : "Hôm nay mình bắt đầu từ đâu nhỉ?";
+}
+
+/** Câu gợi ý ngắn cho em theo chặng: việc đáng làm tiếp theo, đúng một việc. */
+export function goiYChoEm(s: AppState, chang: Chang = changCuaEm(s)): GoiY {
+  const nhac = nhacLocHocPhi(s.hoSo);
+  const ra = (moTa: string, den: string): GoiY => ({ moTa, den, nhacHocPhi: chang === "dinhHuong" ? null : nhac });
+
+  if (chang === "dinhHuong") {
+    if (!s.hoSo.soThich) return ra("Em làm trắc nghiệm hướng nghiệp 18 câu để mình gợi ý nhóm ngành hợp với em.", DUONG_DAN.tracNghiem());
+    if (s.nguyenVong.length < 2) return ra("Em lưu 2 đến 3 ngành em thấy hợp vào danh sách, để về sau so sánh và chọn dần.", DUONG_DAN.khamPha());
+    if (!coDiemNaoDo(s)) return ra("Em nhập điểm học bạ các môn. Điểm học bạ chưa phải điểm thi, chỉ để so tham khảo.", DUONG_DAN.batDau(2));
+    return ra("Em giữ điểm học bạ đều các môn và xem thêm vài ngành khác.", DUONG_DAN.khamPha());
+  }
+
   const m = mucTieuDayDu(s);
-  if (!m) return null;
+  if (chang === "thiLai") {
+    if (!coDiemNaoDo(s)) return ra("Em nhập điểm thi năm trước để mình so với điểm chuẩn từng ngành.", DUONG_DAN.batDau(2));
+    if (!s.nguyenVong.length) return ra("Em so học phí và khu vực của các ngành em quan tâm ở Khám phá, rồi lưu vào danh sách nguyện vọng.", DUONG_DAN.khamPha());
+    if (!m) return ra("Em xem lại ngưỡng điểm chuẩn so với điểm năm trước của em, rồi chọn một nguyện vọng làm mục tiêu.", DUONG_DAN.nguyenVong());
+  } else if (!m) {
+    if (s.nguyenVong.length) return ra("Em chọn nguyện vọng 1 làm mục tiêu để mình tính điểm còn thiếu và xếp việc ôn.", DUONG_DAN.nguyenVong());
+    return ra("Em chọn một ngành và trường làm mục tiêu. Có mục tiêu rồi, mình mới tính được em còn thiếu bao nhiêu điểm.", DUONG_DAN.khamPha());
+  }
+  if (!m) return ra("Em chọn một ngành làm mục tiêu để bắt đầu.", DUONG_DAN.khamPha());
+  if (thieuChoAnToan(s)) return ra("Danh sách của em chưa có nguyện vọng An toàn hay Dự phòng. Em thêm một chỗ an toàn nhé.", DUONG_DAN.nguyenVongAnToan());
   const chuaCo = monThieuDiem(s, m.toHop);
   if (chuaCo.length) {
-    return { moTa: `Em nhập điểm ${noi(chuaCo.map((x) => TEN_MON[x]))} để mình tính đúng em còn thiếu bao nhiêu và nên ưu tiên môn nào.`, den: DUONG_DAN.batDau(2) };
+    return ra(`Em nhập điểm ${noi(chuaCo.map((x) => TEN_MON[x]))} để mình tính đúng em còn thiếu bao nhiêu và nên ưu tiên môn nào.`, DUONG_DAN.batDau(2));
   }
   const mon = [...khoangCachCuaToi(s)].sort((a, b) => b.thieu - a.thieu)[0];
   if (mon && mon.thieu > 0) {
-    return { moTa: `${mon.ten} còn thiếu khoảng ${lam1(mon.thieu)} điểm so với mức cần. Dành thêm thời gian cho môn này sẽ giúp em gần mục tiêu nhanh nhất.`, den: DUONG_DAN.monKeoDiem() };
+    return ra(`${mon.ten} còn thiếu khoảng ${lam1(mon.thieu)} điểm so với mức cần. Dành thêm thời gian cho môn này sẽ giúp em gần mục tiêu nhanh nhất.`, DUONG_DAN.monKeoDiem());
   }
-  return { moTa: `Điểm hiện tại đã chạm mức ${lam1(m.mucTieu)}. Em giữ nhịp ôn đều và thử thêm đề khó hơn nhé.`, den: DUONG_DAN.tienDo() };
+  return ra(`Điểm hiện tại đã chạm mức ${lam1(m.mucTieu)}. Em giữ nhịp ôn đều và thử thêm đề khó hơn nhé.`, DUONG_DAN.tienDo());
 }
 
 /** Các môn trong tổ hợp mục tiêu mà em chưa có điểm (tổng điểm đang tính thiếu). */
@@ -150,7 +202,7 @@ export function hieuEm(s: AppState): HieuEm {
   if (giam) luuY.push(`${TEN_MON[giam.mon]} giảm ${lam1(-giam.lanCuoi)} điểm ở lần thi thử gần nhất`);
   const kyNang = h.canCaiThien.filter((x) => !Object.values(TEN_MON).includes(x));
   if (kyNang.length) luuY.push(`Em muốn rèn thêm ${noi(kyNang.slice(0, 2).map(viThuong))}`);
-  if (m && m.soNgayCon > 0 && m.soNgayCon <= 60) luuY.push(`Chỉ còn ${m.soNgayCon} ngày đến kỳ thi`);
+  if (m && !m.anDemNguoc && m.soNgayCon > 0 && m.soNgayCon <= 60) luuY.push(`Chỉ còn ${m.soNgayCon} ngày đến kỳ thi`);
 
   // Ưu tiên hiện tại
   const uuTien: string[] = [];
@@ -160,11 +212,13 @@ export function hieuEm(s: AppState): HieuEm {
     if (keo && keo.thieu > 0) uuTien.push(`Nâng ${keo.ten} trước, môn này kéo điểm nhiều nhất`);
     const tiep = viecConLai(s)[0];
     if (tiep) uuTien.push(`Việc tuần này nên làm trước: ${tiep.tieuDe}`);
-    else if (h.khoi === 12 && m.soNgayCon > 0) uuTien.push(`Ôn thi THPT, còn ${m.soNgayCon} ngày`);
+    else if (!m.anDemNguoc && m.soNgayCon > 0) uuTien.push(`Ôn thi THPT, còn ${m.soNgayCon} ngày`);
   } else {
     uuTien.push(h.nganhQuanTam.length ? `Tìm hiểu ngành ${noi(h.nganhQuanTam)} để chọn mục tiêu chính` : "Chọn một ngành em muốn theo");
     if (coDiem.length < CAC_MON.length) uuTien.push("Nhập đủ điểm các môn để biết tổ hợp nào hợp với em");
-    if (h.khoi === 11) uuTien.push("Giữ điểm học bạ lớp 10–11 đều các môn");
+    const chang = changCuaEm(s);
+    if (chang === "dinhHuong") uuTien.push("Giữ điểm học bạ lớp 10–11 đều các môn");
+    else if (chang === "thiLai") uuTien.push("Xem lại điểm thi năm trước và chọn hướng đi cho năm nay");
     else if (h.khoi === 12) uuTien.push("Chuẩn bị cho kỳ thi THPT");
   }
 

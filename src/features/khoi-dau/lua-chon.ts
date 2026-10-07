@@ -1,10 +1,9 @@
 // Danh sách lựa chọn cho các bước tạo hồ sơ. Giá trị lưu vào HoSo giữ nguyên như hồ sơ mẫu đang dùng.
 import {
-  Atom, BedDouble, BookOpen, Building2, Calculator, ChartColumn, CircleHelp, FlaskConical, GraduationCap, HeartPulse,
-  House, Languages, Laptop, Leaf, Palette, School, Signpost, Target, Wrench, type LucideIcon,
+  Atom, BedDouble, BookOpen, Building2, Calculator, ChartColumn, FlaskConical, HeartPulse,
+  House, Languages, Laptop, Leaf, Palette, School, Signpost, Wrench, type LucideIcon,
 } from "lucide-react";
-import { GIAI_DOAN_DA_TOT_NGHIEP } from "@/state/chang";
-import type { HoSo, MaToHop, MonId, NguonDiem, ToneTen } from "@/state/types";
+import type { HoSo, MaToHop, MonId, ToneTen } from "@/state/types";
 
 export type LuaChonCoIcon<T> = { gia: T; nhan: string; phu?: string; icon?: LucideIcon };
 
@@ -81,19 +80,6 @@ export const NGANH: LuaChonCoIcon<string>[] = [
   { gia: "Luật", nhan: "Luật", icon: Signpost },
 ];
 
-export const MUC_TIEU_HIEN_TAI: LuaChonCoIcon<NonNullable<HoSo["mucTieuHienTai"]>>[] = [
-  { gia: "chuaChonTruong", nhan: "Chưa biết chọn trường", icon: CircleHelp },
-  { gia: "daCoMoUoc", nhan: "Đã có trường mơ ước", icon: Target },
-  { gia: "soSanh", nhan: "Muốn so sánh vài trường", icon: ChartColumn },
-];
-
-export const GIAI_DOAN = ["Đang học lớp 11", "Đang học lớp 12", "Ôn thi THPT", GIAI_DOAN_DA_TOT_NGHIEP];
-
-export const NGUON_DIEM: LuaChonCoIcon<NguonDiem>[] = [
-  { gia: "hocBa", nhan: "Học bạ" }, { gia: "thiThu", nhan: "Thi thử" },
-  { gia: "danhGiaNangLuc", nhan: "Đánh giá năng lực" }, { gia: "tuDanhGia", nhan: "Tự đánh giá" },
-];
-
 export const ICON_MON: Record<MonId, LucideIcon> = {
   toan: Calculator, vatLy: Atom, hoaHoc: FlaskConical, nguVan: BookOpen, tiengAnh: Languages, sinh: Leaf,
 };
@@ -105,7 +91,6 @@ export const TONE_TO_HOP: Record<MaToHop, ToneTen> = { A00: "xanh", A01: "tim", 
 
 export const DIEM_MANH = ["Tư duy logic", "Giải quyết vấn đề", "Tiếng Anh", "Sáng tạo", "Giao tiếp", "Kiên trì"];
 export const CAN_CAI_THIEN = ["Toán", "Vật lý", "Hóa học", "Ngữ văn", "Tiếng Anh", "Sinh học", "Diễn đạt", "Quản lý thời gian", "Tập trung"];
-export const CACH_HOC = ["Học qua bài tập", "Học theo dự án", "Thảo luận nhóm", "Xem video"];
 
 export const NGAN_SACH: LuaChonCoIcon<NonNullable<HoSo["nganSach"]>>[] = [
   { gia: "duoi30", nhan: "Dưới 30 triệu" }, { gia: "30-60", nhan: "30 – 60 triệu" },
@@ -127,10 +112,3 @@ export const VIEC_LAM: LuaChonCoIcon<NonNullable<HoSo["quanTamViecLam"]>>[] = [
   { gia: "rat", nhan: "Rất quan tâm" }, { gia: "binhThuong", nhan: "Bình thường" }, { gia: "chuaRo", nhan: "Chưa rõ" },
 ];
 
-export const CON_DUONG: LuaChonCoIcon<NonNullable<HoSo["conDuong"]>>[] = [
-  { gia: "daiHoc", nhan: "Đại học", icon: GraduationCap },
-  { gia: "caoDang", nhan: "Cao đẳng", icon: School },
-  { gia: "khac", nhan: "Khác", icon: Signpost },
-];
-
-export const TOI_DA_GHI_CHU = 200;

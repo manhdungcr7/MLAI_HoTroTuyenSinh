@@ -5,6 +5,7 @@ import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { Nut } from "@/components/ui/nut-the";
 import { DUONG_DAN, type BuocBatDau } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { changCuaEm } from "@/state/chang";
 import { CAC_MON, type HoSo, type MonId } from "@/state/types";
 import Buoc1, { ID_TRUONG } from "./buoc-1";
 import Buoc2, { idDiem } from "./buoc-2";
@@ -22,6 +23,8 @@ function denO(id: string) {
     o.scrollIntoView({ block: "center", behavior: "smooth" });
   });
 }
+
+const diemDau = (h: HoSo) => CAC_MON.some((m) => h.diem[m] !== null);
 
 export default function BatDau() {
   const { buoc } = useParams();
@@ -65,7 +68,9 @@ export default function BatDau() {
       return;
     }
     capNhatHoSo({ hoanTat: true });
-    setDangPhanTich(true);
+    // Em lớp 10–11 chưa có điểm: không có gì để phân tích, vào thẳng Hôm nay.
+    if (diemDau(h) || changCuaEm({ hoSo: h }) !== "dinhHuong") setDangPhanTich(true);
+    else nav(DUONG_DAN.homNay(), { replace: true });
   };
 
   const tiepTuc = () => {
@@ -83,7 +88,9 @@ export default function BatDau() {
   };
 
   if (dangPhanTich) {
-    return <ManHinhPhanTichAI onHoanTat={() => nav(DUONG_DAN.khamPha(), { replace: true })} />;
+    // Nước rút và thi lại đã có điểm: tới thẳng danh sách nguyện vọng; còn lại tới Khám phá.
+    const den = changCuaEm({ hoSo: h }) !== "dinhHuong" && diemDau(h) ? DUONG_DAN.nguyenVong() : DUONG_DAN.khamPha();
+    return <ManHinhPhanTichAI onHoanTat={() => nav(den, { replace: true })} />;
   }
 
   return (

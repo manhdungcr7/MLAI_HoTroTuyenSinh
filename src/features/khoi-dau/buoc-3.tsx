@@ -1,9 +1,9 @@
-import { Briefcase, ChartColumn, House, MapPin, NotebookPen, Plane, Route, Wallet } from "lucide-react";
+import { Briefcase, ChartColumn, House, MapPin, Plane, Wallet } from "lucide-react";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { HoSo } from "@/state/types";
-import { CHO_O, CON_DUONG, HOC_XA_NHA, KHU_VUC, NGAN_SACH, TOI_DA_GHI_CHU, VIEC_LAM } from "./lua-chon";
+import { CHO_O, HOC_XA_NHA, KHU_VUC, NGAN_SACH, VIEC_LAM } from "./lua-chon";
 import { CauHoi, ChonO, TieuDeBuoc } from "./thanh-phan";
 import { demVuaNganSach, goiYHocPhi } from "./tinh-toan";
 
@@ -12,7 +12,6 @@ type P = { h: HoSo; sua: (p: Partial<HoSo>) => void };
 export default function Buoc3({ h, sua }: P) {
   const goiY = goiYHocPhi(h.nganSach, h.choO);
   const soVua = h.nganSach ? demVuaNganSach(h.nganSach, LUA_CHON_MAU) : 0;
-  const conLai = TOI_DA_GHI_CHU - h.ghiChuChiPhi.length;
   return (
     <>
       <TieuDeBuoc tieuDe="Mục tiêu & ưu tiên" moTa="Chia sẻ điều kiện gia đình và mong muốn của em để gợi ý sát thực tế hơn." />
@@ -36,26 +35,6 @@ export default function Buoc3({ h, sua }: P) {
       <CauHoi tieuDe="Em quan tâm việc làm sau khi ra trường?" icon={Briefcase}>
         <ChonO nhan="Mức quan tâm việc làm" cot={3} cacLua={VIEC_LAM} giaTri={h.quanTamViecLam} onChange={(v) => sua({ quanTamViecLam: v })} />
       </CauHoi>
-
-      <CauHoi tieuDe="Con đường em muốn đi" icon={Route}>
-        <ChonO nhan="Con đường học tập" kieu="o" cot={3} cacLua={CON_DUONG} giaTri={h.conDuong} onChange={(v) => sua({ conDuong: v })} />
-      </CauHoi>
-
-      <div className="space-y-1.5">
-        <label htmlFor="bd-ghi-chu" className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
-          <NotebookPen size={18} className="text-xanh" />Ghi chú chi phí khác
-          <span className="ml-auto text-[12px] font-semibold text-chu-phu">Không bắt buộc</span>
-        </label>
-        <div className="rounded-xl border border-vien bg-trang focus-within:border-xanh">
-          <textarea id="bd-ghi-chu" rows={3} maxLength={TOI_DA_GHI_CHU} value={h.ghiChuChiPhi}
-            onChange={(e) => sua({ ghiChuChiPhi: e.target.value.slice(0, TOI_DA_GHI_CHU) })} aria-describedby="bd-dem-ghi-chu"
-            placeholder="Ví dụ: đi lại, sinh hoạt phí gia đình có thể hỗ trợ thêm mỗi tháng…"
-            className="block w-full resize-none rounded-xl bg-transparent px-3 pt-2.5 text-[15px] text-chu placeholder:text-chu-phu/70 outline-none" />
-          <p id="bd-dem-ghi-chu" className={gop("px-3 pb-2 text-right text-[12px] font-semibold", conLai <= 20 ? "text-cam-chu" : "text-chu-phu")}>
-            {h.ghiChuChiPhi.length}/{TOI_DA_GHI_CHU}
-          </p>
-        </div>
-      </div>
 
       <div aria-live="polite" className={gop("rounded-the p-3.5 flex gap-3 items-start", goiY ? "bg-luc-nhat" : "bg-xanh-nhat")}>
         <BieuTuongTron icon={ChartColumn} tone={goiY ? "luc" : "xanh"} kichThuoc={40} />

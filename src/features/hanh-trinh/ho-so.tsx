@@ -6,6 +6,7 @@ import { HangBam, Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut
 import { ThanhTienDo, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { nhanLop } from "@/state/chang";
 import type { ToneTen } from "@/state/types";
 import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
 import { ChiSoTheoDoi } from "./chi-so-theo-doi";
@@ -67,7 +68,7 @@ export default function HoSo() {
   }
 
   const x = hieuEm(s);
-  const thongTin = [h.khoi && (h.khoi === 11 ? "Lớp 10 – 11" : `Lớp ${h.khoi}`), h.tinh].filter(Boolean).join(" · ") || "Chưa có lớp và tỉnh";
+  const thongTin = [nhanLop(h), h.tinh].filter(Boolean).join(" · ") || "Chưa có lớp và tỉnh";
   const mucLuuY = s.mucTieu ? DUONG_DAN.monKeoDiem() : DUONG_DAN.batDau(2);
   const nganSach = [h.nganSach && `học phí ${TEN_NGAN_SACH[h.nganSach].toLowerCase()}/năm`, h.choO && TEN_CHO_O[h.choO]].filter(Boolean).join(", ");
 
@@ -81,7 +82,6 @@ export default function HoSo() {
             <div className="min-w-0 flex-1">
               <p className="text-[18px] font-extrabold text-muc leading-tight truncate">{h.hoTen.trim() || "Em chưa điền tên"}</p>
               <p className="text-[13px] text-chu">{thongTin}</p>
-              {h.giaiDoan && <Nhan tone="xanh" className="mt-1 bg-trang/80">{h.giaiDoan}</Nhan>}
             </div>
           </div>
           <div className="mt-3 rounded-xl bg-trang/75 px-3 py-2.5">

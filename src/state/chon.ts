@@ -3,6 +3,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { isoNgay, thuHaiCuaTuan, bayNgayCuaTuan, soNgayTu } from "@/engine/xep-lich";
 import { khoangCachTheoMon, monThieuCuaToHop, tongDiem } from "@/engine/phan-tich";
 import { diemHienTaiCuaTungMon, type AppState } from "./store";
+import { changCuaEm, coDemNguoc, type Chang } from "./chang";
 import { TO_HOP, type LuaChon, type MaToHop, type MonId, type ViecCanHoc } from "./types";
 
 export const homNay = () => isoNgay(new Date());
@@ -12,7 +13,7 @@ export const tuanHienTai = () => thuHaiCuaTuan(homNay());
  * `hienTai` và `conThieu` chỉ là điểm thật khi `duDiem` (tức `monThieu` rỗng). Có môn thiếu thì `hienTai` chỉ là tổng các môn đã nhập
  * (môn chưa nhập tính 0): nơi hiển thị phải nói "chưa đủ điểm", không đưa số này ra như khoảng cách tới mục tiêu.
  */
-export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; toHop: MonId[]; monThieu: MonId[]; duDiem: boolean } | null {
+export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; anDemNguoc: boolean; toHop: MonId[]; monThieu: MonId[]; duDiem: boolean } | null {
   if (!s.mucTieu) return null;
   const lc = tim(s.mucTieu.luaChonId);
   if (!lc) return null;
@@ -23,6 +24,8 @@ export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTi
     lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, toHop: s.mucTieu.toHop, monThieu, duDiem: monThieu.length === 0,
     conThieu: Math.max(0, Math.round((s.mucTieu.diemMucTieu - hienTai) * 10) / 10),
     soNgayCon: Math.max(0, soNgayTu(homNay(), s.mucTieu.ngayThi)),
+    /** Em lớp 10–11 chưa có kỳ thi sát: các màn không hiện đếm ngược hay câu "gần kỳ thi". */
+    anDemNguoc: !coDemNguoc(changCuaEm(s)),
   };
 }
 
@@ -88,9 +91,18 @@ export function coTheDatMucTieu(lc: LuaChon): { ok: true } | { ok: false; lyDo: 
   return { ok: true };
 }
 
-export const mucTieuTuLuaChon = (lc: LuaChon, diem?: Record<MonId, number | null>) => ({
+/**
+ * Ngày thi THPT dự kiến (26/6). Chặng nước rút và thi lại: kỳ thi sắp tới. Em lớp 10–11: kỳ thi của năm em học xong lớp 12,
+ * tức muộn hơn một năm (lớp 10 sẽ sớm hơn thực tế một năm, em sửa ở màn Mục tiêu).
+ */
+export function ngayThiDuKien(chang: Chang = "nuocRut", bayGio: Date = new Date()): string {
+  const nam = bayGio.getFullYear() + (bayGio.getMonth() > 5 ? 1 : 0) + (chang === "dinhHuong" ? 1 : 0);
+  return isoNgay(new Date(nam, 5, 26));
+}
+
+export const mucTieuTuLuaChon = (lc: LuaChon, diem?: Record<MonId, number | null>, chang: Chang = "nuocRut") => ({
   luaChonId: lc.id, phuongThuc: "THPT" as const, maToHop: toHopChoMucTieu(lc, diem), toHop: TO_HOP[toHopChoMucTieu(lc, diem)], diemMucTieu: lc.diemMin,
-  ngayThi: isoNgay(new Date(new Date().getFullYear() + (new Date().getMonth() > 5 ? 1 : 0), 5, 26)),
+  ngayThi: ngayThiDuKien(chang),
 });
 
 /** Chọn ngành làm mục tiêu từ danh sách nguyện vọng: lấy NV1, nếu chưa đặt được thì thử NV kế tiếp; hết thì trả lý do của NV đầu. */
@@ -104,7 +116,7 @@ export function chonNguyenVongLamMucTieu(
     const lc = timLc(id);
     if (!lc) continue;
     const kt = coTheDatMucTieu(lc);
-    if (kt.ok) return { ok: true, lc, mucTieu: mucTieuTuLuaChon(lc, diem) };
+    if (kt.ok) return { ok: true, lc, mucTieu: mucTieuTuLuaChon(lc, diem, changCuaEm(s)) };
     lyDoDau ??= `${lc.nganh} (${lc.truong}): ${kt.lyDo}`;
   }
   return { ok: false, lyDo: lyDoDau ?? "Danh sách nguyện vọng chưa có ngành nào để chọn làm mục tiêu." };

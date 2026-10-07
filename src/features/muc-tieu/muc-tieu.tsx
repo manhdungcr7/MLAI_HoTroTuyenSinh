@@ -190,20 +190,22 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
         </div>
       ))}
 
-      <button type="button" onClick={moSua}
-        className="w-full text-left rounded-the bg-cam-nhat p-4 flex items-center gap-4 active:brightness-95">
-        <BieuTuongTron icon={CalendarDays} tone="cam" kichThuoc={56} />
-        <span className="flex-1 min-w-0">
-          <span className="block text-[14px] font-bold text-cam-chu">{daQua ? "Ngày thi dự kiến đã qua" : "Thời gian còn lại đến kỳ thi"}</span>
-          {daQua ? (
-            <span className="block text-[14px] text-chu mt-0.5">Em cập nhật ngày thi mới để mình đếm lại nhé.</span>
-          ) : (
-            <span className="block leading-tight text-muc"><b className="text-[28px] font-extrabold">{d.soNgayCon}</b><span className="text-[16px] font-bold"> ngày</span></span>
-          )}
-          <span className="block text-[13px] text-chu-phu">Thi ngày {ngayVN(d.goc.ngayThi)} (dự kiến)</span>
-        </span>
-        <Pencil size={18} className="text-cam-chu shrink-0" />
-      </button>
+      {!d.anDemNguoc && (
+        <button type="button" onClick={moSua}
+          className="w-full text-left rounded-the bg-cam-nhat p-4 flex items-center gap-4 active:brightness-95">
+          <BieuTuongTron icon={CalendarDays} tone="cam" kichThuoc={56} />
+          <span className="flex-1 min-w-0">
+            <span className="block text-[14px] font-bold text-cam-chu">{daQua ? "Ngày thi dự kiến đã qua" : "Thời gian còn lại đến kỳ thi"}</span>
+            {daQua ? (
+              <span className="block text-[14px] text-chu mt-0.5">Em cập nhật ngày thi mới để mình đếm lại nhé.</span>
+            ) : (
+              <span className="block leading-tight text-muc"><b className="text-[28px] font-extrabold">{d.soNgayCon}</b><span className="text-[16px] font-bold"> ngày</span></span>
+            )}
+            <span className="block text-[13px] text-chu-phu">Thi ngày {ngayVN(d.goc.ngayThi)} (dự kiến)</span>
+          </span>
+          <Pencil size={18} className="text-cam-chu shrink-0" />
+        </button>
+      )}
 
       {nd && (
         <DongThongBao tone={nd.datRoi ? "luc" : "tim"} icon={nd.datRoi ? Trophy : Sparkles} tieuDe={nd.tieuDe} moTa={nd.moTa}
@@ -217,7 +219,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
             <b className="text-[16px] leading-snug text-cam-chu">Nếu chỉ học dàn trải, em sẽ khó bù đủ {diem1(d.conThieu)} điểm.</b>
           </p>
           <p className="text-[14px] text-chu mt-2 pl-[34px]">
-            {daQua ? "" : `Còn ${d.soNgayCon} ngày. `}Chia đều sức cho mọi môn thì môn nào cũng tăng chậm. Em nên dồn sức vào môn có thể tăng điểm với công sức hợp lý.
+            {daQua || d.anDemNguoc ? "" : `Còn ${d.soNgayCon} ngày. `}Chia đều sức cho mọi môn thì môn nào cũng tăng chậm. Em nên dồn sức vào môn có thể tăng điểm với công sức hợp lý.
           </p>
         </div>
       )}

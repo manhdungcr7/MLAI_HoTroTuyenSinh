@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { BarChart3, CalendarClock, CalendarDays, Check, ChevronDown, ChevronRight, ChevronUp, Compass, Flag, Lightbulb, ListTodo, PartyPopper, Target, TrendingUp } from "lucide-react";
+import { BarChart3, CalendarClock, CalendarDays, Check, ChevronDown, ChevronRight, ChevronUp, Compass, Flag, Lightbulb, ListTodo, PartyPopper, Target, TrendingUp, Wallet } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { DongThongBao } from "@/components/ui/thong-bao";
@@ -11,7 +11,8 @@ import { useApp } from "@/state/store";
 import { chonNguyenVongLamMucTieu, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
-import { goiYChoEm, lichSapToi, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
+import { goiYChoEm, lichSapToi, loiChaoTheoChang, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
+import { changCuaEm, type Chang } from "@/state/chang";
 import { dinhDang } from "@/engine/dinh-dang";
 
 const SO_DONG_GON = 3;
@@ -25,25 +26,31 @@ export default function HomNay() {
 
   const m = mucTieuDayDu(s);
   const ten = s.hoSo.hoTen.trim() ? tenGoi(s.hoSo.hoTen) : "em";
-  const goiY = goiYChoEm(s);
+  const chang = changCuaEm(s);
+  const goiY = goiYChoEm(s, chang);
   const coKeHoach = viecCuaTuan(s.viec, tuanHienTai()).length > 0 || s.khoiHoc.length > 0;
   const thieuMon = m ? monThieuDiem(s, m.toHop).map((x) => TEN_MON_NGAN[x]) : [];
 
   return (
     <>
-      <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={s.tamTrang === "met" ? "Hôm nay mình học nhẹ thôi nhé." : m ? "Cùng cố gắng hôm nay nhé." : "Hôm nay mình bắt đầu từ đâu nhỉ?"} />
+      <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={loiChaoTheoChang(s, chang)} />
       <NoiDung>
         {m ? (
           <>
             <TheMucTieu nganh={m.lc.nganh} truong={m.lc.truong} tenTruong={m.lc.tenTruong} conThieu={thieuMon.length ? null : m.conThieu} onClick={() => nav(DUONG_DAN.mucTieu())} />
             <OSoDiem hienTai={m.hienTai} mucTieu={m.mucTieu} thieuMon={thieuMon} />
-            <HangBam bieuTuong={CalendarDays} tone="do" onClick={() => nav(DUONG_DAN.mucTieu())}
-              tieuDe={m.soNgayCon > 0 ? <>Còn <b className="text-[18px] font-extrabold text-do-chu">{m.soNgayCon} ngày</b> đến kỳ thi</> : "Đã tới ngày thi dự kiến"}
-              phu={m.soNgayCon > 0 ? `Kỳ thi THPT dự kiến ${ngayDayDu(s.mucTieu!.ngayThi)}` : "Em cập nhật ngày thi mới ở trang Mục tiêu nhé."} />
-            <ViecHomNay />
+            {m.anDemNguoc
+              ? <p className="px-1 text-[12px] text-chu-phu">Điểm học bạ chưa phải điểm thi, chỉ để so tham khảo.</p>
+              : (
+                <HangBam bieuTuong={CalendarDays} tone="do" onClick={() => nav(DUONG_DAN.mucTieu())}
+                  tieuDe={m.soNgayCon > 0 ? <>Còn <b className="text-[18px] font-extrabold text-do-chu">{m.soNgayCon} ngày</b> đến kỳ thi</> : "Đã tới ngày thi dự kiến"}
+                  phu={m.soNgayCon > 0 ? `Kỳ thi THPT dự kiến ${ngayDayDu(s.mucTieu!.ngayThi)}` : "Em cập nhật ngày thi mới ở trang Mục tiêu nhé."} />
+              )}
+            {(chang !== "dinhHuong" || viecCuaTuan(s.viec, tuanHienTai()).length > 0) && <ViecHomNay />}
           </>
         ) : (
           <ChuaCoMucTieu
+            chang={chang}
             onClick={() => nav(DUONG_DAN.khamPha())}
             soNguyenVong={s.nguyenVong.length}
             nganhNV={nv.ok ? nv.lc.nganh : undefined}
@@ -58,7 +65,8 @@ export default function HomNay() {
 
         <CauNoiDongLuc />
 
-        {goiY && <DongThongBao tone="tim" icon={Lightbulb} tieuDe="Gợi ý cho em" moTa={goiY.moTa} onClick={() => nav(goiY.den)} />}
+        <DongThongBao tone="tim" icon={Lightbulb} tieuDe="Gợi ý cho em" moTa={goiY.moTa} onClick={() => nav(goiY.den)} />
+        {goiY.nhacHocPhi && <DongThongBao tone="cam" icon={Wallet} tieuDe="Lọc theo học phí" moTa={goiY.nhacHocPhi} onClick={() => nav(DUONG_DAN.khamPha())} />}
       </NoiDung>
     </>
   );
@@ -121,14 +129,18 @@ function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: num
   );
 }
 
-function ChuaCoMucTieu({ onClick, soNguyenVong, nganhNV, lyDo, onNguyenVong }: { onClick: () => void; soNguyenVong?: number; nganhNV?: string; lyDo?: string; onNguyenVong?: () => void }) {
+function ChuaCoMucTieu({ chang, onClick, soNguyenVong, nganhNV, lyDo, onNguyenVong }: { chang: Chang; onClick: () => void; soNguyenVong?: number; nganhNV?: string; lyDo?: string; onNguyenVong?: () => void }) {
   return (
     <NenHero tone="cam" className="p-5">
       <span className="flex items-start gap-3">
         <BieuTuongTron icon={Compass} tone="cam" kichThuoc={48} />
         <span className="min-w-0">
-          <b className="block text-[18px] leading-snug text-muc">Em chưa chọn mục tiêu chính</b>
-          <span className="block text-[14px] text-chu mt-1">Chọn một ngành và trường em muốn theo. Sau đó, việc cần làm mỗi ngày sẽ hiện ở đây.</span>
+          <b className="block text-[18px] leading-snug text-muc">{chang === "dinhHuong" ? "Em chưa cần chốt mục tiêu ngay" : "Em chưa chọn mục tiêu chính"}</b>
+          <span className="block text-[14px] text-chu mt-1">
+            {chang === "dinhHuong"
+              ? "Em cứ khám phá vài ngành, lưu những ngành thấy hợp. Khi đã rõ hơn, em chọn một ngành làm mục tiêu."
+              : "Chọn một ngành và trường em muốn theo. Sau đó, việc cần làm mỗi ngày sẽ hiện ở đây."}
+          </span>
         </span>
       </span>
       <div className="mt-4 space-y-2">

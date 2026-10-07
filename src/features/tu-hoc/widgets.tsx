@@ -94,7 +94,7 @@ function nhomPhuHop(s: ReturnType<typeof useApp>["s"]): NhomCauNoi | null {
   const ganNhat = s.lichSu[0];
   if (ganNhat && ganNhat.trangThai !== "xong" && Date.now() - new Date(ganNhat.luc).getTime() < 2 * 86_400_000) return "sauKhiSai";
   const m = mucTieuDayDu(s);
-  if (m && m.soNgayCon <= 45) return "ganKyThi";
+  if (m && !m.anDemNguoc && m.soNgayCon <= 45) return "ganKyThi";
   if (!s.lichSu.length) return "batDau";
   return "kienTri";
 }
