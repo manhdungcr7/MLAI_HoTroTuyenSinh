@@ -139,26 +139,37 @@
 
 ---
 
-## Việc còn lại sau đợt rà soát 2026-10 (chi tiết ở `docs/audit/05_PAGE_BY_PAGE_USER_REVIEW_AND_WORK_MAP.md`)
+## Đợt nâng cấp vừa hoàn thành & đã gộp vào `main` (2026-10-07)
 
-Đã làm trong đợt này: nhãn đúng năm điểm chuẩn, không gán nhãn cho chương trình khác THPT, cờ "suy ra", thiếu môn hiện "chưa đủ điểm", bỏ copy dự đoán, độ bền dữ liệu localStorage, giới hạn API tư vấn, xóa lần thi thử nhập nhầm, chọn nguyện vọng làm mục tiêu thật, giữ thứ tự nguyện vọng (WP3), nút Báo số liệu sai, tâm trạng tự hết theo ngày, Chủ nhật nghỉ mặc định.
+1. **Phân luồng 3 chặng học sinh (`src/state/chang.ts`)**:
+   - `changCuaEm`: Định hướng (Lớp 10–11), Nước rút (Lớp 12), Thi lại (Đã tốt nghiệp).
+   - Ẩn toàn bộ đếm ngược kỳ thi và cảnh báo dồn dập cho học sinh lớp 10–11; điều chỉnh ngày thi dự kiến (+1 năm).
+   - Rút gọn Onboarding Bước 1–3 gọn gàng, hỗ trợ cả 3 chặng mượt mà.
+2. **Nâng cấp Engine Xếp Lịch & Tạo Việc (`src/engine/tao-viec.ts`, `xep-lich.ts`)**:
+   - `viecChoTuan` & `xepLai`: Xếp lịch thông minh từ thời điểm hiện tại (`tuPhut`), không xếp vào ngày đã qua hoặc giờ đã trôi qua.
+   - Hỗ trợ chế độ "ôn nhẹ" 3 môn chung (Toán, Văn, Anh) khi học sinh chưa đặt mục tiêu trường.
+   - Test suite hoàn chỉnh `tests/xep-lai.test.ts` kiểm thử mọi kịch bản góc.
+3. **Giao diện Kế hoạch tuần & Nhập lịch nhanh (`src/features/ke-hoach/`)**:
+   - Hộp nhập nhanh lịch học cố định theo buổi (sáng/chiều/tối) không cần bấm từng tiết.
+   - Component `TuanMoiTuTao` và `TheViecDoTuanTruoc` tự động bắt nhịp khi sang tuần mới.
+   - Tích hợp lịch phổ thông mẫu, cho phép thêm hoặc thay thế lịch cũ an toàn.
+4. **Hạ tầng CMS Quản trị & Dữ liệu Cộng đồng (`cms/`, `migrations/0001_cong_dong.sql`)**:
+   - Trọn bộ API Cloudflare Pages Functions D1 (`cms/functions/api/`) quản lý trường, thông tin học phí, học bổng, nơi lưu trú, review, phân công CTV/QTV.
+   - Ứng dụng CMS Mobile riêng (`cms/`) chạy độc lập (cổng `npm run cms:dev` / `npm run cms:build`), có sẵn chế độ giả lập (`gia-lap.ts`) cho dev nhanh.
+   - Module kiểm tra làm sạch dữ liệu `src/data/dong-gop-kiem-tra.ts` (100% test xanh `tests/dong-gop.test.ts`).
 
-| # | Việc | Ưu tiên | Cỡ | Model gợi ý |
+---
+
+## Việc còn lại để bàn giao cho các bạn tiếp theo
+
+| # | Việc | Phụ trách | Ưu tiên | Trạng thái & Hướng dẫn thực hiện |
 |---|---|---|---|---|
-| 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon (thẻ chia sẻ Zalo/Facebook đang không có ảnh) | P0 | S | người làm thiết kế |
-| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` (đang tạm là email cá nhân) sang địa chỉ chung của nhóm | P0 | T | haiku |
-| 13 | Gói dữ liệu: chunk `chuan-hoa` hiện 980 KB (trước là ~840 KB), kiểm tra dữ liệu có bị kéo vào đường nạp đầu qua chuỗi import state không | P1 | S | sonnet |
-| 14 | Xác minh 924 chương trình chỉ có điểm "2026" từ trang tổng hợp; trang "Số liệu từ đâu ra?" đang nói điểm năm nay chưa công bố (mâu thuẫn) | P0 | S | tự kiểm tay, haiku sửa chữ |
-| 15 | Dữ liệu: `du-lieu.meta.json` (ngày lấy, người phụ trách), zod schema chạy trong `kiem-tra`, bắt ID nguyện vọng mồ côi | P1 | M | sonnet |
-| 16 | Hôm nay cho người chưa có mục tiêu: "3 việc đầu tiên" và mốc tuyển sinh | P1 | M | sonnet |
-| 17 | Dọn onboarding: nối `nguonDiem` (học bạ khác điểm thi) vào cảnh báo; bỏ ô chết `cachHoc`, `conDuong`, `ghiChuChiPhi`, `mucTieuHienTai`; bỏ "Giai đoạn", thêm "thi lại"; mức ngân sách "Dưới 15 triệu"; màn phân tích thành thẻ kết quả thật | P1 | S-M | sonnet |
-| 18 | Tự tạo việc khi sang tuần mới; streak hiển thị và "làm nhẹ khi bỏ lỡ"; bộ đếm giờ và ghi điểm sau buổi học | P1 | M | sonnet |
-| 19 | Nút "Đặt X điểm làm mục tiêu" ở kết quả Thử tình huống (Haiku bỏ vì cần logic tính mục tiêu từ tình huống) | P2 | S | sonnet |
-| 20 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 (112 chương trình); gộp với issue #07 | P1 | M-L | main |
-| 21 | Các nơi còn dùng `mucTieuDayDu` chưa xử lý thiếu môn (`hanh-trinh/tinh-toan.ts`, `ke-hoach/*`, `tu-hoc/widgets.tsx`); `tu-van/lay-du-lieu.ts` và `diem-thi-thu.tsx` vẫn có thể gắn nhãn cho chương trình khác THPT | P1 | S | sonnet |
-| 22 | Banner sao lưu ở Hồ sơ đang hiện thường trực; cần lưu thời điểm sao lưu cuối để chỉ nhắc khi quá hạn | P2 | S | haiku |
-| 23 | Đồng hành: bản gọn cho phụ huynh, nút phản hồi nhanh, nhắc tạo liên kết mới sau 2 tuần | P2 | S | sonnet |
-| 24 | Thông báo thật khi tắt app (Web Push) và quyết định về riêng tư | P2 | M-L | main |
-| 25 | Điểm ưu tiên khu vực/đối tượng, học bổng, ký túc xá, mở rộng độ phủ Y Dược và các tỉnh thiếu | P2 | L | main thiết kế, sonnet làm |
-| 26 | Rate-limit thật cho `/api/tu-van`: bật binding `RATE_KV` và WAF rule (code đã hỗ trợ, chưa cấu hình) | P0 | T | main |
-| 27 | Rà tay bằng `agent-browser` ở 390/360px các màn đã đổi (chip tổ hợp, thanh nút dính, hộp cách xét NV, cảnh báo thứ tự) và Lighthouse trên mạng chậm | P0 | S | haiku |
+| 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon | Thiết kế | P0 | Xuất ảnh OpenGraph để khi chia sẻ lên Zalo/Facebook hiện preview đẹp |
+| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` sang email chung nhóm | Hưng | P0 | Sửa hằng số email tiếp nhận phản hồi lỗi từ người dùng |
+| 13 | Kiểm tra bundle size chunk `chuan-hoa` (~980KB) | Dũng | P1 | Tách lazy-load danh mục dữ liệu trường để giảm tải lần đầu |
+| 14 | Xác minh 924 chương trình chỉ có điểm "2026" từ trang tổng hợp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
+| 15 | Kết nối giao diện người dùng với CMS Backend thật trên Cloudflare | Cả nhóm | P1 | Tạo D1 instance trên Cloudflare, áp migration `0001_cong_dong.sql` và cấu hình Pages Access |
+| 16 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 | Kiệt | P1 | Bổ sung các môn KHXH vào ma trận tổ hợp và phân tích Gap điểm |
+| 17 | Rate-limit thật cho `/api/tu-van` trên Cloudflare Workers | Tuấn / Hưng | P0 | Bật binding `RATE_KV` và WAF rule chống spam |
+| 18 | Rà soát visual responsive 360px - 390px trên thiết bị thật | Cả nhóm | P0 | Dùng `agent-browser` hoặc DevTools kiểm tra độ tràn viền |
+
