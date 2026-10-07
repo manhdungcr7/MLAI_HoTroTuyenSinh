@@ -21,24 +21,24 @@
 
 ## 📌 Issue #01: Luồng nhập và mô tả "Trường mơ ước" khi tạo hồ sơ
 - 👤 **Phụ trách (Owner):** Tuấn (`khoi-dau`) & Kiệt (`muc-tieu`)
-- ⏳ **Trạng thái:** `Ghi nhận (Backlog - Xử lý sau)`
+- ⏳ **Trạng thái:** `Bán phần hoàn thành — Cần nối hiển thị & tính toán`
 - 🏷️ **Nhãn:** `enhancement`, `khoi-dau`, `muc-tieu`
 
 ### 1. Bối cảnh & Vấn đề
 - Ở màn hình **Tạo hồ sơ (Bước 1/3)**, mục **"Mục tiêu hiện tại"** có lựa chọn `Đã có trường mơ ước`.
-- Hiện tại khi chọn mục này, hệ thống mới chỉ lưu cờ trạng thái mà chưa có ô nhập/chọn cụ thể trường hoặc ngành mơ ước của học sinh.
+- Hiện tại khi chọn mục này, hệ thống chỉ lưu trường mơ ước vào `HoSo.truongMoUoc` nhưng chưa nối tới hiển thị hoặc tính toán.
 
 ### 2. Yêu cầu nghiệp vụ (User Story)
 - **Khi học sinh chọn "Đã có trường mơ ước":**
-  - Hiển thị thêm trường nhập liệu/chọn nhanh: **"Tên trường / Ngành mơ ước của em"** (tự động gợi ý từ danh mục 200+ trường hoặc cho phép gõ tự do).
-  - Cho phép học sinh nhập lý do hoặc mức điểm ước lượng muốn đạt được.
+  - ✅ Hiển thị thêm trường nhập liệu: **"Tên trường / Ngành mơ ước của em"** (ô nhập tự do).
+  - ❌ Chưa: Tự động gọi ý từ danh mục 200+ trường.
 - **Giá trị mang lại:**
-  - Ngay khi hoàn tất hồ sơ, hệ thống lập tức thiết lập trường đó làm **Mục tiêu tham chiếu chính** trong tab *Mục tiêu* và tính toán khoảng cách điểm (gap analysis) từ điểm hiện tại đến điểm chuẩn trường mơ ước.
+  - ❌ Chưa: Lập tức thiết lập trường đó làm **Mục tiêu tham chiếu chính** trong tab *Mục tiêu* và tính toán khoảng cách điểm.
 
-### 3. Các thành phần liên quan
-- **State (`src/state/types.ts`):** Mở rộng kiểu `HoSo` thêm trường `truongMoUoc?: string` hoặc `nganhMoUoc?: string`.
-- **Giao diện (`src/features/khoi-dau/buoc-1.tsx`):** Thêm ô tìm kiếm/nhập trường mơ ước khi `h.mucTieuHienTai === "daCoMoUoc"`.
-- **Phân tích (`src/features/muc-tieu/` & `src/engine/`):** Tự động gắn trường mơ ước vào tab Mục tiêu.
+### 3. Các thành phần cần hoàn thiện
+- ✅ **State (`src/state/types.ts`):** Đã thêm `truongMoUoc?: string` vào `HoSo`.
+- ✅ **Giao diện (`src/features/khoi-dau/buoc-1.tsx`):** Đã thêm ô nhập.
+- ❌ **Phân tích (`src/features/muc-tieu/` & `src/state/chon.ts`):** Chưa gắn trường mơ ước vào mục tiêu tự động; `datMucTieu` chưa được gọi.
 
 ---
 
