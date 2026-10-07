@@ -44,3 +44,14 @@ npm test
 - Hồ sơ có 6 môn chính + 5 môn thêm không bắt buộc (Sử, Địa, GDKT&PL, Tin, Công nghệ; `HoSo.diemThem`). Tổ hợp có môn năng khiếu / vẽ (V00, T00, M01...) và ngoại ngữ khác (D02-D06...) không tính được từ điểm hồ sơ nên app ghi 'chưa so được'.
 - Học phí: chỉ khoảng 30 ngành có số theo năm; các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
 - Điểm chuẩn năm nay chưa có; app dùng năm gần nhất và luôn ghi "điểm chuẩn các năm trước".
+
+## Lớp dữ liệu từ CMS (bản xuất bản)
+- Ứng dụng nạp nền `/api/manifest` (nếu chưa có bản xuất bản thì dùng `/data/manifest.json` đi kèm bản dựng), tải đúng bộ dữ liệu đổi hash, kiểm tra SHA-256, lưu IndexedDB, rồi hợp nhất lên dữ liệu gốc bằng `src/engine/du-lieu-tuyen-sinh/hop-nhat.ts`. Chưa có bản nào thì app chạy bằng dữ liệu gốc.
+- Màn chi tiết (`kham-pha/chi-tiet.tsx`) đọc qua `khoDuLieu` và có khối "Thông tin của trường" (`thong-tin-truong.tsx`): kênh chính thức, nơi lưu trú, học bổng, thông báo. Mỗi dòng kèm link nguồn; không có thì ghi "chưa có".
+- Quy tắc hợp nhất: thông tin trường, học bổng, thông báo **bắt buộc có `nguon.url`**, thiếu thì bỏ. Học phí CMS không ghi đè khi chỉ lặp lại số gốc (cùng nguồn, cùng mức thấp). Học phí cấp trường chỉ lấy bản ghi cấp trường, không lấy học phí của một ngành. Test: `tests/hop-nhat-snapshot.test.ts`.
+- Danh sách khám phá và so sánh vẫn đọc dữ liệu gốc (`LUA_CHON_MAU`); chỉ màn chi tiết đọc bản đã hợp nhất. Muốn số CMS vào cả danh sách thì cần chuyển các màn đó sang `useKhoDuLieu()` (`src/state/dung-kho-du-lieu.ts`).
+
+## Chỗ còn thiếu (chưa có nguồn thật, không điền)
+- Ký túc xá, học bổng, kênh Zalo/fanpage, thông báo, đánh giá của sinh viên: chưa có bản ghi nào được xác minh. Bản xuất bản hiện chứa 100 bản ghi trường sinh bằng `scripts/khoi-tao-d1-that.ts` với website, fanpage và giá ký túc xá do script tự dựng (chung một giá cho mọi trường) và mức học phí cao bằng 1,2 lần mức thấp. App bỏ các bản ghi này vì không có nguồn; cần sửa script, không dựng số thay cho dữ liệu chưa có.
+- Thư mục thô `../nguyen-vong` không có trong máy này nên không bổ sung được dữ liệu mới; mọi số liệu trong app vẫn là kết quả đã sinh sẵn ở `src/data/`.
+- Học phí riêng của ngành: 24 chương trình. Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.

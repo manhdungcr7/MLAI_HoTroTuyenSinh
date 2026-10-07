@@ -3,7 +3,11 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import { AppProvider } from "@/state/store";
 import { LoiUngDung } from "@/components/layout/loi-ung-dung";
+import { khoDuLieu } from "@/engine/du-lieu-tuyen-sinh/kho-du-lieu";
 import "./styles/index.css";
+
+// Nạp bộ đệm dữ liệu tuyển sinh ngầm không chặn UI
+void khoDuLieu.khoiTao();
 
 // Service worker chỉ để hiện thông báo nhắc học (không lưu bộ nhớ đệm).
 if (import.meta.env.PROD && "serviceWorker" in navigator) {

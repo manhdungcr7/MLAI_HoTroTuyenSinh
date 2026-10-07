@@ -20,6 +20,8 @@ import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } f
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
+import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
+import { ThongTinTruong } from "./thong-tin-truong";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
   "Rất cao": "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc rất cao.",
@@ -168,7 +170,8 @@ export default function ChiTiet() {
   const { s, themNguyenVong, datMucTieu } = useApp(); // import { vung-an-toan-duoi } nếu cần
   const [nguon, setNguon] = useState<NguonTaiSau | null>(null);
   useEffect(() => { let con = true; taiNguon().then((m) => con && setNguon(m)).catch(() => {}); return () => { con = false; }; }, []);
-  const lcGoc = timGoc(id);
+  const kho = useKhoDuLieu();
+  const lcGoc = kho.layLuaChonTheoId(id) ?? timGoc(id); // đã hợp nhất với bản CMS đã xuất bản
   const lc = useMemo(() => {
     if (!lcGoc) return undefined;
     const theoNam = nguon?.nam[lcGoc.id];
@@ -176,6 +179,7 @@ export default function ChiTiet() {
     const khop = lcGoc.nguonCap === "aggregator_verified" && !!theoNam?.some((x) => x.nam === String(lcGoc.namDiem));
     return { ...lcGoc, nguonTheoNam: theoNam, ...(khop ? { daKiemChung: true, nguon: "Điểm lấy từ trang tổng hợp, đã đối chiếu: đúng con số này có trong đề án tuyển sinh của trường (file PDF)" } : {}) };
   }, [lcGoc, nguon]);
+  const thongTinTruong = lcGoc ? kho.layChiTietTruong(lcGoc.maTruong ?? lcGoc.truong) : null;
   const bc = useMemo(() => boiCanhTu(s), [s]);
   const [hoiTiep, setHoiTiep] = useState<null | "vuaThem" | "daCo">(null);
   const [chonThem, setChonThem] = useState(false);
@@ -266,7 +270,7 @@ export default function ChiTiet() {
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
             <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? <>{bc.nganSach !== null && `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm. `}{lc.nguonHocPhi && <a href={`${lc.nguonHocPhi.url}#page=${lc.nguonHocPhi.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Theo đề án {lc.nguonHocPhi.nam}, trang {lc.nguonHocPhi.trang}</a>}</> : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
+              phu={coHocPhi(lc) ? <>{bc.nganSach !== null && `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm. `}{lc.nguonHocPhi && <a href={lc.nguonHocPhi.trang > 0 ? `${lc.nguonHocPhi.url}#page=${lc.nguonHocPhi.trang}` : lc.nguonHocPhi.url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">{lc.nguonHocPhi.trang > 0 ? `Theo đề án ${lc.nguonHocPhi.nam}, trang ${lc.nguonHocPhi.trang}` : `Nguồn học phí năm ${lc.nguonHocPhi.nam}`}</a>}</> : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
               <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{lc.coHoiViecLam}. {MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <a href={`${lc.nguonViecLam.url}#page=${lc.nguonViecLam.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem trong đề án {lc.nguonViecLam.nam}, trang {lc.nguonViecLam.trang}</a></>}</>} />
@@ -283,6 +287,8 @@ export default function ChiTiet() {
         <DanhSachY tone="cam" icon={AlertTriangle} tieuDe="Điều cần lưu ý" cuaEm={kq.luuY} chung={lc.canLuuY} />
 
         <ChuongTrinhHoc lc={lc} trang={nguon?.nganh[lc.id]} chungTruong={nguon?.truongNganh[lc.maTruong ?? ""]} />
+
+        <ThongTinTruong tt={thongTinTruong} />
 
         {/* Nguồn dữ liệu: không bịa đường link */}
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">

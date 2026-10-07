@@ -19,6 +19,14 @@ legacy/**/dist/
 .env*
 !.env.example
 
+# Screenshot & debug artifacts (dev/CI iterations)
+/*.png
+cms/dist/
+cms/ref-ba/
+cms/.wrangler/
+public/snapshots/
+public/data/
+
 # kết quả trung gian của các lượt quét song song (gộp bằng scripts/gop-chuong-trinh.py)
 src/data/chuong-trinh.*of*.json
 scripts/chuong-trinh-bao-cao.*of*.json

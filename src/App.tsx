@@ -17,9 +17,10 @@ import { routes as thietKe } from "@/features/thiet-ke/routes";
 import { routes as tuVan } from "@/features/tu-van/routes";
 import { routes as huongNghiep } from "@/features/huong-nghiep/routes";
 import { routes as dongHanh } from "@/features/dong-hanh/routes";
+import { routes as landingPage } from "@/features/landing-page/routes";
 
 // Thêm slice mới: import `routes` của nó rồi thêm vào mảng này. Không sửa gì khác.
-const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan, huongNghiep, dongHanh];
+const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan, huongNghiep, dongHanh, landingPage];
 
 // Tiêu đề tab trình duyệt theo màn (khớp theo đầu đường dẫn, dài nhất thắng).
 const TIEU_DE: [string, string][] = [

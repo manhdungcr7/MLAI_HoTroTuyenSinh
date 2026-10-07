@@ -53,6 +53,7 @@ body {
 
 /* Khung điện thoại: trên máy tính, ứng dụng nằm giữa một cột rộng 430px */
 .khung-ung-dung { max-width: 430px; margin: 0 auto; min-height: 100dvh; background: var(--color-nen); position: relative; box-shadow: 0 0 40px rgba(22, 100, 245, .08); overflow-x: clip; }
+.khung-ung-dung:has(.trang-toan-man-hinh) { max-width: 100%; box-shadow: none; background: var(--color-nen); }
 .an-thanh-cuon::-webkit-scrollbar { display: none; }
 .an-thanh-cuon { scrollbar-width: none; }
 .vung-an-toan-duoi { padding-bottom: calc(env(safe-area-inset-bottom) + 6px); }
