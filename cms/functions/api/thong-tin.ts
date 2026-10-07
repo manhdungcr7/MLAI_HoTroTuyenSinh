@@ -3,7 +3,6 @@ import { LOAI_THONG_TIN, duocDatTrangThai, kiemTraThongTin } from "../../../src/
 import { cauNhatKy, demBang, thongTinTuHang, type HangThongTin } from "../_thu-vien/d1";
 import { chay, khongHoTro, TAP_TRUONG } from "../_thu-vien/quyen";
 import { cam, docThan, docTrang, json, locEnum, loiKiemTra, sai } from "../_thu-vien/phan-hoi";
-import { tuPhatHanh } from "../_thu-vien/phat-hanh";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 
 const TRANG_THAI = ["nhap", "cho", "duyet", "an"] as const;
@@ -53,7 +52,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
         .bind(b.id, b.maTruong, b.loai, b.nam ?? null, b.linkNguon ?? null, b.trangThai, c.email, c.luc, c.luc, JSON.stringify(b.duLieu))
         .run();
       await cauNhatKy(c.d1, c.email, `thong-tin.tao.${b.trangThai}`, `thong_tin_truong:${b.id}`, c.luc).run();
-      const phatHanh = b.trangThai === "duyet" ? await tuPhatHanh(c.env, c.d1, c.email, c.bayGio) : "khong-can";
+      const phatHanh = "khong-tu-dong";
       return json({ ...b, nguonGui: "cms", taoLuc: c.luc }, 201, { "x-phat-hanh": phatHanh });
     }
     throw khongHoTro();

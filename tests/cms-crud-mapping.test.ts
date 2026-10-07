@@ -5,7 +5,7 @@ import {
 } from "../src/data/dong-gop-kiem-tra";
 import {
   formTrong, bodyTuForm, kiemTraForm, type FormThongTin
-} from "../cms/src/tinh-nang/truong/bieu-mau";
+} from "../cms/src/du-lieu-truong/bieu-mau";
 import { DANH_SACH_TRUONG, truongTheoMa } from "../cms/src/du-lieu/danh-sach-truong";
 import { xuLyDuLieuMau } from "../cms/src/may-chu/gia-lap";
 import type { ChiTietTruongApi, ThongTinCms } from "../cms/src/may-chu/kieu";

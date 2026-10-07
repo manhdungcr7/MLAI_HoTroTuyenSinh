@@ -1,21 +1,23 @@
-// Bộ xử lý dữ liệu mẫu khi chạy CMS ở chế độ giả lập (VITE_GIA_LAP=1 hoặc ?gia-lap=1).
+// Bộ xử lý dữ liệu mẫu khi chạy CMS ở chế độ giả lập hoặc local dev
 import { DANH_SACH_TRUONG } from "../du-lieu/danh-sach-truong";
-import { vaiTroMau } from "./che-do";
 import { tienDoTruong } from "@/data/dong-gop-kiem-tra";
+import { layTaiKhoanHienTai } from "@cms/xac-thuc/phien-lam-viec";
 import type {
-  ChiTietTruongApi, KenhBody, KetQuaPhatHanh, NguoiCms, NhatKyCms, PhanCongCms,
+  ChiTietTruongApi, KenhBody, NguoiCms, NhatKyCms, PhanCongCms,
   SuaThongTinBody, TaoThongTinBody, ThongTinCms, TienDoTruong, Toi,
   TruongTrongDanhSach, BanGhiTruong,
 } from "./kieu";
 
 const DANG_PHAN_CONG_MAU: PhanCongCms[] = [
-  { email: "ban@nguyenvongai.local", maTruong: "QSC" },
-  { email: "ban@nguyenvongai.local", maTruong: "BKA" },
+  { email: "quantri@nguyenvongai.vn", maTruong: "QSC" },
+  { email: "quantri@nguyenvongai.vn", maTruong: "BKA" },
+  { email: "congtacvien@nguyenvongai.vn", maTruong: "QSC" },
+  { email: "congtacvien@nguyenvongai.vn", maTruong: "NEU" },
 ];
 
 const NGUOI_MAU: NguoiCms[] = [
-  { email: "ban@nguyenvongai.local", vaiTro: "qtv", taoLuc: "2026-01-01T00:00:00Z" },
-  { email: "ctv1@nguyenvongai.local", vaiTro: "ctv", taoLuc: "2026-01-02T00:00:00Z" },
+  { email: "quantri@nguyenvongai.vn", vaiTro: "qtv", taoLuc: "2026-01-01T00:00:00Z" },
+  { email: "congtacvien@nguyenvongai.vn", vaiTro: "ctv", taoLuc: "2026-01-02T00:00:00Z" },
 ];
 
 const KENH_LUC_DAU: Record<string, BanGhiTruong> = {
@@ -23,6 +25,11 @@ const KENH_LUC_DAU: Record<string, BanGhiTruong> = {
     maTruong: "QSC",
     fanpageUrl: "https://facebook.com/uit.edu.vn",
     websiteTuyenSinhUrl: "https://tuyensinh.uit.edu.vn",
+  },
+  BKA: {
+    maTruong: "BKA",
+    fanpageUrl: "https://facebook.com/dhbkhanoi",
+    websiteTuyenSinhUrl: "https://ts.hust.edu.vn",
   },
 };
 
@@ -39,10 +46,22 @@ const THONG_TIN_LUC_DAU: ThongTinCms[] = [
     linkNguon: "https://tuyensinh.uit.edu.vn/hoc-phi",
     duLieu: { mucThap: 35, mucCao: 45, donVi: "trieu_nam", phamVi: "Chương trình chuẩn" },
   },
+  {
+    id: "tt-mau-2",
+    maTruong: "BKA",
+    loai: "hoc_phi",
+    nam: 2026,
+    trangThai: "cho",
+    phienBan: 1,
+    luc: "2026-03-02T10:00:00Z",
+    nguonGui: "cms",
+    linkNguon: "https://ts.hust.edu.vn/hoc-phi-2026.pdf",
+    duLieu: { mucThap: 27, mucCao: 35, donVi: "trieu_nam", phamVi: "Chương trình chuẩn" },
+  },
 ];
 
 const NHAT_KY_LUC_DAU: NhatKyCms[] = [
-  { id: 1, ai: "ban@nguyenvongai.local", hanhDong: "Duyệt học phí", doiTuong: "QSC", luc: "2026-03-01T00:00:00Z" },
+  { id: 1, ai: "quantri@nguyenvongai.vn", hanhDong: "Duyệt học phí", doiTuong: "QSC", luc: "2026-03-01T00:00:00Z" },
 ];
 
 function tinhTienDo(ma: string): TienDoTruong {
@@ -57,11 +76,15 @@ export async function xuLyDuLieuMau(
   query: Record<string, string | number | undefined>,
   body?: unknown,
 ): Promise<unknown> {
+  const tkHienTai = layTaiKhoanHienTai();
+
   // GET /toi
   if (method === "GET" && duong === "/toi") {
-    const vai = vaiTroMau();
-    const giao = DANG_PHAN_CONG_MAU.filter((p) => p.email === "ban@nguyenvongai.local").map((p) => p.maTruong);
-    const toi: Toi = { email: "ban@nguyenvongai.local", vaiTro: vai, truongDuocGiao: giao };
+    const toi: Toi = {
+      email: tkHienTai.email,
+      vaiTro: tkHienTai.vaiTro,
+      truongDuocGiao: tkHienTai.truongDuocGiao,
+    };
     return toi;
   }
 
@@ -95,8 +118,8 @@ export async function xuLyDuLieuMau(
       return res;
     });
     if (cuaToi) {
-      const tapGiao = new Set(DANG_PHAN_CONG_MAU.filter((p) => p.email === "ban@nguyenvongai.local").map((p) => p.maTruong));
-      ds = ds.filter((t) => tapGiao.has(t.maTruong));
+      const tapGiao = new Set(tkHienTai.truongDuocGiao);
+      ds = ds.filter((t) => tapGiao.has("*") || tapGiao.has(t.maTruong));
     }
     const batDau = (trang - 1) * moi;
     return { truong: ds.slice(batDau, batDau + moi), tong: ds.length };
@@ -162,8 +185,8 @@ export async function xuLyDuLieuMau(
     const cuaToi = query["cua-toi"] === "1" || query["cua-toi"] === 1;
     let ds = DANH_SACH_TRUONG.map((t) => tinhTienDo(t.ma));
     if (cuaToi) {
-      const tapGiao = new Set(DANG_PHAN_CONG_MAU.filter((p) => p.email === "ban@nguyenvongai.local").map((p) => p.maTruong));
-      ds = ds.filter((t) => tapGiao.has(t.maTruong));
+      const tapGiao = new Set(tkHienTai.truongDuocGiao);
+      ds = ds.filter((t) => tapGiao.has("*") || tapGiao.has(t.maTruong));
     }
     const dem = ds.filter((t) => t.du).length;
     const trang = Number(query.trang || 1);
@@ -218,9 +241,15 @@ export async function xuLyDuLieuMau(
     return { nhatKy: NHAT_KY_LUC_DAU.slice(batDau, batDau + moi), tong: NHAT_KY_LUC_DAU.length };
   }
 
-  // POST /phat-hanh
-  if (method === "POST" && duong === "/phat-hanh") {
-    const res: KetQuaPhatHanh = { luc: new Date().toISOString(), soTruong: DANH_SACH_TRUONG.length, soBanGhi: THONG_TIN_LUC_DAU.length };
+  // POST /phat-hanh hoặc /xuat-ban-snapshot
+  if (method === "POST" && (duong === "/phat-hanh" || duong === "/xuat-ban-snapshot" || duong === "/api/xuat-ban-snapshot")) {
+    const res = {
+      thanhCong: true,
+      dataVersion: `${new Date().toISOString().slice(0, 10).replace(/-/g, ".")}.01`,
+      soBanGhiMoi: THONG_TIN_LUC_DAU.filter((t) => t.trangThai === "duyet").length,
+      tongBanGhiPublished: THONG_TIN_LUC_DAU.length,
+      thongBao: "Xuất bản thành công Snapshot ở chế độ Giả lập.",
+    };
     return res;
   }
 

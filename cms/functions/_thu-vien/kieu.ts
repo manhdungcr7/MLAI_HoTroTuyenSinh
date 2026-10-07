@@ -9,7 +9,7 @@ export interface KhoD1Cau {
 export interface KhoD1 {
   prepare(sql: string): KhoD1Cau;
   /** Chạy nhiều câu lệnh trong một giao dịch. */
-  batch(cau: KhoD1Cau[]): Promise<unknown[]>;
+  batch(cau: KhoD1Cau[]): Promise<{ meta?: { changes?: number } }[]>;
 }
 export interface KhoKV {
   get(khoa: string): Promise<string | null>;
@@ -27,6 +27,9 @@ export interface Env {
   QTV_DAU_TIEN?: string;
   /** Chỉ '1' VÀ chạy ở localhost/127.0.0.1 mới giả danh người dùng (đọc email từ header X-Gia-Danh). */
   GIA_DANH_DEV?: string;
+  /** Secret Telegram (wrangler secret put). Thiếu thì bỏ qua thông báo, không lỗi. */
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_CHAT_ID?: string;
 }
 
 export interface BoiCanh {

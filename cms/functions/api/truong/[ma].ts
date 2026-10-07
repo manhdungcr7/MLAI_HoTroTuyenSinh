@@ -3,7 +3,6 @@ import { kiemTraBanGhiTruong } from "../../../../src/data/dong-gop-kiem-tra";
 import { banGhiTruongTuHang, cauNhatKy, demBang, thongTinTuHang, type HangThongTin, type HangTruong } from "../../_thu-vien/d1";
 import { chay, khongHoTro, TAP_TRUONG, TEN_TRUONG } from "../../_thu-vien/quyen";
 import { docThan, docTrang, json, khongTimThay, loiKiemTra } from "../../_thu-vien/phan-hoi";
-import { tuPhatHanh } from "../../_thu-vien/phat-hanh";
 import { gomTienDo, tienDoCua } from "../../_thu-vien/tien-do";
 import type { BoiCanh, TuyChon } from "../../_thu-vien/kieu";
 
@@ -43,7 +42,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
         .bind(ma, b.fanpageUrl ?? null, b.nhomTuyenSinhChinhThucUrl ?? null, b.nhomCongDongUrl ?? null, b.websiteTuyenSinhUrl ?? null, b.ghiChu ?? null, c.luc, c.email)
         .run();
       await cauNhatKy(c.d1, c.email, "truong.sua-kenh", `truong_cong_dong:${ma}`, c.luc).run();
-      const phatHanh = await tuPhatHanh(c.env, c.d1, c.email, c.bayGio);
+      const phatHanh = "khong-tu-dong";
       return json(b, 200, { "x-phat-hanh": phatHanh });
     }
     throw khongHoTro();

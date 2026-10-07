@@ -2,6 +2,20 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nguyen-vong-ai",
   "compatibility_date": "2026-10-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nguyenvongai_db",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV_CONG_DONG",
+      "id": "b6281182b7ff42bc8a23deb93ffdef94"
+    }
+  ],
   "observability": {
     "enabled": true
   },

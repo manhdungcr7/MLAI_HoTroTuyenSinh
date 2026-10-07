@@ -3,7 +3,6 @@ import { LOAI_THONG_TIN, duocDatTrangThai, kiemTraThongTin, khopPhienBan, type T
 import { cauNhatKy, layThongTin, thongTinTuHang } from "../../_thu-vien/d1";
 import { chay, khongHoTro, TAP_TRUONG } from "../../_thu-vien/quyen";
 import { cam, docThan, json, khongTimThay, loiKiemTra, sai, LoiHttp } from "../../_thu-vien/phan-hoi";
-import { tuPhatHanh } from "../../_thu-vien/phat-hanh";
 import type { BoiCanh, TuyChon } from "../../_thu-vien/kieu";
 
 const TRANG_THAI: readonly string[] = ["nhap", "cho", "duyet", "an"];
@@ -65,7 +64,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       await cauNhatKy(c.d1, c.email, `thong-tin.${ten}`, doi, c.luc).run();
     }
     if (doiNoiDung) await cauNhatKy(c.d1, c.email, "thong-tin.sua", doi, c.luc).run();
-    const phatHanh = hang.trang_thai === "duyet" || tt === "duyet" ? await tuPhatHanh(c.env, c.d1, c.email, c.bayGio) : "khong-can";
+    const phatHanh = "khong-tu-dong";
     const moi = await layThongTin(c.d1, id);
     return json(thongTinTuHang(moi!), 200, { "x-phat-hanh": phatHanh });
   });
