@@ -79,7 +79,7 @@ export default function DanhSachNguyenVong() {
             {tong === null && (
               <DongThongBao tone="cam" icon={GraduationCap} tieuDe="Chưa đủ điểm để xếp nhãn"
                 moTa="Nhập điểm Toán, Vật lý, Tiếng Anh để biết mỗi nguyện vọng là Thử sức, Vừa sức, An toàn hay Dự phòng."
-                hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
+                hanhDong="Nhập điểm ngay" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} />
             )}
 
             {ds.length > SO_NV_GOI_Y && (

@@ -84,6 +84,8 @@ interface Ctx {
   /** Xếp lại lịch tự học của một tuần. `viecMoi`: thay luôn danh sách việc (dùng khi tạo việc mới cho tuần) trong cùng một lần cập nhật. */
   xepLai: (tuanBatDau: string, tuNgay?: string, viecMoi?: ViecCanHoc[]) => { chuaXep: number; ghiChu: string[] };
   doiCauNoi: () => void;
+  /** Xóa một lần thi thử theo vị trí trong `diemThi`. */
+  xoaDiemThi: (viTri: number) => void;
 }
 
 const AppCtx = createContext<Ctx | null>(null);
@@ -159,6 +161,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setS({ ...x, khoiHoc: [...giu, ...r.khoi] });
       return { chuaXep: r.chuaXep.length, ghiChu: r.ghiChu };
     },
+    xoaDiemThi: (viTri) => cap((x) => (viTri < 0 || viTri >= x.diemThi.length ? x : { ...x, diemThi: x.diemThi.filter((_, i) => i !== viTri) })),
   }), [s, cap]);
 
   return <AppCtx.Provider value={api}>{children}</AppCtx.Provider>;

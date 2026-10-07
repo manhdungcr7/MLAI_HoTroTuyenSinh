@@ -88,3 +88,20 @@ export const mucTieuTuLuaChon = (lc: LuaChon, diem?: Record<MonId, number | null
   luaChonId: lc.id, phuongThuc: "THPT" as const, maToHop: toHopChoMucTieu(lc, diem), toHop: TO_HOP[toHopChoMucTieu(lc, diem)], diemMucTieu: lc.diemMin,
   ngayThi: isoNgay(new Date(new Date().getFullYear() + (new Date().getMonth() > 5 ? 1 : 0), 5, 26)),
 });
+
+/** Chọn ngành làm mục tiêu từ danh sách nguyện vọng: lấy NV1, nếu chưa đặt được thì thử NV kế tiếp; hết thì trả lý do của NV đầu. */
+export function chonNguyenVongLamMucTieu(
+  s: Pick<AppState, "nguyenVong" | "hoSo" | "diemThi">,
+  timLc: (id: string) => LuaChon | undefined = tim,
+): { ok: true; lc: LuaChon; mucTieu: ReturnType<typeof mucTieuTuLuaChon> } | { ok: false; lyDo: string } {
+  const diem = diemHienTaiCuaTungMon(s);
+  let lyDoDau: string | null = null;
+  for (const id of s.nguyenVong) {
+    const lc = timLc(id);
+    if (!lc) continue;
+    const kt = coTheDatMucTieu(lc);
+    if (kt.ok) return { ok: true, lc, mucTieu: mucTieuTuLuaChon(lc, diem) };
+    lyDoDau ??= `${lc.nganh} (${lc.truong}): ${kt.lyDo}`;
+  }
+  return { ok: false, lyDo: lyDoDau ?? "Danh sách nguyện vọng chưa có ngành nào để chọn làm mục tiêu." };
+}
