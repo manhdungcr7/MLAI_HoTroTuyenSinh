@@ -12,7 +12,7 @@
     "noEmit": true,
     "isolatedModules": true,
     "types": ["vite/client", "node"],
-    "paths": { "@/*": ["./src/*"] }
+    "paths": { "@/*": ["./src/*"], "@cms/*": ["./cms/src/*"] }
   },
-  "include": ["src", "tests", "functions", "vite.config.ts"]
+  "include": ["src", "tests", "functions", "vite.config.ts", "cms/src", "cms/functions", "cms/vite.config.ts"]
 }

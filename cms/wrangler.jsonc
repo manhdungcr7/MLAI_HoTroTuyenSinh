@@ -1,0 +1,7 @@
+{
+  // Project Pages riêng cho CMS quản trị. D1 (DB) và KV (KV_CONG_DONG) gắn trong Pages Dashboard,
+  // dùng chung với app học sinh. Xem docs/CMS-THIET-KE.md.
+  "name": "nguyenvongai-cms",
+  "compatibility_date": "2026-10-01",
+  "pages_build_output_dir": "./dist"
+}
