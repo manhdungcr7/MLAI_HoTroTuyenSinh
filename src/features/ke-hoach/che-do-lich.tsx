@@ -10,6 +10,7 @@ import { phutTuGio, thuCuaNgay } from "@/engine/xep-lich";
 import { homNay } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { ngayThang, tenNgay, tenThu, thoiLuong } from "./dinh-dang";
+import { HopNhapLichNhanh } from "./nhap-lich-nhanh";
 import { HopMucLich, HopThemKhoi, HopTrungGio } from "./hop-lich";
 import { mucLichTrongNgay, timTrung, type LoaiMuc, type MucLich } from "./tinh-toan";
 
@@ -27,6 +28,7 @@ export function CheDoLich({ ngayChon, quaKhu, hienThongBao }: { ngayChon: string
   const nav = useNavigate();
   const hom = homNay();
   const [moThem, setMoThem] = useState(false);
+  const [moNhanh, setMoNhanh] = useState(false);
   const [moTrung, setMoTrung] = useState(false);
   const [mucDangXem, setMucDangXem] = useState<MucLich | null>(null);
   const mucs = useMemo(() => mucLichTrongNgay(s.coDinh, s.khoiHoc, ngayChon), [s.coDinh, s.khoiHoc, ngayChon]);
@@ -35,10 +37,16 @@ export function CheDoLich({ ngayChon, quaKhu, hienThongBao }: { ngayChon: string
 
   if (s.coDinh.length === 0) {
     return (
-      <TrangThaiTrong bieuTuong={<CalendarPlus size={26} />} tieuDe="Em chưa nhập lịch học"
-        moTa="Nhập giờ học trên lớp và học thêm trước, mình mới xếp giờ tự học vào đúng khung trống được.">
-        <Nut muiTen onClick={() => nav(DUONG_DAN.caiDatLichHoc())}>Nhập lịch học</Nut>
-      </TrangThaiTrong>
+      <>
+        <TrangThaiTrong bieuTuong={<CalendarPlus size={26} />} tieuDe="Em chưa nhập lịch học"
+          moTa="Nhập giờ học trên lớp và học thêm trước, mình mới xếp giờ tự học vào đúng khung trống được.">
+          <div className="space-y-2">
+            <Nut bieuTuong={CalendarPlus} onClick={() => setMoNhanh(true)}>Nhập nhanh</Nut>
+            <Nut kieu="vien" muiTen onClick={() => nav(DUONG_DAN.caiDatLichHoc())}>Nhập từng tiết</Nut>
+          </div>
+        </TrangThaiTrong>
+        {moNhanh && <HopNhapLichNhanh xong={(n) => { setMoNhanh(false); if (n > 0) hienThongBao(`Đã thêm ${n} tiết vào lịch học`); }} />}
+      </>
     );
   }
 

@@ -7,12 +7,13 @@ import { NenHero } from "@/components/ui/hinh-nen";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { OChon, OInput, Truong } from "@/components/ui/nhap-lieu";
 import { Nhan, Nut, The, gop } from "@/components/ui/nut-the";
-import { LICH_CO_DINH_MAU } from "@/data/lich-mau";
+import { LICH_PHO_THONG_MAU } from "@/data/lich-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { phatHienTrung, phutTuGio } from "@/engine/xep-lich";
 import { homNay, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { CAC_MON, TEN_MON, type MonId, type TietCoDinh } from "@/state/types";
+import { HopNhapLichNhanh } from "@/features/ke-hoach/nhap-lich-nhanh";
 import { LOAI_TIET, NhomChon, OGio } from "./thanh-phan";
 import { NHAN_THU, TEN_THU, dangGio, soViet } from "./tinh-tien-do";
 
@@ -32,6 +33,7 @@ export default function LichHoc() {
   const [moThem, setMoThem] = useState<number | null>(null); // số thứ được chọn sẵn, 0 = không chọn sẵn
   const [xoa, setXoa] = useState<TietCoDinh | null>(null);
   const [hoiMau, setHoiMau] = useState(false);
+  const [moNhanh, setMoNhanh] = useState(false);
   const [daDoi, setDaDoi] = useState<string | null>(null);
 
   const coDinh = s.coDinh;
@@ -41,7 +43,13 @@ export default function LichHoc() {
   const phutThem = coDinh.filter((t) => t.loai === "hocThem").reduce((t, x) => t + thoiLuong(x), 0);
   const ngayTrong = theoThu.filter((n) => !n.ds.length).map((n) => NHAN_THU[n.thu]);
 
-  const dungMau = () => { datCoDinh(LICH_CO_DINH_MAU); setHoiMau(false); setDaDoi(`Đã dùng lịch mẫu (${LICH_CO_DINH_MAU.length} tiết). Em sửa lại cho đúng lịch của mình nhé.`); };
+  /** Thay hẳn lịch đang có bằng lịch mẫu, hoặc chỉ thêm các tiết chưa có (bỏ tiết trùng đúng thứ và giờ). */
+  const dungMau = (cheDo: "thay" | "them" = "thay") => {
+    const them = LICH_PHO_THONG_MAU.filter((m) => !coDinh.some((c) => c.id === m.id || (c.thu === m.thu && c.loai === m.loai && c.batDau === m.batDau && c.ketThuc === m.ketThuc)));
+    datCoDinh(cheDo === "thay" ? LICH_PHO_THONG_MAU : [...coDinh, ...them]);
+    setHoiMau(false);
+    setDaDoi(cheDo === "thay" ? `Đã dùng lịch mẫu (${LICH_PHO_THONG_MAU.length} tiết). Em sửa lại cho đúng lịch của mình nhé.` : `Đã thêm ${them.length} tiết từ lịch mẫu. Em sửa lại cho đúng lịch của mình nhé.`);
+  };
   const xepLaiGiupEm = () => { xepLai(tuanHienTai(), homNay()); nav(DUONG_DAN.tuan("lich")); };
 
   return (
@@ -65,8 +73,9 @@ export default function LichHoc() {
           <TrangThaiTrong bieuTuong={<CalendarDays size={26} />} tieuDe="Chưa có lịch học"
             moTa="Nhập giờ học ở trường và học thêm. Mình sẽ xếp giờ tự học vào khoảng trống, không bị trùng.">
             <div className="space-y-2">
-              <Nut bieuTuong={Plus} onClick={() => setMoThem(0)}>Thêm tiết đầu tiên</Nut>
-              <Nut kieu="vien" bieuTuong={Sparkles} onClick={dungMau}>Dùng lịch mẫu</Nut>
+              <Nut bieuTuong={CalendarPlus} onClick={() => setMoNhanh(true)}>Nhập nhanh buổi học</Nut>
+              <Nut kieu="vien" bieuTuong={Plus} onClick={() => setMoThem(0)}>Thêm từng tiết</Nut>
+              <Nut kieu="nhe" bieuTuong={Sparkles} onClick={() => dungMau()}>Dùng lịch mẫu</Nut>
             </div>
           </TrangThaiTrong>
         ) : (
@@ -126,7 +135,8 @@ export default function LichHoc() {
               <p className="text-[13px] text-chu-phu px-1">Chưa có tiết: <b className="text-chu">{ngayTrong.join(", ")}</b>. Những ngày này có nhiều thời gian tự học hơn.</p>
             )}
 
-            <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="pt-1"><Nut kieu="nhe" bieuTuong={CalendarPlus} onClick={() => setMoNhanh(true)}>Nhập nhanh buổi học</Nut></div>
+            <div className="grid grid-cols-2 gap-2">
               <Nut bieuTuong={Plus} onClick={() => setMoThem(0)}>Thêm tiết</Nut>
               <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => setHoiMau(true)}>Lịch mẫu</Nut>
             </div>
@@ -134,6 +144,8 @@ export default function LichHoc() {
           </>
         )}
       </NoiDung>
+
+      {moNhanh && <HopNhapLichNhanh xong={(n) => { setMoNhanh(false); if (n > 0) setDaDoi(`Đã thêm ${n} tiết vào lịch học.`); }} />}
 
       {moThem !== null && (
         <HopThemTiet thuSan={moThem} dong={() => setMoThem(null)} xong={(n) => { setMoThem(null); setDaDoi(`Đã thêm ${n} tiết vào lịch học.`); }} />
@@ -157,11 +169,12 @@ export default function LichHoc() {
 
       <HopTruot mo={hoiMau} dong={() => setHoiMau(false)} tieuDe="Dùng lịch mẫu?">
         <div className="space-y-4">
-          <p className="text-[14px] text-chu">Lịch mẫu có {LICH_CO_DINH_MAU.length} tiết: học buổi sáng từ Thứ 2 đến Thứ 6, vài buổi chiều, học thêm Toán và Vật lý, một buổi câu lạc bộ.</p>
-          <p className="text-[14px] font-bold text-do-chu flex gap-2"><AlertTriangle size={18} className="shrink-0 mt-0.5" />Lịch hiện tại của em ({coDinh.length} tiết) sẽ bị thay bằng lịch mẫu.</p>
-          <div className="grid grid-cols-2 gap-2">
+          <p className="text-[14px] text-chu">Lịch mẫu có {LICH_PHO_THONG_MAU.length} tiết: học ở trường sáng Thứ 2 đến Thứ 6, chiều Thứ 2, 4, 6 và một buổi học thêm tối. Đây chỉ là mẫu chung, em nên sửa cho đúng lịch của mình.</p>
+          <p className="text-[14px] font-bold text-do-chu flex gap-2"><AlertTriangle size={18} className="shrink-0 mt-0.5" />Em đang có {coDinh.length} tiết. Em muốn thêm mẫu vào hay thay hẳn?</p>
+          <div className="space-y-2">
+            <Nut onClick={() => dungMau("them")}>Thêm vào lịch hiện có</Nut>
+            <Nut kieu="nguyHiem" onClick={() => dungMau("thay")}>Thay bằng lịch mẫu</Nut>
             <Nut kieu="vien" onClick={() => setHoiMau(false)}>Giữ lịch cũ</Nut>
-            <Nut onClick={dungMau}>Dùng mẫu</Nut>
           </div>
         </div>
       </HopTruot>

@@ -1,5 +1,5 @@
 // Màn 17 · Kế hoạch tuần: "Việc cần làm | Lịch" trên cùng một màn, kèm nút "Xếp lịch giúp em".
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { History, Settings, Sparkles, WandSparkles } from "lucide-react";
 import { DauTrangChinh, NoiDung, ThanhPhuKeHoach } from "@/components/layout/khung";
@@ -8,20 +8,20 @@ import { ThanhChuyen } from "@/components/ui/nhap-lieu";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
-import { bayNgayCuaTuan, congNgay } from "@/engine/xep-lich";
+import { bayNgayCuaTuan, thuHaiCuaTuan } from "@/engine/xep-lich";
 import { homNay, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { CheDoLich } from "./che-do-lich";
 import { CheDoViec } from "./che-do-viec";
 import { phutBayGio } from "./dinh-dang";
+import { ngayBatDauXep } from "./lich-tuan";
 import { HopXepLich, type KetQuaXep } from "./hop-xep-lich";
 import { useThongBaoNgan } from "./thanh-phan";
+import { TheViecDoTuanTruoc, TuanMoiTuTao } from "./tuan-moi";
 import { daKetThuc, soBuoiTuHoc } from "./tinh-toan";
 
 type CheDo = "viec" | "lich";
 const CAC_CHE_DO: { gia: CheDo; nhan: string }[] = [{ gia: "viec", nhan: "Việc cần làm" }, { gia: "lich", nhan: "Lịch" }];
-/** Sau giờ này, "Xếp lịch giúp em" bắt đầu xếp từ ngày mai để không đặt việc vào giờ đã qua. */
-const MUON_TRONG_NGAY = 20 * 60 + 30;
 
 export default function KeHoachTuan() {
   const { s, xepLai } = useApp();
@@ -29,7 +29,9 @@ export default function KeHoachTuan() {
   const loc = useLocation();
   const [params, setParams] = useSearchParams();
   const cheDo: CheDo = params.get("xem") === "lich" ? "lich" : "viec";
-  const hom = homNay();
+  // Ngày hôm nay tính lại khi qua nửa đêm hoặc khi quay lại tab, để tuần hiện tại không kẹt ở tuần cũ.
+  const [hom, setHom] = useState(homNay);
+  const tuanHienRef = useRef(tuanHienTai());
   const [tuan, setTuan] = useState(tuanHienTai);
   const [ngay, setNgay] = useState(hom);
   const ngays = useMemo(() => bayNgayCuaTuan(tuan), [tuan]);
@@ -38,6 +40,27 @@ export default function KeHoachTuan() {
   const [thongBao, hienThongBao] = useThongBaoNgan();
   const [ketQua, setKetQua] = useState<KetQuaXep | null>(null);
   const [choXepLai, setChoXepLai] = useState(false);
+
+  useEffect(() => {
+    const capNhat = () => setHom(homNay());
+    const muonNuaDem = () => {
+      const d = new Date();
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 0, 0, 1).getTime() - d.getTime();
+    };
+    let hen = window.setTimeout(function chay() { capNhat(); hen = window.setTimeout(chay, muonNuaDem()); }, muonNuaDem());
+    const khiHien = () => { if (document.visibilityState === "visible") capNhat(); };
+    document.addEventListener("visibilitychange", khiHien);
+    window.addEventListener("focus", capNhat);
+    return () => { window.clearTimeout(hen); document.removeEventListener("visibilitychange", khiHien); window.removeEventListener("focus", capNhat); };
+  }, []);
+  useEffect(() => {
+    const moi = thuHaiCuaTuan(hom);
+    if (moi === tuanHienRef.current) return;
+    // Đang xem tuần vừa là "tuần này" thì chuyển theo sang tuần mới; đang xem tuần khác thì giữ nguyên.
+    setTuan((t) => (t === tuanHienRef.current ? moi : t));
+    setNgay((n) => (bayNgayCuaTuan(tuanHienRef.current).includes(n) ? hom : n));
+    tuanHienRef.current = moi;
+  }, [hom]);
 
   // Thông báo ngắn do màn Chi tiết việc gửi về (Hoàn thành, Dời lịch, Bỏ qua).
   useEffect(() => {
@@ -54,15 +77,14 @@ export default function KeHoachTuan() {
   };
 
   const xep = () => {
-    const laTuanNay = tuan === tuanHienTai();
-    let tuNgay: string | undefined = laTuanNay ? hom : undefined;
-    if (laTuanNay && phutBayGio() >= MUON_TRONG_NGAY) tuNgay = congNgay(hom, 1);
-    if (tuNgay && tuNgay > ngays[6]) {
-      setKetQua({ chuaXep: 0, ghiChu: ["Tuần này đã gần hết. Em chuyển sang tuần sau rồi bấm Xếp lịch giúp em nhé."], tuNgay, hetTuan: true });
+    const bd = ngayBatDauXep(tuan, hom, phutBayGio(), s.cauHinh.ngayNghi);
+    const { tuNgay } = bd;
+    if (bd.hetTuan) {
+      setKetQua({ chuaXep: 0, ghiChu: [bd.ghiChu ?? "Tuần này đã gần hết. Em chuyển sang tuần sau rồi bấm Xếp lịch giúp em nhé."], tuNgay, hetTuan: true });
       return;
     }
     const r = xepLai(tuan, tuNgay);
-    setKetQua({ ...r, tuNgay });
+    setKetQua({ ...r, ghiChu: bd.ghiChu ? [bd.ghiChu, ...r.ghiChu] : r.ghiChu, tuNgay });
   };
 
   // "Xếp cả việc đã bỏ qua": đợi trạng thái việc cập nhật xong rồi mới xếp lại.
@@ -106,6 +128,9 @@ export default function KeHoachTuan() {
             <p className="text-[12px] text-chu-phu">Chỉ xếp lại giờ cho việc đang có, không tạo việc mới.</p>
           </div>
         ) : null}
+
+        {!quaKhu && <TuanMoiTuTao tuan={tuan} hienThongBao={hienThongBao} />}
+        {!quaKhu && <TheViecDoTuanTruoc tuan={tuan} hienThongBao={hienThongBao} />}
 
         {cheDo === "viec"
           ? <CheDoViec ngays={ngays} ngayChon={ngayChon} quaKhu={quaKhu} hienThongBao={hienThongBao} />
