@@ -9,6 +9,14 @@ export const LICH_CO_DINH_MAU: TietCoDinh[] = [
   { id: "clb-t4", ten: "Câu lạc bộ trường", loai: "khac", thu: 3, batDau: "16:00", ketThuc: "17:30" },
 ];
 
+// Lịch phổ thông cho nút "Lịch mẫu": học ở trường sáng thứ 2 đến thứ 6, chiều thứ 2, 4, 6, một buổi học thêm tối.
+// Không gắn môn nào, không phải lịch của một em cụ thể. LICH_CO_DINH_MAU ở trên giữ cho hồ sơ mẫu và các bài test.
+export const LICH_PHO_THONG_MAU: TietCoDinh[] = [
+  ...[1, 2, 3, 4, 5].map((thu): TietCoDinh => ({ id: `pt-sang-${thu}`, ten: "Học ở trường", loai: "chinhKhoa", thu, batDau: "07:00", ketThuc: "11:30" })),
+  ...[1, 3, 5].map((thu): TietCoDinh => ({ id: `pt-chieu-${thu}`, ten: "Học ở trường", loai: "chinhKhoa", thu, batDau: "13:00", ketThuc: "17:00" })),
+  { id: "pt-them-toi-t3", ten: "Học thêm tối", loai: "hocThem", thu: 2, batDau: "19:15", ketThuc: "21:00" },
+];
+
 // Việc mẫu của một tuần ôn thi. Tài liệu chỉ có tên, KHÔNG gắn đường link khi chưa kiểm chứng được nguồn.
 export const VIEC_MAU: ViecCanHoc[] = [
   {
