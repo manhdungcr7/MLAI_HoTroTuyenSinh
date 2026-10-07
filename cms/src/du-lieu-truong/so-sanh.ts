@@ -6,6 +6,7 @@ const NHAN_O: Record<string, string> = {
   nam: "Năm học", donVi: "Đơn vị", mucThap: "Mức thấp", mucCao: "Mức cao", phamVi: "Áp dụng cho", loTrinhTang: "Lộ trình tăng", ghiChu: "Ghi chú",
   ten: "Tên", tenHocBong: "Tên học bổng", giaTri: "Giá trị", dieuKien: "Điều kiện", hanNop: "Hạn nộp",
   coKyTucXa: "Ký túc xá", giaKyTucThang: "Giá KTX (nghìn/tháng)", khuTroXungQuanh: "Khu trọ", giaTroThang: "Giá trọ (nghìn/tháng)", khoangCachKm: "Cách trường (km)",
+  maNganh: "Mã ngành", phuongThuc: "Phương thức", toHop: "Tổ hợp", diemChuan: "Điểm chuẩn", tieuChiPhu: "Tiêu chí phụ",
   tieuDe: "Tiêu đề", noiDung: "Nội dung", nguoiVietLa: "Người viết là",
   websiteTuyenSinhUrl: "Website tuyển sinh", fanpageUrl: "Fanpage", nhomTuyenSinhChinhThucUrl: "Nhóm tuyển sinh", nhomCongDongUrl: "Nhóm sinh viên",
 };

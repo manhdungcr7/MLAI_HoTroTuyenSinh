@@ -1,13 +1,5 @@
-import { dangDungDuLieuMau } from "./che-do";
-import { xuLyDuLieuMau } from "./gia-lap";
-import {
-  LoiApi, SO_MOI_TRANG,
-  type ChiTietTruongApi, type KenhBody, type KetQuaPhatHanh, type NguoiCms, type NhatKyCms, type PhanCongCms,
-  type SuaThongTinBody, type TaoThongTinBody, type ThongTinCms, type TienDoApi, type TienDoTruong, type Toi, type Trang,
-  type TruongTrongDanhSach, type VaiTro, type BanGhiTruong,
-} from "./kieu";
+import { LoiApi, SO_MOI_TRANG, type NguoiCms, type NhatKyCms, type PhanCongCms, type Toi, type Trang, type VaiTro } from "./kieu";
 export * from "./kieu";
-import type { LoaiThongTin, TrangThaiBai } from "@/data/dong-gop-kiem-tra";
 
 type Query = Record<string, string | number | undefined>;
 
@@ -19,7 +11,6 @@ export function chuoiTruyVan(q?: Query): string {
 }
 
 async function goi<T>(method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", duong: string, tuyChon: { query?: Query; body?: unknown } = {}): Promise<T> {
-  if (dangDungDuLieuMau()) return (await xuLyDuLieuMau(method, duong, tuyChon.query ?? {}, tuyChon.body)) as T;
   let res: Response;
   try {
     res = await fetch(`/api${duong}${chuoiTruyVan(tuyChon.query)}`, {
@@ -84,36 +75,7 @@ export async function layHetTrang<T>(lay: (trang: number) => Promise<Trang<T>>):
 // ---------- Phiên ----------
 export const layToi = () => goi<Toi>("GET", "/toi");
 
-// ---------- Trường ----------
-export async function layTrangTruong(trang: number, loc: { cuaToi?: boolean } = {}): Promise<Trang<TruongTrongDanhSach>> {
-  const r = await goi<{ truong: TruongTrongDanhSach[]; tong: number }>("GET", "/truong", { query: { trang, moi: SO_MOI_TRANG, "cua-toi": loc.cuaToi ? 1 : undefined } });
-  return { muc: r.truong, tong: r.tong };
-}
-export const layTatCaTruong = (loc: { cuaToi?: boolean } = {}) => layHetTrang((t) => layTrangTruong(t, loc));
-export const layChiTietTruong = (ma: string) => goi<ChiTietTruongApi>("GET", `/truong/${encodeURIComponent(ma)}`);
-export const luuKenh = (ma: string, body: KenhBody) => goi<BanGhiTruong>("PUT", `/truong/${encodeURIComponent(ma)}`, { body });
-
-// ---------- Thông tin ----------
-export interface LocThongTin { truong?: string; loai?: LoaiThongTin; trangThai?: TrangThaiBai; nguonGui?: "cms" | "agent" }
-export async function layTrangThongTin(trang: number, loc: LocThongTin = {}): Promise<Trang<ThongTinCms>> {
-  const r = await goi<{ thongTin: ThongTinCms[]; tong: number }>("GET", "/thong-tin", { query: { ...loc, trang, moi: SO_MOI_TRANG } });
-  return { muc: r.thongTin, tong: r.tong };
-}
-export const layTatCaThongTin = (loc: LocThongTin = {}) => layHetTrang((t) => layTrangThongTin(t, loc));
-export const taoThongTin = (body: TaoThongTinBody) => goi<ThongTinCms>("POST", "/thong-tin", { body });
-export const suaThongTin = (id: string, body: SuaThongTinBody) => goi<ThongTinCms>("PATCH", `/thong-tin/${encodeURIComponent(id)}`, { body });
-
-// ---------- Tiến độ ----------
-export async function layTienDo(cuaToi: boolean): Promise<TienDoApi> {
-  const truong = await layHetTrang(async (t) => {
-    const r = await goi<TienDoApi>("GET", "/tien-do", { query: { "cua-toi": cuaToi ? 1 : undefined, trang: t, moi: SO_MOI_TRANG } });
-    return { muc: r.truong, tong: r.tong };
-  });
-  const dem = truong.filter((x: TienDoTruong) => x.du).length;
-  return { truong, tongDu: dem, tong: truong.length };
-}
-
-// ---------- Người, phân công, nhật ký, phát hành (qtv) ----------
+// ---------- Người, phân công, nhật ký (qtv) ----------
 export const layNguoi = async () => (await goi<{ nguoi: NguoiCms[] }>("GET", "/nguoi")).nguoi;
 export const themNguoi = (email: string, vaiTro: VaiTro) => goi<NguoiCms>("POST", "/nguoi", { body: { email, vaiTro } });
 export const xoaNguoi = (email: string) => goi<void>("DELETE", "/nguoi", { query: { email } });
@@ -123,4 +85,3 @@ export async function layTrangNhatKy(trang: number): Promise<Trang<NhatKyCms>> {
   const r = await goi<{ nhatKy: NhatKyCms[]; tong: number }>("GET", "/nhat-ky", { query: { trang, moi: SO_MOI_TRANG } });
   return { muc: r.nhatKy, tong: r.tong };
 }
-export const phatHanh = () => goi<KetQuaPhatHanh>("POST", "/phat-hanh");
