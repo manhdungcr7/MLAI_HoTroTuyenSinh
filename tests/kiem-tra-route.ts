@@ -41,7 +41,7 @@ for (const [ten, fn] of Object.entries(DUONG_DAN) as [string, (...a: unknown[]) 
 }
 
 // 3 + 4 + 5) Quét mã nguồn slice và thành phần
-const TU_CAM = ["dashboard", "kịch bản", "giả lập", "tác động", "rủi ro", "chống trượt", "tối ưu", "CTA", "widget", "onboarding", "profile"];
+const TU_CAM = ["dashboard", "kịch bản", "giả lập", "tác động", "rủi ro", "chống trượt", "tối ưu", "CTA", "widget", "onboarding", "profile", "chắc chắn", "chắc chân", "an toàn không", "yên tâm", "cơ hội tốt"];
 for (const f of tatCa) {
   const ten = tenFile(f);
   const trongFeature = /src\/(features|components)\//.test(ten);

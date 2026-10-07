@@ -47,6 +47,7 @@ export default function ChaoMung() {
   const nav = useNavigate();
   const { s, dungHoSoMau, lamLai } = useApp();
   const [hoiThay, setHoiThay] = useState(false);
+  const [hoiLamLai, setHoiLamLai] = useState(false);
   const h = s.hoSo;
   const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
   // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải dữ liệu mẫu Nguyễn Minh Anh) và chưa bấm hoàn tất
@@ -56,12 +57,18 @@ export default function ChaoMung() {
   // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu em đã nhập gì đó.
   const bamXemMau = () => (daCoThongTin ? setHoiThay(true) : xemMau());
 
+  const thucLamLai = () => {
+    lamLai();
+    nav(DUONG_DAN.batDau(1));
+  };
+
   const batDauMoi = () => {
     if (dangDienDo) {
       nav(DUONG_DAN.batDau(1));
+    } else if (h.hoanTat) {
+      setHoiLamLai(true);
     } else {
-      lamLai();
-      nav(DUONG_DAN.batDau(1));
+      thucLamLai();
     }
   };
 
@@ -114,6 +121,14 @@ export default function ChaoMung() {
         <div className="mt-4 space-y-2.5">
           <Nut kieu="nguyHiem" onClick={xemMau}>Dùng hồ sơ mẫu</Nut>
           <Nut kieu="vien" onClick={() => setHoiThay(false)}>Giữ hồ sơ cũ</Nut>
+        </div>
+      </HopTruot>
+
+      <HopTruot mo={hoiLamLai} dong={() => setHoiLamLai(false)} tieuDe="Xóa hết và làm lại?">
+        <p className="text-[14px] text-chu">Mọi thông tin em đã nhập sẽ bị <b>xóa hoàn toàn</b> (hồ sơ, nguyện vọng, kế hoạch, mục tiêu). Em muốn xóa hết không?</p>
+        <div className="mt-4 space-y-2.5">
+          <Nut kieu="nguyHiem" onClick={thucLamLai}>Xóa hết</Nut>
+          <Nut kieu="vien" onClick={() => setHoiLamLai(false)}>Giữ lại</Nut>
         </div>
       </HopTruot>
     </div>

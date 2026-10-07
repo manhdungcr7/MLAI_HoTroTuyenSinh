@@ -13,6 +13,14 @@ const nv = cs.find((c) => c.khoa === "nguyenVong")!;
 assert.ok(nv.phanTram !== null && nv.phanTram >= 0 && nv.phanTram <= 100);
 assert.ok(cs.find((c) => c.khoa === "nhiemVu")!.giaTri.includes("/"), "hồ sơ mẫu có việc tuần này");
 
+// Khi kemTen=false, gói không chứa họ tên
+const tt_khongTen = tomTatChiaSe(mau, new Date("2026-10-06T08:00:00"), false);
+assert.ok(tt_khongTen.vanBan.includes("HỒ SƠ"), "tiêu đề là 'HỒ SƠ' khi kemTen=false");
+assert.ok(!tt_khongTen.vanBan.includes(`HỒ SƠ CỦA ${mau.hoSo.hoTen.toUpperCase()}`), "không chứa 'HỒ SƠ CỦA [tên]'");
+// Khi kemTen=true, tiêu đề chứa họ tên
+const tt_coTen = tomTatChiaSe(mau, new Date("2026-10-06T08:00:00"), true);
+assert.ok(tt_coTen.vanBan.includes(`HỒ SƠ CỦA ${mau.hoSo.hoTen.toUpperCase()}`), "tiêu đề chứa 'HỒ SƠ CỦA [tên]' khi kemTen=true");
+
 // Hồ sơ trống: không chia cho 0, không ra NaN
 const trong = chiSoTheoDoi(TRANG_THAI_BAN_DAU as never);
 assert.ok(trong.every((c) => !c.giaTri.includes("NaN") && !c.moTa.includes("NaN") && !c.moTa.includes("undefined")));

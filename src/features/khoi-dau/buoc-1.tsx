@@ -147,6 +147,24 @@ export default function Buoc1({ h, sua, loi }: P) {
         <ChonO nhan="Mục tiêu hiện tại" kieu="o" cot={3} cacLua={MUC_TIEU_HIEN_TAI} giaTri={h.mucTieuHienTai} onChange={(v) => sua({ mucTieuHienTai: v })} />
       </CauHoi>
 
+      {h.mucTieuHienTai === "daCoMoUoc" && (
+        <div className="space-y-1.5 rounded-xl bg-xanh-nhat p-3 animate-hien-len">
+          <label htmlFor="bd-truong-mo-uoc" className="block text-[14px] font-bold text-muc">
+            Trường hoặc ngành mơ ước của em <span className="text-[12px] font-normal text-chu-phu">(không bắt buộc)</span>
+          </label>
+          <OInput
+            id="bd-truong-mo-uoc"
+            value={h.truongMoUoc ?? ""}
+            onChange={(e) => sua({ truongMoUoc: e.target.value })}
+            placeholder="Ví dụ: ĐH Bách Khoa, CNTT, Y Hà Nội..."
+            maxLength={100}
+          />
+          <p className="text-[12px] text-chu-phu">
+            Mình sẽ dùng trường này để tính khoảng cách điểm và gợi ý môn cần kéo cho em.
+          </p>
+        </div>
+      )}
+
       <div className="space-y-1.5">
         <label htmlFor="bd-giai-doan" className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
           <School size={18} className="text-xanh" />Giai đoạn hiện tại

@@ -33,6 +33,7 @@ export default function NhanLoiNhan() {
         <The className="space-y-2">
           <div className="flex items-center gap-2"><p className="text-[16px] font-extrabold text-muc">{ln.tu}</p><Nhan tone="xanh">{TEN_VAI[ln.vai]}</Nhan></div>
           <p className="text-[15px] text-chu leading-relaxed whitespace-pre-line">{ln.noiDung}</p>
+          <p className="text-[12px] text-chu-phu leading-snug">Người gửi tự xưng, em chưa thể xác minh.</p>
         </The>
         <p className="text-[13px] text-chu-phu leading-snug">Lời nhắn chỉ được lưu khi em bấm lưu, và chỉ nằm trên máy này. Em có thể xóa bất cứ lúc nào ở Hồ sơ.</p>
         {daLuu

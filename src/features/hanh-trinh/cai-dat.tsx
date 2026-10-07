@@ -27,9 +27,14 @@ export default function CaiDat() {
 
   const dungMau = () => { dungHoSoMau(); setHoi(null); nav(DUONG_DAN.homNay()); };
   const xuat = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const dateStr = `${year}-${month}-${day}`;
     const url = URL.createObjectURL(new Blob([taoBanSaoLuu(s)], { type: "application/json" }));
     const a = document.createElement("a");
-    a.href = url; a.download = `nguyen-vong-ai-${new Date().toISOString().slice(0, 10)}.json`;
+    a.href = url; a.download = `nguyen-vong-ai-${dateStr}.json`;
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     setTin({ ok: true, chu: "Đã tải tệp sao lưu về máy. Em giữ tệp này ở nơi an toàn." });
   };

@@ -18,7 +18,7 @@ export default function ChiaSe() {
   const [tin, setTin] = useState("");
   const [kemTen, setKemTen] = useState(false);
   const [lienKet, setLienKet] = useState("");
-  const { muc, vanBan } = tomTatChiaSe(s, new Date());
+  const { muc, vanBan } = tomTatChiaSe(s, new Date(), kemTen);
   const coShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const sao = async () => {
@@ -61,6 +61,9 @@ export default function ChiaSe() {
             <Nut bieuTuong={Link2} onClick={taoLienKet}>Tạo liên kết</Nut>
             {lienKet && (
               <>
+                {lienKet.length > 8000 && (
+                  <p className="text-[13px] text-cam-chu rounded-the bg-cam-nhat p-2.5 leading-snug">Liên kết dài, một số ứng dụng chat có thể cắt. Em thử gửi từng phần hoặc dùng nút Gửi qua ứng dụng khác.</p>
+                )}
                 <p className="break-all rounded-lg bg-nen p-2.5 text-[12px] text-chu-phu select-all max-h-24 overflow-y-auto">{lienKet}</p>
                 <Nut kieu="vien" bieuTuong={Copy} onClick={saoLienKet}>Sao chép liên kết</Nut>
                 <p className="text-[12px] text-chu-phu leading-snug">Ai có liên kết đều xem được nội dung này. Em chỉ gửi cho người em tin tưởng.</p>
@@ -91,11 +94,11 @@ export default function ChiaSe() {
         <section aria-label="Nội dung bản tóm tắt" className="print-vung">
           <TieuDeMuc>Nội dung sẽ được chia sẻ</TieuDeMuc>
           <The className="space-y-3.5">
-            {muc.map((k) => (
-              <div key={k.tieuDe}>
+            {muc.map((k, i) => (
+              <div key={`${k.tieuDe}-${i}`}>
                 <h3 className="text-[14px] font-bold text-muc">{k.tieuDe}</h3>
                 <ul className="mt-1 space-y-1">
-                  {k.dong.map((d) => <li key={d} className="text-[14px] text-chu leading-snug">{d}</li>)}
+                  {k.dong.map((d, j) => <li key={`${d}-${j}`} className="text-[14px] text-chu leading-snug">{d}</li>)}
                 </ul>
               </div>
             ))}

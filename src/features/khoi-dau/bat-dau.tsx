@@ -58,6 +58,12 @@ export default function BatDau() {
   const denBuoc = (b: BuocBatDau) => nav(DUONG_DAN.batDau(b));
 
   const chuyenSangKhamPha = () => {
+    const loi = kiemTraBuoc1(h);
+    const thieu = THU_TU_BAT_BUOC.filter((k) => loi[k]);
+    if (thieu.length) {
+      alert(`Em còn thiếu: ${thieu.map((k) => loi[k]).join(", ")}`);
+      return;
+    }
     capNhatHoSo({ hoanTat: true });
     setDangPhanTich(true);
   };
@@ -77,7 +83,7 @@ export default function BatDau() {
   };
 
   if (dangPhanTich) {
-    return <ManHinhPhanTichAI onHoanTat={() => nav(DUONG_DAN.khamPha())} />;
+    return <ManHinhPhanTichAI onHoanTat={() => nav(DUONG_DAN.khamPha(), { replace: true })} />;
   }
 
   return (

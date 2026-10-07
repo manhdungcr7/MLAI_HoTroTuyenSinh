@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { Navigate, Outlet, RouterProvider, createHashRouter, useLocation } from "react-router-dom";
+import { Outlet, RouterProvider, createHashRouter, useLocation } from "react-router-dom";
 import { KhungCoThanhDuoi, KhungKhongThanh } from "@/components/layout/khung";
 import { TrangLoi } from "@/components/layout/trang-loi";
-import { DUONG_DAN } from "@/duong-dan";
+import { Trang404 } from "@/components/layout/trang-404";
 import type { RoutesCuaSlice } from "@/routes-type";
 import { routes as khoiDau } from "@/features/khoi-dau/routes";
 import { routes as hanhTrinh } from "@/features/hanh-trinh/routes";
@@ -24,7 +24,7 @@ const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, th
 // Tiêu đề tab trình duyệt theo màn (khớp theo đầu đường dẫn, dài nhất thắng).
 const TIEU_DE: [string, string][] = [
   ["/kham-pha/bo-loc", "Bộ lọc"], ["/kham-pha", "Khám phá"], ["/so-sanh", "So sánh"],
-  ["/nguyen-vong/an-toan", "Danh sách có an toàn không?"], ["/nguyen-vong", "Nguyện vọng"],
+  ["/nguyen-vong/an-toan", "Cơ cấu danh sách"], ["/nguyen-vong", "Nguyện vọng"],
   ["/thu-tinh-huong", "Thử tình huống"], ["/diem-thi-thu", "Điểm thi thử"],
   ["/ke-hoach/tuan", "Kế hoạch tuần"], ["/ke-hoach/tien-do", "Tiến độ"], ["/ke-hoach/viec", "Chi tiết việc"], ["/ke-hoach/cai-dat", "Cài đặt"], ["/ke-hoach", "Mục tiêu"],
   ["/ho-so/chia-se", "Chia sẻ với người đồng hành"], ["/ho-so", "Hồ sơ"], ["/huong-nghiep", "Trắc nghiệm hướng nghiệp"], ["/dong-hanh", "Người đồng hành"], ["/loi-nhan", "Lời nhắn cho em"], ["/tu-van", "Tư vấn"], ["/bat-dau", "Tạo hồ sơ"], ["/chao", "Chào mừng"],
@@ -45,7 +45,7 @@ const router = createHashRouter([
     children: [
       { element: <KhungKhongThanh />, children: CAC_SLICE.flatMap((s) => s.khongThanh ?? []) },
       { element: <KhungCoThanhDuoi />, children: CAC_SLICE.flatMap((s) => s.coThanh ?? []) },
-      { path: "*", element: <Navigate to={DUONG_DAN.homNay()} replace /> },
+      { path: "*", element: <Trang404 /> },
     ],
   },
 ]);

@@ -20,7 +20,7 @@ export default function DiemMonThem({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo
     setChu((x) => ({ ...x, [m]: c }));
     const kq = docDiem(c);
     if (kq.loai === "hopLe") sua({ diemThem: { ...them, [m]: kq.gia } });
-    else if (kq.loai === "trong") sua({ diemThem: { ...them, [m]: null } });
+    else sua({ diemThem: { ...them, [m]: null } });
   };
 
   return (
