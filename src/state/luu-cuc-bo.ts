@@ -11,7 +11,7 @@ export function useLuuCucBo<T>(khoa: string, macDinh: T): [T, (v: T | ((c: T) =>
     } catch { return macDinh; }
   });
   useEffect(() => {
-    try { localStorage.setItem(k, JSON.stringify(gia)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
+    try { localStorage.setItem(k, JSON.stringify(gia)); } catch { window.dispatchEvent(new Event("nvai-luu-loi")); /* store hiện banner báo không lưu được */ }
   }, [k, gia]);
   const dat = useCallback((v: T | ((c: T) => T)) => setGia(v), []);
   return [gia, dat];

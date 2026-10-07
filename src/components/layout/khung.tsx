@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Bell, CalendarDays, GraduationCap, Heart, Home, Search, UserRound, type LucideIcon } from "lucide-react";
 import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
 import { gop } from "@/components/ui/nut-the";
+import { BannerKhongLuu } from "./banner-khong-luu";
 
 const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
   homNay: Home, khamPha: Search, nguyenVong: Heart, keHoach: CalendarDays, hoSo: UserRound,
@@ -14,6 +15,7 @@ export function KhungCoThanhDuoi() {
   const { pathname } = useLocation();
   return (
     <div className="khung-ung-dung pb-24">
+      <BannerKhongLuu />
       <Outlet />
       <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang border-t border-vien vung-an-toan-duoi">
         <ul className="grid grid-cols-5">
@@ -37,7 +39,7 @@ export function KhungCoThanhDuoi() {
 }
 
 export function KhungKhongThanh() {
-  return <div className="khung-ung-dung"><Outlet /></div>;
+  return <div className="khung-ung-dung"><BannerKhongLuu /><Outlet /></div>;
 }
 
 export function Logo({ nho }: { nho?: boolean }) {

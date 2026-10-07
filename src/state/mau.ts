@@ -13,6 +13,7 @@ export const HO_SO_TRONG: HoSo = {
 };
 
 export const TRANG_THAI_BAN_DAU: AppState = {
+  phienBan: 2,
   hoSo: HO_SO_TRONG,
   mucTieu: null,
   nguyenVong: [], yeuThich: [], soSanh: [],
