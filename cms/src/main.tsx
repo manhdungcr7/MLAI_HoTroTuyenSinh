@@ -1,9 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./giao-dien/index.css";
+import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <main className="p-6 text-muc font-bold">Quản trị Nguyện Vọng (khung)</main>
+    <App />
   </StrictMode>,
 );

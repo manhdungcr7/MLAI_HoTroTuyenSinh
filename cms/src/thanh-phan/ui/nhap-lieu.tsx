@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from "react
 import { Check, ChevronDown, type LucideIcon } from "lucide-react";
 import { gop } from "./nut-the";
 
-export function Truong({ nhan, batBuoc, goiY, htmlFor, children }: { nhan: string; batBuoc?: boolean; goiY?: string; htmlFor?: string; children: ReactNode }) {
+export function Truong({ nhan, batBuoc, goiY, htmlFor, loi, children }: { nhan: string; batBuoc?: boolean; goiY?: string; htmlFor?: string; loi?: string; children: ReactNode }) {
   if (htmlFor) {
     return (
       <fieldset className="border-none p-0 min-w-0">
@@ -10,7 +10,7 @@ export function Truong({ nhan, batBuoc, goiY, htmlFor, children }: { nhan: strin
           {nhan}{batBuoc && <span className="text-do"> *</span>}
         </label>
         {children}
-        {goiY && <span className="block text-[12px] text-chu-phu mt-1">{goiY}</span>}
+        {loi ? <span className="block text-[12px] font-semibold text-do-chu mt-1">{loi}</span> : goiY ? <span className="block text-[12px] text-chu-phu mt-1">{goiY}</span> : null}
       </fieldset>
     );
   }
@@ -20,7 +20,7 @@ export function Truong({ nhan, batBuoc, goiY, htmlFor, children }: { nhan: strin
         {nhan}{batBuoc && <span className="text-do"> *</span>}
       </legend>
       {children}
-      {goiY && <span className="block text-[12px] text-chu-phu mt-1">{goiY}</span>}
+      {loi ? <span className="block text-[12px] font-semibold text-do-chu mt-1">{loi}</span> : goiY ? <span className="block text-[12px] text-chu-phu mt-1">{goiY}</span> : null}
     </fieldset>
   );
 }
@@ -33,6 +33,16 @@ export function OInput({ bieuTuong: Icon, className, ...p }: InputHTMLAttributes
       {Icon && <Icon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu" />}
       <input {...p} className={gop(KHUNG, Icon && "pl-10", className)} />
     </div>
+  );
+}
+
+export function OTextArea({ className, hang = 3, ...p }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { hang?: number }) {
+  return (
+    <textarea
+      rows={hang}
+      {...p}
+      className={gop("w-full rounded-xl border border-vien bg-white p-3 text-[15px] text-chu placeholder:text-chu-phu/70 focus:border-xanh", className)}
+    />
   );
 }
 

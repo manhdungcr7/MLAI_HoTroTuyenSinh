@@ -1,5 +1,3 @@
-// Client API có kiểu. Mọi màn chỉ gọi các hàm ở đây, không tự fetch.
-// Dùng dữ liệu mẫu khi bật chế độ mẫu (xem che-do.ts); lỗi mạng/HTML/JSON hỏng đều thành LoiApi có thông báo rõ.
 import { dangDungDuLieuMau } from "./che-do";
 import { xuLyDuLieuMau } from "./gia-lap";
 import {
@@ -8,6 +6,7 @@ import {
   type SuaThongTinBody, type TaoThongTinBody, type ThongTinCms, type TienDoApi, type TienDoTruong, type Toi, type Trang,
   type TruongTrongDanhSach, type VaiTro, type BanGhiTruong,
 } from "./kieu";
+export * from "./kieu";
 import type { LoaiThongTin, TrangThaiBai } from "@/data/dong-gop-kiem-tra";
 
 type Query = Record<string, string | number | undefined>;
