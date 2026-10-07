@@ -48,6 +48,8 @@ export const KHUNG_BAO_VE_GIO: { ten: string; batDau: string; ketThuc: string }[
   { ten: "Ăn tối & nghỉ ngơi", batDau: "18:00", ketThuc: "19:00" },
 ];
 const KHUNG_BAO_VE = KHUNG_BAO_VE_GIO.map((k) => ({ batDau: phutTuGio(k.batDau), ketThuc: phutTuGio(k.ketThuc) }));
+/** Khung bảo vệ tùy chỉnh: mảng rỗng = tắt hẳn giờ ăn; không truyền = dùng KHUNG_BAO_VE_GIO. Giờ dạng "HH:mm". */
+export type KhungBaoVeTuyChon = { batDau: string; ketThuc: string }[];
 const MUC_QUY_DOI_TAM_TRANG: Record<TamTrang, number> = { tot: 1, binhThuong: 0.85, met: 0.5 };
 const TOI_DA_MOT_BUOI = 90;
 const TOI_THIEU_MOT_BUOI = 25;
@@ -83,11 +85,17 @@ function truKhung(khungs: Khung[], bo: Khung): Khung[] {
 }
 
 export function khungTrongTrongNgay(
-  ngay: string, coDinh: TietCoDinh[], cfg: CauHinhTuHoc, khoiDaCo: KhoiHoc[] = [],
+  ngay: string, coDinh: TietCoDinh[], cfg: CauHinhTuHoc, khoiDaCo: KhoiHoc[] = [], khungBaoVe?: KhungBaoVeTuyChon,
 ): Khung[] {
   let khungs: Khung[] = [{ batDau: phutTuGio(cfg.gioBatDau), ketThuc: phutTuGio(cfg.gioKetThuc) }];
-  for (const k of KHUNG_BAO_VE) khungs = truKhung(khungs, k);
   const thu = thuCuaNgay(ngay);
+  const baoVe = khungBaoVe ? khungBaoVe.map((k) => ({ batDau: phutTuGio(k.batDau), ketThuc: phutTuGio(k.ketThuc) })) : KHUNG_BAO_VE;
+  const hocThem = coDinh.filter((x) => x.thu === thu && x.loai === "hocThem").map((x) => ({ batDau: phutTuGio(x.batDau), ketThuc: phutTuGio(x.ketThuc) }));
+  for (const k of baoVe) {
+    // Lớp học thêm của em đã đè lên giờ ăn: em tự lo bữa quanh lớp, không cấm thêm phần còn lại của khung ăn.
+    if (hocThem.some((h) => h.batDau < k.ketThuc && h.ketThuc > k.batDau)) continue;
+    khungs = truKhung(khungs, k);
+  }
   for (const t of coDinh.filter((x) => x.thu === thu)) {
     // chừa 10 phút di chuyển / chuẩn bị quanh tiết cố định
     khungs = truKhung(khungs, { batDau: phutTuGio(t.batDau) - 10, ketThuc: phutTuGio(t.ketThuc) + 10 });
@@ -110,6 +118,7 @@ interface DauVao {
   cfg: CauHinhTuHoc;
   tamTrang?: TamTrang;
   khoiDaCo?: KhoiHoc[]; // các khối người dùng tự thêm / đã khóa
+  khungBaoVe?: KhungBaoVeTuyChon; // giờ ăn tùy chỉnh; [] = tắt; mặc định giữ KHUNG_BAO_VE_GIO
 }
 
 export interface KetQuaXepLich {
@@ -133,8 +142,10 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   const khungTheoNgay = new Map<string, Khung[]>();
   const taiTheoNgay = new Map<string, number>();
   const monTheoNgay = new Map<string, MonId[]>();
-  for (const n of ngays) {
-    let khungs = khungTrongTrongNgay(n, coDinh, cfg, khoiDaCo);
+  // Chủ nhật nghỉ vẫn được dành tối cuối để xem trước bài thứ Hai, nên cũng dựng khung cho ngày đó.
+  const ngayKhoiTao = bayNgayCuaTuan(dv.tuanBatDau).filter((n) => (!dv.tuNgay || n >= dv.tuNgay) && (ngays.includes(n) || thuCuaNgay(n) === 7));
+  for (const n of ngayKhoiTao) {
+    let khungs = khungTrongTrongNgay(n, coDinh, cfg, khoiDaCo, dv.khungBaoVe);
     if (dv.tuNgay && n === dv.tuNgay && dv.tuPhut) khungs = truKhung(khungs, { batDau: 0, ketThuc: dv.tuPhut }).filter((k) => k.ketThuc - k.batDau >= TOI_THIEU_MOT_BUOI);
     khungTheoNgay.set(n, khungs);
     // tính phần tự học đã có vào mức tải của ngày
@@ -161,7 +172,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   };
 
   // 1) Chuẩn bị bài: tối hôm trước mỗi môn có tiết ngày mai, dành 15 phút xem trước
-  for (const n of ngays) {
+  for (const n of ngayKhoiTao) {
     const mai = congNgay(n, 1);
     // mỗi môn một buổi, ghi theo tiết sớm nhất của môn đó ngày mai
     const tietMai = coDinh.filter((t) => t.thu === thuCuaNgay(mai) && t.mon).sort((a, b) => phutTuGio(a.batDau) - phutTuGio(b.batDau));
