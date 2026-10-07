@@ -118,7 +118,7 @@ export async function xuLyDuLieuMau(
   if (method === "POST" && duong === "/thong-tin") {
     const b = body as TaoThongTinBody;
     const moi: ThongTinCms = {
-      id: `tt-${Date.now()}`,
+      id: `tt-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       maTruong: b.maTruong,
       loai: b.loai,
       nam: b.nam,
