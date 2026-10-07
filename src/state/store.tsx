@@ -1,12 +1,14 @@
 // Trạng thái toàn ứng dụng, lưu trên máy (localStorage). Chưa có máy chủ: hồ sơ không rời khỏi điện thoại.
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { bayNgayCuaTuan, isoNgay, xepLichTuan } from "@/engine/xep-lich";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau } from "./mau";
+import { chuanHoa } from "./chuan-hoa";
+import { xepLaiTuan } from "./xep-lai";
 import type {
   CauHinhTuHoc, DiemThi, HoSo, KhoiHoc, MucTieuChinh, NhacNho, TamTrang, TietCoDinh, TinhHuongDaLuu, TrangThaiViec, ViecCanHoc, LichSuHoanThanh, LoiNhan,
 } from "./types";
 
 export interface AppState {
+  phienBan: number; // phiên bản cấu trúc dữ liệu, xem chuan-hoa.ts
   hoSo: HoSo;
   mucTieu: MucTieuChinh | null;
   nguyenVong: string[]; // id lựa chọn, theo thứ tự ưu tiên
@@ -42,16 +44,27 @@ function xoaDuLieuPhu() {
 function doc(): AppState {
   try {
     const t = localStorage.getItem(KHOA);
-    if (t) {
-      const luu = JSON.parse(t) as Partial<AppState>;
-      return { ...TRANG_THAI_BAN_DAU, ...luu, hoSo: { ...TRANG_THAI_BAN_DAU.hoSo, ...luu.hoSo } };
-    }
-  } catch { /* trình duyệt chặn lưu: dùng bộ nhớ tạm */ }
+    if (t) return chuanHoa(JSON.parse(t));
+  } catch { /* trình duyệt chặn lưu hoặc dữ liệu hỏng: dùng bộ nhớ tạm */ }
   return TRANG_THAI_BAN_DAU;
+}
+
+/** Chuỗi thô đang lưu trên máy (kể cả khi hỏng không đọc được), để cho em tải về trước khi đặt lại. */
+export function docThoDaLuu(): string | null {
+  try { return localStorage.getItem(KHOA); } catch { return null; }
+}
+
+/** Xóa mọi khóa nvai:* (đặt lại hoàn toàn). Dùng khi dữ liệu hỏng đến mức app không chạy được. */
+export function xoaTatCaDuLieu() {
+  for (const kho of [() => localStorage, () => sessionStorage]) {
+    try { const k = kho(); for (const ten of Object.keys(k)) if (ten.startsWith("nvai:")) k.removeItem(ten); } catch { /* bỏ qua */ }
+  }
 }
 
 interface Ctx {
   s: AppState;
+  /** false khi trình duyệt không cho ghi dữ liệu (đầy bộ nhớ, chế độ riêng tư): dữ liệu chỉ còn trong phiên này. */
+  luuDuoc: boolean;
   capNhatHoSo: (p: Partial<HoSo>) => void;
   datMucTieu: (m: MucTieuChinh | null) => void;
   themNguyenVong: (id: string) => void;
@@ -92,13 +105,35 @@ const idMoi = (t: string) => `${t}-${Date.now().toString(36)}-${dem++}`;
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [s, setS] = useState<AppState>(doc);
+  const [luuDuoc, setLuuDuoc] = useState(true);
+  // sRef luôn là trạng thái mới nhất, kể cả khi hai lệnh gọi liên tiếp trong cùng một lượt: lệnh sau xây trên kết quả của lệnh trước.
+  const sRef = useRef(s);
+  const dat = useCallback((n: AppState) => { sRef.current = n; setS(n); }, []);
+  const cap = useCallback((f: (x: AppState) => AppState) => dat(f(sRef.current)), [dat]);
   useEffect(() => {
-    try { localStorage.setItem(KHOA, JSON.stringify(s)); } catch { /* bỏ qua */ }
+    try {
+      const j = JSON.stringify(s);
+      if (localStorage.getItem(KHOA) !== j) localStorage.setItem(KHOA, j);
+      setLuuDuoc(true);
+    } catch { setLuuDuoc(false); }
   }, [s]);
-  const cap = useCallback((f: (x: AppState) => AppState) => setS(f), []);
+  useEffect(() => {
+    const khiLuuLoi = () => setLuuDuoc(false); // các màn dùng useLuuCucBo báo ghi thất bại
+    // Tab khác đổi dữ liệu thì nhận về, để hai tab không ghi đè nhau bằng bản cũ.
+    const khiTabKhacDoi = (e: StorageEvent) => {
+      if (e.key !== KHOA || !e.newValue) return;
+      try {
+        const n = chuanHoa(JSON.parse(e.newValue));
+        if (JSON.stringify(n) !== JSON.stringify(sRef.current)) dat(n);
+      } catch { /* dữ liệu từ tab khác không đọc được: giữ bản hiện tại */ }
+    };
+    window.addEventListener("nvai-luu-loi", khiLuuLoi);
+    window.addEventListener("storage", khiTabKhacDoi);
+    return () => { window.removeEventListener("nvai-luu-loi", khiLuuLoi); window.removeEventListener("storage", khiTabKhacDoi); };
+  }, [dat]);
 
   const api = useMemo<Ctx>(() => ({
-    s,
+    s, luuDuoc,
     capNhatHoSo: (p) => cap((x) => ({ ...x, hoSo: { ...x.hoSo, ...p } })),
     datMucTieu: (m) => cap((x) => ({ ...x, mucTieu: m })),
     themNguyenVong: (id) => cap((x) => (x.nguyenVong.includes(id) ? x : { ...x, nguyenVong: [...x.nguyenVong, id] })),
@@ -118,11 +153,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     themDiemThi: (d) => cap((x) => ({ ...x, diemThi: [...x.diemThi, d] })),
     luuTinhHuong: (th) => cap((x) => ({ ...x, tinhHuong: [...x.tinhHuong, { ...th, id: idMoi("th"), luc: new Date().toISOString() }].slice(-6) })),
     xoaTinhHuong: (id) => cap((x) => ({ ...x, tinhHuong: x.tinhHuong.filter((t) => t.id !== id) })),
-    dungHoSoMau: () => { xoaDuLieuPhu(); setS(taoHoSoMau()); },
-    lamLai: () => { xoaDuLieuPhu(); setS({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
+    dungHoSoMau: () => { xoaDuLieuPhu(); dat(taoHoSoMau()); },
+    lamLai: () => { xoaDuLieuPhu(); dat({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
     themLoiNhan: (l) => cap((x) => (x.loiNhan.some((k) => k.id === l.id) ? x : { ...x, loiNhan: [l, ...x.loiNhan].slice(0, 30) })),
     xoaLoiNhan: (id) => cap((x) => ({ ...x, loiNhan: x.loiNhan.filter((k) => k.id !== id) })),
-    khoiPhuc: (n) => { xoaDuLieuPhu(); setS(n); },
+    khoiPhuc: (n) => { xoaDuLieuPhu(); dat(chuanHoa(n)); },
     datTrangThaiViec: (v, tt) => cap((x) => ({
       ...x,
       trangThaiViec: { ...x.trangThaiViec, [v.id]: tt },
@@ -143,23 +178,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     capNhatNhacNho: (p) => cap((x) => ({ ...x, nhacNho: { ...x.nhacNho, ...p } })),
     doiCauNoi: () => cap((x) => ({ ...x, cauNoiHomNay: x.cauNoiHomNay + 1 })),
     xepLai: (tuanBatDau, tuNgay, viecMoi) => {
-      const x = viecMoi ? { ...s, viec: viecMoi } : s;
-      const ngays = bayNgayCuaTuan(tuanBatDau);
-      const xong = (k: KhoiHoc) => k.viecId && x.trangThaiViec[k.viecId] === "xong";
-      const giu = x.khoiHoc.filter((k) => !ngays.includes(k.ngay) || k.khoa || !k.id.startsWith("auto-") || xong(k) || (tuNgay && k.ngay < tuNgay));
-      const viecCan = x.viec.filter((v) => {
-        if (v.tuan && v.tuan !== tuanBatDau) return false; // việc của tuần khác không xếp vào tuần này
-        const tt = x.trangThaiViec[v.id];
-        if (tt === "xong" || tt === "boQua") return false;
-        return !giu.some((k) => k.viecId === v.id && k.khoa);
-      });
-      const bayGio = new Date();
-      const tuPhut = tuNgay && tuNgay === isoNgay(bayGio) ? bayGio.getHours() * 60 + bayGio.getMinutes() : undefined;
-      const r = xepLichTuan({ tuanBatDau, tuNgay, tuPhut, coDinh: x.coDinh, viec: viecCan, cfg: x.cauHinh, tamTrang: x.tamTrang, khoiDaCo: giu });
-      setS({ ...x, khoiHoc: [...giu, ...r.khoi] });
-      return { chuaXep: r.chuaXep.length, ghiChu: r.ghiChu };
+      const r = xepLaiTuan(sRef.current, tuanBatDau, tuNgay, viecMoi);
+      dat(r.s);
+      return { chuaXep: r.chuaXep, ghiChu: r.ghiChu };
     },
-  }), [s, cap]);
+  }), [s, luuDuoc, cap, dat]);
 
   return <AppCtx.Provider value={api}>{children}</AppCtx.Provider>;
 }

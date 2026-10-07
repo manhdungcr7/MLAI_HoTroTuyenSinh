@@ -35,6 +35,7 @@ export default function NhanLoiNhan() {
           <p className="text-[15px] text-chu leading-relaxed whitespace-pre-line">{ln.noiDung}</p>
         </The>
         <p className="text-[13px] text-chu-phu leading-snug">Lời nhắn chỉ được lưu khi em bấm lưu, và chỉ nằm trên máy này. Em có thể xóa bất cứ lúc nào ở Hồ sơ.</p>
+        <p className="text-[13px] text-chu-phu leading-snug">Nếu em mở liên kết này trong Zalo, em hãy mở bằng Chrome hoặc Safari chính của máy để lời nhắn lưu vào hồ sơ thật.</p>
         {daLuu
           ? <Nut muiTen onClick={() => nav(DUONG_DAN.hoSo())}>Đã lưu, xem ở Hồ sơ</Nut>
           : <Nut onClick={() => { themLoiNhan(ln); nav(DUONG_DAN.hoSo()); }}>Lưu vào hồ sơ của em</Nut>}

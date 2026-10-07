@@ -1,9 +1,10 @@
 // Xuất và khôi phục dữ liệu của em (một tệp JSON). Dữ liệu chỉ nằm trên máy em, nên đây là cách duy nhất để chuyển sang máy khác hoặc giữ bản dự phòng.
-import { TRANG_THAI_BAN_DAU } from "./mau";
+import { chuanHoa } from "./chuan-hoa";
 import type { AppState } from "./store";
 
 const NHAN = "nguyen-vong-ai";
 const PHIEN_BAN = 2;
+const laObj = (v: unknown) => typeof v === "object" && v !== null && !Array.isArray(v);
 
 export function taoBanSaoLuu(s: AppState, luc = new Date()): string {
   return JSON.stringify({ app: NHAN, phienBan: PHIEN_BAN, luc: luc.toISOString(), duLieu: s }, null, 2);
@@ -25,5 +26,10 @@ export function docBanSaoLuu(text: string): KetQuaDoc {
   const st = (d.hoSo as { soThich?: { diem?: Record<string, unknown>; top?: unknown } | null }).soThich;
   if (st && (typeof st.diem !== "object" || st.diem === null || !["R", "I", "A", "S", "E", "C"].every((k) => typeof st.diem![k] === "number") || !Array.isArray(st.top)))
     return { ok: false, lyDo: "Kết quả trắc nghiệm trong tệp sao lưu bị hỏng." };
-  return { ok: true, s: { ...TRANG_THAI_BAN_DAU, ...d, hoSo: { ...TRANG_THAI_BAN_DAU.hoSo, ...d.hoSo } } as AppState };
+  const dungKieu = (k: "cauHinh" | "nhacNho" | "trangThaiViec") => d[k] === undefined || laObj(d[k]);
+  if (!dungKieu("cauHinh") || !dungKieu("nhacNho") || !dungKieu("trangThaiViec") || (d.hoSo as { diem?: unknown }).diem !== undefined && !laObj((d.hoSo as { diem?: unknown }).diem))
+    return { ok: false, lyDo: "Tệp sao lưu bị hỏng: phần cài đặt hoặc điểm số sai dạng." };
+  const s = chuanHoa(d); // gộp sâu với mặc định, loại giá trị sai kiểu/NaN, cắt độ dài
+  if (d.mucTieu !== undefined && d.mucTieu !== null && s.mucTieu === null) return { ok: false, lyDo: "Mục tiêu trong tệp sao lưu bị hỏng (ngày thi hoặc điểm không hợp lệ)." };
+  return { ok: true, s };
 }

@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import { AppProvider } from "@/state/store";
+import { LoiUngDung } from "@/components/layout/loi-ung-dung";
 import "./styles/index.css";
 
 // Service worker chỉ để hiện thông báo nhắc học (không lưu bộ nhớ đệm).
@@ -11,8 +12,10 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <LoiUngDung>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </LoiUngDung>
   </StrictMode>,
 );
