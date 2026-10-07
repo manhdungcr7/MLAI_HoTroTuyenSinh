@@ -160,7 +160,7 @@ export default function Buoc1({ h, sua, loi }: P) {
             maxLength={100}
           />
           <p className="text-[12px] text-chu-phu">
-            Mình sẽ dùng trường này để tính khoảng cách điểm và gợi ý môn cần kéo cho em.
+            Em có thể chọn đúng ngành này ở bước Khám phá để mình tính khoảng cách điểm.
           </p>
         </div>
       )}

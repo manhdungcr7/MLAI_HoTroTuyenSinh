@@ -8,7 +8,7 @@ import { HangBam, Nut, The, gop } from "@/components/ui/nut-the";
 import { ThanhTienDo } from "@/components/ui/hien-thi";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
-import { homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
+import { chonNguyenVongLamMucTieu, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
@@ -17,8 +17,9 @@ import { dinhDang } from "@/engine/dinh-dang";
 const SO_DONG_GON = 3;
 
 export default function HomNay() {
-  const { s } = useApp();
+  const { s, datMucTieu } = useApp();
   const nav = useNavigate();
+  const nv = chonNguyenVongLamMucTieu(s);
   // Chưa có hồ sơ (lần đầu mở ứng dụng): đưa tới màn Chào mừng.
   if (!s.hoSo.hoanTat && !s.hoSo.hoTen) return <Navigate to={DUONG_DAN.chao()} replace />;
 
@@ -45,7 +46,9 @@ export default function HomNay() {
           <ChuaCoMucTieu
             onClick={() => nav(DUONG_DAN.khamPha())}
             soNguyenVong={s.nguyenVong.length}
-            onNguyenVong={() => nav(DUONG_DAN.nguyenVong())}
+            nganhNV={nv.ok ? nv.lc.nganh : undefined}
+            lyDo={nv.ok ? undefined : nv.lyDo}
+            onNguyenVong={() => (nv.ok ? datMucTieu(nv.mucTieu) : nav(DUONG_DAN.nguyenVong()))}
           />
         )}
 
@@ -118,7 +121,7 @@ function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: num
   );
 }
 
-function ChuaCoMucTieu({ onClick, soNguyenVong, onNguyenVong }: { onClick: () => void; soNguyenVong?: number; onNguyenVong?: () => void }) {
+function ChuaCoMucTieu({ onClick, soNguyenVong, nganhNV, lyDo, onNguyenVong }: { onClick: () => void; soNguyenVong?: number; nganhNV?: string; lyDo?: string; onNguyenVong?: () => void }) {
   return (
     <NenHero tone="cam" className="p-5">
       <span className="flex items-start gap-3">
@@ -131,8 +134,9 @@ function ChuaCoMucTieu({ onClick, soNguyenVong, onNguyenVong }: { onClick: () =>
       <div className="mt-4 space-y-2">
         <Nut muiTen onClick={onClick}>Khám phá ngành học</Nut>
         {Boolean(soNguyenVong && soNguyenVong > 0 && onNguyenVong) && (
-          <Nut kieu="vien" onClick={onNguyenVong}>Chọn từ {soNguyenVong} nguyện vọng đã lưu</Nut>
+          <Nut kieu="vien" onClick={onNguyenVong}>{nganhNV ? `Chọn ${nganhNV} làm mục tiêu` : `Xem ${soNguyenVong} nguyện vọng đã lưu`}</Nut>
         )}
+        {lyDo && <span className="block text-[13px] text-chu-phu">Chưa đặt được từ nguyện vọng: {lyDo}</span>}
       </div>
     </NenHero>
   );

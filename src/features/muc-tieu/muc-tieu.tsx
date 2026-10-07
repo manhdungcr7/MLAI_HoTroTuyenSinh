@@ -8,7 +8,7 @@ import { ThanhTienDo, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { DUONG_DAN } from "@/duong-dan";
-import { homNay } from "@/state/chon";
+import { chonNguyenVongLamMucTieu, homNay } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { TEN_MON, TO_HOP, type MaToHop, type MucTieuChinh } from "@/state/types";
 import { docMucTieu, type DuLieuMucTieu } from "./du-lieu";
@@ -27,6 +27,7 @@ const CAC_TO_HOP = Object.keys(TO_HOP) as MaToHop[];
 export default function MucTieu() {
   const { s, datMucTieu } = useApp();
   const nav = useNavigate();
+  const nv = chonNguyenVongLamMucTieu(s);
   const d = docMucTieu(s);
   // Chỉ THPT tính được thật; chọn hai cách kia chỉ để xem ghi chú, không lưu để các màn khác vẫn khớp số.
   const [phuongThuc, setPhuongThuc] = useState<PhuongThuc>(s.mucTieu?.phuongThuc ?? "THPT");
@@ -45,8 +46,11 @@ export default function MucTieu() {
             moTa={mucTieuCu ? "Ngành em chọn trước đây không còn trong danh sách. Em chọn lại một mục tiêu nhé." : "Chọn một ngành, trường em muốn vào. Mình sẽ tính em còn cách bao xa và nên tập trung môn nào."}>
             <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá ngành học</Nut>
             {s.nguyenVong.length > 0 && (
-              <Nut kieu="vien" onClick={() => nav(DUONG_DAN.nguyenVong())}>Chọn từ {s.nguyenVong.length} nguyện vọng đã lưu</Nut>
+              <Nut kieu="vien" onClick={() => (nv.ok ? datMucTieu(nv.mucTieu) : nav(DUONG_DAN.nguyenVong()))}>
+                {nv.ok ? `Chọn ${nv.lc.nganh} làm mục tiêu` : `Xem ${s.nguyenVong.length} nguyện vọng đã lưu`}
+              </Nut>
             )}
+            {s.nguyenVong.length > 0 && !nv.ok && <span className="block text-[13px] text-chu-phu mt-2">Chưa đặt được từ nguyện vọng: {nv.lyDo}</span>}
           </TrangThaiTrong>
         </NoiDung>
       </>
