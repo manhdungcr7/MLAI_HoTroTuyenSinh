@@ -101,7 +101,10 @@ export default function KeHoachTuan() {
           <DongThongBao tone="xanh" icon={Sparkles} tieuDe="Tuần này chưa có giờ tự học"
             moTa={`Bấm để mình chia ${conViec} việc vào các khung trống quanh lịch học của em.`} hanhDong="Xếp lịch giúp em" onClick={xep} />
         ) : conViec > 0 ? (
-          <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Xếp lịch giúp em</Nut>
+          <div className="space-y-2">
+            <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Xếp lịch giúp em</Nut>
+            <p className="text-[12px] text-chu-phu">Chỉ xếp lại giờ cho việc đang có, không tạo việc mới.</p>
+          </div>
         ) : null}
 
         {cheDo === "viec"

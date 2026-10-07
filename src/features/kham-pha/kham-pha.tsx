@@ -1,8 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpDown, ChevronDown, Compass, PencilLine, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
-import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
@@ -104,20 +103,25 @@ export default function KhamPha() {
           </section>
         )}
 
-        {!coDiemDeSo(bc) && (
-          <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để biết mức phù hợp"
-            moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp (ví dụ Toán, Lý, Anh). Có điểm, mình sẽ so với điểm chuẩn của từng ngành."
-            hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
-        )}
-
-        {!s.hoSo.soThich && (
-          <DongThongBao tone="cam" icon={Compass} tieuDe="Chưa biết mình hợp ngành nào?"
-            moTa="Làm trắc nghiệm 18 câu, khoảng 3 phút. Mình gợi ý nhóm ngành hợp sở thích của em, bên cạnh điểm số."
-            hanhDong="Làm trắc nghiệm" onClick={() => nav(DUONG_DAN.tracNghiem())} />
+        {(!coDiemDeSo(bc) || !s.hoSo.soThich) && (
+          <div className="-mx-4 px-4 overflow-x-auto an-thanh-cuon">
+            <div className="flex gap-2 w-max pb-1">
+              {!coDiemDeSo(bc) && (
+                <button type="button" onClick={() => nav(DUONG_DAN.batDau(2))} className="flex-shrink-0 min-h-11 rounded-xl bg-xanh text-white px-3.5 text-[14px] font-bold active:brightness-90">
+                  Nhập điểm
+                </button>
+              )}
+              {!s.hoSo.soThich && (
+                <button type="button" onClick={() => nav(DUONG_DAN.tracNghiem())} className="flex-shrink-0 min-h-11 rounded-xl bg-cam text-white px-3.5 text-[14px] font-bold active:brightness-90">
+                  Trắc nghiệm hướng nghiệp
+                </button>
+              )}
+            </div>
+          </div>
         )}
 
         <div className="flex items-center justify-between gap-2 pt-1">
-          <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{ds.length}</b> ngành phù hợp</p>
+          <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{ds.length}</b> ngành</p>
           <label className="relative inline-flex items-center gap-1 min-h-11 pl-2 pr-1 rounded-xl text-[13px] font-bold text-xanh active:bg-xanh-nhat">
             <ArrowUpDown size={15} aria-hidden />
             <span className="sr-only">Sắp xếp theo</span>

@@ -94,3 +94,6 @@ export const CAC_MUC_KE_HOACH = [
   { id: "tuan", nhan: "Kế hoạch tuần", den: DUONG_DAN.tuan(), khop: (p: string) => p.startsWith("/ke-hoach/tuan") },
   { id: "tienDo", nhan: "Tiến độ", den: DUONG_DAN.tienDo(), khop: (p: string) => p.startsWith("/ke-hoach/tien-do") },
 ] as const;
+
+/** Email nhận báo sai lệch số liệu. TẠM: địa chỉ của tác giả; cập nhật khi có địa chỉ chính thức. */
+export const EMAIL_BAO_SAI = "ppnh10092002@gmail.com";

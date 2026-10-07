@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { LUA_CHON } from "../src/data/lua-chon-that";
 import { lyDoKhacPhuongThuc, monThieuCuaToHop, nhanChoLuaChon, nhanNguyenVong } from "../src/engine/phan-tich";
 import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
-import { demNhan, dungDanhSach, ketLuan, xetCoCau } from "../src/features/nguyen-vong/tinh-toan";
+import { canhBaoThuTu, demNhan, deXuatThuTu, dungDanhSach, duaLenTruoc, ketLuan, xetCoCau, type DongNV } from "../src/features/nguyen-vong/tinh-toan";
 import { mucTieuDayDu, mucTieuTuLuaChon } from "../src/state/chon";
 import { taoHoSoMau } from "../src/state/mau";
 import type { LuaChon, MonKhoi } from "../src/state/types";
@@ -83,5 +83,33 @@ const sDu = { ...mau, mucTieu: mucTieuTuLuaChon(muc, mau.hoSo.diem) };
 const m2 = mucTieuDayDu(sDu)!;
 assert.equal(m2.duDiem, true); assert.deepEqual(m2.monThieu, []);
 assert.deepEqual(monThieuCuaToHop({ toan: 5, vatLy: null, hoaHoc: 6, sinh: null, nguVan: null, tiengAnh: null }, ["toan", "vatLy", "hoaHoc"]), ["vatLy"]);
+
+// 7) Thứ tự nguyện vọng: giữ thứ tự của em, chỉ cảnh báo khi An toàn/Dự phòng đứng trước Thử sức/Vừa sức
+const hang = (id: string, viTri: number, nhan: DongNV["nhan"]): DongNV => ({ id, viTri, lc: undefined, nhan, toHop: null, suyRa: false, chenh: null, lyDoKhongNhan: null });
+const dsThuTu = [hang("a", 0, "Thử sức"), hang("b", 1, "Dự phòng"), hang("c", 2, "Thử sức"), hang("d", 3, "Vừa sức"), hang("e", 4, "An toàn")];
+const cb = canhBaoThuTu(dsThuTu);
+assert.deepEqual(cb.map((c) => [c.truoc.id, c.sau.id]), [["b", "c"], ["b", "d"]], "Thử sức đứng đầu không bị cảnh báo; mỗi NV cao hơn bị chặn có một cảnh báo");
+assert.ok(cb[0].cau.includes("NV2") && cb[0].cau.includes("NV3") && cb[0].cau.includes("sẽ không xét"));
+assert.deepEqual(canhBaoThuTu([hang("a", 0, "Thử sức"), hang("b", 1, "Vừa sức"), hang("c", 2, "An toàn")]), [], "thứ tự mong muốn không bị cảnh báo");
+assert.deepEqual(canhBaoThuTu([hang("a", 0, null), hang("b", 1, "Thử sức")]), [], "hàng không nhãn không gây cảnh báo");
+assert.deepEqual(duaLenTruoc(["a", "b", "c", "d"], "c", "b"), ["a", "c", "b", "d"]);
+assert.deepEqual(duaLenTruoc(["a", "b", "c"], "a", "c"), ["b", "a", "c"]);
+assert.deepEqual(duaLenTruoc(["a", "b"], "x", "b"), ["a", "b"], "id lạ thì không đổi");
+// đề xuất không ép Vừa sức lên trước Thử sức: giữ thứ tự em đặt
+assert.deepEqual(deXuatThuTu(dsThuTu), ["a", "c", "d", "b", "e"]);
+assert.deepEqual(deXuatThuTu([hang("a", 0, "Thử sức"), hang("b", 1, "Vừa sức"), hang("c", 2, "Dự phòng")]), ["a", "b", "c"], "đã hợp lý thì giữ nguyên");
+assert.deepEqual(deXuatThuTu([hang("a", 0, "Vừa sức"), hang("b", 1, "Thử sức")]), ["a", "b"], "không đảo Vừa sức/Thử sức theo nhãn");
+
+// 8) Chênh điểm từng dòng: tổng theo tổ hợp trừ điểm chuẩn, null khi không so được
+{
+  const l = lc({ diemMin: 24, diemMax: 24, toHopXet: ["A00"], namDiem: 2025 } as Partial<LuaChon>);
+  const du = diem({ toan: 8, vatLy: 8, hoaHoc: 8.4 });
+  const [h] = dungDanhSach([l.id], du, (id) => (id === l.id ? l : undefined));
+  assert.equal(h.chenh, 0.4, "24,4 - 24 = +0,4");
+  const [thieu] = dungDanhSach([l.id], diem({ toan: 8 }), (id) => (id === l.id ? l : undefined));
+  assert.equal(thieu.chenh, null); assert.ok(thieu.lyDoKhongNhan, "không có số thì phải có lý do");
+  const [mat] = dungDanhSach(["khong-co"], du, () => undefined);
+  assert.equal(mat.chenh, null);
+}
 
 console.log("nhan-nguyen-vong: tất cả kiểm tra đều qua");

@@ -54,6 +54,12 @@ export default function ChiaSe() {
           <TieuDeMuc>Gửi liên kết cho người đồng hành</TieuDeMuc>
           <The className="space-y-3">
             <p className="text-[14px] text-chu leading-snug">Người nhận mở liên kết là xem được bản tóm tắt này và viết lời nhắn gửi lại em, không cần tài khoản. Nội dung nằm trong chính liên kết, không lưu trên máy chủ.</p>
+            {!lienKet && (
+              <div className="rounded-the bg-cam-nhat p-3 border border-cam-chu/30 text-[13px] text-cam-chu leading-snug">
+                <p className="font-bold">Ghi chú riêng tư:</p>
+                <p>Liên kết chứa điểm, tỉnh, ngân sách. Ai có liên kết đều xem được và không thu hồi được. Chỉ gửi cho người em tin.</p>
+              </div>
+            )}
             <div className="flex items-center justify-between gap-3 min-h-11">
               <span className="text-[14px] text-chu leading-snug">Kèm tên của em trong liên kết</span>
               <CongTac dang={kemTen} onChange={(v) => { setKemTen(v); setLienKet(""); }} nhan="Kèm tên của em trong liên kết" />
@@ -61,12 +67,12 @@ export default function ChiaSe() {
             <Nut bieuTuong={Link2} onClick={taoLienKet}>Tạo liên kết</Nut>
             {lienKet && (
               <>
+                <p className="text-[12px] text-chu-phu">Ngày tạo: {new Date().toLocaleDateString("vi-VN")}</p>
                 {lienKet.length > 8000 && (
                   <p className="text-[13px] text-cam-chu rounded-the bg-cam-nhat p-2.5 leading-snug">Liên kết dài, một số ứng dụng chat có thể cắt. Em thử gửi từng phần hoặc dùng nút Gửi qua ứng dụng khác.</p>
                 )}
                 <p className="break-all rounded-lg bg-nen p-2.5 text-[12px] text-chu-phu select-all max-h-24 overflow-y-auto">{lienKet}</p>
                 <Nut kieu="vien" bieuTuong={Copy} onClick={saoLienKet}>Sao chép liên kết</Nut>
-                <p className="text-[12px] text-chu-phu leading-snug">Ai có liên kết đều xem được nội dung này. Em chỉ gửi cho người em tin tưởng.</p>
               </>
             )}
           </The>

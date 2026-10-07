@@ -136,3 +136,29 @@
 - 👤 **Phụ trách (Owner):** cả nhóm, khi làm phần máy chủ
 - ⏳ **Trạng thái:** `Ghi nhận (Backlog)`
 - `du-lieu-that.json` (khoảng 800 KB) nằm trong gói chính (gzip khoảng 157 KB). Khi có máy chủ, nên tải danh mục theo trang và tìm kiếm phía máy chủ.
+
+---
+
+## Việc còn lại sau đợt rà soát 2026-10 (chi tiết ở `docs/audit/05_PAGE_BY_PAGE_USER_REVIEW_AND_WORK_MAP.md`)
+
+Đã làm trong đợt này: nhãn đúng năm điểm chuẩn, không gán nhãn cho chương trình khác THPT, cờ "suy ra", thiếu môn hiện "chưa đủ điểm", bỏ copy dự đoán, độ bền dữ liệu localStorage, giới hạn API tư vấn, xóa lần thi thử nhập nhầm, chọn nguyện vọng làm mục tiêu thật, giữ thứ tự nguyện vọng (WP3), nút Báo số liệu sai, tâm trạng tự hết theo ngày, Chủ nhật nghỉ mặc định.
+
+| # | Việc | Ưu tiên | Cỡ | Model gợi ý |
+|---|---|---|---|---|
+| 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon (thẻ chia sẻ Zalo/Facebook đang không có ảnh) | P0 | S | người làm thiết kế |
+| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` (đang tạm là email cá nhân) sang địa chỉ chung của nhóm | P0 | T | haiku |
+| 13 | Gói dữ liệu: chunk `chuan-hoa` hiện 980 KB (trước là ~840 KB), kiểm tra dữ liệu có bị kéo vào đường nạp đầu qua chuỗi import state không | P1 | S | sonnet |
+| 14 | Xác minh 924 chương trình chỉ có điểm "2026" từ trang tổng hợp; trang "Số liệu từ đâu ra?" đang nói điểm năm nay chưa công bố (mâu thuẫn) | P0 | S | tự kiểm tay, haiku sửa chữ |
+| 15 | Dữ liệu: `du-lieu.meta.json` (ngày lấy, người phụ trách), zod schema chạy trong `kiem-tra`, bắt ID nguyện vọng mồ côi | P1 | M | sonnet |
+| 16 | Hôm nay cho người chưa có mục tiêu: "3 việc đầu tiên" và mốc tuyển sinh | P1 | M | sonnet |
+| 17 | Dọn onboarding: nối `nguonDiem` (học bạ khác điểm thi) vào cảnh báo; bỏ ô chết `cachHoc`, `conDuong`, `ghiChuChiPhi`, `mucTieuHienTai`; bỏ "Giai đoạn", thêm "thi lại"; mức ngân sách "Dưới 15 triệu"; màn phân tích thành thẻ kết quả thật | P1 | S-M | sonnet |
+| 18 | Tự tạo việc khi sang tuần mới; streak hiển thị và "làm nhẹ khi bỏ lỡ"; bộ đếm giờ và ghi điểm sau buổi học | P1 | M | sonnet |
+| 19 | Nút "Đặt X điểm làm mục tiêu" ở kết quả Thử tình huống (Haiku bỏ vì cần logic tính mục tiêu từ tình huống) | P2 | S | sonnet |
+| 20 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 (112 chương trình); gộp với issue #07 | P1 | M-L | main |
+| 21 | Các nơi còn dùng `mucTieuDayDu` chưa xử lý thiếu môn (`hanh-trinh/tinh-toan.ts`, `ke-hoach/*`, `tu-hoc/widgets.tsx`); `tu-van/lay-du-lieu.ts` và `diem-thi-thu.tsx` vẫn có thể gắn nhãn cho chương trình khác THPT | P1 | S | sonnet |
+| 22 | Banner sao lưu ở Hồ sơ đang hiện thường trực; cần lưu thời điểm sao lưu cuối để chỉ nhắc khi quá hạn | P2 | S | haiku |
+| 23 | Đồng hành: bản gọn cho phụ huynh, nút phản hồi nhanh, nhắc tạo liên kết mới sau 2 tuần | P2 | S | sonnet |
+| 24 | Thông báo thật khi tắt app (Web Push) và quyết định về riêng tư | P2 | M-L | main |
+| 25 | Điểm ưu tiên khu vực/đối tượng, học bổng, ký túc xá, mở rộng độ phủ Y Dược và các tỉnh thiếu | P2 | L | main thiết kế, sonnet làm |
+| 26 | Rate-limit thật cho `/api/tu-van`: bật binding `RATE_KV` và WAF rule (code đã hỗ trợ, chưa cấu hình) | P0 | T | main |
+| 27 | Rà tay bằng `agent-browser` ở 390/360px các màn đã đổi (chip tổ hợp, thanh nút dính, hộp cách xét NV, cảnh báo thứ tự) và Lighthouse trên mạng chậm | P0 | S | haiku |

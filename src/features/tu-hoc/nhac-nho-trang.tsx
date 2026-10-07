@@ -50,7 +50,9 @@ export default function NhacNhoTrang() {
       <NoiDung>
         <TheCaiDat icon={n.bat ? BellRing : BellOff} tone={n.bat ? "xanh" : "muc"} tieuDe="Nhắc nhở học tập"
           moTa={n.bat ? "Đang bật. Mình chỉ nhắc việc có thật trong lịch của em." : "Đang tắt. Bật lên để được nhắc đi học và chuẩn bị bài."}
-          phai={<CongTacLon dang={n.bat} onChange={(v) => void batTat(v)} nhan="Bật nhắc nhở" />} />
+          phai={<CongTacLon dang={n.bat} onChange={(v) => void batTat(v)} nhan="Bật nhắc nhở" />}>
+          {n.bat && <p className="text-[12px] text-chu-phu mt-2">Chỉ nhắc khi ứng dụng còn mở hoặc đã thêm lên màn hình chính.</p>}
+        </TheCaiDat>
 
         <QuyenThongBaoThe quyen={quyen} xinQuyen={() => void xinQuyen()} />
 

@@ -6,6 +6,9 @@ const thuHai = thuHaiCuaTuan("2026-10-07"); // thứ 4
 assert.equal(thuHai, "2026-10-05");
 assert.equal(thuCuaNgay("2026-10-11"), 7);
 
+// 0) Mặc định không xếp vào Chủ nhật
+assert.ok(CAU_HINH_MAC_DINH.ngayNghi.includes(7), "Chủ nhật (7) phải trong ngayNghi mặc định");
+
 const kq = xepLichTuan({ tuanBatDau: thuHai, coDinh: LICH_CO_DINH_MAU, viec: VIEC_MAU, cfg: CAU_HINH_MAC_DINH });
 assert.ok(kq.khoi.length > 0, "phải xếp được ít nhất một khối");
 
@@ -104,10 +107,10 @@ assert.ok(goiY[0].ngay > "2026-10-05" || phutTuGio(goiY[0].batDau) >= 14 * 60, "
 const thuTu = goiY.map((g) => g.ngay + g.batDau);
 assert.deepEqual(thuTu, [...thuTu].sort(), "gợi ý phải theo thứ tự thời gian");
 
-// 15) Khung trống gần mốc: chọn giờ sát giờ cũ nhất trong ngày
-const ganMoc = khungTrongGanNhat({ tuNgay: "2026-10-11", phut: 60, coDinh: [], cfg: CAU_HINH_MAC_DINH, soKhung: 1, soNgay: 1, ganMoc: 15 * 60 + 2 });
-assert.deepEqual(ganMoc, [{ ngay: "2026-10-11", batDau: "15:00", ketThuc: "16:00" }]);
+// 15) Khung trống gần mốc: chọn giờ sát giờ cũ nhất trong ngày (dùng Thứ 2 vì Chủ nhật mặc định là ngày nghỉ)
+const ganMoc = khungTrongGanNhat({ tuNgay: "2026-10-05", phut: 60, coDinh: [], cfg: CAU_HINH_MAC_DINH, soKhung: 1, soNgay: 1, ganMoc: 15 * 60 + 2 });
+assert.deepEqual(ganMoc, [{ ngay: "2026-10-05", batDau: "15:00", ketThuc: "16:00" }]);
 // ngày nghỉ không được gợi ý
-assert.equal(khungTrongGanNhat({ tuNgay: "2026-10-11", phut: 30, coDinh: [], cfg: { ...CAU_HINH_MAC_DINH, ngayNghi: [7] }, soNgay: 1 }).length, 0);
+assert.equal(khungTrongGanNhat({ tuNgay: "2026-10-11", phut: 30, coDinh: [], cfg: CAU_HINH_MAC_DINH, soNgay: 1 }).length, 0);
 
 console.log("xep-lich: tất cả kiểm tra đều qua");

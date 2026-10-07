@@ -39,13 +39,26 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
 
   if (viecTuan.length === 0) {
     return s.mucTieu ? (
-      <TrangThaiTrong bieuTuong={<ListPlus size={26} />} tieuDe="Tuần này chưa có việc cần học"
-        moTa={`Mình sẽ tạo việc ôn cho tổ hợp ${s.mucTieu.maToHop} theo môn em còn thiếu điểm và thời gian tự học còn trống, rồi xếp vào lịch giúp em.`}>
-        <div className="space-y-2">
-          <Nut bieuTuong={ListPlus} onClick={taoVaXep}>Tạo việc và xếp lịch cho tuần này</Nut>
-          <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn nên ưu tiên</Nut>
-        </div>
-      </TrangThaiTrong>
+      s.coDinh.length === 0 ? (
+        <TrangThaiTrong bieuTuong={<ListPlus size={26} />} tieuDe="Em nhập lịch học trước nhé"
+          moTa="Để mình xếp việc vào giờ tự học mà không rơi vào lúc em đang học ở trường.">
+          <div className="space-y-2">
+            <Nut muiTen onClick={() => nav(DUONG_DAN.caiDatLichHoc())}>Nhập lịch học</Nut>
+            <Nut kieu="vien" onClick={taoVaXep}>Vẫn tạo và xếp</Nut>
+          </div>
+        </TrangThaiTrong>
+      ) : (
+        <TrangThaiTrong bieuTuong={<ListPlus size={26} />} tieuDe="Tuần này chưa có việc cần học"
+          moTa={`Mình sẽ tạo việc ôn cho tổ hợp ${s.mucTieu.maToHop} theo môn em còn thiếu điểm và thời gian tự học còn trống, rồi xếp vào lịch giúp em.`}>
+          <div className="space-y-2">
+            <div>
+              <Nut bieuTuong={ListPlus} onClick={taoVaXep}>Tạo việc và xếp lịch cho tuần này</Nut>
+              <p className="mt-1.5 text-[12px] text-chu-phu">Tạo việc mới từ điểm hiện tại, xếp vào khung giờ trống.</p>
+            </div>
+            <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn nên ưu tiên</Nut>
+          </div>
+        </TrangThaiTrong>
+      )
     ) : (
       <TrangThaiTrong bieuTuong={<Target size={26} />} tieuDe="Em chưa có mục tiêu"
         moTa="Chọn một mục tiêu trước, mình sẽ tạo việc cần học mỗi tuần theo môn còn thiếu điểm.">
@@ -94,9 +107,9 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
       })}
 
       {!quaKhu && s.mucTieu && (
-        <div className="pt-1">
+        <div className="pt-1 space-y-2">
           <Nut kieu="vien" bieuTuong={ListPlus} onClick={taoVaXep}>Cập nhật việc theo điểm mới</Nut>
-          <p className="mt-1.5 text-[12px] text-chu-phu">Giữ lại việc đã xong, tạo lại phần còn lại theo điểm hiện tại và giờ tự học còn trống.</p>
+          <p className="text-[12px] text-chu-phu">Giữ lại việc đã xong, tạo lại phần còn lại theo điểm hiện tại và giờ tự học còn trống.</p>
         </div>
       )}
     </>

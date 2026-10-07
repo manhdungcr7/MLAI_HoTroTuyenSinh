@@ -38,7 +38,7 @@ export const CAU_HINH_MAC_DINH: CauHinhTuHoc = {
   gioKetThuc: "21:30",
   gioHocToiDaMoiNgay: 3,
   thoiDiemTot: "toi",
-  ngayNghi: [],
+  ngayNghi: [7], // Chủ nhật (7) mặc định nghỉ
   nghiGiuaBuoi: 10,
 };
 

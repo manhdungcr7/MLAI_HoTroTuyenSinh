@@ -19,7 +19,7 @@ export const TRANG_THAI_BAN_DAU: AppState = {
   nguyenVong: [], yeuThich: [], soSanh: [],
   diemThi: [], tinhHuong: [],
   coDinh: [], viec: [], trangThaiViec: {}, khoiHoc: [],
-  cauHinh: CAU_HINH_MAC_DINH, tamTrang: "binhThuong",
+  cauHinh: CAU_HINH_MAC_DINH, tamTrang: "binhThuong", tamTrangNgay: undefined,
   nhacNho: { bat: false, truocPhut: 15, nhacChuanBiBai: true, gioChuanBiBai: "20:00" },
   lichSu: [],
   cauNoiHomNay: 0,

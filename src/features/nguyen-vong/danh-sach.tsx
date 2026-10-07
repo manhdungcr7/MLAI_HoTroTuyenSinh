@@ -17,8 +17,8 @@ import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
-import { CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
-import { SO_NV_GOI_Y, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
+import { CanhBaoThuTuThe, CoCauMini, GhiChuDuLieu, HopQuyTacXet, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
+import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
 
@@ -33,6 +33,7 @@ export default function DanhSachNguyenVong() {
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
   const coCau = xetCoCau(demNhan(ds), ds.length);
   const kl = ketLuan(coCau);
+  const canhBao = useMemo(() => canhBaoThuTu(ds), [ds]);
   const { tin, bao, an } = useHoanTac();
   const [dangSua, setDangSua] = useState<string | null>(null);
   const [dangXoa, setDangXoa] = useState<string | null>(null);
@@ -86,6 +87,9 @@ export default function DanhSachNguyenVong() {
               <DongThongBao tone="xanh" icon={ListPlus} tieuDe={`Em đang có ${ds.length} nguyện vọng`}
                 moTa={`Giữ khoảng 5–${SO_NV_GOI_Y} nguyện vọng giúp em dễ cân nhắc hơn. Em vẫn có thể giữ nhiều hơn nếu muốn.`} />
             )}
+
+            <HopQuyTacXet />
+            <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
             <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Tổ hợp cao nhất của em: ${dinhDang(tong, 1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
               Thứ tự của em
@@ -241,8 +245,13 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
               )}
             </span>
           </span>
+          {d.lc && d.chenh !== null && (
+            <span className={gop("mt-2 block text-[13px] leading-snug font-bold", d.chenh < 0 ? "text-cam-chu" : "text-luc-chu")}>
+              Điểm em {d.chenh < 0 ? "kém" : "hơn"} điểm chuẩn năm {d.lc.namDiem}: {d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 2)}
+            </span>
+          )}
           {d.lc && (
-            <span className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
+            <span className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
               <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
               {d.toHop && <span className="inline-flex items-center rounded-full bg-nen px-2 py-0.5 text-[12px]">tổ hợp {d.toHop}{d.suyRa ? " · suy ra" : ""}</span>}
               <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</> : "Chưa có học phí"}</span>

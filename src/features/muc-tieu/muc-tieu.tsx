@@ -17,10 +17,11 @@ import { diem1, ngayVN, nhanDinhMucTieu, tenToHop } from "./tinh-toan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 
 type PhuongThuc = MucTieuChinh["phuongThuc"];
+// Ẩn DGNL và hocBa vì chưa phát triển (chỉ giữ code, không hiển thị)
 const CAC_PHUONG_THUC: { gia: PhuongThuc; nhan: string; day: string }[] = [
   { gia: "THPT", nhan: "THPT", day: "điểm thi tốt nghiệp THPT" },
-  { gia: "DGNL", nhan: "ĐGNL", day: "Đánh giá năng lực" },
-  { gia: "hocBa", nhan: "Học bạ", day: "Học bạ" },
+  // { gia: "DGNL", nhan: "ĐGNL", day: "Đánh giá năng lực" },
+  // { gia: "hocBa", nhan: "Học bạ", day: "Học bạ" },
 ];
 const CAC_TO_HOP = Object.keys(TO_HOP) as MaToHop[];
 

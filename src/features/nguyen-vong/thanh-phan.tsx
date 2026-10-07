@@ -1,9 +1,11 @@
 // Thành phần dùng chung giữa hai màn của slice Nguyện vọng.
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Info, Undo2 } from "lucide-react";
+import { AlertTriangle, ChevronDown, ChevronUp, Info, Lightbulb, Undo2 } from "lucide-react";
 import { CAC_NHAN, TONE_NHAN } from "@/components/ui/co-cau";
 import { TONE_GD, gop } from "@/components/ui/nut-the";
+import { Nut } from "@/components/ui/nut-the";
 import type { NhanNguyenVong, ToneTen } from "@/state/types";
+import type { CanhBaoThuTu } from "./tinh-toan";
 
 const NEN_DAM: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", tim: "bg-tim", do: "bg-do", muc: "bg-muc" };
 
@@ -80,6 +82,40 @@ export function ThanhHoanTac({ tin, an }: { tin: TinHoanTac | null; an: () => vo
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+/** Cảnh báo trung tính: nguyện vọng chắc chắn đứng trước nguyện vọng cao hơn. Em tự quyết, nút chỉ di chuyển đúng một cặp. */
+export function CanhBaoThuTuThe({ ds, onDua }: { ds: CanhBaoThuTu[]; onDua: (c: CanhBaoThuTu) => void }) {
+  if (ds.length === 0) return null;
+  return (
+    <div role="status" className="rounded-the bg-cam-nhat p-3.5">
+      <p className="flex items-center gap-2 font-bold text-[15px] text-cam-chu leading-snug"><AlertTriangle size={20} className="shrink-0" />Em xem lại thứ tự này nhé</p>
+      <ul className="mt-2 space-y-3">
+        {ds.map((c) => (
+          <li key={c.sau.id}>
+            <p className="text-[13px] text-chu leading-snug">{c.cau}</p>
+            <Nut kieu="vien" className="mt-1.5" onClick={() => onDua(c)}>{`Đưa NV${c.sau.viTri + 1} lên trước`}</Nut>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-2 text-[12.5px] text-chu-phu leading-snug">Nếu em muốn giữ như vậy cũng được, đây chỉ là nhắc.</p>
+    </div>
+  );
+}
+
+/** Hộp giải thích quy tắc xét nguyện vọng, đóng mở được. */
+export function HopQuyTacXet() {
+  const [mo, setMo] = useState(true);
+  return (
+    <div className="rounded-the bg-xanh-nhat px-3.5 py-2.5">
+      <button type="button" onClick={() => setMo(!mo)} aria-expanded={mo} className="w-full min-h-11 -my-1 flex items-center gap-2 text-left">
+        <Lightbulb size={18} className="text-xanh shrink-0" />
+        <b className="flex-1 text-[14px] text-muc">Cách xét nguyện vọng</b>
+        {mo ? <ChevronUp size={18} className="text-chu-phu" /> : <ChevronDown size={18} className="text-chu-phu" />}
+      </button>
+      {mo && <p className="text-[13px] text-chu leading-snug pb-1">Em sẽ vào nguyện vọng cao nhất mà em đủ điểm, nên NV1 nên là trường em muốn nhất.</p>}
     </div>
   );
 }

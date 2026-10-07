@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau } from "./mau";
 import { chuanHoa } from "./chuan-hoa";
 import { xepLaiTuan } from "./xep-lai";
+import { isoNgay } from "@/engine/xep-lich";
 import type {
   CauHinhTuHoc, DiemThi, HoSo, KhoiHoc, MucTieuChinh, NhacNho, TamTrang, TietCoDinh, TinhHuongDaLuu, TrangThaiViec, ViecCanHoc, LichSuHoanThanh, LoiNhan,
 } from "./types";
@@ -22,6 +23,7 @@ export interface AppState {
   khoiHoc: KhoiHoc[]; // các khối tự học đã xếp (tự động hoặc em tự chọn)
   cauHinh: CauHinhTuHoc;
   tamTrang: TamTrang;
+  tamTrangNgay?: string; // ngày đặt tamTrang ("Hơi mệt"), để reset ngày hôm sau
   nhacNho: NhacNho;
   lichSu: LichSuHoanThanh[];
   cauNoiHomNay: number;
@@ -44,7 +46,11 @@ function xoaDuLieuPhu() {
 function doc(): AppState {
   try {
     const t = localStorage.getItem(KHOA);
-    if (t) return chuanHoa(JSON.parse(t));
+    if (t) {
+      const n = chuanHoa(JSON.parse(t));
+      // Tâm trạng chỉ có hiệu lực trong ngày đặt: sang ngày mới trở về bình thường ở mọi màn.
+      return n.tamTrang !== "binhThuong" && n.tamTrangNgay !== isoNgay(new Date()) ? { ...n, tamTrang: "binhThuong", tamTrangNgay: undefined } : n;
+    }
   } catch { /* trình duyệt chặn lưu hoặc dữ liệu hỏng: dùng bộ nhớ tạm */ }
   return TRANG_THAI_BAN_DAU;
 }
@@ -176,7 +182,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     datCoDinh: (t) => cap((x) => ({ ...x, coDinh: t })),
     datViec: (v) => cap((x) => ({ ...x, viec: v })),
     capNhatCauHinh: (p) => cap((x) => ({ ...x, cauHinh: { ...x.cauHinh, ...p } })),
-    datTamTrang: (t) => cap((x) => ({ ...x, tamTrang: t })),
+    datTamTrang: (t) => cap((x) => ({
+      ...x,
+      tamTrang: t,
+      tamTrangNgay: t === "binhThuong" ? undefined : isoNgay(new Date()),
+    })),
     capNhatNhacNho: (p) => cap((x) => ({ ...x, nhacNho: { ...x.nhacNho, ...p } })),
     doiCauNoi: () => cap((x) => ({ ...x, cauNoiHomNay: x.cauNoiHomNay + 1 })),
     xepLai: (tuanBatDau, tuNgay, viecMoi) => {

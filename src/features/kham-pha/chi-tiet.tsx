@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
-  AlertTriangle, BarChart3, Briefcase, Check, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, Target, ThumbsUp, Users, Wallet,
+  AlertTriangle, BarChart3, Briefcase, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, Target, ThumbsUp, Users, Wallet, AlertCircle,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { AnhBia, BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
@@ -12,7 +12,7 @@ import { tim as timGoc } from "@/data/lua-chon-mau";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
-import { DUONG_DAN } from "@/duong-dan";
+import { DUONG_DAN, EMAIL_BAO_SAI } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { LuaChon, ToneTen } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
@@ -164,7 +164,7 @@ function ChuongTrinhHoc({ lc, trang, chungTruong }: { lc: LuaChon; trang?: { url
 export default function ChiTiet() {
   const { id = "" } = useParams();
   const nav = useNavigate();
-  const { s, themNguyenVong, datMucTieu } = useApp();
+  const { s, themNguyenVong, datMucTieu } = useApp(); // import { vung-an-toan-duoi } nếu cần
   const [nguon, setNguon] = useState<NguonTaiSau | null>(null);
   useEffect(() => { let con = true; taiNguon().then((m) => con && setNguon(m)).catch(() => {}); return () => { con = false; }; }, []);
   const lcGoc = timGoc(id);
@@ -250,11 +250,7 @@ export default function ChiTiet() {
                 <p className="text-[12px] text-chu-phu">So với điểm chuẩn</p>
                 <p className={gop("text-[16px] font-extrabold", TONE_CHU[TONE_CHAC_CHAN[kq.chacChan!]])}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan!]}</p>
               </div>
-              <div className="rounded-xl bg-trang/80 p-2.5">
-                <p className="text-[12px] text-chu-phu">Điểm gợi ý</p>
-                <p className="text-[16px] font-extrabold text-muc">{kq.diemGoiY}<span className="text-[13px] font-semibold text-chu-phu">/100</span></p>
-              </div>
-              <p className="col-span-2 text-[12px] text-chu-phu leading-snug">Điểm gợi ý tính từ điểm, học phí, khu vực và cơ hội việc làm để em dễ so sánh. Đây không phải xác suất đậu.</p>
+              <p className="text-[12px] text-chu-phu leading-snug">So với điểm chuẩn các năm trước để em dễ cân nhắc. Không phải xác suất đậu.</p>
             </div>
           ) : kq.lyDoKhongSo ? null : (
             <Nut className="mt-3" kieu="vien" bieuTuong={PencilLine} onClick={() => nav(DUONG_DAN.batDau(2))}>Nhập điểm của em</Nut>
@@ -311,18 +307,26 @@ export default function ChiTiet() {
               </a>
             )}
             <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+            <a href={`mailto:${EMAIL_BAO_SAI}?subject=Báo số liệu sai - Mã: ${lc.id}&body=Mã chương trình: ${lc.id}\nTrường dữ liệu sai: ...\nGiá trị đúng và link nguồn: ...`}
+              className="inline-flex items-center gap-1 min-h-11 text-[12px] font-bold text-do mt-1">
+              <AlertCircle size={13} />Báo số liệu sai
+            </a>
           </div>
         </section>
 
         <div className="space-y-2 pt-1">
           <NutTuVan nguCanh={`Chi tiết ngành ${lc.nganh}`} />
-          <Nut bieuTuong={trongDs ? Check : Plus} onClick={themVao}>{trongDs ? "Đã trong danh sách" : "Thêm nguyện vọng"}</Nut>
           <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh ngành này</Nut>
-          {!laMucTieu && (dat.ok
-            ? <Nut kieu="vien" bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu chính sang ngành này" : "Đặt làm mục tiêu chính"}</Nut>
-            : <p className="text-[13px] text-chu-phu rounded-xl bg-nen p-3">{dat.lyDo}</p>)}
         </div>
       </NoiDung>
+
+      {/* Thanh dính dưới với 2 nút chính */}
+      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 pb-1.5">
+        <div className="grid grid-cols-[1fr_1.5fr] gap-2.5">
+          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã lưu" : "Thêm NV"}</Nut>
+          {!laMucTieu && dat.ok && <Nut bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu" : "Đặt mục tiêu"}</Nut>}
+        </div>
+      </div>
 
       <HopTruot mo={hoiTiep !== null} dong={() => setHoiTiep(null)} tieuDe={hoiTiep === "daCo" ? "Đã có trong danh sách" : "Đã thêm nguyện vọng"}>
         <div className="flex items-center gap-3 rounded-the bg-luc-nhat p-3">

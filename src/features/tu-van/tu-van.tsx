@@ -67,6 +67,7 @@ export default function TuVan() {
           <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-trang text-xanh"><Sparkles size={22} /></span>
           <h2 className="mt-3 text-[19px] font-extrabold text-muc">Mình trả lời dựa trên số liệu có nguồn</h2>
           <p className="mt-1 text-[14px] text-chu">Mình chỉ dùng điểm chuẩn, tổ hợp, học phí đã có trong app và hồ sơ của em. Câu nào chưa có dữ liệu, mình nói thẳng. Ngữ cảnh: {nguCanh}.</p>
+          <p className="mt-1 text-[12px] text-chu-phu">Câu hỏi và tóm tắt hồ sơ của em được gửi lên máy chủ để AI trả lời; không gửi họ tên hay thông tin liên hệ.</p>
         </div>
 
         {tin.length === 0 && (

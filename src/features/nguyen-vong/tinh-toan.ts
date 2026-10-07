@@ -26,6 +26,8 @@ export interface DongNV {
   suyRa: boolean;
   /** Vì sao hàng này không có nhãn (khác phương thức THPT, thiếu điểm môn, tổ hợp chưa tính được); null khi đã có nhãn. */
   lyDoKhongNhan: string | null;
+  /** Điểm em hơn (+) hoặc kém (−) điểm chuẩn của năm `lc.namDiem`, làm tròn 2 chữ số. null khi không so được (xem lyDoKhongNhan). */
+  chenh: number | null;
 }
 
 type DiemMon = DiemDayDu;
@@ -51,10 +53,10 @@ export function lyDoChuaSoDuoc(lc: LuaChon, tl: TongToHop): string | null {
 export function dungDanhSach(ids: string[], diem: DiemMon, tim: (id: string) => LuaChon | undefined): DongNV[] {
   return ids.map((id, viTri) => {
     const lc = tim(id);
-    if (!lc) return { id, viTri, lc, nhan: null, toHop: null, suyRa: false, lyDoKhongNhan: "Lựa chọn này không còn trong dữ liệu." };
+    if (!lc) return { id, viTri, lc, nhan: null, toHop: null, suyRa: false, chenh: null, lyDoKhongNhan: "Lựa chọn này không còn trong dữ liệu." };
     const tl = tongChoLuaChon(lc, diem);
     const nhan = nhanChoLuaChon(lc, tl.tong);
-    return { id, viTri, lc, nhan, toHop: nhan ? tl.toHop : null, suyRa: nhan ? tl.suyRa : false, lyDoKhongNhan: nhan ? null : lyDoChuaSoDuoc(lc, tl) };
+    return { id, viTri, lc, nhan, toHop: nhan ? tl.toHop : null, suyRa: nhan ? tl.suyRa : false, chenh: nhan && tl.tong !== null ? Math.round((tl.tong - lc.diemMin) * 100) / 100 : null, lyDoKhongNhan: nhan ? null : lyDoChuaSoDuoc(lc, tl) };
   });
 }
 
@@ -259,14 +261,42 @@ export function goiYHanhDong(ds: DongNV[], dk: DkGoiY): GoiY[] {
   return ra;
 }
 
-// ---------- Sắp xếp lại ----------
+// ---------- Thứ tự nguyện vọng ----------
+// Quy tắc xét tuyển: em vào nguyện vọng CAO NHẤT mà đủ điểm. Thứ tự do em chọn; mình chỉ cảnh báo và đề xuất, không tự đổi.
 
-/** Thứ tự "theo mức vừa sức": Vừa sức trước, rồi Thử sức, An toàn, Dự phòng. Giữ nguyên thứ tự trong cùng nhãn. */
-export const THU_TU_VUA_SUC: NhanNguyenVong[] = ["Vừa sức", "Thử sức", "An toàn", "Dự phòng"];
+const laChacChan = (d: DongNV) => d.nhan === "An toàn" || d.nhan === "Dự phòng";
+const laCaoHon = (d: DongNV) => d.nhan === "Thử sức" || d.nhan === "Vừa sức";
 
-export function sapTheoVuaSuc(ds: DongNV[]): string[] {
-  const hang = (d: DongNV) => (d.nhan ? THU_TU_VUA_SUC.indexOf(d.nhan) : THU_TU_VUA_SUC.length);
-  return [...ds].sort((a, b) => hang(a) - hang(b) || a.viTri - b.viTri).map((d) => d.id);
+/** Một cặp: nguyện vọng An toàn/Dự phòng (`truoc`) đứng trước nguyện vọng Thử sức/Vừa sức (`sau`). */
+export interface CanhBaoThuTu { truoc: DongNV; sau: DongNV; cau: string }
+
+/** Mỗi nguyện vọng Thử sức/Vừa sức bị chặn bởi nguyện vọng An toàn/Dự phòng đứng trước nó cho một cảnh báo (cặp với nguyện vọng chắc chắn đứng đầu tiên). */
+export function canhBaoThuTu(ds: DongNV[]): CanhBaoThuTu[] {
+  const ra: CanhBaoThuTu[] = [];
+  for (const sau of ds) {
+    if (!laCaoHon(sau)) continue;
+    const truoc = ds.find((d) => d.viTri < sau.viTri && laChacChan(d));
+    if (!truoc) continue;
+    ra.push({ truoc, sau, cau: `NV${truoc.viTri + 1} (${truoc.nhan}) đứng trước NV${sau.viTri + 1} (${sau.nhan}). Nếu em đủ điểm NV${truoc.viTri + 1} thì sẽ không xét NV${sau.viTri + 1}.` });
+  }
+  return ra;
+}
+
+/** Thứ tự id sau khi đưa `id` lên đứng ngay trước `truocId`; các nguyện vọng khác giữ nguyên thứ tự. */
+export function duaLenTruoc(ids: string[], id: string, truocId: string): string[] {
+  const a = ids.filter((x) => x !== id);
+  const k = a.indexOf(truocId);
+  if (k < 0 || !ids.includes(id)) return [...ids];
+  a.splice(k, 0, id);
+  return a;
+}
+
+/**
+ * Đề xuất thứ tự: các nguyện vọng An toàn/Dự phòng xuống sau cùng, còn lại giữ NGUYÊN thứ tự em đặt
+ * (Thử sức và Vừa sức không bị xáo theo nhãn). Chỉ là đề xuất, em xem trước rồi mới áp dụng.
+ */
+export function deXuatThuTu(ds: DongNV[]): string[] {
+  return [...ds.filter((d) => !laChacChan(d)), ...ds.filter(laChacChan)].map((d) => d.id);
 }
 
 /** Chuỗi bước doiViTri(tu, den) để biến `hienTai` thành `dich` (store chỉ có hàm đổi một vị trí). */

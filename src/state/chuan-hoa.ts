@@ -155,6 +155,7 @@ export function chuanHoa(raw: unknown): AppState {
         ? ({ ...k, viecId: typeof k.viecId === "string" ? k.viecId : null } as unknown as KhoiHoc) : null),
     cauHinh: chuanHoaCauHinh(o.cauHinh),
     tamTrang: trong(o.tamTrang, ["tot", "binhThuong", "met"] as const) ?? TRANG_THAI_BAN_DAU.tamTrang,
+    tamTrangNgay: laNgayIso(o.tamTrangNgay) ? o.tamTrangNgay : undefined,
     nhacNho: chuanHoaNhacNho(o.nhacNho),
     lichSu: danhSach<LichSuHoanThanh>(o.lichSu, (l) => {
       const tt = trong(l.trangThai, TRANG_THAI_VIEC);

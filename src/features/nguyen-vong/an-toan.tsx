@@ -3,7 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  AlertTriangle, ArrowDownUp, CheckCircle2, ChevronRight, GraduationCap, Info, ListChecks, MapPin, Plus, Scale, School, ShieldCheck, ShieldPlus, SlidersHorizontal, TrendingDown, Wallet,
+  AlertTriangle, ArrowDownUp, CheckCircle2, ChevronRight, GraduationCap, Info, ListChecks, MapPin, Plus, Scale, School, ShieldCheck, ShieldPlus, SlidersHorizontal, TrendingDown, TrendingUp, Wallet,
   type LucideIcon,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
@@ -13,14 +13,15 @@ import { BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HangBam, Nut, TONE_CHU, TONE_NEN, The, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { LUA_CHON_MAU, tim } from "@/data/lua-chon-mau";
+import { useBoLoc } from "@/features/kham-pha/dung-bo-loc";
 import { DUONG_DAN } from "@/duong-dan";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
 import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
-import { GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
+import { CanhBaoThuTuThe, GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import {
-  cacBuocDoiCho, chamDiem, toHopTotNhat, demNhan, dungDanhSach, giongNhau, goiYHanhDong, ketLuan, sapTheoVuaSuc, xetCoCau, type DiemDanhGia, type GoiY,
+  canhBaoThuTu, chamDiem, toHopTotNhat, deXuatThuTu, demNhan, dungDanhSach, duaLenTruoc, giongNhau, goiYHanhDong, ketLuan, xetCoCau, type DiemDanhGia, type GoiY,
 } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
 
@@ -29,7 +30,8 @@ const VIEN_KHUNG: Record<ToneTen, string> = { do: "border-do/30", cam: "border-c
 
 export default function DanhSachAnToan() {
   const nav = useNavigate();
-  const { s, doiViTri } = useApp();
+  const { s, datNguyenVong } = useApp();
+  const [, suaBoLoc] = useBoLoc();
   const diemMon = diemDayDu(s);
   const tong = toHopTotNhat(diemMon).tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -41,15 +43,29 @@ export default function DanhSachAnToan() {
   const { tin, bao, an } = useHoanTac(6000);
   const [giaiThich, setGiaiThich] = useState<DiemDanhGia | "nhan" | null>(null);
 
-  /** Áp một thứ tự mới bằng chuỗi doiViTri (store chưa có hàm đặt cả danh sách). */
-  const datThuTu = (hienTai: string[], dich: string[]) => cacBuocDoiCho(hienTai, dich).forEach(([tu, den]) => doiViTri(tu, den));
+  const canhBao = useMemo(() => canhBaoThuTu(ds), [ds]);
+  const [xemTruoc, setXemTruoc] = useState<string[] | null>(null);
 
-  const sapXepLai = () => {
+  /** Đặt cả danh sách theo thứ tự mới, báo kèm hoàn tác về thứ tự cũ. */
+  const datThuTu = (moi: string[], chu: string) => {
     const cu = [...s.nguyenVong];
-    const moi = sapTheoVuaSuc(ds);
-    if (giongNhau(cu, moi)) return bao("Danh sách đã đúng thứ tự này rồi.");
-    datThuTu(cu, moi);
-    bao("Đã xếp: Vừa sức → Thử sức → An toàn → Dự phòng", () => datThuTu(moi, cu));
+    datNguyenVong(moi);
+    bao(chu, () => datNguyenVong(cu));
+  };
+
+  const duaLen = (c: ReturnType<typeof canhBaoThuTu>[number]) =>
+    datThuTu(duaLenTruoc(s.nguyenVong, c.sau.id, c.truoc.id), `Đã đưa NV${c.sau.viTri + 1} lên trước NV${c.truoc.viTri + 1}`);
+
+  const goiYThuTu = () => {
+    const moi = deXuatThuTu(ds);
+    if (giongNhau(s.nguyenVong, moi)) return bao("Thứ tự của em đã hợp lý, mình không cần đổi gì.");
+    setXemTruoc(moi);
+  };
+
+  /** Mở Khám phá, đặt sẵn khoảng điểm chuẩn thấp hơn điểm em từ 1,5 điểm (ngưỡng An toàn). */
+  const themAnToan = () => {
+    if (tong !== null) suaBoLoc({ diemTu: Math.max(15, Math.floor(tong - 6)), diemDen: Math.min(30, Math.floor((tong - 1.5) * 10) / 10) });
+    nav(DUONG_DAN.khamPha());
   };
 
   const dau = <DauTrangCoQuayLai tieuDe="Cơ cấu danh sách của em" quayLai={DUONG_DAN.nguyenVong()}
@@ -80,6 +96,8 @@ export default function DanhSachAnToan() {
         ) : (
           <KhungCanhBao kl={kl} />
         )}
+
+        <CanhBaoThuTuThe ds={canhBao} onDua={duaLen} />
 
         {tong !== null && ds.some((d) => d.lyDoKhongNhan) && (
           <The>
@@ -132,16 +150,19 @@ export default function DanhSachAnToan() {
         )}
 
         <TieuDeMuc>Tác vụ nhanh</TieuDeMuc>
-        <HangBam bieuTuong={ShieldPlus} tone="luc" tieuDe="Thêm nguyện vọng An toàn" phu="Tìm trường có điểm tham khảo thấp hơn điểm em" onClick={() => nav(DUONG_DAN.khamPha())} />
+        <HangBam bieuTuong={ShieldPlus} tone="luc" tieuDe="Thêm nguyện vọng An toàn" phu="Tìm trường có điểm tham khảo thấp hơn điểm em" onClick={themAnToan} />
         {tong !== null && ds.length > 1 && (
-          <HangBam bieuTuong={ArrowDownUp} tone="cam" tieuDe="Sắp xếp lại theo mức vừa sức" phu="Vừa sức lên trước, rồi Thử sức, An toàn, Dự phòng" onClick={sapXepLai} />
+          <HangBam bieuTuong={ArrowDownUp} tone="cam" tieuDe="Gợi ý thứ tự theo mức vừa sức" phu="Xem trước, em bấm áp dụng mới đổi" onClick={goiYThuTu} />
         )}
+        <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Thử nếu tăng điểm" phu="Cộng thử điểm từng môn, xem nhãn đổi ra sao" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
 
         <Nut bieuTuong={SlidersHorizontal} muiTen className="!mt-4" onClick={() => nav(DUONG_DAN.nguyenVong())}>Điều chỉnh danh sách</Nut>
         <GhiChuDuLieu />
       </NoiDung>
 
       <HopGiaiThich giaiThich={giaiThich} dong={() => setGiaiThich(null)} />
+      <HopXemTruoc moi={xemTruoc} ds={ds} dong={() => setXemTruoc(null)}
+        apDung={() => { if (xemTruoc) datThuTu(xemTruoc, "Đã áp dụng thứ tự gợi ý"); setXemTruoc(null); }} />
       <ThanhHoanTac tin={tin} an={an} />
     </>
   );
@@ -261,6 +282,36 @@ function DongTruong({ truong, tone, ten, phu, nhan, onClick }: { truong: string;
       </span>
       <ChevronRight size={16} className="text-chu-phu shrink-0" />
     </button>
+  );
+}
+
+/** Xem trước thứ tự đề xuất: chưa đổi gì cho tới khi em bấm áp dụng. */
+function HopXemTruoc({ moi, ds, dong, apDung }: { moi: string[] | null; ds: ReturnType<typeof dungDanhSach>; dong: () => void; apDung: () => void }) {
+  return (
+    <HopTruot mo={moi !== null} dong={dong} tieuDe="Gợi ý thứ tự">
+      {moi && (
+        <div className="space-y-3 text-[14px] text-chu">
+          <p>Mình chỉ đưa nguyện vọng An toàn và Dự phòng xuống cuối, các nguyện vọng còn lại giữ nguyên thứ tự em đặt. Vì em sẽ vào nguyện vọng cao nhất mà em đủ điểm.</p>
+          <ol className="space-y-1.5">
+            {moi.map((id, i) => {
+              const d = ds.find((x) => x.id === id);
+              return (
+                <li key={id} className="flex items-center gap-2 text-[13px]">
+                  <b className="w-9 shrink-0 text-muc">NV{i + 1}</b>
+                  <span className="flex-1 min-w-0 truncate">{d?.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "Lựa chọn không còn trong dữ liệu"}</span>
+                  {d?.nhan && <NhanNguyenVongTag nhan={d.nhan} />}
+                  {d && d.viTri !== i && <span className="shrink-0 text-chu-phu">(trước là NV{d.viTri + 1})</span>}
+                </li>
+              );
+            })}
+          </ol>
+          <div className="grid grid-cols-2 gap-2">
+            <Nut kieu="vien" onClick={dong}>Giữ nguyên</Nut>
+            <Nut onClick={apDung}>Áp dụng</Nut>
+          </div>
+        </div>
+      )}
+    </HopTruot>
   );
 }
 
