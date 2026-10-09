@@ -16,7 +16,7 @@ Hướng chọn: **số 6, "Chọn trường hoặc chương trình học"**, ng
 | Ý chấm | Bằng chứng |
 |---|---|
 | (5đ) Đặc điểm địa lý, kinh tế, văn hóa, hành vi | Điểm ưu tiên khu vực KV1/KV2-NT/KV2/KV3 và đối tượng UT1/UT2, giảm dần từ 22,5 điểm đúng quy chế (`engine/diem-uu-tien.ts`); 34 tỉnh thành theo đơn vị hành chính mới; ngân sách học phí theo gia đình, ở nhà hay ở trọ hay ký túc xá, sẵn sàng học xa nhà; Zalo/Facebook là kênh chính (liên kết chia sẻ, nhóm tuyển sinh). |
-| (10đ) Dữ liệu, hạ tầng, ngôn ngữ, khả năng triển khai | 2.513 chương trình của 95 trường, lấy từ đề án tuyển sinh chính thức, mỗi con số kèm link và số trang (`docs/DU-LIEU.md`); 73 tổ hợp xét tuyển chính thức; tiếng Việt thuần, chữ nhẹ, mobile-first, chạy được không cần tài khoản (local-first, dữ liệu em nằm trên máy em); chạy trên Cloudflare Pages (miễn phí ở quy mô ban đầu). |
+| (10đ) Dữ liệu, hạ tầng, ngôn ngữ, khả năng triển khai | 2.878 chương trình của 105 trường, lấy từ đề án tuyển sinh chính thức, mỗi con số kèm link và số trang (`docs/DU-LIEU.md`); 73 tổ hợp xét tuyển chính thức; tiếng Việt thuần, chữ nhẹ, mobile-first, chạy được không cần tài khoản (local-first, dữ liệu em nằm trên máy em); chạy trên Cloudflare Pages (miễn phí ở quy mô ban đầu). |
 
 ## 3. Tính sáng tạo và khác biệt (20 điểm)
 

@@ -1,11 +1,11 @@
 # Dữ liệu ngành và trường: nguồn, cách sinh lại, giới hạn
 
-Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **2.513 chương trình** của 95 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
+Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **2.878 chương trình** của 105 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
 
 ## Các tệp dữ liệu (`src/data/`)
 | Tệp | Nội dung | Sinh bởi |
 |---|---|---|
-| `du-lieu-that.json` | 2.513 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
+| `du-lieu-that.json` | 2.878 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
 | `nguon-nam.json` | Với mỗi chương trình và mỗi năm có điểm: link file đề án PDF và **số trang** có điểm đó | `scripts/sinh-nguon-nam.py` (cần `tim-url-de-an.py` chạy trước) |
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
@@ -75,3 +75,14 @@ npm test
 - Tệp phụ mồ côi (khóa không còn trong dữ liệu chính) tự bị bỏ; `cms/.../tap-truong.json` và danh sách chương trình của CMS sinh lại bằng `scripts/sinh-tap-truong.ts`, `scripts/sinh-chuong-trinh-cms.ts`.
 - Test chất lượng: `tests/du-lieu.test.ts` (nhóm, tên ngành, tỉnh), `tests/toan-bo-chuong-trinh.test.ts` (mọi chương trình qua mọi hàm hiển thị với 7 kiểu học sinh, không chữ lỗi, số vô lý).
 - Còn tồn tại: mã trường trùng tên (D61 và NHH đều là Học viện Ngân hàng; D64 và TMU là ĐH Thương mại); nhiều trường chỉ có vài chương trình (BKA 2); điểm chuẩn mặc định lọc từ 15 trở lên ở màn Khám phá.
+
+## Bổ sung trường TP.HCM (nguồn thứ cấp)
+
+`scripts/them-truong-tuyensinh247.py [--ghi]` thêm 10 trường phổ biến ở TP.HCM (NTS, LPS, SPK, DSG, DKC, SGD, NLS, KTS, UEF, DNT), 365 chương trình, đọc thẳng JSON nhúng trong trang điểm chuẩn tổng hợp của tuyensinh247.
+
+- Chỉ nhận phương thức điểm thi tốt nghiệp THPT (thang 30). Điểm xét tuyển kết hợp, học bạ, ĐGNL khác thang nên bỏ.
+- Mỗi (trường, ngành) giữ một dòng có điểm cao nhất; tổ hợp lấy từ cột khối, phải đúng dạng A00, D01.
+- Ngành ở phân hiệu ghi "(CS: Cần Thơ)" lấy tỉnh của phân hiệu.
+- Nhãn `aggregator_verified`: app hiện "chưa đối chiếu với đề án". Mỗi trường mới chỉ có một năm điểm.
+- Chưa thêm: QSB, KSA, DTT (chỉ có thang tổng hợp), QSK, QSQ (không có dòng THPT).
+- Chạy lại được: trường đã có thì bỏ qua.

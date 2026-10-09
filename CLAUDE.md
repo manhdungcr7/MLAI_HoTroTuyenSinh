@@ -11,7 +11,7 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Tính năng trong slide | Nằm ở đâu |
 |---|---|
 | Hồ sơ học sinh thông minh | `src/features/khoi-dau` (nhập), `src/features/hanh-trinh/ho-so.tsx` (nhận xét tự động) |
-| Khám phá ngành/trường | `src/features/kham-pha` (2.513 chương trình thật, lọc, so sánh, chi tiết có nguồn) |
+| Khám phá ngành/trường | `src/features/kham-pha` (2.878 chương trình thật, lọc, so sánh, chi tiết có nguồn) |
 | Danh mục nguyện vọng cân bằng | `src/features/nguyen-vong`, `src/features/thu-tinh-huong` |
 | Mục tiêu và khoảng cách | `src/features/muc-tieu` |
 | Kế hoạch học theo tuần | `src/features/ke-hoach`, `src/features/tu-hoc` |
@@ -56,7 +56,7 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 
 ## 4. Dữ liệu
 
-- 2.513 chương trình thật ở `src/data/du-lieu-that.json`, chuyển sang kiểu `LuaChon` bởi `src/data/lua-chon-that.ts`.
+- 2.878 chương trình thật ở `src/data/du-lieu-that.json`, chuyển sang kiểu `LuaChon` bởi `src/data/lua-chon-that.ts`.
 - Các file nạp lười (lazy): điểm theo năm, đề án trường, chương trình, trang ngành-trường.
 - Học phí (24 chương trình) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
 - 73 tổ hợp xét tuyển chính thức: `src/data/to-hop-chinh-thuc.ts`.
@@ -81,7 +81,7 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 ## 6. Việc đã làm và vì sao (lịch sử rà soát)
 
 Giai đoạn 1 — nạp dữ liệu thật và đưa lên main:
-- Thay dữ liệu mẫu bằng 2.513 chương trình thật, có nguồn, năm, tổ hợp, phương thức.
+- Thay dữ liệu mẫu bằng 2.878 chương trình thật, có nguồn, năm, tổ hợp, phương thức.
 - Trang "Về dữ liệu" nói rõ nguồn và giới hạn; lọc, so sánh, gợi ý danh sách nguyện vọng theo điểm và ngân sách.
 - Cloudflare Pages deploy từ `main` (https://nguyenvongai.pages.dev). `public/_headers` đặt no-cache cho HTML, `sw.js`, manifest để người dùng không kẹt bản cũ.
 
