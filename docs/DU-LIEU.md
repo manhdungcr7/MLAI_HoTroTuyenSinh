@@ -1,11 +1,11 @@
 # Dữ liệu ngành và trường: nguồn, cách sinh lại, giới hạn
 
-Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **2.878 chương trình** của 105 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
+Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.447 chương trình** của 113 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
 
 ## Các tệp dữ liệu (`src/data/`)
 | Tệp | Nội dung | Sinh bởi |
 |---|---|---|
-| `du-lieu-that.json` | 2.878 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
+| `du-lieu-that.json` | 3.447 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
 | `nguon-nam.json` | Với mỗi chương trình và mỗi năm có điểm: link file đề án PDF và **số trang** có điểm đó | `scripts/sinh-nguon-nam.py` (cần `tim-url-de-an.py` chạy trước) |
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
@@ -84,5 +84,5 @@ npm test
 - Mỗi (trường, ngành) giữ một dòng có điểm cao nhất; tổ hợp lấy từ cột khối, phải đúng dạng A00, D01.
 - Ngành ở phân hiệu ghi "(CS: Cần Thơ)" lấy tỉnh của phân hiệu.
 - Nhãn `aggregator_verified`: app hiện "chưa đối chiếu với đề án". Mỗi trường mới chỉ có một năm điểm.
-- Chưa thêm: QSB, KSA, DTT (chỉ có thang tổng hợp), QSK, QSQ (không có dòng THPT).
+- Chưa thêm: QSB, KSA, DTT (chỉ có thang tổng hợp), QSK, QSQ (không có dòng THPT). Lượt hai thêm 569 chương trình: 8 trường mới (MBS, HSU, SIU, VGU, BVU, DDT, DHS, FPT) và bổ sung ngành còn thiếu cho BKA, HTC, DCN, GTA, YDS, NHP, DDQ, TLA, DCT (chỉ thêm ngành chưa có).
 - Chạy lại được: trường đã có thì bỏ qua.

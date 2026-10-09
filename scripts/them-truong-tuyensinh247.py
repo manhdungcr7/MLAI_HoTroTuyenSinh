@@ -32,7 +32,17 @@ TRUONG = {
     "KTS": ("ĐH Kiến trúc TP.HCM", "TP.HCM"),
     "UEF": ("ĐH Kinh tế - Tài chính TP.HCM (UEF)", "TP.HCM"),
     "DNT": ("ĐH Ngoại ngữ - Tin học TP.HCM (HUFLIT)", "TP.HCM"),
+    "MBS": ("ĐH Mở TP.HCM", "TP.HCM"),
+    "HSU": ("ĐH Hoa Sen", "TP.HCM"),
+    "SIU": ("ĐH Quốc tế Sài Gòn", "TP.HCM"),
+    "VGU": ("ĐH Việt - Đức", "TP.HCM"),
+    "BVU": ("ĐH Bà Rịa - Vũng Tàu", "TP.HCM"),
+    "DDT": ("ĐH Duy Tân", "Đà Nẵng"),
+    "DHS": ("ĐH Sư phạm - ĐH Huế", "Huế"),
+    "FPT": ("ĐH FPT", "Hà Nội"),
 }
+# Trường đã có ít chương trình: lấy tên và tỉnh sẵn có, chỉ thêm ngành chưa có.
+BO_SUNG = ["BKA", "HTC", "DCN", "HQT", "GTA", "YDS", "NHP", "DDQ", "TLA", "NHF", "DCT"]
 TO_HOP = re.compile(r"^[A-Z]\d{2}$")
 # Ngành học ở phân hiệu ngoài thành phố, ghi trong tên "(CS: Cần Thơ)": tỉnh là tỉnh của phân hiệu, không phải của trường mẹ.
 TINH_CO_SO = {"cần thơ": "Cần Thơ", "đà lạt": "Lâm Đồng", "gia lai": "Gia Lai", "nha trang": "Khánh Hòa", "đồng nai": "Đồng Nai"}
@@ -62,10 +72,18 @@ def main() -> None:
     ds = json.loads(OUT.read_text(encoding="utf-8"))
     da_co = {x["ma"] for x in ds}
     moi = []
-    for ma, (ten, tinh) in TRUONG.items():
-        if ma in da_co:
+    dang_co = {}
+    for x in ds:
+        dang_co.setdefault(x["ma"], (x["truong"], x["tinh"], set()))[2].add(sua_ten(x["nganh"]).lower())
+    muc = dict(TRUONG)
+    for ma in BO_SUNG:
+        if ma in dang_co:
+            muc[ma] = dang_co[ma][:2]
+    for ma, (ten, tinh) in muc.items():
+        if ma in da_co and ma not in BO_SUNG:
             print(f"{ma}: đã có trong dữ liệu, bỏ qua")
             continue
+        co_san = dang_co[ma][2] if ma in dang_co else set()
         theo_nganh: dict[str, dict] = {}
         for r in doc_dong(tai(ma)):
             if r.get("admission_alias") != "diem-thi-thpt" or r.get("mark_type") != 1:
@@ -75,6 +93,8 @@ def main() -> None:
                 continue
             to_hop = [t.strip() for t in (r.get("block") or "").split(";") if TO_HOP.match(t.strip())]
             khoa = sua_ten(ten_nganh).lower()
+            if khoa in co_san:
+                continue
             cu = theo_nganh.get(khoa)
             if cu is None or mark > cu["diem"][str(cu["nam"])]:
                 theo_nganh[khoa] = {"ten": sua_ten(ten_nganh), "toHop": to_hop, "nam": nam, "diem": {str(nam): round(float(mark), 2)}}

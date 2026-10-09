@@ -18,7 +18,7 @@ export interface BoLoc {
 }
 
 export const BO_LOC_MAC_DINH: BoLoc = {
-  diemTu: 15, diemDen: 30, hocPhi: "tatCa", khuVuc: "", nhom: "", hocXa: "co", bac: { daiHoc: true, caoDang: true },
+  diemTu: 0, diemDen: 30, hocPhi: "tatCa", khuVuc: "", nhom: "", hocXa: "co", bac: { daiHoc: true, caoDang: true },
 };
 
 export const CAC_MUC_HOC_PHI: { gia: BoLoc["hocPhi"]; nhan: string }[] = [
