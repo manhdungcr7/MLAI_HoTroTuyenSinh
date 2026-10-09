@@ -49,9 +49,19 @@ npm test
 - Ứng dụng nạp nền `/api/manifest` (nếu chưa có bản xuất bản thì dùng `/data/manifest.json` đi kèm bản dựng), tải đúng bộ dữ liệu đổi hash, kiểm tra SHA-256, lưu IndexedDB, rồi hợp nhất lên dữ liệu gốc bằng `src/engine/du-lieu-tuyen-sinh/hop-nhat.ts`. Chưa có bản nào thì app chạy bằng dữ liệu gốc.
 - Màn chi tiết (`kham-pha/chi-tiet.tsx`) đọc qua `khoDuLieu` và có khối "Thông tin của trường" (`thong-tin-truong.tsx`): kênh chính thức, nơi lưu trú, học bổng, thông báo. Mỗi dòng kèm link nguồn; không có thì ghi "chưa có".
 - Quy tắc hợp nhất: thông tin trường, học bổng, thông báo **bắt buộc có `nguon.url`**, thiếu thì bỏ. Học phí CMS không ghi đè khi chỉ lặp lại số gốc (cùng nguồn, cùng mức thấp). Học phí cấp trường chỉ lấy bản ghi cấp trường, không lấy học phí của một ngành. Test: `tests/hop-nhat-snapshot.test.ts`.
-- Danh sách khám phá và so sánh vẫn đọc dữ liệu gốc (`LUA_CHON_MAU`); chỉ màn chi tiết đọc bản đã hợp nhất. Muốn số CMS vào cả danh sách thì cần chuyển các màn đó sang `useKhoDuLieu()` (`src/state/dung-kho-du-lieu.ts`).
+- **Mọi màn dùng bản đã hợp nhất.** `LUA_CHON_MAU` và `tim()` (`src/data/lua-chon-mau.ts`) là danh mục đang dùng: kho dữ liệu thay nội dung tại chỗ bằng `datDanhMuc` khi có bản CMS mới, và gốc ứng dụng dựng lại màn đang mở (`useBanDuLieu`). Khám phá, nhãn nguyện vọng, so sánh, thử tình huống đều thấy số mới. Dữ liệu gốc (`LUA_CHON`) không bị sửa.
+- Điểm chuẩn từ CMS chỉ ghi đè điểm thi THPT thang 30; mỗi chương trình lấy năm mới nhất, cùng năm nhiều bản ghi thì lấy điểm cao nhất (không làm học sinh tưởng dễ hơn). Bản ghi DGNL (thang 1200) hay học bạ không bao giờ đè điểm THPT. Khóa ghép là **mã chương trình** (người nhập chọn ngành từ danh sách của trường, `cms/src/du-lieu-truong/chuong-trinh-truong.json`, sinh bằng `scripts/sinh-chuong-trinh-cms.ts`).
+- Bộ dựng snapshot (`chuanHoaChoSnapshot`) lấy nguồn, mã trường, mã bản ghi, ngày cập nhật từ bản ghi đã duyệt ở máy chủ, **không tin** nguồn người dùng tự ghi trong `data`.
+- Học phí cấp trường chỉ lấp chỗ trống của chương trình chưa có học phí riêng (không đè số riêng) và chỉ loại tính theo năm.
+- Phục vụ tệp: `functions/snapshots/[tep].ts` trả `/snapshots/<tên>.<phiên bản>.<băm>.json` từ KV (dự phòng D1), tự kiểm lại mã băm, cache vĩnh viễn. Test: `tests/snapshot-phuc-vu.test.ts`.
 
 ## Chỗ còn thiếu (chưa có nguồn thật, không điền)
 - Ký túc xá, học bổng, kênh Zalo/fanpage, thông báo, đánh giá của sinh viên: chưa có bản ghi nào được xác minh. Bản xuất bản hiện chứa 100 bản ghi trường sinh bằng `scripts/khoi-tao-d1-that.ts` với website, fanpage và giá ký túc xá do script tự dựng (chung một giá cho mọi trường) và mức học phí cao bằng 1,2 lần mức thấp. App bỏ các bản ghi này vì không có nguồn; cần sửa script, không dựng số thay cho dữ liệu chưa có.
 - Thư mục thô `../nguyen-vong` không có trong máy này nên không bổ sung được dữ liệu mới; mọi số liệu trong app vẫn là kết quả đã sinh sẵn ở `src/data/`.
 - Học phí riêng của ngành: 24 chương trình. Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
+
+## Dự báo điểm chuẩn năm tới
+`src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 1.330 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 92% (2023), 93% (2024), 68% (2025); sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).
+
+## Điểm ưu tiên khu vực và đối tượng
+`src/engine/diem-uu-tien.ts`. KV1 +0,75; KV2-NT +0,5; KV2 +0,25; KV3 0; UT1 +2; UT2 +1; từ 22,5 điểm giảm dần theo [(30 − tổng)/7,5] × mức. Học sinh khai ở Bước 2; `diemDayDu(s).uuTien` mang mức vào `tongChoLuaChon`, tính riêng cho từng tổ hợp. Mục tiêu hiển thị vẫn là điểm chuẩn của ngành; phần còn thiếu đã trừ ưu tiên (`mucTieuTho`). Mức cộng có thể đổi theo quy chế từng năm: cần đối chiếu mỗi mùa tuyển sinh.

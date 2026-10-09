@@ -58,7 +58,7 @@
 
 ## 📌 Issue #03: Cơ chế tính điểm ưu tiên khu vực (KV1, KV2, KV2-NT, KV3) & Đối tượng
 - 👤 **Phụ trách (Owner):** Tuấn (`khoi-dau`) & Kiệt (`thu-tinh-huong`)
-- ⏳ **Trạng thái:** `Ghi nhận (Backlog - Dự kiến Phase 2)`
+- ✅ **Trạng thái:** `Đã làm một phần: khai báo KV/đối tượng và tính công thức giảm dần từ 22,5 điểm đã vào mọi phép so với điểm chuẩn (engine/diem-uu-tien.ts, Bước 2). Chưa làm: tự map tỉnh/huyện sang khu vực ưu tiên (cần danh sách xã theo khu vực của Bộ).`
 - 🏷️ **Nhãn:** `engine`, `tuyen-sinh`, `tinh-toan`
 
 ### 1. Bối cảnh & Vấn đề

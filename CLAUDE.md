@@ -18,6 +18,10 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Hỏi tư vấn AI có căn cứ | `src/features/tu-van`, `functions/api/tu-van.ts` |
 | Hiểu sở thích (hướng nghiệp) | `src/features/huong-nghiep` (trắc nghiệm Holland 18 câu → nhóm ngành gợi ý, lưu `HoSo.soThich`) |
 | Phụ huynh/thầy cô đồng hành | `src/features/hanh-trinh/chia-se.tsx` (tóm tắt + tạo liên kết), `src/features/dong-hanh` (người đồng hành xem, viết lời nhắn; em nhận lời nhắn) |
+| Dự báo khoảng điểm chuẩn năm tới | `src/engine/du-bao-diem-chuan.ts`, `src/features/kham-pha/khoi-du-bao.tsx` (có kiểm định ngược) |
+| Điểm ưu tiên khu vực/đối tượng | `src/engine/diem-uu-tien.ts`, `src/features/khoi-dau/diem-uu-tien.tsx` |
+| Cập nhật dữ liệu bởi người trong trường | `cms/` (CMS quản trị), `functions/snapshots`, `functions/api/{bao-sai,tinh-nguyen,manifest}.ts`, `src/features/dong-gop`; vận hành: `docs/QUAN-TRI.md` |
+| Đối chiếu tiêu chí chấm của Ban Tổ chức | `docs/DOI-CHIEU-TIEU-CHI.md`, `docs/HOI-DAP-BAN-GIAM-KHAO.md`, `docs/KICH-BAN-DEMO.md` |
 | 4 chỉ số theo dõi (slide 9) | `src/features/hanh-trinh/chi-so-theo-doi.tsx`, logic ở `tom-tat.ts` |
 | Quyền riêng tư, local-first (slide 8) | `localStorage`, xuất/khôi phục ở Cài đặt, `src/state/sao-luu.ts` |
 
@@ -31,7 +35,10 @@ npm install
 npm run dev          # chạy thử
 npx tsc --noEmit     # kiểm tra kiểu (gồm cả thư mục functions)
 npm run kiem-tra     # kiểm tra route, màu, từ cấm
-npm test             # toàn bộ test (xep-lich, muc-tieu, thu-tinh-huong, tu-hoc, du-lieu, tu-van, ke-hoach, chia-se, dong-hanh, kiem-tra-route)
+npm test             # toàn bộ test (24 bộ: logic, dữ liệu, CMS/API, dự báo, ưu tiên, hộp thư, kiểm tra đồng nhất)
+npm run cms:build    # build CMS quản trị (CI cũng chạy)
+npm run cms:api      # CMS + API cục bộ (D1/KV cục bộ), xem docs/QUAN-TRI.md
+npm run app:local    # app học sinh + Functions cục bộ, dùng chung dữ liệu với cms:api
 npm run build
 ```
 
@@ -99,12 +106,25 @@ Giai đoạn 4 — hoàn thiện phần còn thiếu của các slice khác và 
 - Sao lưu/khôi phục kiểm tra thêm `loiNhan` và `soThich`.
 - Giao diện: dấu thập phân thống nhất bằng dấu phẩy qua `engine/dinh-dang.ts` (không dùng `.toFixed` trực tiếp để hiển thị); màn chờ onboarding hiện số chương trình/trường thật thay vì con số viết tay.
 
+Giai đoạn 5 — kéo code mới của nhóm, đối chiếu đề bài Ban Tổ chức, nối đường ống dữ liệu cộng đồng (2026-10-09):
+- Đã đọc `Decision_Intelligence_Challenge_Brief_TMA` (6 tiêu chí, 100 điểm). Bảng đối chiếu từng ý chấm với bằng chứng trong sản phẩm: `docs/DOI-CHIEU-TIEU-CHI.md`; hỏi đáp dự kiến: `docs/HOI-DAP-BAN-GIAM-KHAO.md`; kịch bản demo: `docs/KICH-BAN-DEMO.md`.
+- **Lỗ hổng nghiêm trọng đã vá: dữ liệu tình nguyện viên không bao giờ tới học sinh.** CMS của nhóm xuất bản snapshot vào KV, app học sinh tải `/snapshots/*.json` nhưng không có hàm nào phục vụ các đường dẫn đó (SPA trả `index.html`, JSON hỏng). Thêm `functions/snapshots/[tep].ts` (đọc KV, dự phòng D1, tự kiểm mã băm, cache vĩnh viễn). Phát hiện thêm khi chạy cả vòng ở máy: tên tệp `cutoff-scores` khác khóa KV `cutoffScores` (404), hợp nhất tìm trường theo **tên ngắn** thay vì **mã trường** nên không trường thật nào khớp, hình dạng `data` mà CMS lưu khác hình dạng app đọc (thiếu `nguon`, tên ô kênh khác), điểm chuẩn CMS khóa theo mã ngành Bộ mà dữ liệu gốc không có, thông tin cộng đồng (nơi ở, đánh giá, lưu ý) không được nạp, và các màn danh sách không dùng bản hợp nhất. Đã sửa tất cả: `chuanHoaChoSnapshot`, hợp nhất theo mã trường, điểm chuẩn khóa theo **mã chương trình** (người nhập chọn ngành từ danh sách của trường), `LUA_CHON_MAU` thay tại chỗ khi có bản mới (`useBanDuLieu`).
+- Chạy thử cả vòng ở máy, không cần tài khoản Cloudflare: `npm run cms:api` rồi `npm run app:local` (`scripts/chay-app-local.mjs`, dùng chung D1/KV với CMS). Đã kiểm bằng trình duyệt: nhập điểm chuẩn ở CMS, duyệt, xuất bản, học sinh thấy số mới trên cả thẻ danh sách, nhãn và trang chi tiết.
+- CMS: "Nhập điểm chuẩn cả trường một lượt" (bảng ngành, một nguồn chung), form từng ngành chọn chương trình thay vì gõ mã.
+- Kênh cộng đồng công khai: `/api/bao-sai` (học sinh báo số liệu sai, thay cho mailto), `/api/tinh-nguyen` + trang `/dong-gop` (đăng ký làm tình nguyện viên), migration `0005`, hộp thư trong CMS (Phê duyệt > Hộp thư) với nút "Cấp quyền cộng tác viên" tự thêm email và giao đúng trường. Giới hạn tần suất theo IP bằng KV. Test: `tests/hop-thu.test.ts` (SQLite thật).
+- **Dự báo khoảng điểm chuẩn năm tới** (`engine/du-bao-diem-chuan.ts`, khối trên trang ngành, dòng "Dự kiến" ở danh sách nguyện vọng, và trong dữ liệu gửi AI tư vấn). Hệ số nở khoảng chọn bằng kiểm định bỏ-một-năm trên dữ liệu thật; phát hiện bản đầu (cộng trung vị, tách theo nhóm ngành) phủ chỉ 55% nên bỏ. Kết quả: phủ 92% (2023), 93% (2024), 68% (2025). Test in và kiểm mức phủ mỗi lần chạy.
+- **Điểm ưu tiên khu vực/đối tượng** (`engine/diem-uu-tien.ts`, khai ở Bước 2): đi vào mọi phép so điểm chuẩn và phần "còn thiếu" của mục tiêu.
+- Sửa dấu thập phân còn sót ("1.3 điểm"), CI build CMS, tài liệu vận hành `docs/QUAN-TRI.md`.
+- Việc cần chủ tài khoản Cloudflare (không làm thay được): tạo D1 (tài khoản đang chạm giới hạn số D1), Access, biến môi trường; xem `docs/QUAN-TRI.md` mục 3.
+
 ## 7. Giới hạn đã biết và việc còn lại
 
 - Điểm chuẩn là số năm trước; điểm năm nay có thể khác. Học phí và việc làm mới có cho một phần chương trình. Danh sách đầy đủ ở `docs/DU-LIEU.md` và `docs/BACKLOG.md`.
 - Trắc nghiệm hướng nghiệp là công cụ gợi ý để tìm hiểu, chưa được kiểm định tâm lý; kết quả chỉ nên dùng cùng điểm số và trao đổi với người lớn.
 - Chưa có tài khoản, đăng nhập hay đồng bộ nhiều thiết bị (đúng với hướng local-first của MVP); chuyển máy dùng tệp sao lưu.
-- Phụ huynh/thầy cô không có tài khoản riêng, đồng hành bằng liên kết hai chiều (xem mục 6, giai đoạn 4). Muốn có tài khoản, thông báo đẩy và đồng bộ thật cần một máy chủ lưu dữ liệu (Cloudflare D1/KV) và đăng nhập, chưa làm.
+- Phụ huynh/thầy cô không có tài khoản riêng, đồng hành bằng liên kết hai chiều (xem mục 6, giai đoạn 4). Muốn có tài khoản, thông báo đẩy và đồng bộ thật cần đăng nhập cho học sinh và máy chủ lưu dữ liệu của em, chưa làm (D1 đã có cho dữ liệu trường).
+- Dự báo điểm chuẩn không bù được thay đổi quy chế/đề thi/chỉ tiêu (năm 2025 chỉ phủ 68%). Điểm ưu tiên: học sinh tự khai khu vực, chưa tự map từ tỉnh/huyện. Mức cộng ưu tiên cần đối chiếu quy chế mỗi năm.
+- Hạ tầng thật của CMS (D1, Access) chưa dựng; chạy thử đầy đủ bằng `npm run cms:api` + `npm run app:local`.
 - Chưa bật AI thật cho đến khi có khóa API trên Cloudflare.
 - Thông báo đẩy khi tắt app phụ thuộc trình duyệt; nhắc trong app luôn hoạt động.
 
