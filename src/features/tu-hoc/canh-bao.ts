@@ -76,7 +76,13 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
   }
 
   // 3) Đã qua giữa tuần mà còn nhiều việc quan trọng chưa làm
-  const quanTrongChua = viecTuan.filter((v) => v.mucUuTien === "cao" && (!tt(v.id) || tt(v.id) === "chua" || tt(v.id) === "doi"));
+  // Chỉ tính việc quan trọng mà MỌI buổi đã xếp của nó đều đã qua mà chưa xong; kế hoạch vừa tạo giữa tuần (các buổi còn ở phía trước) không phải là "chậm".
+  const daQua = (k: { ngay: string; ketThuc: string }) => k.ngay < hom || (k.ngay === hom && phutTuGio(k.ketThuc) <= phutHienTai(bayGio));
+  const quanTrongChua = viecTuan.filter((v) => {
+    if (v.mucUuTien !== "cao" || !(!tt(v.id) || tt(v.id) === "chua" || tt(v.id) === "doi")) return false;
+    const buoi = s.khoiHoc.filter((k) => k.viecId === v.id);
+    return buoi.length > 0 && buoi.every(daQua);
+  });
   if (thu >= 3 && quanTrongChua.length >= 2) {
     const conNgay = 8 - thu;
     ra.push({

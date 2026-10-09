@@ -2,7 +2,7 @@ import { CAU_HINH_MAC_DINH, congNgay, isoNgay, thuHaiCuaTuan, xepLichTuan } from
 import { LICH_CO_DINH_MAU } from "@/data/lich-mau";
 import { viecChoTuan } from "@/features/ke-hoach/tao-viec-tuan";
 import type { AppState } from "./store";
-import { idHoSoMau } from "@/data/lua-chon-that";
+import { idHoSoMau, timLuaChon } from "@/data/lua-chon-that";
 import { TO_HOP, type DiemThi, type HoSo, type MonId } from "./types";
 
 export const HO_SO_TRONG: HoSo = {
@@ -45,7 +45,8 @@ export function taoHoSoMau(): AppState {
       cachHoc: ["Học qua bài tập", "Học theo dự án"], nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"], ghiChuChiPhi: "",
       hocXaNha: true, quanTamViecLam: "rat", conDuong: "daiHoc", hoanTat: true,
     },
-    mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: 26, ngayThi: congNgay(isoNgay(hom), 266) },
+    // Điểm mục tiêu đúng bằng điểm chuẩn của ngành mục tiêu (trước đây ghi 26 trong khi ngành là 28,5).
+    mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: timLuaChon(ids[0])?.diemMin ?? 26, ngayThi: congNgay(isoNgay(hom), 266) },
     nguyenVong: ids.slice(0, 5),
     yeuThich: ids.slice(0, 1), soSanh: ids.slice(0, 2),
     diemThi,
@@ -59,8 +60,8 @@ export function taoHoSoMau(): AppState {
   };
   // Việc của tuần này do chính bộ sinh việc tạo từ mục tiêu và điểm của hồ sơ mẫu (không phải danh sách viết sẵn), rồi xếp sẵn vào lịch.
   const tuan = thuHaiCuaTuan(isoNgay(hom));
-  const kq = viecChoTuan(nen, tuan);
+  const kq = viecChoTuan(nen, tuan, isoNgay(hom));
   const viec = kq.ok ? kq.viec : [];
-  const r = xepLichTuan({ tuanBatDau: tuan, coDinh: nen.coDinh, viec, cfg: nen.cauHinh });
+  const r = xepLichTuan({ tuanBatDau: tuan, tuNgay: isoNgay(hom), coDinh: nen.coDinh, viec, cfg: nen.cauHinh }); // chỉ xếp từ hôm nay, không xếp vào ngày đã qua
   return { ...nen, viec, khoiHoc: r.khoi };
 }

@@ -53,8 +53,13 @@ const daXong = { ...boLo, trangThaiViec: { "v-ly-dien": "xong" } as Record<strin
 assert.ok(!taoCanhBao(daXong, BAY_GIO).some((c) => loaiCuaCanhBao(c) === "boLo"));
 
 // 5) Giữa tuần còn ≥2 việc quan trọng → "Cần điều chỉnh kế hoạch tuần này"
-const dc = cb1.find((c) => loaiCuaCanhBao(c) === "dieuChinh");
+// Chỉ nhắc khi các buổi đã xếp của ≥2 việc quan trọng đều ĐÃ QUA mà chưa xong (buổi "c" còn ở phía trước nên không tính)
+assert.ok(!cb1.some((c) => loaiCuaCanhBao(c) === "dieuChinh"), "còn buổi phía trước thì chưa phải chậm");
+const cb2 = taoCanhBao({ ...boLo, khoiHoc: boLo.khoiHoc.filter((k) => k.id !== "c") }, BAY_GIO);
+const dc = cb2.find((c) => loaiCuaCanhBao(c) === "dieuChinh");
 assert.ok(dc && dc.hanhDong?.nhan === "Xem đề xuất điều chỉnh" && dc.hanhDong.den === DUONG_DAN.tuan("lich"));
+// Kế hoạch vừa tạo giữa tuần, mọi buổi còn ở phía trước: không được báo "cần điều chỉnh"
+assert.ok(!taoCanhBao({ ...rong, viec: VIEC_MAU, coDinh: LICH_CO_DINH_MAU, khoiHoc: [khoi("m1", "v-ly-dien", "2026-10-09", "20:00", "21:00"), khoi("m2", "v-toan-ham-so", "2026-10-10", "15:00", "16:00", "toan")] }, BAY_GIO).some((c) => loaiCuaCanhBao(c) === "dieuChinh"));
 // Đầu tuần (thứ 2) chưa nhắc
 assert.ok(!taoCanhBao({ ...rong, viec: VIEC_MAU, coDinh: LICH_CO_DINH_MAU }, new Date(2026, 9, 5, 9)).some((c) => loaiCuaCanhBao(c) === "dieuChinh"));
 
