@@ -24,7 +24,7 @@ export function NhomChon<T extends string | number>({ nhan, cacLua, giaTri, onCh
 }) {
   const nhieu = Array.isArray(giaTri);
   return (
-    <div role={nhieu ? "group" : "radiogroup"} aria-label={nhan} className={gop("grid", cot === 7 ? "gap-1" : "gap-1.5", COT[cot])}>
+    <div role={nhieu ? "group" : "radiogroup"} aria-label={nhan} className={gop("grid", cot === 7 ? "gap-[3px]" : "gap-1.5", COT[cot])}>
       {cacLua.map((c) => {
         const chon = nhieu ? (giaTri as T[]).includes(c.gia) : giaTri === c.gia;
         return (

@@ -29,12 +29,12 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
         <div className="absolute top-3.5 h-5 w-0.5 bg-xanh" style={{ left: vt(d.kyVong) }} />
         {diemEm !== null && (
           <div className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: vt(diemEm), top: 0 }}>
-            <span className="text-[11px] font-extrabold text-do-chu leading-none whitespace-nowrap">Em {dinhDang(diemEm, 1)}</span>
+            <span className="text-[12px] font-extrabold text-do-chu leading-none whitespace-nowrap">Em {dinhDang(diemEm, 1)}</span>
             <span className="mt-0.5 size-3 rounded-full bg-do border-2 border-trang" />
           </div>
         )}
-        <span className="absolute bottom-0 left-0 text-[11px] text-chu-phu">{tu}</span>
-        <span className="absolute bottom-0 right-0 text-[11px] text-chu-phu">{den}</span>
+        <span className="absolute bottom-0 left-0 text-[12px] text-chu-phu">{tu}</span>
+        <span className="absolute bottom-0 right-0 text-[12px] text-chu-phu">{den}</span>
       </div>
 
       {viTri && <p className="text-[14px] text-chu leading-snug rounded-xl bg-nen p-3">{MO_TA_VI_TRI[viTri]}</p>}

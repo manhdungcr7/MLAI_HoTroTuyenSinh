@@ -112,7 +112,7 @@ export default function KhamPha() {
                 </button>
               )}
               {!s.hoSo.soThich && (
-                <button type="button" onClick={() => nav(DUONG_DAN.tracNghiem())} className="flex-shrink-0 min-h-11 rounded-xl bg-cam text-white px-3.5 text-[14px] font-bold active:brightness-90">
+                <button type="button" onClick={() => nav(DUONG_DAN.tracNghiem())} className="flex-shrink-0 min-h-11 rounded-xl bg-cam-chu text-white px-3.5 text-[14px] font-bold active:brightness-90">
                   Trắc nghiệm hướng nghiệp
                 </button>
               )}

@@ -109,7 +109,7 @@ export default function HoSo() {
           <div className="flex-1 text-[13px] text-cam-chu leading-snug">
             <b className="block">Nhớ sao lưu dữ liệu</b>
             <p>Dữ liệu chỉ nằm trên máy này. Nếu mất điện thoại hay đổi máy, dữ liệu sẽ mất nếu em chưa tải bản sao lưu.</p>
-            <button type="button" onClick={() => nav(DUONG_DAN.hoSoCaiDat())} className="inline-flex items-center gap-1 min-h-11 font-bold text-cam active:underline">Tới cài đặt sao lưu</button>
+            <button type="button" onClick={() => nav(DUONG_DAN.hoSoCaiDat())} className="inline-flex items-center gap-1 min-h-11 font-bold text-cam-chu active:underline">Tới cài đặt sao lưu</button>
           </div>
         </div>
 
