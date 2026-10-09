@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Compass, HeartHandshake, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
+import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Compass, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NenHero } from "@/components/ui/hinh-nen";
 import { HangBam, Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -102,7 +102,7 @@ export default function HoSo() {
           trong="Hồ sơ đã có đủ thông tin chính. Khi có gì thay đổi, em cập nhật lại nhé." />
 
         <TieuDeMuc>Tiến bộ của em</TieuDeMuc>
-        <ChiSoTheoDoi s={s} />
+        <ChiSoTheoDoi s={s} gon />
 
         <div className="rounded-the border border-cam-chu/30 bg-cam-nhat p-3 flex items-start gap-2">
           <AlertTriangle size={18} className="text-cam-chu shrink-0 mt-px" />
@@ -118,8 +118,6 @@ export default function HoSo() {
           <HangBam bieuTuong={Compass} tone="cam" tieuDe="Trắc nghiệm hướng nghiệp" onClick={() => nav(DUONG_DAN.tracNghiem())}
             phu={h.soThich ? `Kết quả: ${moTaTop(h.soThich)}` : "18 câu, khoảng 3 phút, gợi ý nhóm ngành hợp sở thích"}
             nhan={<Nhan tone={h.soThich ? "luc" : "cam"}>{h.soThich ? "Đã làm" : "Chưa làm"}</Nhan>} />
-          <HangBam bieuTuong={HeartHandshake} tone="luc" tieuDe="Cùng cập nhật dữ liệu trường" onClick={() => nav(DUONG_DAN.dongGop())}
-            phu="Sinh viên, thầy cô, cán bộ tuyển sinh giúp dữ liệu luôn mới" />
           <HangBam bieuTuong={Users} tone="tim" tieuDe="Chia sẻ với phụ huynh, thầy cô" onClick={() => nav(DUONG_DAN.chiaSe())}
             phu={s.loiNhan.length ? `Có ${s.loiNhan.length} lời nhắn từ người đồng hành` : "Gửi liên kết cho phụ huynh, thầy cô và nhận lời nhắn lại"} />
           <HangBam bieuTuong={Wallet} tone="cam" tieuDe="Bổ sung ngân sách sinh hoạt" onClick={() => nav(DUONG_DAN.batDau(3))}

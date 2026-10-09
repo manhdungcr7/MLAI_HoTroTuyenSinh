@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, BookOpenCheck, CalendarDays, Database, Download, Info, Upload, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
+import { Bell, BookOpenCheck, CalendarDays, Database, Download, HeartHandshake, Info, Upload, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
 import { DauTrangCoQuayLai, Logo, NoiDung } from "@/components/layout/khung";
 import { HangBam, Nhan, Nut, The } from "@/components/ui/nut-the";
 import { HopTruot, TieuDeMuc } from "@/components/ui/hien-thi";
@@ -83,6 +83,7 @@ export default function CaiDat() {
         <section>
           <TieuDeMuc>Về dữ liệu</TieuDeMuc>
           <div className="space-y-2">
+            <HangBam bieuTuong={HeartHandshake} tone="luc" tieuDe="Cùng cập nhật dữ liệu trường" onClick={() => nav(DUONG_DAN.dongGop())} phu="Dành cho sinh viên, thầy cô, cán bộ tuyển sinh" />
             <DongThongBao tone="cam" icon={Database} tieuDe="Điểm chuẩn là số của các năm trước"
               moTa="Điểm chuẩn lấy từ đề án tuyển sinh của trường hoặc trang tổng hợp, mỗi ngành đều ghi nguồn. Học phí và việc làm nhiều ngành chưa có. Em luôn đối chiếu với đề án chính thức của trường trước khi quyết định." />
             <DongThongBao tone="xanh" icon={Info} tieuDe="Điểm phù hợp không phải khả năng đậu"

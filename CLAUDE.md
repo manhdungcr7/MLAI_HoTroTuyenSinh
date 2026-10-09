@@ -117,6 +117,8 @@ Giai đoạn 5 — kéo code mới của nhóm, đối chiếu đề bài Ban T�
 - Sửa dấu thập phân còn sót ("1.3 điểm"), CI build CMS, tài liệu vận hành `docs/QUAN-TRI.md`.
 - Việc cần chủ tài khoản Cloudflare (không làm thay được): tạo D1 (tài khoản đang chạm giới hạn số D1), Access, biến môi trường; xem `docs/QUAN-TRI.md` mục 3.
 
+**Quy ước giao diện (nhóm chốt 2026-10-09):** app dành cho học sinh dùng thật, giữ gọn. Giải thích dành cho ban giám khảo (giả định, kiểm định, kiến trúc, mô hình mở rộng) để ở **slide**, không nhồi vào app. Nội dung sẵn cho slide: `docs/NOI-DUNG-CHO-SLIDE.md`. Màn mới chỉ giữ một dòng giới hạn ngắn (ví dụ "không phải xác suất đậu").
+
 ## 7. Giới hạn đã biết và việc còn lại
 
 - Điểm chuẩn là số năm trước; điểm năm nay có thể khác. Học phí và việc làm mới có cho một phần chương trình. Danh sách đầy đủ ở `docs/DU-LIEU.md` và `docs/BACKLOG.md`.

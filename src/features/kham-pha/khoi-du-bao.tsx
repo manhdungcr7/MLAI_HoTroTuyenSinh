@@ -39,11 +39,9 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
 
       {viTri && <p className="text-[14px] text-chu leading-snug rounded-xl bg-nen p-3">{MO_TA_VI_TRI[viTri]}</p>}
 
-      <div className="text-[12px] text-chu-phu leading-snug space-y-1">
-        <p>Cách tính: lấy điểm năm {d.namCuoi}, cộng mức tăng giảm thường gặp của điểm chuẩn giữa hai năm liền nhau, rút từ {d.soMau.toLocaleString("vi-VN")} cặp năm có thật trong dữ liệu. Khoảng này phủ khoảng 8 trên 10 trường hợp trong các năm bình thường (đã kiểm lại với năm 2023 và 2024; năm 2025 biến động mạnh hơn nên chỉ phủ khoảng 7 trên 10).</p>
-        <p>Đây không phải xác suất đậu. Nếu trường đổi chỉ tiêu, phương thức xét hay đề thi khó dễ khác, điểm chuẩn có thể ra ngoài khoảng này.</p>
-        {d.luuY.map((l) => <p key={l}>{l}</p>)}
-      </div>
+      <p className="text-[12px] text-chu-phu leading-snug">
+        Suy từ biến động điểm chuẩn các năm trước, không phải xác suất đậu. Đổi chỉ tiêu hoặc đề thi thì có thể ra ngoài khoảng.{d.luuY.length > 0 && ` ${d.luuY[0]}`}
+      </p>
     </section>
   );
 }
