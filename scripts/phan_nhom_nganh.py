@@ -73,6 +73,12 @@ TINH_MOI = {
 }
 
 
+# Bản ghi gán nhầm trường (ngành không thể thuộc trường đó: Giáo dục Mầm non ở Học viện Ngân hàng, Khoa học giáo dục ở ĐH Thương mại): bỏ.
+TRUONG_GAN_NHAM = {"D61", "D64"}
+# Tên trường ghi trùng với trường khác (QHQ là Trường Quản trị và Kinh doanh, không phải ĐH Kinh tế - ĐHQGHN như QHE).
+DOI_TEN_TRUONG = {"QHQ": "Trường Quản trị và Kinh doanh - ĐHQGHN"}
+
+
 def tinh_moi(tinh: str) -> str:
     return TINH_MOI.get(unicodedata.normalize("NFC", tinh).strip(), unicodedata.normalize("NFC", tinh).strip())
 
@@ -136,15 +142,17 @@ def phan_nhom(ten: str) -> str:
 
 
 def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8")
     duong = Path(__file__).resolve().parent.parent / "src" / "data" / "du-lieu-that.json"
     ds = json.loads(duong.read_text(encoding="utf-8"))
-    rac = [x for x in ds if la_rac(x["nganh"])]
-    ds = [x for x in ds if not la_rac(x["nganh"])]
+    rac = [x for x in ds if la_rac(x["nganh"]) or x["ma"] in TRUONG_GAN_NHAM]
+    ds = [x for x in ds if not (la_rac(x["nganh"]) or x["ma"] in TRUONG_GAN_NHAM)]
     doi = 0
     thong_ke: dict[str, int] = {}
     xa_hoi: set[str] = set()
     for x in ds:
         x["nganh"] = sua_ten(x["nganh"])
+        x["truong"] = DOI_TEN_TRUONG.get(x["ma"], x["truong"])
         x["tinh"] = tinh_moi(x["tinh"])
         moi = phan_nhom(x["nganh"])
         if moi != x["nhom"]:
@@ -155,6 +163,18 @@ def main() -> None:
             xa_hoi.add(lam_sach(x["nganh"])[0])
     if "--ghi" in sys.argv:
         duong.write_text(json.dumps(ds, ensure_ascii=False), encoding="utf-8")
+        # Các tệp phụ khóa theo mã chương trình hoặc mã trường: bỏ khóa không còn trong dữ liệu chính (không để lại dữ liệu mồ côi).
+        ids, ma = {x["id"] for x in ds}, {x["ma"] for x in ds}
+        for ten, tap in (("chuong-trinh", ids), ("hoc-phi", ids), ("viec-lam", ids), ("nguon-nam", ids), ("nguon-nam-thu-cap", ids),
+                         ("de-an-truong", ma), ("de-an-truong-thu-cap", ma), ("trang-nganh-truong", ma)):
+            f = duong.parent / f"{ten}.json"
+            j = json.loads(f.read_text(encoding="utf-8"))
+            bo = [k for k in j if k not in tap]
+            for k in bo:
+                del j[k]
+            if bo:
+                f.write_text(json.dumps(j, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+                print(f"  {ten}.json: bỏ {len(bo)} khóa mồ côi")
     sys.stdout.reconfigure(encoding="utf-8")
     print(f"bỏ {len(rac)} dòng rác:", [x["nganh"] for x in rac])
     print(f"đổi nhóm {doi}/{len(ds)} chương trình")

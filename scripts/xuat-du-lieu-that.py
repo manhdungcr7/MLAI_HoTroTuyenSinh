@@ -13,7 +13,7 @@ import re
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from phan_nhom_nganh import la_rac, phan_nhom, sua_ten, tinh_moi  # noqa: E402
+from phan_nhom_nganh import DOI_TEN_TRUONG, TRUONG_GAN_NHAM, la_rac, phan_nhom, sua_ten, tinh_moi  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "legacy" / "frontend" / "src" / "data" / "programs-catalog.json"
@@ -38,13 +38,13 @@ def main() -> None:
     out = []
     for r in rows:
         cutoffs = {y: v for y, v in (r.get("cutoffs") or {}).items() if isinstance(v, (int, float)) and v > 0}
-        if not cutoffs or la_rac(r["majorName"]):  # mảnh rác khi trích PDF (điểm của nữ, "sử dụng kết quả thi...") không phải ngành
+        if not cutoffs or la_rac(r["majorName"]) or r["schoolCode"] in TRUONG_GAN_NHAM:  # mảnh rác khi trích PDF (điểm của nữ, "sử dụng kết quả thi...") không phải ngành
             continue
         pid = r["schoolCode"].lower() + "-" + hashlib.sha1(r["programKey"].encode("utf-8")).hexdigest()[:8]
         out.append({
             "id": pid,
             "ma": r["schoolCode"],
-            "truong": r["schoolName"],
+            "truong": DOI_TEN_TRUONG.get(r["schoolCode"], r["schoolName"]),
             "nganh": sua_ten(r["majorName"]),
             "nhom": nhom_nganh(r["majorName"], r.get("majorGroup") or "other"),
             "tinh": tinh_moi(r.get("schoolProvince") or ""),

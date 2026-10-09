@@ -1,11 +1,11 @@
 # Dữ liệu ngành và trường: nguồn, cách sinh lại, giới hạn
 
-Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **2.529 chương trình** của khoảng 100 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
+Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **2.513 chương trình** của 95 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
 
 ## Các tệp dữ liệu (`src/data/`)
 | Tệp | Nội dung | Sinh bởi |
 |---|---|---|
-| `du-lieu-that.json` | 2.529 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
+| `du-lieu-that.json` | 2.513 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
 | `nguon-nam.json` | Với mỗi chương trình và mỗi năm có điểm: link file đề án PDF và **số trang** có điểm đó | `scripts/sinh-nguon-nam.py` (cần `tim-url-de-an.py` chạy trước) |
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
@@ -65,3 +65,13 @@ npm test
 
 ## Điểm ưu tiên khu vực và đối tượng
 `src/engine/diem-uu-tien.ts`. KV1 +0,75; KV2-NT +0,5; KV2 +0,25; KV3 0; UT1 +2; UT2 +1; từ 22,5 điểm giảm dần theo [(30 − tổng)/7,5] × mức. Học sinh khai ở Bước 2; `diemDayDu(s).uuTien` mang mức vào `tongChoLuaChon`, tính riêng cho từng tổ hợp. Mục tiêu hiển thị vẫn là điểm chuẩn của ngành; phần còn thiếu đã trừ ưu tiên (`mucTieuTho`). Mức cộng có thể đổi theo quy chế từng năm: cần đối chiếu mỗi mùa tuyển sinh.
+
+## Làm sạch và phân nhóm (2026-10-09)
+`scripts/phan_nhom_nganh.py` (chạy `python scripts/phan_nhom_nganh.py --ghi`, và được `xuat-du-lieu-that.py` dùng chung):
+- **Phân nhóm ngành** theo luật có thứ tự ưu tiên trên tên đã làm sạch (bỏ tiền tố CT chuẩn, phần trong ngoặc, phần cơ sở, phần sau "chuyên ngành"). Bản cũ phân theo từ khóa trên cả chuỗi tên nên sai nhiều: "Hóa học (tăng cường tiếng Anh)" vào Ngôn ngữ, "Sư phạm Tin học" vào CNTT, "Chăn nuôi thú y" vào Y Dược... Thêm nhóm **Khoa học tự nhiên** (Toán, Lý, Hóa, Sinh, Môi trường, Tài nguyên). Nhóm trả về phải khớp `PHAN_NHOM_NGANH` ở màn Tạo hồ sơ (test kiểm hai chiều).
+- **Bỏ 16 dòng không phải ngành**: mảnh rác khi trích PDF ("Nữ: 21.07", "Kết hợp", "Sử dụng kết quả thi...", "Tổng chỉ tiêu...", mã ngành trơ trọi) và 2 bản ghi gán nhầm trường (D61, D64: "Giáo dục Mầm non" ở Học viện Ngân hàng).
+- **Sửa chính tả** do trích PDF (dấu đặt nhầm chữ "thuâṭ", chữ dính "Công nghệkỹthuật", ký tự hỏng).
+- **Đổi tên tỉnh sang 34 tỉnh thành từ 1/7/2025** (Nghị quyết 202/2025/QH15): dữ liệu gốc còn tên tỉnh cũ (Bình Dương, Phú Yên, Tiền Giang...), nên học sinh chọn "TP.HCM" hay "Đắk Lắk" trước đây không khớp trường cùng nơi. Bảng đổi ở `TINH_MOI`.
+- Tệp phụ mồ côi (khóa không còn trong dữ liệu chính) tự bị bỏ; `cms/.../tap-truong.json` và danh sách chương trình của CMS sinh lại bằng `scripts/sinh-tap-truong.ts`, `scripts/sinh-chuong-trinh-cms.ts`.
+- Test chất lượng: `tests/du-lieu.test.ts` (nhóm, tên ngành, tỉnh), `tests/toan-bo-chuong-trinh.test.ts` (mọi chương trình qua mọi hàm hiển thị với 7 kiểu học sinh, không chữ lỗi, số vô lý).
+- Còn tồn tại: mã trường trùng tên (D61 và NHH đều là Học viện Ngân hàng; D64 và TMU là ĐH Thương mại); nhiều trường chỉ có vài chương trình (BKA 2); điểm chuẩn mặc định lọc từ 15 trở lên ở màn Khám phá.

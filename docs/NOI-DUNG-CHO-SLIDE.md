@@ -21,7 +21,7 @@ Tiêu chí chấm: `docs/DOI-CHIEU-TIEU-CHI.md`. Hỏi đáp dự kiến: `docs/
 
 ## 4. Chiến lược dữ liệu (tiêu chí 4, ý 1 và 2)
 Ba tầng, mỗi tầng có nhãn tin cậy hiện trên app:
-1. Đề án tuyển sinh chính thức: 2.529 chương trình, khoảng 100 trường, link tới đúng trang PDF.
+1. Đề án tuyển sinh chính thức: 2.513 chương trình, 95 trường, link tới đúng trang PDF.
 2. Trang tổng hợp điểm chuẩn, có đối chiếu với đề án khi tìm thấy cùng con số.
 3. Thông tin cộng đồng (ký túc xá, đánh giá, lưu ý): bắt buộc có nguồn, qua duyệt, gắn nhãn "chưa phải số liệu chính thức".
 Dữ liệu người dùng: điểm từng môn, thi thử theo thời gian, thời khóa biểu, ngân sách. Dữ liệu thời gian: dự báo, đếm ngược tới kỳ thi, kế hoạch tuần.
