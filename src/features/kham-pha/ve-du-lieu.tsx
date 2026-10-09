@@ -1,7 +1,7 @@
 // "Số liệu này từ đâu ra?": mọi con số ở đây tính trực tiếp từ dữ liệu trong app, không gõ tay.
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BadgeCheck, FileSearch, FileText, GraduationCap, ShieldAlert, AlertCircle } from "lucide-react";
+import { BadgeCheck, FileSearch, FileText, GraduationCap, ShieldAlert, AlertCircle, Users } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut } from "@/components/ui/nut-the";
@@ -97,10 +97,17 @@ export default function VeDuLieu() {
           <div className="flex-1 min-w-0">
             <b className="block text-[14px] text-muc">Báo số liệu sai lệch?</b>
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Nếu em phát hiện điểm chuẩn, học phí hoặc thông tin nào sai so với đề án thực, hãy báo cho mình để cập nhật.</p>
-            <a href={`mailto:${EMAIL_BAO_SAI}?subject=Báo số liệu sai - Nguyện Vọng AI&body=Mã chương trình: ...\nTrường dữ liệu sai: ...\nGiá trị đúng và link nguồn: ...`}
-              className="inline-flex items-center min-h-11 text-[13px] font-bold text-do hover:underline">
-              Báo số liệu sai
-            </a>
+            <p className="text-[13px] text-chu-phu leading-snug mt-1">Em thấy số sai ở ngành nào, mở trang ngành đó và bấm "Báo số liệu sai". Người phụ trách trường sẽ kiểm tra nguồn rồi sửa.</p>
+            <a href={`mailto:${EMAIL_BAO_SAI}?subject=Góp ý dữ liệu - Nguyện Vọng AI`} className="inline-flex items-center min-h-11 text-[13px] font-bold text-do hover:underline">Góp ý khác qua email</a>
+          </div>
+        </section>
+
+        <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Cùng cập nhật dữ liệu">
+          <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-luc-nhat text-luc"><Users size={20} /></span>
+          <div className="flex-1 min-w-0">
+            <b className="block text-[14px] text-muc">Bạn là sinh viên, thầy cô hay cán bộ tuyển sinh?</b>
+            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Dữ liệu đổi mỗi năm và người trong trường nắm rõ nhất. Bạn giúp cập nhật cho trường mình, mọi thông tin đều qua duyệt và có nguồn.</p>
+            <button type="button" onClick={() => nav(DUONG_DAN.dongGop())} className="inline-flex items-center min-h-11 text-[13px] font-bold text-xanh hover:underline">Đăng ký làm tình nguyện viên</button>
           </div>
         </section>
 

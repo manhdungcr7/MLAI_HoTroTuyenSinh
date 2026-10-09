@@ -3,6 +3,7 @@ import type { LuaChon } from "@/state/types";
 import { boDongBoDuLieu, SU_KIEN_CAP_NHAT_DU_LIEU } from "./bo-dong-bo";
 import { hopNhatLuaChonVaCms, layChiTietTruongHopNhat, type DuLieuTruongHopNhat, type TapDuLieuCmsSnapshot } from "./hop-nhat";
 import type {
+  SnapshotCongDong,
   SnapshotDiemChuanHieuChinh,
   SnapshotHocBong,
   SnapshotHocPhi,
@@ -57,13 +58,14 @@ export class KhoDuLieuTuyenSinh {
 
   private async napTuCacheIndexedDB(): Promise<void> {
     try {
-      const [schools, tuition, scholarships, admissions, announcements, cutoffScores] = await Promise.all([
+      const [schools, tuition, scholarships, admissions, announcements, cutoffScores, community] = await Promise.all([
         khoIndexedDB.docDataset<SnapshotTruong[]>("schools"),
         khoIndexedDB.docDataset<SnapshotHocPhi[]>("tuition"),
         khoIndexedDB.docDataset<SnapshotHocBong[]>("scholarships"),
         khoIndexedDB.docDataset<SnapshotTuyenSinh[]>("admissions"),
         khoIndexedDB.docDataset<SnapshotThongBao[]>("announcements"),
         khoIndexedDB.docDataset<SnapshotDiemChuanHieuChinh[]>("cutoffScores"),
+        khoIndexedDB.docDataset<SnapshotCongDong[]>("community"),
       ]);
 
       this.cmsSnapshot = {
@@ -73,6 +75,7 @@ export class KhoDuLieuTuyenSinh {
         admissions: admissions || [],
         announcements: announcements || [],
         cutoffScores: cutoffScores || [],
+        community: community || [],
       };
 
       this.capNhatMap();

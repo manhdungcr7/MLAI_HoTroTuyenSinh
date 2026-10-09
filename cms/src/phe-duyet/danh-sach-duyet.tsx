@@ -16,18 +16,20 @@ import { dinhDangLuc } from "@cms/du-lieu-truong/dinh-dang";
 import { maTruongCua, NHAN_TT, TONE_TT } from "@cms/du-lieu-truong/mo-hinh";
 import { nhanBan, tomTatBan } from "@cms/du-lieu-truong/tom-tat-ban";
 import { SoSanhBan } from "./so-sanh-ban";
+import HopThu from "../he-thong/hop-thu";
 
-type Tab = "cho" | "duyet" | "nhap";
+type Tab = "cho" | "duyet" | "nhap" | "hop-thu";
 const TAB: { id: Tab; nhan: string; gom: readonly TrangThaiCms[] }[] = [
   { id: "cho", nhan: "Chờ duyệt", gom: ["SUBMITTED", "IN_REVIEW"] },
   { id: "duyet", nhan: "Đã duyệt", gom: ["APPROVED"] },
   { id: "nhap", nhan: "Cần sửa", gom: ["REJECTED", "DRAFT"] },
+  { id: "hop-thu", nhan: "Hộp thư", gom: [] }, // báo sai từ học sinh, đăng ký tình nguyện viên
 ];
 
 export default function DanhSachDuyet() {
   const { laQtv, toi } = usePhien();
   const [tham, setTham] = useSearchParams();
-  const tab: Tab = (["cho", "duyet", "nhap"] as const).find((t) => t === tham.get("trang-thai")) ?? (laQtv ? "cho" : "nhap");
+  const tab: Tab = (["cho", "duyet", "nhap", "hop-thu"] as const).find((t) => t === tham.get("trang-thai")) ?? (laQtv ? "cho" : "nhap");
   const bg = useTai(() => layHetBanGhi());
   const tenDs = useTai(() => layDanhSachTenTruong());
 
@@ -79,14 +81,14 @@ export default function DanhSachDuyet() {
           {TAB.map((t) => (
             <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTham({ "trang-thai": t.id })}
               className={gop("flex-1 min-h-12 rounded-lg text-[13px] font-bold px-1", tab === t.id ? "bg-xanh text-white" : "text-chu-phu")}>
-              {t.nhan}{bg.du ? ` (${theoTab[t.id].length})` : ""}
+              {t.nhan}{bg.du && t.id !== "hop-thu" ? ` (${theoTab[t.id].length})` : ""}
             </button>
           ))}
         </div>
 
         {banTin && <DongThongBao tone={banTin.tone} tieuDe={banTin.noiDung} onClick={() => setBanTin(null)} />}
 
-        {bg.dangTai && !bg.du ? <KhungDangTai soKhung={3} cao="h-36" /> : bg.loi ? (
+        {tab === "hop-thu" ? <HopThu /> : bg.dangTai && !bg.du ? <KhungDangTai soKhung={3} cao="h-36" /> : bg.loi ? (
           <KhungLoi moTa={bg.loi} thuLai={bg.taiLai} />
         ) : dsHienTai.length === 0 ? (
           <TrangThaiTrong bieuTuong={<Inbox size={26} />}

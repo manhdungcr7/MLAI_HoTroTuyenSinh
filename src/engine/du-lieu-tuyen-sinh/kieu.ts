@@ -77,6 +77,9 @@ export interface SnapshotTruong {
   fanpageUrl?: string;
   nhomZaloUrl?: string;
   nhomFacebookUrl?: string;
+  /** Nhóm do trường lập (Facebook hoặc Zalo) và nhóm sinh viên/cộng đồng, đúng tên hai ô trong CMS. */
+  nhomTuyenSinhChinhThucUrl?: string;
+  nhomCongDongUrl?: string;
   diaChi?: string;
   kyTucXa?: {
     coKyTuc: boolean;
@@ -97,6 +100,8 @@ export interface SnapshotHocPhi {
   mucThap: number; // triệu VNĐ
   mucCao: number;
   donVi: "trieu_nam" | "trieu_tin_chi";
+  /** Học phí áp dụng cho ai (ví dụ "Chương trình chuẩn"); CMS bắt buộc nhập. */
+  phamVi?: string;
   loTrinhTang?: string;
   nguon: NguonKiemChung;
   capNhatLuc: string;

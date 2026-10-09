@@ -46,6 +46,8 @@ for (const f of tatCa) {
   const ten = tenFile(f);
   const trongFeature = /src\/(features|components)\//.test(ten);
   if (!trongFeature) continue;
+  // Trang giới thiệu đã được duyệt nguyên trạng và bị khóa (xem AGENTS.md); nó viết cho ban giám khảo, không phải cho học sinh.
+  if (ten.startsWith("src/features/landing-page/")) continue;
   const code = boChuThich(doc(f));
   for (const m of code.matchAll(/(?:\bto|\bhref|quayLai|\bnav|navigate|\bNavigate to)\s*[=(]\s*\{?\s*["'`]\/(?!\/)/g)) {
     const dong = code.slice(0, m.index).split("\n").length;

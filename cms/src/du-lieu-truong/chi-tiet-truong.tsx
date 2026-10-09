@@ -15,6 +15,7 @@ import { MUC_CAN_DU, type MucTienDo } from "@/data/dong-gop-kiem-tra";
 import { HopFormThongTin } from "./form-thong-tin";
 import { KhoiKenh } from "./khoi-kenh";
 import { HopFormDiemChuan } from "./form-diem-chuan";
+import { HopFormDiemChuanCaTruong } from "./form-diem-chuan-ca-truong";
 import { tomTatBan } from "./tom-tat-ban";
 import { LOAI_THEM_TAY, type LoaiThemTay } from "./bieu-mau";
 import { dinhDangLuc, dongNoiDung, nhanLoai, nhanMuc, tieuDeBanGhi } from "./dinh-dang";
@@ -41,6 +42,7 @@ export default function ChiTietTruong() {
 
   const [dangMo, setDangMo] = useState<DangMo>(null);
   const [diemMo, setDiemMo] = useState<{ ban?: BanGhiCms } | null>(null);
+  const [caTruongMo, setCaTruongMo] = useState(false);
   const [kenhMoSan, setKenhMoSan] = useState(false);
   const [banTin, setBanTin] = useState<{ tone: "luc" | "do"; noiDung: string } | null>(null);
   const [dangDoi, setDangDoi] = useState<string | null>(null);
@@ -61,7 +63,7 @@ export default function ChiTietTruong() {
   /** Cộng tác viên chỉ thao tác trên bản do mình tạo hoặc bản đang chạy; quản trị viên thao tác mọi bản. */
   const duocDung = (b: BanGhiCms) => laQtv || b.createdBy === toi.email || b.status === "PUBLISHED";
 
-  const xong = (noiDung: string) => { setDangMo(null); setDiemMo(null); setKenhMoSan(false); setBanTin({ tone: "luc", noiDung }); bg.taiLai(); };
+  const xong = (noiDung: string) => { setDangMo(null); setDiemMo(null); setCaTruongMo(false); setKenhMoSan(false); setBanTin({ tone: "luc", noiDung }); bg.taiLai(); };
 
   const chuyen = async (b: BanGhiCms, dich: "SUBMITTED" | "ARCHIVED", thongBao: string) => {
     setDangDoi(b.id);
@@ -198,6 +200,9 @@ export default function ChiTietTruong() {
                 <h2 className="font-extrabold text-[16px] text-muc">Điểm chuẩn <span className="text-[13px] font-semibold text-chu-phu">({diemChuan.length})</span></h2>
                 {duocSua && <button type="button" onClick={() => setDiemMo({})} className="min-h-11 px-2 text-[14px] font-bold text-xanh inline-flex items-center gap-1"><Plus size={16} /> Thêm</button>}
               </div>
+              {duocSua && (
+                <button type="button" onClick={() => setCaTruongMo(true)} className="w-full min-h-12 rounded-xl border border-xanh/40 bg-xanh-nhat text-xanh font-bold text-[14px]">Nhập điểm chuẩn cả trường một lượt</button>
+              )}
               {diemChuan.length === 0 ? (
                 <p className="rounded-xl border border-dashed border-vien bg-trang p-3 text-[13px] text-chu-phu">Chưa có điểm chuẩn bổ sung. Mục này không bắt buộc.</p>
               ) : diemChuan.map((b) => {
@@ -230,6 +235,8 @@ export default function ChiTietTruong() {
           </>
         )}
       </NoiDung>
+
+      {caTruongMo && <HopFormDiemChuanCaTruong maTruong={ma} tenTruong={ten} laQtv={laQtv} dong={() => setCaTruongMo(false)} onXong={xong} />}
 
       {diemMo && <HopFormDiemChuan key={diemMo.ban?.id ?? "moi"} maTruong={ma} tenTruong={ten} ban={diemMo.ban} laQtv={laQtv} dong={() => setDiemMo(null)} onXong={xong} />}
 

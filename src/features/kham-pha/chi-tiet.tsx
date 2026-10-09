@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
-  AlertTriangle, BarChart3, Briefcase, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, Target, ThumbsUp, Users, Wallet, AlertCircle,
+  AlertTriangle, BarChart3, Briefcase, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, Target, ThumbsUp, Users, Wallet,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { AnhBia, BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
@@ -12,7 +12,7 @@ import { tim as timGoc } from "@/data/lua-chon-mau";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { coTheDatMucTieu, mucTieuTuLuaChon } from "@/state/chon";
 import { coHocPhi } from "@/data/lua-chon-phu";
-import { DUONG_DAN, EMAIL_BAO_SAI } from "@/duong-dan";
+import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { changCuaEm } from "@/state/chang";
 import type { LuaChon, ToneTen } from "@/state/types";
@@ -21,6 +21,7 @@ import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } 
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
 import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
+import { NutBaoSai } from "./bao-sai-sheet";
 import { ThongTinTruong } from "./thong-tin-truong";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
@@ -314,10 +315,7 @@ export default function ChiTiet() {
               </a>
             )}
             <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
-            <a href={`mailto:${EMAIL_BAO_SAI}?subject=Báo số liệu sai - Mã: ${lc.id}&body=Mã chương trình: ${lc.id}\nTrường dữ liệu sai: ...\nGiá trị đúng và link nguồn: ...`}
-              className="inline-flex items-center gap-1 min-h-11 text-[12px] font-bold text-do mt-1">
-              <AlertCircle size={13} />Báo số liệu sai
-            </a>
+            <NutBaoSai maChuongTrinh={lc.id} tenNganh={`${lc.nganh} · ${lc.truong}`} />
           </div>
         </section>
 

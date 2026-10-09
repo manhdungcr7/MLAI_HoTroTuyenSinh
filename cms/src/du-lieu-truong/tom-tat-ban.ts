@@ -15,7 +15,7 @@ export function tomTatBan(b: BanGhiCms): { tieuDe: string; dong: string[] } {
   const tt = thongTinTuBanGhi(b);
   if (b.entityType === "cutoff_score") {
     const d = (b.data ?? {}) as Record<string, unknown>;
-    return { tieuDe: `Ngành ${d.maNganh ?? "?"}, ${d.nam ?? "?"}: ${typeof d.diemChuan === "number" ? soViet(d.diemChuan) : "?"} điểm (${d.toHop ?? "?"})`, dong: soSanhBan(null, b).filter((x) => x.khoa !== "source").map((x) => `${x.nhan}: ${x.moi}`) };
+    return { tieuDe: `${d.tenNganh ?? (d.maNganh ? `Ngành ${d.maNganh}` : "Ngành")}, ${d.nam ?? "?"}: ${typeof d.diemChuan === "number" ? soViet(d.diemChuan) : "?"} điểm (${d.toHop ?? "?"})`, dong: soSanhBan(null, b).filter((x) => x.khoa !== "source").map((x) => `${x.nhan}: ${x.moi}`) };
   }
   if (tt) return { tieuDe: tieuDeBanGhi(tt), dong: dongNoiDung(tt) };
   const dong = soSanhBan(null, b).filter((d) => d.khoa !== "source").map((d) => `${d.nhan}: ${d.moi}`);

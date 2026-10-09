@@ -44,6 +44,40 @@ export interface KetQuaXayDungSnapshot {
   };
 }
 
+/** Mã trường của một entityId: phần trước dấu "-" đầu tiên (BKA-HP2026-chuan -> BKA). Giống quy tắc ở máy chủ. */
+const maTruongTu = (entityId: string) => entityId.split("-")[0].toUpperCase();
+
+/**
+ * Đưa `data` do CMS lưu về đúng hình dạng snapshot công khai mà ứng dụng học sinh đọc.
+ * Nguồn (`nguon`), mã trường, mã bản ghi và ngày cập nhật LUÔN lấy từ bản ghi đã duyệt (do máy chủ đặt), không tin giá trị người dùng tự ghi trong `data`:
+ * nhờ vậy mọi dòng hiển thị cho học sinh đều có nguồn kiểm chứng thật và không thể giả nguồn.
+ */
+export function chuanHoaChoSnapshot(bg: BanGhiCms, data: Record<string, unknown>): Record<string, unknown> {
+  const nguon = { ...bg.source, ngayKiemChung: bg.source.ngayKiemChung };
+  const chung = { ...data, maTruong: maTruongTu(bg.entityId), nguon, capNhatLuc: bg.updatedAt };
+  switch (bg.entityType) {
+    case "school": {
+      const ra: Record<string, unknown> = { ...chung, id: undefined };
+      // CMS lưu website tuyển sinh ở `websiteTuyenSinhUrl`; ứng dụng học sinh đọc `websiteTuyenSinh`.
+      if (typeof data.websiteTuyenSinhUrl === "string") ra.websiteTuyenSinh = data.websiteTuyenSinhUrl;
+      return ra;
+    }
+    case "tuition": case "scholarship":
+      return { ...chung, id: bg.entityId };
+    case "cutoff_score":
+      // `id` là MÃ CHƯƠNG TRÌNH trong dữ liệu gốc (ví dụ bka-47a6194c) để ghép đúng ngành; người nhập chọn từ danh sách chương trình của trường.
+      return { ...chung, id: typeof data.id === "string" && data.id ? data.id : bg.entityId, maNganh: typeof data.maNganh === "string" ? data.maNganh : "" };
+    case "announcement": {
+      // Thông báo có thể không gắn trường cụ thể: không suy mã trường từ entityId.
+      const { maTruong: _bo, ...ra } = chung;
+      void _bo;
+      return { ...ra, ...(typeof data.maTruong === "string" && data.maTruong ? { maTruong: data.maTruong } : {}), id: typeof data.id === "string" && data.id ? data.id : bg.entityId };
+    }
+    default:
+      return chung;
+  }
+}
+
 /** Lọc bỏ các thông tin nội bộ CMS trước khi đóng gói thành Snapshot công khai */
 export function lamSachDuLieuPublic<T>(duLieu: T): T {
   if (!duLieu || typeof duLieu !== "object") return duLieu;
@@ -77,26 +111,26 @@ export async function taoSnapshotVaManifest(
   for (const bg of danhSachBanGhiPublished) {
     if (bg.status !== "PUBLISHED") continue;
 
-    const dataClean = lamSachDuLieuPublic(bg.data);
+    const dataClean = chuanHoaChoSnapshot(bg, lamSachDuLieuPublic((bg.data ?? {}) as Record<string, unknown>));
 
     switch (bg.entityType) {
       case "school":
-        dsTruong.push(dataClean as SnapshotTruong);
+        dsTruong.push(dataClean as unknown as SnapshotTruong);
         break;
       case "tuition":
-        dsHocPhi.push(dataClean as SnapshotHocPhi);
+        dsHocPhi.push(dataClean as unknown as SnapshotHocPhi);
         break;
       case "scholarship":
-        dsHocBong.push(dataClean as SnapshotHocBong);
+        dsHocBong.push(dataClean as unknown as SnapshotHocBong);
         break;
       case "admission":
-        dsTuyenSinh.push(dataClean as SnapshotTuyenSinh);
+        dsTuyenSinh.push(dataClean as unknown as SnapshotTuyenSinh);
         break;
       case "announcement":
-        dsThongBao.push(dataClean as SnapshotThongBao);
+        dsThongBao.push(dataClean as unknown as SnapshotThongBao);
         break;
       case "cutoff_score":
-        dsDiemChuan.push(dataClean as SnapshotDiemChuanHieuChinh);
+        dsDiemChuan.push(dataClean as unknown as SnapshotDiemChuanHieuChinh);
         break;
       case "noi_luu_tru":
       case "review":
