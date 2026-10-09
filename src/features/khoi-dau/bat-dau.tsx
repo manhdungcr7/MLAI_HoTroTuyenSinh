@@ -64,7 +64,10 @@ export default function BatDau() {
     const loi = kiemTraBuoc1(h);
     const thieu = THU_TU_BAT_BUOC.filter((k) => loi[k]);
     if (thieu.length) {
-      alert(`Em còn thiếu: ${thieu.map((k) => loi[k]).join(", ")}`);
+      // Không dùng hộp thoại của trình duyệt: đưa em về Bước 1 và tô đúng ô còn thiếu.
+      setDaThuBuoc1(true);
+      if (so !== 1) denBuoc(1);
+      setTimeout(() => denO(ID_TRUONG[thieu[0]]), 150);
       return;
     }
     capNhatHoSo({ hoanTat: true });

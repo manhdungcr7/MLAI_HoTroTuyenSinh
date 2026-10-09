@@ -34,14 +34,15 @@ for (const lc of LUA_CHON) {
   assert.ok(d.thap <= d.kyVong + 1e-9 && d.kyVong <= d.cao + 1e-9, `thấp ≤ giữa ≤ cao: ${lc.id}`);
   assert.ok(d.thap >= 10 && d.cao <= 30, `trong thang điểm: ${lc.id}`);
 }
-assert.ok(soDuBao > 2000, `phần lớn chương trình có dự báo (${soDuBao})`);
+assert.ok(soDuBao > 1200, `các chương trình có điểm từ năm ${nam - 2} trở đi đều có dự báo (${soDuBao})`);
+assert.equal(duBaoDiemChuan(mau({ "2023": 25 }), tk, 2027), null, "điểm cuối cách quá 2 năm thì không dự báo (khoảng sẽ rộng vô nghĩa)");
 assert.equal(duBaoDiemChuan(mau({ "2026": 25 }), tk, 2026), null, "đã có điểm của năm đó thì không dự báo");
 assert.equal(duBaoDiemChuan(mau({}), tk, 2027), null);
 assert.equal(duBaoDiemChuan(mau({ "2026": 25 }, "CNTT", "HOC_BA"), tk, 2027), null, "không dự báo điểm học bạ như điểm thi");
 assert.equal(duBaoDiemChuan(mau({ "2026": 25 }), { tatCa: [1, 2, 3] }, 2027), null, "quá ít mẫu thì không dự báo");
-const xa = duBaoDiemChuan(mau({ "2024": 25 }), tk, 2027)!, gan = duBaoDiemChuan(mau({ "2026": 25 }), tk, 2027)!;
+const xa = duBaoDiemChuan(mau({ "2025": 25 }), tk, 2027)!, gan = duBaoDiemChuan(mau({ "2026": 25 }), tk, 2027)!;
 assert.ok(xa.cao - xa.thap > gan.cao - gan.thap, "dự báo xa hơn thì khoảng rộng hơn");
-assert.ok(xa.luuY.some((x) => x.includes("cách 3 năm")) && gan.luuY.some((x) => x.includes("một năm")), "có cảnh báo khi dữ liệu yếu");
+assert.ok(xa.luuY.some((x) => x.includes("cách 2 năm")) && gan.luuY.some((x) => x.includes("một năm")), "có cảnh báo khi dữ liệu yếu");
 assert.equal(gan.kyVong, 25, "tâm dự báo là điểm năm mới nhất");
 assert.ok(duBaoDiemChuan(mau({ "2026": 29.9 }), tk, 2027)!.cao <= 30, "không vượt thang 30");
 

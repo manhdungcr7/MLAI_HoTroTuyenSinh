@@ -62,6 +62,14 @@ function chuanHoaHoSo(raw: unknown): HoSo {
     for (const m of CAC_MON_THEM) if (m in o.diemThem) them[m] = diem10(o.diemThem[m]);
     h.diemThem = them;
   }
+  // Điểm ưu tiên khu vực/đối tượng em khai: giữ khi tải lại, chỉ nhận giá trị trong danh sách quy định.
+  if (laObj(o.uuTienTuyenSinh)) {
+    h.uuTienTuyenSinh = {
+      khuVuc: trong(o.uuTienTuyenSinh.khuVuc, ["KV1", "KV2-NT", "KV2", "KV3"] as const),
+      doiTuong: trong(o.uuTienTuyenSinh.doiTuong, ["khong", "UT1", "UT2"] as const),
+    };
+  }
+  if (o.laMau === true) h.laMau = true;
   const st = o.soThich;
   if (laObj(st) && laObj(st.diem) && NHOM_SO_THICH.every((k) => so((st.diem as Obj)[k]) !== null) && Array.isArray(st.top)) {
     const d = {} as Record<LoaiSoThich, number>;

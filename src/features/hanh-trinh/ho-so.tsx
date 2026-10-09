@@ -82,6 +82,7 @@ export default function HoSo() {
             <div className="min-w-0 flex-1">
               <p className="text-[18px] font-extrabold text-muc leading-tight truncate">{h.hoTen.trim() || "Em chưa điền tên"}</p>
               <p className="text-[13px] text-chu">{thongTin}</p>
+              {h.laMau && <Nhan tone="cam" className="mt-1 bg-trang/80">Hồ sơ mẫu, không phải người thật</Nhan>}
             </div>
           </div>
           <div className="mt-3 rounded-xl bg-trang/75 px-3 py-2.5">

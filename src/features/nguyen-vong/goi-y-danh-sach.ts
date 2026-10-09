@@ -11,8 +11,8 @@ import { dinhDang } from "@/engine/dinh-dang";
 
 export interface DongGoiY { lc: LuaChon; nhan: NhanNguyenVong; tong: number; toHop: string | null; lyDo: string[] }
 
-/** Cơ cấu mong muốn cho 8 nguyện vọng (em có thể bỏ bớt hoặc sắp lại sau). */
-const CO_CAU: NhanNguyenVong[] = ["Thử sức", "Thử sức", "Vừa sức", "Vừa sức", "Vừa sức", "An toàn", "An toàn", "Dự phòng"];
+/** Cơ cấu gợi ý cho 6 nguyện vọng (khớp lời khuyên giữ khoảng 5–6; em thêm, bỏ bớt hoặc sắp lại sau). */
+const CO_CAU: NhanNguyenVong[] = ["Thử sức", "Vừa sức", "Vừa sức", "An toàn", "An toàn", "Dự phòng"];
 const TOI_DA_MOT_TRUONG = 2;
 
 type DauVao = Pick<HoSo, "nganSach" | "khuVuc" | "nganhQuanTam" | "tinh"> & { hocXaNha?: boolean | null };

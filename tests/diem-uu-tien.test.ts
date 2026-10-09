@@ -5,6 +5,7 @@ import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
 import { diemDayDu } from "../src/features/kham-pha/to-hop";
 import { mucTieuDayDu } from "../src/state/chon";
 import { taoHoSoMau } from "../src/state/mau";
+import { chuanHoa } from "../src/state/chuan-hoa";
 
 // 1) Mức theo quy định
 assert.equal(mucUuTien(null), 0);
@@ -57,5 +58,13 @@ assert.equal(m1.mucTieu, m0.mucTieu, "mục tiêu hiển thị vẫn là điểm
 assert.ok(m1.mucTieuTho < m0.mucTieuTho && m1.conThieu < m0.conThieu, "có ưu tiên thì còn thiếu ít hơn");
 assert.ok(m1.uuTienCong > 0 && m1.uuTienCong <= 0.75);
 assert.equal(m0.uuTienCong, 0);
+
+// 6) Sống sót qua chuẩn hóa dữ liệu (tải lại trang, khôi phục sao lưu): trước đây khai báo ưu tiên bị mất mỗi lần tải lại
+const sauTai = chuanHoa(JSON.parse(JSON.stringify(voi)));
+assert.deepEqual(sauTai.hoSo.uuTienTuyenSinh, { khuVuc: "KV1", doiTuong: "khong" }, "ưu tiên còn nguyên sau khi tải lại");
+assert.equal(sauTai.hoSo.laMau, true, "nhãn hồ sơ mẫu còn nguyên");
+const xau = chuanHoa({ hoSo: { uuTienTuyenSinh: { khuVuc: "KV9", doiTuong: "hack" } } });
+assert.deepEqual(xau.hoSo.uuTienTuyenSinh, { khuVuc: null, doiTuong: null }, "giá trị lạ bị bỏ");
+assert.equal(chuanHoa({ hoSo: { laMau: "co" } }).hoSo.laMau, undefined);
 
 console.log("diem-uu-tien: tất cả kiểm tra đều qua");

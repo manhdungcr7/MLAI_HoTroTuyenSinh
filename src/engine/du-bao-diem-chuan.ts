@@ -39,6 +39,8 @@ export interface DuBaoDiemChuan {
 export const HE_SO_NO_RONG = 1.3;
 /** Chỉ dùng biến động từ năm này trở đi (các năm trước quá ít mẫu: 22 cặp). */
 export const NAM_BIEN_DONG_SOM_NHAT = 2023;
+/** Chỉ dự báo khi điểm mới nhất cách năm dự báo không quá số năm này. */
+export const TOI_DA_NAM_XA = 2;
 const DIEM_TOI_THIEU = 10, DIEM_TOI_DA = 30;
 
 const hopLe = (d: number) => Number.isFinite(d) && d >= DIEM_TOI_THIEU && d <= DIEM_TOI_DA;
@@ -84,6 +86,7 @@ export function duBaoDiemChuan(lc: LuaChon, tk: ThongKeBienDong, namDuBao: numbe
   const [namCuoi, diemCuoi] = c[c.length - 1];
   const k = namDuBao - namCuoi;
   if (k < 1) return null; // đã có điểm của chính năm đó: không dự báo
+  if (k > TOI_DA_NAM_XA) return null; // điểm cuối quá cũ thì khoảng rộng đến mức vô nghĩa: thà không đưa ra
   if (tk.tatCa.length < 30) return null;
 
   const nopRong = HE_SO_NO_RONG * Math.sqrt(k);

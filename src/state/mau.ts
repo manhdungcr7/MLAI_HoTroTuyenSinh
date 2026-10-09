@@ -38,7 +38,7 @@ export function taoHoSoMau(): AppState {
   const nen: AppState = {
     ...TRANG_THAI_BAN_DAU,
     hoSo: {
-      hoTen: "Nguyễn Minh Anh", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "Ôn thi THPT", nganhQuanTam: ["CNTT"], mucTieuHienTai: "daCoMoUoc",
+      laMau: true, hoTen: "Nguyễn Minh Anh", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "Ôn thi THPT", nganhQuanTam: ["CNTT"], mucTieuHienTai: "daCoMoUoc",
       nguonDiem: "thiThu", diem: { toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 },
       soThich: { diem: { R: 4, I: 8, A: 4, S: 5, E: 4, C: 6 }, top: ["I", "C", "S"], luc: new Date().toISOString() },
       diemManh: ["Tư duy logic", "Giải quyết vấn đề", "Tiếng Anh"], canCaiThien: ["Vật lý", "Diễn đạt", "Quản lý thời gian"],

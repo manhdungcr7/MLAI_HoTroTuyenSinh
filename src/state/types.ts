@@ -55,6 +55,7 @@ export interface HoSo {
   diem: Record<MonId, number | null>;
   diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)
   uuTienTuyenSinh?: { khuVuc: "KV1" | "KV2-NT" | "KV2" | "KV3" | null; doiTuong: "khong" | "UT1" | "UT2" | null }; // điểm ưu tiên khu vực/đối tượng theo quy chế, không bắt buộc
+  laMau?: boolean; // hồ sơ trình diễn (người giả), không phải học sinh thật
   soThich?: KetQuaSoThich | null; // trắc nghiệm hướng nghiệp, chưa làm thì để trống
   diemManh: string[];
   canCaiThien: string[];
