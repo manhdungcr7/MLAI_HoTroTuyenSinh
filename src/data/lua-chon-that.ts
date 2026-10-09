@@ -114,15 +114,23 @@ export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
  * (1 Thử sức, 2 Vừa sức, 1 An toàn, 1 Dự phòng) để màn Nguyện vọng có đủ các nhóm. Lấy theo dữ liệu, không gõ tay mã.
  */
 export function idHoSoMau(diem: Partial<Record<MonKhoi, number | null>>): string[] {
-  const ung = LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.khuVuc === "TP.HCM" && l.phuongThuc === "THPT" && Object.keys(l.diemTheoNam ?? {}).length >= 2)
+  const goi = (loc: (l: LuaChon) => boolean) => LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.phuongThuc === "THPT" && loc(l))
     .map((l) => ({ l, tong: tongChoLuaChon(l, diem).tong }))
     .filter((x): x is { l: LuaChon; tong: number } => x.tong !== null)
     .map((x) => ({ ...x, nhan: nhanNguyenVong(x.l, x.tong) }))
     .sort((a, b) => b.l.diemMin - a.l.diemMin);
+  // Ưu tiên ngành ở TP.HCM có từ hai năm điểm; thiếu nhãn nào thì nới dần (TP.HCM mọi ngành, rồi cả nước) để luôn đủ các nhóm.
+  const tang = [
+    goi((l) => l.khuVuc === "TP.HCM" && Object.keys(l.diemTheoNam ?? {}).length >= 2),
+    goi((l) => l.khuVuc === "TP.HCM"),
+    goi(() => true),
+  ];
   const chon: LuaChon[] = [];
   for (const nhan of ["Thử sức", "Vừa sức", "Vừa sức", "An toàn", "Dự phòng"] as const) {
-    const x = ung.find((u) => u.nhan === nhan && !chon.includes(u.l) && !chon.some((c) => c.truong === u.l.truong && c.nganh === u.l.nganh));
-    if (x) chon.push(x.l);
+    for (const ung of tang) {
+      const x = ung.find((u) => u.nhan === nhan && !chon.includes(u.l) && !chon.some((c) => c.truong === u.l.truong && c.nganh === u.l.nganh));
+      if (x) { chon.push(x.l); break; }
+    }
   }
   return chon.map((l) => l.id);
 }

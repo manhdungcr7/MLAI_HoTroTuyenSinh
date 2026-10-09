@@ -22,12 +22,13 @@ export interface NhomNganhItem {
 
 export const PHAN_NHOM_NGANH: NhomNganhItem[] = [
   {
-    nhom: "🌟 Công nghệ & Kỹ thuật",
+    nhom: "🌟 Công nghệ, Kỹ thuật & Khoa học",
     danhSach: [
       { gia: "CNTT", nhan: "Công nghệ thông tin / Khoa học máy tính" },
       { gia: "Kỹ thuật", nhan: "Kỹ thuật / Cơ khí / Điện - Điện tử / Tự động hóa" },
       { gia: "Xây dựng", nhan: "Xây dựng / Kiến trúc công trình / Giao thông" },
-      { gia: "Logistics", nhan: "Logistics & Quản lý chuỗi cung ứng" },
+      { gia: "Khoa học tự nhiên", nhan: "Toán / Vật lý / Hóa học / Sinh học / Môi trường & Tài nguyên" },
+      { gia: "Logistics", nhan: "Logistics / Vận tải / Quản lý chuỗi cung ứng" },
     ],
   },
   {
@@ -35,7 +36,7 @@ export const PHAN_NHOM_NGANH: NhomNganhItem[] = [
     danhSach: [
       { gia: "Kinh tế", nhan: "Kinh tế / Quản trị kinh doanh / Thương mại" },
       { gia: "Tài chính", nhan: "Tài chính - Ngân hàng / Kế toán / Kiểm toán" },
-      { gia: "Marketing", nhan: "Marketing / Thương mại điện tử / Truyền thông" },
+      { gia: "Marketing", nhan: "Marketing / Thương mại điện tử / Truyền thông / PR" },
       { gia: "Du lịch", nhan: "Du lịch / Quản trị khách sạn & Nhà hàng" },
     ],
   },
@@ -43,7 +44,7 @@ export const PHAN_NHOM_NGANH: NhomNganhItem[] = [
     nhom: "🩺 Y Dược & Chăm sóc sức khỏe",
     danhSach: [
       { gia: "Y Dược", nhan: "Y khoa / Dược học / Răng Hàm Mặt / Y học cổ truyền" },
-      { gia: "Điều dưỡng", nhan: "Điều dưỡng / Kỹ thuật xét nghiệm / Y tế công cộng" },
+      { gia: "Điều dưỡng", nhan: "Điều dưỡng / Kỹ thuật y học / Dinh dưỡng / Y tế công cộng" },
     ],
   },
   {
@@ -51,17 +52,17 @@ export const PHAN_NHOM_NGANH: NhomNganhItem[] = [
     danhSach: [
       { gia: "Sư phạm", nhan: "Sư phạm / Giáo dục học / Quản lý giáo dục" },
       { gia: "Luật", nhan: "Luật / Luật kinh tế / Luật quốc tế" },
-      { gia: "Ngôn ngữ", nhan: "Ngôn ngữ & Biên phiên dịch (Anh, Trung, Nhật, Hàn...)" },
-      { gia: "Báo chí", nhan: "Báo chí / Truyền thông đa phương tiện / PR" },
-      { gia: "Xã hội", nhan: "Tâm lý học / Xã hội học / Quan hệ quốc tế" },
+      { gia: "Ngôn ngữ", nhan: "Ngôn ngữ (Anh, Trung, Nhật, Hàn...) / Đông phương học" },
+      { gia: "Báo chí", nhan: "Báo chí / Xuất bản / Truyền hình" },
+      { gia: "Xã hội", nhan: "Tâm lý học / Xã hội học / Văn học / Lịch sử / Quan hệ quốc tế" },
     ],
   },
   {
     nhom: "🎨 Mỹ thuật, Thiết kế & Ứng dụng",
     danhSach: [
-      { gia: "Thiết kế", nhan: "Thiết kế đồ họa / Thiết kế nội thất / UI-UX" },
+      { gia: "Thiết kế", nhan: "Thiết kế đồ họa, nội thất, thời trang / Âm nhạc / Điện ảnh" },
       { gia: "Kiến trúc", nhan: "Kiến trúc & Quy hoạch không gian đô thị" },
-      { gia: "Nông Lâm", nhan: "Nông Lâm Ngư nghiệp / Công nghệ sinh học / Thú y" },
+      { gia: "Nông Lâm", nhan: "Nông Lâm Ngư nghiệp / Công nghệ sinh học / Thú y / Thực phẩm" },
       { gia: "Thể thao", nhan: "Thể dục thể thao / Huấn luyện thể chất" },
     ],
   },

@@ -33,6 +33,7 @@ export function laNgayIso(v: unknown): v is string {
 const laThoiDiem = (v: unknown): v is string => typeof v === "string" && !Number.isNaN(Date.parse(v));
 
 const NHOM_SO_THICH: LoaiSoThich[] = ["R", "I", "A", "S", "E", "C"];
+const GIA_TRI_HOP_LE = ["thuNhap", "onDinh", "sangTao", "giupNguoi", "tuChu", "diChuyen"]; // khớp CAC_GIA_TRI ở features/huong-nghiep/cau-hoi.ts
 
 function chuanHoaHoSo(raw: unknown): HoSo {
   const b = HO_SO_TRONG;
@@ -75,6 +76,8 @@ function chuanHoaHoSo(raw: unknown): HoSo {
     const d = {} as Record<LoaiSoThich, number>;
     for (const k of NHOM_SO_THICH) d[k] = (st.diem as Obj)[k] as number;
     h.soThich = { diem: d, top: st.top.filter((x): x is LoaiSoThich => NHOM_SO_THICH.includes(x as LoaiSoThich)), luc: chu(st.luc) };
+    const gt = mangChu(st.giaTri).filter((g) => GIA_TRI_HOP_LE.includes(g)).slice(0, 2);
+    if (gt.length) h.soThich.giaTri = gt;
   }
   return h;
 }

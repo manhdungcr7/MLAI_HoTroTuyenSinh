@@ -16,7 +16,7 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Mục tiêu và khoảng cách | `src/features/muc-tieu` |
 | Kế hoạch học theo tuần | `src/features/ke-hoach`, `src/features/tu-hoc` |
 | Hỏi tư vấn AI có căn cứ | `src/features/tu-van`, `functions/api/tu-van.ts` |
-| Hiểu sở thích (hướng nghiệp) | `src/features/huong-nghiep` (trắc nghiệm Holland 18 câu → nhóm ngành gợi ý, lưu `HoSo.soThich`) |
+| Hiểu sở thích (hướng nghiệp) | `src/features/huong-nghiep` (trắc nghiệm Holland 12 tình huống + 1 câu giá trị → nhóm ngành gợi ý, lưu `HoSo.soThich`) |
 | Phụ huynh/thầy cô đồng hành | `src/features/hanh-trinh/chia-se.tsx` (tóm tắt + tạo liên kết), `src/features/dong-hanh` (người đồng hành xem, viết lời nhắn; em nhận lời nhắn) |
 | Dự báo khoảng điểm chuẩn năm tới | `src/engine/du-bao-diem-chuan.ts`, `src/features/kham-pha/khoi-du-bao.tsx` (có kiểm định ngược) |
 | Điểm ưu tiên khu vực/đối tượng | `src/engine/diem-uu-tien.ts`, `src/features/khoi-dau/diem-uu-tien.tsx` |
@@ -101,7 +101,7 @@ Giai đoạn 3 — đối chiếu slide thuyết trình (6–10/10) và bổ sun
 - Test mới: `tests/chia-se.test.ts`.
 
 Giai đoạn 4 — hoàn thiện phần còn thiếu của các slice khác và rà giao diện:
-- **Trắc nghiệm hướng nghiệp** (`/huong-nghiep`): 18 câu mô hình Holland (RIASEC), mỗi nhóm 3 câu xen kẽ. Kết quả là điểm 6 nhóm và nhóm ngành gợi ý (chỉ dùng nhóm có trong dữ liệu thật, test kiểm tra). Kết quả đi vào: nhận xét ở Hồ sơ, dòng "hợp sở thích" ở thẻ ngành trong Khám phá (không đổi mức phù hợp theo điểm), bản tóm tắt chia sẻ. Khi các nhóm điểm gần nhau thì nói "chưa nổi bật nhóm nào" thay vì chọn bừa.
+- **Trắc nghiệm hướng nghiệp** (`/huong-nghiep`): 12 tình huống (chọn một trong bốn) theo mô hình Holland (RIASEC) và một câu về điều em coi trọng ở nghề; viết lại ngày 2026-10-09 vì bản 18 câu "em có thích..." quá chung chung. Kết quả là điểm 6 nhóm và nhóm ngành gợi ý (chỉ dùng nhóm có trong dữ liệu thật, test kiểm tra). Kết quả đi vào: nhận xét ở Hồ sơ, dòng "hợp sở thích" ở thẻ ngành trong Khám phá (không đổi mức phù hợp theo điểm), bản tóm tắt chia sẻ. Khi các nhóm điểm gần nhau thì nói "chưa nổi bật nhóm nào" thay vì chọn bừa.
 - **Đồng hành không cần tài khoản** (`/dong-hanh`, `/loi-nhan`): hệ thống chưa có máy chủ lưu dữ liệu, nên dữ liệu đi theo phần `#` của liên kết (không gửi lên máy chủ). Em tạo liên kết (tùy chọn kèm tên) → phụ huynh/thầy cô mở xem, viết lời nhắn → họ gửi lại một liên kết → em mở và bấm lưu vào Hồ sơ (`AppState.loiNhan`, tối đa 30). Mọi dữ liệu đọc từ liên kết được kiểm tra hình dạng, cắt độ dài, chỉ hiển thị dạng chữ (`dong-hanh/goi-tin.ts`, có test cho dữ liệu xấu). Giới hạn: ai có liên kết đều xem được; không có thông báo tự động khi có lời nhắn mới.
 - Sao lưu/khôi phục kiểm tra thêm `loiNhan` và `soThich`.
 - Giao diện: dấu thập phân thống nhất bằng dấu phẩy qua `engine/dinh-dang.ts` (không dùng `.toFixed` trực tiếp để hiển thị); màn chờ onboarding hiện số chương trình/trường thật thay vì con số viết tay.

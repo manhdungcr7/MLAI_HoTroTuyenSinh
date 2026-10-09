@@ -59,7 +59,7 @@ Chênh giữa điểm của học sinh (theo đúng tổ hợp của ngành, đ�
 Mỗi màn nhắc quyết định cuối thuộc về học sinh và gia đình; đối chiếu đề án chính thức. App không đưa kết luận "đậu/trượt", chỉ nêu đánh đổi: điểm, học phí, nơi học, ngành. Phụ huynh và thầy cô được mời cùng xem qua bản tóm tắt chia sẻ.
 
 **17. Trắc nghiệm hướng nghiệp có khoa học không?**
-Dựa trên mô hình Holland (RIASEC) phổ biến trong hướng nghiệp, 18 câu, chưa kiểm định tâm lý riêng cho học sinh Việt Nam. App nói rõ đây là gợi ý để tìm hiểu, và khi các nhóm điểm gần nhau thì nói "chưa nổi bật nhóm nào" thay vì kết luận.
+Dựa trên mô hình Holland (RIASEC) phổ biến trong hướng nghiệp, 12 tình huống, chưa kiểm định tâm lý riêng cho học sinh Việt Nam. App nói rõ đây là gợi ý để tìm hiểu, và khi các nhóm điểm gần nhau thì nói "chưa nổi bật nhóm nào" thay vì kết luận.
 
 **18. Thiên lệch (bias) có không?**
 Điểm chuẩn phản ánh nhu cầu thị trường chứ không phải năng lực; ngành ít người chọn có điểm thấp. App không xếp hạng ngành "tốt hay xấu"; gợi ý theo điểm, ngân sách, khu vực, sở thích mà học sinh khai. Thông tin cộng đồng có thể thiên lệch theo người viết, nên bị gắn nhãn và giới hạn số bài hiển thị.

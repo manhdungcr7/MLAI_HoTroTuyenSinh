@@ -117,7 +117,7 @@ export default function HoSo() {
         <TieuDeMuc>Hành động nhanh</TieuDeMuc>
         <div className="space-y-2">
           <HangBam bieuTuong={Compass} tone="cam" tieuDe="Trắc nghiệm hướng nghiệp" onClick={() => nav(DUONG_DAN.tracNghiem())}
-            phu={h.soThich ? `Kết quả: ${moTaTop(h.soThich)}` : "18 câu, khoảng 3 phút, gợi ý nhóm ngành hợp sở thích"}
+            phu={h.soThich ? `Kết quả: ${moTaTop(h.soThich)}` : "12 tình huống, khoảng 2 phút, gợi ý nhóm ngành hợp sở thích"}
             nhan={<Nhan tone={h.soThich ? "luc" : "cam"}>{h.soThich ? "Đã làm" : "Chưa làm"}</Nhan>} />
           <HangBam bieuTuong={Users} tone="tim" tieuDe="Chia sẻ với phụ huynh, thầy cô" onClick={() => nav(DUONG_DAN.chiaSe())}
             phu={s.loiNhan.length ? `Có ${s.loiNhan.length} lời nhắn từ người đồng hành` : "Gửi liên kết cho phụ huynh, thầy cô và nhận lời nhắn lại"} />

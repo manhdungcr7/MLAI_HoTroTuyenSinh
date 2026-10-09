@@ -42,7 +42,7 @@ Bốn vai trò của AI, chỉ một là mô hình ngôn ngữ:
 | 2025 | 413 | 68% | 1,9 điểm |
 
 Điểm nhấn kể chuyện: bản đầu (cộng trung vị, tách theo nhóm ngành) chỉ phủ 55%, kiểm định cho thấy nó kém nên đã bỏ. Năm 2025 biến động mạnh bất thường (độ lệch chuẩn 2,6 so với 1,8) nên khoảng phủ thấp hơn; app nói thẳng "không phải xác suất đậu".
-**Giới hạn nêu ra:** không bù được thay đổi quy chế, đề thi, chỉ tiêu; điểm do học sinh tự nhập; trắc nghiệm hướng nghiệp (Holland, 18 câu) chỉ là gợi ý.
+**Giới hạn nêu ra:** không bù được thay đổi quy chế, đề thi, chỉ tiêu; điểm do học sinh tự nhập; trắc nghiệm hướng nghiệp (Holland, 12 tình huống) chỉ là gợi ý.
 
 ## 6. Mở rộng và vận hành (tiêu chí 5, ý 2, 10 điểm)
 Sơ đồ một dòng cho slide:

@@ -37,7 +37,7 @@ export type NguonDiem = "hocBa" | "thiThu" | "danhGiaNangLuc" | "tuDanhGia";
 
 export type LoaiSoThich = "R" | "I" | "A" | "S" | "E" | "C";
 /** Kết quả trắc nghiệm sở thích nghề nghiệp (Holland). diem: 0–9 mỗi nhóm; top: 3 nhóm cao nhất. */
-export interface KetQuaSoThich { diem: Record<LoaiSoThich, number>; top: LoaiSoThich[]; luc: string }
+export interface KetQuaSoThich { diem: Record<LoaiSoThich, number>; top: LoaiSoThich[]; luc: string; giaTri?: string[] }
 
 export type VaiDongHanh = "phuHuynh" | "giaoVien" | "tuVan";
 /** Lời nhắn của phụ huynh, thầy cô hoặc người tư vấn gửi cho em qua liên kết. */

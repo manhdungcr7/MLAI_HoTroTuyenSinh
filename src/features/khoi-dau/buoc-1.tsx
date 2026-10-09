@@ -64,7 +64,7 @@ export default function Buoc1({ h, sua, loi }: P) {
           <span className="ml-auto text-[12px] font-semibold text-chu-phu">chọn 1 hoặc nhiều</span>
         </label>
 
-        {/* Dropdown bao phủ toàn bộ 24 nhóm ngành đào tạo */}
+        {/* Dropdown bao phủ toàn bộ các nhóm ngành trong dữ liệu */}
         <OChon
           id={ID_TRUONG.nganhQuanTam}
           value=""
@@ -77,7 +77,7 @@ export default function Buoc1({ h, sua, loi }: P) {
           aria-invalid={!!loi.nganhQuanTam}
           className={gop(loi.nganhQuanTam && "border-do/60")}
         >
-          <option value="">+ Chọn nhóm ngành từ danh sách (24 nhóm)...</option>
+          <option value="">+ Chọn nhóm ngành từ danh sách ({TAT_CA_NGANH.length} nhóm)...</option>
           {PHAN_NHOM_NGANH.map((group) => (
             <optgroup key={group.nhom} label={group.nhom}>
               {group.danhSach.map((item) => (

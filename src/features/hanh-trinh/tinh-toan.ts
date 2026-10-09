@@ -111,7 +111,7 @@ export function goiYChoEm(s: AppState, chang: Chang = changCuaEm(s)): GoiY {
   const ra = (moTa: string, den: string): GoiY => ({ moTa, den, nhacHocPhi: chang === "dinhHuong" ? null : nhac });
 
   if (chang === "dinhHuong") {
-    if (!s.hoSo.soThich) return ra("Em làm trắc nghiệm hướng nghiệp 18 câu để mình gợi ý nhóm ngành hợp với em.", DUONG_DAN.tracNghiem());
+    if (!s.hoSo.soThich) return ra("Em làm trắc nghiệm hướng nghiệp 12 tình huống để mình gợi ý nhóm ngành hợp với em.", DUONG_DAN.tracNghiem());
     if (s.nguyenVong.length < 2) return ra("Em lưu 2 đến 3 ngành em thấy hợp vào danh sách, để về sau so sánh và chọn dần.", DUONG_DAN.khamPha());
     if (!coDiemNaoDo(s)) return ra("Em nhập điểm học bạ các môn. Điểm học bạ chưa phải điểm thi, chỉ để so tham khảo.", DUONG_DAN.batDau(2));
     return ra("Em giữ điểm học bạ đều các môn và xem thêm vài ngành khác.", DUONG_DAN.khamPha());

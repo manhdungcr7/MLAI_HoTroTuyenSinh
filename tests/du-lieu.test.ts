@@ -174,4 +174,19 @@ assert.ok(dsKhac.every((x) => x.nhan === null && /phương thức/.test(x.lyDoKh
 const thptNhan = LUA_CHON.find((l) => l.phuongThuc === "THPT" && l.toHopXet?.length === 1 && l.toHopXet[0] === "A01")!;
 assert.ok(danhGia(thptNhan, { ...bcGioi, diem: dDu }).muc !== null, "THPT vẫn so bình thường");
 
+// ---- Chất lượng danh mục (nhóm ngành, tên ngành, tỉnh): lỗi ở đây hiện thẳng ra trước mắt học sinh ----
+import { PHAN_NHOM_NGANH, THANH_PHO, TINH } from "../src/features/khoi-dau/lua-chon";
+const nhomTrongMan = new Set(PHAN_NHOM_NGANH.flatMap((g) => g.danhSach.map((x) => x.gia)));
+const nhomTrongDuLieu = new Set(LUA_CHON.map((l) => l.nhomNganh));
+for (const g of nhomTrongDuLieu) assert.ok(nhomTrongMan.has(g), `nhóm ngành "${g}" có trong dữ liệu mà màn Tạo hồ sơ không cho chọn`);
+for (const g of nhomTrongMan) assert.ok(nhomTrongDuLieu.has(g), `màn Tạo hồ sơ cho chọn nhóm "${g}" nhưng dữ liệu không có chương trình nào`);
+for (const g of nhomTrongDuLieu) assert.ok(LUA_CHON.filter((l) => l.nhomNganh === g).length >= 5, `nhóm "${g}" quá ít chương trình để lọc`);
+const RAC = /^(kết hợp|kết quả|nữ\s*:|nam\s*:|tổng chỉ tiêu|sử dụng k|đhqg|\d{6,})/i;
+for (const l of LUA_CHON) {
+  assert.ok(l.nganh.trim().length >= 4 && !RAC.test(l.nganh.trim()), `tên ngành không phải ngành: "${l.nganh}" (${l.id})`);
+  assert.ok(!/[̀-ͯṭṇ�]/.test(l.nganh.normalize("NFC")), `tên ngành lỗi ký tự: "${l.nganh}" (${l.id})`);
+}
+const tinhHopLe = new Set([...THANH_PHO, ...TINH, "TP.HCM"]);
+for (const l of LUA_CHON) assert.ok(tinhHopLe.has(l.khuVuc), `tỉnh "${l.khuVuc}" của ${l.id} không thuộc 34 tỉnh thành hiện hành (dữ liệu còn tên tỉnh cũ?)`);
+
 console.log("du-lieu: tất cả kiểm tra đều qua");
