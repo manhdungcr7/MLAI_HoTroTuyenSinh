@@ -7,7 +7,7 @@ import { dinhDang } from "@/engine/dinh-dang";
 
 export type Diem = Record<MonId, number | null>;
 /** Điểm các môn thêm (Sử, Địa, Tin...) trong hồ sơ: không đổi khi em kéo thử điểm, nhưng cần để tính đúng tổ hợp của từng ngành. */
-export type DiemThem = Partial<Record<MonThem, number | null>>;
+export type DiemThem = Partial<Record<MonThem, number | null>> & { uuTien?: number };
 
 /**
  * Tổng điểm của em theo ĐÚNG tổ hợp của ngành này (đề án ghi); đề án chưa ghi thì lấy tổ hợp cao nhất của em.

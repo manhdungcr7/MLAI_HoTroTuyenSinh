@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { hopNhatLuaChonVaCms, layChiTietTruongHopNhat } from "../src/engine/du-lieu-tuyen-sinh/hop-nhat";
 import { chuanHoaChoSnapshot, taoSnapshotVaManifest } from "../src/engine/du-lieu-tuyen-sinh/snapshot-builder";
 import type { BanGhiCms } from "../src/engine/du-lieu-tuyen-sinh/kieu";
+import { LUA_CHON_MAU, datDanhMuc, tim } from "../src/data/lua-chon-mau";
+import { LUA_CHON } from "../src/data/lua-chon-that";
 import type { LuaChon } from "../src/state/types";
 
 const nguon = { url: "https://truong.example/de-an.pdf", tieuDe: "Đề án", donViCongBo: "Trường", ngayKiemChung: "2026-10-07" };
@@ -68,4 +70,14 @@ const kq = await taoSnapshotVaManifest([bg("cutoff_score", "BKA-DC2025-bka-1-thp
 const hn = hopNhatLuaChonVaCms([that], { cutoffScores: kq.datasets.cutoffScores.duLieu });
 assert.equal(hn[0].diemMin, 27.5, "THPT ghi đè; DGNL 900 không được đè");
 assert.equal(hn[0].namDiem, 2026);
+// 7) Danh mục đang dùng được thay tại chỗ: mọi màn đọc LUA_CHON_MAU/tim thấy số mới, dữ liệu gốc không đổi
+const soLuong = LUA_CHON_MAU.length, goc0 = LUA_CHON[0];
+datDanhMuc([{ ...goc0, diemMin: 29.9 }, ...LUA_CHON.slice(1)]);
+assert.equal(LUA_CHON_MAU.length, soLuong);
+assert.equal(LUA_CHON_MAU[0].diemMin, 29.9, "mảng dùng chung thấy bản mới");
+assert.equal(tim(goc0.id)?.diemMin, 29.9, "tim() thấy bản mới");
+assert.notEqual(LUA_CHON[0].diemMin, 29.9, "dữ liệu gốc không bị sửa");
+datDanhMuc([...LUA_CHON]);
+assert.equal(tim(goc0.id)?.diemMin, goc0.diemMin);
+
 console.log("✓ hợp nhất snapshot: nguồn bắt buộc, không ghi đè số gốc bằng số suy ra");

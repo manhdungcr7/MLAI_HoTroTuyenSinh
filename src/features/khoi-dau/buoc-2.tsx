@@ -4,6 +4,7 @@ import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { CAC_MON, TEN_MON_NGAN, type HoSo, type MonId } from "@/state/types";
 import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP } from "./lua-chon";
 import DiemMonThem from "./diem-mon-them";
+import DiemUuTien from "./diem-uu-tien";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -67,6 +68,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
       </fieldset>
 
       <DiemMonThem h={h} sua={sua} />
+      <DiemUuTien h={h} sua={sua} />
 
       <section aria-labelledby="tieu-de-to-hop">
         <div className="flex items-center justify-between gap-2 mb-2">
@@ -102,7 +104,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             );
           })}
         </ul>
-        <p className="mt-2 text-[12px] text-chu-phu">Tổng 3 môn, chưa cộng điểm ưu tiên khu vực hay đối tượng.</p>
+        <p className="mt-2 text-[12px] text-chu-phu">Tổng 3 môn, chưa cộng điểm ưu tiên. Khi so với điểm chuẩn, mình tự cộng phần ưu tiên em khai ở mục Điểm ưu tiên.</p>
       </section>
 
       <section className="rounded-the border border-vien bg-trang">

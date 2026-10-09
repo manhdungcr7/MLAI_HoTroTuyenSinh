@@ -14,6 +14,8 @@ export interface SuKien {
   chenh?: number; // điểm của em trừ điểm chuẩn gần nhất
   hocPhiTrieu?: number;
   tiLeViecLam?: number;
+  /** Khoảng điểm chuẩn dự kiến của năm tới (suy từ biến động các năm trước, KHÔNG phải xác suất đậu). */
+  duBao?: { nam: number; thap: number; cao: number };
   nguon: string; // mô tả nguồn: "Đề án 2024, trang 3" hoặc "Trang tổng hợp, chưa đối chiếu"
 }
 
@@ -28,6 +30,13 @@ export interface HoSoTomTat { // không có tên, không có thông tin liên h�
 
 export interface YeuCauTuVan { cauHoi: string; nguCanh?: string; hoSo?: HoSoTomTat | null; duLieu: SuKien[] }
 export interface TraLoiTuVan { traLoi: string; nguon: string[] }
+
+function lamSachDuBao(x: unknown): SuKien["duBao"] {
+  if (!x || typeof x !== "object") return undefined;
+  const o = x as Record<string, unknown>;
+  const thap = so(o.thap, 10, 30), cao = so(o.cao, 10, 30), nam = so(o.nam, 2020, 2100);
+  return thap !== undefined && cao !== undefined && nam !== undefined && thap <= cao ? { nam: Math.round(nam), thap, cao } : undefined;
+}
 
 export const GIOI_HAN = { cauHoi: 1000, suKien: 12, kichThuocBody: 16_000, yeuCauMoiPhutMoiIp: 8 };
 
@@ -92,6 +101,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
       chenh: typeof r.chenh === "number" ? r.chenh : undefined,
       hocPhiTrieu: typeof r.hocPhiTrieu === "number" ? r.hocPhiTrieu : undefined,
       tiLeViecLam: typeof r.tiLeViecLam === "number" ? r.tiLeViecLam : undefined,
+      duBao: lamSachDuBao(r.duBao),
       nguon: chuoi(r.nguon, 120),
     });
   }
@@ -105,7 +115,7 @@ export const NHAC_HE_THONG = [
   "1. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ bên dưới. Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, tỷ lệ việc làm từ trí nhớ. Thiếu dữ liệu thì nói rõ \"mình chưa có dữ liệu này\" và chỉ em cách tự kiểm tra (đề án của trường).",
   "2. Mỗi số liệu nêu ra phải kèm tên ngành, trường và năm. Cuối câu trả lời liệt kê mã nguồn đã dùng theo dạng [nguồn: id1, id2].",
   '3. Không nói "khả năng đậu x%". Dùng các nhãn Thử sức, Vừa sức, An toàn, Dự phòng và giải thích vì sao (điểm của em hơn hay kém điểm chuẩn bao nhiêu).',
-  "4. Điểm chuẩn là của các năm trước, năm nay có thể khác: nhắc điều này khi so điểm.",
+  "4. Điểm chuẩn là của các năm trước, năm nay có thể khác: nhắc điều này khi so điểm. Nếu dữ liệu có trường duBao thì đó là KHOẢNG điểm chuẩn dự kiến của năm tới: nêu cả hai đầu khoảng, nói rõ đây là khoảng suy từ biến động các năm trước và không phải xác suất đậu.",
   "5. Không quyết định thay em. Nêu lợi ích, giới hạn và đánh đổi (điểm, học phí, nơi học, ngành nghề) rồi để em chọn.",
   "6. Nếu câu hỏi ngoài việc chọn ngành, chọn trường, ôn thi, lập kế hoạch thì từ chối nhẹ nhàng.",
   "7. Trả lời tối đa khoảng 180 từ.",

@@ -13,6 +13,7 @@ import { HangBam, Nhan, Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
+import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
@@ -253,6 +254,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
           {d.lc && (
             <span className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
               <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
+              {(() => { const db = duBaoCua(d.lc); return db ? <span className="inline-flex items-center gap-1" title="Khoảng điểm chuẩn dự kiến, đã kiểm định với các năm trước. Không phải xác suất đậu.">Dự kiến {db.namDuBao}: <b className="text-chu">{dinhDang(db.thap, 1)}–{dinhDang(db.cao, 1)}</b></span> : null; })()}
               {d.toHop && <span className="inline-flex items-center rounded-full bg-nen px-2 py-0.5 text-[12px]">tổ hợp {d.toHop}{d.suyRa ? " · suy ra" : ""}</span>}
               <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</> : "Chưa có học phí"}</span>
             </span>

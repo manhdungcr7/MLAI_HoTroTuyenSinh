@@ -22,6 +22,8 @@ import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
 import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
 import { NutBaoSai } from "./bao-sai-sheet";
+import { KhoiDuBao } from "./khoi-du-bao";
+import { tongChoLuaChon } from "./to-hop";
 import { ThongTinTruong } from "./thong-tin-truong";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
@@ -77,7 +79,7 @@ const TEN_PHUONG_THUC: Record<string, string> = {
 };
 
 /** Điểm chuẩn từng năm có thật, kèm điểm của em để so ngay. Không nội suy năm thiếu. */
-function BangDiemChuan({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
+function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number | null; uuTienCong?: number }) {
   const nam = Object.entries(lc.diemTheoNam ?? {}).sort((a, b) => b[0].localeCompare(a[0]));
   if (nam.length === 0) return null;
   return (
@@ -97,8 +99,7 @@ function BangDiemChuan({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
           );
         })}
       </ul>
-      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em theo tổ hợp của ngành: <b className="text-chu">{dinhDang(diemEm, 2)}</b></p>}
-      {lc.diemDuKien != null && <p className="mt-1 text-[12px] text-chu-phu">Điểm chuẩn dự kiến năm tới lấy bằng năm gần nhất ({dinhDang(lc.diemDuKien, 2)}); điểm thật có thể lệch vài điểm.</p>}
+      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em theo tổ hợp của ngành: <b className="text-chu">{dinhDang(diemEm, 2)}</b>{uuTienCong ? ` (đã gồm +${dinhDang(uuTienCong, 2)} điểm ưu tiên em khai)` : ""}</p>}
     </section>
   );
 }
@@ -282,7 +283,9 @@ export default function ChiTiet() {
           </ul>
         </section>
 
-        <BangDiemChuan lc={lc} diemEm={kq.tong} />
+        <BangDiemChuan lc={lc} diemEm={kq.tong} uuTienCong={tongChoLuaChon(lc, bc.diem).uuTienCong} />
+
+        <KhoiDuBao lc={lc} diemEm={kq.tong} />
 
         <DanhSachY tone="luc" icon={ThumbsUp} tieuDe="Vì sao nên cân nhắc" cuaEm={kq.tot} chung={lc.lyDoPhuHop} />
         <DanhSachY tone="cam" icon={AlertTriangle} tieuDe="Điều cần lưu ý" cuaEm={kq.luuY} chung={lc.canLuuY} />

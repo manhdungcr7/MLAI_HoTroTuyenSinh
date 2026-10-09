@@ -1,4 +1,5 @@
 import { LUA_CHON as CORE_LUA_CHON } from "@/data/lua-chon-that";
+import { datDanhMuc } from "@/data/lua-chon-mau";
 import type { LuaChon } from "@/state/types";
 import { boDongBoDuLieu, SU_KIEN_CAP_NHAT_DU_LIEU } from "./bo-dong-bo";
 import { hopNhatLuaChonVaCms, layChiTietTruongHopNhat, type DuLieuTruongHopNhat, type TapDuLieuCmsSnapshot } from "./hop-nhat";
@@ -40,6 +41,7 @@ export class KhoDuLieuTuyenSinh {
   private capNhatMap() {
     this.danhSachHopNhat = hopNhatLuaChonVaCms(this.coreLuaChon, this.cmsSnapshot);
     this.mapHopNhatTheoId = new Map(this.danhSachHopNhat.map((item) => [item.id, item]));
+    datDanhMuc(this.danhSachHopNhat); // mọi màn đọc LUA_CHON_MAU/tim đều thấy bản đã hợp nhất
   }
 
   /**

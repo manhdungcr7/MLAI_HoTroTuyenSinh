@@ -24,7 +24,7 @@ export function dauVaoViecTuan(s: AppState, tuan: string, tuNgay?: string): DauV
   for (const mon of CAC_MON) doDoc[mon] = doDocXuHuong(diemCacLanGanNhat(s.diemThi, mon));
   const gio = uocLuongGioTuHoc(s.coDinh, s.cauHinh, tuan, tuNgay);
   return {
-    toHop: m.toHop, diem: diemHienTaiCuaTungMon(s), diemMucTieu: m.mucTieu, canCaiThien: s.hoSo.canCaiThien, doDoc,
+    toHop: m.toHop, diem: diemHienTaiCuaTungMon(s), diemMucTieu: m.mucTieuTho, canCaiThien: s.hoSo.canCaiThien, doDoc,
     tuan, chiSoTuan: chiSoTuanCua(tuan), phutTuHoc: gio.tongPhut, tamTrang: tamTrangVanHieuLuc(s),
     ngayConDenThi: m.soNgayCon > 0 ? m.soNgayCon : undefined, lop: lopCuaEm(s),
   };

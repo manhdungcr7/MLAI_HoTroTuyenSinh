@@ -61,7 +61,7 @@ export interface KetQuaPhuHop {
   luuY: string[]; // điều cần lưu ý sinh từ hồ sơ của em
 }
 
-const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? dinhDang(n, 2) : (Math.round(n * 10) / 10).toFixed(1));
+const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? dinhDang(n, 2) : dinhDang(Math.round(n * 10) / 10, 1));
 
 /** Trường có nằm trong khu vực em ưu tiên không. "Tỉnh khác" khớp mọi nơi ngoài 3 thành phố lớn. */
 export function dungKhuVuc(lc: LuaChon, uuTien: string[]): boolean | null {

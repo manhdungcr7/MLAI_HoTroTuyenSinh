@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, RouterProvider, createHashRouter, useLocation } from "react-router-dom";
+import { useBanDuLieu } from "@/state/dung-kho-du-lieu";
 import { KhungCoThanhDuoi, KhungKhongThanh } from "@/components/layout/khung";
 import { TrangLoi } from "@/components/layout/trang-loi";
 import { Trang404 } from "@/components/layout/trang-404";
@@ -37,7 +38,8 @@ function Goc() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   useEffect(() => { const t = tieuDeCua(pathname); document.title = t ? `${t} · Nguyện Vọng AI` : "Nguyện Vọng AI"; }, [pathname]);
-  return <Outlet />;
+  const ban = useBanDuLieu();
+  return <Outlet key={ban} />;
 }
 
 const router = createHashRouter([

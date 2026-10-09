@@ -20,7 +20,10 @@ export const TEN_MON_THEM: Record<MonThem, string> = {
 export const TEN_MON_THEM_NGAN: Record<MonThem, string> = { lichSu: "Sử", diaLy: "Địa", gdktpl: "GDKT&PL", tinHoc: "Tin", congNghe: "C.nghệ" };
 export type MonKhoi = MonId | MonThem;
 /** Điểm đủ 11 môn (6 môn chính + 5 môn thêm); môn chưa có là null. */
-export type DiemDayDu = Record<MonKhoi, number | null>;
+export type DiemDayDu = Record<MonKhoi, number | null> & {
+  /** Mức điểm ưu tiên theo quy định (khu vực + đối tượng) của em; chưa chọn thì không có. Tổng điểm so với điểm chuẩn đã tự cộng phần này. */
+  uuTien?: number;
+};
 
 export type MaToHop = "A00" | "A01" | "D01" | "B00";
 export const TO_HOP: Record<MaToHop, MonId[]> = {
@@ -51,6 +54,7 @@ export interface HoSo {
   nguonDiem: NguonDiem;
   diem: Record<MonId, number | null>;
   diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)
+  uuTienTuyenSinh?: { khuVuc: "KV1" | "KV2-NT" | "KV2" | "KV3" | null; doiTuong: "khong" | "UT1" | "UT2" | null }; // điểm ưu tiên khu vực/đối tượng theo quy chế, không bắt buộc
   soThich?: KetQuaSoThich | null; // trắc nghiệm hướng nghiệp, chưa làm thì để trống
   diemManh: string[];
   canCaiThien: string[];

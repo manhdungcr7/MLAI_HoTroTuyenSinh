@@ -38,6 +38,9 @@ jobs:
       - name: Build ứng dụng
         run: npm run build
 
+      - name: Build CMS quản trị
+        run: npm run cms:build
+
       - name: Deploy lên Cloudflare Pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: cloudflare/wrangler-action@v3
@@ -45,3 +48,14 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '5fdd1d1433519df6429d7418d43fff9a' }}
           command: pages deploy dist --project-name=nguyenvongai --branch=main
+
+      # CMS quản trị (tình nguyện viên nhập dữ liệu) là một project Pages riêng. Chỉ deploy khi đã tạo project `nguyenvongai-cms`,
+      # gắn D1/KV và Cloudflare Access (xem docs/QUAN-TRI.md), rồi đặt biến Repository variable DEPLOY_CMS = true.
+      - name: Deploy CMS lên Cloudflare Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.DEPLOY_CMS == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '5fdd1d1433519df6429d7418d43fff9a' }}
+          workingDirectory: cms
+          command: pages deploy dist --project-name=nguyenvongai-cms --branch=main

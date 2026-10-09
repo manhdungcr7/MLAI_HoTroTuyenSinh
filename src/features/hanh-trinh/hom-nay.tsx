@@ -37,7 +37,7 @@ export default function HomNay() {
       <NoiDung>
         {m ? (
           <>
-            <TheMucTieu nganh={m.lc.nganh} truong={m.lc.truong} tenTruong={m.lc.tenTruong} conThieu={thieuMon.length ? null : m.conThieu} onClick={() => nav(DUONG_DAN.mucTieu())} />
+            <TheMucTieu nganh={m.lc.nganh} truong={m.lc.truong} tenTruong={m.lc.tenTruong} conThieu={thieuMon.length ? null : m.conThieu} uuTien={m.uuTienCong} onClick={() => nav(DUONG_DAN.mucTieu())} />
             <OSoDiem hienTai={m.hienTai} mucTieu={m.mucTieu} thieuMon={thieuMon} />
             {m.anDemNguoc
               ? <p className="px-1 text-[12px] text-chu-phu">Điểm học bạ chưa phải điểm thi, chỉ để so tham khảo.</p>
@@ -72,7 +72,7 @@ export default function HomNay() {
   );
 }
 
-function TheMucTieu({ nganh, truong, tenTruong, conThieu, onClick }: { nganh: string; truong: string; tenTruong: string; conThieu: number | null; onClick: () => void }) {
+function TheMucTieu({ nganh, truong, tenTruong, conThieu, uuTien, onClick }: { nganh: string; truong: string; tenTruong: string; conThieu: number | null; uuTien: number; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="block w-full text-left rounded-lon shadow-the active:opacity-90">
       <NenHero tone="xanh" className="p-4">
@@ -89,7 +89,7 @@ function TheMucTieu({ nganh, truong, tenTruong, conThieu, onClick }: { nganh: st
           {conThieu === null ? (
             <span className="text-[14px] text-chu">Cần đủ điểm 3 môn của tổ hợp để tính em còn thiếu bao nhiêu.</span>
           ) : conThieu > 0 ? (
-            <span className="text-[14px] text-chu">Còn thiếu <b className="text-[20px] font-extrabold text-do-chu">{dinhDang(conThieu, 1)}</b> <b className="text-do-chu">điểm</b> so với mục tiêu</span>
+            <span className="text-[14px] text-chu">Còn thiếu <b className="text-[20px] font-extrabold text-do-chu">{dinhDang(conThieu, 1)}</b> <b className="text-do-chu">điểm</b> so với mục tiêu{uuTien > 0 && <span className="block text-[12px] text-chu-phu">Đã tính điểm ưu tiên em khai (khoảng +{dinhDang(uuTien, 2)})</span>}</span>
           ) : (
             <span className="text-[14px] font-bold text-luc-chu">Em đã chạm điểm mục tiêu, giữ vững nhé!</span>
           )}

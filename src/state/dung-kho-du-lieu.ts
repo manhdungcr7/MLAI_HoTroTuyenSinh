@@ -12,3 +12,14 @@ export function useKhoDuLieu() {
   }, []);
   return khoDuLieu;
 }
+
+/** Số lần bản dữ liệu đã đổi. Gốc ứng dụng dùng làm `key` để dựng lại màn đang mở khi có bản CMS mới, vì mọi màn đọc danh mục dùng chung. */
+export function useBanDuLieu(): number {
+  const [ban, dem] = useState(0);
+  useEffect(() => {
+    const khiCoMoi = () => setTimeout(() => dem((n) => n + 1), 0); // đợi kho nạp xong rồi mới dựng lại
+    window.addEventListener(SU_KIEN_CAP_NHAT_DU_LIEU, khiCoMoi);
+    return () => window.removeEventListener(SU_KIEN_CAP_NHAT_DU_LIEU, khiCoMoi);
+  }, []);
+  return ban;
+}

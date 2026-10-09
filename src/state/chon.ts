@@ -1,5 +1,6 @@
 // Các hàm đọc dữ liệu dẫn xuất từ state. Dùng chung cho nhiều màn.
 import { tim } from "@/data/lua-chon-mau";
+import { tongCanDatDeDen, mucUuTien } from "@/engine/diem-uu-tien";
 import { isoNgay, thuHaiCuaTuan, bayNgayCuaTuan, soNgayTu } from "@/engine/xep-lich";
 import { khoangCachTheoMon, monThieuCuaToHop, tongDiem } from "@/engine/phan-tich";
 import { diemHienTaiCuaTungMon, type AppState } from "./store";
@@ -13,16 +14,20 @@ export const tuanHienTai = () => thuHaiCuaTuan(homNay());
  * `hienTai` và `conThieu` chỉ là điểm thật khi `duDiem` (tức `monThieu` rỗng). Có môn thiếu thì `hienTai` chỉ là tổng các môn đã nhập
  * (môn chưa nhập tính 0): nơi hiển thị phải nói "chưa đủ điểm", không đưa số này ra như khoảng cách tới mục tiêu.
  */
-export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; conThieu: number; soNgayCon: number; anDemNguoc: boolean; toHop: MonId[]; monThieu: MonId[]; duDiem: boolean } | null {
+export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTieu: number; mucTieuTho: number; uuTienCong: number; conThieu: number; soNgayCon: number; anDemNguoc: boolean; toHop: MonId[]; monThieu: MonId[]; duDiem: boolean } | null {
   if (!s.mucTieu) return null;
   const lc = tim(s.mucTieu.luaChonId);
   if (!lc) return null;
   const diem = diemHienTaiCuaTungMon(s);
   const hienTai = tongDiem(diem, s.mucTieu.toHop);
   const monThieu = monThieuCuaToHop(diem, s.mucTieu.toHop);
+  // Điểm ưu tiên khu vực/đối tượng bù một phần: em chỉ cần nâng tổng ba môn tới `mucTieuTho` (bằng `mucTieu` khi em không có ưu tiên).
+  const muc = mucUuTien(s.hoSo.uuTienTuyenSinh);
+  const mucTieuTho = tongCanDatDeDen(s.mucTieu.diemMucTieu, muc);
   return {
-    lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, toHop: s.mucTieu.toHop, monThieu, duDiem: monThieu.length === 0,
-    conThieu: Math.max(0, Math.round((s.mucTieu.diemMucTieu - hienTai) * 10) / 10),
+    lc, hienTai, mucTieu: s.mucTieu.diemMucTieu, mucTieuTho, uuTienCong: Math.round((s.mucTieu.diemMucTieu - mucTieuTho) * 100) / 100,
+    toHop: s.mucTieu.toHop, monThieu, duDiem: monThieu.length === 0,
+    conThieu: Math.max(0, Math.round((mucTieuTho - hienTai) * 10) / 10),
     soNgayCon: Math.max(0, soNgayTu(homNay(), s.mucTieu.ngayThi)),
     /** Em lớp 10–11 chưa có kỳ thi sát: các màn không hiện đếm ngược hay câu "gần kỳ thi". */
     anDemNguoc: !coDemNguoc(changCuaEm(s)),
@@ -32,7 +37,7 @@ export function mucTieuDayDu(s: AppState): { lc: LuaChon; hienTai: number; mucTi
 export function khoangCachCuaToi(s: AppState) {
   const m = mucTieuDayDu(s);
   if (!m) return [];
-  return khoangCachTheoMon(diemHienTaiCuaTungMon(s), m.toHop, m.mucTieu, s.hoSo.canCaiThien);
+  return khoangCachTheoMon(diemHienTaiCuaTungMon(s), m.toHop, m.mucTieuTho, s.hoSo.canCaiThien);
 }
 
 const THU_TU = { cao: 0, vua: 1, thap: 2 } as const;

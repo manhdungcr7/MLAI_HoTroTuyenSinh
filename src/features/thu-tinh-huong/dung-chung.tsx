@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle2, ClipboardList, Info, Minus, Plus } from "lucide-react";
+import { mucUuTien } from "@/engine/diem-uu-tien";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
@@ -18,7 +19,8 @@ export function useTinhHuong() {
   const diem = useMemo(() => diemHienTaiCuaTungMon(s), [s]);
   // Tổ hợp hiện tổng điểm: theo mục tiêu, không có thì tổ hợp cao nhất em đủ điểm. Từng ngành vẫn được so theo tổ hợp của chính nó.
   const { ma: maToHop, toHop } = chonToHopHienThi(diem, s.mucTieu);
-  const them = s.hoSo.diemThem;
+  const muc = mucUuTien(s.hoSo.uuTienTuyenSinh);
+  const them = useMemo(() => ({ ...s.hoSo.diemThem, ...(muc > 0 ? { uuTien: muc } : {}) }), [s.hoSo.diemThem, muc]);
   const dkGoc = useMemo(() => dieuKienTuHoSo(s.hoSo), [s.hoSo]);
   const [dangThu, datDangThu] = useLuuCucBo<TinhHuongDangThu>("thu-tinh-huong-dang-thu", DANG_THU_MAC_DINH);
   const thieu = monThieu(diem, toHop);
