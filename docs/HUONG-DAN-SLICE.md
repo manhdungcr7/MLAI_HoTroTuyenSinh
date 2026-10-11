@@ -19,23 +19,26 @@ Nguyện Vọng AI: web giúp học sinh THPT chọn ngành/trường và theo �
 
 ## 2. Chạy và kiểm tra
 - Dev server đang chạy ở `http://localhost:3030` (HMR). Đừng chạy thêm. Nếu chưa chạy: `npm run dev` ở thư mục gốc.
-- Nạp hồ sơ mẫu: mở `http://localhost:3030/#/chao` rồi bấm "Xem thử bằng hồ sơ mẫu". Hồ sơ trống: `localStorage.clear()` rồi tải lại.
+- Nạp hồ sơ mẫu: mở `http://localhost:3030/#/chao` rồi bấm "Xem hồ sơ mẫu". Hồ sơ trống: `localStorage.clear()` rồi tải lại.
 - **Dùng `agent-browser` với phiên riêng** (nhiều agent chạy cùng lúc): `export AGENT_BROWSER_SESSION=<ten-slice>` trước lệnh đầu tiên; `agent-browser set viewport 390 844`; đóng bằng `agent-browser close` khi xong. Đọc kiểm tra bằng `agent-browser eval` (kiểm `document.documentElement.scrollWidth > clientWidth`, kích thước nút, chữ bị cắt) thay vì chụp ảnh liên tục. **Tối đa một ảnh chụp cuối** để đối chiếu với ref.
 - Trước khi báo xong: `npx tsc --noEmit` (lỗi nằm trong thư mục slice khác thì bỏ qua, họ đang làm dở) và `npm run kiem-tra` (đường dẫn viết tay, mã màu, từ cấm, route chưa đăng ký) phải sạch ở phần của bạn. **Không `git commit`**, người điều phối sẽ gộp.
 
 ## 3. Bản đồ route (nguồn: `src/duong-dan.ts`)
 Tab dưới: Hôm nay `/` · Khám phá `/kham-pha` · Nguyện vọng `/nguyen-vong` · Kế hoạch `/ke-hoach` · Hồ sơ `/ho-so`.
-Không thanh tab: `/chao`, `/bat-dau/1|2|3`.
-Con của Khám phá: `/kham-pha/bo-loc`, `/kham-pha/:id`, `/so-sanh`.
+Không thanh tab: `/chao`, `/bat-dau/1|2|3`, `/dong-hanh`, `/loi-nhan`, `/gioi-thieu` (landing, đã khóa, xem `AGENTS.md`).
+Con của Khám phá: `/kham-pha/bo-loc`, `/kham-pha/ve-du-lieu`, `/kham-pha/:id`, `/so-sanh`.
 Con của Nguyện vọng: `/nguyen-vong/an-toan`, `/thu-tinh-huong`, `/thu-tinh-huong/ket-qua`, `/diem-thi-thu`, `/diem-thi-thu/ket-qua`.
 Kế hoạch (3 mục chuyển bằng `ThanhPhuKeHoach`: Mục tiêu · Kế hoạch tuần · Tiến độ): `/ke-hoach/muc-tieu`, `/ke-hoach/muc-tieu/mon-keo-diem`, `/ke-hoach/tuan` (Việc cần làm | Lịch, `?xem=lich`), `/ke-hoach/viec/:id`, `/ke-hoach/tien-do`, `/ke-hoach/cai-dat/lich-hoc`, `/ke-hoach/cai-dat/tu-hoc`, `/ke-hoach/cai-dat/nhac-nho`. Chuông ở đầu trang gốc của tab → `nhacNho`.
-Hồ sơ: `/ho-so`, `/ho-so/cai-dat`.
+Hồ sơ: `/ho-so`, `/ho-so/cai-dat`, `/ho-so/chia-se`.
+Có thanh tab nhưng không thuộc tab nào: `/huong-nghiep` (trắc nghiệm), `/dong-gop` (đăng ký tình nguyện viên), `/tu-van` (Tư vấn AI). Đường dẫn lạ → trang 404.
 
 **Ma trận liên kết bắt buộc** (nút nào phải dẫn đi đâu):
-- Chào → `/bat-dau/1` → 2 → 3 → `/ho-so` (hoàn tất hồ sơ) · "Xem thử bằng hồ sơ mẫu" → `/`.
-- Hôm nay → thẻ mục tiêu: `mucTieu` · "Còn X ngày": `mucTieu` · việc nên làm tiếp: `viec(id)` · nhịp học: `tienDo` · gợi ý môn: `monKeoDiem` · chưa có mục tiêu: `khamPha`.
+- Chào → "Bắt đầu ngay" `/bat-dau/1` (đã có hồ sơ hoàn tất thì hỏi "Xóa hết và làm lại?") · "Xem hồ sơ mẫu" → `/` (hỏi trước nếu sẽ ghi đè).
+- Bắt đầu 1 → "Xem gợi ý" = hoàn tất ngay · "Bổ sung điểm" → 2 → 3 → "Hoàn tất". Hoàn tất: thiếu mục bắt buộc thì về bước 1 tô ô thiếu; lớp 10–11 chưa có điểm → `/`; còn lại → màn kết quả (số ngành đủ điểm / thử sức) → nút "Lập danh sách nguyện vọng" `nguyenVong` (lớp 12, thi lại, đủ điểm một tổ hợp) hoặc "Khám phá ngành học" `khamPha`; chưa đủ điểm có thêm "Nhập điểm" → `batDau(2)`.
+- Hôm nay → thẻ mục tiêu: `mucTieu` · "Còn X ngày": `mucTieu` · việc nên làm tiếp: `viec(id)` · lịch sắp tới: `tuan("lich")` · tiến độ tuần: `tienDo` · "Gợi ý cho em": một việc tùy chặng (`tracNghiem`, `khamPha`, `batDau(2)`, `nguyenVong`, `nguyenVongAnToan`, `monKeoDiem`, `tienDo`) · chưa có mục tiêu: lấy NV1 làm mục tiêu hoặc `khamPha`.
+- Hồ sơ → 4 khối nhận xét: `batDau(1/2/3)`, `monKeoDiem`, `mucTieu`, `khamPha` · Trắc nghiệm: `tracNghiem` · Chia sẻ: `chiaSe` · Cài đặt: `hoSoCaiDat` (→ `caiDatLichHoc`, `caiDatTuHoc`, `nhacNho`, `dongGop`; Dùng hồ sơ mẫu → `/`; Xóa hết → `chao`).
 - Khám phá → thẻ: `chiTiet(id)` · Bộ lọc: `boLoc` (Áp dụng quay về `khamPha`).
-- Chi tiết → "Thêm vào nguyện vọng": thêm rồi hỏi tiếp tới `nguyenVong` · "So sánh": `soSanh(a,b)` (chọn thêm một trường nếu mới có một).
+- Chi tiết → "Thêm NV": thêm rồi hỏi tiếp tới `nguyenVong` · "So sánh": `soSanh(a,b)` (chọn thêm một trường nếu mới có một) · "Đặt mục tiêu": `mucTieu` (chỉ khi `coTheDatMucTieu`) · "Hỏi tư vấn AI": `tuVan` · "Báo số liệu sai": hộp gửi `/api/bao-sai`.
 - So sánh → "Chọn mục tiêu": đặt mục tiêu rồi tới `mucTieu` · "Lưu so sánh": lưu và báo đã lưu · bấm trường: `chiTiet(id)`.
 - Nguyện vọng → "Thêm nguyện vọng": `khamPha` · "Danh sách có an toàn không?": `nguyenVongAnToan` · "Nếu tăng điểm?": `thuTinhHuong` · "Nhập điểm thi thử": `diemThiThu` · bấm một nguyện vọng: `chiTiet(id)`.
 - An toàn → 3 gợi ý: "Thêm trường an toàn" → `khamPha` · "Giảm bớt thử sức" → `nguyenVong` · "Gợi ý thêm trường" → `khamPha`.

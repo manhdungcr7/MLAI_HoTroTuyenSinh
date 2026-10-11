@@ -33,8 +33,6 @@ export const TO_HOP: Record<MaToHop, MonId[]> = {
   B00: ["toan", "hoaHoc", "sinh"],
 };
 
-export type NguonDiem = "hocBa" | "thiThu" | "danhGiaNangLuc" | "tuDanhGia";
-
 export type LoaiSoThich = "R" | "I" | "A" | "S" | "E" | "C";
 /** Kết quả trắc nghiệm sở thích nghề nghiệp (Holland). diem: 0–9 mỗi nhóm; top: 3 nhóm cao nhất. */
 export interface KetQuaSoThich { diem: Record<LoaiSoThich, number>; top: LoaiSoThich[]; luc: string; giaTri?: string[] }
@@ -47,11 +45,8 @@ export interface HoSo {
   hoTen: string;
   khoi: 11 | 12 | null;
   tinh: string;
-  giaiDoan: string;
+  giaiDoan: string; // chỉ còn dùng để đánh dấu "Đã tốt nghiệp THPT" (chặng thi lại), xem state/chang.ts
   nganhQuanTam: string[]; // chọn 1 hoặc nhiều
-  mucTieuHienTai: "chuaChonTruong" | "daCoMoUoc" | "soSanh" | null;
-  truongMoUoc?: string; // Tên trường hoặc ngành mơ ước của em (khi chọn daCoMoUoc)
-  nguonDiem: NguonDiem;
   diem: Record<MonId, number | null>;
   diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)
   uuTienTuyenSinh?: { khuVuc: "KV1" | "KV2-NT" | "KV2" | "KV3" | null; doiTuong: "khong" | "UT1" | "UT2" | null }; // điểm ưu tiên khu vực/đối tượng theo quy chế, không bắt buộc
@@ -59,14 +54,11 @@ export interface HoSo {
   soThich?: KetQuaSoThich | null; // trắc nghiệm hướng nghiệp, chưa làm thì để trống
   diemManh: string[];
   canCaiThien: string[];
-  cachHoc: string[];
   nganSach: "duoi30" | "30-60" | "60-100" | "tren100" | null; // triệu đồng / năm
   choO: "oNha" | "oTro" | "kyTucXa" | null;
   khuVuc: string[];
-  ghiChuChiPhi: string;
   hocXaNha: boolean | null;
   quanTamViecLam: "rat" | "binhThuong" | "chuaRo" | null;
-  conDuong: "daiHoc" | "caoDang" | "khac" | null;
   hoanTat: boolean;
 }
 

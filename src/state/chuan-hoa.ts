@@ -46,16 +46,14 @@ function chuanHoaHoSo(raw: unknown): HoSo {
     khoi: o.khoi === 11 || o.khoi === 12 ? o.khoi : null,
     tinh: chu(o.tinh), giaiDoan: chu(o.giaiDoan),
     nganhQuanTam: mangChu(o.nganhQuanTam),
-    mucTieuHienTai: trong(o.mucTieuHienTai, ["chuaChonTruong", "daCoMoUoc", "soSanh"] as const),
-    nguonDiem: trong(o.nguonDiem, ["hocBa", "thiThu", "danhGiaNangLuc", "tuDanhGia"] as const) ?? b.nguonDiem,
+    // Dữ liệu cũ còn nguonDiem, mucTieuHienTai, truongMoUoc, cachHoc, conDuong, ghiChuChiPhi (đã bỏ ô nhập): không chép sang, tự rơi khi đọc.
     diem,
-    diemManh: mangChu(o.diemManh), canCaiThien: mangChu(o.canCaiThien), cachHoc: mangChu(o.cachHoc),
+    diemManh: mangChu(o.diemManh), canCaiThien: mangChu(o.canCaiThien),
     nganSach: trong(o.nganSach, ["duoi30", "30-60", "60-100", "tren100"] as const),
     choO: trong(o.choO, ["oNha", "oTro", "kyTucXa"] as const),
-    khuVuc: mangChu(o.khuVuc), ghiChuChiPhi: chu(o.ghiChuChiPhi),
+    khuVuc: mangChu(o.khuVuc),
     hocXaNha: typeof o.hocXaNha === "boolean" ? o.hocXaNha : null,
     quanTamViecLam: trong(o.quanTamViecLam, ["rat", "binhThuong", "chuaRo"] as const),
-    conDuong: trong(o.conDuong, ["daiHoc", "caoDang", "khac"] as const),
     hoanTat: o.hoanTat === true,
   };
   if (laObj(o.diemThem)) {

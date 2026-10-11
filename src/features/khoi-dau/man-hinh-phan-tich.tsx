@@ -1,95 +1,85 @@
-import { useEffect, useState } from "react";
-import { Brain, CheckCircle2, Database, Sparkles, Target } from "lucide-react";
-import { gop } from "@/components/ui/nut-the";
+// Màn ngay sau khi tạo hồ sơ: cho em thấy kết quả thật (bao nhiêu ngành trong tầm điểm), thay cho màn chờ giả.
+// Số liệu lấy từ tinhCoHoi của Khám phá, nên khớp đúng con số em sẽ thấy ở tab Khám phá.
+import { CheckCircle2, Compass, ListChecks, PencilLine, Sparkles } from "lucide-react";
+import { NoiDung } from "@/components/layout/khung";
+import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
+import { Nut, The } from "@/components/ui/nut-the";
 import { LUA_CHON } from "@/data/lua-chon-that";
+import { dinhDang } from "@/engine/dinh-dang";
+import type { KetQuaBanDau } from "./tinh-toan";
 
 const SO_TRUONG = new Set(LUA_CHON.map((l) => l.maTruong ?? l.truong)).size;
+const so = (n: number) => n.toLocaleString("vi-VN");
 
-const CAC_BUOC_AI = [
-  { icon: Brain, tieu: "Đối chiếu năng lực & tổ hợp điểm", phu: "Phân tích thế mạnh các môn học..." },
-  { icon: Database, tieu: `Đối chiếu ${LUA_CHON.length.toLocaleString("vi-VN")} chương trình của ${SO_TRUONG} trường`, phu: "So sánh điểm chuẩn & mức học phí..." },
-  { icon: Target, tieu: "Xếp nhóm nguyện vọng vừa sức", phu: "Phân loại Thử sức · Vừa sức · An toàn..." },
-];
-
-export function ManHinhPhanTichAI({ onHoanTat }: { onHoanTat: () => void }) {
-  const [buoc, setBuoc] = useState(0);
-  const [phanTram, setPhanTram] = useState(20);
-
-  useEffect(() => {
-    const t1 = setTimeout(() => { setBuoc(1); setPhanTram(60); }, 380);
-    const t2 = setTimeout(() => { setBuoc(2); setPhanTram(95); }, 760);
-    const t3 = setTimeout(() => { setPhanTram(100); }, 1050);
-    const t4 = setTimeout(() => { onHoanTat(); }, 1200);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
-    };
-  }, [onHoanTat]);
-
+export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
+  kq: KetQuaBanDau;
+  /** true: lối chính là lập danh sách nguyện vọng (lớp 12, thi lại); false: Khám phá. */
+  denNguyenVong: boolean;
+  onDi: () => void;
+  onNhapDiem: () => void;
+}) {
   return (
-    <div className="fixed inset-0 z-50 max-w-[430px] mx-auto bg-nen flex flex-col items-center justify-center px-6 animate-hien-len">
-      {/* Vòng sáng AI Core */}
-      <div className="relative mb-6">
-        <div className="size-24 rounded-3xl gd-xanh text-white grid place-items-center shadow-nut animate-bounce [animation-duration:2s]">
-          <Sparkles size={46} strokeWidth={2.2} className="animate-spin [animation-duration:6s]" />
-        </div>
-        <div className="absolute -inset-2 rounded-[2rem] border-2 border-xanh/30 animate-ping [animation-duration:2s] pointer-events-none" />
-      </div>
+    <div className="min-h-dvh flex flex-col">
+      <NoiDung className="flex-1 pt-6">
+        <NenHero tone="xanh" className="p-5">
+          <span className="flex items-center gap-3">
+            <BieuTuongTron icon={CheckCircle2} tone="luc" kichThuoc={48} />
+            <span className="min-w-0">
+              <b className="block text-[20px] leading-tight text-muc">Hồ sơ của em đã sẵn sàng</b>
+              <span className="block text-[13px] text-chu-phu mt-0.5">Mình đã so với {so(LUA_CHON.length)} chương trình của {SO_TRUONG} trường.</span>
+            </span>
+          </span>
+        </NenHero>
 
-      <h2 className="text-[20px] font-extrabold text-muc text-center mb-1">
-        Nguyện Vọng AI đang tính toán...
-      </h2>
-      <p className="text-[13.5px] text-chu-phu text-center max-w-[280px] mb-6">
-        Hệ thống đang cá nhân hóa danh sách gợi ý phù hợp nhất với em
-      </p>
-
-      {/* Thanh tiến trình */}
-      <div className="w-full bg-vien rounded-full h-2 mb-6 overflow-hidden">
-        <div
-          className="h-full gd-xanh rounded-full transition-all duration-300 ease-out"
-          style={{ width: `${phanTram}%` }}
-        />
-      </div>
-
-      {/* Các bước xử lý AI */}
-      <div className="w-full space-y-2.5">
-        {CAC_BUOC_AI.map((b, idx) => {
-          const Icon = b.icon;
-          const daXong = buoc > idx;
-          const dangChay = buoc === idx;
-          return (
-            <div
-              key={b.tieu}
-              className={gop(
-                "flex items-center gap-3 p-3 rounded-xl border transition-all duration-300",
-                dangChay
-                  ? "bg-white border-xanh shadow-sm scale-[1.02]"
-                  : daXong
-                  ? "bg-luc-nhat/50 border-luc/30 text-chu"
-                  : "bg-white/40 border-vien/60 opacity-40",
-              )}
-            >
-              <span
-                className={gop(
-                  "size-8 rounded-lg grid place-items-center shrink-0",
-                  daXong ? "bg-luc text-white" : dangChay ? "gd-xanh text-white" : "bg-vien text-chu-phu",
-                )}
-              >
-                {daXong ? <CheckCircle2 size={18} /> : <Icon size={18} className={dangChay ? "animate-pulse" : ""} />}
-              </span>
-              <div className="min-w-0 flex-1">
-                <b className={gop("block text-[13px] leading-tight", dangChay ? "text-xanh font-bold" : "text-muc font-semibold")}>
-                  {b.tieu}
-                </b>
-                <span className="block text-[11.5px] text-chu-phu leading-tight mt-0.5 truncate">
-                  {b.phu}
-                </span>
+        {kq.coDiem && kq.tong !== null ? (
+          <>
+            <The className="space-y-3">
+              <p className="text-[14px] text-chu">
+                Tổ hợp cao nhất của em: <b className="text-muc">{kq.toHop}</b> · <b className="text-[18px] text-muc">{dinhDang(kq.tong, 1)}</b> điểm
+              </p>
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="rounded-xl bg-luc-nhat p-3">
+                  <b className="block text-[24px] leading-none text-luc-chu">{so(kq.soDuDiem)}</b>
+                  <span className="block mt-1 text-[13px] text-chu">ngành đủ điểm chuẩn năm gần nhất</span>
+                </div>
+                <div className="rounded-xl bg-cam-nhat p-3">
+                  <b className="block text-[24px] leading-none text-cam-chu">{so(kq.soThuSuc)}</b>
+                  <span className="block mt-1 text-[13px] text-chu">ngành có thể thử sức (thiếu dưới 2 điểm)</span>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            </The>
+
+            {kq.nhomQuanTam.length > 0 && (
+              <section aria-label="Nhóm ngành em quan tâm">
+                <h2 className="text-[15px] font-bold text-muc mb-2">Nhóm ngành em quan tâm</h2>
+                <ul className="space-y-2">
+                  {kq.nhomQuanTam.map((g) => (
+                    <li key={g.nhom} className="flex items-center justify-between gap-2 rounded-xl border border-vien bg-trang px-3 min-h-12">
+                      <span className="text-[14px] font-semibold text-chu">{g.nhom}</span>
+                      <span className="text-[13px] text-chu-phu text-right">
+                        {g.duDiem + g.thuSuc === 0
+                          ? "chưa có ngành trong tầm điểm"
+                          : <><b className="text-luc-chu">{so(g.duDiem)}</b> đủ điểm · <b className="text-cam-chu">{so(g.thuSuc)}</b> thử sức</>}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <p className="text-[12px] text-chu-phu">Chỉ tính ngành xét điểm thi tốt nghiệp THPT, so với điểm chuẩn các năm trước, đã gồm điểm ưu tiên em khai. Không phải xác suất đậu.</p>
+          </>
+        ) : (
+          <The className="flex items-start gap-3">
+            <Sparkles size={22} className="text-xanh shrink-0 mt-0.5" />
+            <p className="text-[14px] text-chu">Em chưa nhập đủ điểm 3 môn của một tổ hợp, nên mình chưa so được với điểm chuẩn. Em vẫn xem được các ngành, và nhập điểm lúc nào cũng được.</p>
+          </The>
+        )}
+      </NoiDung>
+
+      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 pb-2 vung-an-toan-duoi space-y-2">
+        <Nut muiTen bieuTuong={denNguyenVong ? ListChecks : Compass} onClick={onDi}>{denNguyenVong ? "Lập danh sách nguyện vọng" : "Khám phá ngành học"}</Nut>
+        {!kq.coDiem && <Nut kieu="vien" bieuTuong={PencilLine} onClick={onNhapDiem}>Nhập điểm</Nut>}
       </div>
     </div>
   );
