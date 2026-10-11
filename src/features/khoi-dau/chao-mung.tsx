@@ -50,8 +50,8 @@ export default function ChaoMung() {
   const [hoiLamLai, setHoiLamLai] = useState(false);
   const h = s.hoSo;
   const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
-  // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải dữ liệu mẫu Nguyễn Minh Anh) và chưa bấm hoàn tất
-  const dangDienDo = daCoThongTin && !h.hoanTat && h.hoTen !== "Nguyễn Minh Anh";
+  // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải hồ sơ mẫu) và chưa bấm hoàn tất
+  const dangDienDo = daCoThongTin && !h.hoanTat && !h.laMau;
 
   const xemMau = () => { dungHoSoMau(); nav(DUONG_DAN.homNay()); };
   // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu em đã nhập gì đó.

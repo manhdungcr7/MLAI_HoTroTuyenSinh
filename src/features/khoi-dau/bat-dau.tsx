@@ -10,9 +10,11 @@ import { CAC_MON, type HoSo, type MonId } from "@/state/types";
 import Buoc1, { ID_TRUONG } from "./buoc-1";
 import Buoc2, { idDiem } from "./buoc-2";
 import Buoc3 from "./buoc-3";
-import { ManHinhPhanTichAI } from "./man-hinh-phan-tich";
+import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
+import { ManHinhKetQua } from "./man-hinh-phan-tich";
 import { DaLuuTam, ThanhBuoc } from "./thanh-phan";
-import { THU_TU_BAT_BUOC, docDiem, kiemTraBuoc1, vietDiem } from "./tinh-toan";
+import { THU_TU_BAT_BUOC, docDiem, ketQuaBanDau, kiemTraBuoc1, vietDiem } from "./tinh-toan";
 
 /** Đưa con trỏ tới ô và cuộn ô đó ra giữa màn hình. */
 function denO(id: string) {
@@ -39,9 +41,11 @@ export default function BatDau() {
   // Chữ điểm đang gõ. Giữ riêng để "7," gõ dở không bị mất; số hợp lệ được ghi ngay vào hồ sơ.
   const [chuDiem, setChuDiem] = useState<Record<MonId, string>>(() =>
     Object.fromEntries(CAC_MON.map((m) => [m, vietDiem(h.diem[m])])) as Record<MonId, string>);
+  const [dangPhanTich, setDangPhanTich] = useState(false);
 
   useEffect(() => { window.scrollTo(0, 0); }, [so]);
 
+  // Mọi hook phải gọi trước câu return này: khi /bat-dau/abc chuyển về /bat-dau/1 trên cùng component, số hook không được đổi.
   if (!hopLe) return <Navigate to={DUONG_DAN.batDau(1)} replace />;
 
   const sua = (p: Partial<HoSo>) => { capNhatHoSo(p); setDaSua(true); };
@@ -55,8 +59,6 @@ export default function BatDau() {
   const loi1 = kiemTraBuoc1(h);
   const thieu1 = THU_TU_BAT_BUOC.filter((k) => loi1[k]);
   const monSai = CAC_MON.filter((m) => { const k = docDiem(chuDiem[m]).loai; return k === "khongPhaiSo" || k === "ngoaiKhoang"; });
-
-  const [dangPhanTich, setDangPhanTich] = useState(false);
 
   const denBuoc = (b: BuocBatDau) => nav(DUONG_DAN.batDau(b));
 
@@ -91,9 +93,14 @@ export default function BatDau() {
   };
 
   if (dangPhanTich) {
-    // Nước rút và thi lại đã có điểm: tới thẳng danh sách nguyện vọng; còn lại tới Khám phá.
-    const den = changCuaEm({ hoSo: h }) !== "dinhHuong" && diemDau(h) ? DUONG_DAN.nguyenVong() : DUONG_DAN.khamPha();
-    return <ManHinhPhanTichAI onHoanTat={() => nav(den, { replace: true })} />;
+    // Nước rút và thi lại đã có điểm: lối chính là danh sách nguyện vọng; còn lại là Khám phá.
+    const kq = ketQuaBanDau(tinhCoHoi(diemDayDu(s)), h.nganhQuanTam);
+    const denNguyenVong = changCuaEm({ hoSo: h }) !== "dinhHuong" && kq.coDiem;
+    return (
+      <ManHinhKetQua kq={kq} denNguyenVong={denNguyenVong}
+        onDi={() => nav(denNguyenVong ? DUONG_DAN.nguyenVong() : DUONG_DAN.khamPha(), { replace: true })}
+        onNhapDiem={() => { setDangPhanTich(false); denBuoc(2); }} />
+    );
   }
 
   return (

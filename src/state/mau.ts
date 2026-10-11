@@ -6,10 +6,10 @@ import { idHoSoMau, timLuaChon } from "@/data/lua-chon-that";
 import { TO_HOP, type DiemThi, type HoSo, type MonId } from "./types";
 
 export const HO_SO_TRONG: HoSo = {
-  hoTen: "", khoi: null, tinh: "", giaiDoan: "", nganhQuanTam: [], mucTieuHienTai: null, nguonDiem: "hocBa",
+  hoTen: "", khoi: null, tinh: "", giaiDoan: "", nganhQuanTam: [],
   diem: { toan: null, vatLy: null, hoaHoc: null, sinh: null, nguVan: null, tiengAnh: null },
-  diemManh: [], canCaiThien: [], cachHoc: [], nganSach: null, choO: null, khuVuc: [], ghiChuChiPhi: "",
-  hocXaNha: null, quanTamViecLam: null, conDuong: null, hoanTat: false,
+  diemManh: [], canCaiThien: [], nganSach: null, choO: null, khuVuc: [],
+  hocXaNha: null, quanTamViecLam: null, hoanTat: false,
 };
 
 export const TRANG_THAI_BAN_DAU: AppState = {
@@ -38,12 +38,12 @@ export function taoHoSoMau(): AppState {
   const nen: AppState = {
     ...TRANG_THAI_BAN_DAU,
     hoSo: {
-      laMau: true, hoTen: "Nguyễn Minh Anh", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "Ôn thi THPT", nganhQuanTam: ["CNTT"], mucTieuHienTai: "daCoMoUoc",
-      nguonDiem: "thiThu", diem: { toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 },
+      laMau: true, hoTen: "Nguyễn Minh Anh", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "", nganhQuanTam: ["CNTT"],
+      diem: { toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 },
       soThich: { diem: { R: 1, I: 5, A: 1, S: 1, E: 2, C: 2 }, top: ["I", "C", "E"], giaTri: ["thuNhap", "sangTao"], luc: new Date().toISOString() },
       diemManh: ["Tư duy logic", "Giải quyết vấn đề", "Tiếng Anh"], canCaiThien: ["Vật lý", "Diễn đạt", "Quản lý thời gian"],
-      cachHoc: ["Học qua bài tập", "Học theo dự án"], nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"], ghiChuChiPhi: "",
-      hocXaNha: true, quanTamViecLam: "rat", conDuong: "daiHoc", hoanTat: true,
+      nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"],
+      hocXaNha: true, quanTamViecLam: "rat", hoanTat: true,
     },
     // Điểm mục tiêu đúng bằng điểm chuẩn của ngành mục tiêu (trước đây ghi 26 trong khi ngành là 28,5).
     mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: timLuaChon(ids[0])?.diemMin ?? 26, ngayThi: congNgay(isoNgay(hom), 266) },

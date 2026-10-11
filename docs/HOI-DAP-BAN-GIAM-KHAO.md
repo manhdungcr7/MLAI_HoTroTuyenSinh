@@ -8,7 +8,7 @@ Mỗi câu trả lời dẫn tới nơi kiểm chứng được trong mã, test 
 Học sinh lớp 11–12 có điện thoại, biết điểm các môn (học bạ hoặc thi thử), và quyết định ngành/trường cùng gia đình. Không giả định học sinh biết rõ mình muốn gì: có trắc nghiệm sở thích (`features/huong-nghiep`) và gợi ý ngành theo điểm.
 
 **2. "Điểm của em" lấy từ đâu, có đáng tin không?**
-Do học sinh tự nhập (điểm học bạ hoặc thi thử, có thể cập nhật theo thời gian). Mình không xác minh điểm. App chỉ dùng để so với điểm chuẩn và nói rõ điểm nào được dùng (`HoSo.nguonDiem`).
+Do học sinh tự nhập (điểm học bạ hoặc thi thử, có thể cập nhật theo thời gian). Mình không xác minh điểm. App chỉ dùng để so với điểm chuẩn và nói rõ điểm nào được dùng: mỗi môn lấy lần thi thử gần nhất, chưa có thì lấy điểm em nhập ở hồ sơ (`diemHienTaiCuaTungMon`); màn Mục tiêu ghi rõ "dự kiến từ điểm thi thử" hay "từ điểm em nhập ở hồ sơ".
 
 **3. Điểm chuẩn năm nay chưa công bố thì sao?**
 App dùng điểm các năm trước, luôn ghi năm, và đưa thêm khoảng dự kiến năm tới (câu 12). Điểm chuẩn năm vừa công bố do tình nguyện viên cập nhật qua CMS có nguồn và có duyệt.

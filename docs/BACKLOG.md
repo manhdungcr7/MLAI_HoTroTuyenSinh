@@ -19,57 +19,58 @@
 
 ---
 
-## 📌 Issue #01: Luồng nhập và mô tả "Trường mơ ước" khi tạo hồ sơ
+## 📌 Issue #01: Đặt mục tiêu sớm cho học sinh "đã có trường mơ ước"
 - 👤 **Phụ trách (Owner):** Tuấn (`khoi-dau`) & Kiệt (`muc-tieu`)
-- ⏳ **Trạng thái:** `Bán phần hoàn thành — Cần nối hiển thị & tính toán`
+- ✅ **Trạng thái:** `Đóng — giải quyết theo hướng khác (2026-10-11)`
 - 🏷️ **Nhãn:** `enhancement`, `khoi-dau`, `muc-tieu`
 
-### 1. Bối cảnh & Vấn đề
-- Ở màn hình **Tạo hồ sơ (Bước 1/3)**, mục **"Mục tiêu hiện tại"** có lựa chọn `Đã có trường mơ ước`.
-- Hiện tại khi chọn mục này, hệ thống chỉ lưu trường mơ ước vào `HoSo.truongMoUoc` nhưng chưa nối tới hiển thị hoặc tính toán.
+### 1. Bối cảnh
+- Bản đầu có mục **"Mục tiêu hiện tại"** ở Bước 1 với lựa chọn `Đã có trường mơ ước` và ô gõ tự do `HoSo.truongMoUoc`, nhưng không logic nào đọc hai trường này.
 
-### 2. Yêu cầu nghiệp vụ (User Story)
-- **Khi học sinh chọn "Đã có trường mơ ước":**
-  - ✅ Hiển thị thêm trường nhập liệu: **"Tên trường / Ngành mơ ước của em"** (ô nhập tự do).
-  - ❌ Chưa: Tự động gọi ý từ danh mục 200+ trường.
-- **Giá trị mang lại:**
-  - ❌ Chưa: Lập tức thiết lập trường đó làm **Mục tiêu tham chiếu chính** trong tab *Mục tiêu* và tính toán khoảng cách điểm.
+### 2. Đã xử lý
+- Bỏ mục "Mục tiêu hiện tại" và ô trường mơ ước khỏi Bước 1; **đã xóa** `mucTieuHienTai`, `truongMoUoc` khỏi kiểu `HoSo` (`src/state/types.ts`). Dữ liệu cũ còn hai trường này vẫn đọc được, `chuanHoa` tự bỏ (test ở `tests/do-ben-du-lieu.test.ts`).
+- Nhu cầu "đặt mục tiêu sớm" được đáp ứng bằng 3 lối có dữ liệu thật (thay cho ô gõ tự do không so được với điểm chuẩn):
+  - Trang ngành (`kham-pha/chi-tiet.tsx`) → **Đặt mục tiêu**.
+  - So sánh (`kham-pha/so-sanh.tsx`) → **Chọn mục tiêu**.
+  - Hôm nay / Mục tiêu khi chưa có mục tiêu → lấy **NV1** (`chonNguyenVongLamMucTieu` ở `state/chon.ts`).
+- Ngay sau khi tạo hồ sơ, màn kết quả cho thấy số ngành trong tầm điểm của từng nhóm ngành em chọn (`khoi-dau/man-hinh-phan-tich.tsx`).
 
-### 3. Các thành phần cần hoàn thiện
-- ✅ **State (`src/state/types.ts`):** Đã thêm `truongMoUoc?: string` vào `HoSo`.
-- ✅ **Giao diện (`src/features/khoi-dau/buoc-1.tsx`):** Đã thêm ô nhập.
-- ❌ **Phân tích (`src/features/muc-tieu/` & `src/state/chon.ts`):** Chưa gắn trường mơ ước vào mục tiêu tự động; `datMucTieu` chưa được gọi.
+### 3. Có thể làm tiếp (nếu nhóm thấy cần)
+- Ô tìm trường/ngành **chọn từ danh mục thật** ở Bước 1, chọn xong gọi `datMucTieu(mucTieuTuLuaChon(lc))` (chỉ khi `coTheDatMucTieu(lc).ok`).
 
 ---
 
 ## 📌 Issue #02: Phân định rạch ròi giữa Form trắng và Dữ liệu mẫu (Sample Persona)
 - 👤 **Phụ trách (Owner):** Tuấn (`khoi-dau`, `hanh-trinh`)
-- ✅ **Trạng thái:** `Đã xử lý cốt lõi luồng khởi đầu` / ⏳ `Mở rộng trang Hồ sơ (Backlog)`
+- ✅ **Trạng thái:** `Đã xử lý cốt lõi` / ⏳ `Đổi qua lại hồ sơ thật ↔ hồ sơ mẫu (Backlog)`
 - 🏷️ **Nhãn:** `state-management`, `ux`, `data-integrity`
 
 ### 1. Bối cảnh & Vấn đề
-- Trước đây khi bấm "Bắt đầu ngay" từ màn hình Chào mừng, nếu trước đó học sinh đã từng nhấn "Xem hồ sơ mẫu", state lưu trữ trên máy (`localStorage`) vẫn giữ tên "Nguyễn Minh Anh" cùng các điểm thi mẫu. Điều này gây hiểu lầm rằng hệ thống tự ý hardcode thông tin cá nhân.
+- Trước đây khi bấm "Bắt đầu ngay" từ màn hình Chào mừng, nếu trước đó học sinh đã từng nhấn "Xem hồ sơ mẫu", state lưu trữ trên máy (`localStorage`) vẫn giữ tên "Nguyễn Minh Anh" cùng các điểm thi mẫu.
 
-### 2. Giải pháp đã thực hiện & Tiếp tục theo dõi
-- ✅ **Đã xử lý:** Tách biệt nút "Bắt đầu ngay" (gọi `lamLai()` trả về `HO_SO_TRONG` hoàn toàn trắng nếu không phải hồ sơ người dùng tự điền dở dang) và "Xem hồ sơ mẫu" (`dungHoSoMau()`).
-- ⏳ **Cần hoàn thiện thêm:** Cơ chế "Đổi hồ sơ / Xóa hồ sơ" trực tiếp trong trang Cài đặt / Cá nhân để học sinh có thể chuyển qua lại giữa hồ sơ cá nhân và hồ sơ mẫu chỉ với 1 chạm.
+### 2. Đã xử lý
+- ✅ Tách "Bắt đầu ngay" (`lamLai()`, xóa mọi khóa `nvai:*`) và "Xem hồ sơ mẫu" (`dungHoSoMau()`); cả hai hỏi lại bằng `HopTruot` trước khi xóa/ghi đè dữ liệu đang có.
+- ✅ Cờ `HoSo.laMau` đánh dấu hồ sơ mẫu; Hồ sơ hiện nhãn "Hồ sơ mẫu, không phải người thật"; màn Chào nhận diện hồ sơ mẫu bằng cờ này (không so tên nữa).
+- ✅ Cài đặt có **Dùng hồ sơ mẫu**, **Xóa hết và làm lại**, **Tải bản sao lưu**, **Khôi phục từ tệp sao lưu**.
+
+### 3. Còn lại
+- ⏳ Chuyển qua lại giữa hồ sơ thật và hồ sơ mẫu mà **không mất** hồ sơ thật (hiện phải tự tải bản sao lưu trước khi dùng hồ sơ mẫu).
 
 ---
 
-## 📌 Issue #03: Cơ chế tính điểm ưu tiên khu vực (KV1, KV2, KV2-NT, KV3) & Đối tượng
+## 📌 Issue #03: Điểm ưu tiên khu vực (KV1, KV2-NT, KV2, KV3) & Đối tượng
 - 👤 **Phụ trách (Owner):** Tuấn (`khoi-dau`) & Kiệt (`thu-tinh-huong`)
-- ✅ **Trạng thái:** `Đã làm một phần: khai báo KV/đối tượng và tính công thức giảm dần từ 22,5 điểm đã vào mọi phép so với điểm chuẩn (engine/diem-uu-tien.ts, Bước 2). Chưa làm: tự map tỉnh/huyện sang khu vực ưu tiên (cần danh sách xã theo khu vực của Bộ).`
+- ✅ **Trạng thái:** `Đã làm phần tính toán` / ⏳ `Tự map tỉnh → khu vực (Backlog)`
 - 🏷️ **Nhãn:** `engine`, `tuyen-sinh`, `tinh-toan`
 
-### 1. Bối cảnh & Vấn đề
-- Điểm xét tuyển đại học thực tế tại Việt Nam chịu ảnh hưởng lớn từ chính sách cộng điểm ưu tiên theo khu vực và đối tượng chính sách theo quy chế của Bộ GD&ĐT (đặc biệt là công thức giảm dần mức điểm ưu tiên đối với thí sinh đạt tổng điểm từ 22.5 trở lên).
-- Khi chọn Tỉnh/Thành phố ở Bước 1, hệ thống có thể gợi ý sẵn khu vực ưu tiên mặc định.
+### 1. Đã làm
+- Khai báo ở Bước 2, khối gập "Điểm ưu tiên khu vực, đối tượng" (`khoi-dau/diem-uu-tien.tsx`) → `HoSo.uuTienTuyenSinh`.
+- Mức theo quy chế: KV1 +0,75 · KV2-NT +0,5 · KV2 +0,25 · KV3 0 · UT1 +2 · UT2 +1; từ 22,5 điểm giảm dần theo `[(30 − tổng) / 7,5] × mức` (`engine/diem-uu-tien.ts`, test `tests/diem-uu-tien.test.ts`).
+- Đi vào mọi phép so với điểm chuẩn (`tongChoLuaChon`), phần "còn thiếu" của Mục tiêu (`mucTieuTho`), dòng "tổ hợp cao nhất khi tính đủ" ở Bước 2 và màn kết quả sau khi tạo hồ sơ.
 
-### 2. Yêu cầu nghiệp vụ (User Story)
-- **Tự động hóa:** Tự động map Tỉnh/Huyện học sinh chọn sang khu vực ưu tiên tương ứng.
-- **Tùy chỉnh:** Cho phép học sinh tùy chỉnh lại Khu vực (KV1: +0.75đ, KV2-NT: +0.5đ, KV2: +0.25đ, KV3: 0đ) và Đối tượng chính sách (nếu có).
-- **Tính toán:** Áp dụng đúng công thức điểm ưu tiên theo quy chế tuyển sinh:
-  `Điểm ưu tiên thực tế = [(30 - Tổng điểm) / 7.5] × Mức điểm ưu tiên theo quy định` (với thí sinh đạt ≥ 22.5 điểm).
+### 2. Còn lại
+- ⏳ Tự gợi ý khu vực từ Tỉnh/Huyện (cần danh sách xã theo khu vực của Bộ GD&ĐT; hồ sơ hiện chỉ có tỉnh nên chưa map chính xác được).
+- ⏳ Đối chiếu lại mức cộng mỗi mùa tuyển sinh.
 
 ---
 

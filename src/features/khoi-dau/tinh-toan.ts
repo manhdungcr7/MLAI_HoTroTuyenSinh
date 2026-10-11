@@ -1,5 +1,7 @@
 // Hàm thuần (không React) cho luồng Khởi đầu: đọc điểm, kiểm tra bước 1, tổ hợp tự tính, gợi ý học phí.
+import { mucUuTien } from "@/engine/diem-uu-tien";
 import { tongDiem } from "@/engine/phan-tich";
+import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { TEN_MON_NGAN, TO_HOP, type HoSo, type MaToHop, type MonId } from "@/state/types";
 
 // ---------- Đọc điểm ----------
@@ -54,6 +56,18 @@ export function tinhCacToHop(diem: Record<MonId, number | null>): KetQuaToHop[] 
   });
 }
 
+/**
+ * Tổ hợp cao nhất khi tính đủ như Khám phá: 73 tổ hợp chính thức (gồm cả Sử, Địa, Tin...) và đã cộng điểm ưu tiên.
+ * Dùng để báo em con số thật sẽ dùng khi so với điểm chuẩn. null khi chưa đủ 3 môn của tổ hợp nào.
+ */
+export function toHopCaoNhatDayDu(
+  diem: Record<MonId, number | null>, diemThem: HoSo["diemThem"], uuTienTuyenSinh: HoSo["uuTienTuyenSinh"],
+): { toHop: string; tong: number; uuTienCong: number } | null {
+  const muc = mucUuTien(uuTienTuyenSinh);
+  const t = tongChoLuaChon({ toHopXet: [] }, { ...diem, ...(diemThem ?? {}), ...(muc > 0 ? { uuTien: muc } : {}) });
+  return t.tong === null || t.toHop === null ? null : { toHop: t.toHop, tong: t.tong, uuTienCong: t.uuTienCong ?? 0 };
+}
+
 export const tenMonCuaToHop = (mon: MonId[]) => mon.map((m) => TEN_MON_NGAN[m]).join(" – ");
 
 // ---------- Gợi ý học phí theo ngân sách ----------
@@ -85,4 +99,27 @@ export function goiYHocPhi(nganSach: HoSo["nganSach"], choO: HoSo["choO"]): GoiY
 export function demVuaNganSach(nganSach: MucNganSach, ds: { hocPhiMax?: number }[]): number {
   const den = KHOANG_NGAN_SACH[nganSach].den;
   return ds.filter((l) => den === null || (typeof l.hocPhiMax === "number" && l.hocPhiMax <= den)).length;
+}
+
+// ---------- Kết quả ngay sau khi tạo hồ sơ ----------
+export interface NhomCoHoi { nhom: string; duDiem: number; thuSuc: number }
+export interface KetQuaBanDau {
+  /** Em có đủ điểm 3 môn của ít nhất một tổ hợp để so với điểm chuẩn. */
+  coDiem: boolean;
+  toHop: string | null;
+  tong: number | null;
+  soDuDiem: number;
+  soThuSuc: number;
+  /** Các nhóm ngành em chọn ở Bước 1, giữ thứ tự em chọn; nhóm chưa có ngành nào trong tầm thì số là 0. */
+  nhomQuanTam: NhomCoHoi[];
+}
+
+/** Gom "cơ hội của em" (tính ở Khám phá) thành kết quả ngắn cho màn sau khi tạo hồ sơ. Không tự đặt thêm số. */
+export function ketQuaBanDau(
+  coHoi: { tong: number; toHop: string; soDuDiem: number; soThuSuc: number; theoNhom: NhomCoHoi[] } | null,
+  nganhQuanTam: string[],
+): KetQuaBanDau {
+  if (!coHoi) return { coDiem: false, toHop: null, tong: null, soDuDiem: 0, soThuSuc: 0, nhomQuanTam: [] };
+  const nhomQuanTam = nganhQuanTam.map((n) => coHoi.theoNhom.find((g) => g.nhom === n) ?? { nhom: n, duDiem: 0, thuSuc: 0 });
+  return { coDiem: true, toHop: coHoi.toHop, tong: coHoi.tong, soDuDiem: coHoi.soDuDiem, soThuSuc: coHoi.soThuSuc, nhomQuanTam };
 }

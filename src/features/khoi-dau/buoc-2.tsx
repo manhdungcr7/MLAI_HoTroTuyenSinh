@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { ChevronDown, NotebookPen, Pencil, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
 import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
-import { CAC_MON, TEN_MON_NGAN, type HoSo, type MonId } from "@/state/types";
+import { CAC_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type MonId } from "@/state/types";
 import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP } from "./lua-chon";
 import DiemMonThem from "./diem-mon-them";
 import DiemUuTien from "./diem-uu-tien";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
-import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop } from "./tinh-toan";
+import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop, toHopCaoNhatDayDu } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
 
 export const idDiem = (m: MonId) => `bd-diem-${m}`;
+const TO_HOP_APP: string[] = Object.keys(TO_HOP);
 
 type P = {
   h: HoSo;
@@ -24,6 +25,8 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
   const diemDung = Object.fromEntries(ketQua.map(({ m, kq }) => [m, kq.loai === "hopLe" ? kq.gia : null])) as Record<MonId, number | null>;
   const toHop = tinhCacToHop(diemDung);
   const caoNhat = Math.max(...toHop.map((t) => t.tong ?? -1));
+  // Con số Khám phá thật sự dùng (73 tổ hợp + ưu tiên); chỉ nhắc khi khác với 4 thẻ ở trên.
+  const dayDu = toHopCaoNhatDayDu(diemDung, h.diemThem, h.uuTienTuyenSinh);
   const loiDiem = ketQua.filter(({ kq }) => kq.loai === "khongPhaiSo" || kq.loai === "ngoaiKhoang");
   const coThem = h.diemManh.length + h.canCaiThien.length > 0;
   const [moThem, setMoThem] = useState(coThem);
@@ -105,6 +108,12 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
           })}
         </ul>
         <p className="mt-2 text-[12px] text-chu-phu">Tổng 3 môn, chưa cộng điểm ưu tiên. Khi so với điểm chuẩn, mình tự cộng phần ưu tiên em khai ở mục Điểm ưu tiên.</p>
+        {dayDu && (dayDu.uuTienCong > 0 || !TO_HOP_APP.includes(dayDu.toHop)) && (
+          <p aria-live="polite" className="mt-2 rounded-xl bg-xanh-nhat px-3 py-2.5 text-[13px] text-chu">
+            Tính cả môn khác và điểm ưu tiên, tổ hợp cao nhất của em là <b className="text-muc">{dayDu.toHop}</b>: <b className="text-muc">{dinhDang(dayDu.tong, 1)}</b> điểm
+            {dayDu.uuTienCong > 0 && <> (đã cộng {dinhDang(dayDu.uuTienCong, 2)} ưu tiên)</>}. Đây là số mình dùng khi so với điểm chuẩn ở Khám phá.
+          </p>
+        )}
       </section>
 
       <section className="rounded-the border border-vien bg-trang">

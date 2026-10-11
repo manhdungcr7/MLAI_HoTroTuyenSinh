@@ -90,4 +90,10 @@ const b = xepLaiTuan(a.s, tuan2); // xây trên kết quả của lần trước
 assert.ok(a.s.khoiHoc.some((k) => k.viecId === "a"), "tuần 1 có việc a");
 assert.ok(b.s.khoiHoc.some((k) => k.viecId === "a") && b.s.khoiHoc.some((k) => k.viecId === "b"), "lần hai giữ việc lần một");
 
+// ---- Dữ liệu cũ còn các trường hồ sơ đã bỏ ô nhập: vẫn đọc được, các trường đó không chép sang
+const hoSoCu = chuanHoa({ ...mau, hoSo: { ...mau.hoSo, nguonDiem: "thiThu", mucTieuHienTai: "daCoMoUoc", truongMoUoc: "UIT", cachHoc: ["Xem video"], conDuong: "daiHoc", ghiChuChiPhi: "x" } });
+for (const k of ["nguonDiem", "mucTieuHienTai", "truongMoUoc", "cachHoc", "conDuong", "ghiChuChiPhi"]) assert.ok(!(k in hoSoCu.hoSo), `bỏ ${k}`);
+assert.equal(hoSoCu.hoSo.hoTen, mau.hoSo.hoTen);
+assert.ok(docBanSaoLuu(JSON.stringify({ app: "nguyen-vong-ai", phienBan: 2, luc: "", duLieu: { ...mau, hoSo: { ...mau.hoSo, nguonDiem: "hocBa" } } })).ok, "tệp sao lưu cũ vẫn khôi phục được");
+
 console.log("do-ben-du-lieu: OK");
