@@ -18,7 +18,7 @@ import { dinhDang } from "@/engine/dinh-dang";
 // Thứ tự nút môn theo ref: các môn hay thi trước.
 const THU_TU_MON: MonId[] = ["toan", "nguVan", "tiengAnh", "vatLy", "hoaHoc", "sinh"];
 const KHU_VUC = [...new Set(LUA_CHON_MAU.map((l) => l.khuVuc))];
-const VACH_CONG = [-2, -1, 0, 1, 2].map((g) => ({ gia: g, chu: g > 0 ? `+${g}` : g < 0 ? `−${-g}` : "0" }));
+const VACH_CONG = [-4, -2, -1, 0, 1, 2, 4].map((g) => ({ gia: g, chu: g > 0 ? `+${g}` : g < 0 ? `−${-g}` : "0" }));
 
 export default function ThuTinhHuong() {
   const nav = useNavigate();
@@ -102,7 +102,7 @@ export default function ThuTinhHuong() {
                     <span className={gop("rounded-lg px-2.5 py-1 text-[14px] font-extrabold text-white", cong < 0 ? "gd-do" : "gd-xanh")}>{vietCong(cong)}</span>
                   </div>
                   <div className="mt-3">
-                    <ThanhTruot gia={cong} min={-2} max={2} buoc={0.25} tuGiua onChange={datCong} nhan={`điểm ${TEN_MON[mon]}`}
+                    <ThanhTruot gia={cong} min={-4} max={4} buoc={0.25} tuGiua onChange={datCong} nhan={`điểm ${TEN_MON[mon]}`}
                       vach={VACH_CONG} vietGia={(v) => `${vietCong(v)} điểm, ${TEN_MON[mon]} thành ${vietDiem(apDungCong(diem, { [mon]: v })[mon]!)}`} />
                   </div>
                   {(diemMon + cong > 10 || diemMon + cong < 0) && (

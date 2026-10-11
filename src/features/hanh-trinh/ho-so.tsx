@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, Brain, ChevronRight, ClipboardList, FileText, MapPin, Compass, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
+import { AlertTriangle, ChevronRight, ClipboardList, FileText, MapPin, Compass, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NenHero } from "@/components/ui/hinh-nen";
 import { HangBam, Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -105,15 +105,6 @@ export default function HoSo() {
         <TieuDeMuc>Tiến bộ của em</TieuDeMuc>
         <ChiSoTheoDoi s={s} gon />
 
-        <div className="rounded-the border border-cam-chu/30 bg-cam-nhat p-3 flex items-start gap-2">
-          <AlertTriangle size={18} className="text-cam-chu shrink-0 mt-px" />
-          <div className="flex-1 text-[13px] text-cam-chu leading-snug">
-            <b className="block">Nhớ sao lưu dữ liệu</b>
-            <p>Dữ liệu chỉ nằm trên máy này. Nếu mất điện thoại hay đổi máy, dữ liệu sẽ mất nếu em chưa tải bản sao lưu.</p>
-            <button type="button" onClick={() => nav(DUONG_DAN.hoSoCaiDat())} className="inline-flex items-center gap-1 min-h-11 font-bold text-cam-chu active:underline">Tới cài đặt sao lưu</button>
-          </div>
-        </div>
-
         <TieuDeMuc>Hành động nhanh</TieuDeMuc>
         <div className="space-y-2">
           <HangBam bieuTuong={Compass} tone="cam" tieuDe="Trắc nghiệm hướng nghiệp" onClick={() => nav(DUONG_DAN.tracNghiem())}
@@ -129,10 +120,6 @@ export default function HoSo() {
             nhan={<Nhan tone={h.khuVuc.length ? "luc" : "cam"}>{h.khuVuc.length ? "Đã có" : "Còn thiếu"}</Nhan>} />
         </div>
 
-        <p className="flex gap-2 rounded-xl bg-xanh-nhat p-3 text-[13px] text-chu leading-snug">
-          <Brain size={18} className="text-xanh shrink-0 mt-px" />
-          Đây là nhận xét tự động từ điểm và lựa chọn của em, không phải đánh giá con người em. Em có thể cập nhật bất cứ lúc nào.
-        </p>
         <Nut muiTen onClick={() => nav(DUONG_DAN.batDau(1))}>Hoàn thiện hồ sơ</Nut>
         <Nut kieu="nhe" bieuTuong={Settings} onClick={() => nav(DUONG_DAN.hoSoCaiDat())}>Cài đặt</Nut>
       </NoiDung>
