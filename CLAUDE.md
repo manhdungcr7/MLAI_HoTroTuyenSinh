@@ -58,7 +58,7 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 
 - 3.447 chương trình thật ở `src/data/du-lieu-that.json`, chuyển sang kiểu `LuaChon` bởi `src/data/lua-chon-that.ts`.
 - Các file nạp lười (lazy): điểm theo năm, đề án trường, chương trình, trang ngành-trường.
-- Học phí (24 chương trình) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
+- Học phí (566 chương trình, phủ toàn bộ top 15 trường đại học lớn nhất: BKA, KHA/NEU, NTH/FTU, QSC/UIT, QHI/UET, QHE/UEB, HTC, DCN, NHH, LPH, HQT, XDA, PKA, YHB, YDS) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
 - 73 tổ hợp xét tuyển chính thức: `src/data/to-hop-chinh-thuc.ts`.
 - Script sinh lại dữ liệu cần thư mục anh em `nguyen-vong` (nguồn thô). Hướng dẫn và giới hạn: `docs/DU-LIEU.md`.
 - Dữ liệu nào chưa có thì hiển thị "chưa có", không điền thay.

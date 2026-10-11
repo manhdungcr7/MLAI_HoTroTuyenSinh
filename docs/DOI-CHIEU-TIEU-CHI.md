@@ -50,7 +50,7 @@ Hướng chọn: **số 6, "Chọn trường hoặc chương trình học"**, ng
 ## Việc còn thiếu (nói thẳng)
 
 - Điểm chuẩn **năm 2026** mới có cho 924 chương trình, chủ yếu từ trang tổng hợp; phần lớn dữ liệu là 2023–2025. Mùa tuyển sinh tới, tình nguyện viên nhập từng trường qua CMS.
-- Học phí riêng theo ngành chỉ có 24 chương trình; việc làm và khung chương trình học chưa đủ (đã nói rõ trên app).
+- Học phí riêng theo ngành đã phủ 566 chương trình (bao gồm toàn bộ top 15 trường đại học lớn nhất); việc làm và khung chương trình học chưa đủ (đã nói rõ trên app).
 - Hạ tầng thật (D1, Cloudflare Access cho CMS) cần chủ tài khoản thao tác (xem `docs/QUAN-TRI.md`); tài khoản hiện chạm giới hạn số D1.
 - Trắc nghiệm hướng nghiệp (Holland) là công cụ gợi ý, chưa kiểm định tâm lý.
 - Dự báo điểm chuẩn **không** bù được cho thay đổi quy chế, đề thi, chỉ tiêu; năm 2025 khoảng chỉ phủ 68%.

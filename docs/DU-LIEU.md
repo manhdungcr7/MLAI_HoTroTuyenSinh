@@ -58,7 +58,7 @@ npm test
 ## Chỗ còn thiếu (chưa có nguồn thật, không điền)
 - Ký túc xá, học bổng, kênh Zalo/fanpage, thông báo, đánh giá của sinh viên: chưa có bản ghi nào được xác minh. Bản xuất bản hiện chứa 100 bản ghi trường sinh bằng `scripts/khoi-tao-d1-that.ts` với website, fanpage và giá ký túc xá do script tự dựng (chung một giá cho mọi trường) và mức học phí cao bằng 1,2 lần mức thấp. App bỏ các bản ghi này vì không có nguồn; cần sửa script, không dựng số thay cho dữ liệu chưa có.
 - Thư mục thô `../nguyen-vong` không có trong máy này nên không bổ sung được dữ liệu mới; mọi số liệu trong app vẫn là kết quả đã sinh sẵn ở `src/data/`.
-- Học phí riêng của ngành: 24 chương trình. Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
+- Học phí riêng của ngành: 566 chương trình (phủ toàn bộ top 15 trường đại học lớn nhất cả nước: BKA, KHA/NEU, NTH/FTU, QSC/UIT, QHI/UET, QHE/UEB, HTC, DCN, NHH, LPH, HQT, XDA, PKA, YHB, YDS). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
 
 ## Dự báo điểm chuẩn năm tới
 `src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 1.330 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 92% (2023), 93% (2024), 68% (2025); sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).
