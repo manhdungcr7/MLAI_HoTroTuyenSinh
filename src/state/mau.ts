@@ -60,8 +60,9 @@ export function taoHoSoMau(): AppState {
   };
   // Việc của tuần này do chính bộ sinh việc tạo từ mục tiêu và điểm của hồ sơ mẫu (không phải danh sách viết sẵn), rồi xếp sẵn vào lịch.
   const tuan = thuHaiCuaTuan(isoNgay(hom));
-  const kq = viecChoTuan(nen, tuan, isoNgay(hom));
+  const kqThu = viecChoTuan(nen, tuan, isoNgay(hom));
+  const kq = kqThu.ok ? kqThu : viecChoTuan(nen, tuan);
   const viec = kq.ok ? kq.viec : [];
-  const r = xepLichTuan({ tuanBatDau: tuan, tuNgay: isoNgay(hom), coDinh: nen.coDinh, viec, cfg: nen.cauHinh }); // chỉ xếp từ hôm nay, không xếp vào ngày đã qua
+  const r = xepLichTuan({ tuanBatDau: tuan, tuNgay: kqThu.ok ? isoNgay(hom) : undefined, coDinh: nen.coDinh, viec, cfg: nen.cauHinh }); // nếu còn ngày thì chỉ xếp từ hôm nay, nếu cuối tuần thì xếp cả tuần
   return { ...nen, viec, khoiHoc: r.khoi };
 }
