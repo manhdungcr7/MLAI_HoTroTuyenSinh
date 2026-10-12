@@ -18,6 +18,14 @@ TEP_HP = ROOT / "src" / "data" / "hoc-phi.json"
 TEP_DEAN = ROOT / "src" / "data" / "de-an-truong.json"
 
 
+# Kiểm ngày 12/10/2026 (tải từng PDF, đọc trang đầu và trang ghi học phí): các trường dưới đây KHÔNG được thêm học phí.
+# - QHF, QHL, QHY: link trỏ tới PDF của trường khác (Trường Ngoại ngữ - ĐH Thái Nguyên, ĐH Luật Hà Nội, ĐH Y Hà Nội).
+# - QST, IUH, TMU, TLA, BVH, QHX, SPH, NTS: link trả 404, học sinh không mở được nguồn.
+# Khi có link đúng (mở được, đúng trường, đúng trang học phí), sửa nhánh tương ứng bên dưới rồi bỏ mã khỏi tập này.
+# Chỉ giữ GHA, QHT, QSX: PDF đúng trường và trang ghi có bảng học phí.
+BO_QUA = {"QHF", "QHL", "QHY", "QST", "IUH", "TMU", "TLA", "BVH", "QHX", "SPH", "NTS"}
+
+
 def chuan(s: str) -> str:
     s = unicodedata.normalize("NFD", str(s).lower().replace("đ", "d"))
     return re.sub(r"[^a-z0-9]+", " ", "".join(c for c in s if unicodedata.category(c) != "Mn")).strip()
@@ -40,6 +48,8 @@ def main() -> None:
         cn = chuan(nganh)
 
         if pid in hp_moi:
+            continue
+        if ma in BO_QUA:
             continue
 
         # 1. QHT - ĐH Khoa học Tự nhiên - ĐHQGHN
@@ -261,6 +271,8 @@ def main() -> None:
     }
 
     for ma, info in DEAN_CAP_NHAT.items():
+        if ma in BO_QUA:
+            continue
         if ma not in deans:
             deans[ma] = {
                 "docs": [{"nam": info["nam"], "url": info["url"]}],
