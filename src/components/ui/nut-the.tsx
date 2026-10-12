@@ -38,7 +38,7 @@ export function Nut({ kieu = "chinh", bieuTuong: Icon, muiTen, rong = true, clas
       type={type}
       {...p}
       className={gop(
-        "min-h-12 px-3.5 py-2.5 rounded-xl font-bold text-[15px] inline-flex items-center justify-center gap-2 transition active:scale-[.99] disabled:opacity-50 disabled:pointer-events-none text-center select-none",
+        "min-h-12 px-3.5 py-2.5 rounded-xl font-bold text-[15px] inline-flex items-center justify-center gap-2 transition active:scale-[.99] disabled:opacity-50 disabled:pointer-events-none text-center select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh focus-visible:ring-offset-2",
         rong && "w-full", KIEU_NUT[kieu], className,
       )}
     >
@@ -64,7 +64,7 @@ export function HangBam({ bieuTuong: Icon, tone = "xanh", tieuDe, phu, nhan, onC
   bieuTuong?: LucideIcon; tone?: ToneTen; tieuDe: ReactNode; phu?: ReactNode; nhan?: ReactNode; onClick?: () => void; className?: string;
 }) {
   return (
-    <button type="button" onClick={onClick} className={gop("w-full min-h-14 flex items-center gap-3 rounded-the bg-trang border border-vien shadow-the px-3 py-2.5 text-left active:bg-xanh-nhat", className)}>
+    <button type="button" onClick={onClick} className={gop("w-full min-h-14 flex items-center gap-3 rounded-the bg-trang border border-vien shadow-the px-3 py-2.5 text-left active:bg-xanh-nhat transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh", className)}>
       {Icon && <span className={gop("size-10 rounded-xl grid place-items-center shrink-0", TONE_NEN[tone], TONE_CHU[tone])}><Icon size={20} /></span>}
       <span className="flex-1 min-w-0">
         <span className="block text-[14px] font-semibold text-chu leading-snug">{tieuDe}</span>

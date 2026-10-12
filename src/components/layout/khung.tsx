@@ -25,7 +25,7 @@ export function KhungCoThanhDuoi() {
             return (
               <li key={t.id}>
                 <Link to={t.den} aria-current={dang ? "page" : undefined}
-                  className={gop("min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold", dang ? "text-xanh" : "text-chu-phu")}>
+                  className={gop("min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-all cursor-pointer active:scale-95", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
                   <Icon size={22} strokeWidth={dang ? 2.6 : 2} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />
                   {t.nhan}
                 </Link>
@@ -58,7 +58,7 @@ export function DauTrangChinh({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?
     <header className="px-4 pt-3 pb-2">
       <div className="flex items-center justify-between">
         <Logo nho />
-        <button type="button" aria-label="Nhắc nhở" onClick={() => nav(DUONG_DAN.nhacNho())} className="size-11 grid place-items-center rounded-full bg-trang border border-vien">
+        <button type="button" aria-label="Nhắc nhở" onClick={() => nav(DUONG_DAN.nhacNho())} className="size-11 grid place-items-center rounded-full bg-trang border border-vien cursor-pointer active:bg-xanh-nhat transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">
           <Bell size={20} />
         </button>
       </div>
@@ -78,7 +78,7 @@ export function DauTrangCoQuayLai({ tieuDe, buoc, quayLai, phai }: { tieuDe: str
   const nav = useNavigate();
   return (
     <header className="sticky top-0 z-30 bg-nen border-b border-vien/60 grid grid-cols-[auto_1fr_auto] items-center min-h-14 px-3 gap-2">
-      <button type="button" onClick={() => (quayLai ? nav(quayLai) : nav(-1))} aria-label="Quay lại" className="size-11 grid place-items-center rounded-full active:bg-xanh-nhat shrink-0"><ArrowLeft size={22} /></button>
+      <button type="button" onClick={() => (quayLai ? nav(quayLai) : nav(-1))} aria-label="Quay lại" className="size-11 grid place-items-center rounded-full active:bg-xanh-nhat shrink-0 cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh"><ArrowLeft size={22} /></button>
       <h1 className="text-center text-[15px] font-extrabold text-muc line-clamp-2 leading-tight px-1">{tieuDe}</h1>
       <span className="min-w-[44px] text-right text-[13px] font-bold text-xanh whitespace-nowrap shrink-0">{phai ?? buoc}</span>
     </header>
@@ -96,7 +96,7 @@ export function ThanhPhuKeHoach() {
           return (
             <li key={m.id} className="flex-1">
               <Link to={m.den} aria-current={dang ? "page" : undefined}
-                className={gop("min-h-12 rounded-lg grid place-items-center text-[13px] font-bold transition-colors", dang ? "gd-xanh text-white" : "text-chu-phu")}>
+                className={gop("min-h-12 rounded-lg grid place-items-center text-[13px] font-bold transition-all cursor-pointer", dang ? "gd-xanh text-white shadow-nut" : "text-chu-phu hover:text-chu active:bg-xanh-nhat")}>
                 {m.nhan}
               </Link>
             </li>
