@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChartColumn, Clock, GraduationCap, Landmark, Layers, ShieldCheck, Sparkles, Sprout, Target, type LucideIcon } from "lucide-react";
+import { ChartColumn, Clock, GraduationCap, ShieldCheck, Sparkles, Target, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
-import { Nut, TONE_GD, The, gop } from "@/components/ui/nut-the";
+import { Nut, The, gop } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
@@ -15,29 +15,28 @@ const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string; phu: string }[] 
   { icon: ChartColumn, tone: "luc", tieu: "Có lộ trình học để kéo gần mục tiêu", phu: "Biết cần chuẩn bị gì từ bây giờ." },
 ];
 
-const BIEN: { nhan: string; icon: LucideIcon; tone: ToneTen; lech: string }[] = [
-  { nhan: "Đại học", icon: Landmark, tone: "xanh", lech: "-rotate-6 -translate-x-1" },
-  { nhan: "Ngành học", icon: Layers, tone: "luc", lech: "rotate-3 -translate-x-4" },
-  { nhan: "Tương lai", icon: Sprout, tone: "cam", lech: "-rotate-3" },
+/** Ba ô trên phiếu nguyện vọng minh họa: tên nhóm ngành chung, không phải dữ liệu của ai. */
+const PHIEU: { nganh: string; nhan: string; vien: string; chu: string }[] = [
+  { nganh: "Công nghệ thông tin", nhan: "Thử sức", vien: "border-tim", chu: "text-tim-chu" },
+  { nganh: "Kỹ thuật máy tính", nhan: "Vừa sức", vien: "border-cam", chu: "text-cam-chu" },
+  { nganh: "Hệ thống thông tin", nhan: "An toàn", vien: "border-luc", chu: "text-luc-chu" },
 ];
 
-/** Minh họa bằng gradient thay cho ảnh nhân vật: mũ tốt nghiệp ở giữa, ba tấm biển chỉ đường bên phải. */
+/** Minh họa: một tờ phiếu nguyện vọng đặt nghiêng trên giấy ô ly, đúng việc app giúp em làm. */
 function MinhHoa() {
   return (
-    <div aria-hidden className="relative h-[180px] mt-2">
-      <span className="absolute left-4 top-3 size-[145px] rounded-full bg-white/60" />
-      <span className="absolute left-[40px] top-[35px]"><BieuTuongTron icon={GraduationCap} tone="xanh" kichThuoc={96} /></span>
-      {/* Cột và các biển định hướng */}
-      <span className="absolute right-[68px] top-2 bottom-0 w-2 rounded-full bg-white/80" />
-      <ul className="absolute right-1 top-3 flex flex-col items-end gap-3">
-        {BIEN.map((b) => {
-          const Icon = b.icon;
-          return (
-            <li key={b.nhan} className={gop("inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-white text-[14px] font-extrabold shadow-nut", TONE_GD[b.tone], b.lech)}>
-              <Icon size={16} strokeWidth={2.4} />{b.nhan}
-            </li>
-          );
-        })}
+    <div aria-hidden className="relative mt-4 mb-1 mx-1 -rotate-[1.5deg] rounded-the bg-trang border border-vien shadow-the p-3">
+      <p className="so-lon text-[13px] font-bold text-chu-phu mb-2">Phiếu nguyện vọng</p>
+      <ul className="space-y-1.5">
+        {PHIEU.map((x, i) => (
+          <li key={x.nganh} className="flex items-center gap-2.5">
+            <span className={gop("size-9 rounded-lg border-2 bg-trang flex flex-col items-center justify-center leading-none shrink-0", x.vien, x.chu)}>
+              <span className="text-[8px] font-bold">NV</span><span className="so-lon text-[15px] font-bold">{i + 1}</span>
+            </span>
+            <span className="flex-1 min-w-0 text-[14px] font-semibold text-chu truncate">{x.nganh}</span>
+            <span className={gop("text-[12px] font-bold", x.chu)}>{x.nhan}</span>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -79,12 +78,11 @@ export default function ChaoMung() {
           <Logo />
         </div>
         <MinhHoa />
-        <h1 className="mt-4 text-[32px] leading-[1.15] font-extrabold text-muc">
-          Chắp cánh ước mơ<br />
-          <span className="text-xanh">Vững bước tương lai</span>
+        <h1 className="mt-5 text-[34px] leading-[1.08] font-bold text-muc">
+          Xếp nguyện vọng vừa sức, rồi học để đạt
         </h1>
         <p className="text-[14.5px] text-chu mt-2 max-w-[340px] leading-relaxed">
-          Khám phá ngành phù hợp, cân nhắc trường vừa sức và xây dựng lộ trình để tiến gần mục tiêu.
+          So điểm của em với điểm chuẩn thật các năm trước, chọn ngành hợp và lập kế hoạch học từng tuần.
         </p>
       </NenHero>
 
