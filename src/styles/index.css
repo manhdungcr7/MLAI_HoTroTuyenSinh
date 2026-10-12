@@ -49,22 +49,26 @@
 html, body, #root { min-height: 100%; }
 body {
   margin: 0;
-  background: #e3e8f0;
+  background: #e9f0fc;
   color: var(--color-chu);
   font-family: var(--font-sans);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
-  font-feature-settings: "tnum" 1; /* số thẳng cột: điểm, học phí, ngày */
 }
 @layer base {
   button, input, select, textarea { font: inherit; color: inherit; }
   button { cursor: pointer; text-wrap: balance; }
-  h1, h2, h3, h4, h5, h6 { text-wrap: balance; letter-spacing: -.01em; font-family: var(--font-tieu-de); font-stretch: 90%; }
+  h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
   p { text-wrap: pretty; }
-  :focus-visible { outline: 2px solid var(--color-xanh); outline-offset: 2px; }
+  :focus-visible { outline: 3px solid #8db4ff; outline-offset: 2px; }
 }
+
+/* Quy tắc riêng của app. Landing (.trang-toan-man-hinh) đã khóa nên không nhận các quy tắc này. */
+.khung-ung-dung:not(:has(.trang-toan-man-hinh)) { font-feature-settings: "tnum" 1; } /* số thẳng cột: điểm, học phí, ngày */
+.khung-ung-dung:not(:has(.trang-toan-man-hinh)) :is(h1, h2, h3, h4, h5, h6) { letter-spacing: -.01em; font-family: var(--font-tieu-de); font-stretch: 90%; }
+.khung-ung-dung:not(:has(.trang-toan-man-hinh)) :focus-visible { outline: 2px solid var(--color-xanh); outline-offset: 2px; }
 
 /* Khung điện thoại: trên máy tính, ứng dụng nằm giữa một cột rộng 430px */
 .khung-ung-dung { max-width: 430px; margin: 0 auto; min-height: 100dvh; background: var(--color-nen); position: relative; box-shadow: 0 0 0 1px rgba(19, 28, 63, .06); overflow-x: clip; }
