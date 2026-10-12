@@ -60,7 +60,23 @@
 | T7 | Khởi đầu | `khoi-dau` (Tuấn) | Bớt dòng phụ dưới mỗi câu hỏi; màn kết quả đã gọn |
 | T8 | Số liệu từ đâu ra, Trắc nghiệm, Kế hoạch tuần, Điểm thi thử | chủ slice | Áp nguyên tắc 3.2 |
 
-Đo lại sau khi sửa bằng script đo (đặt vào `scripts/do-mat-do-chu.mjs` khi làm T1). Ghi số mới vào bảng 3.1.
+### 3.4 Kết quả đo lại (12/10, sau các commit T1–T8, cùng cách đo)
+
+| Màn | Từ trước → sau | Màn hình trước → sau | Đã làm |
+|---|---|---|---|
+| Chia sẻ | 506 → **113** | 3,0 → **1,2** | 4 chỉ số dạng gọn, nội dung tóm tắt vào khối gập (vẫn in được), câu ngắn |
+| Cơ cấu danh sách | 355 → **167** | 2,4 → **1,7** | Tổ hợp + chú thích nhãn vào ⓘ; gợi ý điều chỉnh lên trước thẻ điểm; thẻ điểm chỉ hiện chi tiết khi chưa chấm được |
+| Trang ngành | 425 → **274** | 3,3 → **2,7** | Link nguồn "Nguồn · tr. N"; khối Nguồn gập; mô tả 2 dòng; "Thông tin trường" trống còn 1 dòng; câu phù hợp ngắn |
+| Nguyện vọng | 352 → **203** | 2,8 → **2,2** | Thẻ NV 2 dòng số; bỏ hộp "Cách xét" (vào mô tả đầu trang); ghi chú 1 dòng |
+| Hồ sơ | 283 → **145** | 2,2 → **1,6** | Nhận xét dạng số, ≤ 2 ý/khối; "nên bổ sung" vào thẻ đầu; hành động nhanh lưới 2×2 |
+| Hôm nay | 182 → **126** | 1,7 → **1,4** | Một thẻ mục tiêu: hiện tại → mục tiêu · thiếu · số ngày; tâm trạng 1 hàng; gợi ý ≤ 15 từ |
+| Điểm thi thử | 313 → **96** | 3,0 → **1,4** | Bỏ hộp lặp ý; nút chính lên trước; lịch sử 18 dòng vào khối gập |
+| Kế hoạch tuần | 317 → **194** | 2,2 → **1,7** | Bỏ nhãn ưu tiên lặp tên nhóm, dòng chi tiết từng việc, 2 dòng giải thích dưới nút |
+| Khởi đầu B1/B2/B3 | 415/264/143 → 397/223/113 | — | Rút dòng phụ (B1 cao vì ô chọn 34 tỉnh) |
+
+**Chưa làm (ưu tiên tiếp):** Trang ngành vẫn 2,7 màn (mục tiêu ≤ 2: gộp "Vì sao nên cân nhắc" + "Điều cần lưu ý" thành một khối chip như T1 gốc); "Số liệu từ đâu ra" 464 từ; Trắc nghiệm 321; Nhắc nhở 238; Thử tình huống 232.
+
+Cách đo: Playwright + Edge, 390×844, nạp hồ sơ mẫu, đếm từ trong `<main>`, số màn = `scrollHeight / 844`. Script nằm ngoài repo (cần `playwright-core`, không thêm vào dependencies); ai cần chạy lại thì hỏi Tuấn.
 
 ## 4. Tính năng nên thêm (ăn điểm tiêu chí 3 và 4)
 
@@ -110,13 +126,14 @@ Ngày 5:  đóng băng tính năng; sửa lỗi từ F5; D2, D3; tập demo
 | B3 Hồ sơ mẫu cho demo | ✅ | `9a68cfd` — mục tiêu mới CNTT CLC – QST (26,0; có A01; 2 năm điểm), Minh Anh 24,5 → thiếu 1,5; `idHoSoMau` nhận điểm thi thử mới nhất + ngân sách; test trong `hanh-trinh.test.ts` |
 | B4 Dòng giới hạn | ✅ | `6daea0d` — 1 dòng dưới "So với điểm chuẩn" (trang ngành) và dưới "Với điểm của em" (Khám phá) |
 | B5 Sửa tài liệu | ✅ | `CLAUDE.md`, `DU-LIEU.md`, `DOI-CHIEU-TIEU-CHI.md`, `NOI-DUNG-CHO-SLIDE.md`: học phí 1.058 → 721, bỏ "axe", 924 → 1.716, bỏ D61/D64; `BACKLOG.md` #12 mở lại (email vẫn cá nhân), #14 thêm câu "năm nay chưa công bố" ở `ve-du-lieu.tsx` |
-| T1 Trang ngành | ⬜ | |
-| T2 Cơ cấu danh sách | ⬜ | |
-| T3 Nguyện vọng | ⬜ | |
-| T4 Hồ sơ | ⬜ | |
-| T5 Chia sẻ | ⬜ | |
-| T6 Hôm nay | ⬜ | |
-| T7 Khởi đầu | ⬜ | |
+| T1 Trang ngành | 🟡 | `874fbbe` — 425 → 274 từ, 3,3 → 2,7 màn. Còn: gộp 2 khối ý thành chip |
+| T2 Cơ cấu danh sách | ✅ | `874fbbe` — 355 → 167 từ |
+| T3 Nguyện vọng | ✅ | `874fbbe` — 352 → 203 từ (giữ 2 dòng số thay vì gập, vì bấm dòng đã mở trang ngành) |
+| T4 Hồ sơ | ✅ | `5a040ad` — 283 → 145 từ |
+| T5 Chia sẻ | ✅ | `5a040ad` — 506 → 113 từ |
+| T6 Hôm nay | ✅ | `5a040ad` — 182 → 126 từ |
+| T7 Khởi đầu | ✅ | `5a040ad` |
+| T8 Điểm thi thử · Kế hoạch tuần | ✅ | `c44eb30` — 313 → 96 và 317 → 194 từ. Còn: Số liệu từ đâu ra, Trắc nghiệm |
 | F1 Sức chịu danh sách | ⬜ | |
 | F2 Chi phí mỗi năm | ⬜ | |
 | F3 Trọng số | ⬜ | |

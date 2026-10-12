@@ -81,33 +81,33 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const chenh = tong === null ? null : Math.round((tong - lc.diemMin) * 100) / 100; // 2 chữ số: quyết định mức theo số thật, chỉ khi hiển thị mới làm tròn 1 chữ số
   const moNhom = tl.toHop ? ` (tổ hợp ${tl.toHop})` : "";
   if (!khac && tong !== null && chenh !== null) {
-    if (chenh >= 0) tot.push(chenh < 0.05 ? `Điểm hiện tại của em${moNhom} là ${so(tong)}, đúng bằng mức tham khảo thấp nhất, chưa có chỗ dự phòng.` : `Điểm hiện tại của em${moNhom} là ${so(tong)}, cao hơn mức tham khảo thấp nhất ${so(chenh)} điểm.`);
-    else luuY.push(`Điểm hiện tại của em${moNhom} là ${so(tong)}, thấp hơn mức tham khảo ${so(-chenh)} điểm. Em cần tăng khoảng ${so(-chenh)} điểm ở 3 môn của tổ hợp.`);
-    if (tl.suyRa) luuY.push(`Đề án chưa ghi tổ hợp xét tuyển của ngành này nên đã lấy tổ hợp cao nhất của em (${tl.toHop}). Hãy kiểm tra đề án.`);
+    if (chenh >= 0) tot.push(chenh < 0.05 ? `Điểm em${moNhom} ${so(tong)}, bằng mức tham khảo, chưa có dự phòng.` : `Điểm em${moNhom} ${so(tong)}, hơn mức tham khảo ${so(chenh)}.`);
+    else luuY.push(`Điểm em${moNhom} ${so(tong)}, thiếu ${so(-chenh)} so với mức tham khảo.`);
+    if (tl.suyRa) luuY.push(`Đề án chưa ghi tổ hợp, tạm dùng ${tl.toHop} của em. Nên kiểm tra đề án.`);
   }
 
   // 2) Học phí so với ngân sách
   let vuotNganSach = false;
   if (bc.nganSach !== null) {
-    if (!coHocPhi(lc)) luuY.push("Đề án chưa công bố học phí theo ngành này nên chưa so được với ngân sách của em.");
-    else if ((lc.hocPhiMin as number) > bc.nganSach) { vuotNganSach = true; luuY.push(`Học phí từ ${lc.hocPhiMin} triệu/năm, vượt ngân sách ${bc.nganSach} triệu/năm em đã chọn.`); }
-    else if ((lc.hocPhiMax as number) > bc.nganSach) luuY.push(`Học phí có thể lên tới ${lc.hocPhiMax} triệu/năm, cao hơn ngân sách ${bc.nganSach} triệu/năm của em.`);
-    else tot.push(`Học phí nằm trong ngân sách ${bc.nganSach} triệu/năm của em.`);
+    if (!coHocPhi(lc)) luuY.push("Chưa có học phí riêng của ngành, chưa so được ngân sách.");
+    else if ((lc.hocPhiMin as number) > bc.nganSach) { vuotNganSach = true; luuY.push(`Học phí từ ${lc.hocPhiMin} tr/năm, vượt ngân sách ${bc.nganSach} tr.`); }
+    else if ((lc.hocPhiMax as number) > bc.nganSach) luuY.push(`Học phí có thể tới ${lc.hocPhiMax} tr/năm, trên ngân sách ${bc.nganSach} tr.`);
+    else tot.push(`Học phí trong ngân sách ${bc.nganSach} tr/năm.`);
   }
 
   // 3) Khu vực
   const dung = dungKhuVuc(lc, bc.khuVucUuTien);
   const xaNha = bc.hocXaNha === false && !!bc.tinh && !cungNoi(lc.khuVuc, bc.tinh);
-  if (dung === true) tot.push(`Trường ở ${lc.khuVuc}, đúng khu vực em ưu tiên.`);
-  else if (xaNha) luuY.push(`Trường ở ${lc.khuVuc}, trong khi em muốn học gần nhà.`);
-  else if (dung === false) luuY.push(`Trường ở ${lc.khuVuc}, ngoài khu vực em ưu tiên. Nên tính thêm chi phí ăn ở.`);
+  if (dung === true) tot.push(`Ở ${lc.khuVuc}, đúng khu vực em ưu tiên.`);
+  else if (xaNha) luuY.push(`Ở ${lc.khuVuc}, xa nơi em muốn học.`);
+  else if (dung === false) luuY.push(`Ở ${lc.khuVuc}, ngoài khu vực ưu tiên: tính thêm ăn ở.`);
   const ngoaiKhuVuc = xaNha;
 
   // 4) Ngành
   const khacNganh = bc.nganhQuanTam.length > 0 && !bc.nganhQuanTam.includes(lc.nhomNganh);
   if (bc.nganhQuanTam.includes(lc.nhomNganh)) tot.push(`Đúng nhóm ngành ${lc.nhomNganh} em quan tâm.`);
   else if (khacNganh) luuY.push(`Khác nhóm ngành em đã chọn (${bc.nganhQuanTam.join(", ")}).`);
-  if (bc.nganhHopSoThich.includes(lc.nhomNganh)) tot.push("Nhóm ngành này hợp với sở thích em đã chọn trong trắc nghiệm hướng nghiệp.");
+  if (bc.nganhHopSoThich.includes(lc.nhomNganh)) tot.push("Hợp sở thích theo trắc nghiệm hướng nghiệp.");
 
   if (khac || tong === null || chenh === null) {
     return {
@@ -146,8 +146,8 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const giaiThich = muc === "Phù hợp"
     ? `Điểm của em ${phanDiem}${vuaNganSach ? ", học phí vừa ngân sách" : ""}.`
     : muc === "Có thể thử sức"
-      ? `Điểm của em ${phanDiem}. Nếu cố gắng thêm, em có thể với tới.`
-      : vuotNganSach ? "Học phí vượt ngân sách em đã chọn, cần bàn thêm với gia đình."
+      ? `Điểm của em ${phanDiem}. Cố thêm là có thể với tới.`
+      : vuotNganSach ? "Học phí vượt ngân sách, cần bàn với gia đình."
         : ngoaiKhuVuc ? "Trường ở xa nơi em muốn học."
           : khacNganh ? `Ngành này khác nhóm ngành em quan tâm. Điểm của em ${phanDiem}.`
             : `Điểm của em ${phanDiem}, khoảng cách còn khá xa.`;

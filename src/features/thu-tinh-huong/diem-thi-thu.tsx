@@ -1,11 +1,10 @@
 // Màn 14 · Nhập điểm thi thử mới: 6 ô điểm, tổ hợp tự tính, ghi điểm và lưu ảnh chụp trước/sau để màn kết quả so sánh.
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle, Atom, BookOpen, Calculator, FlaskConical, Info, Languages, Leaf, type LucideIcon } from "lucide-react";
+import { AlertCircle, Atom, BookOpen, Calculator, FlaskConical, Languages, Leaf, type LucideIcon } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { Nut, gop } from "@/components/ui/nut-the";
-import { DongThongBao } from "@/components/ui/thong-bao";
 import { tim } from "@/data/lua-chon-mau";
 import { goiYDanhSach } from "@/features/nguyen-vong/goi-y-danh-sach";
 import { DUONG_DAN } from "@/duong-dan";
@@ -72,7 +71,7 @@ export default function DiemThiThu() {
       <NoiDung>
         <NenHero className="p-4">
           <h2 className="text-[22px] leading-tight font-extrabold text-muc">Nhập điểm thi thử mới</h2>
-          <p className="text-[14px] text-chu mt-1">Nhập kết quả thi thử gần nhất của em. Điểm mới sẽ dùng để cập nhật gợi ý trường và nguyện vọng.</p>
+          <p className="text-[14px] text-chu mt-1">Điểm mới sẽ cập nhật nhãn nguyện vọng và gợi ý.</p>
         </NenHero>
 
         <section aria-labelledby="diem-mon">
@@ -92,18 +91,17 @@ export default function DiemThiThu() {
                     onChange={(e) => { setChuoi((c) => ({ ...c, [mon]: e.target.value })); setBao(null); }}
                     className={gop("w-full min-h-12 rounded-xl border bg-trang px-3 text-[17px] font-bold text-muc focus:border-xanh", loi ? "border-do" : "border-vien")} />
                   <p id={`dtt-${mon}-goi-y`} className={gop("mt-1 text-[12px] leading-snug min-h-4", loi ? "text-do-chu font-semibold" : doi ? "text-luc-chu font-semibold" : "text-chu-phu")}>
-                    {loi ?? (doi ? `Trước: ${truoc === null ? "chưa có" : vietDiem(truoc)} → ${vietDiem(gia!)}` : truoc === null ? "Chưa có điểm" : "Giữ như lần trước")}
+                    {loi ?? (doi ? `Trước: ${truoc === null ? "chưa có" : vietDiem(truoc)} → ${vietDiem(gia!)}` : truoc === null ? "Chưa có điểm" : "")}
                   </p>
                 </div>
               );
             })}
           </div>
-          <p className="text-[12px] text-chu-phu mt-1.5">Nhập số từ 0 đến 10, dùng dấu phẩy hoặc dấu chấm đều được. Để trống môn em không thi.</p>
+          <p className="text-[12px] text-chu-phu mt-1.5">Thang 10, dấu phẩy hay chấm đều được. Môn để trống giữ điểm cũ.</p>
         </section>
 
         <section aria-labelledby="to-hop-sau">
-          <h2 id="to-hop-sau" className="text-[16px] font-extrabold text-muc mt-1">Tổ hợp xét tuyển sau khi nhập</h2>
-          <p className="text-[13px] text-chu-phu mb-2">Tự tính điểm các tổ hợp phổ biến từ điểm em vừa nhập.</p>
+          <h2 id="to-hop-sau" className="text-[16px] font-extrabold text-muc mt-1 mb-2">Tổ hợp sau khi nhập</h2>
           <div className="grid grid-cols-2 gap-2.5">
             {CAC_TO_HOP.map((ma) => {
               const sau = toHopSau[ma], truoc = toHopTruoc[ma].tong;
@@ -124,13 +122,21 @@ export default function DiemThiThu() {
           </div>
         </section>
 
-        <DongThongBao tone="xanh" icon={Info} tieuDe="Điểm mới sẽ được dùng để cập nhật gợi ý trường và nguyện vọng của em."
-          moTa="Mỗi môn có đổi được ghi thành một lần thi thử ngày hôm nay. Môn để trống giữ nguyên điểm cũ." />
+        <div role="alert" aria-live="assertive" className="empty:hidden">
+          {bao && (
+            <p className={gop("rounded-xl px-3 py-2.5 text-[14px] font-semibold flex items-center gap-2", bao.tone === "do" ? "bg-do-nhat text-do-chu" : "bg-cam-nhat text-cam-chu")}>
+              <AlertCircle size={18} className="shrink-0" />{bao.chu}
+            </p>
+          )}
+        </div>
+        <Nut muiTen onClick={capNhat}>Cập nhật kết quả</Nut>
 
         {s.diemThi.length > 0 && (
-          <section aria-labelledby="lich-su-diem">
-            <h2 id="lich-su-diem" className="text-[16px] font-extrabold text-muc mb-2">Các lần thi thử đã nhập</h2>
-            <ul className="space-y-2">
+          <details className="rounded-the bg-trang border border-vien px-3">
+            <summary className="min-h-12 flex items-center justify-between text-[14px] font-bold text-muc cursor-pointer list-none">
+              Lịch sử nhập điểm <span className="text-[13px] font-semibold text-chu-phu">{s.diemThi.length} lần · Xem</span>
+            </summary>
+            <ul className="space-y-2 pb-3">
               {s.diemThi.map((d, i) => ({ d, i })).sort((a, b) => (a.d.ngay === b.d.ngay ? b.i - a.i : a.d.ngay < b.d.ngay ? 1 : -1)).map(({ d, i }) => (
                 <li key={i} className="rounded-xl bg-trang border border-vien px-3 py-2 flex items-center gap-2 min-h-12">
                   <span className="min-w-0 flex-1 text-[14px] text-chu">
@@ -148,18 +154,9 @@ export default function DiemThiThu() {
                 </li>
               ))}
             </ul>
-            <p className="text-[12px] text-chu-phu mt-1.5">Xóa một lần nhập nhầm thì điểm hiện tại quay về lần gần nhất còn lại, hoặc điểm trong hồ sơ.</p>
-          </section>
+            <p className="text-[12px] text-chu-phu pb-3">Xóa lần nhập nhầm thì điểm quay về lần gần nhất còn lại.</p>
+          </details>
         )}
-
-        <div role="alert" aria-live="assertive" className="empty:hidden">
-          {bao && (
-            <p className={gop("rounded-xl px-3 py-2.5 text-[14px] font-semibold flex items-center gap-2", bao.tone === "do" ? "bg-do-nhat text-do-chu" : "bg-cam-nhat text-cam-chu")}>
-              <AlertCircle size={18} className="shrink-0" />{bao.chu}
-            </p>
-          )}
-        </div>
-        <Nut muiTen onClick={capNhat}>Cập nhật kết quả</Nut>
       </NoiDung>
     </>
   );

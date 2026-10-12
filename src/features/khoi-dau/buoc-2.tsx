@@ -33,7 +33,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
 
   return (
     <>
-      <TieuDeBuoc tieuDe="Nhập điểm nhanh" moTa="Nhập điểm gần nhất, tổ hợp xét tuyển tự tính ngay cho em."
+      <TieuDeBuoc tieuDe="Nhập điểm nhanh" moTa="Điểm gần nhất. Tổ hợp tự tính ngay."
         phai={<span className="mt-1.5 shrink-0 inline-flex items-center gap-1 rounded-lg bg-xanh-nhat px-2 py-1 text-[12px] font-bold text-xanh"><Pencil size={13} />Sửa sau được</span>} />
 
       <fieldset className="min-w-0">
@@ -67,7 +67,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             {loiDiem.map(({ m, kq }) => <LoiNho key={m}>{TEN_MON_NGAN[m]}: {LOI_DIEM[kq.loai as "khongPhaiSo" | "ngoaiKhoang"]}</LoiNho>)}
           </div>
         )}
-        <p className="mt-2 text-[12px] text-chu-phu">Chưa nhớ chính xác thì để trống, em bổ sung sau. Gõ "7,5" hay "7.5" đều được.</p>
+        <p className="mt-2 text-[12px] text-chu-phu">Chưa nhớ thì để trống. Gõ "7,5" hay "7.5" đều được.</p>
       </fieldset>
 
       <DiemMonThem h={h} sua={sua} />
@@ -107,11 +107,11 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             );
           })}
         </ul>
-        <p className="mt-2 text-[12px] text-chu-phu">Tổng 3 môn, chưa cộng điểm ưu tiên. Khi so với điểm chuẩn, mình tự cộng phần ưu tiên em khai ở mục Điểm ưu tiên.</p>
+        <p className="mt-2 text-[12px] text-chu-phu">Tổng 3 môn, chưa cộng ưu tiên (app tự cộng khi so điểm chuẩn).</p>
         {dayDu && (dayDu.uuTienCong > 0 || !TO_HOP_APP.includes(dayDu.toHop)) && (
           <p aria-live="polite" className="mt-2 rounded-xl bg-xanh-nhat px-3 py-2.5 text-[13px] text-chu">
-            Tính cả môn khác và điểm ưu tiên, tổ hợp cao nhất của em là <b className="text-muc">{dayDu.toHop}</b>: <b className="text-muc">{dinhDang(dayDu.tong, 1)}</b> điểm
-            {dayDu.uuTienCong > 0 && <> (đã cộng {dinhDang(dayDu.uuTienCong, 2)} ưu tiên)</>}. Đây là số mình dùng khi so với điểm chuẩn ở Khám phá.
+            Cao nhất (gồm môn khác, ưu tiên): <b className="text-muc">{dayDu.toHop} · {dinhDang(dayDu.tong, 1)}</b>
+            {dayDu.uuTienCong > 0 && <> (+{dinhDang(dayDu.uuTienCong, 2)} ưu tiên)</>}. Số này dùng để so điểm chuẩn.
           </p>
         )}
       </section>
@@ -121,7 +121,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
           className="w-full min-h-14 flex items-center gap-3 px-4 text-left">
           <span className="flex-1">
             <b className="block text-[15px] text-chu">Thêm về cách em học</b>
-            <span className="block text-[13px] text-chu-phu">Không bắt buộc · giúp gợi ý kế hoạch học sát hơn</span>
+            <span className="block text-[13px] text-chu-phu">Không bắt buộc · kế hoạch sát hơn</span>
           </span>
           <ChevronDown size={20} className={gop("text-chu-phu transition-transform", moThem && "rotate-180")} />
         </button>

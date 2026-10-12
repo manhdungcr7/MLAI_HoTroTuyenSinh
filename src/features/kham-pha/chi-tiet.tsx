@@ -27,10 +27,19 @@ import { tongChoLuaChon } from "./to-hop";
 import { ThongTinTruong } from "./thong-tin-truong";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
-  "Rất cao": "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc rất cao.",
-  Cao: "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc cao.",
-  Khá: "Theo khảo sát sinh viên tốt nghiệp trong đề án của trường, tỷ lệ có việc ở mức khá, nên chủ động thực tập sớm.",
+  "Rất cao": "Khảo sát trong đề án.",
+  Cao: "Khảo sát trong đề án.",
+  Khá: "Khảo sát trong đề án. Nên thực tập sớm.",
 };
+
+/** Liên kết nguồn ngắn ("Nguồn · tr. 12"): đủ để bấm kiểm, không chiếm cả dòng chữ. */
+function LinkNguon({ url, trang, nhan = "Nguồn" }: { url: string; trang?: number; nhan?: string }) {
+  return (
+    <a href={trang && trang > 0 ? `${url}#page=${trang}` : url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">
+      {nhan}{trang && trang > 0 ? ` · tr. ${trang}` : ""}
+    </a>
+  );
+}
 
 function DongThongTin({ icon, tone, nhan, giaTri, phu }: { icon: LucideIcon; tone: ToneTen; nhan: ReactNode; giaTri: ReactNode; phu?: ReactNode }) {
   const Icon = icon;
@@ -92,14 +101,14 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
             <li key={n} className="flex items-center justify-between gap-3 py-2">
               <span className="text-[14px] text-chu">Năm {n}</span>
               <span className="flex items-center gap-3">
-                {link && <a href={link.trang ? `${link.url}#page=${link.trang}` : link.url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 text-[13px] font-bold text-xanh hover:underline">Xem trong đề án {link.tai ?? ""}{link.trang ? `, trang ${link.trang}` : ""}</a>}
+                {link && <span className="text-[13px]"><LinkNguon url={link.url} trang={link.trang} /></span>}
                 <b className="text-[16px] text-muc tabular-nums">{dinhDang(d, 2)}</b>
               </span>
             </li>
           );
         })}
       </ul>
-      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em theo tổ hợp của ngành: <b className="text-chu">{dinhDang(diemEm, 2)}</b>{uuTienCong ? ` (đã gồm +${dinhDang(uuTienCong, 2)} điểm ưu tiên em khai)` : ""}</p>}
+      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em: <b className="text-chu">{dinhDang(diemEm, 2)}</b>{uuTienCong ? ` (gồm +${dinhDang(uuTienCong, 2)} ưu tiên)` : ""}</p>}
     </section>
   );
 }
@@ -140,7 +149,7 @@ function ChuongTrinhHoc({ lc, trang, chungTruong }: { lc: LuaChon; trang?: { url
         <b className="text-[14px] text-muc">Chương trình học của ngành</b>
         {trang ? (
           <>
-            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Trang giới thiệu ngành trên website chính thức của trường (mình đã mở thử, đúng tên ngành). Em tìm khung chương trình, tức môn học từng kỳ, ngay trong trang này hoặc ở mục Chương trình đào tạo của trường.</p>
+            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Trang ngành trên website trường: xem môn học từng kỳ.</p>
             <a href={trang.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
               {trang.tieuDe || "Xem trang ngành của trường"}
             </a>
@@ -148,7 +157,7 @@ function ChuongTrinhHoc({ lc, trang, chungTruong }: { lc: LuaChon; trang?: { url
         ) : (
           <>
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
-              Mình chưa có trang riêng của ngành này. Em xem khung chương trình trên trang của trường trước khi chọn.
+              Chưa có trang riêng của ngành. Xem môn học trước khi chọn.
             </p>
             {chungTruong && (
               <a href={chungTruong.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
@@ -157,7 +166,7 @@ function ChuongTrinhHoc({ lc, trang, chungTruong }: { lc: LuaChon; trang?: { url
             )}
             <a href={`https://www.google.com/search?q=${encodeURIComponent(truyVan)}`} target="_blank" rel="noreferrer"
               className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
-              Tìm khung chương trình của ngành này (mở trang tìm kiếm)
+              Tìm khung chương trình
             </a>
           </>
         )}
@@ -237,7 +246,7 @@ export default function ChiTiet() {
             </div>
             <h2 className="mt-2 text-[22px] font-extrabold text-muc leading-tight">{lc.nganh}</h2>
             <p className="text-[14px] text-chu mt-0.5"><b>{lc.truong}</b> · {lc.tenTruong}</p>
-            <p className="text-[13px] text-chu-phu mt-1">{lc.moTa}</p>
+            <p className="text-[13px] text-chu-phu mt-1 line-clamp-2">{lc.moTa}</p>
           </div>
         </section>
 
@@ -267,17 +276,17 @@ export default function ChiTiet() {
         {/* Thông tin chính */}
         <section className="rounded-the bg-trang border border-vien shadow-the p-4" aria-label="Thông tin chính">
           <ul className="divide-y divide-vien">
-            <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn tham khảo (năm ${lc.namDiem})`} giaTri={`${khoangDiem(lc)} điểm`} phu="Thang 30. Điểm chuẩn năm nay có thể khác." />
+            <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn ${lc.namDiem} (thang 30)`} giaTri={`${khoangDiem(lc)} điểm`} />
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
             <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? <>{bc.nganSach !== null && `Ngân sách của em: tối đa khoảng ${bc.nganSach} triệu/năm. `}{lc.nguonHocPhi && <a href={lc.nguonHocPhi.trang > 0 ? `${lc.nguonHocPhi.url}#page=${lc.nguonHocPhi.trang}` : lc.nguonHocPhi.url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">{lc.nguonHocPhi.trang > 0 ? `Theo đề án ${lc.nguonHocPhi.nam}, trang ${lc.nguonHocPhi.trang}` : `Nguồn học phí năm ${lc.nguonHocPhi.nam}`}</a>}</> : <>Đề án chưa nêu học phí riêng cho ngành này.{hpTruong && <> <a href={`${hpTruong.url}#page=${hpTruong.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem mức học phí trong đề án {hpTruong.nam}, trang {hpTruong.trang}</a></>}</>} />
+              phu={coHocPhi(lc) ? <>{bc.nganSach !== null && `Ngân sách em ≤ ${bc.nganSach} tr · `}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
-              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{lc.coHoiViecLam}. {MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <a href={`${lc.nguonViecLam.url}#page=${lc.nguonViecLam.trang}`} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Xem trong đề án {lc.nguonViecLam.nam}, trang {lc.nguonViecLam.trang}</a></>}</>} />
+              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <LinkNguon url={lc.nguonViecLam.url} trang={lc.nguonViecLam.trang} /></>}</>} />
             ) : (
-              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri="Chưa có dữ liệu" phu="Trường chưa công bố tỷ lệ việc làm của ngành này." />
+              <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri="Chưa có dữ liệu" />
             )}
             {lc.moiTruongHoc && <DongThongTin icon={Users} tone="xanh" nhan="Môi trường học" giaTri={lc.moiTruongHoc} />}
           </ul>
@@ -303,21 +312,21 @@ export default function ChiTiet() {
               {lc.daKiemChung ? <Nhan tone="luc">Đã kiểm chứng</Nhan> : <Nhan tone="cam">Chưa kiểm chứng</Nhan>}
             </div>
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
-              {lc.nguon}.{!lc.daKiemChung && " Số liệu chưa được đối chiếu với trường, em hãy xem lại trên trang tuyển sinh chính thức trước khi quyết định."}
+              {lc.daKiemChung ? "Đối chiếu với đề án của trường." : "Chưa đối chiếu với trường, xem lại trang tuyển sinh chính thức."}
             </p>
-            {lc.ngayCapNhat ? (
+            <details className="mt-1 group">
+              <summary className="min-h-11 flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none">Xem chi tiết nguồn</summary>
+              <p className="text-[12px] text-chu-phu leading-snug">{lc.nguon}.</p>
               <p className="mt-1 text-[12px] text-chu-phu">
-                Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}
+                {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}
               </p>
-            ) : (
-              <p className="mt-1 text-[12px] text-chu-phu">Ngày cập nhật từ nguồn: chưa có thông tin.</p>
-            )}
-            {lc.linkNguon && (
-              <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
-                {lc.nguonCap === "aggregator_verified" ? "Xem bảng điểm chuẩn của trường (trang tổng hợp)" : "Xem trang tuyển sinh chính thức"}
-              </a>
-            )}
-            <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+              {lc.linkNguon && (
+                <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
+                  {lc.nguonCap === "aggregator_verified" ? "Bảng điểm chuẩn (trang tổng hợp)" : "Trang tuyển sinh chính thức"}
+                </a>
+              )}
+              <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+            </details>
             <NutBaoSai maChuongTrinh={lc.id} tenNganh={`${lc.nganh} · ${lc.truong}`} />
           </div>
         </section>
@@ -342,11 +351,11 @@ export default function ChiTiet() {
           <div className="min-w-0">
             <b className="block text-[15px] text-muc">{lc.nganh} – {lc.truong}</b>
             <span className="text-[13px] text-chu">
-              {hoiTiep === "daCo" ? "Lựa chọn này đã nằm trong danh sách nguyện vọng của em." : `Đang ở vị trí ${s.nguyenVong.indexOf(lc.id) + 1} trong danh sách nguyện vọng.`}
+              {hoiTiep === "daCo" ? "Đã có trong danh sách nguyện vọng." : `Đang là NV${s.nguyenVong.indexOf(lc.id) + 1}.`}
             </span>
           </div>
         </div>
-        <p className="text-[14px] text-chu my-3">Em muốn xem danh sách nguyện vọng và kiểm tra đã cân đối chưa?</p>
+        <p className="text-[14px] text-chu my-3">Xem danh sách đã cân đối chưa?</p>
         <div className="space-y-2">
           <Nut bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
           <Nut kieu="nhe" onClick={() => setHoiTiep(null)}>Ở lại xem</Nut>

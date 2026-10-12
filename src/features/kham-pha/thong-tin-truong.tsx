@@ -86,10 +86,17 @@ export function ThongTinTruong({ tt }: { tt: DuLieuTruongHopNhat | null }) {
   const kenh = tt ? (([["Trang tuyển sinh", tt.websiteTuyenSinh], ["Fanpage", tt.fanpageUrl], ["Nhóm tuyển sinh của trường", tt.nhomChinhThucUrl], ["Nhóm Zalo", tt.nhomZaloUrl], ["Nhóm sinh viên (cộng đồng)", tt.nhomCongDongUrl]] as [string, string | undefined][]).filter((k): k is [string, string] => !!k[1])) : [];
   const ktx = tt?.kyTucXa;
   const coGi = !!tt && (kenh.length > 0 || !!ktx || tt.hocBong.length > 0 || tt.thongBao.length > 0 || !!tt.hocPhiMoiNhat || tt.congDong.length > 0);
+  // Chưa có gì đã xác minh: một dòng ngắn, không chiếm cả khối.
+  if (!coGi) {
+    return (
+      <p className="flex items-center gap-2 rounded-the bg-trang border border-vien px-4 py-3 text-[13px] text-chu-phu" aria-label="Thông tin của trường">
+        <School size={16} className="shrink-0" />Ký túc xá, học bổng của trường: chưa có tin đã xác minh.
+      </p>
+    );
+  }
   return (
     <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-3" aria-label="Thông tin của trường">
       <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-muc"><School size={18} />Thông tin của trường</h2>
-      {!coGi && <p className="text-[14px] text-chu-phu leading-snug">Chưa có thông tin ký túc xá, học bổng hay kênh chính thức đã được xác minh cho trường này. Có tin mới, em sẽ thấy ở đây.</p>}
       {kenh.length > 0 && (
         <div>
           <ul className="flex flex-wrap gap-x-4">
