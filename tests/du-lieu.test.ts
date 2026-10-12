@@ -7,6 +7,7 @@ import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
 import { boiCanhTu, coDiemDeSo, danhGia, sapXep } from "../src/features/kham-pha/phu-hop";
 import { dungDanhSach, demNhan } from "../src/features/nguyen-vong/tinh-toan";
 import { taoHoSoMau } from "../src/state/mau";
+import { diemHienTaiCuaTungMon } from "../src/state/diem-hien-tai";
 import type { DiemDayDu, MonKhoi } from "../src/state/types";
 import { goiYDanhSach } from "../src/features/nguyen-vong/goi-y-danh-sach";
 import { tinhCoHoi } from "../src/features/kham-pha/co-hoi";
@@ -97,10 +98,12 @@ assert.equal(tongChoLuaChon({ toHopXet: ["A00"] }, diem({ toan: 8 })).tong, null
 // 5) Hồ sơ mẫu: danh sách nguyện vọng có đủ các nhóm nhãn và mọi id tồn tại
 const mau = taoHoSoMau();
 assert.ok(mau.nguyenVong.length >= 4 && mau.nguyenVong.every((id) => timLuaChon(id)));
-const dsMau = dungDanhSach(mau.nguyenVong, diem({ toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 }), timLuaChon);
+// Nhãn tính theo điểm app thực sự dùng (lần thi thử mới nhất), giống màn Nguyện vọng.
+const diemMau = diemHienTaiCuaTungMon(mau) as Partial<Record<MonKhoi, number>>; // hồ sơ mẫu đủ 6 môn
+const dsMau = dungDanhSach(mau.nguyenVong, diem(diemMau), timLuaChon);
 const dem = demNhan(dsMau);
 assert.ok(dem["Thử sức"] >= 1 && dem["An toàn"] + dem["Dự phòng"] >= 1, "hồ sơ mẫu phải có cả thử sức và chỗ chắc chân");
-assert.deepEqual(idHoSoMau(diem({ toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 })), mau.nguyenVong);
+assert.deepEqual(idHoSoMau(diem(diemMau), 60), mau.nguyenVong);
 
 // 6) Xếp hạng "Phù hợp nhất": học sinh giỏi thấy ngành sát điểm mình trước, không phải ngành dễ nhất
 const bcGioi = { ...boiCanhTu(mau), diem: diem({ toan: 9.5, vatLy: 9, hoaHoc: 9, sinh: 8, nguVan: 8, tiengAnh: 9 }), nganhQuanTam: ["CNTT"], khuVucUuTien: [], tinh: "" };

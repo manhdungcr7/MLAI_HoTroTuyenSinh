@@ -34,7 +34,9 @@ export function taoHoSoMau(): AppState {
     ["toan", [7.2, 7.6, 8.0]], ["vatLy", [8.0, 8.3, 8.5]], ["tiengAnh", [7.0, 7.5, 8.0]],
     ["hoaHoc", [7.0, 7.2, 7.2]], ["nguVan", [7.6, 7.5, 7.6]], ["sinh", [8.0, 8.2, 8.3]],
   ] as [MonId, number[]][]).flatMap(([mon, d]) => d.map((diem, i) => ({ mon, diem, ngay: ngay((2 - i) * 14 + 1) })));
-  const ids = idHoSoMau({ toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 });
+  // Chọn ngành theo điểm app thực sự dùng (lần thi thử mới nhất từng môn) và ngân sách "30-60" (tối đa 60 tr/năm).
+  const diemMoiNhat = Object.fromEntries(diemThi.map((d) => [d.mon, d.diem])) as Record<MonId, number>;
+  const ids = idHoSoMau(diemMoiNhat, 60);
   const nen: AppState = {
     ...TRANG_THAI_BAN_DAU,
     hoSo: {
@@ -45,7 +47,7 @@ export function taoHoSoMau(): AppState {
       nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"],
       hocXaNha: true, quanTamViecLam: "rat", hoanTat: true,
     },
-    // Điểm mục tiêu đúng bằng điểm chuẩn của ngành mục tiêu (trước đây ghi 26 trong khi ngành là 28,5).
+    // Điểm mục tiêu đúng bằng điểm chuẩn của ngành mục tiêu (NV1); idHoSoMau chọn ngành thiếu khoảng 1–2,5 điểm, không vượt ngân sách.
     mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: timLuaChon(ids[0])?.diemMin ?? 26, ngayThi: congNgay(isoNgay(hom), 266) },
     nguyenVong: ids.slice(0, 5),
     yeuThich: ids.slice(0, 1), soSanh: ids.slice(0, 2),

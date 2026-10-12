@@ -257,6 +257,7 @@ export default function ChiTiet() {
                 <span className="text-[13px] text-chu-phu mr-2">So với điểm chuẩn:</span>
                 <span className={gop("text-[15px] font-extrabold", TONE_CHU[TONE_CHAC_CHAN[kq.chacChan!]])}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan!]}</span>
               </div>
+              <p className="mt-1.5 text-[12px] text-chu-phu">Theo điểm chuẩn các năm trước · không phải xác suất đậu</p>
             </div>
           ) : kq.lyDoKhongSo ? null : (
             <Nut className="mt-3" kieu="vien" bieuTuong={PencilLine} onClick={() => nav(DUONG_DAN.batDau(2))}>Nhập điểm của em</Nut>

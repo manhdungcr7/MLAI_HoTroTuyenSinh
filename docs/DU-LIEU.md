@@ -58,7 +58,7 @@ npm test
 ## Chỗ còn thiếu (chưa có nguồn thật, không điền)
 - Ký túc xá, học bổng, kênh Zalo/fanpage, thông báo, đánh giá của sinh viên: chưa có bản ghi nào được xác minh. Bản xuất bản hiện chứa 100 bản ghi trường sinh bằng `scripts/khoi-tao-d1-that.ts` với website, fanpage và giá ký túc xá do script tự dựng (chung một giá cho mọi trường) và mức học phí cao bằng 1,2 lần mức thấp. App bỏ các bản ghi này vì không có nguồn; cần sửa script, không dựng số thay cho dữ liệu chưa có.
 - Thư mục thô `../nguyen-vong` không có trong máy này nên không bổ sung được dữ liệu mới; mọi số liệu trong app vẫn là kết quả đã sinh sẵn ở `src/data/`.
-- Học phí riêng của ngành: 1.058 chương trình (phủ toàn bộ các trường đại học lớn nhất cả nước: BKA, KHA/NEU, NTH/NTS/FTU, ĐHQGHN [QHI, QHE, QHT, QHX, QHF, QHL, QHY, QHS], ĐHQG-HCM [QSC, QSY, QST, QSX], TMU, BVH, IUH, TLA, GHA, SPH, HTC, DCN, NHH, LPH, HQT, XDA, PKA, YHB, YDS). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
+- Học phí riêng của ngành: 721 chương trình ở 20 trường (KHA/NEU, PKA, QSX, BKA, DCN, GHA, XDA, HTC, NTH, YDS, NHH, YHB, QHT, QHI, QSC, HQT, DDY, LPH, QHE, QSY). Quy tắc: chỉ giữ học phí đã đối chiếu được với văn bản đúng trường; 12/10 đã gỡ 337 dòng của 11 trường vì link 404 hoặc PDF là của trường khác — xem `scripts/lam-day-hoc-phi.py` (BO_QUA). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
 
 ## Dự báo điểm chuẩn năm tới
 `src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 1.330 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 92% (2023), 93% (2024), 68% (2025); sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).
@@ -74,7 +74,7 @@ npm test
 - **Đổi tên tỉnh sang 34 tỉnh thành từ 1/7/2025** (Nghị quyết 202/2025/QH15): dữ liệu gốc còn tên tỉnh cũ (Bình Dương, Phú Yên, Tiền Giang...), nên học sinh chọn "TP.HCM" hay "Đắk Lắk" trước đây không khớp trường cùng nơi. Bảng đổi ở `TINH_MOI`.
 - Tệp phụ mồ côi (khóa không còn trong dữ liệu chính) tự bị bỏ; `cms/.../tap-truong.json` và danh sách chương trình của CMS sinh lại bằng `scripts/sinh-tap-truong.ts`, `scripts/sinh-chuong-trinh-cms.ts`.
 - Test chất lượng: `tests/du-lieu.test.ts` (nhóm, tên ngành, tỉnh), `tests/toan-bo-chuong-trinh.test.ts` (mọi chương trình qua mọi hàm hiển thị với 7 kiểu học sinh, không chữ lỗi, số vô lý).
-- Còn tồn tại: mã trường trùng tên (D61 và NHH đều là Học viện Ngân hàng; D64 và TMU là ĐH Thương mại); nhiều trường chỉ có vài chương trình (BKA 2); điểm chuẩn mặc định lọc từ 15 trở lên ở màn Khám phá.
+- Còn tồn tại: nhiều trường chỉ có vài chương trình (BKA 2); điểm chuẩn mặc định lọc từ 15 trở lên ở màn Khám phá.
 
 ## Bổ sung trường TP.HCM (nguồn thứ cấp)
 

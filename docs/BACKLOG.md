@@ -166,9 +166,9 @@
 | # | Việc | Phụ trách | Ưu tiên | Trạng thái & Hướng dẫn thực hiện |
 |---|---|---|---|---|
 | 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon | Thiết kế | P0 | ✅ **Đã hoàn thành**: Đã tạo trọn bộ ảnh nhận diện thương hiệu độ phân giải cao và PWA icons |
-| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` sang email chung nhóm | Hưng | P0 | ✅ **Đã hoàn thành**: Đã trỏ về email quản trị tiếp nhận phản hồi |
+| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` sang email chung nhóm | Hưng | P0 | ⚠️ **Chưa xong** (kiểm 12/10): `src/duong-dan.ts` vẫn là email cá nhân `daomanhdungtvt@…`; cần một email chung của nhóm rồi đổi một dòng |
 | 13 | Kiểm tra bundle size chunk `chuan-hoa` (~980KB) | Dũng | P1 | Tách lazy-load danh mục dữ liệu trường để giảm tải lần đầu |
-| 14 | Xác minh 924 chương trình chỉ có điểm "2026" từ trang tổng hợp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
+| 14 | Xác minh điểm "2026" (đếm lại 12/10: 1.716 chương trình có điểm 2026, phần lớn từ trang tổng hợp); đồng thời sửa câu "Điểm chuẩn năm nay chưa công bố" ở `ve-du-lieu.tsx` cho khớp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
 | 15 | Kết nối giao diện người dùng với CMS Backend thật trên Cloudflare | Cả nhóm | P1 | Tạo D1 instance trên Cloudflare, áp migration `0001_cong_dong.sql` và cấu hình Pages Access |
 | 16 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 | Kiệt | P1 | Bổ sung các môn KHXH vào ma trận tổ hợp và phân tích Gap điểm |
 | 17 | Rate-limit thật cho `/api/tu-van` trên Cloudflare Workers | Tuấn / Hưng | P0 | **Một phần:** API đã từ chối gọi mô hình khi thiếu KV hoặc KV lỗi; cần tạo/gắn namespace `RATE_KV` trên Cloudflare và bật WAF rule để hoàn tất vận hành. |
