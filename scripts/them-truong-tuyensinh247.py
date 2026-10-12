@@ -40,6 +40,11 @@ TRUONG = {
     "DDT": ("ĐH Duy Tân", "Đà Nẵng"),
     "DHS": ("ĐH Sư phạm - ĐH Huế", "Huế"),
     "FPT": ("ĐH FPT", "Hà Nội"),
+    "NTT": ("ĐH Nguyễn Tất Thành", "TP.HCM"),
+    "HIU": ("ĐH Quốc tế Hồng Bàng", "TP.HCM"),
+    "THP": ("ĐH Hải Phòng", "Hải Phòng"),
+    "DDN": ("ĐH Đại Nam", "Hà Nội"),
+    "DDU": ("ĐH Đông Đô", "Hà Nội"),
 }
 # Trường đã có ít chương trình: lấy tên và tỉnh sẵn có, chỉ thêm ngành chưa có.
 BO_SUNG = ["BKA", "HTC", "DCN", "HQT", "GTA", "YDS", "NHP", "DDQ", "TLA", "NHF", "DCT"]

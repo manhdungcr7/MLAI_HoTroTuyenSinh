@@ -1,11 +1,11 @@
 # Dữ liệu ngành và trường: nguồn, cách sinh lại, giới hạn
 
-Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.447 chương trình** của 113 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
+Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.652 chương trình** của 118 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
 
 ## Các tệp dữ liệu (`src/data/`)
 | Tệp | Nội dung | Sinh bởi |
 |---|---|---|
-| `du-lieu-that.json` | 3.447 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
+| `du-lieu-that.json` | 3.652 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
 | `nguon-nam.json` | Với mỗi chương trình và mỗi năm có điểm: link file đề án PDF và **số trang** có điểm đó | `scripts/sinh-nguon-nam.py` (cần `tim-url-de-an.py` chạy trước) |
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
@@ -58,7 +58,7 @@ npm test
 ## Chỗ còn thiếu (chưa có nguồn thật, không điền)
 - Ký túc xá, học bổng, kênh Zalo/fanpage, thông báo, đánh giá của sinh viên: chưa có bản ghi nào được xác minh. Bản xuất bản hiện chứa 100 bản ghi trường sinh bằng `scripts/khoi-tao-d1-that.ts` với website, fanpage và giá ký túc xá do script tự dựng (chung một giá cho mọi trường) và mức học phí cao bằng 1,2 lần mức thấp. App bỏ các bản ghi này vì không có nguồn; cần sửa script, không dựng số thay cho dữ liệu chưa có.
 - Thư mục thô `../nguyen-vong` không có trong máy này nên không bổ sung được dữ liệu mới; mọi số liệu trong app vẫn là kết quả đã sinh sẵn ở `src/data/`.
-- Học phí riêng của ngành: 566 chương trình (phủ toàn bộ top 15 trường đại học lớn nhất cả nước: BKA, KHA/NEU, NTH/FTU, QSC/UIT, QHI/UET, QHE/UEB, HTC, DCN, NHH, LPH, HQT, XDA, PKA, YHB, YDS). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
+- Học phí riêng của ngành: 1.058 chương trình (phủ toàn bộ các trường đại học lớn nhất cả nước: BKA, KHA/NEU, NTH/NTS/FTU, ĐHQGHN [QHI, QHE, QHT, QHX, QHF, QHL, QHY, QHS], ĐHQG-HCM [QSC, QSY, QST, QSX], TMU, BVH, IUH, TLA, GHA, SPH, HTC, DCN, NHH, LPH, HQT, XDA, PKA, YHB, YDS). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
 
 ## Dự báo điểm chuẩn năm tới
 `src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 1.330 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 92% (2023), 93% (2024), 68% (2025); sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).

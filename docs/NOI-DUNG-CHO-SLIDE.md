@@ -21,7 +21,7 @@ Tiêu chí chấm: `docs/DOI-CHIEU-TIEU-CHI.md`. Hỏi đáp dự kiến: `docs/
 
 ## 4. Chiến lược dữ liệu (tiêu chí 4, ý 1 và 2)
 Ba tầng, mỗi tầng có nhãn tin cậy hiện trên app:
-1. Đề án tuyển sinh chính thức: 3.447 chương trình, 113 trường, link tới đúng trang PDF.
+1. Đề án tuyển sinh chính thức: 3.652 chương trình, 118 trường, link tới đúng trang PDF.
 2. Trang tổng hợp điểm chuẩn, có đối chiếu với đề án khi tìm thấy cùng con số.
 3. Thông tin cộng đồng (ký túc xá, đánh giá, lưu ý): bắt buộc có nguồn, qua duyệt, gắn nhãn "chưa phải số liệu chính thức".
 Dữ liệu người dùng: điểm từng môn, thi thử theo thời gian, thời khóa biểu, ngân sách. Dữ liệu thời gian: dự báo, đếm ngược tới kỳ thi, kế hoạch tuần.
@@ -71,6 +71,6 @@ Sơ đồ một dòng cho slide:
 | Quy chế thay đổi hằng năm | Mức ưu tiên và công thức nằm một chỗ, đối chiếu mỗi mùa; ghi rõ trong tài liệu vận hành |
 
 ## 9. Điều nói thẳng (slide "Giới hạn và bước tiếp")
-- Học phí riêng theo ngành đã được làm dày lên 566 chương trình (phủ trọn vẹn top 15 trường lớn nhất); điểm 2026 chủ yếu từ trang tổng hợp; chưa có khung chương trình học.
+- Học phí riêng theo ngành đã được làm dày lên 1.058 chương trình (phủ trọn vẹn các trường lớn nhất cả nước: BKA, NEU, FTU, ĐHQGHN, ĐHQG-HCM, TMU, BVH, IUH, TLA, GHA, SPH,...); điểm 2026 chủ yếu từ trang tổng hợp; chưa có khung chương trình học.
 - Hạ tầng thật của CMS (D1, Access) cần dựng; chạy thử đầy đủ ở máy.
 - Bước tiếp: tuyển tình nguyện viên từ các trường đối tác, nhập điểm chuẩn mùa 2027, tài khoản cho phụ huynh và thầy cô, đo tác động bằng người dùng thật.
