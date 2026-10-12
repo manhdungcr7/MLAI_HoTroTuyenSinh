@@ -99,7 +99,6 @@ export default function KhamPha() {
                 ))}
               </div>
             )}
-            <p className="mt-2 text-[12px] text-chu-phu">Chỉ tính điểm thi tốt nghiệp THPT, dựa trên điểm chuẩn các năm trước. Điểm chuẩn năm nay có thể khác.</p>
           </section>
         )}
 

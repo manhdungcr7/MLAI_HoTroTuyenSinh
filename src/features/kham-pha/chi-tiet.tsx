@@ -252,12 +252,11 @@ export default function ChiTiet() {
             </div>
           </div>
           {kq.muc ? (
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <div className="rounded-xl bg-trang/80 p-2.5">
-                <p className="text-[12px] text-chu-phu">So với điểm chuẩn</p>
-                <p className={gop("text-[16px] font-extrabold", TONE_CHU[TONE_CHAC_CHAN[kq.chacChan!]])}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan!]}</p>
+            <div className="mt-3">
+              <div className="rounded-xl bg-trang/80 p-2.5 inline-block">
+                <span className="text-[13px] text-chu-phu mr-2">So với điểm chuẩn:</span>
+                <span className={gop("text-[15px] font-extrabold", TONE_CHU[TONE_CHAC_CHAN[kq.chacChan!]])}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan!]}</span>
               </div>
-              <p className="text-[12px] text-chu-phu leading-snug">So với điểm chuẩn các năm trước để em dễ cân nhắc. Không phải xác suất đậu.</p>
             </div>
           ) : kq.lyDoKhongSo ? null : (
             <Nut className="mt-3" kieu="vien" bieuTuong={PencilLine} onClick={() => nav(DUONG_DAN.batDau(2))}>Nhập điểm của em</Nut>

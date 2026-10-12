@@ -165,8 +165,8 @@
 
 | # | Việc | Phụ trách | Ưu tiên | Trạng thái & Hướng dẫn thực hiện |
 |---|---|---|---|---|
-| 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon | Thiết kế | P0 | Xuất ảnh OpenGraph để khi chia sẻ lên Zalo/Facebook hiện preview đẹp |
-| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` sang email chung nhóm | Hưng | P0 | Sửa hằng số email tiếp nhận phản hồi lỗi từ người dùng |
+| 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon | Thiết kế | P0 | ✅ **Đã hoàn thành**: Đã tạo trọn bộ ảnh nhận diện thương hiệu độ phân giải cao và PWA icons |
+| 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` sang email chung nhóm | Hưng | P0 | ✅ **Đã hoàn thành**: Đã trỏ về email quản trị tiếp nhận phản hồi |
 | 13 | Kiểm tra bundle size chunk `chuan-hoa` (~980KB) | Dũng | P1 | Tách lazy-load danh mục dữ liệu trường để giảm tải lần đầu |
 | 14 | Xác minh 924 chương trình chỉ có điểm "2026" từ trang tổng hợp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
 | 15 | Kết nối giao diện người dùng với CMS Backend thật trên Cloudflare | Cả nhóm | P1 | Tạo D1 instance trên Cloudflare, áp migration `0001_cong_dong.sql` và cấu hình Pages Access |

@@ -75,7 +75,6 @@ export default function ManBoLoc() {
         <Muc tieuDe="Học phí tối đa" phu="(triệu đồng/năm)">
           <ChonNhanh cot={2} cacLua={CAC_MUC_HOC_PHI} giaTri={b.hocPhi} onChange={(v: BoLoc["hocPhi"]) => sua({ hocPhi: v })} />
           {bc.nganSach !== null && <p className="text-[13px] text-chu-phu">Ngân sách trong hồ sơ của em: tối đa khoảng {bc.nganSach} triệu/năm.</p>}
-          {b.hocPhi !== "tatCa" && <p className="text-[13px] text-chu-phu">Ngành chưa có học phí trong dữ liệu vẫn được giữ lại, vì chưa thể nói là vượt hay vừa mức này.</p>}
         </Muc>
 
         <Muc tieuDe="Khu vực">
