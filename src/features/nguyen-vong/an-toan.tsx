@@ -7,7 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
-import { CAC_NHAN, NhanNguyenVongTag, TONE_NHAN, ThanhCoCau } from "@/components/ui/co-cau";
+import { CAC_NHAN, NhanNguyenVongTag, ThanhCoCau } from "@/components/ui/co-cau";
 import { HopTruot, ThanhTienDo, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { BieuTuongTron, HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HangBam, Nut, TONE_CHU, TONE_NEN, The, gop } from "@/components/ui/nut-the";
@@ -110,57 +110,38 @@ export default function DanhSachAnToan() {
           </The>
         )}
 
-        {tong !== null && ds.some((d) => d.toHop) && (
-          <The>
-            <TieuDeMuc>Tổ hợp dùng để tính điểm</TieuDeMuc>
-            <ul className="space-y-1 text-[13px] text-chu-phu">
-              {ds.filter((d) => d.toHop && d.lc).map((d) => (
-                <li key={d.id}>NV{d.viTri + 1} · {d.lc!.truong}: tổ hợp {d.toHop}{d.suyRa ? " · suy ra (đề án chưa ghi tổ hợp, mình lấy tổ hợp cao nhất của em)" : ""}</li>
-              ))}
-            </ul>
-          </The>
-        )}
-
         {tong !== null && (
           <The>
             <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{ds.length} nguyện vọng</span>}>So với điểm chuẩn</TieuDeMuc>
             <ThanhCoCau dem={dem} />
-            <ul className="mt-3 space-y-1 text-[13px] text-chu-phu border-t border-vien pt-2.5">
-              {CAC_NHAN.map((n) => (
-                <li key={n} className="flex items-center gap-2">
-                  <span className={gop("w-[70px] shrink-0 font-bold", TONE_CHU[TONE_NHAN[n]])}>{n}</span>
-                  <span>{MO_TA_NHAN[n]}</span>
-                </li>
-              ))}
-            </ul>
           </The>
+        )}
+
+        {tong !== null && (
+          <>
+            <TieuDeMuc>Gợi ý điều chỉnh</TieuDeMuc>
+            {goiY.length === 0 ? (
+              <DongThongBao tone="luc" icon={CheckCircle2} tieuDe="Chưa cần điều chỉnh"
+                moTa="Có điểm thi thử mới thì quay lại xem nhãn có đổi không." />
+            ) : goiY.map((g, i) => <TheGoiY key={g.loai} g={g} so={i + 1} nav={nav} />)}
+          </>
         )}
 
         <TieuDeMuc>Đánh giá tổng quan</TieuDeMuc>
         {diem.map((d) => <TheDiem key={d.khoa} d={d} moGiaiThich={() => setGiaiThich(d)} boSung={() => nav(DUONG_DAN.batDau(d.khoa === "canBang" ? 2 : 3))} />)}
 
-        {tong !== null && (
-          <>
-            <TieuDeMuc>Gợi ý điều chỉnh cho em</TieuDeMuc>
-            {goiY.length === 0 ? (
-              <DongThongBao tone="luc" icon={CheckCircle2} tieuDe="Chưa cần điều chỉnh thêm"
-                moTa="Có trường để thử sức lẫn nguyện vọng điểm chuẩn thấp hơn điểm em. Khi có điểm thi thử mới, em quay lại đây xem nhãn có đổi không nhé." />
-            ) : goiY.map((g, i) => <TheGoiY key={g.loai} g={g} so={i + 1} nav={nav} />)}
-          </>
-        )}
-
         <TieuDeMuc>Tác vụ nhanh</TieuDeMuc>
-        <HangBam bieuTuong={ShieldPlus} tone="luc" tieuDe="Thêm nguyện vọng An toàn" phu="Tìm trường có điểm tham khảo thấp hơn điểm em" onClick={themAnToan} />
+        <HangBam bieuTuong={ShieldPlus} tone="luc" tieuDe="Thêm nguyện vọng An toàn" onClick={themAnToan} />
         {tong !== null && ds.length > 1 && (
-          <HangBam bieuTuong={ArrowDownUp} tone="cam" tieuDe="Gợi ý thứ tự theo mức vừa sức" phu="Xem trước, em bấm áp dụng mới đổi" onClick={goiYThuTu} />
+          <HangBam bieuTuong={ArrowDownUp} tone="cam" tieuDe="Gợi ý thứ tự" phu="Xem trước rồi mới đổi" onClick={goiYThuTu} />
         )}
-        <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Thử nếu tăng điểm" phu="Cộng thử điểm từng môn, xem nhãn đổi ra sao" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
+        <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Thử nếu tăng điểm" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
 
         <Nut bieuTuong={SlidersHorizontal} muiTen className="!mt-4" onClick={() => nav(DUONG_DAN.nguyenVong())}>Điều chỉnh danh sách</Nut>
         <GhiChuDuLieu />
       </NoiDung>
 
-      <HopGiaiThich giaiThich={giaiThich} dong={() => setGiaiThich(null)} />
+      <HopGiaiThich giaiThich={giaiThich} dong={() => setGiaiThich(null)} ds={ds} />
       <HopXemTruoc moi={xemTruoc} ds={ds} dong={() => setXemTruoc(null)}
         apDung={() => { if (xemTruoc) datThuTu(xemTruoc, "Đã áp dụng thứ tự gợi ý"); setXemTruoc(null); }} />
       <ThanhHoanTac tin={tin} an={an} />
@@ -209,7 +190,7 @@ function TheDiem({ d, moGiaiThich, boSung }: { d: DiemDanhGia; moGiaiThich: () =
           </div>
           <p className={gop("text-[14px] font-bold", d.diem === null ? "text-chu-phu" : TONE_CHU[d.tone])}>{d.nhanXet}</p>
           {d.diem !== null && <div className="mt-1.5"><ThanhTienDo phanTram={d.diem} tone={d.tone} /></div>}
-          <p className="mt-1.5 text-[13px] text-chu-phu leading-snug">{d.chiTiet}</p>
+          {d.diem === null && <p className="mt-1.5 text-[13px] text-chu-phu leading-snug">{d.chiTiet}</p>}
           {d.diem === null && (
             <button type="button" onClick={boSung} className="mt-1 min-h-11 inline-flex items-center gap-1 text-[14px] font-bold text-xanh">
               {d.khoa === "canBang" ? "Nhập điểm" : "Bổ sung ngay"}<ChevronRight size={16} />
@@ -261,7 +242,7 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
         </ul>
       )}
       {g.loai !== "giamThuSuc" && g.truong.length === 0 && (
-        <p className="mt-2 text-[13px] text-chu-phu">Chưa có ngành nào vừa điểm và vừa ngân sách của em. Em vào Khám phá để xem thêm nhé.</p>
+        <p className="mt-2 text-[13px] text-chu-phu">Chưa có ngành vừa điểm và vừa ngân sách.</p>
       )}
 
       <Nut kieu="vien" muiTen className="mt-3" onClick={() => nav(den)}>{k.nut}</Nut>
@@ -291,7 +272,7 @@ function HopXemTruoc({ moi, ds, dong, apDung }: { moi: string[] | null; ds: Retu
     <HopTruot mo={moi !== null} dong={dong} tieuDe="Gợi ý thứ tự">
       {moi && (
         <div className="space-y-3 text-[14px] text-chu">
-          <p>Mình chỉ đưa nguyện vọng An toàn và Dự phòng xuống cuối, các nguyện vọng còn lại giữ nguyên thứ tự em đặt. Vì em sẽ vào nguyện vọng cao nhất mà em đủ điểm.</p>
+          <p>Chỉ đưa An toàn, Dự phòng xuống cuối; còn lại giữ thứ tự em đặt (em vào NV cao nhất đủ điểm).</p>
           <ol className="space-y-1.5">
             {moi.map((id, i) => {
               const d = ds.find((x) => x.id === id);
@@ -315,17 +296,26 @@ function HopXemTruoc({ moi, ds, dong, apDung }: { moi: string[] | null; ds: Retu
   );
 }
 
-function HopGiaiThich({ giaiThich, dong }: { giaiThich: DiemDanhGia | "nhan" | null; dong: () => void }) {
+function HopGiaiThich({ giaiThich, dong, ds = [] }: { giaiThich: DiemDanhGia | "nhan" | null; dong: () => void; ds?: ReturnType<typeof dungDanhSach> }) {
+  const coToHop = ds.filter((d) => d.toHop && d.lc);
   const laNhan = giaiThich === "nhan";
   return (
     <HopTruot mo={giaiThich !== null} dong={dong} tieuDe={laNhan ? "Cách xếp nhãn" : giaiThich ? `Cách tính: ${giaiThich.ten}` : ""}>
       {laNhan ? (
         <div className="space-y-3 text-[14px] text-chu">
-          <p>Mình so tổng điểm hiện tại của em, tính theo đúng tổ hợp xét tuyển của từng ngành, với điểm chuẩn năm trước:</p>
+          <p>So điểm hiện tại của em (theo tổ hợp của từng ngành) với điểm chuẩn năm trước:</p>
           <ul className="space-y-2">
             {CAC_NHAN.map((n) => <li key={n} className="flex items-center gap-2"><NhanNguyenVongTag nhan={n} /><span>{MO_TA_NHAN[n]}</span></li>)}
           </ul>
-          <p className="text-chu-phu text-[13px]">Nhãn là gợi ý, không phải cam kết trúng tuyển. Điểm chuẩn mỗi năm có thể đổi. Điểm của trường là điểm chuẩn các năm trước.</p>
+          {coToHop.length > 0 && (
+            <div>
+              <p className="font-bold text-muc">Tổ hợp dùng để tính</p>
+              <ul className="mt-1 space-y-0.5 text-[13px] text-chu-phu">
+                {coToHop.map((d) => <li key={d.id}>NV{d.viTri + 1} · {d.lc!.truong}: {d.toHop}{d.suyRa ? " (suy ra, đề án chưa ghi)" : ""}</li>)}
+              </ul>
+            </div>
+          )}
+          <p className="text-chu-phu text-[13px]">Nhãn là gợi ý, không phải cam kết trúng tuyển. Điểm chuẩn mỗi năm có thể đổi.</p>
         </div>
       ) : giaiThich ? (
         <div className="space-y-2 text-[14px] text-chu">

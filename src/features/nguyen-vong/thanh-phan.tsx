@@ -1,6 +1,6 @@
 // Thành phần dùng chung giữa hai màn của slice Nguyện vọng.
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AlertTriangle, ChevronDown, ChevronUp, Info, Lightbulb, Undo2 } from "lucide-react";
+import { AlertTriangle, Info, Undo2 } from "lucide-react";
 import { CAC_NHAN, TONE_NHAN } from "@/components/ui/co-cau";
 import { TONE_GD, gop } from "@/components/ui/nut-the";
 import { Nut } from "@/components/ui/nut-the";
@@ -45,7 +45,7 @@ export function GhiChuDuLieu() {
   return (
     <p className="flex gap-2 text-[13px] text-chu-phu leading-snug px-1">
       <Info size={16} className="shrink-0 mt-0.5" />
-      <span>Nhãn là gợi ý theo điểm tham khảo năm trước, không phải cam kết trúng tuyển. Điểm là điểm chuẩn các năm trước; em đối chiếu với đề án của trường.</span>
+      <span>Nhãn so với điểm chuẩn năm trước, không phải cam kết trúng tuyển.</span>
     </p>
   );
 }
@@ -101,21 +101,6 @@ export function CanhBaoThuTuThe({ ds, onDua }: { ds: CanhBaoThuTu[]; onDua: (c: 
         ))}
       </ul>
       <p className="mt-2 text-[12.5px] text-chu-phu leading-snug">Nếu em muốn giữ như vậy cũng được, đây chỉ là nhắc.</p>
-    </div>
-  );
-}
-
-/** Hộp giải thích quy tắc xét nguyện vọng, đóng mở được. */
-export function HopQuyTacXet() {
-  const [mo, setMo] = useState(true);
-  return (
-    <div className="rounded-the bg-xanh-nhat px-3.5 py-2.5">
-      <button type="button" onClick={() => setMo(!mo)} aria-expanded={mo} className="w-full min-h-11 -my-1 flex items-center gap-2 text-left">
-        <Lightbulb size={18} className="text-xanh shrink-0" />
-        <b className="flex-1 text-[14px] text-muc">Cách xét nguyện vọng</b>
-        {mo ? <ChevronUp size={18} className="text-chu-phu" /> : <ChevronDown size={18} className="text-chu-phu" />}
-      </button>
-      {mo && <p className="text-[13px] text-chu leading-snug pb-1">Em sẽ vào nguyện vọng cao nhất mà em đủ điểm, nên NV1 nên là trường em muốn nhất.</p>}
     </div>
   );
 }
