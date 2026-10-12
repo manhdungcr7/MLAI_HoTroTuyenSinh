@@ -99,6 +99,7 @@ export default function KhamPha() {
                 ))}
               </div>
             )}
+            <p className="mt-2 text-[12px] text-chu-phu">Điểm thi THPT so với điểm chuẩn năm trước · không phải xác suất đậu</p>
           </section>
         )}
 
