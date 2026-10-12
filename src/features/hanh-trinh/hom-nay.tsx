@@ -109,8 +109,7 @@ function ODiem({ nhan, gia, noiBat }: { nhan: string; gia: React.ReactNode; noiB
   return (
     <span className="min-w-0">
       <span className="block text-[11px] text-chu-phu">{nhan}</span>
-      {/* Con số quyết định của màn: tô bút dạ quang. */}
-      <b className="so-lon block text-[26px] font-bold leading-tight text-muc"><span className={noiBat ? "da-quang" : undefined}>{gia}</span></b>
+      <b className={`so-lon block text-[26px] font-bold leading-tight ${noiBat ? "text-cam-chu" : "text-muc"}`}>{gia}</b>
     </span>
   );
 }

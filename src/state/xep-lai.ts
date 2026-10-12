@@ -14,7 +14,7 @@ export function xepLaiTuan(
     if (v.tuan && v.tuan !== tuanBatDau) return false; // việc của tuần khác không xếp vào tuần này
     const tt = x.trangThaiViec[v.id];
     if (tt === "xong" || tt === "boQua") return false;
-    return !giu.some((k) => k.viecId === v.id && k.khoa);
+    return !giu.some((k) => k.viecId === v.id && (k.khoa || (tuNgay && k.ngay < tuNgay)));
   });
   const tuPhut = tuNgay && tuNgay === isoNgay(bayGio) ? bayGio.getHours() * 60 + bayGio.getMinutes() : undefined;
   const r = xepLichTuan({ tuanBatDau, tuNgay, tuPhut, coDinh: x.coDinh, viec: viecCan, cfg: x.cauHinh, tamTrang: x.tamTrang, khoiDaCo: giu });

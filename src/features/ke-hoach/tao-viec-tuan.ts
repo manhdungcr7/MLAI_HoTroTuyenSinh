@@ -61,7 +61,7 @@ export function viecChoTuan(s: AppState, tuan: string, tuNgay?: string, bayGio: 
   const daKhoa = new Set(giuKhoi.filter((k) => k.khoa && k.viecId).map((k) => k.viecId));
   const tuPhut = tuNgay && tuNgay === isoNgay(bayGio) ? bayGio.getHours() * 60 + bayGio.getMinutes() : undefined;
   let taoMoi: ViecCanHoc[] = [];
-  for (const he of [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3]) {
+  for (const he of [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.15, 0.1]) {
     taoMoi = taoViecTuan({ ...dv, phutTuHoc: dv.phutTuHoc * he }).filter((v) => !xong.has(v.id));
     if (taoMoi.length === 0) break;
     const thu = xepLichTuan({

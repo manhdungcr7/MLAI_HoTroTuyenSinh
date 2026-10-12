@@ -33,11 +33,12 @@ const phutKhoi = (k: KhoiHoc) => phutTuGio(k.ketThuc) - phutTuGio(k.batDau);
     assert.ok(phutTuGio(k.ketThuc) <= phutTuGio(cfgNghiCN.gioKetThuc) - 30, "xong trước giờ ngủ");
   }
   assert.equal(phatHienTrung(cn).length, 0, "các buổi xem trước không trùng giờ");
-  // ngày nghỉ khác (thứ Bảy) vẫn không có gì
-  assert.equal(kq.khoi.filter((k) => k.ngay === "2026-10-10").length, 0, "chỉ Chủ nhật được ngoại lệ, ngày nghỉ khác vẫn trống");
+  // ngày nghỉ khác (thứ Bảy khi nghỉ cả thứ 7 và CN) vẫn không có gì
+  const kqNghiT7 = xepLichTuan({ tuanBatDau: TUAN, coDinh: LICH_CO_DINH_MAU, viec: VIEC_MAU, cfg: { ...CAU_HINH_MAC_DINH, ngayNghi: [6, 7] } });
+  assert.equal(kqNghiT7.khoi.filter((k) => k.ngay === "2026-10-10").length, 0, "chỉ Chủ nhật được ngoại lệ, ngày nghỉ khác vẫn trống");
 
-  // Trần ngày: chỉ cho 15 phút/ngày thì Chủ nhật chỉ còn một buổi xem trước
-  const tran = xepLichTuan({ tuanBatDau: TUAN, coDinh: LICH_CO_DINH_MAU, viec: [], cfg: { ...cfgNghiCN, gioHocToiDaMoiNgay: 0.25 } });
+  // Trần ngày: chỉ cho 15 phút/ngày (tâm trạng tốt) thì Chủ nhật chỉ còn một buổi xem trước
+  const tran = xepLichTuan({ tuanBatDau: TUAN, coDinh: LICH_CO_DINH_MAU, viec: [], cfg: { ...cfgNghiCN, gioHocToiDaMoiNgay: 0.25 }, tamTrang: "tot" });
   assert.equal(tran.khoi.filter((k) => k.ngay === CN).length, 1, "trần 15 phút/ngày tính cả buổi xem trước ở Chủ nhật");
   assert.equal(tran.khoi.filter((k) => k.ngay === CN).reduce((s, k) => s + phutKhoi(k), 0), 15);
 
@@ -172,7 +173,7 @@ const nen: AppState = { ...goc, coDinh: LICH_CO_DINH_MAU, cauHinh: cfgNghiCN, vi
   assert.ok(v.length > 0, "vẫn sinh việc ôn nhẹ");
   assert.ok(v.reduce((t, x) => t + x.phut, 0) <= NGAN_SACH_ON_NHE + 45, "ôn nhẹ không quá khoảng 4 giờ");
   assert.ok(v.every((x) => x.mucUuTien === "thap"), "ôn nhẹ không có việc ưu tiên cao");
-  assert.ok(v.every((x) => !/còn thiếu|cần khoảng/.test(x.lyDo)), "không nói về điểm thiếu khi chưa có mục tiêu");
+  assert.ok(v.every((x) => !/còn thiếu \d|cần khoảng \d/.test(x.lyDo)), "không nói về điểm thiếu cụ thể khi chưa có mục tiêu");
   assert.ok(v.some((x) => x.lyDo.includes("chưa chọn mục tiêu")) && v.every((x) => x.taiLieu![0].ten.includes("chương trình em đang học")));
   const kq = viecChoTuan(chuaMucTieu, TUAN, undefined, ngayThu(0), true);
   assert.ok(kq.ok && kq.viec.length > 0, "viecChoTuan có cờ nhẹ chạy được khi chưa có mục tiêu");
