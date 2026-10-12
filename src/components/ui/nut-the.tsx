@@ -19,7 +19,7 @@ export const TONE_VIEN: Record<ToneTen, string> = { xanh: "border-xanh/30", luc:
 
 type KieuNut = "chinh" | "vien" | "nhe" | "nguyHiem";
 const KIEU_NUT: Record<KieuNut, string> = {
-  chinh: "gd-xanh text-white shadow-nut active:brightness-95",
+  chinh: "nut-muc text-white",
   vien: "bg-trang text-xanh border border-xanh/40 active:bg-xanh-nhat",
   nhe: "bg-xanh-nhat text-xanh active:brightness-95",
   nguyHiem: "bg-trang text-do-chu border border-do/50 active:bg-do-nhat",
@@ -38,7 +38,7 @@ export function Nut({ kieu = "chinh", bieuTuong: Icon, muiTen, rong = true, clas
       type={type}
       {...p}
       className={gop(
-        "min-h-12 px-3.5 py-2.5 rounded-xl font-bold text-[15px] inline-flex items-center justify-center gap-2 transition active:scale-[.99] disabled:opacity-50 disabled:pointer-events-none text-center select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh focus-visible:ring-offset-2",
+        "min-h-12 px-3.5 py-2.5 rounded-[10px] font-bold text-[15px] inline-flex items-center justify-center gap-2 transition disabled:opacity-50 disabled:pointer-events-none text-center select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh focus-visible:ring-offset-2",
         rong && "w-full", KIEU_NUT[kieu], className,
       )}
     >
@@ -56,7 +56,7 @@ export function The({ tone = "trung", vien = true, className, ...p }: TheProps) 
 }
 
 export function Nhan({ tone = "xanh", children, className }: { tone?: ToneTen; children: ReactNode; className?: string }) {
-  return <span className={gop("inline-flex items-center rounded-lg px-2 py-0.5 text-[12px] font-bold whitespace-nowrap", TONE_NEN[tone], TONE_CHU[tone], className)}>{children}</span>;
+  return <span className={gop("inline-flex items-center rounded-md px-1.5 py-0.5 text-[12px] font-bold whitespace-nowrap", TONE_NEN[tone], TONE_CHU[tone], className)}>{children}</span>;
 }
 
 /** Hàng bấm được: biểu tượng tròn bên trái, mũi tên bên phải. */
@@ -65,7 +65,7 @@ export function HangBam({ bieuTuong: Icon, tone = "xanh", tieuDe, phu, nhan, onC
 }) {
   return (
     <button type="button" onClick={onClick} className={gop("w-full min-h-14 flex items-center gap-3 rounded-the bg-trang border border-vien shadow-the px-3 py-2.5 text-left active:bg-xanh-nhat transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh", className)}>
-      {Icon && <span className={gop("size-10 rounded-xl grid place-items-center shrink-0", TONE_NEN[tone], TONE_CHU[tone])}><Icon size={20} /></span>}
+      {Icon && <span className={gop("size-10 rounded-[10px] grid place-items-center shrink-0", TONE_NEN[tone], TONE_CHU[tone])}><Icon size={20} strokeWidth={2} /></span>}
       <span className="flex-1 min-w-0">
         <span className="block text-[14px] font-semibold text-chu leading-snug">{tieuDe}</span>
         {phu && <span className="block text-[13px] text-chu-phu leading-snug">{phu}</span>}

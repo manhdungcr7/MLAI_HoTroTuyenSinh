@@ -85,11 +85,11 @@ function TheMucTieu({ m, thieuMon, ngayThi, onClick }: { m: MucTieuDayDu; thieuM
           <BieuTuongTron icon={Target} tone="xanh" kichThuoc={44} />
           <span className="flex-1 min-w-0">
             <span className="block text-[12px] font-semibold text-xanh">Mục tiêu</span>
-            <b className="block text-[18px] leading-tight text-muc">{m.lc.nganh} <span className="whitespace-nowrap">– {m.lc.truong}</span></b>
+            <b className="so-lon block text-[20px] leading-tight text-muc">{m.lc.nganh} <span className="whitespace-nowrap">– {m.lc.truong}</span></b>
           </span>
           <ChevronRight size={20} className="text-xanh shrink-0" />
         </span>
-        <span className="mt-3 grid grid-cols-3 gap-1 rounded-xl bg-trang/75 py-2 text-center">
+        <span className="mt-3 grid grid-cols-3 gap-1 rounded-[10px] bg-trang border border-vien py-2.5 text-center">
           <ODiem nhan="Hiện tại" gia={duDiem ? dinhDang(m.hienTai, 1) : "—"} />
           <ODiem nhan="Mục tiêu" gia={dinhDang(m.mucTieu, 1)} />
           {dat
@@ -109,7 +109,8 @@ function ODiem({ nhan, gia, noiBat }: { nhan: string; gia: React.ReactNode; noiB
   return (
     <span className="min-w-0">
       <span className="block text-[11px] text-chu-phu">{nhan}</span>
-      <b className={gop("block text-[22px] font-extrabold leading-tight", noiBat ? "text-do-chu" : "text-muc")}>{gia}</b>
+      {/* Con số quyết định của màn: tô bút dạ quang. */}
+      <b className="so-lon block text-[26px] font-bold leading-tight text-muc"><span className={noiBat ? "da-quang" : undefined}>{gia}</span></b>
     </span>
   );
 }

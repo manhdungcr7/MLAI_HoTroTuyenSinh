@@ -1,4 +1,4 @@
-// Trang mẫu thiết kế (chỉ khi chạy dev): mọi thành phần, tông màu, gradient, trạng thái. Slice đối chiếu ở đây.
+// Trang mẫu thiết kế (chỉ khi chạy dev): mọi thành phần, tông màu, giấy ô ly, trạng thái. Slice đối chiếu ở đây.
 import { useState } from "react";
 import { Bell, BookOpen, Flag, Sparkles, Target } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
@@ -28,7 +28,14 @@ export default function TrangThietKe() {
     <>
       <DauTrangChinh tieuDe="Trang mẫu thiết kế" moTa="Chỉ có khi chạy dev. Dùng để đối chiếu giao diện." />
       <NoiDung className="space-y-5">
-        <section><TieuDeMuc>Tông màu và gradient</TieuDeMuc>
+        <section className="space-y-2"><TieuDeMuc>Vở ô ly · mực xanh</TieuDeMuc>
+          <NenHero className="p-4">
+            <p className="text-[13px] text-chu-phu">Tờ giấy ô ly: tối đa một tờ mỗi màn, chứa con số để quyết định</p>
+            <p className="so-lon mt-1 text-[26px] font-bold text-muc">Còn thiếu <span className="da-quang">1,5</span></p>
+          </NenHero>
+          <p className="text-[13px] text-chu-phu"><b className="text-chu">.da-quang</b> chỉ tô một con số mỗi màn · <b className="text-do-chu">bút đỏ</b> (tông do) chỉ cho điều cần sửa · <b className="text-chu">.so-lon</b> cho số lớn và tiêu đề không phải thẻ h.</p>
+        </section>
+        <section><TieuDeMuc>Tông màu</TieuDeMuc>
           <div className="grid grid-cols-3 gap-2">{TONES.map((t) => (
             <div key={t} className="space-y-1"><BieuTuongTron icon={Sparkles} tone={t} /><NenHero tone={t} className="p-2 text-[12px] font-bold">{t}</NenHero><HuyHieuTruong ten={t} tone={t} /></div>
           ))}</div>

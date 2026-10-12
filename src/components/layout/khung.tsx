@@ -17,7 +17,7 @@ export function KhungCoThanhDuoi() {
     <div className="khung-ung-dung pb-24">
       <BannerKhongLuu />
       <Outlet />
-      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang border-t border-vien vung-an-toan-duoi">
+      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang/95 backdrop-blur border-t border-vien vung-an-toan-duoi">
         <ul className="grid grid-cols-5">
           {CAC_TAB.map((t) => {
             const dang = t.khop(pathname);
@@ -25,8 +25,10 @@ export function KhungCoThanhDuoi() {
             return (
               <li key={t.id}>
                 <Link to={t.den} aria-current={dang ? "page" : undefined}
-                  className={gop("min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-all cursor-pointer active:scale-95", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
-                  <Icon size={22} strokeWidth={dang ? 2.6 : 2} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />
+                  className={gop("relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition-colors cursor-pointer", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
+                  {/* Tab đang mở: một nét mực ngắn ở mép trên, như gạch chân bằng bút. */}
+                  {dang && <span aria-hidden className="absolute top-0 inset-x-5 h-[3px] rounded-b-full bg-xanh" />}
+                  <Icon size={22} strokeWidth={dang ? 2.4 : 1.8} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />
                   {t.nhan}
                 </Link>
               </li>
@@ -46,7 +48,7 @@ export function Logo({ nho }: { nho?: boolean }) {
   return (
     <span className="inline-flex items-center gap-1.5 font-extrabold text-muc">
       <span className="size-8 rounded-lg gd-xanh text-white grid place-items-center"><GraduationCap size={18} /></span>
-      <span className={nho ? "text-[14px]" : "text-[15px]"}>Nguyện Vọng AI</span>
+      <span className={gop("so-lon", nho ? "text-[14px]" : "text-[15px]")}>Nguyện Vọng AI</span>
     </span>
   );
 }
@@ -64,7 +66,7 @@ export function DauTrangChinh({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?
       </div>
       <div className="mt-3 flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-[26px] leading-tight font-extrabold text-muc">{tieuDe}</h1>
+          <h1 className="text-[28px] leading-[1.15] font-bold tracking-tight text-muc">{tieuDe}</h1>
           {moTa && <p className="text-[14px] text-chu-phu mt-1">{moTa}</p>}
         </div>
         {phai}
@@ -96,7 +98,7 @@ export function ThanhPhuKeHoach() {
           return (
             <li key={m.id} className="flex-1">
               <Link to={m.den} aria-current={dang ? "page" : undefined}
-                className={gop("min-h-12 rounded-lg grid place-items-center text-[13px] font-bold transition-all cursor-pointer", dang ? "gd-xanh text-white shadow-nut" : "text-chu-phu hover:text-chu active:bg-xanh-nhat")}>
+                className={gop("min-h-11 rounded-lg grid place-items-center text-[13px] font-bold transition-colors cursor-pointer", dang ? "bg-xanh text-white" : "text-chu-phu hover:text-chu active:bg-xanh-nhat")}>
                 {m.nhan}
               </Link>
             </li>

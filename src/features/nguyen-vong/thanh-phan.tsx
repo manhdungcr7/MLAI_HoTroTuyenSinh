@@ -10,13 +10,18 @@ import type { CanhBaoThuTu } from "./tinh-toan";
 const NEN_DAM: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", tim: "bg-tim", do: "bg-do", muc: "bg-muc" };
 
 /** Ô số thứ tự NV1..NVn, gradient theo màu nhãn (chưa có nhãn thì màu chủ đạo). */
+/** Ô NV như ô trên phiếu đăng ký: khung trắng viền màu nhãn, số thứ tự lớn. */
 export function OSoThuTu({ viTri, nhan }: { viTri: number; nhan: NhanNguyenVong | null }) {
+  const tone = nhan ? TONE_NHAN[nhan] : "muc";
   return (
-    <span aria-hidden className={gop("size-11 rounded-xl grid place-items-center text-white font-extrabold text-[14px] shrink-0 shadow-the", nhan ? TONE_GD[TONE_NHAN[nhan]] : "gd-muc")}>
-      NV{viTri + 1}
+    <span aria-hidden className={gop("size-11 rounded-[10px] border-2 bg-trang flex flex-col items-center justify-center leading-none shrink-0", VIEN_O[tone], CHU_O[tone])}>
+      <span className="text-[9px] font-bold tracking-wide">NV</span>
+      <span className="so-lon text-[19px] font-bold">{viTri + 1}</span>
     </span>
   );
 }
+const VIEN_O: Record<ToneTen, string> = { xanh: "border-xanh", luc: "border-luc", cam: "border-cam", tim: "border-tim", do: "border-do", muc: "border-muc" };
+const CHU_O: Record<ToneTen, string> = { xanh: "text-xanh", luc: "text-luc-chu", cam: "text-cam-chu", tim: "text-tim-chu", do: "text-do-chu", muc: "text-muc" };
 
 /** Thanh cơ cấu thu nhỏ: một dải màu + chú thích 4 nhãn kèm số lượng. */
 export function CoCauMini({ dem }: { dem: Record<NhanNguyenVong, number> }) {

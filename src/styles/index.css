@@ -1,83 +1,137 @@
 @import "tailwindcss";
 
 /* =====================================================================
-   THEME DUY NHẤT của Nguyện Vọng AI.
+   THEME DUY NHẤT của Nguyện Vọng AI — "Vở ô ly · mực xanh" (12/10/2026).
+   Lấy từ đồ dùng của học sinh: giấy ô ly, mực bút bi xanh, bút dạ quang, bút đỏ chấm bài.
+   - Mực xanh (xanh): màu chính. Mực đậm (muc): tiêu đề.
+   - Dạ quang (da-quang): CHỈ tô dưới con số quan trọng nhất của màn (class .da-quang).
+   - Bút đỏ (do): chỉ cho điều em cần sửa (thiếu điểm, vượt ngân sách...).
+   - Giấy ô ly (nen-*): tối đa một tờ mỗi màn, chứa con số để quyết định. Các thẻ khác phẳng, viền mảnh.
    Trong src/features và src/components KHÔNG viết mã màu (#xxxxxx) hay gradient tay:
-   chỉ dùng class của Tailwind theo token bên dưới và các class gd-* / nen-* của file này.
+   chỉ dùng class của Tailwind theo token bên dưới và các class gd-* / nen-* / da-quang của file này.
+   Landing (src/features/landing-page, landing.css) có màu và font riêng, không dùng token ở đây.
    ===================================================================== */
 @theme {
+  /* Chữ thường: Be Vietnam Pro (gọn, dấu tiếng Việt chuẩn). Tiêu đề và con số lớn: Bricolage Grotesque, thu hẹp nhẹ. */
   --font-sans: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-tieu-de: "Bricolage Grotesque", "Be Vietnam Pro", system-ui, sans-serif;
+  /* 800 quá nặng cho màn nhỏ: hạ một bậc cho cả app. */
+  --font-weight-extrabold: 700;
+  --font-weight-bold: 600;
+  --font-weight-semibold: 500;
 
-  /* Màu chính và chữ */
-  --color-xanh: #1560ee;
-  --color-xanh-dam: #0f4fc7;
-  --color-xanh-nhat: #e8f0ff;
-  --color-muc: #0b1f4d;       /* tiêu đề */
-  --color-chu: #1c2b4a;       /* chữ thường */
-  --color-chu-phu: #5b6b8c;   /* chữ phụ */
-  --color-vien: #dfe7f5;
-  --color-nen: #f4f8ff;
+  /* Mực và giấy */
+  --color-xanh: #2448c4;      /* mực bút bi xanh */
+  --color-xanh-dam: #1a348f;
+  --color-xanh-nhat: #e9eefb;
+  --color-muc: #131c3f;       /* tiêu đề */
+  --color-chu: #253150;       /* chữ thường */
+  --color-chu-phu: #5b6684;   /* chữ phụ */
+  --color-vien: #dfe4ee;
+  --color-nen: #f5f7fa;       /* giấy */
   --color-trang: #ffffff;
+  --color-da-quang: #ffe45e;  /* bút dạ quang */
 
   /* Bốn tông phụ, mỗi tông có màu đậm + nền nhạt + chữ trên nền nhạt */
-  --color-luc: #12a37f;   --color-luc-nhat: #e3f7f0;   --color-luc-chu: #0b7d61;
-  --color-cam: #f59e0b;   --color-cam-nhat: #fff3dc;   --color-cam-chu: #a05900;
-  --color-do: #e5484d;    --color-do-nhat: #ffe9ea;    --color-do-chu: #c02f34;
-  --color-tim: #6d5bf0;   --color-tim-nhat: #eeebff;   --color-tim-chu: #5444d6;
+  --color-luc: #107a5f;   --color-luc-nhat: #e3f3ed;   --color-luc-chu: #0b6b53;
+  --color-cam: #dc8a00;   --color-cam-nhat: #fff1d8;   --color-cam-chu: #8a5100;
+  --color-do: #d7362f;    --color-do-nhat: #fdebea;    --color-do-chu: #b2241e;
+  --color-tim: #6a4fd6;   --color-tim-nhat: #efebfc;   --color-tim-chu: #5137bf;
 
-  /* Bo góc và đổ bóng */
-  --radius-the: 1rem;
-  --radius-lon: 1.5rem;
-  --shadow-the: 0 1px 2px rgba(15, 79, 199, .06), 0 6px 18px rgba(15, 79, 199, .06);
-  --shadow-nut: 0 6px 16px rgba(22, 100, 245, .28);
+  /* Bo góc theo cấp: tờ giấy 18 · thẻ 12 · nút 10 (rounded-xl của Tailwind là 12) */
+  --radius-the: .75rem;
+  --radius-lon: 1.125rem;
+  /* Không đổ bóng mềm: một mép giấy mảnh cho thẻ, một mép mực đặc cho nút chính. */
+  --shadow-the: 0 1px 0 rgba(19, 28, 63, .06);
+  --shadow-nut: 0 3px 0 var(--color-xanh-dam);
 }
 
 html, body, #root { min-height: 100%; }
 body {
   margin: 0;
-  background: #e9f0fc;
+  background: #e3e8f0;
   color: var(--color-chu);
   font-family: var(--font-sans);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
+  font-feature-settings: "tnum" 1; /* số thẳng cột: điểm, học phí, ngày */
 }
 @layer base {
   button, input, select, textarea { font: inherit; color: inherit; }
   button { cursor: pointer; text-wrap: balance; }
-  h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+  h1, h2, h3, h4, h5, h6 { text-wrap: balance; letter-spacing: -.01em; font-family: var(--font-tieu-de); font-stretch: 90%; }
   p { text-wrap: pretty; }
-  :focus-visible { outline: 3px solid #8db4ff; outline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--color-xanh); outline-offset: 2px; }
 }
 
 /* Khung điện thoại: trên máy tính, ứng dụng nằm giữa một cột rộng 430px */
-.khung-ung-dung { max-width: 430px; margin: 0 auto; min-height: 100dvh; background: var(--color-nen); position: relative; box-shadow: 0 0 40px rgba(22, 100, 245, .08); overflow-x: clip; }
-.khung-ung-dung:has(.trang-toan-man-hinh) { max-width: 100%; box-shadow: none; background: var(--color-nen); }
+.khung-ung-dung { max-width: 430px; margin: 0 auto; min-height: 100dvh; background: var(--color-nen); position: relative; box-shadow: 0 0 0 1px rgba(19, 28, 63, .06); overflow-x: clip; }
+/* Landing đã khóa: giữ đúng nền cũ, không theo token mới. */
+.khung-ung-dung:has(.trang-toan-man-hinh) { max-width: 100%; box-shadow: none; background: #f4f8ff; }
 .an-thanh-cuon::-webkit-scrollbar { display: none; }
 .an-thanh-cuon { scrollbar-width: none; }
 .vung-an-toan-duoi { padding-bottom: calc(env(safe-area-inset-bottom) + 6px); }
 
-/* ---------- Gradient đậm: huy hiệu, vòng tròn biểu tượng, nút nhấn ---------- */
-.gd-xanh { background-image: linear-gradient(135deg, #3b86ff 0%, #1664f5 55%, #0f4fc7 100%); }
-.gd-luc  { background-image: linear-gradient(135deg, #3fdcb4 0%, #12a37f 100%); }
-.gd-cam  { background-image: linear-gradient(135deg, #ffc15e 0%, #f59e0b 60%, #e8890c 100%); }
-.gd-tim  { background-image: linear-gradient(135deg, #9b8bff 0%, #6d5bf0 100%); }
-.gd-do   { background-image: linear-gradient(135deg, #ff8a8e 0%, #e5484d 100%); }
-.gd-muc  { background-image: linear-gradient(135deg, #2d4f9a 0%, #0b1f4d 100%); }
+/* ---------- Màu đặc (tên gd-* giữ lại cho code cũ; không còn gradient) ---------- */
+.gd-xanh { background-color: var(--color-xanh); }
+.gd-luc  { background-color: var(--color-luc); }
+.gd-cam  { background-color: #a86400; } /* cam đậm hơn để chữ trắng đủ tương phản (4,7:1) */
+.gd-tim  { background-color: var(--color-tim); }
+.gd-do   { background-color: var(--color-do); }
+.gd-muc  { background-color: var(--color-muc); }
 
-/* ---------- Nền hero mềm: đầu trang, thẻ lớn. Có hai vòng sáng làm điểm nhấn ---------- */
-.nen-xanh { background-image: radial-gradient(circle at 88% 12%, rgba(255,255,255,.75) 0, transparent 38%), radial-gradient(circle at 8% 100%, rgba(22,100,245,.14) 0, transparent 45%), linear-gradient(135deg, #dcebff 0%, #eaf3ff 55%, #e1f6ff 100%); }
-.nen-luc  { background-image: radial-gradient(circle at 88% 12%, rgba(255,255,255,.75) 0, transparent 38%), radial-gradient(circle at 8% 100%, rgba(18,163,127,.16) 0, transparent 45%), linear-gradient(135deg, #d5f5ea 0%, #e6f8f1 55%, #dff6fb 100%); }
-.nen-cam  { background-image: radial-gradient(circle at 88% 12%, rgba(255,255,255,.75) 0, transparent 38%), radial-gradient(circle at 8% 100%, rgba(245,158,11,.18) 0, transparent 45%), linear-gradient(135deg, #ffeccb 0%, #fff4df 55%, #fff8e6 100%); }
-.nen-tim  { background-image: radial-gradient(circle at 88% 12%, rgba(255,255,255,.75) 0, transparent 38%), radial-gradient(circle at 8% 100%, rgba(109,91,240,.16) 0, transparent 45%), linear-gradient(135deg, #e6e1ff 0%, #f0edff 55%, #eaf0ff 100%); }
-.nen-do   { background-image: radial-gradient(circle at 88% 12%, rgba(255,255,255,.75) 0, transparent 38%), radial-gradient(circle at 8% 100%, rgba(229,72,77,.14) 0, transparent 45%), linear-gradient(135deg, #ffdfe0 0%, #ffecec 55%, #fff1ea 100%); }
-.nen-trang-xanh { background-image: linear-gradient(180deg, #e3eeff 0%, var(--color-nen) 100%); }
+/* ---------- Tờ giấy ô ly: ô nhỏ 8px, ô lớn 32px, như vở ô ly 4 ô ---------- */
+.nen-xanh, .nen-luc, .nen-cam, .nen-tim, .nen-do, .giay-o-ly {
+  --o-giay: var(--color-trang);
+  --o-net: rgba(36, 72, 196, .07);
+  --o-dam: rgba(36, 72, 196, .13);
+  background-color: var(--o-giay);
+  background-image:
+    linear-gradient(var(--o-dam) 1px, transparent 1px),
+    linear-gradient(90deg, var(--o-dam) 1px, transparent 1px),
+    linear-gradient(var(--o-net) 1px, transparent 1px),
+    linear-gradient(90deg, var(--o-net) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px, 8px 8px, 8px 8px;
+  background-position: -1px -1px;
+  border: 1px solid var(--o-dam);
+}
+.nen-luc { --o-giay: #f6fbf9; --o-net: rgba(18, 135, 106, .08); --o-dam: rgba(18, 135, 106, .15); }
+.nen-cam { --o-giay: #fffbf2; --o-net: rgba(220, 138, 0, .09); --o-dam: rgba(220, 138, 0, .17); }
+.nen-tim { --o-giay: #f9f8ff; --o-net: rgba(106, 79, 214, .08); --o-dam: rgba(106, 79, 214, .15); }
+.nen-do  { --o-giay: #fff8f7; --o-net: rgba(215, 54, 47, .07); --o-dam: rgba(215, 54, 47, .14); }
+.nen-trang-xanh { background-color: var(--color-nen); }
+/* Lưới ô ly trắng mờ trên dải màu đặc (ảnh bìa trang ngành). */
+.o-ly-trang {
+  background-image:
+    linear-gradient(rgba(255,255,255,.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.16) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px, 8px 8px, 8px 8px;
+}
 
-@keyframes hien-len { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.hien-len { animation: hien-len .25s ease-out both; }
+/* ---------- Bút dạ quang: một nét tô dưới con số quan trọng nhất ---------- */
+/* Con số lớn và tiêu đề không phải thẻ h: dùng class font-tieu-de (Tailwind) hoặc .so-lon. */
+.so-lon { font-family: var(--font-tieu-de); font-stretch: 90%; letter-spacing: -.01em; }
+
+.da-quang {
+  background-image: linear-gradient(transparent 52%, var(--color-da-quang) 52%, var(--color-da-quang) 90%, transparent 90%);
+  padding-inline: .12em;
+  margin-inline: -.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- Nút chính: phím mực có mép đặc, bấm thì lún xuống ---------- */
+.nut-muc { background-color: var(--color-xanh); box-shadow: var(--shadow-nut); transition: transform .08s ease, box-shadow .08s ease; }
+.nut-muc:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--color-xanh-dam); }
+
+@keyframes hien-len { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.hien-len { animation: hien-len .22s ease-out both; }
 @keyframes khung-xuong { from { opacity: .55; } to { opacity: 1; } }
-.dang-tai { animation: khung-xuong .9s ease-in-out infinite alternate; background: #e3eaf8; border-radius: 1rem; }
+.dang-tai { animation: khung-xuong .9s ease-in-out infinite alternate; background: #e6ebf3; border-radius: .75rem; }
 @media (prefers-reduced-motion: reduce) { .hien-len, .dang-tai { animation: none; } * { transition: none !important; } }
 
 /* Landing page reference layout. */
