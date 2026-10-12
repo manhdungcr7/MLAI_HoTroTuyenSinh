@@ -14,7 +14,7 @@ export default function Buoc3({ h, sua }: P) {
   const soVua = h.nganSach ? demVuaNganSach(h.nganSach, LUA_CHON_MAU) : 0;
   return (
     <>
-      <TieuDeBuoc tieuDe="Mục tiêu & ưu tiên" moTa="Chia sẻ điều kiện gia đình và mong muốn của em để gợi ý sát thực tế hơn." />
+      <TieuDeBuoc tieuDe="Mục tiêu & ưu tiên" moTa="Điều kiện gia đình và mong muốn của em." />
 
       <CauHoi tieuDe="Học phí gia đình có thể chi mỗi năm" icon={Wallet}>
         <ChonO nhan="Mức học phí mỗi năm" cot={2} cacLua={NGAN_SACH} giaTri={h.nganSach} onChange={(v) => sua({ nganSach: v })} />
@@ -40,16 +40,16 @@ export default function Buoc3({ h, sua }: P) {
         <BieuTuongTron icon={ChartColumn} tone={goiY ? "luc" : "xanh"} kichThuoc={40} />
         {goiY ? (
           <div className="min-w-0 text-[13px] text-chu">
-            <p>Với ngân sách hiện tại, nên ưu tiên trường có học phí</p>
+            <p>Nên ưu tiên học phí</p>
             <p className="text-[16px] font-extrabold text-luc-chu leading-snug">{goiY.khoang}</p>
             {goiY.ghiChu && <p className="mt-1">{goiY.ghiChu}</p>}
             <p className="mt-1 text-chu-phu">
-              {soVua > 0 ? `${soVua}/${LUA_CHON_MAU.length} lựa chọn có học phí vừa mức này (chỉ tính ngành đã có học phí).` : "Chưa có ngành nào có học phí vừa mức này."}
-              {" "}Nhiều ngành chưa có học phí, em xem thêm trên trang của trường.
+              {soVua > 0 ? `${soVua}/${LUA_CHON_MAU.length} ngành đã có học phí vừa mức này.` : "Chưa có ngành nào có học phí vừa mức này."}
+              {" "}Nhiều ngành chưa có học phí.
             </p>
           </div>
         ) : (
-          <p className="text-[13px] text-chu pt-0.5"><b className="block text-[15px] text-muc">Gợi ý học phí</b>Chọn mức học phí ở trên, mình sẽ gợi ý khoảng học phí nên ưu tiên cho em.</p>
+          <p className="text-[13px] text-chu pt-0.5"><b className="block text-[15px] text-muc">Gợi ý học phí</b>Chọn mức ở trên để xem khoảng nên ưu tiên.</p>
         )}
       </div>
     </>

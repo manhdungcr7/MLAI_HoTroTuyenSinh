@@ -119,16 +119,16 @@ export interface KetLuan {
 export function ketLuan(c: CoCau): KetLuan {
   const hienTrang = c.n ? `Hiện em có ${moTaSoLuong(c.dem)}.` : "Em chưa có nguyện vọng nào.";
   if (c.chuaDuCanCu > 0)
-    return { tone: "muc", onDinh: false, tieuDe: "Chưa đủ căn cứ để nhận xét cả danh sách", hienTrang, nenLam: null, lyDo: `Chưa đủ căn cứ cho ${c.chuaDuCanCu} nguyện vọng (thiếu điểm môn hoặc điểm thuộc phương thức khác). Em bổ sung điểm để mình xếp nhãn.` };
+    return { tone: "muc", onDinh: false, tieuDe: "Chưa đủ căn cứ để nhận xét cả danh sách", hienTrang, nenLam: null, lyDo: `Chưa đủ căn cứ cho ${c.chuaDuCanCu} nguyện vọng (thiếu điểm môn hoặc khác phương thức).` };
   if (c.chacChan === 0)
-    return { tone: "do", onDinh: false, tieuDe: "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm em", hienTrang, nenLam: "Em có thể thêm ít nhất 1 nguyện vọng có điểm chuẩn thấp hơn điểm của em từ 1,5 điểm", lyDo: "để danh sách có chỗ cho trường hợp điểm thi thấp hơn dự kiến." };
+    return { tone: "do", onDinh: false, tieuDe: "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm em", hienTrang, nenLam: "Thêm 1 nguyện vọng thấp hơn điểm em từ 1,5", lyDo: "phòng khi điểm thi thấp hơn dự kiến." };
   if (c.thuSucNhieu)
-    return { tone: "cam", onDinh: false, tieuDe: "Thử sức đang hơi nhiều", hienTrang, nenLam: "Em có thể đổi bớt 1 nguyện vọng thử sức sang trường vừa sức", lyDo: "để danh sách cân hơn giữa ước mơ và khả năng hiện tại." };
+    return { tone: "cam", onDinh: false, tieuDe: "Thử sức đang hơi nhiều", hienTrang, nenLam: "Đổi 1 NV thử sức sang vừa sức", lyDo: "để cân giữa ước mơ và sức hiện tại." };
   if (c.canThemAnToan)
-    return { tone: "cam", onDinh: false, tieuDe: "Mới có 1 nguyện vọng điểm chuẩn thấp hơn điểm em", hienTrang, nenLam: "Em có thể thêm 1 nguyện vọng An toàn hoặc Dự phòng nữa", lyDo: "để có thêm lựa chọn ở phía sau." };
+    return { tone: "cam", onDinh: false, tieuDe: "Mới có 1 nguyện vọng điểm chuẩn thấp hơn điểm em", hienTrang, nenLam: "Thêm 1 NV An toàn hoặc Dự phòng", lyDo: "để có thêm chỗ lùi." };
   if (c.thieuVuaSuc)
-    return { tone: "cam", onDinh: false, tieuDe: "Chưa có nguyện vọng vừa sức", hienTrang, nenLam: "Em có thể thêm 1 trường có điểm chuẩn gần với điểm của em", lyDo: "vì nhóm này sát với điểm hiện tại của em." };
-  return { tone: "luc", onDinh: true, tieuDe: "Cơ cấu danh sách đủ các nhóm", hienTrang, nenLam: null, lyDo: "Có cả trường để thử sức lẫn nguyện vọng điểm chuẩn thấp hơn điểm em. Nhãn chỉ so với điểm chuẩn các năm trước, không dự đoán kết quả." };
+    return { tone: "cam", onDinh: false, tieuDe: "Chưa có nguyện vọng vừa sức", hienTrang, nenLam: "Thêm 1 trường điểm chuẩn sát điểm em", lyDo: "đây là nhóm dễ trúng nhất với sức hiện tại." };
+  return { tone: "luc", onDinh: true, tieuDe: "Cơ cấu danh sách đủ các nhóm", hienTrang, nenLam: null, lyDo: "Có cả chỗ thử sức lẫn chỗ lùi. Nhãn so với điểm chuẩn năm trước, không dự đoán kết quả." };
 }
 
 // ---------- Ba điểm đánh giá ----------
@@ -170,7 +170,7 @@ export function chamDiem(ds: DongNV[], hoSo: Pick<HoSo, "nganSach" | "khuVuc">, 
 
   const coPhiNao = coDuLieu.some((d) => coHocPhi(d.lc));
   const taiChinh: DiemDanhGia = ns !== null && coDuLieu.length > 0 && !coPhiNao
-    ? { khoa: "taiChinh", ten: "Phù hợp tài chính", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Các nguyện vọng này chưa có học phí trong dữ liệu, nên chưa so được với ngân sách. Em xem học phí trên trang của trường.", cachTinh: ["Cần ít nhất một nguyện vọng có học phí trong dữ liệu mới chấm được."] }
+    ? { khoa: "taiChinh", ten: "Phù hợp tài chính", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Các nguyện vọng chưa có học phí trong dữ liệu.", cachTinh: ["Cần ít nhất một nguyện vọng có học phí trong dữ liệu mới chấm được."] }
     : ns === null
     ? { khoa: "taiChinh", ten: "Phù hợp tài chính", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Em chưa chọn mức học phí gia đình có thể lo.", cachTinh: ["Cần em chọn ngân sách học phí ở bước Mục tiêu & ưu tiên."] }
     : {

@@ -10,7 +10,7 @@ import { homNay, khoangCachCuaToi, mucTieuDayDu, tuanHienTai, viecCuaTuan } from
 import { useApp } from "@/state/store";
 import type { ToneTen, ViecCanHoc } from "@/state/types";
 import { phutBayGio, tenNgay, tenThu, ngayThang, soPhut, thoiLuong } from "./dinh-dang";
-import { NhanUuTien, OTichTron } from "./thanh-phan";
+import { OTichTron } from "./thanh-phan";
 import { buoiNenHien, daKetThuc, khoiCuaViec, nhomViec, tienDoNgay, type IdNhom } from "./tinh-toan";
 import { viecChoTuan } from "./tao-viec-tuan";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -126,7 +126,6 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
       {!quaKhu && s.mucTieu && (
         <div className="pt-1 space-y-2">
           <Nut kieu="vien" bieuTuong={ListPlus} onClick={() => taoVaXep()}>Cập nhật việc theo điểm mới</Nut>
-          <p className="text-[12px] text-chu-phu">Giữ lại việc đã xong, tạo lại phần còn lại theo điểm hiện tại và giờ tự học còn trống.</p>
         </div>
       )}
       {hopCanLich}
@@ -152,7 +151,7 @@ function MucTieuHomNay() {
         </span>
         <b className="block text-[18px] text-muc leading-tight mt-0.5">Bù +{dinhDang(mon.thieu, 1)} điểm cho {mon.ten}</b>
         <span className="block text-[13px] text-chu-phu leading-snug mt-0.5">
-          {viecMon ? `Việc giúp em nhất: ${viecMon.tieuDe}.` : `${mon.ten} là môn còn thiếu nhiều điểm nhất so với mục tiêu ${m.lc.truong}.`}
+          {viecMon ? `Làm trước: ${viecMon.tieuDe}` : `Môn thiếu nhiều nhất so với ${m.lc.truong}`}
         </span>
       </span>
     </button>
@@ -176,9 +175,9 @@ function DongViec({ v, ngays, ngayChon, quaKhu }: { v: ViecCanHoc; ngays: string
         <span className="flex-1 min-w-0">
           <span className="flex items-start justify-between gap-2">
             <b className={gop("text-[15px] text-muc leading-snug", xong && "line-through")}>{v.tieuDe}</b>
-            {tt === "boQua" ? <Nhan tone="muc">Đã bỏ qua</Nhan> : xong ? <Nhan tone="luc">Xong</Nhan> : <NhanUuTien muc={v.mucUuTien} />}
+            {/* Mức ưu tiên đã là tên nhóm phía trên, không lặp nhãn ở từng dòng. */}
+            {tt === "boQua" ? <Nhan tone="muc">Đã bỏ qua</Nhan> : xong ? <Nhan tone="luc">Xong</Nhan> : null}
           </span>
-          <span className="block text-[13px] text-chu-phu leading-snug mt-0.5">{v.chiTiet}</span>
           <span className={gop("flex items-center gap-1 text-[13px] font-semibold mt-1", buoi ? "text-xanh" : "text-cam-chu")}>
             <Clock size={14} className="shrink-0" />
             <span className="min-w-0">

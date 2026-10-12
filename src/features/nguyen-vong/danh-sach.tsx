@@ -18,7 +18,7 @@ import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
-import { CanhBaoThuTuThe, CoCauMini, GhiChuDuLieu, HopQuyTacXet, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
+import { CanhBaoThuTuThe, CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -65,7 +65,7 @@ export default function DanhSachNguyenVong() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Danh sách nguyện vọng" moTa="Sắp xếp thứ tự ưu tiên. NV1 là trường em muốn vào nhất." />
+      <DauTrangChinh tieuDe="Danh sách nguyện vọng" moTa="Em vào NV cao nhất đủ điểm, nên NV1 là trường muốn nhất." />
       <NoiDung>
         <NutTuVan nguCanh="Danh sách nguyện vọng" />
         {ds.length === 0 ? (
@@ -86,17 +86,16 @@ export default function DanhSachNguyenVong() {
 
             {ds.length > SO_NV_GOI_Y && (
               <DongThongBao tone="xanh" icon={ListPlus} tieuDe={`Em đang có ${ds.length} nguyện vọng`}
-                moTa={`Giữ khoảng 5–${SO_NV_GOI_Y} nguyện vọng giúp em dễ cân nhắc hơn. Em vẫn có thể giữ nhiều hơn nếu muốn.`} />
+                moTa={`Khoảng 5–${SO_NV_GOI_Y} nguyện vọng là dễ cân nhắc nhất.`} />
             )}
 
-            <HopQuyTacXet />
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
-            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Tổ hợp cao nhất của em: ${dinhDang(tong, 1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
+            <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Cao nhất: ${dinhDang(tong, 1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
               Thứ tự của em
             </TieuDeMuc>
             <p className="-mt-1 text-[13px] text-chu-phu flex items-center gap-1">
-              <GripVertical size={15} className="shrink-0" />Giữ tay nắm để kéo, hoặc bấm mũi tên để đổi thứ tự.
+              <GripVertical size={15} className="shrink-0" />Kéo tay nắm hoặc bấm mũi tên để đổi.
             </p>
 
             <ol className={gop("space-y-3", keo && "select-none")} aria-label="Danh sách nguyện vọng theo thứ tự ưu tiên">
@@ -112,9 +111,11 @@ export default function DanhSachNguyenVong() {
             <Nut bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Thêm nguyện vọng</Nut>
             <NutGoiYDanhSach kieu="vien" onMo={() => setMoGoiY(true)} />
 
-            <TieuDeMuc>Nếu điểm của em thay đổi</TieuDeMuc>
-            <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Nếu tăng điểm thì sao?" phu="Thử cộng điểm từng môn, xem nhãn các trường đổi ra sao" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
-            <HangBam bieuTuong={ClipboardPen} tone="cam" tieuDe="Nhập điểm thi thử mới" phu="Cập nhật điểm để nhãn nguyện vọng sát hơn" onClick={() => nav(DUONG_DAN.diemThiThu())} />
+            <TieuDeMuc>Nếu điểm thay đổi</TieuDeMuc>
+            <div className="grid grid-cols-2 gap-2">
+              <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Thử tăng điểm" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
+              <HangBam bieuTuong={ClipboardPen} tone="cam" tieuDe="Nhập thi thử" onClick={() => nav(DUONG_DAN.diemThiThu())} />
+            </div>
 
             <GhiChuDuLieu />
           </>
@@ -151,7 +152,7 @@ export default function DanhSachNguyenVong() {
         {dongXoa && (
           <div className="space-y-4">
             <TomTatTruong d={dongXoa} />
-            <p className="text-[14px] text-chu">NV{dongXoa.viTri + 1} sẽ được bỏ khỏi danh sách, các nguyện vọng sau sẽ dồn lên. Em có thể hoàn tác trong vài giây.</p>
+            <p className="text-[14px] text-chu">Các NV sau sẽ dồn lên. Hoàn tác được trong vài giây.</p>
             <div className="grid grid-cols-2 gap-2">
               <Nut kieu="vien" onClick={() => setDangXoa(null)}>Giữ lại</Nut>
               <Nut kieu="nguyHiem" bieuTuong={Trash2} onClick={() => xoa(dongXoa.id)}>Xóa</Nut>
@@ -177,12 +178,12 @@ function TheTomTat({ tong, kl, dem, onClick }: { tong: number | null; kl: Return
           <ChevronRight size={20} className="text-chu-phu shrink-0" />
         </span>
         {tong === null ? (
-          <span className="block mt-3 text-[14px] text-chu">Cần đủ điểm 3 môn của một tổ hợp để xếp nhãn và trả lời câu này.</span>
+          <span className="block mt-3 text-[14px] text-chu">Cần đủ điểm 3 môn của một tổ hợp để xếp nhãn.</span>
         ) : (
           <>
             <span className="block mt-3"><CoCauMini dem={dem} /></span>
             <span className="block mt-2.5 text-[14px] text-chu leading-snug">
-              <b className="text-muc">{kl.tieuDe}.</b> {kl.nenLam ? `${kl.nenLam}.` : "Em xem chi tiết để biết thêm nhé."}
+              <b className="text-muc">{kl.tieuDe}.</b>{kl.nenLam && ` ${kl.nenLam}.`}
             </span>
           </>
         )}
@@ -246,19 +247,22 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
               )}
             </span>
           </span>
-          {d.lc && d.chenh !== null && (
-            <span className={gop("mt-2 block text-[13px] leading-snug font-bold", d.chenh < 0 ? "text-cam-chu" : "text-luc-chu")}>
-              Điểm em {d.chenh < 0 ? "kém" : "hơn"} điểm chuẩn năm {d.lc.namDiem}: {d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 2)}
-            </span>
-          )}
           {d.lc && (
-            <span className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-chu-phu">
-              <span className="inline-flex items-center gap-1"><GraduationCap size={14} />Điểm {d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
-              {(() => { const db = duBaoCua(d.lc); return db ? <span className="inline-flex items-center gap-1" title="Khoảng điểm chuẩn dự kiến, đã kiểm định với các năm trước. Không phải xác suất đậu.">Dự kiến {db.namDuBao}: <b className="text-chu">{dinhDang(db.thap, 1)}–{dinhDang(db.cao, 1)}</b></span> : null; })()}
-              {d.toHop && <span className="inline-flex items-center rounded-full bg-nen px-2 py-0.5 text-[12px]">tổ hợp {d.toHop}{d.suyRa ? " · suy ra" : ""}</span>}
-              <span className="inline-flex items-center gap-1"><Wallet size={14} />{coHocPhi(d.lc) ? <><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</> : "Chưa có học phí"}</span>
+            <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-chu-phu">
+              <span className="inline-flex items-center gap-1"><GraduationCap size={14} />{d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
+              {d.chenh !== null && (
+                <b className={d.chenh < 0 ? "text-cam-chu" : "text-luc-chu"} title={`Điểm em so với điểm chuẩn ${d.lc.namDiem}`}>
+                  em {d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 1)}
+                </b>
+              )}
+              {d.toHop && <span className="inline-flex items-center rounded-full bg-nen px-2 py-0.5 text-[12px]">{d.toHop}{d.suyRa ? " · suy ra" : ""}</span>}
+              {coHocPhi(d.lc) && <span className="inline-flex items-center gap-1"><Wallet size={14} /><b className="text-chu">{hocPhiChu(d.lc)}</b> tr/năm</span>}
             </span>
           )}
+          {d.lc && (() => {
+            const db = duBaoCua(d.lc);
+            return db ? <span className="mt-1 block text-[12px] text-chu-phu" title="Khoảng điểm chuẩn dự kiến, đã kiểm định với các năm trước. Không phải xác suất đậu.">Dự kiến {db.namDuBao}: {dinhDang(db.thap, 1)}–{dinhDang(db.cao, 1)}</span> : null;
+          })()}
         </button>
 
         <div className="flex items-center gap-1 border-t border-vien px-1.5 py-0.5">
