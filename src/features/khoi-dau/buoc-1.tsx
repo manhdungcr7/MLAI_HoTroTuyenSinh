@@ -29,7 +29,7 @@ export default function Buoc1({ h, sua, loi }: P) {
   return (
     <>
       <TieuDeBuoc tieuDe={<>Điền nhanh trong <span className="text-xanh">60 giây</span></>}
-        moTa="Chỉ vài thông tin cơ bản để gợi ý hợp với em hơn. Em có thể bổ sung thêm sau." />
+        moTa="Vài thông tin cơ bản, sửa sau được." />
 
       <div className="space-y-1.5">
         <label htmlFor="bd-ho-ten" className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
@@ -156,7 +156,7 @@ export default function Buoc1({ h, sua, loi }: P) {
 
       <p className="flex gap-2 items-start rounded-the bg-xanh-nhat p-3 text-[13px] text-chu">
         <Lightbulb size={18} className="text-cam shrink-0 mt-0.5" />
-        Chưa chắc ngành nào cũng không sao. Em cứ chọn theo cảm nhận, sau này đổi lại được.
+        Chưa chắc cũng không sao, chọn theo cảm nhận rồi đổi sau.
       </p>
     </>
   );

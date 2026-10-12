@@ -10,9 +10,9 @@ import type { TamTrang, ToneTen } from "@/state/types";
 import { CAU_NOI, TEN_NHOM_CAU_NOI, chonCauNoi, type NhomCauNoi } from "./cau-noi";
 
 const CAC_TAM_TRANG: { gia: TamTrang; nhan: string; icon: LucideIcon; tone: ToneTen; loiNhan: string }[] = [
-  { gia: "tot", nhan: "Khỏe", icon: Smile, tone: "luc", loiNhan: "Tuyệt quá! Mình giữ lịch như cũ. Làm việc nên làm trước khi còn nhiều năng lượng nhé." },
-  { gia: "binhThuong", nhan: "Bình thường", icon: Meh, tone: "xanh", loiNhan: "Cứ từ từ thôi. Hôm nay xong một việc quan trọng là đã tốt rồi." },
-  { gia: "met", nhan: "Hơi mệt", icon: Frown, tone: "cam", loiNhan: "Mình đã làm nhẹ lịch tự học còn lại của tuần. Nghỉ ngơi cũng là một phần của việc học." },
+  { gia: "tot", nhan: "Khỏe", icon: Smile, tone: "luc", loiNhan: "Tuyệt! Làm việc khó trước khi còn sung sức." },
+  { gia: "binhThuong", nhan: "Ổn", icon: Meh, tone: "xanh", loiNhan: "Xong một việc quan trọng là đủ tốt rồi." },
+  { gia: "met", nhan: "Hơi mệt", icon: Frown, tone: "cam", loiNhan: "Đã làm nhẹ lịch còn lại của tuần. Nghỉ ngơi nhé." },
 ];
 
 const VIEN_CHON: Record<ToneTen, string> = {
@@ -51,9 +51,9 @@ export function TamTrangHomNay() {
           const dang = s.tamTrang === t.gia;
           return (
             <button key={t.gia} type="button" role="radio" aria-checked={dang} onClick={() => chon(t.gia)}
-              className={gop("min-h-14 rounded-xl border flex flex-col items-center justify-center gap-0.5 text-[13px] font-bold transition-colors",
+              className={gop("min-h-11 rounded-xl border flex items-center justify-center gap-1.5 text-[13px] font-bold transition-colors",
                 dang ? VIEN_CHON[t.tone] : "bg-trang border-vien text-chu active:bg-xanh-nhat")}>
-              <t.icon size={22} />{t.nhan}
+              <t.icon size={18} />{t.nhan}
             </button>
           );
         })}
@@ -80,8 +80,7 @@ export function CauNoiDongLuc() {
     <The tone="tim" className="flex gap-3 items-start">
       <Quote className="text-tim shrink-0 mt-0.5" size={22} />
       <div className="flex-1 min-w-0">
-        <p className="text-[12px] font-bold text-tim-chu">{TEN_NHOM_CAU_NOI[cau.nhom]}</p>
-        <p className="text-[15px] font-semibold text-chu leading-snug" aria-live="polite">{cau.cau}</p>
+        <p className="text-[14px] font-semibold text-chu leading-snug" aria-live="polite" title={TEN_NHOM_CAU_NOI[cau.nhom]}>{cau.cau}</p>
       </div>
       <button type="button" onClick={doiCauNoi} aria-label="Đổi câu khác" className="size-11 -m-2 grid place-items-center rounded-full text-tim-chu active:bg-tim/10"><RefreshCw size={18} /></button>
     </The>

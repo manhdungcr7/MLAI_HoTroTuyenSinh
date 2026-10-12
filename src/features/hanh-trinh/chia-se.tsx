@@ -1,6 +1,6 @@
 // Bản tóm tắt để em đưa cho phụ huynh, thầy cô, người tư vấn xem. Dữ liệu không rời máy trừ khi em tự bấm chia sẻ.
 import { useState } from "react";
-import { Copy, Link2, MessageCircleHeart, Printer, Share2, Trash2, Users } from "lucide-react";
+import { ChevronDown, ChevronUp, Copy, Link2, MessageCircleHeart, Printer, Share2, Trash2, Users } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { TieuDeMuc } from "@/components/ui/hien-thi";
 import { The, Nut } from "@/components/ui/nut-the";
@@ -18,20 +18,21 @@ export default function ChiaSe() {
   const [tin, setTin] = useState("");
   const [kemTen, setKemTen] = useState(false);
   const [lienKet, setLienKet] = useState("");
+  const [moNoiDung, setMoNoiDung] = useState(false);
   const { muc, vanBan } = tomTatChiaSe(s, new Date(), kemTen);
   const coShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   const sao = async () => {
-    try { await navigator.clipboard.writeText(vanBan); setTin("Đã sao chép. Em dán vào tin nhắn hoặc email là được."); }
-    catch { setTin("Máy không cho sao chép tự động. Em bấm giữ vào đoạn văn bên dưới để chọn và sao chép."); }
+    try { await navigator.clipboard.writeText(vanBan); setTin("Đã sao chép. Dán vào tin nhắn hoặc email là được."); }
+    catch { setMoNoiDung(true); setTin("Máy không cho sao chép tự động. Bấm giữ đoạn văn bên dưới để chọn."); }
   };
   const taoLienKet = () => {
     const goi = taoGoiChiaSe(muc, chiSoTheoDoi(s).map((c) => ({ ten: c.ten, giaTri: c.giaTri })), new Date(), kemTen ? s.hoSo.hoTen : undefined);
     setLienKet(lienKetDayDu(DUONG_DAN.dongHanh(maHoa(goi))));
   };
   const saoLienKet = async () => {
-    try { await navigator.clipboard.writeText(lienKet); setTin("Đã sao chép liên kết. Em gửi cho phụ huynh hoặc thầy cô qua Zalo, tin nhắn."); }
-    catch { setTin("Máy không cho sao chép tự động. Em bấm giữ vào liên kết để chọn và sao chép."); }
+    try { await navigator.clipboard.writeText(lienKet); setTin("Đã sao chép liên kết. Gửi qua Zalo hoặc tin nhắn."); }
+    catch { setTin("Máy không cho sao chép tự động. Bấm giữ liên kết để chọn."); }
   };
   const chiaSe = async () => {
     try { await navigator.share({ title: "Tóm tắt Nguyện Vọng AI", text: vanBan }); }
@@ -43,22 +44,20 @@ export default function ChiaSe() {
       <DauTrangCoQuayLai tieuDe="Chia sẻ với người đồng hành" quayLai={DUONG_DAN.hoSo()} />
       <NoiDung className="space-y-4">
         <DongThongBao tone="xanh" icon={Users} tieuDe="Để người lớn cùng em cân nhắc"
-          moTa="Đây là bản tóm tắt hồ sơ, mục tiêu, danh sách nguyện vọng và những điều nên trao đổi. Em gửi cho phụ huynh, thầy cô hoặc người tư vấn để họ nắm đúng tình hình của em. Mình không gửi gì lên máy chủ." />
+          moTa="Gửi bản tóm tắt cho phụ huynh, thầy cô. Không lưu trên máy chủ." />
 
         <section aria-label="Chỉ số theo dõi">
-          <TieuDeMuc>Tiến bộ của em</TieuDeMuc>
-          <ChiSoTheoDoi s={s} />
+          <ChiSoTheoDoi s={s} gon />
         </section>
 
         <section aria-label="Liên kết cho người đồng hành" className="space-y-2.5 print:hidden">
-          <TieuDeMuc>Gửi liên kết cho người đồng hành</TieuDeMuc>
+          <TieuDeMuc>Gửi liên kết</TieuDeMuc>
           <The className="space-y-3">
-            <p className="text-[14px] text-chu leading-snug">Người nhận mở liên kết là xem được bản tóm tắt này và viết lời nhắn gửi lại em, không cần tài khoản. Nội dung nằm trong chính liên kết, không lưu trên máy chủ.</p>
+            <p className="text-[14px] text-chu leading-snug">Người nhận xem tóm tắt và nhắn lại em, không cần tài khoản.</p>
             {!lienKet && (
-              <div className="rounded-the bg-cam-nhat p-3 border border-cam-chu/30 text-[13px] text-cam-chu leading-snug">
-                <p className="font-bold">Ghi chú riêng tư:</p>
-                <p>Liên kết chứa điểm, tỉnh, ngân sách. Ai có liên kết đều xem được và không thu hồi được. Chỉ gửi cho người em tin.</p>
-              </div>
+              <p className="rounded-the bg-cam-nhat px-3 py-2 text-[13px] text-cam-chu leading-snug">
+                <b>Riêng tư:</b> ai có liên kết đều xem được điểm, tỉnh, ngân sách và không thu hồi được. Chỉ gửi người em tin.
+              </p>
             )}
             <div className="flex items-center justify-between gap-3 min-h-11">
               <span className="text-[14px] text-chu leading-snug">Kèm tên của em trong liên kết</span>
@@ -69,7 +68,7 @@ export default function ChiaSe() {
               <>
                 <p className="text-[12px] text-chu-phu">Ngày tạo: {new Date().toLocaleDateString("vi-VN")}</p>
                 {lienKet.length > 8000 && (
-                  <p className="text-[13px] text-cam-chu rounded-the bg-cam-nhat p-2.5 leading-snug">Liên kết dài, một số ứng dụng chat có thể cắt. Em thử gửi từng phần hoặc dùng nút Gửi qua ứng dụng khác.</p>
+                  <p className="text-[13px] text-cam-chu rounded-the bg-cam-nhat p-2.5 leading-snug">Liên kết dài, có ứng dụng chat sẽ cắt. Thử nút Gửi qua ứng dụng khác.</p>
                 )}
                 <p className="break-all rounded-lg bg-nen p-2.5 text-[12px] text-chu-phu select-all max-h-24 overflow-y-auto">{lienKet}</p>
                 <Nut kieu="vien" bieuTuong={Copy} onClick={saoLienKet}>Sao chép liên kết</Nut>
@@ -80,7 +79,7 @@ export default function ChiaSe() {
 
         {s.loiNhan.length > 0 && (
           <section aria-label="Lời nhắn đã nhận" className="print:hidden">
-            <TieuDeMuc>Lời nhắn em đã nhận</TieuDeMuc>
+            <TieuDeMuc>Lời nhắn đã nhận</TieuDeMuc>
             <div className="space-y-2">
               {s.loiNhan.map((l) => (
                 <The key={l.id} className="space-y-1.5">
@@ -98,8 +97,11 @@ export default function ChiaSe() {
         )}
 
         <section aria-label="Nội dung bản tóm tắt" className="print-vung">
-          <TieuDeMuc>Nội dung sẽ được chia sẻ</TieuDeMuc>
-          <The className="space-y-3.5">
+          <button type="button" onClick={() => setMoNoiDung((x) => !x)} aria-expanded={moNoiDung}
+            className="w-full min-h-12 flex items-center justify-between rounded-the bg-trang border border-vien px-4 text-[14px] font-bold text-muc active:bg-xanh-nhat print:hidden">
+            Xem nội dung sẽ gửi {moNoiDung ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </button>
+          <The className={moNoiDung ? "mt-2 space-y-3.5" : "hidden print:block space-y-3.5"}>
             {muc.map((k, i) => (
               <div key={`${k.tieuDe}-${i}`}>
                 <h3 className="text-[14px] font-bold text-muc">{k.tieuDe}</h3>
@@ -113,9 +115,9 @@ export default function ChiaSe() {
 
         <div aria-live="polite" className="min-h-5 text-[13px] text-chu-phu">{tin}</div>
         <div className="space-y-2 print:hidden">
-          <Nut bieuTuong={Copy} onClick={sao}>Sao chép bản tóm tắt</Nut>
+          <Nut kieu="vien" bieuTuong={Copy} onClick={sao}>Sao chép bản tóm tắt</Nut>
           {coShare && <Nut kieu="vien" bieuTuong={Share2} onClick={chiaSe}>Gửi qua ứng dụng khác</Nut>}
-          <Nut kieu="vien" bieuTuong={Printer} onClick={() => window.print()}>In hoặc lưu thành PDF</Nut>
+          <Nut kieu="nhe" bieuTuong={Printer} onClick={() => window.print()}>In hoặc lưu PDF</Nut>
         </div>
       </NoiDung>
     </>

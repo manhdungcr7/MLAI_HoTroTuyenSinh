@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { BarChart3, CalendarClock, CalendarDays, Check, ChevronDown, ChevronRight, ChevronUp, Compass, Flag, Lightbulb, ListTodo, PartyPopper, Target, TrendingUp, Wallet } from "lucide-react";
+import { CalendarClock, CalendarDays, Check, ChevronDown, ChevronRight, ChevronUp, Compass, Lightbulb, ListTodo, PartyPopper, Target, TrendingUp, Wallet } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { DongThongBao } from "@/components/ui/thong-bao";
@@ -37,15 +37,12 @@ export default function HomNay() {
       <NoiDung>
         {m ? (
           <>
-            <TheMucTieu nganh={m.lc.nganh} truong={m.lc.truong} tenTruong={m.lc.tenTruong} conThieu={thieuMon.length ? null : m.conThieu} uuTien={m.uuTienCong} onClick={() => nav(DUONG_DAN.mucTieu())} />
-            <OSoDiem hienTai={m.hienTai} mucTieu={m.mucTieu} thieuMon={thieuMon} />
-            {m.anDemNguoc
-              ? <p className="px-1 text-[12px] text-chu-phu">Điểm học bạ chưa phải điểm thi, chỉ để so tham khảo.</p>
-              : (
-                <HangBam bieuTuong={CalendarDays} tone="do" onClick={() => nav(DUONG_DAN.mucTieu())}
-                  tieuDe={m.soNgayCon > 0 ? <>Còn <b className="text-[18px] font-extrabold text-do-chu">{m.soNgayCon} ngày</b> đến kỳ thi</> : "Đã tới ngày thi dự kiến"}
-                  phu={m.soNgayCon > 0 ? `Kỳ thi THPT dự kiến ${ngayDayDu(s.mucTieu!.ngayThi)}` : "Em cập nhật ngày thi mới ở trang Mục tiêu nhé."} />
-              )}
+            <TheMucTieu m={m} thieuMon={thieuMon} ngayThi={s.mucTieu?.ngayThi} onClick={() => nav(DUONG_DAN.mucTieu())} />
+            {thieuMon.length > 0 && (
+              <button type="button" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} className="w-full min-h-12 rounded-xl bg-cam-nhat px-3 text-left text-[13px] text-chu active:brightness-95">
+                Thiếu điểm <b>{thieuMon.join(", ")}</b> · <b className="text-xanh">Nhập điểm</b>
+              </button>
+            )}
             {(chang !== "dinhHuong" || viecCuaTuan(s.viec, tuanHienTai()).length > 0) && <ViecHomNay />}
           </>
         ) : (
@@ -72,60 +69,48 @@ export default function HomNay() {
   );
 }
 
-function TheMucTieu({ nganh, truong, tenTruong, conThieu, uuTien, onClick }: { nganh: string; truong: string; tenTruong: string; conThieu: number | null; uuTien: number; onClick: () => void }) {
+type MucTieuDayDu = NonNullable<ReturnType<typeof mucTieuDayDu>>;
+
+/** Một thẻ duy nhất cho mục tiêu: ngành – trường, ba con số (hiện tại → mục tiêu · thiếu) và số ngày còn lại. */
+function TheMucTieu({ m, thieuMon, ngayThi, onClick }: { m: MucTieuDayDu; thieuMon: string[]; ngayThi?: string; onClick: () => void }) {
+  const duDiem = thieuMon.length === 0;
+  const dat = duDiem && m.conThieu <= 0;
+  const dongDuoi = m.anDemNguoc
+    ? "Điểm học bạ, chỉ để so tham khảo"
+    : m.soNgayCon > 0 ? `Còn ${m.soNgayCon} ngày đến kỳ thi${ngayThi ? ` · ${ngayDayDu(ngayThi)}` : ""}` : "Đã tới ngày thi dự kiến · cập nhật ở Mục tiêu";
   return (
     <button type="button" onClick={onClick} className="block w-full text-left rounded-lon shadow-the active:opacity-90">
       <NenHero tone="xanh" className="p-4">
         <span className="flex items-center gap-3">
-          <BieuTuongTron icon={Target} tone="xanh" kichThuoc={54} />
+          <BieuTuongTron icon={Target} tone="xanh" kichThuoc={44} />
           <span className="flex-1 min-w-0">
-            <span className="block text-[13px] font-semibold text-xanh">Mục tiêu mơ ước</span>
-            <b className="block text-[20px] leading-tight text-muc">{nganh} <span className="whitespace-nowrap">– {truong}</span></b>
-            <span className="block text-[12px] text-chu-phu leading-snug mt-0.5">{tenTruong}</span>
+            <span className="block text-[12px] font-semibold text-xanh">Mục tiêu</span>
+            <b className="block text-[18px] leading-tight text-muc">{m.lc.nganh} <span className="whitespace-nowrap">– {m.lc.truong}</span></b>
           </span>
-          <span className="size-9 rounded-full bg-trang/80 grid place-items-center shrink-0"><ChevronRight size={18} className="text-xanh" /></span>
+          <ChevronRight size={20} className="text-xanh shrink-0" />
         </span>
-        <span className="mt-3 flex items-center gap-2 rounded-xl bg-trang/75 px-3 py-2">
-          {conThieu === null ? (
-            <span className="text-[14px] text-chu">Cần đủ điểm 3 môn của tổ hợp để tính em còn thiếu bao nhiêu.</span>
-          ) : conThieu > 0 ? (
-            <span className="text-[14px] text-chu">Còn thiếu <b className="text-[20px] font-extrabold text-do-chu">{dinhDang(conThieu, 1)}</b> <b className="text-do-chu">điểm</b> so với mục tiêu{uuTien > 0 && <span className="block text-[12px] text-chu-phu">Đã tính điểm ưu tiên em khai (khoảng +{dinhDang(uuTien, 2)})</span>}</span>
-          ) : (
-            <span className="text-[14px] font-bold text-luc-chu">Em đã chạm điểm mục tiêu, giữ vững nhé!</span>
-          )}
+        <span className="mt-3 grid grid-cols-3 gap-1 rounded-xl bg-trang/75 py-2 text-center">
+          <ODiem nhan="Hiện tại" gia={duDiem ? dinhDang(m.hienTai, 1) : "—"} />
+          <ODiem nhan="Mục tiêu" gia={dinhDang(m.mucTieu, 1)} />
+          {dat
+            ? <ODiem nhan="Đã đạt" gia={<Check size={22} strokeWidth={3} className="inline text-luc-chu" />} />
+            : <ODiem nhan="Còn thiếu" gia={duDiem ? dinhDang(m.conThieu, 1) : "—"} noiBat />}
+        </span>
+        <span className="mt-2 flex items-center gap-1.5 text-[12px] text-chu-phu">
+          <CalendarDays size={14} className="shrink-0" />
+          {dongDuoi}{m.uuTienCong > 0 && ` · gồm +${dinhDang(m.uuTienCong, 2)} ưu tiên`}
         </span>
       </NenHero>
     </button>
   );
 }
 
-function OSoDiem({ hienTai, mucTieu, thieuMon }: { hienTai: number; mucTieu: number; thieuMon: string[] }) {
-  const nav = useNavigate();
-  const { s } = useApp();
+function ODiem({ nhan, gia, noiBat }: { nhan: string; gia: React.ReactNode; noiBat?: boolean }) {
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <The className="!p-3 flex items-center gap-2.5">
-        <span className="size-10 rounded-xl bg-xanh-nhat text-xanh grid place-items-center shrink-0"><BarChart3 size={20} /></span>
-        <span className="min-w-0">
-          <span className="block text-[12px] text-chu-phu leading-tight">Điểm hiện tại</span>
-          {thieuMon.length > 0
-            ? <><b className="text-[22px] font-extrabold text-muc leading-tight">—</b><span className="block text-[12px] text-chu-phu leading-tight">chưa đủ điểm</span></>
-            : <><b className="text-[22px] font-extrabold text-muc leading-tight">{dinhDang(hienTai, 1)}</b><span className="text-[13px] text-chu-phu"> / 30</span></>}
-        </span>
-      </The>
-      <The className="!p-3 flex items-center gap-2.5">
-        <span className="size-10 rounded-xl bg-do-nhat text-do grid place-items-center shrink-0"><Flag size={20} /></span>
-        <span className="min-w-0">
-          <span className="block text-[12px] text-chu-phu leading-tight">Điểm mục tiêu</span>
-          <b className="text-[22px] font-extrabold text-muc leading-tight">{dinhDang(mucTieu, 1)}</b><span className="text-[13px] text-chu-phu"> / 30</span>
-        </span>
-      </The>
-      {thieuMon.length > 0 && (
-        <button type="button" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} className="col-span-2 min-h-12 rounded-xl bg-cam-nhat px-3 text-left text-[13px] text-chu active:brightness-95">
-          Chưa có điểm <b>{thieuMon.join(", ")}</b> nên điểm hiện tại đang tính thiếu. <b className="text-xanh">Nhập điểm</b>
-        </button>
-      )}
-    </div>
+    <span className="min-w-0">
+      <span className="block text-[11px] text-chu-phu">{nhan}</span>
+      <b className={gop("block text-[22px] font-extrabold leading-tight", noiBat ? "text-do-chu" : "text-muc")}>{gia}</b>
+    </span>
   );
 }
 
@@ -138,8 +123,8 @@ function ChuaCoMucTieu({ chang, onClick, soNguyenVong, nganhNV, lyDo, onNguyenVo
           <b className="block text-[18px] leading-snug text-muc">{chang === "dinhHuong" ? "Em chưa cần chốt mục tiêu ngay" : "Em chưa chọn mục tiêu chính"}</b>
           <span className="block text-[14px] text-chu mt-1">
             {chang === "dinhHuong"
-              ? "Em cứ khám phá vài ngành, lưu những ngành thấy hợp. Khi đã rõ hơn, em chọn một ngành làm mục tiêu."
-              : "Chọn một ngành và trường em muốn theo. Sau đó, việc cần làm mỗi ngày sẽ hiện ở đây."}
+              ? "Khám phá và lưu vài ngành thấy hợp trước đã."
+              : "Chọn một ngành để nhận việc cần làm mỗi ngày."}
           </span>
         </span>
       </span>
@@ -178,7 +163,7 @@ function ViecHomNay() {
         {dauMuc}
         <div className="flex items-start gap-3 rounded-xl bg-nen p-3">
           <ListTodo size={22} className="text-xanh shrink-0 mt-0.5" />
-          <p className="text-[14px] text-chu">Chưa có việc học nào. Việc sẽ xuất hiện ở đây sau khi em lập kế hoạch tuần từ mục tiêu đã chọn.</p>
+          <p className="text-[14px] text-chu">Chưa có việc học. Lập kế hoạch tuần để việc hiện ở đây.</p>
         </div>
         <Nut kieu="nhe" muiTen onClick={() => nav(DUONG_DAN.tuan())}>Lập kế hoạch tuần</Nut>
       </The>
@@ -190,7 +175,7 @@ function ViecHomNay() {
     return (
       <The className="space-y-3">
         {dauMuc}
-        <p className="text-[14px] text-chu">Hôm nay chưa có buổi tự học nào được xếp.{tiep ? " Nếu rảnh, em có thể làm trước việc này:" : " Em đã xong hết việc của tuần này rồi!"}</p>
+        <p className="text-[14px] text-chu">{tiep ? "Hôm nay trống lịch. Rảnh thì làm trước:" : "Em đã xong hết việc tuần này!"}</p>
         {tiep ? (
           <HangBam bieuTuong={ListTodo} tone="cam" tieuDe={tiep.tieuDe} phu={`${tiep.phut} phút · nên làm trước`} onClick={() => nav(DUONG_DAN.viec(tiep.id))} />
         ) : (
@@ -212,11 +197,11 @@ function ViecHomNay() {
           {moRong ? <>Thu gọn<ChevronUp size={16} /></> : <>Xem thêm {conAn} việc khác<ChevronDown size={16} /></>}
         </button>
       )}
-      <div className={gop("mt-2 flex items-center gap-3 rounded-xl p-3", xong === ds.length ? "bg-luc-nhat" : "bg-nen")}>
-        <BieuTuongTron icon={xong === ds.length ? PartyPopper : Target} tone={xong === ds.length ? "luc" : "do"} kichThuoc={40} />
+      <div className={gop("mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5", xong === ds.length ? "bg-luc-nhat" : "bg-nen")}>
+        {xong === ds.length && <PartyPopper size={20} className="text-luc-chu shrink-0" />}
         <div className="flex-1 min-w-0" aria-live="polite">
-          <p className="text-[14px] text-chu mb-1.5">
-            {xong === ds.length ? <b className="text-luc-chu">Xong hết việc hôm nay, giỏi lắm!</b> : <>Đã hoàn thành <b className="text-[16px] text-muc">{xong}/{ds.length}</b> việc hôm nay</>}
+          <p className="text-[13px] text-chu mb-1.5">
+            {xong === ds.length ? <b className="text-luc-chu">Xong hết việc hôm nay, giỏi lắm!</b> : <><b className="text-[15px] text-muc">{xong}/{ds.length}</b> việc xong</>}
           </p>
           <ThanhTienDo phanTram={(xong / ds.length) * 100} tone="luc" />
         </div>
@@ -273,7 +258,7 @@ function LichVaTienDo() {
             ))}
           </span>
         ) : (
-          <span className="mt-1 text-[13px] text-chu-phu">Tuần này không còn buổi nào. Xem lịch để xếp thêm.</span>
+          <span className="mt-1 text-[13px] text-chu-phu">Tuần này hết buổi.</span>
         )}
       </button>
       <button type="button" onClick={() => nav(DUONG_DAN.tienDo())} className="text-left rounded-the bg-trang border border-vien shadow-the p-3 active:bg-xanh-nhat flex flex-col">
@@ -284,8 +269,7 @@ function LichVaTienDo() {
         <b className="mt-2 text-[14px] text-muc">Tiến độ tuần này</b>
         {td.tong ? (
           <>
-            <span className="mt-1.5 text-[12px] text-chu-phu">Đã hoàn thành</span>
-            <span className="text-[13px] text-chu-phu"><b className="text-[22px] font-extrabold text-muc">{td.xong}</b> / {td.tong} việc</span>
+            <span className="mt-1.5 text-[13px] text-chu-phu"><b className="text-[22px] font-extrabold text-muc">{td.xong}</b> / {td.tong} việc xong</span>
             <span className="mt-auto pt-2 flex items-center gap-2">
               <span className="flex-1"><ThanhTienDo phanTram={td.phanTram} tone="luc" /></span>
               <b className="text-[12px] text-luc-chu">{td.phanTram}%</b>
