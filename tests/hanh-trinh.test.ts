@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { DUONG_DAN } from "../src/duong-dan";
 import { chuDaiDien, goiYChoEm, hieuEm, loiChaoTheoChang, monThieuDiem, nhacLocHocPhi } from "../src/features/hanh-trinh/tinh-toan";
 import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau } from "../src/state/mau";
+import { mucTieuDayDu } from "../src/state/chon";
+import { THIEU_MUC_TIEU_MAU } from "../src/data/lua-chon-that";
 import type { AppState } from "../src/state/store";
 import type { HoSo } from "../src/state/types";
 
@@ -44,6 +46,15 @@ assert.ok(x.manh.length > 0 && x.uuTien.length > 0);
 assert.ok(x.uuTien[0].startsWith("Đạt "), "có mục tiêu thì ưu tiên đầu là đạt điểm mục tiêu");
 assert.ok(x.dayDu >= 80, `hồ sơ mẫu gần đầy đủ (đang ${x.dayDu}%)`);
 assert.ok(sachChu([...x.manh, ...x.luuY, ...x.uuTien]));
+
+// ---------- Hồ sơ mẫu: mục tiêu hợp lý cho demo ----------
+const mt = mucTieuDayDu(mau);
+assert.ok(mt, "hồ sơ mẫu có mục tiêu");
+assert.ok(mt.lc.hocPhiMin === undefined || mt.lc.hocPhiMin <= 60, `mục tiêu không vượt ngân sách 60 tr (đang ${mt.lc.hocPhiMin})`);
+assert.ok(mt.lc.toHopXet?.includes("A01"), "đề án mục tiêu có ghi tổ hợp A01 mà hồ sơ mẫu dùng");
+assert.ok(Object.keys(mt.lc.diemTheoNam ?? {}).length >= 2, "mục tiêu có từ hai năm điểm");
+assert.ok(mt.conThieu >= THIEU_MUC_TIEU_MAU.it && mt.conThieu <= THIEU_MUC_TIEU_MAU.nhieu, `mục tiêu thiếu 1–2,5 điểm (đang ${mt.conThieu})`);
+assert.equal(mau.nguyenVong[0], mau.mucTieu?.luaChonId, "NV1 là mục tiêu");
 
 // ---------- Môn thiếu điểm, chữ đại diện ----------
 assert.deepEqual(monThieuDiem(voi({ diem: { ...diemDu, vatLy: null } }), ["toan", "vatLy", "tiengAnh"]), ["vatLy"]);

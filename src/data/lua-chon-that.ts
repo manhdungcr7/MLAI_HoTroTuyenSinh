@@ -109,26 +109,47 @@ export const taiNguon = async (): Promise<NguonTaiSau> => {
 
 export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
 
+/** Khoảng cách mong muốn tới mục tiêu của hồ sơ mẫu: đủ để có việc phải làm, không quá xa để demo hợp lý. */
+export const THIEU_MUC_TIEU_MAU = { it: 1, nhieu: 2.5 };
+
 /**
  * Danh sách nguyện vọng cho hồ sơ mẫu "Minh Anh": ngành CNTT ở TP.HCM, chọn theo nhãn tính từ chính điểm mẫu
  * (1 Thử sức, 2 Vừa sức, 1 An toàn, 1 Dự phòng) để màn Nguyện vọng có đủ các nhóm. Lấy theo dữ liệu, không gõ tay mã.
+ * NV1 (Thử sức) cũng là mục tiêu: ưu tiên ngành đề án có ghi A01, có ≥ 2 năm điểm, học phí không vượt ngân sách,
+ * và thiếu khoảng 1–2,5 điểm, để màn Hôm nay và Mục tiêu kể đúng câu chuyện "còn cách bao xa".
+ * `diem` phải là điểm app thực sự dùng (lần thi thử mới nhất), không phải điểm hồ sơ ban đầu.
  */
-export function idHoSoMau(diem: Partial<Record<MonKhoi, number | null>>): string[] {
+export function idHoSoMau(diem: Partial<Record<MonKhoi, number | null>>, nganSachToiDa = Infinity): string[] {
   const goi = (loc: (l: LuaChon) => boolean) => LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.phuongThuc === "THPT" && loc(l))
     .map((l) => ({ l, tong: tongChoLuaChon(l, diem).tong }))
     .filter((x): x is { l: LuaChon; tong: number } => x.tong !== null)
     .map((x) => ({ ...x, nhan: nhanNguyenVong(x.l, x.tong) }))
     .sort((a, b) => b.l.diemMin - a.l.diemMin);
-  // Ưu tiên ngành ở TP.HCM có từ hai năm điểm; thiếu nhãn nào thì nới dần (TP.HCM mọi ngành, rồi cả nước) để luôn đủ các nhóm.
+  const vuaTien = (l: LuaChon) => l.hocPhiMin === undefined || l.hocPhiMin <= nganSachToiDa;
+  const haiNam = (l: LuaChon) => Object.keys(l.diemTheoNam ?? {}).length >= 2;
+  const coA01 = (l: LuaChon) => !!l.toHopXet?.includes("A01");
+  // Ưu tiên chặt nhất trước; thiếu nhãn nào thì nới dần để luôn đủ các nhóm.
   const tang = [
-    goi((l) => l.khuVuc === "TP.HCM" && Object.keys(l.diemTheoNam ?? {}).length >= 2),
+    goi((l) => l.khuVuc === "TP.HCM" && haiNam(l) && coA01(l) && vuaTien(l)),
+    goi((l) => l.khuVuc === "TP.HCM" && coA01(l) && vuaTien(l)),
+    goi((l) => l.khuVuc === "TP.HCM" && haiNam(l)),
     goi((l) => l.khuVuc === "TP.HCM"),
     goi(() => true),
   ];
+  const giuaKhoang = -(THIEU_MUC_TIEU_MAU.it + THIEU_MUC_TIEU_MAU.nhieu) / 2;
+  const hopMucTieu = (u: { l: LuaChon; tong: number }) => {
+    const x = u.tong - u.l.diemMin;
+    return x <= -THIEU_MUC_TIEU_MAU.it && x >= -THIEU_MUC_TIEU_MAU.nhieu;
+  };
   const chon: LuaChon[] = [];
-  for (const nhan of ["Thử sức", "Vừa sức", "Vừa sức", "An toàn", "Dự phòng"] as const) {
+  const conTrong = (u: { l: LuaChon }) => !chon.includes(u.l) && !chon.some((c) => c.truong === u.l.truong && c.nganh === u.l.nganh);
+  for (const [i, nhan] of (["Thử sức", "Vừa sức", "Vừa sức", "An toàn", "Dự phòng"] as const).entries()) {
     for (const ung of tang) {
-      const x = ung.find((u) => u.nhan === nhan && !chon.includes(u.l) && !chon.some((c) => c.truong === u.l.truong && c.nganh === u.l.nganh));
+      const hop = ung.filter((u) => u.nhan === nhan && conTrong(u));
+      // NV1 là mục tiêu: lấy ngành có khoảng thiếu gần giữa khoảng mong muốn; các NV khác giữ thứ tự điểm chuẩn giảm dần.
+      const x = i === 0
+        ? [...hop.filter(hopMucTieu)].sort((a, b) => Math.abs(a.tong - a.l.diemMin - giuaKhoang) - Math.abs(b.tong - b.l.diemMin - giuaKhoang))[0] ?? hop[0]
+        : hop[0];
       if (x) { chon.push(x.l); break; }
     }
   }
