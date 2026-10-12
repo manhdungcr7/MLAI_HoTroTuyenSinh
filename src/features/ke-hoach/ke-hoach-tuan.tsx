@@ -125,7 +125,6 @@ export default function KeHoachTuan() {
         ) : conViec > 0 ? (
           <div className="space-y-2">
             <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Xếp lịch giúp em</Nut>
-            <p className="text-[12px] text-chu-phu">Chỉ xếp lại giờ cho việc đang có, không tạo việc mới.</p>
           </div>
         ) : null}
 
