@@ -71,6 +71,6 @@ Sơ đồ một dòng cho slide:
 | Quy chế thay đổi hằng năm | Mức ưu tiên và công thức nằm một chỗ, đối chiếu mỗi mùa; ghi rõ trong tài liệu vận hành |
 
 ## 9. Điều nói thẳng (slide "Giới hạn và bước tiếp")
-- Học phí riêng theo ngành đã được làm dày lên 1.058 chương trình (phủ trọn vẹn các trường lớn nhất cả nước: BKA, NEU, FTU, ĐHQGHN, ĐHQG-HCM, TMU, BVH, IUH, TLA, GHA, SPH,...); điểm 2026 chủ yếu từ trang tổng hợp; chưa có khung chương trình học.
+- Học phí riêng theo ngành có cho 721 chương trình ở 20 trường, mỗi dòng đối chiếu được với văn bản của đúng trường; điểm 2026 chủ yếu từ trang tổng hợp; chưa có khung chương trình học.
 - Hạ tầng thật của CMS (D1, Access) cần dựng; chạy thử đầy đủ ở máy.
 - Bước tiếp: tuyển tình nguyện viên từ các trường đối tác, nhập điểm chuẩn mùa 2027, tài khoản cho phụ huynh và thầy cô, đo tác động bằng người dùng thật.

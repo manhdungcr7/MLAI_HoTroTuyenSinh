@@ -44,13 +44,13 @@ Hướng chọn: **số 6, "Chọn trường hoặc chương trình học"**, ng
 
 | Ý chấm | Bằng chứng |
 |---|---|
-| (5đ) Giao diện trực quan, dễ dùng | Thiết kế mobile-first 360–390px, chữ nhẹ, một việc mỗi màn, trạng thái rỗng/lỗi/đang tải đầy đủ, kiểm tra truy cập tự động (axe) và cổng đồng nhất (`npm run kiem-tra`: đường dẫn, màu, từ ngữ). |
+| (5đ) Giao diện trực quan, dễ dùng | Thiết kế mobile-first 360–390px, chữ nhẹ, một việc mỗi màn, trạng thái rỗng/lỗi/đang tải đầy đủ, và cổng đồng nhất (`npm run kiem-tra`: đường dẫn, màu, từ ngữ). |
 | (5đ) Trả lời được câu hỏi về giả định, dữ liệu, AI, rủi ro | `docs/HOI-DAP-BAN-GIAM-KHAO.md` (24 câu hỏi dự kiến, có trả lời kèm vị trí trong mã hoặc test). |
 
 ## Việc còn thiếu (nói thẳng)
 
-- Điểm chuẩn **năm 2026** mới có cho 924 chương trình, chủ yếu từ trang tổng hợp; phần lớn dữ liệu là 2023–2025. Mùa tuyển sinh tới, tình nguyện viên nhập từng trường qua CMS.
-- Học phí riêng theo ngành đã phủ 1.058 chương trình (bao gồm toàn bộ các trường đại học lớn nhất cả nước: BKA, NEU, FTU, ĐHQGHN, ĐHQG-HCM, TMU, BVH, IUH, TLA, GHA, SPH,...); việc làm và khung chương trình học chưa đủ (đã nói rõ trên app).
+- Điểm chuẩn **năm 2026** mới có cho 1.716 chương trình, chủ yếu từ trang tổng hợp; phần lớn dữ liệu là 2023–2025. Mùa tuyển sinh tới, tình nguyện viên nhập từng trường qua CMS.
+- Học phí riêng theo ngành có cho 721 chương trình ở 20 trường, chỉ giữ dòng đối chiếu được với văn bản đúng trường (đã gỡ 337 dòng không kiểm chứng được); việc làm và khung chương trình học chưa đủ (đã nói rõ trên app).
 - Hạ tầng thật (D1, Cloudflare Access cho CMS) cần chủ tài khoản thao tác (xem `docs/QUAN-TRI.md`); tài khoản hiện chạm giới hạn số D1.
 - Trắc nghiệm hướng nghiệp (Holland) là công cụ gợi ý, chưa kiểm định tâm lý.
 - Dự báo điểm chuẩn **không** bù được cho thay đổi quy chế, đề thi, chỉ tiêu; năm 2025 khoảng chỉ phủ 68%.
