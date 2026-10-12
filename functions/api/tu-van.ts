@@ -41,18 +41,37 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   if (!env.ANTHROPIC_API_KEY && !env.OPENAI_API_KEY) return json({ loi: "chua-cau-hinh" }, 503);
   const khai = Number(request.headers.get("content-length"));
   if (Number.isFinite(khai) && khai > GIOI_HAN.kichThuocBody) return json({ loi: "Yêu cầu quá lớn" }, 413);
-  if (env.RATE_KV) {
-    const ip = request.headers.get("cf-connecting-ip") ?? "khong-ro";
-    let cho = true;
-    try { cho = await choPhepTanSuat(env.RATE_KV, ip, Date.now()); } catch { /* KV lỗi thì không chặn người dùng */ }
-    if (!cho) return json({ loi: "Em hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
-  }
-  const chu = await request.text();
-  if (new TextEncoder().encode(chu).length > GIOI_HAN.kichThuocBody) return json({ loi: "Yêu cầu quá lớn" }, 413);
+  // Request.text() đọc toàn bộ body trước khi kiểm tra kích thước; đọc theo luồng để giới hạn bộ nhớ.
+  const reader = request.body?.getReader();
+  if (!reader) return json({ loi: "Yêu cầu không hợp lệ" }, 400);
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > GIOI_HAN.kichThuocBody) {
+        await reader.cancel();
+        return json({ loi: "Yêu cầu quá lớn" }, 413);
+      }
+      chunks.push(value);
+    }
+  } catch { return json({ loi: "Không đọc được yêu cầu" }, 400); }
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  const chu = new TextDecoder().decode(bytes);
   let goc: unknown;
   try { goc = JSON.parse(chu); } catch { return json({ loi: "Yêu cầu không hợp lệ" }, 400); }
   const kt = kiemTraYeuCau(goc);
   if (!kt.ok) return json({ loi: kt.loi }, 400);
+  // Không gọi mô hình nếu thiếu rate limit hoặc KV gặp lỗi: endpoint công khai có thể phát sinh chi phí.
+  if (!env.RATE_KV) return json({ loi: "Dịch vụ tư vấn chưa được cấu hình giới hạn truy cập" }, 503);
+  const ip = request.headers.get("cf-connecting-ip") ?? "khong-ro";
+  try {
+    if (!await choPhepTanSuat(env.RATE_KV, ip, Date.now())) return json({ loi: "Em hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
+  } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
   try {
     const tho = await goiMoHinh(env, dungNoiDung(kt.v), f);
     if (!tho) return json({ loi: "Chưa có câu trả lời, em thử lại nhé" }, 502);

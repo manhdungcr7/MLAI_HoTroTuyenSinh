@@ -171,6 +171,6 @@
 | 14 | Xác minh 924 chương trình chỉ có điểm "2026" từ trang tổng hợp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
 | 15 | Kết nối giao diện người dùng với CMS Backend thật trên Cloudflare | Cả nhóm | P1 | Tạo D1 instance trên Cloudflare, áp migration `0001_cong_dong.sql` và cấu hình Pages Access |
 | 16 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 | Kiệt | P1 | Bổ sung các môn KHXH vào ma trận tổ hợp và phân tích Gap điểm |
-| 17 | Rate-limit thật cho `/api/tu-van` trên Cloudflare Workers | Tuấn / Hưng | P0 | Bật binding `RATE_KV` và WAF rule chống spam |
+| 17 | Rate-limit thật cho `/api/tu-van` trên Cloudflare Workers | Tuấn / Hưng | P0 | **Một phần:** API đã từ chối gọi mô hình khi thiếu KV hoặc KV lỗi; cần tạo/gắn namespace `RATE_KV` trên Cloudflare và bật WAF rule để hoàn tất vận hành. |
 | 18 | Rà soát visual responsive 360px - 390px trên thiết bị thật | Cả nhóm | P0 | Dùng `agent-browser` hoặc DevTools kiểm tra độ tràn viền |
 

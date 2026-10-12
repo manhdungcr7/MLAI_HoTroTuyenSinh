@@ -8,6 +8,7 @@ import { taoHoSoMau, TRANG_THAI_BAN_DAU } from "../src/state/mau";
 
 const yc = (o: object) => new Request("https://x/api/tu-van", { method: "POST", body: JSON.stringify(o) });
 const sk = { id: "a1", nganh: "Khoa học máy tính", truong: "UIT", tenTruong: "ĐH CNTT", tinh: "TP.HCM", phuongThuc: "THPT", toHop: ["A01"], diem: { "2024": 26.9 }, nguon: "Đề án 2024, trang 3" };
+const kvCho: KhoKV = { get: async () => null, put: async () => {} };
 
 // 1) Kiểm tra yêu cầu
 assert.equal(kiemTraYeuCau(null).ok, false);
@@ -31,15 +32,16 @@ assert.equal((await xuLy(new Request("https://x/", { method: "POST", body: "{h�
 assert.equal((await xuLy(yc({ cauHoi: "ab" }), { ANTHROPIC_API_KEY: "k" }, gia({}))).status, 400);
 let thamSo: { url?: string; init?: RequestInit } = {};
 const spy = (async (url: string, init: RequestInit) => { thamSo = { url, init }; return { ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: "Điểm 26,9 (2024). [nguồn: a1, giả]" }] }) }; }) as unknown as typeof fetch;
-const r1 = await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { ANTHROPIC_API_KEY: "khoa-bi-mat" }, spy);
+const r1 = await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { ANTHROPIC_API_KEY: "khoa-bi-mat", RATE_KV: kvCho }, spy);
 const d1 = (await r1.json()) as { traLoi: string; nguon: string[] };
 assert.equal(r1.status, 200); assert.deepEqual(d1.nguon, ["a1"]);
 assert.equal(thamSo.url, "https://api.anthropic.com/v1/messages");
 assert.ok(String(thamSo.init?.body).includes("DỮ LIỆU") && !String(r1.headers.get("content-type")).includes("khoa-bi-mat"));
 assert.ok(!JSON.stringify(d1).includes("khoa-bi-mat"), "khóa API không được lộ ra câu trả lời");
 const spyOA = (async (url: string) => ({ ok: true, status: 200, json: async () => ({ choices: [{ message: { content: `ok ${url}` } }] }) })) as unknown as typeof fetch;
-assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENAI_API_KEY: "k" }, spyOA)).json() as { traLoi: string }).traLoi.startsWith("ok https://api.openai.com"), true);
-assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k" }, gia({}, false))).status, 502, "dịch vụ lỗi thì 502, không lộ chi tiết");
+assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENAI_API_KEY: "k", RATE_KV: kvCho }, spyOA)).json() as { traLoi: string }).traLoi.startsWith("ok https://api.openai.com"), true);
+assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k" }, spy)).status, 503, "thiếu KV thì không gọi mô hình");
+assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k", RATE_KV: kvCho }, gia({}, false))).status, 502, "dịch vụ lỗi thì 502, không lộ chi tiết");
 
 // 3b) Giới hạn: body, hồ sơ whitelist, tần suất
 const lon = new Request("https://x/", { method: "POST", body: "{}", headers: { "content-length": String(GIOI_HAN.kichThuocBody + 1) } });
@@ -56,7 +58,7 @@ assert.equal(await choPhepTanSuat(kv, "5.6.7.8", 1_000_000, 3), true, "IP khác 
 assert.equal(await choPhepTanSuat(kv, "1.2.3.4", 1_000_000 + 60_000, 3), true, "sang phút mới thì đếm lại");
 const kvDay: KhoKV = { get: async () => "99", put: async () => {} };
 assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { ANTHROPIC_API_KEY: "k", RATE_KV: kvDay }, gia({}))).status, 429);
-assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { OPENAI_API_KEY: "k", RATE_KV: { get: async () => { throw new Error("kv"); }, put: async () => {} } }, spyOA)).status, 200, "KV lỗi thì không chặn");
+assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { OPENAI_API_KEY: "k", RATE_KV: { get: async () => { throw new Error("kv"); }, put: async () => {} } }, spyOA)).status, 503, "KV lỗi thì không gọi mô hình");
 
 // 4) Tìm ngành trong dữ liệu thật
 const khop = timNganhKhop("điểm chuẩn Khoa học máy tính UIT");

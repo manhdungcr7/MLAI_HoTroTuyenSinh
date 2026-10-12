@@ -19,7 +19,7 @@ Chạy thử trên máy: `npm run build && npx wrangler pages dev dist --port 87
 - Khóa API chỉ nằm ở biến bí mật của Cloudflare, không xuống trình duyệt (có test kiểm tra).
 - Endpoint công khai nên có thể bị gọi nhiều: giới hạn đầu vào (câu hỏi ≤ 1000 ký tự, body ≤ 16 KB (kiểm `content-length` trước khi đọc), hồ sơ chỉ giữ các trường đã biết, gọi nhà cung cấp tối đa 20 giây, ≤ 12 ngành, `max_tokens` 700). 
 ### Giới hạn tần suất (tùy chọn)
-Nếu có binding KV tên `RATE_KV`, máy chủ đếm theo IP và theo phút, quá 8 yêu cầu/phút thì trả 429 (app tự chuyển sang trả lời tự động). Không có binding thì bỏ qua bước này.
+Máy chủ bắt buộc có binding KV tên `RATE_KV` để đếm theo IP và theo phút; quá 8 yêu cầu/phút thì trả 429 (app tự chuyển sang trả lời tự động). Nếu thiếu binding hoặc KV lỗi, API trả 503 và không gọi mô hình để tránh phát sinh chi phí không giới hạn.
 Bật: `npx wrangler kv namespace create RATE_KV`, rồi Cloudflare Pages > Settings > Bindings > Add > KV namespace, đặt tên biến `RATE_KV`, chọn namespace vừa tạo, deploy lại.
 Đếm bằng KV không nguyên tử nên chỉ chặn lạm dụng thô. Khuyến nghị thêm quy tắc WAF Rate Limiting của Cloudflare cho đường dẫn `/api/tu-van` (ví dụ 10 yêu cầu/phút/IP) để chặn chặt ngay ở cạnh mạng.
 
