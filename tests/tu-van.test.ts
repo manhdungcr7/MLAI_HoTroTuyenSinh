@@ -103,4 +103,15 @@ assert.ok(dl.length > 0 && !JSON.stringify(dl).includes(mau.hoSo.hoTen));
   assert.ok(NHAC_HE_THONG.includes("tongCuaEm") && NHAC_HE_THONG.includes("KHÔNG dùng làm điểm của một ngành"));
   assert.ok(NHAC_HE_THONG.includes("Không mô tả phạm vi dữ liệu"));
 }
+// Ngữ cảnh nối tiếp: nhận, cắt đúng giới hạn, bỏ khi rỗng, và vào lời nhắc ở vai trò ngữ cảnh (không phải nguồn số liệu)
+{
+  const k = kiemTraYeuCau({ cauHoi: "Còn ngành kia thì sao?", nguCanh: "Tư vấn chung\nEm hỏi: UIT?\n" + "d".repeat(2000), duLieu: [] });
+  assert.ok(k.ok && k.v.nguCanh && k.v.nguCanh.length === GIOI_HAN.nguCanh && GIOI_HAN.nguCanh === 700);
+  assert.ok(k.ok && dungNoiDung(k.v).includes("Em hỏi: UIT?") && dungNoiDung(k.v).includes("KHÔNG phải nguồn số liệu"));
+  const r = kiemTraYeuCau({ cauHoi: "Câu hỏi bình thường", nguCanh: "   ", duLieu: [] });
+  assert.ok(r.ok && r.v.nguCanh === undefined);
+  const n = kiemTraYeuCau({ cauHoi: "Câu hỏi bình thường", nguCanh: 5, duLieu: [] });
+  assert.ok(n.ok && n.v.nguCanh === undefined);
+  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 9, "giữ nguyên 9 quy tắc");
+}
 console.log("tu-van: tất cả kiểm tra đều qua");

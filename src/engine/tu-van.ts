@@ -46,7 +46,7 @@ function lamSachDuBao(x: unknown): SuKien["duBao"] {
   return thap !== undefined && cao !== undefined && nam !== undefined && thap <= cao ? { nam: Math.round(nam), thap, cao } : undefined;
 }
 
-export const GIOI_HAN = { cauHoi: 1000, suKien: 12, kichThuocBody: 16_000, yeuCauMoiPhutMoiIp: 8 };
+export const GIOI_HAN = { cauHoi: 1000, nguCanh: 700, suKien: 12, kichThuocBody: 16_000, yeuCauMoiPhutMoiIp: 8 };
 
 const chuoi = (x: unknown, n: number) => String(x ?? "").slice(0, n);
 
@@ -116,7 +116,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
     });
   }
   const hoSo = lamSachHoSo(o.hoSo);
-  return { ok: true, v: { cauHoi, nguCanh: typeof o.nguCanh === "string" ? o.nguCanh.slice(0, 80) : undefined, hoSo, duLieu: sach } };
+  return { ok: true, v: { cauHoi, nguCanh: typeof o.nguCanh === "string" && o.nguCanh.trim() ? o.nguCanh.trim().slice(0, GIOI_HAN.nguCanh) : undefined, hoSo, duLieu: sach } };
 }
 
 export const NHAC_HE_THONG = [
@@ -136,7 +136,7 @@ export const NHAC_HE_THONG = [
 export function dungNoiDung(y: YeuCauTuVan): string {
   const hs = y.hoSo ? JSON.stringify(y.hoSo) : "(em không chia sẻ hồ sơ)";
   const dl = y.duLieu.length ? y.duLieu.map((d) => JSON.stringify(d)).join("\n") : "(không có ngành nào khớp câu hỏi trong phần dữ liệu gửi kèm)";
-  return `HỒ SƠ (đã bỏ tên):\n${hs}\n\nDỮ LIỆU (mỗi dòng một ngành, có mã id; các ngành này chỉ là phần khớp câu hỏi, KHÔNG phải toàn bộ dữ liệu của app):\n${dl}\n\nNGỮ CẢNH MÀN HÌNH: ${y.nguCanh ?? "Tư vấn chung"}\n\nCÂU HỎI CỦA EM:\n${y.cauHoi}`;
+  return `HỒ SƠ (đã bỏ tên):\n${hs}\n\nDỮ LIỆU (mỗi dòng một ngành, có mã id; các ngành này chỉ là phần khớp câu hỏi, KHÔNG phải toàn bộ dữ liệu của app):\n${dl}\n\nNGỮ CẢNH MÀN HÌNH VÀ CÁC LƯỢT TRƯỚC (chỉ để hiểu "ngành đó", "trường này", "còn … thì sao"; KHÔNG phải nguồn số liệu, mọi con số phải lấy từ DỮ LIỆU): ${y.nguCanh ?? "Tư vấn chung"}\n\nCÂU HỎI CỦA EM:\n${y.cauHoi}`;
 }
 
 /** Giữ lại các mã nguồn có thật trong dữ liệu đã gửi; bỏ mã AI tự bịa. */

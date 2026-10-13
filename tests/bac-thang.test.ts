@@ -1,8 +1,8 @@
 // Kiểm thử bậc thang tư vấn với AI/VECTORIZE/KV giả. Chạy: npx tsx tests/bac-thang.test.ts
 import assert from "node:assert/strict";
 import { xuLy, type Env } from "../functions/api/tu-van";
-import { chuanHoaCauHoi } from "../functions/_thu-vien/ai/cache";
-import { boLocRag } from "../functions/_thu-vien/ai/bac-thang";
+import { chuanHoaCauHoi, khoaCache } from "../functions/_thu-vien/ai/cache";
+import { boLocRag, cauTruyVanRag, chuDeLuotTruoc } from "../functions/_thu-vien/ai/bac-thang";
 import { nhanDienTruongTinh } from "../functions/_thu-vien/ai/ten-truong";
 import type { KhoAI, KhoVector } from "../functions/_thu-vien/ai/kieu";
 
@@ -115,6 +115,27 @@ const body = { cauHoi: "Nơi ở quanh UIT thế nào?", hoSo: { tinh: "TP.HCM",
   traVe = "Trả lời [nguồn: s0]";
   await goiXuLy({ ANTHROPIC_API_KEY: "k", RATE_KV: kv, AI: aiGia(), VECTORIZE: rong }, { ...body, cauHoi: "Câu hỏi có nguồn hai" });
   assert.ok([...m.keys()].some((k) => k.startsWith("tvc")), "có nguồn thì cache");
+}
+
+// Ngữ cảnh nối tiếp: khóa cache khác nhau theo nguCanh; câu quá ngắn được ghép chủ đề lượt trước để tìm RAG
+{
+  const ds = [{ id: "s0", nhanCuaEm: "Vừa sức" }];
+  const a = await khoaCache("Còn ngành kia thì sao?", ds, null, "v1", "Tư vấn chung\nEm hỏi: Điểm chuẩn UIT?\nMình đáp: 25");
+  const b = await khoaCache("Còn ngành kia thì sao?", ds, null, "v1", "Tư vấn chung\nEm hỏi: Điểm chuẩn NEU?\nMình đáp: 26");
+  const c = await khoaCache("Còn ngành kia thì sao?", ds, null, "v1", "Tư vấn chung\nEm hỏi: Điểm chuẩn UIT?\nMình đáp: 25");
+  assert.notEqual(a, b); assert.equal(a, c);
+  assert.notEqual(await khoaCache("x y z", ds, null, "v1"), await khoaCache("x y z", ds, null, "v1", "Em hỏi: UIT"));
+  const nc = "Tư vấn chung\nCác lượt trước:\nEm hỏi: Học phí Khoa Y Dược Đà Nẵng?\nMình đáp: …\nEm hỏi: Điểm chuẩn UIT?\nMình đáp: …";
+  assert.equal(chuDeLuotTruoc(nc), "Điểm chuẩn UIT?"); assert.equal(chuDeLuotTruoc(undefined), "");
+  assert.equal(cauTruyVanRag({ cauHoi: "Còn nơi ở thì sao?", nguCanh: nc, duLieu: [] }), "Điểm chuẩn UIT? Còn nơi ở thì sao?");
+  assert.equal(cauTruyVanRag({ cauHoi: "Nơi ở quanh trường UIT thế nào, có ký túc xá không?", nguCanh: nc, duLieu: [] }), "Nơi ở quanh trường UIT thế nào, có ký túc xá không?");
+  assert.ok(boLocRag({ cauHoi: "Còn học phí?", nguCanh: "x\nEm hỏi: Học phí Khoa Y Dược Đà Nẵng?", duLieu: [] }).some((b) => b.maTruong === "DDY"), "trường nêu ở lượt trước vẫn được lọc RAG");
+  // Hai cuộc trò chuyện khác nhau không dùng chung câu trả lời đã cache
+  const { kv } = kvMoi(); const env: Env = { ANTHROPIC_API_KEY: "k", RATE_KV: kv };
+  goi = 0; traVe = "Trả lời A [nguồn: s0]";
+  const q = { ...body, cauHoi: "Còn ngành kia thì sao?" };
+  await goiXuLy(env, { ...q, nguCanh: "Em hỏi: UIT?" }); await goiXuLy(env, { ...q, nguCanh: "Em hỏi: NEU?" }); await goiXuLy(env, { ...q, nguCanh: "Em hỏi: UIT?" });
+  assert.equal(goi, 2, "cùng nguCanh trúng cache, khác nguCanh thì hỏi lại");
 }
 
 console.log = log;

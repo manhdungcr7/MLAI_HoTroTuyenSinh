@@ -3,7 +3,7 @@ import type { KhoKVAI } from "./kieu";
 
 export const TTL_CACHE_GIAY = 6 * 60 * 60;
 // Tăng số này mỗi khi đổi prompt/logic bậc thang hoặc dữ liệu gửi AI: câu trả lời cũ (có thể sai) không được phát lại tới 6 giờ.
-const PHIEN_BAN_LOGIC = "2";
+const PHIEN_BAN_LOGIC = "3";
 const TIEN_TO = `tvc${PHIEN_BAN_LOGIC}:`;
 
 export interface BanGhiCache { traLoi: string; nguon: string[]; congDong?: string[]; viecTiep?: string }
@@ -17,10 +17,10 @@ async function bam(s: string): Promise<string> {
   return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
-/** Khóa = câu hỏi chuẩn hóa + id dữ liệu (sắp xếp) + nhãn từng ngành + hồ sơ tóm tắt + phiên bản dữ liệu. */
-export async function khoaCache(cauHoi: string, duLieu: { id: string; nhanCuaEm?: string }[], hoSo: unknown, phienBan = ""): Promise<string> {
+/** Khóa = câu hỏi chuẩn hóa + id dữ liệu (sắp xếp) + nhãn từng ngành + hồ sơ tóm tắt + phiên bản dữ liệu + ngữ cảnh (các lượt trước: cùng câu "còn ngành kia thì sao?" ở hai cuộc trò chuyện khác nhau phải ra hai khóa khác nhau). */
+export async function khoaCache(cauHoi: string, duLieu: { id: string; nhanCuaEm?: string }[], hoSo: unknown, phienBan = "", nguCanh = ""): Promise<string> {
   const ds = duLieu.map((d) => `${d.id}=${d.nhanCuaEm ?? ""}`).sort();
-  return TIEN_TO + await bam(JSON.stringify([chuanHoaCauHoi(cauHoi), ds, hoSo ?? null, phienBan]));
+  return TIEN_TO + await bam(JSON.stringify([chuanHoaCauHoi(cauHoi), ds, hoSo ?? null, phienBan, chuanHoaCauHoi(nguCanh)]));
 }
 
 export async function docCache(kv: KhoKVAI | undefined, khoa: string): Promise<BanGhiCache | null> {

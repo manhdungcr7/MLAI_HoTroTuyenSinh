@@ -51,10 +51,22 @@ const sau = <T>(p: Promise<T>, ms: number, dự: T): Promise<T> => {
   return Promise.race([p, new Promise<T>((r) => { h = setTimeout(() => r(dự), ms); })]).finally(() => h && clearTimeout(h));
 };
 
+/** Chủ đề lượt trước: câu "Em hỏi:" gần nhất trong ngữ cảnh client gửi lên. */
+export function chuDeLuotTruoc(nguCanh?: string): string {
+  const dong = (nguCanh ?? "").split("\n").filter((d) => d.startsWith("Em hỏi: "));
+  return dong.length ? dong[dong.length - 1].slice(8).trim() : "";
+}
+
+/** Câu dùng để nhúng và nhận diện trường/tỉnh: câu quá ngắn hoặc chỉ nêu đại từ thì ghép với chủ đề lượt trước. */
+export function cauTruyVanRag(y: YeuCauTuVan): string {
+  const chuDe = chuDeLuotTruoc(y.nguCanh);
+  return chuDe && y.cauHoi.length < 40 ? `${chuDe} ${y.cauHoi}`.slice(0, 300) : y.cauHoi;
+}
+
 /** Gom bộ lọc: tỉnh của em; trường trong dữ liệu gửi kèm; trường và tỉnh được NÊU TRONG CÂU HỎI (kể cả khác dữ liệu gửi kèm); thêm một truy vấn toàn kho. */
 export function boLocRag(y: YeuCauTuVan): BoLoc[] {
   const tinh = y.hoSo?.tinh?.trim();
-  const nhan = nhanDienTruongTinh(y.cauHoi);
+  const nhan = nhanDienTruongTinh(cauTruyVanRag(y));
   const truong = [...new Set([...nhan.truong, ...y.duLieu.map((d) => d.truong).filter(Boolean)])].slice(0, 3);
   const bo: BoLoc[] = [];
   if (tinh) bo.push({ tinh, k: 4 });
@@ -66,7 +78,7 @@ export function boLocRag(y: YeuCauTuVan): BoLoc[] {
 
 async function layManhCongDong(env: EnvAI, y: YeuCauTuVan): Promise<{ manh: MangChiMuc[]; diemToanKho: number[] }> {
   const bo = boLocRag(y);
-  const kq = (await truyVanNhieuBoLoc(env, y.cauHoi, bo)) ?? [];
+  const kq = (await truyVanNhieuBoLoc(env, cauTruyVanRag(y), bo)) ?? [];
   const thay = new Map<string, MangChiMuc>();
   const toanKho = kq[bo.length - 1] ?? [];
   kq.forEach((r, i) => {
@@ -90,7 +102,7 @@ function phanMoRong(manh: MangChiMuc[], viec?: HanhDong): string {
 
 export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof fetch = fetch): Promise<KhoiBacThang> {
   const kv = env.CACHE_KV ?? env.RATE_KV;
-  const khoa = await khoaCache(y.cauHoi, y.duLieu, y.hoSo, env.DATA_VERSION).catch(() => "");
+  const khoa = await khoaCache(y.cauHoi, y.duLieu, y.hoSo, env.DATA_VERSION, y.nguCanh).catch(() => "");
   const trung = khoa ? await docCache(kv, khoa) : null;
   if (trung) {
     console.log(JSON.stringify({ tang: "cache", msClef: 0, msLLM: 0, soSuKien: y.duLieu.length, tokenVaoUocTinh: 0 }));
