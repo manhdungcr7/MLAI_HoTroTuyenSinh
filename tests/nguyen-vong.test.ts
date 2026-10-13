@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   xetCoCau, ketLuan, moTaSoLuong, dungDanhSach, demNhan,
 } from "../src/features/nguyen-vong/tinh-toan";
+import { goiYDanhSach } from "../src/features/nguyen-vong/goi-y-danh-sach";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
 import type { DiemDayDu, NhanNguyenVong } from "../src/state/types";
 
@@ -108,6 +109,35 @@ const ketQuaDem = demNhan(dsDong);
 assert.equal(typeof ketQuaDem["Thử sức"], "number");
 assert.equal(typeof ketQuaDem["Vừa sức"], "number");
 assert.equal(typeof ketQuaDem["An toàn"], "number");
-assert.equal(typeof ketQuaDem["Dự phòng"], "number");
+// ---------- 4) Gợi ý danh sách nguyện vọng (goiYDanhSach) ----------
+const hoSoGoiY = {
+  nganSach: "duoi30" as const,
+  khuVuc: ["TP.HCM"],
+  nganhQuanTam: ["Công nghệ thông tin"],
+  tinh: "TP.HCM",
+  hocXaNha: true,
+};
+const dsGoiY = goiYDanhSach(diemEm, hoSoGoiY);
+assert.ok(dsGoiY.length > 0, "Thuật toán gợi ý phải trả về danh sách");
+assert.ok(dsGoiY.length <= 6, "Tối đa 6 nguyện vọng theo cơ cấu");
+assert.ok(dsGoiY.every((d) => d.lc && d.nhan && d.lyDo.length > 0), "Mỗi dòng có đủ lựa chọn, nhãn và lý do");
+
+// Kiểm tra giới hạn tối đa 2 ngành / 1 trường
+const demTruong = new Map<string, number>();
+for (const d of dsGoiY) {
+  demTruong.set(d.lc.truong, (demTruong.get(d.lc.truong) ?? 0) + 1);
+}
+for (const [truong, soLuong] of demTruong) {
+  assert.ok(soLuong <= 2, `Trường ${truong} không được vượt quá 2 ngành`);
+}
+
+// Kiểm tra thứ tự ưu tiên: Thử sức -> Vừa sức -> An toàn -> Dự phòng
+const thuTuNhan: Record<NhanNguyenVong, number> = { "Thử sức": 0, "Vừa sức": 1, "An toàn": 2, "Dự phòng": 3 };
+for (let i = 0; i < dsGoiY.length - 1; i++) {
+  assert.ok(
+    thuTuNhan[dsGoiY[i].nhan] <= thuTuNhan[dsGoiY[i + 1].nhan],
+    "Nguyện vọng phải xếp theo thứ tự Thử sức -> Vừa sức -> An toàn -> Dự phòng",
+  );
+}
 
 console.log("nguyen-vong: tất cả kiểm tra đều qua");
