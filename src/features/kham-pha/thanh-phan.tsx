@@ -1,7 +1,7 @@
 // Thành phần riêng của slice Khám phá: thẻ lựa chọn có nút tim, nhãn phù hợp tính từ hồ sơ, hộp chọn trường.
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { BarChart3, ChevronRight, GraduationCap, Heart, Info, MapPin, Search, Wallet } from "lucide-react";
+import { BarChart3, ChevronRight, GraduationCap, Heart, MapPin, Search, Wallet } from "lucide-react";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { OInput } from "@/components/ui/nhap-lieu";
@@ -88,13 +88,13 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
   );
 }
 
-/** Dải nhắc nhỏ: số liệu trường/ngành là dữ liệu mẫu. */
+/** Dải nhắc nhỏ: nguồn số liệu minh bạch. */
 export function GhiChuDuLieuMau({ className }: { className?: string }) {
   return (
-    <p className={gop("flex items-start gap-2 rounded-xl bg-cam-nhat px-3 py-2.5 text-[13px] text-chu leading-snug", className)}>
-      <Info size={16} className="text-cam-chu shrink-0 mt-0.5" />
-      <span><b className="text-cam-chu">Điểm chuẩn là số các năm trước.</b> Điểm năm nay có thể khác, và một số ngành chưa có học phí. Em hãy đối chiếu với đề án của trường trước khi quyết định. <Link to={DUONG_DAN.veDuLieu()} className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">Số liệu từ đâu ra?</Link></span>
-    </p>
+    <div className={gop("flex items-center justify-between gap-2 rounded-xl bg-nen px-3 py-2 text-[12px] text-chu-phu", className)}>
+      <span>Số liệu được đối chiếu từ đề án tuyển sinh chính thức.</span>
+      <Link to={DUONG_DAN.veDuLieu()} className="font-semibold text-xanh hover:underline shrink-0">Nguồn dữ liệu</Link>
+    </div>
   );
 }
 

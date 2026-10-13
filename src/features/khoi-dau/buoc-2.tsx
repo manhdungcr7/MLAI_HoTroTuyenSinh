@@ -67,7 +67,6 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             {loiDiem.map(({ m, kq }) => <LoiNho key={m}>{TEN_MON_NGAN[m]}: {LOI_DIEM[kq.loai as "khongPhaiSo" | "ngoaiKhoang"]}</LoiNho>)}
           </div>
         )}
-        <p className="mt-2 text-[12px] text-chu-phu">Chưa nhớ thì để trống. Gõ "7,5" hay "7.5" đều được.</p>
       </fieldset>
 
       <DiemMonThem h={h} sua={sua} />

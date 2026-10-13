@@ -1,9 +1,10 @@
-import { GraduationCap, Layers, Lightbulb, MapPin, UserRound } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Check, GraduationCap, Layers, MapPin, Search, UserRound, X } from "lucide-react";
 import { OChon, OInput } from "@/components/ui/nhap-lieu";
 import { gop } from "@/components/ui/nut-the";
 import type { HoSo } from "@/state/types";
 import { GIAI_DOAN_DA_TOT_NGHIEP, changCuaEm, type Chang } from "@/state/chang";
-import { NGANH, PHAN_NHOM_NGANH, TAT_CA_NGANH, THANH_PHO, TINH } from "./lua-chon";
+import { PHAN_NHOM_NGANH, TAT_CA_NGANH, THANH_PHO, TINH } from "./lua-chon";
 import { CauHoi, ChonO, TieuDeBuoc } from "./thanh-phan";
 import type { TruongBatBuoc } from "./tinh-toan";
 
@@ -24,16 +25,44 @@ export function hoSoTheoChang(h: Pick<HoSo, "giaiDoan">, c: Chang): Partial<HoSo
 }
 
 export default function Buoc1({ h, sua, loi }: P) {
+  const [tabNhom, setTabNhom] = useState<string>("Tất cả");
+  const [tuKhoa, setTuKhoa] = useState<string>("");
+
   // Giá trị cũ không còn trong danh sách (ví dụ tỉnh trước sáp nhập) vẫn hiện để em thấy và đổi.
   const tinhLa = h.tinh && !THANH_PHO.includes(h.tinh) && !TINH.includes(h.tinh) ? h.tinh : null;
+
+  const toggleNganh = (gia: string) => {
+    if (h.nganhQuanTam.includes(gia)) {
+      sua({ nganhQuanTam: h.nganhQuanTam.filter((x) => x !== gia) });
+    } else {
+      sua({ nganhQuanTam: [...h.nganhQuanTam, gia] });
+    }
+  };
+
+  const danhSachHien = useMemo(() => {
+    const k = tuKhoa.trim().toLowerCase();
+    if (k) {
+      return TAT_CA_NGANH.filter((item) =>
+        item.gia.toLowerCase().includes(k) || item.nhan.toLowerCase().includes(k)
+      );
+    }
+    if (tabNhom === "Tất cả") {
+      return TAT_CA_NGANH;
+    }
+    const found = PHAN_NHOM_NGANH.find((g) => g.nhom.includes(tabNhom));
+    return found ? found.danhSach : TAT_CA_NGANH;
+  }, [tuKhoa, tabNhom]);
+
   return (
     <>
-      <TieuDeBuoc tieuDe={<>Điền nhanh trong <span className="text-xanh">60 giây</span></>}
-        moTa="Vài thông tin cơ bản, sửa sau được." />
+      <TieuDeBuoc
+        tieuDe={<>Điền nhanh trong <span className="text-xanh">60 giây</span></>}
+        moTa="Thông tin cơ bản để hệ thống cá nhân hóa hướng đi cho em."
+      />
 
       <div className="space-y-1.5">
         <label htmlFor="bd-ho-ten" className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
-          <UserRound size={18} className="text-xanh" />Họ và tên<span className="ml-auto text-[12px] font-semibold text-chu-phu">Không bắt buộc · chỉ lưu trên máy</span>
+          <UserRound size={18} className="text-xanh" />Họ và tên <span className="text-[13px] font-normal text-chu-phu">(không bắt buộc)</span>
         </label>
         <OInput id="bd-ho-ten" value={h.hoTen} onChange={(e) => sua({ hoTen: e.target.value })} placeholder="Ví dụ: Minh Anh"
           autoComplete="name" maxLength={60} />
@@ -58,106 +87,98 @@ export default function Buoc1({ h, sua, loi }: P) {
         {loi.tinh && <p className="text-[13px] font-semibold text-do-chu">{loi.tinh}</p>}
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor={ID_TRUONG.nganhQuanTam} className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
-          <Layers size={18} className="text-xanh" />Nhóm ngành quan tâm<span className="text-do" aria-label="bắt buộc">*</span>
-          <span className="ml-auto text-[12px] font-semibold text-chu-phu">chọn 1 hoặc nhiều</span>
-        </label>
+      <div className="space-y-2.5" id={ID_TRUONG.nganhQuanTam} tabIndex={-1}>
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-1.5 text-[15px] font-bold text-chu">
+            <Layers size={18} className="text-xanh" />Nhóm ngành quan tâm<span className="text-do" aria-label="bắt buộc">*</span>
+          </label>
+          {h.nganhQuanTam.length > 0 && (
+            <span className="text-[13px] font-bold text-xanh bg-xanh-nhat px-2.5 py-0.5 rounded-full">
+              Đã chọn {h.nganhQuanTam.length}
+            </span>
+          )}
+        </div>
 
-        {/* Dropdown bao phủ toàn bộ các nhóm ngành trong dữ liệu */}
-        <OChon
-          id={ID_TRUONG.nganhQuanTam}
-          value=""
-          onChange={(e) => {
-            const v = e.target.value;
-            if (v && !h.nganhQuanTam.includes(v)) {
-              sua({ nganhQuanTam: [...h.nganhQuanTam, v] });
-            }
-          }}
-          aria-invalid={!!loi.nganhQuanTam}
-          className={gop(loi.nganhQuanTam && "border-do/60")}
-        >
-          <option value="">+ Chọn nhóm ngành từ danh sách ({TAT_CA_NGANH.length} nhóm)...</option>
-          {PHAN_NHOM_NGANH.map((group) => (
-            <optgroup key={group.nhom} label={group.nhom}>
-              {group.danhSach.map((item) => (
-                <option key={item.gia} value={item.gia} disabled={h.nganhQuanTam.includes(item.gia)}>
-                  {h.nganhQuanTam.includes(item.gia) ? `✓ ${item.nhan}` : item.nhan}
-                </option>
-              ))}
-            </optgroup>
-          ))}
-        </OChon>
+        {/* Ô tìm kiếm nhanh nhóm ngành */}
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu pointer-events-none" />
+          <input
+            type="search"
+            value={tuKhoa}
+            onChange={(e) => setTuKhoa(e.target.value)}
+            placeholder="Tìm nhanh ngành (CNTT, Kinh tế, Y Dược, Luật...)"
+            aria-label="Tìm nhanh nhóm ngành"
+            className="w-full min-h-10 rounded-xl border border-vien bg-trang pl-9 pr-9 text-[14px] focus:border-xanh outline-none"
+          />
+          {tuKhoa && (
+            <button
+              type="button"
+              onClick={() => setTuKhoa("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 size-7 grid place-items-center rounded-full text-chu-phu hover:text-chu"
+            >
+              <X size={15} />
+            </button>
+          )}
+        </div>
 
-        {/* Danh sách ngành đã chọn (Chip hiển thị có nút xoá) */}
-        {h.nganhQuanTam.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            {h.nganhQuanTam.map((g) => {
-              const info = TAT_CA_NGANH.find((t) => t.gia === g);
-              return (
-                <span
-                  key={g}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-xanh-nhat text-xanh text-[13px] font-bold border border-xanh/30 shadow-sm animate-hien-len"
-                >
-                  <span>{info?.gia || g}</span>
-                  <button
-                    type="button"
-                    onClick={() => sua({ nganhQuanTam: h.nganhQuanTam.filter((x) => x !== g) })}
-                    className="relative size-5 rounded-full hover:bg-xanh/20 grid place-items-center text-xanh after:absolute after:-inset-3 after:content-['']" /* vùng bấm rộng 44px */
-                    aria-label={`Xóa ngành ${g}`}
-                  >
-                    ×
-                  </button>
-                </span>
-              );
-            })}
-          </div>
-        ) : (
-          <p className="text-[12.5px] text-chu-phu italic">
-            Em có thể chọn từ danh sách trên hoặc bấm nhanh các gợi ý phổ biến bên dưới.
-          </p>
-        )}
-
-        {/* Gợi ý nhanh các nhóm ngành phổ biến */}
-        <div className="pt-0.5">
-          <span className="text-[12px] font-semibold text-chu-phu block mb-1.5">Gợi ý chọn nhanh:</span>
-          <div className="flex flex-wrap gap-1.5">
-            {NGANH.map((item) => {
-              const daChon = h.nganhQuanTam.includes(item.gia);
-              const Icon = item.icon;
+        {/* Danh mục phân loại nếu không tìm kiếm */}
+        {!tuKhoa && (
+          <div className="flex gap-1.5 overflow-x-auto an-thanh-cuon pb-1">
+            {["Tất cả", "Công nghệ", "Kinh tế", "Y Dược", "Xã hội", "Mỹ thuật"].map((tab) => {
+              const chon = tabNhom === tab;
               return (
                 <button
-                  key={item.gia}
+                  key={tab}
                   type="button"
-                  onClick={() => {
-                    if (daChon) {
-                      sua({ nganhQuanTam: h.nganhQuanTam.filter((x) => x !== item.gia) });
-                    } else {
-                      sua({ nganhQuanTam: [...h.nganhQuanTam, item.gia] });
-                    }
-                  }}
+                  onClick={() => setTabNhom(tab)}
                   className={gop(
-                    "inline-flex items-center gap-1.5 px-3 min-h-11 rounded-lg text-[13px] font-bold border transition active:scale-95",
-                    daChon
-                      ? "bg-xanh text-white border-xanh"
-                      : "bg-trang text-chu border-vien hover:border-xanh/40",
+                    "min-h-8 px-2.5 rounded-lg text-[12.5px] font-semibold whitespace-nowrap transition-colors",
+                    chon ? "bg-xanh text-white shadow-sm" : "bg-nen text-chu hover:bg-vien/40"
                   )}
                 >
-                  {Icon && <Icon size={14} className="shrink-0" />}
-                  <span>{item.nhan}</span>
+                  {tab}
                 </button>
               );
             })}
           </div>
+        )}
+
+        {/* Lưới các thẻ ngành có thể chạm bật/tắt tức thì */}
+        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+          {danhSachHien.map((item) => {
+            const daChon = h.nganhQuanTam.includes(item.gia);
+            return (
+              <button
+                key={item.gia}
+                type="button"
+                onClick={() => toggleNganh(item.gia)}
+                className={gop(
+                  "flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.98] cursor-pointer min-h-12",
+                  daChon
+                    ? "bg-xanh-nhat border-xanh text-xanh shadow-sm ring-1 ring-xanh"
+                    : "bg-trang border-vien text-chu hover:border-xanh/40"
+                )}
+              >
+                <div className="min-w-0 flex-1 pr-1.5">
+                  <b className="block text-[13.5px] leading-snug">{item.gia}</b>
+                  <span className="block text-[11.5px] text-chu-phu leading-tight truncate mt-0.5">
+                    {item.nhan.replace(`${item.gia} / `, "").replace(`${item.gia} - `, "")}
+                  </span>
+                </div>
+                {daChon ? (
+                  <span className="size-5 rounded-full bg-xanh text-white grid place-items-center shrink-0">
+                    <Check size={12} strokeWidth={3} />
+                  </span>
+                ) : (
+                  <span className="size-5 rounded-full border border-vien shrink-0" />
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {loi.nganhQuanTam && <p className="text-[13px] font-semibold text-do-chu">{loi.nganhQuanTam}</p>}
       </div>
-
-      <p className="flex gap-2 items-start rounded-the bg-xanh-nhat p-3 text-[13px] text-chu">
-        <Lightbulb size={18} className="text-cam shrink-0 mt-0.5" />
-        Chưa chắc cũng không sao, chọn theo cảm nhận rồi đổi sau.
-      </p>
     </>
   );
 }

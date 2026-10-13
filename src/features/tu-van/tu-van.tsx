@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Eye, LockKeyhole, RotateCcw, Send, Sparkles } from "lucide-react";
+import { ArrowLeft, RotateCcw, Send, Sparkles } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
@@ -48,7 +48,6 @@ export default function TuVan() {
   const [dang, setDang] = useState(false);
   const [lau, setLau] = useState(false);
   const [dungHoSo, setDungHoSo] = useState(true);
-  const [xemGui, setXemGui] = useState(false);
   const [nguon, setNguon] = useState<NguonTaiSau | null>(null);
   const cuoi = useRef<HTMLDivElement>(null);
   const dangRef = useRef(false); // chặn gửi trùng khi bấm đúp (state chưa kịp cập nhật)
@@ -73,7 +72,6 @@ export default function TuVan() {
     cauHoi: q, nguCanh: taoNguCanh(manHinh, truoc), hoSo: dungHoSo ? tomTatHoSo(s) : null,
     duLieu: chonDuLieuKemTheo(q, s, nguon, 8, nganhLuotTruoc(truoc)),
   });
-  const xemTruoc = cauHoi.trim().length >= 3 ? dungYeuCau(cauHoi.trim(), tin) : null;
 
   /** `thay`: vị trí tin của em cần hỏi lại (Thử lại): bỏ cặp hỏi–đáp cũ rồi gửi lại đúng câu đó. */
   const gui = async (q: string, thay?: number) => {
@@ -105,34 +103,38 @@ export default function TuVan() {
     <>
       <DauTrangCoQuayLai tieuDe="Tư vấn cùng AI" phai={<span className="sr-only">{manHinh}</span>} />
       <NoiDung className="pb-4">
-        <div className="rounded-lon bg-xanh-nhat p-4">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-trang text-xanh"><Sparkles size={22} /></span>
-            <h2 className="text-[17px] font-extrabold text-muc">Mình trả lời dựa trên số liệu có nguồn</h2>
+        <div className="flex items-center justify-between rounded-xl bg-xanh-nhat px-3.5 py-2.5 border border-xanh/20">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="size-7 rounded-lg bg-trang text-xanh grid place-items-center shrink-0 shadow-xs">
+              <Sparkles size={16} />
+            </span>
+            <div className="min-w-0">
+              <span className="text-[13.5px] font-bold text-muc">Trợ lý Tuyển sinh AI</span>
+              <span className="text-[12px] text-chu-phu hidden sm:inline ml-1.5">· Dữ liệu chuẩn hoá từ đề án</span>
+            </div>
           </div>
-          <p className="mt-2 text-[14px] text-chu">Mình chỉ dùng điểm chuẩn, tổ hợp, học phí đã có trong app và hồ sơ của em. Câu nào chưa có dữ liệu, mình nói thẳng. Ngữ cảnh: {manHinh}.</p>
-          <p className="mt-1 text-[12px] text-chu-phu">Câu hỏi, vài lượt trước và tóm tắt hồ sơ của em được gửi lên máy chủ để AI trả lời; không gửi họ tên hay thông tin liên hệ.</p>
-        </div>
-
-        <div className="rounded-the border border-vien bg-trang p-3.5">
-          <label className="flex items-start gap-3 min-h-11">
-            <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="mt-1 size-5 shrink-0 accent-[var(--color-xanh)]" />
-            <span className="text-[14px] text-chu"><b className="text-muc">Cho mình dùng hồ sơ của em</b> (điểm tổ hợp, nhóm ngành, ngân sách, khu vực) để trả lời sát hơn. Không gửi tên và thông tin liên hệ.</span>
+          <label className="flex items-center gap-1.5 text-[12.5px] font-semibold text-chu cursor-pointer shrink-0 ml-2">
+            <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="size-4 accent-[var(--color-xanh)]" />
+            <span>Kèm hồ sơ của em</span>
           </label>
-          <button type="button" onClick={() => setXemGui(!xemGui)} aria-expanded={xemGui} className="mt-1 inline-flex items-center gap-1.5 min-h-11 text-[13px] font-bold text-xanh">
-            <Eye size={16} />{xemGui ? "Ẩn dữ liệu sẽ gửi" : "Xem dữ liệu sẽ gửi đi"}
-          </button>
-          {xemGui && (
-            <pre className="mt-1 max-h-56 overflow-auto rounded-xl bg-nen p-2.5 text-[12px] leading-snug text-chu whitespace-pre-wrap break-words" aria-label="Dữ liệu sẽ gửi">
-              {xemTruoc ? JSON.stringify({ cauHoi: xemTruoc.cauHoi, nguCanh: xemTruoc.nguCanh, hoSo: xemTruoc.hoSo, nganhKemTheo: xemTruoc.duLieu.map((d) => `${d.nganh} · ${d.truong}`) }, null, 1) : "Em gõ câu hỏi để xem mình sẽ gửi những gì."}
-            </pre>
-          )}
-          <p className="mt-1 flex items-start gap-1.5 text-[12px] text-chu-phu"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-luc" />Hồ sơ và cuộc trò chuyện chỉ lưu trên máy. Chỉ phần em thấy ở trên mới được gửi đi khi em bấm Gửi.</p>
         </div>
 
         {tin.length === 0 && (
-          <section aria-label="Câu hỏi gợi ý" className="space-y-2">
-            {goiY.map((x) => <button key={x} type="button" disabled={dang} onClick={() => gui(x)} className="w-full min-h-12 rounded-xl border border-vien bg-trang px-3 py-2 text-left text-[14px] text-chu active:bg-xanh-nhat disabled:opacity-50">{x}</button>)}
+          <section aria-label="Câu hỏi gợi ý" className="space-y-2 pt-1">
+            <p className="text-[13px] font-bold text-chu-phu px-1">Gợi ý hỏi nhanh:</p>
+            <div className="grid gap-2">
+              {goiY.map((x) => (
+                <button
+                  key={x}
+                  type="button"
+                  disabled={dang}
+                  onClick={() => gui(x)}
+                  className="w-full min-h-12 rounded-xl border border-vien bg-trang px-3.5 py-2.5 text-left text-[14px] font-medium text-chu active:bg-xanh-nhat disabled:opacity-50 transition-colors shadow-sm hover:border-xanh/40 cursor-pointer"
+                >
+                  {x}
+                </button>
+              ))}
+            </div>
           </section>
         )}
 

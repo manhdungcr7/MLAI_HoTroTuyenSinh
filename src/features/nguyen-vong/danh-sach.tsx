@@ -194,9 +194,6 @@ export default function DanhSachNguyenVong() {
             <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Cao nhất: ${dinhDang(tong, 1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
               Thứ tự của em
             </TieuDeMuc>
-            <p className="-mt-1 text-[13px] text-chu-phu flex items-center gap-1">
-              <GripVertical size={15} className="shrink-0" />Kéo tay nắm hoặc bấm mũi tên để đổi.
-            </p>
 
             <ol className={gop("space-y-3", keo && "select-none")} aria-label="Danh sách nguyện vọng theo thứ tự ưu tiên">
               {ds.map((d, i) => (

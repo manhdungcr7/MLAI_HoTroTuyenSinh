@@ -118,7 +118,6 @@ export default function KhamPha() {
                 ))}
               </div>
             )}
-            <p className="mt-2 text-[12px] text-chu-phu">Điểm thi THPT so với điểm chuẩn năm trước · không phải xác suất đậu</p>
           </section>
         )}
 
@@ -151,8 +150,6 @@ export default function KhamPha() {
           </label>
         </div>
 
-        <GhiChuDuLieuMau />
-
         {ds.length === 0 ? (
           <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Chưa có trường nào khớp"
             moTa={tuKhoa ? `Không tìm thấy “${tuKhoa.trim()}” trong các tiêu chí đang chọn. Thử từ khác hoặc nới bộ lọc nhé.` : "Thử nới bớt các tiêu chí lọc nhé."}>
@@ -162,14 +159,17 @@ export default function KhamPha() {
             </div>
           </TrangThaiTrong>
         ) : (
-          <ul className="space-y-3">
-            {hien.map(({ l, kq }) => <li key={l.id}><TheKhamPha l={l} kq={kq} onClick={() => nav(DUONG_DAN.chiTiet(l.id))} /></li>)}
-            {ds.length > soHien && (
-              <li className="pt-1">
-                <Nut kieu="vien" onClick={() => setSoHien((n) => n + 30)}>Xem thêm (còn {ds.length - soHien} ngành)</Nut>
-              </li>
-            )}
-          </ul>
+          <>
+            <ul className="space-y-3">
+              {hien.map(({ l, kq }) => <li key={l.id}><TheKhamPha l={l} kq={kq} onClick={() => nav(DUONG_DAN.chiTiet(l.id))} /></li>)}
+              {ds.length > soHien && (
+                <li className="pt-1">
+                  <Nut kieu="vien" onClick={() => setSoHien((n) => n + 30)}>Xem thêm (còn {ds.length - soHien} ngành)</Nut>
+                </li>
+              )}
+            </ul>
+            <GhiChuDuLieuMau />
+          </>
         )}
       </NoiDung>
     </>

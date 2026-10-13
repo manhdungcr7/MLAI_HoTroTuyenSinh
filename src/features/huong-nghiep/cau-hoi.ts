@@ -19,77 +19,77 @@ export interface TinhHuong { loai: LoaiSoThich; chu: string }
 export interface CauHoi { chu: string; luaChon: TinhHuong[] }
 
 export const CAC_CAU_HOI: CauHoi[] = [
-  { chu: "Cuối tuần được rảnh cả ngày, em dễ rơi vào việc nào nhất?", luaChon: [
-    { loai: "R", chu: "Tháo lắp, sửa đồ, đạp xe đi đâu đó hoặc làm đồ thủ công" },
-    { loai: "I", chu: "Xem video khoa học, tập lập trình hoặc giải câu đố đến khi hiểu ra" },
-    { loai: "A", chu: "Vẽ, chụp ảnh, dựng video, viết hoặc sáng tác gì đó của riêng mình" },
-    { loai: "S", chu: "Gặp bạn bè, giúp người trong nhà hoặc đi tình nguyện" },
+  { chu: "Cuối tuần được rảnh cả ngày, em dễ say mê việc nào nhất?", luaChon: [
+    { loai: "R", chu: "Tháo lắp thiết bị, sửa chữa đồ đạc, làm mô hình hoặc vận động thể thao" },
+    { loai: "I", chu: "Tìm hiểu công nghệ mới, tập lập trình hoặc giải các câu đố tư duy hóc búa" },
+    { loai: "A", chu: "Sáng tạo nội dung, vẽ tranh, chụp ảnh, dựng video hoặc sáng tác nhạc/viết lách" },
+    { loai: "S", chu: "Tụ tập bạn bè, giúp đỡ người thân hoặc tham gia hoạt động thiện nguyện" },
   ] },
-  { chu: "Làm dự án nhóm ở lớp, em thường nhận phần nào?", luaChon: [
-    { loai: "E", chu: "Chia việc, thuyết phục cả nhóm và đứng ra thuyết trình" },
-    { loai: "C", chu: "Lên lịch, ghi chép, kiểm tra từng chi tiết cho khớp" },
-    { loai: "I", chu: "Tìm tài liệu, phân tích và tìm ra cách giải quyết" },
-    { loai: "A", chu: "Nghĩ ý tưởng, làm slide và phần trình bày cho đẹp, cuốn hút" },
+  { chu: "Khi làm dự án nhóm ở lớp, em thường chủ động nhận vai trò nào?", luaChon: [
+    { loai: "E", chu: "Điều phối phân chia công việc, thuyết phục cả nhóm và làm diễn giả thuyết trình" },
+    { loai: "C", chu: "Lập tiến độ chi tiết, ghi chép biên bản và rà soát từng đầu việc cho chuẩn xác" },
+    { loai: "I", chu: "Thu thập tài liệu, phân tích số liệu và đề xuất cách làm hiệu quả nhất" },
+    { loai: "A", chu: "Khởi xướng ý tưởng độc đáo, thiết kế slide và hình ảnh cuốn hút" },
   ] },
-  { chu: "Điều nào khiến em thấy “đã” nhất sau một ngày?", luaChon: [
-    { loai: "R", chu: "Làm ra được một thứ chạy được hoặc cầm nắm được" },
-    { loai: "S", chu: "Có người nói nhờ em mà họ hiểu bài, hoặc vui hơn" },
-    { loai: "E", chu: "Thuyết phục được người khác làm theo ý tưởng của mình" },
-    { loai: "C", chu: "Mọi thứ gọn gàng, đúng hạn, không sai sót nào" },
+  { chu: "Điều nào khiến em cảm thấy thỏa mãn và hứng khởi nhất sau một ngày?", luaChon: [
+    { loai: "R", chu: "Tự tay hoàn thiện một sản phẩm cơ học/vật lý nhìn thấy và dùng được" },
+    { loai: "S", chu: "Biết rằng mình đã giúp bạn bè hay người xung quanh giải quyết được khó khăn" },
+    { loai: "E", chu: "Thuyết phục được người khác đồng thuận với ý tưởng và định hướng của mình" },
+    { loai: "C", chu: "Mọi kế hoạch diễn ra ngăn nắp, đúng hạn và không có bất kỳ sai sót nào" },
   ] },
-  { chu: "Nếu chọn một câu lạc bộ ở trường, em chọn câu lạc bộ nào?", luaChon: [
-    { loai: "R", chu: "Robot, cơ khí, sửa chữa, làm mô hình" },
-    { loai: "I", chu: "Khoa học, Toán, lập trình thi đấu" },
-    { loai: "A", chu: "Báo chí, âm nhạc, mỹ thuật, kịch" },
-    { loai: "E", chu: "Kinh doanh, tranh biện, tổ chức sự kiện" },
+  { chu: "Nếu được tự do chọn một câu lạc bộ ở trường, em sẽ chọn CLB nào?", luaChon: [
+    { loai: "R", chu: "CLB Robot, STEM, cơ điện tử, chế tạo mô hình" },
+    { loai: "I", chu: "CLB Tin học, Toán học ứng dụng hoặc Nghiên cứu khoa học" },
+    { loai: "A", chu: "CLB Truyền thông, Nhiếp ảnh, Thiết kế đồ họa, Âm nhạc" },
+    { loai: "E", chu: "CLB Tranh biện, Khởi nghiệp kinh doanh hoặc Tổ chức sự kiện" },
   ] },
-  { chu: "Bạn thân đang buồn vì một chuyện, em sẽ làm gì?", luaChon: [
-    { loai: "S", chu: "Ngồi nghe và ở bên bạn" },
-    { loai: "I", chu: "Cùng bạn phân tích nguyên nhân và các cách giải quyết" },
-    { loai: "E", chu: "Rủ bạn đi đâu đó và đứng ra lo giúp bạn chuyện đó" },
-    { loai: "C", chu: "Giúp bạn lập danh sách việc cần làm, từng bước một" },
+  { chu: "Khi bạn thân gặp chuyện buồn hoặc bế tắc, em sẽ làm gì đầu tiên?", luaChon: [
+    { loai: "S", chu: "Ngồi lại lắng nghe tâm sự và ở bên cạnh động viên tinh thần bạn" },
+    { loai: "I", chu: "Cùng bạn mổ xẻ nguyên nhân gốc rễ và tìm phương án giải quyết bài bản" },
+    { loai: "E", chu: "Rủ bạn đi đổi gió và chủ động đứng ra giúp bạn giải quyết vướng mắc" },
+    { loai: "C", chu: "Giúp bạn lên danh sách các bước việc cần làm cụ thể để tháo gỡ từng bước" },
   ] },
-  { chu: "Loại bài nào làm em hăng nhất?", luaChon: [
-    { loai: "I", chu: "Bài Toán hoặc Lý khó, càng khó càng hứng" },
-    { loai: "A", chu: "Bài viết tự do hoặc bài sáng tạo, ai cũng làm khác nhau" },
-    { loai: "C", chu: "Bài có nhiều bước tính chính xác, bảng biểu, số liệu" },
-    { loai: "R", chu: "Thí nghiệm, thực hành hoặc làm mô hình" },
+  { chu: "Dạng bài tập hoặc thử thách nào khiến em tập trung cao độ nhất?", luaChon: [
+    { loai: "I", chu: "Bài toán tư duy logic, bài thực nghiệm khoa học hóc búa cần đào sâu" },
+    { loai: "A", chu: "Bài tập đề mở, thỏa sức thể hiện góc nhìn cá nhân và sự sáng tạo" },
+    { loai: "C", chu: "Dạng bài có cấu trúc rõ ràng, đòi hỏi tính toán tỉ mỉ và độ chuẩn xác cao" },
+    { loai: "R", chu: "Bài thực hành phòng lab, chế tạo sản phẩm hoặc ứng dụng thực tế" },
   ] },
-  { chu: "Em thấy mình hợp nơi làm việc nào nhất?", luaChon: [
-    { loai: "R", chu: "Xưởng, công trường, phòng thí nghiệm hoặc ngoài trời" },
-    { loai: "S", chu: "Trường học, bệnh viện, nơi gặp nhiều người cần giúp" },
-    { loai: "E", chu: "Công ty: họp bàn, gặp khách hàng, đàm phán" },
-    { loai: "C", chu: "Văn phòng yên tĩnh với số liệu và hồ sơ" },
+  { chu: "Em thấy mình hứng thú với môi trường làm việc nào nhất?", luaChon: [
+    { loai: "R", chu: "Xưởng công nghệ, phòng thí nghiệm vật lý, công trường ngoài trời năng động" },
+    { loai: "S", chu: "Trường học, bệnh viện, trung tâm tư vấn tương tác trực tiếp với con người" },
+    { loai: "E", chu: "Văn phòng tập đoàn, môi trường kinh doanh linh hoạt, đàm phán hợp đồng" },
+    { loai: "C", chu: "Không gian làm việc yên tĩnh, quy củ, quản lý dữ liệu và hệ thống chuẩn mực" },
   ] },
-  { chu: "Nghe tin về một sản phẩm mới (ứng dụng, xe điện...), em tò mò nhất điều gì?", luaChon: [
-    { loai: "I", chu: "Bên trong nó hoạt động thế nào" },
-    { loai: "E", chu: "Bán cho ai và kiếm tiền ra sao" },
-    { loai: "A", chu: "Nó được thiết kế đẹp và dùng thích đến đâu" },
-    { loai: "R", chu: "Mình có tự làm hoặc lắp được không" },
+  { chu: "Khi nghe tin về một sản phẩm mới ra mắt, em tò mò nhất điều gì?", luaChon: [
+    { loai: "I", chu: "Nguyên lý vận hành và công nghệ đột phá ẩn bên trong" },
+    { loai: "E", chu: "Chiến lược kinh doanh, giá trị thị trường và cách tiếp cận người dùng" },
+    { loai: "A", chu: "Trải nghiệm người dùng, phong cách thiết kế và độ tinh tế thẩm mỹ" },
+    { loai: "R", chu: "Chất liệu chế tạo phần cứng và khả năng tự lắp ráp, nâng cấp" },
   ] },
-  { chu: "Gặp việc khó chưa biết làm, em thường làm gì?", luaChon: [
-    { loai: "I", chu: "Tìm hiểu tới cùng đến khi hiểu rõ" },
-    { loai: "E", chu: "Rủ mọi người cùng bàn rồi đứng ra quyết định" },
-    { loai: "C", chu: "Chia thành các bước, lập kế hoạch rồi làm đúng kế hoạch" },
-    { loai: "S", chu: "Hỏi người giỏi hơn và cùng giúp nhau làm" },
+  { chu: "Gặp bài toán hoặc vấn đề khó chưa biết cách làm, em sẽ làm gì?", luaChon: [
+    { loai: "I", chu: "Tự tìm tài liệu nghiên cứu sâu đến khi nắm chắc bản chất mới bắt đầu" },
+    { loai: "E", chu: "Tập hợp các bạn, phân chia mục tiêu và chủ động ra quyết định thử nghiệm" },
+    { loai: "C", chu: "Xây dựng bảng kế hoạch từng bước, đặt mốc thời gian rồi làm tuần tự" },
+    { loai: "S", chu: "Trao đổi với thầy cô, bạn bè nhiều kinh nghiệm để cùng phối hợp làm" },
   ] },
-  { chu: "Mười năm nữa, em muốn người ta nhớ đến em vì điều gì?", luaChon: [
-    { loai: "I", chu: "Tìm ra được điều mới hoặc giải được bài toán khó" },
-    { loai: "A", chu: "Tạo ra sản phẩm hoặc tác phẩm đẹp, độc đáo" },
-    { loai: "S", chu: "Đã giúp nhiều người trở nên tốt hơn" },
-    { loai: "E", chu: "Xây được doanh nghiệp hoặc dẫn dắt được một tập thể" },
+  { chu: "Mười năm nữa nhìn lại, em muốn bản thân đã tạo dựng được điều gì?", luaChon: [
+    { loai: "I", chu: "Đóng góp phát minh kỹ thuật mới hoặc giải quyết được một bài toán chuyên môn lớn" },
+    { loai: "A", chu: "Tạo ra những sản phẩm sáng tạo, ấn phẩm hoặc tác phẩm có phong cách riêng" },
+    { loai: "S", chu: "Đã giúp đỡ, đào tạo và truyền cảm hứng tích cực cho nhiều thế hệ học sinh/cộng đồng" },
+    { loai: "E", chu: "Xây dựng doanh nghiệp thành công hoặc dẫn dắt một đội ngũ phát triển mạnh mẽ" },
   ] },
-  { chu: "Môn hoặc hoạt động nào em ngồi hàng giờ không chán?", luaChon: [
-    { loai: "R", chu: "Công nghệ, thực hành, thể thao vận động" },
-    { loai: "A", chu: "Văn, Mỹ thuật, Âm nhạc" },
-    { loai: "C", chu: "Tính toán, bảng biểu, tin học văn phòng, sổ sách" },
-    { loai: "S", chu: "Giảng lại bài cho bạn, hoạt động đoàn đội" },
+  { chu: "Hoạt động nào em có thể làm liên tục hàng giờ mà không thấy chán?", luaChon: [
+    { loai: "R", chu: "Lắp ráp máy móc, chế tạo vật dụng hoặc rèn luyện thể thao" },
+    { loai: "A", chu: "Viết lách, vẽ tranh, dựng clip, chụp ảnh hoặc tập chơi nhạc cụ" },
+    { loai: "C", chu: "Tính toán bảng tính, quản lý ngân sách, sắp xếp dữ liệu khoa học" },
+    { loai: "S", chu: "Kèm cặp hỗ trợ bạn học, lắng nghe chia sẻ hoặc sinh hoạt đội nhóm" },
   ] },
-  { chu: "Kỳ nghỉ hè lý tưởng của em là gì?", luaChon: [
-    { loai: "R", chu: "Đi phượt, cắm trại hoặc làm một việc tay chân từ đầu tới cuối" },
-    { loai: "E", chu: "Tổ chức một sự kiện hoặc bán hàng kiếm tiền" },
-    { loai: "S", chu: "Chiến dịch tình nguyện hoặc dạy kèm" },
-    { loai: "I", chu: "Học một khóa mới hoặc làm dự án nghiên cứu, lập trình" },
+  { chu: "Kỳ nghỉ hè lý tưởng và đáng nhớ nhất đối với em sẽ là gì?", luaChon: [
+    { loai: "R", chu: "Đi phượt dã ngoại trải nghiệm hoặc tự tay hoàn thiện một dự án kỹ thuật" },
+    { loai: "E", chu: "Thử sức kinh doanh, tổ chức một hội chợ hoặc sự kiện gây quỹ cùng bạn bè" },
+    { loai: "S", chu: "Tham gia chiến dịch tình nguyện Mùa hè xanh hoặc lớp học thiện nguyện" },
+    { loai: "I", chu: "Tham gia trại hè nghiên cứu khoa học, lập trình dự án thực tế" },
   ] },
 ];
 
