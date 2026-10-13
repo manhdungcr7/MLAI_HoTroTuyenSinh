@@ -38,7 +38,7 @@ export default function MucTieu() {
     const mucTieuCu = !!s.mucTieu; // có mục tiêu nhưng lựa chọn không còn trong danh sách
     return (
       <>
-        <DauTrangChinh tieuDe="Mục tiêu chính" moTa="Ngành, trường em muốn vào và chặng đường tới đó." />
+        <DauTrangChinh tieuDe="Mục tiêu chính" />
         <ThanhPhuKeHoach />
         <NoiDung>
           <NutTuVan nguCanh="Mục tiêu học tập" />
@@ -63,7 +63,7 @@ export default function MucTieu() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Mục tiêu chính" moTa="Nguyện vọng em đã chọn và chặng đường tới đó." />
+      <DauTrangChinh tieuDe="Mục tiêu chính" />
       <ThanhPhuKeHoach />
       <NoiDung>
         <NutTuVan nguCanh="Mục tiêu học tập" />

@@ -68,7 +68,7 @@ export default function HoSo() {
   if (!daCoDuLieu) {
     return (
       <>
-        <DauTrangChinh tieuDe="Hồ sơ của em" moTa="Hệ thống sẽ hiểu em rõ hơn khi em điền hồ sơ." phai={nutCaiDat} />
+        <DauTrangChinh tieuDe="Hồ sơ của em" phai={nutCaiDat} />
         <NoiDung>
           <TrangThaiTrong bieuTuong={<FileText size={28} />} tieuDe="Chưa có hồ sơ" moTa="Chỉ mất khoảng 1 phút. Phần nào chưa chắc, em có thể điền sau.">
             <div className="space-y-2">
@@ -88,7 +88,7 @@ export default function HoSo() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Hệ thống hiểu em" moTa="Tóm tắt từ thông tin em đã nhập." phai={nutCaiDat} />
+      <DauTrangChinh tieuDe="Hồ sơ của em" phai={nutCaiDat} />
       <NoiDung>
         <NenHero tone="xanh" className="p-4">
           <div className="flex items-center gap-3">

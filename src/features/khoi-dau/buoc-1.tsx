@@ -57,7 +57,6 @@ export default function Buoc1({ h, sua, loi }: P) {
     <>
       <TieuDeBuoc
         tieuDe={<>Điền nhanh trong <span className="text-xanh">60 giây</span></>}
-        moTa="Thông tin cơ bản để hệ thống cá nhân hóa hướng đi cho em."
       />
 
       <div className="space-y-1.5">

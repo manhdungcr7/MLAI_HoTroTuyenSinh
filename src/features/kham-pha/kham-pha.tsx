@@ -51,7 +51,7 @@ export default function KhamPha() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Khám phá" moTa="Những hướng đi hợp với điểm, sở thích và ngân sách của em." />
+      <DauTrangChinh tieuDe="Khám phá" />
       <NoiDung>
         <NutTuVan nguCanh="Khám phá ngành học" />
         <div className="relative">

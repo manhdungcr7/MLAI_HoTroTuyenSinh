@@ -272,7 +272,7 @@ function HopXemTruoc({ moi, ds, dong, apDung }: { moi: string[] | null; ds: Retu
     <HopTruot mo={moi !== null} dong={dong} tieuDe="Gợi ý thứ tự">
       {moi && (
         <div className="space-y-3 text-[14px] text-chu">
-          <p>Chỉ đưa An toàn, Dự phòng xuống cuối; còn lại giữ thứ tự em đặt (em vào NV cao nhất đủ điểm).</p>
+          <p>Đưa các lựa chọn An toàn và Dự phòng xuống cuối, giữ nguyên thứ tự ưu tiên các ngành còn lại của em.</p>
           <ol className="space-y-1.5">
             {moi.map((id, i) => {
               const d = ds.find((x) => x.id === id);

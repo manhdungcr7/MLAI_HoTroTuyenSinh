@@ -34,7 +34,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
 
   return (
     <>
-      <TieuDeBuoc tieuDe="Nhập điểm nhanh" moTa="Điểm gần nhất. Tổ hợp tự tính ngay."
+      <TieuDeBuoc tieuDe="Điểm các môn"
         phai={<span className="mt-1.5 shrink-0 inline-flex items-center gap-1 rounded-lg bg-xanh-nhat px-2 py-1 text-[12px] font-bold text-xanh"><Pencil size={13} />Sửa sau được</span>} />
 
       <fieldset className="min-w-0">

@@ -117,14 +117,14 @@ export function DaLuuTam({ daSua }: { daSua: boolean }) {
 }
 
 /** Tiêu đề lớn của bước + mô tả ngắn. */
-export function TieuDeBuoc({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa: string; phai?: ReactNode }) {
+export function TieuDeBuoc({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?: string; phai?: ReactNode }) {
   return (
     <div>
       <div className="flex items-start justify-between gap-2">
         <h2 className="text-[24px] leading-tight font-extrabold text-muc">{tieuDe}</h2>
         {phai}
       </div>
-      <p className="text-[14px] text-chu-phu mt-1">{moTa}</p>
+      {moTa && <p className="text-[14px] text-chu-phu mt-1">{moTa}</p>}
     </div>
   );
 }

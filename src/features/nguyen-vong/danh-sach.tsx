@@ -69,7 +69,7 @@ export default function DanhSachNguyenVong() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Danh sách nguyện vọng" moTa="Em vào NV cao nhất đủ điểm, nên NV1 là trường muốn nhất." />
+      <DauTrangChinh tieuDe="Danh sách nguyện vọng" />
       <NoiDung>
         <NutTuVan nguCanh="Danh sách nguyện vọng" />
         {ds.length === 0 ? (
