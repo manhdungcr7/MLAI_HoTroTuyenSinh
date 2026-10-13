@@ -64,7 +64,8 @@ export default function HoSo() {
     </button>
   );
 
-  if (!h.hoTen.trim() && !h.hoanTat) {
+  const daCoDuLieu = Boolean(h.hoanTat || h.hoTen.trim() || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
+  if (!daCoDuLieu) {
     return (
       <>
         <DauTrangChinh tieuDe="Hồ sơ của em" moTa="Hệ thống sẽ hiểu em rõ hơn khi em điền hồ sơ." phai={nutCaiDat} />

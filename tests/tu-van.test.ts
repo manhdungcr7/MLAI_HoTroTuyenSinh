@@ -23,6 +23,8 @@ if (t.ok) assert.ok(dungNoiDung(t.v).includes("Khoa học máy tính") && dungNo
 // 2) Lọc nguồn: bỏ mã AI tự bịa
 const l = locNguon("Điểm là 26,9. [nguồn: a1, bịa123]", ["a1", "a2"]);
 assert.deepEqual(l.nguon, ["a1"]); assert.ok(!l.traLoi.includes("nguồn:"));
+const kd = locNguon("Học phí 31,11. [nguon: a2]", ["a1", "a2"]); // mô hình hay bỏ dấu
+assert.deepEqual(kd.nguon, ["a2"]); assert.ok(!kd.traLoi.includes("nguon"));
 
 // 3) Máy chủ (giả lập mạng, không gọi dịch vụ thật)
 const gia = (body: unknown, ok = true) => (async () => ({ ok, status: ok ? 200 : 500, json: async () => body })) as unknown as typeof fetch;
@@ -40,6 +42,8 @@ assert.ok(String(thamSo.init?.body).includes("DỮ LIỆU") && !String(r1.header
 assert.ok(!JSON.stringify(d1).includes("khoa-bi-mat"), "khóa API không được lộ ra câu trả lời");
 const spyOA = (async (url: string) => ({ ok: true, status: 200, json: async () => ({ choices: [{ message: { content: `ok ${url}` } }] }) })) as unknown as typeof fetch;
 assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENAI_API_KEY: "k", RATE_KV: kvCho }, spyOA)).json() as { traLoi: string }).traLoi.startsWith("ok https://api.openai.com"), true);
+const spyOR = (async (url: string) => ({ ok: true, status: 200, json: async () => ({ choices: [{ message: { content: `ok ${url}` } }] }) })) as unknown as typeof fetch;
+assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENROUTER_API_KEY: "k", RATE_KV: kvCho }, spyOR)).json() as { traLoi: string }).traLoi.startsWith("ok https://openrouter.ai"), true);
 assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k" }, spy)).status, 503, "thiếu KV thì không gọi mô hình");
 assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k", RATE_KV: kvCho }, gia({}, false))).status, 502, "dịch vụ lỗi thì 502, không lộ chi tiết");
 
@@ -87,4 +91,16 @@ assert.ok(/chưa hiểu/.test(traLoiTuDong("xin chào bạn", mau, null).traLoi)
 const dl = chonDuLieuKemTheo("Danh sách nguyện vọng của em", mau, null);
 assert.ok(dl.length > 0 && !JSON.stringify(dl).includes(mau.hoSo.hoTen));
 
+// tongCuaEm/toHopDaTinh: giữ khi hợp lệ, bỏ khi sai, và mô hình nhìn thấy
+{
+  const k = kiemTraYeuCau({ cauHoi: "điểm của em ở MBS?", duLieu: [{ ...sk, tongCuaEm: 24.5, toHopDaTinh: "A01" }, { ...sk, id: "a2", tongCuaEm: 99, toHopDaTinh: 5 }] });
+  assert.ok(k.ok);
+  if (k.ok) {
+    assert.equal(k.v.duLieu[0].tongCuaEm, 24.5); assert.equal(k.v.duLieu[0].toHopDaTinh, "A01");
+    assert.equal(k.v.duLieu[1].tongCuaEm, undefined); assert.equal(k.v.duLieu[1].toHopDaTinh, undefined);
+    assert.ok(dungNoiDung(k.v).includes("\"tongCuaEm\":24.5"));
+  }
+  assert.ok(NHAC_HE_THONG.includes("tongCuaEm") && NHAC_HE_THONG.includes("KHÔNG dùng làm điểm của một ngành"));
+  assert.ok(NHAC_HE_THONG.includes("Không mô tả phạm vi dữ liệu"));
+}
 console.log("tu-van: tất cả kiểm tra đều qua");

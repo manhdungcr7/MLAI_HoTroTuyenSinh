@@ -1,4 +1,5 @@
 // Kiểu tối thiểu cho Cloudflare D1/KV (repo không dùng @cloudflare/workers-types). Đối tượng thật của Cloudflare khớp cấu trúc này.
+import type { KhoAI, KhoVector, KhoKVAI } from "../../../functions/_thu-vien/ai/kieu";
 
 export interface KhoD1Cau {
   bind(...giaTri: unknown[]): KhoD1Cau;
@@ -19,12 +20,12 @@ export interface KhoKV {
 export interface Env {
   DB?: KhoD1;
   KV_CONG_DONG?: KhoKV;
-  /** Tên miền nhóm Cloudflare Zero Trust, ví dụ `nhom-cua-ban.cloudflareaccess.com`. */
-  TEAM_DOMAIN?: string;
-  /** Application Audience (AUD) tag của ứng dụng Access. */
-  ACCESS_AUD?: string;
-  /** Danh sách email phân cách dấu phẩy, tự thành qtv khi bảng quan_tri còn rỗng. */
-  QTV_DAU_TIEN?: string;
+  AI?: KhoAI;
+  VECTORIZE?: KhoVector;
+  CACHE_KV?: KhoKVAI;
+  RATE_KV?: KhoKV;
+  /** Secret ký cookie phiên (wrangler pages secret put SESSION_SECRET). Thiếu thì mọi API trả 500 chua-cau-hinh. */
+  SESSION_SECRET?: string;
   /** Chỉ '1' VÀ chạy ở localhost/127.0.0.1 mới giả danh người dùng (đọc email từ header X-Gia-Danh). */
   GIA_DANH_DEV?: string;
   /** Secret Telegram (wrangler secret put). Thiếu thì bỏ qua thông báo, không lỗi. */

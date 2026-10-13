@@ -46,8 +46,10 @@ export function diemCacLanGanNhat(diemThi: DiemThi[], mon: MonId, so = 3): numbe
 
 /** Độ dốc trung bình (điểm mỗi lần thi) của các lần gần nhất; null khi chưa đủ 2 lần. */
 export function doDocXuHuong(gia: number[]): number | null {
-  if (gia.length < 2) return null;
-  return lam1(((gia[gia.length - 1] - gia[0]) / (gia.length - 1)) * 10) / 10;
+  if (!Array.isArray(gia)) return null;
+  const hopLe = gia.filter((g) => typeof g === "number" && Number.isFinite(g));
+  if (hopLe.length < 2) return null;
+  return lam1(((hopLe[hopLe.length - 1] - hopLe[0]) / (hopLe.length - 1)) * 10) / 10;
 }
 
 export type XuHuong = "tang" | "giu" | "giam" | "chuaRo";
@@ -83,13 +85,15 @@ export interface CongSuc { muc: MucCongSuc; diem: number; doKho: number; heSoXH:
 
 /** Công sức cần bỏ ra = điểm còn thiếu × độ khó (theo điểm hiện tại) × hệ số xu hướng. Chia 3 nấc. */
 export function congSucMon(thieu: number, hienTai: number, gia: number[]): CongSuc {
+  const safeThieu = typeof thieu === "number" && Number.isFinite(thieu) ? thieu : 0;
+  const safeHienTai = typeof hienTai === "number" && Number.isFinite(hienTai) ? hienTai : 0;
   const doc = doDocXuHuong(gia);
-  const doKho = heSoDoKho(hienTai);
+  const doKho = heSoDoKho(safeHienTai);
   const heSoXH = heSoXuHuong(doc);
   // Dư địa gần hết (gần 10 điểm) mà vẫn phải tăng: luôn tính là công sức cao.
-  const hetDuDia = thieu > 0 && 10 - hienTai - thieu < 0.3;
-  const diem = Math.round(thieu * doKho * heSoXH * 100) / 100;
-  const muc: MucCongSuc = thieu <= 0 ? "thap" : hetDuDia || diem >= 0.9 ? "cao" : diem >= 0.5 ? "vua" : "thap";
+  const hetDuDia = safeThieu > 0 && 10 - safeHienTai - safeThieu < 0.3;
+  const diem = Math.round(safeThieu * doKho * heSoXH * 100) / 100;
+  const muc: MucCongSuc = safeThieu <= 0 ? "thap" : hetDuDia || diem >= 0.9 ? "cao" : diem >= 0.5 ? "vua" : "thap";
   return { muc, diem, doKho, heSoXH, doc };
 }
 

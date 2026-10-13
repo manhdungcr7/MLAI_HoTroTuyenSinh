@@ -1,0 +1,337 @@
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% --- GOOGLE / ACADEMIC MODERN THEME ---
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% --- FONT & TIẾNG VIỆT ---
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{times}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+
+% --- MÀU SẮC ĐỒNG NHẤT (Solid Light/Navy) ---
+\definecolor{XanhChuDao}{RGB}{26, 86, 219}      % Primary Blue #1A56DB
+\definecolor{LucThanhCong}{RGB}{14, 159, 110}    % Forest Green #0E9F6E
+\definecolor{CamCanhBao}{RGB}{217, 119, 6}      % Amber Orange #D97706
+\definecolor{DoRuiRo}{RGB}{224, 36, 36}         % Red #E02424
+\definecolor{NenNhe}{RGB}{243, 244, 246}        % Light Gray
+
+\setbeamercolor{palette primary}{bg=XanhChuDao, fg=white}
+\setbeamercolor{palette secondary}{bg=XanhChuDao!85, fg=white}
+\setbeamercolor{palette tertiary}{bg=XanhChuDao!70, fg=white}
+\setbeamercolor{structure}{fg=XanhChuDao}
+\setbeamercolor{title}{fg=white, bg=XanhChuDao}
+\setbeamercolor{frametitle}{fg=white, bg=XanhChuDao}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+% --- THÔNG TIN ĐỀ TÀI ---
+\title[Nguyện Vọng AI - Decision Intelligence]{\textbf{NGUYỆN VỌNG AI}}
+\subtitle{Hệ thống Trí tuệ Hỗ trợ Ra Quyết định Tuyển sinh \& Kế hoạch Hành động cho Học sinh Việt Nam}
+\author[Đội thi Hackathon]{Bài toán số 6: Chọn trường hoặc chương trình học}
+\institute[Decision Intelligence Challenge 2026]{
+  \textbf{Cuộc thi Decision Intelligence Challenge}\\
+  \textit{Working Web Demo:} \texttt{https://nguyenvongai.pages.dev}
+}
+\date{Thời lượng trình bày: 07 phút}
+
+\begin{document}
+
+% ==============================================================================
+% SLIDE 1: BÌA
+% ==============================================================================
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ==============================================================================
+% SLIDE 2: BỐI CẢNH & ĐIỂM NGHẼN (45 GIÂY) - Tiêu chí 1 & 2
+% ==============================================================================
+\begin{frame}{1. Bối cảnh \& Điểm nghẽn Quyết định tại Việt Nam}
+\begin{columns}[T]
+  \begin{column}{0.55\textwidth}
+    \textbf{Quyết định có giá trị đánh đổi cực lớn:}
+    \begin{itemize}
+      \item \textbf{$>$ 1.000.000 thí sinh} THPT mỗi năm đứng trước ngưỡng cửa chọn ngành, trường và thứ tự nguyện vọng.
+      \item Chọn sai nguyện vọng = \alert{\textbf{Cái giá trả bằng 1 năm thanh xuân}} hoặc lãng phí 4 năm đại học và hàng trăm triệu đồng chi phí gia đình.
+    \end{itemize}
+    \vspace{0.3cm}
+    \textbf{Thực trạng ra quyết định hiện nay:}
+    \begin{itemize}
+      \item \textbf{Dữ liệu phân mảnh:} Nằm rải rác trong hàng trăm file PDF đề án dài 60–100 trang của các trường.
+      \item \textbf{Quy chế đặc thù:} Điểm ưu tiên khu vực/đối tượng giảm dần từ 22.5 điểm; 73 tổ hợp môn biến động liên tục.
+      \item \textbf{Tâm lý bầy đàn hoặc quá tải:} Quyết định theo cảm tính, thiếu kịch bản dự phòng an toàn.
+    \end{itemize}
+  \end{column}
+  
+  \begin{column}{0.42\textwidth}
+    \begin{tcolorbox}[colback=NenNhe,colframe=XanhChuDao,title=\textbf{3 Thách thức Ra quyết định}]
+      \small
+      \textbf{1. Bất định điểm số:} Không biết điểm chuẩn năm nay sẽ dao động trong biên độ nào.\\
+      \textbf{2. Thiếu cấu trúc danh sách:} Dồn hết vào trường top (nguy cơ trượt trắng) hoặc chọn quá an toàn.\\
+      \textbf{3. Đứt gãy hành động:} Biết thiếu điểm nhưng không biết mỗi tuần cần học bao nhiêu giờ để bù đắp.
+    \end{tcolorbox}
+  \end{column}
+\end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 3: BÀI TOÁN & NGƯỜI DÙNG MỤC TIÊU (45 GIÂY) - Tiêu chí 1
+% ==============================================================================
+\begin{frame}{2. Phát biểu Bài toán \& Người dùng Mục tiêu}
+\begin{columns}[T]
+  \begin{column}{0.5\textwidth}
+    \begin{tcolorbox}[colback=white,colframe=XanhChuDao,title=\textbf{Bài toán (Problem Statement)}]
+      Xây dựng một \textbf{Lớp Trí tuệ Hỗ trợ Quyết định (Decision Intelligence Layer)} giúp học sinh cá nhân hóa chiến lược đặt nguyện vọng, kiểm soát rủi ro điểm chuẩn và chuyển hóa mục tiêu thành \textbf{lịch học hành động từng tuần}.
+    \end{tcolorbox}
+    \vspace{0.2cm}
+    \textbf{Đối tượng mục tiêu:}
+    \begin{itemize}
+      \item \textbf{Trọng tâm:} Học sinh THPT Lớp 11–12 chuẩn bị thi Tốt nghiệp THPT / ĐGNL.
+      \item \textbf{Đồng hành:} Phụ huynh và Thầy cô giáo (thông qua liên kết chia sẻ bảo mật, không cần đăng ký tài khoản).
+    \end{itemize}
+  \end{column}
+  
+  \begin{column}{0.48\textwidth}
+    \begin{tcolorbox}[colback=white,colframe=LucThanhCong,title=\textbf{4 Câu hỏi Cốt lõi Giải quyết Cho Em}]
+      \begin{enumerate}
+        \item \textbf{Mình đang ở đâu?} $\rightarrow$ Năng lực hiện tại qua điểm kiểm tra/thi thử \& điểm ưu tiên thực tế.
+        \item \textbf{Muốn đi tới đâu?} $\rightarrow$ Ngành yêu thích, vị trí địa lý, ngân sách học phí gia đình.
+        \item \textbf{Còn cách bao xa?} $\rightarrow$ Khoảng chênh lệch điểm theo tổ hợp xét tuyển tối ưu.
+        \item \textbf{Hôm nay làm gì?} $\rightarrow$ Tự động xếp lịch tự học hàng tuần khớp với thời khóa biểu trường.
+      \end{enumerate}
+    \end{tcolorbox}
+  \end{column}
+\end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 4: KHÁC BIỆT CỐT LÕI (45 GIÂY) - Tiêu chí 3 (20 Điểm)
+% ==============================================================================
+\begin{frame}{3. Tính Sáng tạo \& Khác biệt: Vượt Xa Chatbot / Tra cứu}
+\begin{table}[]
+\small
+\centering
+\begin{tabular}{p{3.2cm} p{3.6cm} p{3.6cm} p{3.8cm}}
+\toprule
+\textbf{Tiêu chí} & \textbf{Trang tra cứu thông thường} & \textbf{Chatbot LLM thông thường} & \textbf{Nguyện Vọng AI (Decision Layer)} \\
+\midrule
+\textbf{Dữ liệu đầu vào} & Chỉ gõ tên trường/mã ngành & Đoạn văn chat tự do & \textbf{Hồ sơ năng lực, điểm ưu tiên, ngân sách, TKB} \\
+\midrule
+\textbf{Bản chất trả lời} & Bảng số liệu tĩnh quá khứ & Văn xuôi tổng quát, dễ ảo giác & \textbf{Chiến lược cấu trúc 4 tầng \& Lời giải đánh đổi} \\
+\midrule
+\textbf{Độ tin cậy số liệu} & Khó xác minh nguồn gốc & Bịa điểm chuẩn, bịa xác suất & \textbf{100\% dẫn link PDF đề án, nói rõ mức bất định} \\
+\midrule
+\textbf{Sau khi có kết quả} & Người dùng tự bơi & Dừng lại ở câu trả lời & \textbf{Tự động sinh Kế hoạch Tự học tuần \& Báo sai} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{tcolorbox}[colback=XanhChuDao!10,colframe=XanhChuDao]
+\centering
+\textbf{Triết lý cốt lõi:} AI không quyết định thay con người — AI phân tích đánh đổi, minh bạch giả định và trao quyền tự chủ tối đa cho học sinh.
+\end{tcolorbox}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 5: KIẾN TRÚC HỆ THỐNG & LUỒNG QUYẾT ĐỊNH (60 GIÂY) - Tiêu chí 5 & 6
+% ==============================================================================
+\begin{frame}{4. Luồng Trải nghiệm Ra Quyết định Hoàn chỉnh (End-to-End)}
+\begin{columns}[c]
+  \begin{column}{0.65\textwidth}
+    \textbf{Luồng 5 bước khép kín trên Mobile-First UI:}
+    \begin{enumerate}
+      \item \textbf{Khởi tạo nhanh ($<$60s):} Chọn tổ hợp, điểm hiện tại, điểm cộng ưu tiên KV/UT quy chế Bộ GD\&ĐT.
+      \item \textbf{Khám phá đa chiều:} 3.652 chương trình từ 118 trường ĐH; lọc theo khu vực (Bắc/Trung/Nam), ngân sách học phí, cơ hội ký túc xá.
+      \item \textbf{Cơ cấu Danh sách Nguyện vọng (Phễu 4 Tầng):}
+      \begin{itemize}
+        \item \textcolor{CamCanhBao}{\textbf{Thử sức}} (Cao hơn 0.5–2đ) $\rightarrow$ Ước mơ
+        \item \textcolor{LucThanhCong}{\textbf{Vừa sức}} (Chênh $\pm$0.5đ) $\rightarrow$ Mục tiêu chính
+        \item \textcolor{XanhChuDao}{\textbf{An toàn}} (Thấp hơn 0.5–1.5đ) $\rightarrow$ Chắc chắn
+        \item \textcolor{DoRuiRo!80}{\textbf{Dự phòng}} (Thấp hơn $>$1.5đ) $\rightarrow$ Chống trượt trắng
+      \end{itemize}
+      \item \textbf{Mô phỏng tình huống What-If:} Thử giả lập ``Nếu điểm thi tăng/giảm 1 điểm'' hoặc ``Điểm chuẩn biến động $\pm$5\%''.
+      \item \textbf{Chuyển hóa Hành động:} Động cơ xếp lịch tự động đưa môn còn thiếu vào giờ tự học mỗi tối.
+    \end{enumerate}
+  \end{column}
+  
+  \begin{column}{0.32\textwidth}
+    \begin{tcolorbox}[colback=white,colframe=XanhChuDao,title=\textbf{Mobile Visual}]
+      \centering
+      \fbox{\includegraphics[width=0.85\linewidth,height=4.8cm,keepaspectratio]{screenshots/12-nguyen-vong.png}}\\
+      \scriptsize \textit{Giao diện 4 giỏ nguyện vọng trực quan}
+    \end{tcolorbox}
+  \end{column}
+\end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 6: CHIẾN LƯỢC DỮ LIỆU & PHÙ HỢP BỐI CẢNH VN (45 GIÂY) - Tiêu chí 2 & 4
+% ==============================================================================
+\begin{frame}{5. Chiến lược Dữ liệu 3 Tầng Phù hợp Bối cảnh Việt Nam}
+\begin{columns}[T]
+  \begin{column}{0.5\textwidth}
+    \begin{tcolorbox}[colback=white,colframe=XanhChuDao,title=\textbf{Chiến lược Dữ liệu 3 Tầng Minh bạch}]
+      \small
+      \textbf{Tầng 1 — Đề án Tuyển sinh Gốc (60\%):}\\
+      3.652 chương trình từ 118 trường ĐH. Dẫn link trực tiếp tới đúng số trang trong file PDF đề án.\\
+      \textbf{Tầng 2 — Điểm chuẩn Đối chiếu (30\%):}\\
+      Dữ liệu chuỗi thời gian 2023–2025, đối chiếu chéo giữa các nguồn.\\
+      \textbf{Tầng 3 — Thông tin Cộng đồng Kiểm duyệt (10\%):}\\
+      Học phí thực tế (721 ngành), KTX, đời sống sinh viên. Bắt buộc có nguồn kiểm chứng \& duyệt qua CMS.
+    \end{tcolorbox}
+  \end{column}
+  
+  \begin{column}{0.48\textwidth}
+    \begin{tcolorbox}[colback=white,colframe=LucThanhCong,title=\textbf{Bản địa hóa Triệt để Cho Người Việt}]
+      \small
+      \begin{itemize}
+        \item \textbf{Điểm ưu tiên quy chế mới:} KV1 (+0.75), KV2-NT (+0.5), KV2 (+0.25). Tự động giảm dần tỷ lệ khi tổng điểm $\ge 22.5$:
+        $$\text{Điểm UT} = \left[\frac{30 - \text{Tổng}}{7.5}\right] \times \text{Mức quy định}$$
+        \item \textbf{73 Tổ hợp xét tuyển chuẩn Bộ GD\&ĐT:} A00, A01, B00, C00, D01, D07...
+        \item \textbf{Kênh Zalo / Facebook:} Chia sẻ danh sách cho cha mẹ qua Link web tĩnh không cần cài app.
+      \end{itemize}
+    \end{tcolorbox}
+  \end{column}
+\end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 7: MÔ HÌNH AI & KIỂM ĐỊNH BACKTEST (60 GIÂY) - Tiêu chí 4 (10 Điểm AI)
+% ==============================================================================
+\begin{frame}{6. Đổi mới AI \& Kiểm định Dự báo Ngược (Backtesting)}
+\begin{columns}[T]
+  \begin{column}{0.55\textwidth}
+    \textbf{4 Vai trò AI chuyên biệt (Không chỉ dựa vào LLM):}
+    \begin{enumerate}
+      \item \textbf{Dự báo (Time-series / Empirical Quantile):} Dự báo khoảng điểm chuẩn năm tới dựa trên phân vị $P_{10}$ và $P_{90}$ từ 1.330 cặp năm biến động thực tế.
+      \item \textbf{Tối ưu hóa Ràng buộc (Constraint Engine):} Xếp lịch học theo môn hổng kiến thức vào các ô giờ trống của học sinh.
+      \item \textbf{Mô phỏng Rủi ro (Simulation):} Đánh giá độ nhạy của danh sách khi điểm chuẩn dao động.
+      \item \textbf{Tư vấn Ngôn ngữ Căn cứ (Grounded LLM):} RAG có kiểm duyệt, nghiêm cấm bịa đặt xác suất đỗ (``đậu 90\%'').
+    \end{enumerate}
+  \end{column}
+  
+  \begin{column}{0.42\textwidth}
+    \textbf{Kiểm định Backtesting Bỏ-một-năm:}\\
+    \textit{(Chạy kiểm chứng thực nghiệm bằng unit test)}
+    \vspace{0.1cm}
+    \small
+    \begin{tabular}{lccc}
+      \toprule
+      \textbf{Năm} & \textbf{Số ngành} & \textbf{Độ phủ 80\%} & \textbf{Sai số MAE} \\
+      \midrule
+      2023 & 380 & \textbf{92\%} & 1.00 đ \\
+      2024 & 537 & \textbf{93\%} & 1.25 đ \\
+      2025 & 413 & \textbf{68\%}$^*$ & 1.90 đ \\
+      \bottomrule
+    \end{tabular}
+    \vspace{0.2cm}
+    \scriptsize
+    $^*$ \textit{Năm 2025 có đề thi đổi mới biến động đột biến ($\sigma=2.6$). Hệ thống chủ động cảnh báo mức bất định cao và từ chối cam kết xác suất cố định.}
+  \end{column}
+\end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 8: MÔ HÌNH VẬN HÀNH & CMS MỞ RỘNG (45 GIÂY) - Tiêu chí 5
+% ==============================================================================
+\begin{frame}{7. Khả năng Mở rộng \& Vận hành Bền vững (Data Pipeline)}
+\begin{tcolorbox}[colback=NenNhe,colframe=XanhChuDao]
+\centering
+\textbf{Đường ống Dữ liệu Tự hành 5 Bước (Đã kiểm nghiệm hoàn chỉnh):}
+\vspace{0.15cm}
+\begin{tikzpicture}[node distance=2.2cm, auto, >=latex]
+  \node [draw, rounded corners, fill=white, text width=2.2cm, align=center, font=\scriptsize] (tnv) {Tình nguyện viên / SV trường};
+  \node [draw, rounded corners, fill=white, text width=2cm, align=center, font=\scriptsize, right of=tnv] (cms) {Cổng CMS Nội bộ};
+  \node [draw, rounded corners, fill=white, text width=2cm, align=center, font=\scriptsize, right of=cms] (qtv) {Quản trị viên Duyệt \& Khóa};
+  \node [draw, rounded corners, fill=LucThanhCong!20, text width=2.2cm, align=center, font=\scriptsize, right of=qtv] (hash) {Xuất bản Snapshot SHA-256};
+  \node [draw, rounded corners, fill=XanhChuDao!20, text width=2cm, align=center, font=\scriptsize, right of=hash] (app) {Học sinh nhận số liệu mới};
+  
+  \draw[->, thick] (tnv) -- (cms);
+  \draw[->, thick] (cms) -- (qtv);
+  \draw[->, thick] (qtv) -- (hash);
+  \draw[->, thick] (hash) -- (app);
+\end{tikzpicture}
+\end{tcolorbox}
+
+\begin{columns}[T]
+  \begin{column}{0.5\textwidth}
+    \textbf{Cơ chế Giám sát \& Chống lỗi:}
+    \begin{itemize}
+      \item Học sinh báo sai trực tiếp tại trang ngành $\rightarrow$ Gửi về Hộp thư phụ trách trường.
+      \item Audit Log lưu vết từng thao tác sửa điểm.
+      \item Khả năng Rollback phiên bản dữ liệu tức thì.
+    \end{itemize}
+  \end{column}
+  \begin{column}{0.48\textwidth}
+    \textbf{Chi phí Hạ tầng Gần như 0 đồng:}
+    \begin{itemize}
+      \item \textbf{Edge Computing:} Cloudflare Pages + D1 SQLite + KV Cache.
+      \item \textbf{Offline-First:} Lưu trữ LocalStorage trên thiết bị học sinh, bảo vệ quyền riêng tư 100\%.
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 9: KIỂM SOÁT RỦI RO & ĐẠO ĐỨC AI (30 GIÂY) - Tiêu chí 6
+% ==============================================================================
+\begin{frame}{8. Quản trị Rủi ro, Minh bạch \& Đạo đức AI}
+\begin{table}[]
+\small
+\centering
+\begin{tabular}{p{4.2cm} p{5.5cm} p{4.2cm}}
+\toprule
+\textbf{Rủi ro Tiềm ẩn} & \textbf{Giải pháp Kiểm soát trong Hệ thống} & \textbf{Minh chứng} \\
+\midrule
+\textbf{Hiểu lầm là cam kết đỗ} & Cấm tuyệt đối hiển thị xác suất \% đỗ; luôn gắn nhãn cảnh báo ``Chỉ mang tính tham khảo''. & UI mọi màn hình khám phá \& nguyện vọng \\
+\midrule
+\textbf{Sai lệch số liệu tuyển sinh} & Trích dẫn link PDF đề án; nút ``Báo sai số liệu'' công khai; cơ chế duyệt 2 lớp. & Tính năng \texttt{/bao-sai} \& Hộp thư CMS \\
+\midrule
+\textbf{Xâm phạm quyền riêng tư} & Dữ liệu điểm và TKB lưu cục bộ trên máy học sinh (Local-first); không bán dữ liệu cho bên thứ 3. & Không yêu cầu đăng nhập tài khoản \\
+\midrule
+\textbf{Quy chế tuyển sinh đổi mới} & Tách rời Rule Engine cấu hình điểm ưu tiên và tổ hợp; cập nhật linh hoạt từng mùa. & Module \texttt{engine/diem-uu-tien.ts} \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+% ==============================================================================
+% SLIDE 10: TỔNG KẾT & TRÌNH DIỄN DEMO (15 GIÂY) - Tiêu chí 1, 5, 6
+% ==============================================================================
+\begin{frame}{9. Tổng kết \& Trải nghiệm Live Demo}
+\begin{columns}[c]
+  \begin{column}{0.58\textwidth}
+    \begin{tcolorbox}[colback=LucThanhCong!10,colframe=LucThanhCong,title=\textbf{Giá trị Đọng lại của Nguyện Vọng AI}]
+      \begin{itemize}
+        \item \textbf{Đúng bài toán:} Giải quyết bài toán lớn của 1 triệu học sinh Việt Nam mỗi năm.
+        \item \textbf{Đúng bản chất Decision Intelligence:} Giúp hiểu lựa chọn $\rightarrow$ So sánh đánh đổi $\rightarrow$ Hành động học tập mỗi tuần.
+        \item \textbf{Sản phẩm thật:} 3.652 chương trình, 33 màn hình hoàn chỉnh, đã kiểm thử tự động 24 suite tests.
+      \end{itemize}
+    \end{tcolorbox}
+    \vspace{0.2cm}
+    \textbf{Kính mời Ban Giám Khảo trải nghiệm trực tiếp:}
+    \begin{itemize}
+      \item \textbf{Web Demo:} \url{https://nguyenvongai.pages.dev}
+      \item \textbf{Mã nguồn \& Kiểm định:} \url{https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh}
+    \end{itemize}
+  \end{column}
+  
+  \begin{column}{0.38\textwidth}
+    \centering
+    \begin{tcolorbox}[colback=white,colframe=XanhChuDao,title=\textbf{Quét mã trải nghiệm Web}]
+      \centering
+      \fbox{\includegraphics[width=0.8\linewidth,height=4.2cm,keepaspectratio]{screenshots/06-hom-nay.png}}\\
+      \scriptsize \textbf{Trải nghiệm mượt mà trên Mobile}
+    \end{tcolorbox}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\end{document}

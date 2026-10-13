@@ -73,7 +73,7 @@ function MucTinhNguyen({ d, xong }: { d: DangKyTinhNguyen; xong: (m: string, loi
       {d.ghiChu && <p className="rounded-xl bg-nen p-2.5 text-[13px] text-chu whitespace-pre-line">{d.ghiChu}</p>}
       {(d.trangThai === "moi" || d.trangThai === "da_lien_he") && (
         <div className="grid grid-cols-2 gap-2">
-          {coEmail ? <Nut onClick={() => void capQuyen()} disabled={dang}>Cấp quyền cộng tác viên</Nut>
+          {coEmail ? <Nut className="col-span-2" onClick={() => void capQuyen()} disabled={dang}>Cấp quyền cộng tác viên</Nut>
             : <p className="col-span-2 text-[12px] text-cam-chu">Người này để số điện thoại. Liên hệ xin email đăng nhập rồi thêm ở mục Thành viên.</p>}
           {d.trangThai === "moi" && <button type="button" disabled={dang} onClick={() => void doi("da_lien_he")} className="min-h-11 rounded-xl border border-xanh/40 text-xanh font-bold text-[13px] disabled:opacity-50">Đã liên hệ</button>}
           <button type="button" disabled={dang} onClick={() => void doi("tu_choi")} className="min-h-11 rounded-xl border border-do/40 text-do-chu font-bold text-[13px] disabled:opacity-50">Từ chối</button>

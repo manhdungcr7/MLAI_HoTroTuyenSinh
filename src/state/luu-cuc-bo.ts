@@ -7,7 +7,18 @@ export function useLuuCucBo<T>(khoa: string, macDinh: T): [T, (v: T | ((c: T) =>
   const [gia, setGia] = useState<T>(() => {
     try {
       const t = localStorage.getItem(k);
-      return t ? ({ ...(macDinh as object), ...JSON.parse(t) } as T) : macDinh;
+      if (!t) return macDinh;
+      const parsed = JSON.parse(t);
+      if (Array.isArray(macDinh)) {
+        return (Array.isArray(parsed) ? parsed : macDinh) as T;
+      }
+      if (typeof macDinh === "object" && macDinh !== null) {
+        if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+          return { ...macDinh, ...parsed } as T;
+        }
+        return macDinh;
+      }
+      return typeof parsed === typeof macDinh ? (parsed as T) : macDinh;
     } catch { return macDinh; }
   });
   useEffect(() => {

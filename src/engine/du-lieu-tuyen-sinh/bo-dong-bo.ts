@@ -12,6 +12,7 @@ export interface TrangThaiDongBo {
   loi: string | null;
 }
 
+export const LOI_CHUA_XUAT_BAN = "Chưa có bản dữ liệu nào được xuất bản";
 const KHOA_META_MANIFEST = "manifest_local";
 const KHOA_META_LAST_CHECK = "last_checked_at";
 
@@ -26,20 +27,32 @@ export class BoDongBoDuLieu {
     this.manifestEndpoint = manifestEndpoint;
   }
 
+  /**
+   * Trả về manifest có ít nhất một bộ dữ liệu đã xuất bản, hoặc ném lỗi "chưa có bản xuất bản".
+   * API trả được manifest hợp lệ nhưng rỗng (chưa ai xuất bản) thì DỪNG, không thử bản tĩnh và không xin tệp nào
+   * (tránh một loạt yêu cầu 404 vô ích; app dùng dữ liệu đóng gói sẵn). Chỉ khi API lỗi mạng/HTTP mới thử bản tĩnh.
+   */
   private async layManifestTuXa(): Promise<ManifestTuyenSinh> {
     const hopLe = (m: unknown): m is ManifestTuyenSinh => {
       const x = m as ManifestTuyenSinh | null;
-      return !!x?.schemaVersion && !!x.datasets && Object.values(x.datasets).some((d) => d.hash);
+      return !!x?.schemaVersion && !!x.datasets;
     };
+    const coXuatBan = (m: ManifestTuyenSinh) => Object.values(m.datasets).some((d) => d.hash);
     let loiApi = "";
     for (const url of [this.manifestEndpoint, this.manifestDuPhong]) {
       try {
         const resp = await fetch(url, { headers: { Accept: "application/json" }, cache: "no-cache" });
         if (!resp.ok) { loiApi ||= `Không tải được manifest: HTTP ${resp.status}`; continue; }
         const m: unknown = await resp.json();
-        if (hopLe(m)) return m;
-        loiApi ||= "Chưa có bản dữ liệu nào được xuất bản";
-      } catch (e) { loiApi ||= e instanceof Error ? e.message : String(e); }
+        if (hopLe(m)) {
+          if (coXuatBan(m)) return m;
+          throw new Error(LOI_CHUA_XUAT_BAN);
+        }
+        loiApi ||= "Manifest sai định dạng";
+      } catch (e) {
+        if (e instanceof Error && e.message === LOI_CHUA_XUAT_BAN) throw e;
+        loiApi ||= e instanceof Error ? e.message : String(e);
+      }
     }
     throw new Error(loiApi || "Không tải được manifest");
   }
@@ -100,6 +113,7 @@ export class BoDongBoDuLieu {
 
       for (const [key, meta] of Object.entries(remoteManifest.datasets)) {
         const localMeta = localManifest?.datasets?.[key as keyof typeof remoteManifest.datasets];
+        if (!meta.hash) continue; // bộ này chưa xuất bản: không có tệp để xin
         if (!localMeta || localMeta.hash !== meta.hash || force) {
           cacDatasetCanTai.push({ key, url: meta.url, expectedHash: meta.hash });
         }

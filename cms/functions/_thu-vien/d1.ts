@@ -12,10 +12,10 @@ export async function vaiTroCua(d1: KhoD1, email: string): Promise<VaiTro | null
   return r?.vai_tro ?? null;
 }
 
-/** Tạo qtv đầu tiên một cách nguyên tử: chỉ chèn khi bảng còn rỗng. Trả true nếu vừa tạo. */
-export async function taoQtvDauTien(d1: KhoD1, email: string, luc: string): Promise<boolean> {
-  const r = await d1.prepare("INSERT INTO quan_tri (email, vai_tro, tao_luc) SELECT ?, 'qtv', ? WHERE NOT EXISTS (SELECT 1 FROM quan_tri)").bind(email, luc).run();
-  return (r.meta?.changes ?? 0) > 0;
+export interface HoSoQuanTri { vaiTro: VaiTro; phaiDoiMatKhau: boolean; matKhau: string | null; matKhauLuc: string | null }
+export async function hoSoQuanTri(d1: KhoD1, email: string): Promise<HoSoQuanTri | null> {
+  const r = await d1.prepare("SELECT vai_tro, mat_khau, phai_doi_mat_khau, mat_khau_luc FROM quan_tri WHERE email = ? LIMIT 1").bind(email).first<{ vai_tro: VaiTro; mat_khau: string | null; phai_doi_mat_khau: number; mat_khau_luc: string | null }>();
+  return r ? { vaiTro: r.vai_tro, phaiDoiMatKhau: Number(r.phai_doi_mat_khau) === 1, matKhau: r.mat_khau, matKhauLuc: r.mat_khau_luc } : null;
 }
 
 export async function truongDuocGiao(d1: KhoD1, email: string): Promise<string[]> {

@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Check, ExternalLink, Inbox, X } from "lucide-react";
+import { Check, ExternalLink, Inbox, Sparkles, X } from "lucide-react";
 import { DUONG_DAN } from "@cms/duong-dan";
 import { thongBaoLoi } from "@cms/may-chu/api";
-import { doiTrangThai, layHetBanGhi, type BanGhiCms, type TrangThaiCms } from "@cms/may-chu/ban-ghi-api";
+import { doiTrangThai, layHetBanGhi, xinGoiYDuyet, type BanGhiCms, type GoiYDuyet, type TrangThaiCms } from "@cms/may-chu/ban-ghi-api";
 import { usePhien } from "@cms/trang-thai/phien";
 import { useTai } from "@cms/trang-thai/dung-tai";
 import { layDanhSachTenTruong } from "@cms/trang-thai/ten-truong";
@@ -25,6 +25,52 @@ const TAB: { id: Tab; nhan: string; gom: readonly TrangThaiCms[] }[] = [
   { id: "nhap", nhan: "Cần sửa", gom: ["REJECTED", "DRAFT"] },
   { id: "hop-thu", nhan: "Hộp thư", gom: [] }, // báo sai từ học sinh, đăng ký tình nguyện viên
 ];
+
+const NHAN_LOAI_AI: Record<string, string> = { official_info: "Thông tin chính thức", personal_opinion: "Ý kiến cá nhân", advertisement: "Quảng cáo", spam: "Rác", other: "Khác" };
+const NHAN_TIN_CAY = { cao: "Cao", vua: "Vừa", thap: "Thấp" } as const;
+const TONE_TIN_CAY = { cao: "luc", vua: "cam", thap: "do" } as const;
+
+/** Gợi ý của AI cho người duyệt. Chỉ gọi khi bấm nút; không đổi bản ghi. */
+function KhoiGoiY({ id }: { id: string }) {
+  const [tt, setTt] = useState<"chua" | "tai" | "xong" | "loi">("chua");
+  const [kq, setKq] = useState<GoiYDuyet | null>(null);
+  const [loi, setLoi] = useState("");
+  const xin = async () => {
+    setTt("tai");
+    try { setKq(await xinGoiYDuyet(id)); setTt("xong"); } catch (e) { setLoi(thongBaoLoi(e)); setTt("loi"); }
+  };
+  const ai = kq?.ai;
+  return (
+    <div className="rounded-xl border border-vien p-2.5 space-y-2">
+      {tt === "chua" && <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => void xin()}>Xin gợi ý AI</Nut>}
+      {tt === "tai" && <p className="text-[13px] text-chu-phu" role="status">Đang xem xét mục này</p>}
+      {tt === "loi" && (
+        <div className="space-y-2">
+          <p className="text-[13px] text-do-chu">{loi}</p>
+          <Nut kieu="vien" onClick={() => void xin()}>Thử lại</Nut>
+        </div>
+      )}
+      {tt === "xong" && kq && (
+        <div className="space-y-2 text-[13px] text-chu">
+          {kq.quyTac.length === 0 ? <p className="text-chu-phu">Không thấy lỗi theo quy tắc kiểm tra.</p> : kq.quyTac.map((c) => (
+            <p key={c.ma} className={c.muc === "loi" ? "rounded-lg bg-do-nhat p-2 text-do-chu" : "rounded-lg bg-cam-nhat p-2 text-cam-chu"}>{c.thongBao}</p>
+          ))}
+          {kq.trung && <p className="rounded-lg bg-cam-nhat p-2 text-cam-chu break-words">Có thể trùng với bản đã xuất bản <b>{kq.trung.id}</b>: {kq.trung.noiDung}</p>}
+          {ai ? (
+            <div className="flex flex-wrap gap-1.5">
+              <Nhan tone={TONE_TIN_CAY[ai.doTinCay.muc]}>Độ tin cậy: {NHAN_TIN_CAY[ai.doTinCay.muc]}</Nhan>
+              {ai.loai && <Nhan tone="tim">{NHAN_LOAI_AI[ai.loai.chon] ?? ai.loai.chon}</Nhan>}
+              {ai.khanCap && ai.khanCap.muc !== "thap" && <Nhan tone="cam">Cần xem sớm</Nhan>}
+              {ai.nhayCam?.co && <Nhan tone="do">Có thể chứa thông tin cá nhân</Nhan>}
+            </div>
+          ) : <p className="text-chu-phu">AI chưa dùng được lúc này, chỉ có kết quả kiểm tra quy tắc.</p>}
+          {!kq.daKiemTrung && <p className="text-chu-phu">Chưa kiểm được trùng lặp.</p>}
+        </div>
+      )}
+      <p className="text-[12px] text-chu-phu">Gợi ý chỉ để tham khảo, người duyệt quyết định.</p>
+    </div>
+  );
+}
 
 export default function DanhSachDuyet() {
   const { laQtv, toi } = usePhien();
@@ -80,8 +126,9 @@ export default function DanhSachDuyet() {
         <div role="tablist" className="flex bg-trang border border-vien rounded-xl p-1 gap-1">
           {TAB.map((t) => (
             <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTham({ "trang-thai": t.id })}
-              className={gop("flex-1 min-h-12 rounded-lg text-[13px] font-bold px-1", tab === t.id ? "bg-xanh text-white" : "text-chu-phu")}>
-              {t.nhan}{bg.du && t.id !== "hop-thu" ? ` (${theoTab[t.id].length})` : ""}
+              className={gop("flex-1 min-h-12 rounded-lg text-[13px] font-bold px-1 flex flex-col items-center justify-center leading-tight whitespace-nowrap", tab === t.id ? "bg-xanh text-white" : "text-chu-phu")}>
+              <span>{t.nhan}</span>
+              {bg.du && t.id !== "hop-thu" && <span className="text-[12px] font-semibold">{theoTab[t.id].length}</span>}
             </button>
           ))}
         </div>
@@ -129,6 +176,7 @@ export default function DanhSachDuyet() {
                   <p className="text-[12px] text-chu-phu">{b.source.donViCongBo} · gửi bởi {b.createdBy} · {dinhDangLuc(b.updatedAt)}</p>
                   {b.changeNote && <p className="text-[13px] text-chu"><b>Ghi chú:</b> {b.changeNote}</p>}
                   {laQtv && <SoSanhBan ban={b} />}
+                  {laQtv && cho && <KhoiGoiY id={b.id} />}
 
                   {laQtv && cho && (
                     <div className="grid grid-cols-2 gap-2 pt-1">

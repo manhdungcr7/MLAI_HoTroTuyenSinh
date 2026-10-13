@@ -173,4 +173,9 @@
 | 16 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 | Kiệt | P1 | Bổ sung các môn KHXH vào ma trận tổ hợp và phân tích Gap điểm |
 | 17 | Rate-limit thật cho `/api/tu-van` trên Cloudflare Workers | Tuấn / Hưng | P0 | **Một phần:** API đã từ chối gọi mô hình khi thiếu KV hoặc KV lỗi; cần tạo/gắn namespace `RATE_KV` trên Cloudflare và bật WAF rule để hoàn tất vận hành. |
 | 18 | Rà soát visual responsive 360px - 390px trên thiết bị thật | Cả nhóm | P0 | Dùng `agent-browser` hoặc DevTools kiểm tra độ tràn viền |
+| 19 | [Audit P0] Sửa `useLuuCucBo` hỏng kiểu Array/Primitive | Core Engine | P0 | Ngăn spread object làm vỡ cấu trúc Array thành Object |
+| 20 | [Audit P0] Sửa bẫy điều hướng khi để trống Họ Tên trong Hôm nay & Hồ sơ | Tuấn | P0 | Kiểm tra dữ liệu thực chất thay vì bắt buộc có họ tên |
+| 21 | [Audit P0] Thay thế so sánh tên cố định bằng cờ `laMau` trong Store | Tuấn | P0 | Phân định dứt điểm hồ sơ mẫu và hồ sơ thật bằng cờ boolean |
+| 22 | [Audit P0] Xóa `alert()` và lỗi chữ Hán trên Landing Page | Tuấn / Landing | P0 | Thay alert bằng inline message; sửa `đề案` thành `đề án` |
+| 23 | [Audit P1] Sửa các lỗi tính toán, fallback dinhDang, timeout hook và hoàn tác | Cả nhóm | P1 | Tinh chỉnh dinhDang phòng thủ, snapshot hoàn tác NV, fix ngưỡng nhãn 0.25đ |
 

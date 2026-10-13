@@ -13,7 +13,7 @@ import { TEN_MON, type MonId, type ToneTen } from "@/state/types";
 import { docMucTieu, type DuLieuMucTieu } from "./du-lieu";
 import { BieuTuongMon, TONE_NHAN, ThangCongSuc } from "./thanh-phan";
 import { TEN_CONG_SUC, TEN_XU_HUONG, diem1, goiYTuanNay, tenToHop, tongPhanBu, type MonKeoDiem } from "./tinh-toan";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDangDiem } from "@/engine/dinh-dang";
 
 const MAU_THANH: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", do: "bg-do", tim: "bg-tim", muc: "bg-muc" };
 const MAU_THANH_NHAT: Record<ToneTen, string> = { xanh: "bg-xanh/25", luc: "bg-luc/25", cam: "bg-cam/30", do: "bg-do/25", tim: "bg-tim/25", muc: "bg-muc/20" };
@@ -179,7 +179,7 @@ function GiaiThichMon({ m }: { m: MonKeoDiem }) {
         {dong("Còn thiếu", <b>+{diem1(m.thieu)} điểm ({diem1(m.hienTai)} → {diem1(m.mucTieu)})</b>)}
         {dong("Độ khó theo điểm hiện tại", <>×{cs.doKho} <span className="text-chu-phu">(càng gần 10 càng khó tăng)</span></>)}
         {dong("Xu hướng thi thử", <>{m.cacLan.length ? m.cacLan.map(diem1).join(" → ") : "chưa có"}, {TEN_XU_HUONG[m.xuHuong]} <span className="text-chu-phu">(×{cs.heSoXH})</span></>)}
-        {dong("Kết quả", <b>{diem1(m.thieu)} × {cs.doKho} × {cs.heSoXH} ≈ {dinhDang(cs.diem, 2)} → {TEN_CONG_SUC[cs.muc]}</b>)}
+        {dong("Kết quả", <b>{diem1(m.thieu)} × {cs.doKho} × {cs.heSoXH} ≈ {dinhDangDiem(cs.diem)} → {TEN_CONG_SUC[cs.muc]}</b>)}
       </div>
       {m.cacLan.length >= 2 && (
         <div className="flex items-center gap-3 rounded-xl bg-nen p-3">
@@ -201,7 +201,7 @@ function GiaiThichChung() {
       <div className="space-y-1.5">
         <p><Nhan tone="do">Nên ưu tiên</Nhan> môn còn thiếu nhiều nhất, hoặc môn cần nhiều công sức.</p>
         <p><Nhan tone="cam">Dễ tăng</Nhan> môn còn thiếu, công sức thấp hoặc vừa.</p>
-        <p><Nhan tone="luc">Giữ vững</Nhan> môn còn thiếu dưới 0.3 điểm.</p>
+        <p><Nhan tone="luc">Giữ vững</Nhan> môn còn thiếu dưới 0.25 điểm.</p>
       </div>
       <p className="text-[13px] font-semibold text-cam-chu">Mọi con số ở đây là ước tính, không phải cam kết.</p>
     </div>

@@ -4,11 +4,14 @@
 import { TEN_MON_NGAN, type CauHinhTuHoc, type KhoiHoc, type MonId, type TamTrang, type TietCoDinh, type ViecCanHoc } from "@/state/types";
 
 export const phutTuGio = (g: string): number => {
+  if (typeof g !== "string") return 0;
   const [h, m] = g.split(":").map(Number);
-  return h * 60 + (m || 0);
+  return (Number.isFinite(h) ? h : 0) * 60 + (Number.isFinite(m) ? m : 0);
 };
-export const gioTuPhut = (p: number): string =>
-  `${String(Math.floor(p / 60)).padStart(2, "0")}:${String(p % 60).padStart(2, "0")}`;
+export const gioTuPhut = (p: number): string => {
+  const safe = Math.max(0, Number.isFinite(p) ? p : 0);
+  return `${String(Math.floor(safe / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`;
+};
 
 const MOT_NGAY = 86_400_000;
 export const isoNgay = (d: Date): string =>
@@ -87,20 +90,24 @@ function truKhung(khungs: Khung[], bo: Khung): Khung[] {
 export function khungTrongTrongNgay(
   ngay: string, coDinh: TietCoDinh[], cfg: CauHinhTuHoc, khoiDaCo: KhoiHoc[] = [], khungBaoVe?: KhungBaoVeTuyChon,
 ): Khung[] {
-  let khungs: Khung[] = [{ batDau: phutTuGio(cfg.gioBatDau), ketThuc: phutTuGio(cfg.gioKetThuc) }];
+  const bdCfg = phutTuGio(cfg.gioBatDau);
+  const ktCfg = phutTuGio(cfg.gioKetThuc);
+  if (ktCfg <= bdCfg) return [];
+  let khungs: Khung[] = [{ batDau: bdCfg, ketThuc: ktCfg }];
   const thu = thuCuaNgay(ngay);
   const baoVe = khungBaoVe ? khungBaoVe.map((k) => ({ batDau: phutTuGio(k.batDau), ketThuc: phutTuGio(k.ketThuc) })) : KHUNG_BAO_VE;
-  const hocThem = coDinh.filter((x) => x.thu === thu && x.loai === "hocThem").map((x) => ({ batDau: phutTuGio(x.batDau), ketThuc: phutTuGio(x.ketThuc) }));
+  const hocThem = (Array.isArray(coDinh) ? coDinh : []).filter((x) => x.thu === thu && x.loai === "hocThem").map((x) => ({ batDau: phutTuGio(x.batDau), ketThuc: phutTuGio(x.ketThuc) }));
   for (const k of baoVe) {
+    if (k.ketThuc <= k.batDau) continue;
     // Lớp học thêm của em đã đè lên giờ ăn: em tự lo bữa quanh lớp, không cấm thêm phần còn lại của khung ăn.
     if (hocThem.some((h) => h.batDau < k.ketThuc && h.ketThuc > k.batDau)) continue;
     khungs = truKhung(khungs, k);
   }
-  for (const t of coDinh.filter((x) => x.thu === thu)) {
+  for (const t of (Array.isArray(coDinh) ? coDinh : []).filter((x) => x.thu === thu)) {
     // chừa 10 phút di chuyển / chuẩn bị quanh tiết cố định
     khungs = truKhung(khungs, { batDau: phutTuGio(t.batDau) - 10, ketThuc: phutTuGio(t.ketThuc) + 10 });
   }
-  for (const k of khoiDaCo.filter((x) => x.ngay === ngay)) {
+  for (const k of (Array.isArray(khoiDaCo) ? khoiDaCo : []).filter((x) => x.ngay === ngay)) {
     khungs = truKhung(khungs, { batDau: phutTuGio(k.batDau), ketThuc: phutTuGio(k.ketThuc) });
   }
   return khungs.filter((k) => k.ketThuc - k.batDau >= TOI_THIEU_MOT_BUOI);
@@ -166,7 +173,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   const gioNgu = phutTuGio(cfg.gioKetThuc) - CACH_GIO_NGU;
 
   const datVao = (ngay: string, batDau: number, phut: number) => {
-    const khungs = khungTheoNgay.get(ngay)!;
+    const khungs = khungTheoNgay.get(ngay) ?? [];
     khungTheoNgay.set(ngay, truKhung(khungs, { batDau, ketThuc: batDau + phut + cfg.nghiGiuaBuoi }).filter((k) => k.ketThuc - k.batDau >= TOI_THIEU_MOT_BUOI));
     taiTheoNgay.set(ngay, (taiTheoNgay.get(ngay) ?? 0) + phut);
   };
@@ -179,12 +186,13 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
     const cacMon = new Map<MonId, string>();
     for (const t of tietMai) if (!cacMon.has(t.mon!)) cacMon.set(t.mon!, buoiTrongNgay(t.batDau));
     for (const [mon, buoiMai] of cacMon) {
-      const khungs = khungTheoNgay.get(n)!;
+      const khungs = khungTheoNgay.get(n) ?? [];
       const o = khungs.find((k) => k.ketThuc >= 19 * 60 + 15 && k.ketThuc - Math.max(k.batDau, 19 * 60) >= 15);
       if (!o || (taiTheoNgay.get(n) ?? 0) + 15 > tran) continue;
       const bd = Math.max(o.batDau, 19 * 60);
       them({ viecId: null, ten: `Xem trước bài ${tenMonNgan(mon)} (${buoiMai} mai có tiết)`, loai: "tuHoc", mon, ngay: n, batDau: gioTuPhut(bd), ketThuc: gioTuPhut(bd + 15), ghiChu: `Đọc lướt 15 phút để ${buoiMai} mai nghe giảng dễ hơn.` });
       datVao(n, bd, 15);
+      if (!monTheoNgay.has(n)) monTheoNgay.set(n, []);
       monTheoNgay.get(n)!.push(mon);
     }
   }
@@ -192,7 +200,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   // 2) Chia việc thành các buổi ngắn rồi xếp, việc quan trọng trước
   const buoi: { viec: ViecCanHoc; phut: number }[] = [];
   for (const v of viec) {
-    let con = v.phut;
+    let con = typeof v.phut === "number" && Number.isFinite(v.phut) ? v.phut : 0;
     while (con > 0) {
       const p = con > TOI_DA_MOT_BUOI + TOI_THIEU_MOT_BUOI ? TOI_DA_MOT_BUOI : con;
       buoi.push({ viec: v, phut: p });
@@ -207,13 +215,15 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
     for (const [thuTu, n] of ngays.entries()) {
       const tai = taiTheoNgay.get(n) ?? 0;
       if (tai + b.phut > tran) continue;
-      for (const k of khungTheoNgay.get(n)!) {
+      const cacKhung = khungTheoNgay.get(n) ?? [];
+      for (const k of cacKhung) {
         if (k.ketThuc - k.batDau < b.phut) continue;
         const uaThich = TAM_UU_TIEN[cfg.thoiDiemTot];
         const cacUngVien = new Set([k.batDau, Math.max(k.batDau, Math.min(uaThich, k.ketThuc - b.phut))]);
         for (const bd of cacUngVien) {
           if (b.phut >= BUOI_NANG_PHUT && bd + b.phut > gioNgu) continue; // không học nặng sát giờ ngủ
-          const trungMon = monTheoNgay.get(n)!.includes(b.viec.mon) ? 60 : 0; // đỡ học một môn hai lần trong ngày
+          const daHocMon = (monTheoNgay.get(n) ?? []).includes(b.viec.mon);
+          const trungMon = daHocMon ? 60 : 0; // đỡ học một môn hai lần trong ngày
           const xaGio = DIEM_UU_TIEN[b.viec.mucUuTien] >= 2 ? Math.abs(bd - uaThich) / 4 : Math.abs(bd - uaThich) / 12;
           const somTrongTuan = b.viec.mucUuTien === "cao" ? thuTu * 8 : 0; // việc nên làm trước thì làm sớm trong tuần
           const diem = tai * 0.5 + trungMon + xaGio + somTrongTuan;
@@ -224,6 +234,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
     if (!tot) { thieu.set(b.viec.id, (thieu.get(b.viec.id) ?? 0) + b.phut); continue; }
     them({ viecId: b.viec.id, ten: b.viec.tieuDe, loai: "tuHoc", mon: b.viec.mon, ngay: tot.ngay, batDau: gioTuPhut(tot.bd), ketThuc: gioTuPhut(tot.bd + b.phut) });
     datVao(tot.ngay, tot.bd, b.phut);
+    if (!monTheoNgay.has(tot.ngay)) monTheoNgay.set(tot.ngay, []);
     monTheoNgay.get(tot.ngay)!.push(b.viec.mon);
   }
 

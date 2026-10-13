@@ -112,8 +112,8 @@ export default function CaiDatTuHoc() {
         <DongThongBao tone="tim" icon={HeartHandshake} tieuDe="Học vừa sức quan trọng hơn học nhiều"
           moTa="Nếu thấy mệt, em giảm số giờ tối đa hoặc chọn “Hơi mệt” ở trang Hôm nay, lịch sẽ nhẹ đi." />
 
-        {daDoi && <p role="status" className="text-[13px] font-semibold text-luc-chu text-center">Đã lưu cài đặt. Bấm “Xếp lại lịch giúp em” để lịch tuần này đổi theo.</p>}
-        <Nut bieuTuong={Wand2} onClick={xepLaiGiupEm}>Xếp lại lịch giúp em</Nut>
+        {daDoi && <p role="status" className="text-[13px] font-semibold text-luc-chu text-center">Đã lưu cài đặt. Bấm “Xếp lại lịch” để lịch tuần này đổi theo.</p>}
+        <Nut bieuTuong={Wand2} onClick={xepLaiGiupEm}>Xếp lại lịch tuần</Nut>
         <HangBam bieuTuong={CalendarDays} tieuDe="Lịch học của em"
           phu={s.coDinh.length ? `${s.coDinh.length} tiết cố định, giờ tự học sẽ tránh các tiết này` : "Chưa nhập lịch ở trường, học thêm"} onClick={() => nav(DUONG_DAN.caiDatLichHoc())} />
       </NoiDung>

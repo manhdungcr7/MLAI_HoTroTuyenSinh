@@ -3,11 +3,11 @@
 //   PATCH { loai, id, trangThai }                       đổi trạng thái (qtv; ctv chỉ báo sai của trường được giao)
 //   POST  { action: "CAP_QUYEN", id }                   (qtv) biến một đăng ký tình nguyện thành cộng tác viên: thêm vào quan_tri, giao đúng trường, đánh dấu đã cấp
 // Báo sai không bao giờ tự sửa số liệu: người của trường kiểm tra nguồn rồi sửa qua quy trình duyệt bình thường.
-import { laEmail, chuanHoaEmail } from "../_thu-vien/xac-thuc-access";
+import { laEmail, chuanHoaEmail } from "../_thu-vien/xac-thuc";
 import { cauNhatKy } from "../_thu-vien/d1";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, cam, docThan, docTrang, json, khongTimThay, locEnum, sai } from "../_thu-vien/phan-hoi";
-import { TAP_TRUONG, chay, khongHoTro } from "../_thu-vien/quyen";
+import { TAP_TRUONG, chay, khongHoTro, MOI_VAI } from "../_thu-vien/quyen";
 
 const TT_BAO_SAI = ["moi", "xong", "boQua"] as const;
 const TT_TINH_NGUYEN = ["moi", "da_lien_he", "da_cap_quyen", "tu_choi"] as const;
@@ -19,9 +19,9 @@ interface HangTinhNguyen { id: string; ho_ten: string; vai_tro: string; ma_truon
 export const maTruongCuaBaoSai = (maChuongTrinh: string) => maChuongTrinh.split("-")[0].toUpperCase();
 
 export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
-  chay(ctx, o, ["qtv", "ctv"], async (c) => {
+  chay(ctx, o, MOI_VAI, async (c) => {
     const m = c.request.method;
-    const laQtv = c.vaiTro === "qtv";
+    const laQtv = c.laQuanTri;
 
     if (m === "GET") {
       const loai = c.url.searchParams.get("loai") ?? "bao-sai";

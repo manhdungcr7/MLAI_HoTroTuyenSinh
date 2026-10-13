@@ -111,10 +111,10 @@ export default function TongQuanDashboard() {
                 aria-valuenow={Math.round((tongDu / ds.length) * 100)} aria-valuemin={0} aria-valuemax={100}>
                 <div className="h-full bg-luc rounded-full" style={{ width: `${(tongDu / ds.length) * 100}%` }} />
               </div>
-              <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-[13px]">
+              <ul className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[13px]">
                 {MUC_CAN_DU.map((m) => (
-                  <li key={m} className="flex justify-between gap-2">
-                    <span className="text-chu-phu truncate">{nhanMuc(m)}</span>
+                  <li key={m} className="flex justify-between gap-1.5">
+                    <span className="text-chu-phu min-w-0 leading-tight">{nhanMuc(m)}</span>
                     <b className="text-chu shrink-0">{ds.length - demThieu(m)}/{ds.length}</b>
                   </li>
                 ))}

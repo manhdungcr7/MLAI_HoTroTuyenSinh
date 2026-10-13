@@ -1,0 +1,65 @@
+// Mật khẩu của CMS: SHA-256(muối + mật khẩu), muối ngẫu nhiên 16 byte, bằng WebCrypto (Workers và Node). Hàm thuần, không đụng D1.
+// Định dạng lưu: sha256$<muối base64url>$<băm base64url>. Lớp bảo vệ chính chống dò mật khẩu là giới hạn 5 lần sai/15 phút.
+export const DO_DAI_TOI_THIEU = 8;
+/** Bảng chữ cho mật khẩu tạm: bỏ ký tự dễ nhầm (0/O, 1/l/I). */
+const BANG_CHU = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+export function maHoaB64Url(b: Uint8Array): string {
+  let s = "";
+  for (const x of b) s += String.fromCharCode(x);
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+export function giaiB64Url(s: string): Uint8Array {
+  const chuan = s.replace(/-/g, "+").replace(/_/g, "/");
+  const nhi = atob(chuan + "=".repeat((4 - (chuan.length % 4)) % 4));
+  return Uint8Array.from(nhi, (c) => c.charCodeAt(0));
+}
+
+/** So sánh hằng thời gian theo độ dài (độ dài khác thì sai, độ dài không phải bí mật). */
+export function bangHangThoiGian(a: Uint8Array, b: Uint8Array): boolean {
+  if (a.length !== b.length) return false;
+  let khac = 0;
+  for (let i = 0; i < a.length; i++) khac |= a[i] ^ b[i];
+  return khac === 0;
+}
+
+async function bam(matKhau: string, muoi: Uint8Array): Promise<Uint8Array> {
+  const mk = new TextEncoder().encode(matKhau);
+  const goc = new Uint8Array(muoi.length + mk.length);
+  goc.set(muoi);
+  goc.set(mk, muoi.length);
+  return new Uint8Array(await crypto.subtle.digest("SHA-256", goc));
+}
+
+export async function bamMatKhau(matKhau: string): Promise<string> {
+  const muoi = crypto.getRandomValues(new Uint8Array(16));
+  return `sha256$${maHoaB64Url(muoi)}$${maHoaB64Url(await bam(matKhau, muoi))}`;
+}
+
+/** Đúng/sai. Chuỗi lưu hỏng hoặc rỗng thì sai (không ném lỗi). */
+export async function xacMinhMatKhau(matKhau: string, daLuu: string | null | undefined): Promise<boolean> {
+  const p = (daLuu ?? "").split("$");
+  if (p.length !== 3 || p[0] !== "sha256") return false;
+  try {
+    return bangHangThoiGian(await bam(matKhau, giaiB64Url(p[1])), giaiB64Url(p[2]));
+  } catch { return false; }
+}
+
+/** Lỗi của mật khẩu mới, hoặc null nếu dùng được. Chỉ cần đủ dài. */
+export function loiMatKhauMoi(matKhau: unknown): string | null {
+  if (typeof matKhau !== "string" || matKhau.length < DO_DAI_TOI_THIEU) return `Mật khẩu cần có ít nhất ${DO_DAI_TOI_THIEU} ký tự`;
+  if (matKhau.length > 200) return "Mật khẩu tối đa 200 ký tự";
+  return null;
+}
+
+/** Mật khẩu tạm 14 ký tự, lấy mẫu loại bỏ lệch từ bộ sinh số của hệ điều hành. */
+export function sinhMatKhauTam(): string {
+  const gioiHan = 256 - (256 % BANG_CHU.length);
+  let ra = "";
+  while (ra.length < 14) {
+    for (const x of crypto.getRandomValues(new Uint8Array(32))) {
+      if (x < gioiHan && ra.length < 14) ra += BANG_CHU[x % BANG_CHU.length];
+    }
+  }
+  return ra;
+}

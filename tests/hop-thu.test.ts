@@ -35,7 +35,8 @@ const d1: KhoD1 = {
 };
 const kvMap = new Map<string, string>();
 const kv = { get: async (k: string) => kvMap.get(k) ?? null, put: async (k: string, v: string) => { kvMap.set(k, v); } };
-const env: Env = { DB: d1, KV_CONG_DONG: kv, GIA_DANH_DEV: "1", QTV_DAU_TIEN: "qtv@test.local" };
+const env: Env = { DB: d1, KV_CONG_DONG: kv, GIA_DANH_DEV: "1" };
+db.prepare("INSERT INTO quan_tri (email, vai_tro, tao_luc) VALUES ('qtv@test.local', 'sa', 't')").run();
 
 // ---------- Phía học sinh ----------
 const gui = (xuLy: typeof xuLyBaoSai | typeof xuLyTinhNguyen, body: unknown, ip = "1.2.3.4", method = "POST") =>
@@ -121,8 +122,8 @@ assert.equal((await goi(hopThu, "POST", "/api/hop-thu", q, { action: "CAP_QUYEN"
 await gui(xuLyTinhNguyen, { ...dk, lienHe: q, maTruong: "QSC", hoTen: "Quản trị viên thử" }, "8.8.8.8");
 const idQtv = ((await goi(hopThu, "GET", "/api/hop-thu?loai=tinh-nguyen&trangThai=moi", q)).json.dangKy as { id: string; lienHe: string }[]).find((x) => x.lienHe === q)!.id;
 const capQtv = await goi(hopThu, "POST", "/api/hop-thu", q, { action: "CAP_QUYEN", id: idQtv });
-assert.equal(capQtv.status, 201); assert.equal(capQtv.json.vaiTro, "qtv");
-assert.equal((db.prepare("SELECT vai_tro FROM quan_tri WHERE email = ?").get(q) as { vai_tro: string }).vai_tro, "qtv");
+assert.equal(capQtv.status, 201); assert.equal(capQtv.json.vaiTro, "sa");
+assert.equal((db.prepare("SELECT vai_tro FROM quan_tri WHERE email = ?").get(q) as { vai_tro: string }).vai_tro, "sa");
 // đổi trạng thái thường
 assert.equal((await goi(hopThu, "PATCH", "/api/hop-thu", q, { loai: "tinh-nguyen", id: coSdt.id, trangThai: "da_lien_he" })).status, 200);
 assert.equal((await goi(hopThu, "PATCH", "/api/hop-thu", q, { loai: "tinh-nguyen", id: coSdt.id, trangThai: "da_cap_quyen" })).status, 400, "không đánh dấu đã cấp quyền mà chưa cấp");

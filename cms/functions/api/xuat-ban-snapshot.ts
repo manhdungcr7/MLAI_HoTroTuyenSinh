@@ -1,8 +1,9 @@
-// /api/xuat-ban-snapshot (chỉ qtv): xuất bản các bản ghi APPROVED thành snapshot có phiên bản + mã băm, hoặc quay lại phiên bản cũ.
+// /api/xuat-ban-snapshot (qtv xuất bản; ROLLBACK/DONG_BO_KV/DONG_BO_VECTOR chỉ sa): xuất bản các bản ghi APPROVED thành snapshot có phiên bản + mã băm, hoặc quay lại phiên bản cũ.
 //   GET                                -> bản đang chạy, số bản chờ xuất bản, lịch sử phiên bản (phân trang)
 //   POST {action:"PUBLISH"} (mặc định) -> APPROVED => PUBLISHED, bản cũ cùng thực thể => SUPERSEDED, dựng snapshot, ghi D1 trong MỘT giao dịch, rồi đồng bộ KV
 //   POST {action:"ROLLBACK", targetVersion}
 //   POST {action:"DONG_BO_KV"}         -> đẩy lại bản đang chạy từ D1 sang KV (khi lần trước KV lỗi)
+//   POST {action:"DONG_BO_VECTOR", batDau?} -> dựng lại chỉ mục vector (RAG) từ bản đang chạy, theo lô và giới hạn thời gian; còn dở thì trả `tiepTuc` để gọi lại với batDau đó
 // Thứ tự an toàn: dựng snapshot trong bộ nhớ -> một batch D1 (bản ghi, manifest, tệp snapshot, nhật ký) -> KV (manifest:active ghi cuối cùng).
 import { taoSnapshotVaManifest } from "../../../src/engine/du-lieu-tuyen-sinh/snapshot-builder";
 import type { BanGhiCms } from "../../../src/engine/du-lieu-tuyen-sinh/kieu";
@@ -10,8 +11,9 @@ import { cauKiemToan, mapTuD1, type HangBanGhiD1 } from "../_thu-vien/ban-ghi-d1
 import { docHetTheoKhoa } from "../_thu-vien/d1";
 import type { BoiCanh, Env, KhoD1, KhoD1Cau, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, docThan, docTrang, json, sai } from "../_thu-vien/phan-hoi";
-import { chay, khongHoTro } from "../_thu-vien/quyen";
+import { chay, khongHoTro, QUAN_TRI } from "../_thu-vien/quyen";
 import { thongBaoSuKien } from "../_thu-vien/telegram";
+import { capNhatChiMuc, mucTuBanGhi, mucTuTap, type KetQuaCapNhat } from "../../../functions/_thu-vien/ai/chi-muc";
 
 const KHOA_ID = "publish_lock";
 const THOI_HAN_KHOA_MS = 60_000;
@@ -34,10 +36,33 @@ async function dongBoKv(env: Env, d1: KhoD1, dataVersion: string): Promise<"ok" 
   return "ok";
 }
 
+const TG_VECTOR_MS = 20_000;
+type KqVector = KetQuaCapNhat & { tongSo?: number; tiepTuc?: number };
+
+/** Ghi một dòng cảnh báo vào nhật ký kiểm toán; chính việc ghi lỗi cũng không được làm hỏng xuất bản. */
+async function canhBaoVector(c: { d1: KhoD1; email: string; luc: string }, dataVersion: string, kq: KetQuaCapNhat) {
+  try { await cauKiemToan(c.d1, { email: c.email, hanhDong: "VECTOR_CANH_BAO", entityType: "snapshot", entityId: dataVersion, version: 0, ghiChu: `Chưa cập nhật được chỉ mục vector (${kq.loi ?? "không rõ"}), đã làm ${kq.soBanGhi} bản ghi. Chạy DONG_BO_VECTOR để dựng lại.`, luc: c.luc }).run(); } catch { /* bỏ qua */ }
+}
+
+/** Dựng lại chỉ mục từ tập snapshot của `dataVersion` (lấy từ D1), từ vị trí `batDau`, dừng khi hết giờ. */
+async function dongBoVector(env: Env, d1: KhoD1, dataVersion: string, batDau = 0): Promise<KqVector> {
+  if (!env.AI || !env.VECTORIZE) return { daLam: false, soBanGhi: 0 };
+  const tap = await d1.prepare("SELECT ten, noi_dung FROM snapshot_tap WHERE data_version = ? LIMIT 20").bind(dataVersion).all<HangTap>();
+  const muc = tap.results.flatMap((t) => mucTuTap(t.ten, t.noi_dung, dataVersion));
+  const han = Date.now() + TG_VECTOR_MS;
+  let vt = batDau, lam = 0;
+  while (vt < muc.length && Date.now() < han) {
+    const kq = await capNhatChiMuc(env, muc.slice(vt, vt + 100));
+    if (!kq.daLam) return { ...kq, soBanGhi: lam + kq.soBanGhi, tongSo: muc.length, tiepTuc: vt };
+    lam += kq.soBanGhi; vt += 100;
+  }
+  return { daLam: true, soBanGhi: lam, tongSo: muc.length, ...(vt < muc.length ? { tiepTuc: vt } : {}) };
+}
+
 const loiKv = (e: unknown) => new LoiHttp(502, "dong-bo-kv-loi", `Đã lưu vào D1 nhưng chưa đồng bộ được KV (${e instanceof Error ? e.message : "lỗi lạ"}). Gọi lại POST với action DONG_BO_KV.`);
 
 export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
-  chay(ctx, o, ["qtv"], async (c) => {
+  chay(ctx, o, QUAN_TRI, async (c) => {
     // ===== GET: trạng thái xuất bản =====
     if (c.request.method === "GET") {
       const t = docTrang(c.url, 20);
@@ -62,6 +87,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
 
     // ===== ROLLBACK =====
     if (action === "ROLLBACK") {
+      c.yeuCauSa("Chỉ siêu quản trị được quay lại phiên bản cũ");
       const dich = String(body.targetVersion || "");
       if (!dich) throw sai("Thiếu targetVersion để rollback", "targetVersion");
       const co = await c.d1.prepare("SELECT data_version FROM snapshot_manifest WHERE data_version = ? LIMIT 1").bind(dich).first();
@@ -72,11 +98,15 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       ]);
       let kv: "ok" | "chua-cau-hinh";
       try { kv = await dongBoKv(c.env, c.d1, dich); } catch (e) { throw e instanceof LoiHttp && e.status === 404 ? e : loiKv(e); }
-      return json({ thanhCong: true, thongBao: `Đã rollback về version ${dich}`, activeVersion: dich, dongBoKv: kv });
+      // Chỉ mục vector dựng lại theo phiên bản đích (lỗi không làm hỏng rollback). Mã vector chỉ có ở bản mới hơn thì còn sót, chạy DONG_BO_VECTOR không xóa chúng.
+      let vector: KqVector = { daLam: false, soBanGhi: 0 };
+      try { vector = await dongBoVector(c.env, c.d1, dich); if (!vector.daLam && vector.loi) await canhBaoVector(c, dich, vector); } catch { /* bỏ qua */ }
+      return json({ thanhCong: true, thongBao: `Đã rollback về version ${dich}`, activeVersion: dich, dongBoKv: kv, vector });
     }
 
     // ===== ĐỒNG BỘ KV =====
     if (action === "DONG_BO_KV") {
+      c.yeuCauSa("Chỉ siêu quản trị được đồng bộ KV");
       const a = await c.d1.prepare("SELECT data_version FROM snapshot_manifest WHERE is_active = 1 LIMIT 1").first<{ data_version: string }>();
       if (!a) throw new LoiHttp(404, "chua-co-snapshot", "Chưa có snapshot nào đang chạy");
       let kv: "ok" | "chua-cau-hinh";
@@ -84,7 +114,17 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       return json({ thanhCong: true, activeVersion: a.data_version, dongBoKv: kv });
     }
 
-    if (action !== "PUBLISH") throw sai("action phải là PUBLISH, ROLLBACK hoặc DONG_BO_KV", "action");
+    // ===== ĐỒNG BỘ VECTOR =====
+    if (action === "DONG_BO_VECTOR") {
+      c.yeuCauSa("Chỉ siêu quản trị được đồng bộ vector");
+      const a = await c.d1.prepare("SELECT data_version FROM snapshot_manifest WHERE is_active = 1 LIMIT 1").first<{ data_version: string }>();
+      if (!a) throw new LoiHttp(404, "chua-co-snapshot", "Chưa có snapshot nào đang chạy");
+      const batDau = Math.max(0, Math.floor(Number(body.batDau) || 0));
+      const vector = await dongBoVector(c.env, c.d1, a.data_version, batDau).catch((e): KqVector => ({ daLam: false, soBanGhi: 0, loi: e instanceof Error ? e.message : "loi-la" }));
+      return json({ thanhCong: true, activeVersion: a.data_version, vector });
+    }
+
+    if (action !== "PUBLISH") throw sai("action phải là PUBLISH, ROLLBACK, DONG_BO_KV hoặc DONG_BO_VECTOR", "action");
 
     // ===== PUBLISH =====
     // Khóa nguyên tử: chỉ chiếm được khi chưa có khóa hoặc khóa cũ đã hết hạn (changes = 0 nghĩa là người khác đang giữ).
@@ -144,9 +184,15 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
 
       let kv: "ok" | "chua-cau-hinh";
       try { kv = await dongBoKv(c.env, c.d1, dataVersion); } catch (e) { throw loiKv(e); }
+      // Chỉ mục vector chỉ cho bản ghi vừa xuất bản (id vector theo thực thể nên bản mới tự ghi đè bản cũ; bản đã xuất bản không bị xóa vì chỉ DRAFT/REJECTED mới lưu trữ được).
+      let vector: KetQuaCapNhat = { daLam: false, soBanGhi: 0 };
+      try {
+        vector = await capNhatChiMuc(c.env, [...thang.values()].map((h) => mucTuBanGhi(mapTuD1(h), dataVersion)));
+        if (!vector.daLam && vector.loi) await canhBaoVector(c, dataVersion, vector);
+      } catch { /* vector không được làm hỏng xuất bản */ }
       const tb = await thongBaoSuKien(c.env, { hanhDong: "PUBLISHED", email: c.email, phienBan: dataVersion, soBanGhi: thang.size }, c.o);
 
-      return json({ thanhCong: true, dataVersion, soBanGhiMoi: thang.size, soBanBiThayThe: thua.length, conBanChoXuatBan: choDuyet.length >= TOI_DA_MOI_LAN, tongBanGhiPublished: dsXuatBan.length, dongBoKv: kv, manifest: kqSnap.manifest }, 200, { "x-thong-bao": tb });
+      return json({ thanhCong: true, dataVersion, soBanGhiMoi: thang.size, soBanBiThayThe: thua.length, conBanChoXuatBan: choDuyet.length >= TOI_DA_MOI_LAN, tongBanGhiPublished: dsXuatBan.length, dongBoKv: kv, vector: { daLam: vector.daLam, soBanGhi: vector.soBanGhi }, manifest: kqSnap.manifest }, 200, { "x-thong-bao": tb });
     } finally {
       await c.d1.prepare("DELETE FROM khoa_xuat_ban WHERE khoa_id = ? AND so_huu_boi = ?").bind(KHOA_ID, c.email).run();
     }

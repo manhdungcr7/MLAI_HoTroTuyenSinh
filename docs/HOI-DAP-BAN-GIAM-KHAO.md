@@ -79,7 +79,7 @@ Giai đoạn đầu: miễn phí cho học sinh, trường đối tác đóng g�
 Trang `/dong-gop` trong app cho phép sinh viên, thầy cô, cán bộ tuyển sinh đăng ký; quản trị viên liên hệ, xác minh, rồi cấp quyền và giao đúng trường chỉ bằng một nút (CMS, Hộp thư). Mỗi mùa tuyển sinh có thể bắt đầu từ các trường đối tác, mỗi trường vài tình nguyện viên.
 
 **23. Có cần máy chủ và tài khoản?**
-Học sinh thì không (local-first). CMS dùng Cloudflare Access (đăng nhập bằng email) và D1/KV. Muốn đồng bộ nhiều thiết bị hoặc tài khoản riêng cho phụ huynh/thầy cô thì cần thêm đăng nhập cho học sinh, chưa làm.
+Học sinh thì không (local-first). CMS dùng đăng nhập email + mật khẩu tự quản và D1/KV. Muốn đồng bộ nhiều thiết bị hoặc tài khoản riêng cho phụ huynh/thầy cô thì cần thêm đăng nhập cho học sinh, chưa làm.
 
 **24. Điểm yếu lớn nhất hiện giờ?**
 Phủ dữ liệu: học phí theo ngành mới có 24 chương trình, điểm 2026 chủ yếu từ trang tổng hợp, chưa có khung chương trình học. Cách khắc phục đã dựng (CMS, tình nguyện viên) nhưng cần người dùng thật để lấp đầy. Điều này được nói thẳng trên app ("Chưa có dữ liệu") thay vì điền số suy diễn.

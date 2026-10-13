@@ -7,7 +7,7 @@ import DiemMonThem from "./diem-mon-them";
 import DiemUuTien from "./diem-uu-tien";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop, toHopCaoNhatDayDu } from "./tinh-toan";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 
 export const idDiem = (m: MonId) => `bd-diem-${m}`;
 const TO_HOP_APP: string[] = Object.keys(TO_HOP);
@@ -111,7 +111,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
         {dayDu && (dayDu.uuTienCong > 0 || !TO_HOP_APP.includes(dayDu.toHop)) && (
           <p aria-live="polite" className="mt-2 rounded-xl bg-xanh-nhat px-3 py-2.5 text-[13px] text-chu">
             Cao nhất (gồm môn khác, ưu tiên): <b className="text-muc">{dayDu.toHop} · {dinhDang(dayDu.tong, 1)}</b>
-            {dayDu.uuTienCong > 0 && <> (+{dinhDang(dayDu.uuTienCong, 2)} ưu tiên)</>}. Số này dùng để so điểm chuẩn.
+            {dayDu.uuTienCong > 0 && <> (+{dinhDangDiem(dayDu.uuTienCong)} ưu tiên)</>}. Số này dùng để so điểm chuẩn.
           </p>
         )}
       </section>

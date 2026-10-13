@@ -181,14 +181,15 @@ export function chamDiem(ds: DongNV[], hoSo: Pick<HoSo, "nganSach" | "khuVuc">, 
       ],
     };
 
-  const dungKV = coDuLieu.filter((d) => dungKhuVuc(d.lc, hoSo.khuVuc) === true).length;
+  const khuVucHoSo = Array.isArray(hoSo.khuVuc) ? hoSo.khuVuc : [];
+  const dungKV = coDuLieu.filter((d) => dungKhuVuc(d.lc, khuVucHoSo) === true).length;
   const diemKV = coDuLieu.length ? Math.round((dungKV / coDuLieu.length) * 100) : 0;
-  const khuVuc: DiemDanhGia = hoSo.khuVuc.length === 0
+  const khuVuc: DiemDanhGia = khuVucHoSo.length === 0
     ? { khoa: "khuVuc", ten: "Phù hợp khu vực", diem: null, nhanXet: "Chưa có dữ liệu", tone: "muc", chiTiet: "Em chưa chọn nơi muốn học.", cachTinh: ["Cần em chọn nơi muốn học ở bước Mục tiêu & ưu tiên."] }
     : {
       khoa: "khuVuc", ten: "Phù hợp khu vực", diem: diemKV, nhanXet: diemKV >= 85 ? "Rất phù hợp" : diemKV >= 70 ? "Phù hợp" : diemKV >= 50 ? "Khá xa" : "Rất xa", tone: toneDiem(diemKV),
       chiTiet: `${dungKV}/${coDuLieu.length} nguyện vọng ở khu vực em ưu tiên.`,
-      cachTinh: [`Điểm = số nguyện vọng ở nơi em muốn học (${hoSo.khuVuc.join(", ")}), chia cho tổng số nguyện vọng, nhân 100.`],
+      cachTinh: [`Điểm = số nguyện vọng ở nơi em muốn học (${khuVucHoSo.join(", ")}), chia cho tổng số nguyện vọng, nhân 100.`],
     };
 
   return [canBang, taiChinh, khuVuc];

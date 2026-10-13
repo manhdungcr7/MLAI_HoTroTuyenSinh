@@ -71,12 +71,12 @@ export default function CaiDat() {
               <ShieldCheck size={22} className="text-luc shrink-0" />
               <span>Mọi thông tin em nhập chỉ lưu trên điện thoại này, chưa gửi lên máy chủ nào. Nếu xóa dữ liệu trình duyệt, hồ sơ cũng mất theo.</span>
             </p>
-            <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu về máy</Nut>
-            <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục từ tệp sao lưu</Nut>
+            <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu</Nut>
+            <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục sao lưu</Nut>
             <input ref={oTep} type="file" accept="application/json,.json" className="hidden" aria-hidden="true" tabIndex={-1} onChange={(e) => void nhap(e.target.files?.[0])} />
             <p role="status" className={tin ? (tin.ok ? "text-[13px] text-luc-chu" : "text-[13px] text-do-chu") : "sr-only"}>{tin?.chu}</p>
             <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Dùng hồ sơ mẫu</Nut>
-            <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết và làm lại</Nut>
+            <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết dữ liệu</Nut>
           </The>
         </section>
 

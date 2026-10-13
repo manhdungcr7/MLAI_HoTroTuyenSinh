@@ -86,7 +86,7 @@ function chuanHoaMucTieu(raw: unknown): MucTieuChinh | null {
   const phuongThuc = trong(raw.phuongThuc, ["THPT", "DGNL", "hocBa"] as const);
   const diemMucTieu = so(raw.diemMucTieu);
   if (!maToHop || !phuongThuc || diemMucTieu === null || diemMucTieu < 0 || diemMucTieu > 30 || typeof raw.luaChonId !== "string" || !raw.luaChonId || !laNgayIso(raw.ngayThi)) return null;
-  const toHop = mang(raw.toHop).filter((m): m is MonId => CAC_MON.includes(m as MonId));
+  const toHop = Array.from(new Set(mang(raw.toHop).filter((m): m is MonId => CAC_MON.includes(m as MonId))));
   return { luaChonId: raw.luaChonId, phuongThuc, maToHop, toHop: toHop.length === 3 ? toHop : TO_HOP[maToHop], diemMucTieu, ngayThi: raw.ngayThi };
 }
 
@@ -139,8 +139,8 @@ export function chuanHoa(raw: unknown): AppState {
     hoSo: chuanHoaHoSo(o.hoSo),
     mucTieu: chuanHoaMucTieu(o.mucTieu),
     nguyenVong: Array.from(new Set(mangChu(o.nguyenVong))),
-    yeuThich: mangChu(o.yeuThich),
-    soSanh: mangChu(o.soSanh).slice(0, 2),
+    yeuThich: Array.from(new Set(mangChu(o.yeuThich))),
+    soSanh: Array.from(new Set(mangChu(o.soSanh))).slice(0, 2),
     diemThi: danhSach<DiemThi>(o.diemThi, (d) => {
       const diem = diem10(d.diem);
       return CAC_MON.includes(d.mon as MonId) && diem !== null && typeof d.ngay === "string" ? { mon: d.mon as MonId, diem, ngay: d.ngay } : null;

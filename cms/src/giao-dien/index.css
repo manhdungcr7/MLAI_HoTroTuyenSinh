@@ -79,7 +79,7 @@ body {
 .nen-trang-xanh { background-image: linear-gradient(180deg, #e3eeff 0%, var(--color-nen) 100%); }
 
 @keyframes hien-len { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.hien-len { animation: hien-len .25s ease-out both; }
+.hien-len { animation: hien-len .25s ease-out backwards; }
 @keyframes khung-xuong { from { opacity: .55; } to { opacity: 1; } }
 .dang-tai { animation: khung-xuong .9s ease-in-out infinite alternate; background: #e3eaf8; border-radius: 1rem; }
 @media (prefers-reduced-motion: reduce) { .hien-len, .dang-tai { animation: none; } * { transition: none !important; } }

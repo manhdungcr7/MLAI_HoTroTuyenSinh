@@ -1,3 +1,4 @@
+import { dinhDang } from "@/engine/dinh-dang";
 // Bản tóm tắt để em đưa cho phụ huynh, thầy cô hoặc người tư vấn xem, và 4 chỉ số theo dõi tiến bộ. TypeScript thuần, không React.
 // Mọi câu đều sinh từ dữ liệu của em; không có câu nào viết sẵn cho mọi người.
 import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
@@ -12,7 +13,7 @@ import { nhanLop } from "@/state/chang";
 import { CAC_MON, TEN_MON, type MonId, type NhanNguyenVong } from "@/state/types";
 import { TEN_CHO_O, TEN_NGAN_SACH, hieuEm } from "./tinh-toan";
 
-const so = (n: number) => (Math.round(n * 10) / 10).toFixed(1).replace(".", ",");
+const so = (n: number) => dinhDang(Math.round(n * 10) / 10, 1);
 
 // ---------- 4 chỉ số theo dõi (slide "Chỉ số nên theo dõi") ----------
 

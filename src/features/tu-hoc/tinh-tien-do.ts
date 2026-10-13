@@ -60,7 +60,13 @@ export function soVoiTuanTruoc(
 ): { tuanNay: number; tuanTruoc: number; chenh: number } | null {
   const thuHai = thuHaiCuaTuan(isoNgay(bayGio)), thuHaiTruoc = congNgay(thuHai, -7);
   const dem = (tu: string, den: string) => new Set(lichSu
-    .filter((l) => l.trangThai === "xong" && isoNgay(new Date(l.luc)) >= tu && isoNgay(new Date(l.luc)) < den)
+    .filter((l) => {
+      if (l.trangThai !== "xong" || typeof l.luc !== "string") return false;
+      const d = new Date(l.luc);
+      if (Number.isNaN(d.getTime())) return false;
+      const iso = isoNgay(d);
+      return iso >= tu && iso < den;
+    })
     .map((l) => l.viecId)).size;
   const tuanTruoc = dem(thuHaiTruoc, thuHai);
   if (!tuanTruoc) return null;
@@ -137,7 +143,8 @@ export function uocLuongGioTuHoc(coDinh: TietCoDinh[], cfg: CauHinhTuHoc, thuHai
 
 /** "1 giờ 30 phút", "2 giờ", "45 phút" */
 export function dangGio(phut: number): string {
-  const g = Math.floor(phut / 60), p = Math.round(phut % 60);
+  const safePhut = Math.max(0, Number.isFinite(phut) ? phut : 0);
+  const g = Math.floor(safePhut / 60), p = Math.round(safePhut % 60);
   if (!g) return `${p} phút`;
   return p ? `${g} giờ ${p} phút` : `${g} giờ`;
 }

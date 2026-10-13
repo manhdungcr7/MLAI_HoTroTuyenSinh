@@ -102,10 +102,10 @@ export default function MucTieu() {
         )}
 
         <div className="space-y-2 pt-1">
-          <Nut muiTen onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn nên ưu tiên</Nut>
-          <Nut kieu="vien" muiTen onClick={() => nav(DUONG_DAN.tuan())}>Xem kế hoạch cải thiện</Nut>
+          <Nut muiTen onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn ưu tiên</Nut>
+          <Nut kieu="vien" muiTen onClick={() => nav(DUONG_DAN.tuan())}>Xem kế hoạch học</Nut>
           <button type="button" onClick={() => nav(DUONG_DAN.khamPha())}
-            className="w-full min-h-12 text-[14px] font-bold text-xanh underline underline-offset-4">Xem lại mục tiêu khác</button>
+            className="w-full min-h-12 text-[14px] font-bold text-xanh underline underline-offset-4">Đổi mục tiêu khác</button>
         </div>
       </NoiDung>
       <SuaMucTieu mo={moSua} dong={() => setMoSua(false)} mt={d.goc} lc={d.lc} luu={datMucTieu} />

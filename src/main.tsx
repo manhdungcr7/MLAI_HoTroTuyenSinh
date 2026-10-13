@@ -14,7 +14,14 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
   window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => { /* không đăng ký được thì vẫn dùng nhắc trong ứng dụng */ }); });
 }
 
-createRoot(document.getElementById("root")!).render(
+let rootElement = document.getElementById("root") || document.getElementById("app");
+if (!rootElement) {
+  rootElement = document.createElement("div");
+  rootElement.id = "root";
+  document.body.appendChild(rootElement);
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <LoiUngDung>
       <AppProvider>

@@ -6,7 +6,7 @@ import { gop } from "@/components/ui/nut-the";
 import { OChon } from "@/components/ui/nhap-lieu";
 import { MUC_DOI_TUONG, MUC_KHU_VUC, TEN_DOI_TUONG, TEN_KHU_VUC, mucUuTien, type DoiTuongUuTien, type KhuVucUuTien } from "@/engine/diem-uu-tien";
 import type { HoSo } from "@/state/types";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 
 export default function DiemUuTien({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo>) => void }) {
   const u = h.uuTienTuyenSinh ?? { khuVuc: null, doiTuong: null };
@@ -20,7 +20,7 @@ export default function DiemUuTien({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo>
         <span className="size-9 rounded-xl grid place-items-center bg-cam-nhat text-cam-chu shrink-0"><Scale size={18} /></span>
         <span className="flex-1">
           <b className="block text-[15px] text-chu">Điểm ưu tiên khu vực, đối tượng</b>
-          <span className="block text-[13px] text-chu-phu">{muc > 0 ? `Mức em khai: +${dinhDang(muc, 2)} điểm` : "Không bắt buộc · cộng vào điểm xét tuyển nếu em thuộc diện"}</span>
+          <span className="block text-[13px] text-chu-phu">{muc > 0 ? `Mức em khai: +${dinhDangDiem(muc)} điểm` : "Không bắt buộc · cộng vào điểm xét tuyển nếu em thuộc diện"}</span>
         </span>
         <ChevronDown size={20} className={gop("text-chu-phu transition-transform", mo && "rotate-180")} />
       </button>
@@ -30,7 +30,7 @@ export default function DiemUuTien({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo>
             <label htmlFor="bd-ut-kv" className="block text-[14px] font-bold text-chu mb-1.5">Khu vực ưu tiên</label>
             <OChon id="bd-ut-kv" value={u.khuVuc ?? ""} onChange={(e) => dat({ khuVuc: (e.target.value || null) as KhuVucUuTien | null })}>
               <option value="">Em chưa biết hoặc chưa chọn</option>
-              {(Object.keys(MUC_KHU_VUC) as KhuVucUuTien[]).map((k) => <option key={k} value={k}>{TEN_KHU_VUC[k]} · +{dinhDang(MUC_KHU_VUC[k], 2)}</option>)}
+              {(Object.keys(MUC_KHU_VUC) as KhuVucUuTien[]).map((k) => <option key={k} value={k}>{TEN_KHU_VUC[k]} · +{dinhDangDiem(MUC_KHU_VUC[k])}</option>)}
             </OChon>
             <p className="mt-1 text-[12px] text-chu-phu">Tính theo nơi em học THPT lâu nhất. Em xem trong phiếu đăng ký dự thi hoặc hỏi thầy cô chủ nhiệm.</p>
           </div>

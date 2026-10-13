@@ -36,3 +36,19 @@ export const suaBanNhap = (id: string, data: Record<string, unknown>, source: Ng
   goi<BanGhiCms>("PUT", {}, { id, data, source, changeNote });
 export const doiTrangThai = (id: string, status: "SUBMITTED" | "IN_REVIEW" | "APPROVED" | "REJECTED" | "ARCHIVED", rejectionReason?: string) =>
   goi<BanGhiCms>("PATCH", {}, { id, status, ...(rejectionReason !== undefined && { rejectionReason }) });
+
+export interface CanhBaoQuyTac { ma: string; muc: "loi" | "luu-y"; thongBao: string }
+export interface GoiYDuyet {
+  id: string;
+  quyTac: CanhBaoQuyTac[];
+  ai: null | {
+    doTinCay: { diem: number; muc: "cao" | "vua" | "thap" };
+    loai: { chon: string; tinCay: number } | null;
+    khanCap: { diem: number; muc: "cao" | "vua" | "thap" } | null;
+    nhayCam: { xacSuat: number; co: boolean } | null;
+  };
+  trung: { id: string; diem: number; noiDung: string } | null;
+  daKiemTrung: boolean;
+}
+/** Gợi ý của AI cho người duyệt (chỉ quản trị viên). Chỉ để tham khảo, không đổi bản ghi. */
+export const xinGoiYDuyet = (id: string) => goiJson<GoiYDuyet>("POST", "/goi-y-duyet", {}, { id });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChartColumn, Clock, GraduationCap, ShieldCheck, Sparkles, Target, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
@@ -76,6 +76,12 @@ export default function ChaoMung() {
       <NenHero tone="xanh" className="!rounded-t-none px-4 pt-4 pb-6">
         <div className="flex items-center justify-between gap-2">
           <Logo />
+          <Link
+            to={DUONG_DAN.gioiThieu()}
+            className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-xanh text-[12.5px] font-bold shadow-sm transition-all"
+          >
+            Giới thiệu
+          </Link>
         </div>
         <MinhHoa />
         <h1 className="mt-5 text-[34px] leading-[1.08] font-bold text-muc">

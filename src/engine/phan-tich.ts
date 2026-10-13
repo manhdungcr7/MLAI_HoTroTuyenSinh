@@ -13,11 +13,12 @@ const kep = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n));
 
 /** Tổng điểm các môn của tổ hợp. Môn chưa nhập đang tính là 0: nơi nào hiển thị số này phải kiểm `monThieuCuaToHop` trước, không đưa số đó ra như điểm thật. */
 export function tongDiem(diem: Record<MonId, number | null>, toHop: MonId[]): number {
-  return lam(toHop.reduce((s, m) => s + (diem[m] ?? 0), 0));
+  return lam(toHop.reduce((s, m) => s + (typeof diem[m] === "number" && Number.isFinite(diem[m]) ? diem[m]! : 0), 0));
 }
 
 /** Các môn của tổ hợp em chưa nhập điểm. Rỗng nghĩa là `tongDiem` là điểm thật. */
-export const monThieuCuaToHop = (diem: Record<MonId, number | null>, toHop: MonId[]): MonId[] => toHop.filter((m) => diem[m] === null || diem[m] === undefined);
+export const monThieuCuaToHop = (diem: Record<MonId, number | null>, toHop: MonId[]): MonId[] =>
+  toHop.filter((m) => diem[m] === null || diem[m] === undefined || typeof diem[m] !== "number" || !Number.isFinite(diem[m]));
 
 export const TEN_PHUONG_THUC: Record<string, string> = {
   THPT: "Điểm thi tốt nghiệp THPT", HOC_BA: "Học bạ THPT", DGNL_HCM: "ĐGNL ĐHQG TP.HCM", DGNL_HN: "ĐGNL ĐHQG Hà Nội",
@@ -35,11 +36,14 @@ export interface KhoangCachMon { mon: MonId; ten: string; hienTai: number; mucTi
 
 /** Chia phần điểm còn thiếu cho từng môn: môn còn nhiều dư địa và môn em tự thấy cần cải thiện nhận phần lớn hơn. */
 export function khoangCachTheoMon(diem: Record<MonId, number | null>, toHop: MonId[], diemMucTieu: number, canCaiThien: string[] = []): KhoangCachMon[] {
-  const hienTai = Object.fromEntries(toHop.map((m) => [m, diem[m] ?? 0])) as Record<MonId, number>;
-  let con = Math.max(0, lam(diemMucTieu - tongDiem(diem, toHop), 2));
+  if (!toHop || toHop.length === 0) return [];
+  const safeMucTieu = typeof diemMucTieu === "number" && Number.isFinite(diemMucTieu) ? Math.max(0, diemMucTieu) : 0;
+  const safeCanCaiThien = Array.isArray(canCaiThien) ? canCaiThien : [];
+  const hienTai = Object.fromEntries(toHop.map((m) => [m, typeof diem[m] === "number" && Number.isFinite(diem[m]) ? diem[m]! : 0])) as Record<MonId, number>;
+  let con = Math.max(0, lam(safeMucTieu - tongDiem(diem, toHop), 2));
   const them = Object.fromEntries(toHop.map((m) => [m, 0])) as Record<MonId, number>;
   for (let vong = 0; vong < 4 && con > 0.001; vong++) {
-    const w = toHop.map((m) => ({ m, w: Math.max(0, 10 - hienTai[m] - them[m]) * (canCaiThien.includes(TEN_MON[m]) ? 1.5 : 1) }));
+    const w = toHop.map((m) => ({ m, w: Math.max(0, 10 - hienTai[m] - them[m]) * (safeCanCaiThien.includes(TEN_MON[m]) ? 1.5 : 1) }));
     const tong = w.reduce((s, x) => s + x.w, 0);
     if (tong <= 0) break;
     let daChia = 0;
@@ -57,8 +61,10 @@ export function khoangCachTheoMon(diem: Record<MonId, number | null>, toHop: Mon
 
 /** Chỉ gọi khi `tong` là số hữu hạn và `lc` là điểm THPT. Màn hình nên gọi `nhanChoLuaChon` (trả null khi không so được). */
 export function nhanNguyenVong(lc: LuaChon, tong: number): NhanNguyenVong {
+  const dMin = typeof lc.diemMin === "number" && Number.isFinite(lc.diemMin) ? lc.diemMin : 0;
+  const t = typeof tong === "number" && Number.isFinite(tong) ? tong : 0;
   // Làm tròn 2 chữ số: điểm chuẩn có 2 số lẻ, phép trừ số thực có thể lệch 1e-15 và xếp sai nhãn ở đúng ngưỡng.
-  const x = Math.round((tong - lc.diemMin) * 100) / 100;
+  const x = Math.round((t - dMin) * 100) / 100;
   if (x < 0) return "Thử sức";
   if (x < 1.5) return "Vừa sức";
   if (x < 4) return "An toàn";
@@ -113,7 +119,7 @@ export function phanTichDanhSach(ds: { lc: LuaChon; nhan: NhanNguyenVong }[], ho
     }
   }
   let diemKV = 0, chiTietKV = "Em chưa chọn khu vực ưu tiên.";
-  if (hoSo.khuVuc.length && ds.length) {
+  if (Array.isArray(hoSo.khuVuc) && hoSo.khuVuc.length && ds.length) {
     const dung = ds.filter((d) => hoSo.khuVuc.some((k) => d.lc.khuVuc.replace(/\s/g, "").includes(k.replace(/\s/g, "")))).length;
     diemKV = Math.round((dung / ds.length) * 100);
     chiTietKV = `${dung}/${ds.length} nguyện vọng ở khu vực em ưu tiên.`;
@@ -135,7 +141,9 @@ export interface DieuKienThu {
 
 /** Điểm phù hợp /100 của một lựa chọn trong một tình huống. */
 export function diemPhuHop(lc: LuaChon, dk: DieuKienThu): number {
-  const diemThi = kep(50 + (dk.tong - lc.diemMin) * 15, 5, 100);
+  const tongAnToan = typeof dk.tong === "number" && Number.isFinite(dk.tong) ? dk.tong : 0;
+  const dMin = typeof lc.diemMin === "number" && Number.isFinite(lc.diemMin) ? lc.diemMin : 0;
+  const diemThi = kep(50 + (tongAnToan - dMin) * 15, 5, 100);
   const tc = coHocPhi(lc)
     ? dk.nganSachTrieu >= (lc.hocPhiMax as number) ? 100 : dk.nganSachTrieu >= (lc.hocPhiMin as number) ? 70 : Math.max(0, 100 - ((lc.hocPhiMin as number) - dk.nganSachTrieu) * 8)
     : null;
@@ -146,7 +154,7 @@ export function diemPhuHop(lc: LuaChon, dk: DieuKienThu): number {
   const phan: [number | null, number][] = [[diemThi, trongSo[0]], [tc, trongSo[1]], [kv, trongSo[2]], [viec, trongSo[3]]];
   const co = phan.filter((x): x is [number, number] => x[0] !== null);
   const tongTrong = co.reduce((s, x) => s + x[1], 0);
-  return Math.round(co.reduce((s, x) => s + x[0] * x[1], 0) / tongTrong);
+  return tongTrong > 0 ? Math.round(co.reduce((s, x) => s + x[0] * x[1], 0) / tongTrong) : 50;
 }
 
 export const NGUONG_PHU_HOP = 70;
@@ -157,6 +165,6 @@ export function soSanhTinhHuong(lcs: LuaChon[], goc: DieuKienThu, moi: DieuKienT
     dong: a,
     phuHopHon: a.filter((x) => x.goc < NGUONG_PHU_HOP && x.moi >= NGUONG_PHU_HOP).length,
     itPhuHopHon: a.filter((x) => x.goc >= NGUONG_PHU_HOP && x.moi < NGUONG_PHU_HOP).length,
-    thayDoiLonNhat: [...a].sort((x, y) => Math.abs(y.moi - y.goc) - Math.abs(x.moi - x.goc))[0],
+    thayDoiLonNhat: [...a].sort((x, y) => Math.abs(y.moi - y.goc) - Math.abs(x.moi - x.goc))[0] ?? null,
   };
 }

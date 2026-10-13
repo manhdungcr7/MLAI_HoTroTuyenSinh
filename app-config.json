@@ -1,0 +1,22 @@
+{
+  "app": {
+    "title": "Nguyện Vọng AI",
+    "headerTitle": "Nguyện Vọng AI",
+    "headerColor": "#1560ee",
+    "textColor": "white",
+    "statusBar": "transparent",
+    "actionBarHidden": false,
+    "hideAndroidBottomNavigationBar": false,
+    "hideIOSSafeAreaBottom": false
+  },
+  "pages": [
+    "pages/index/index"
+  ],
+  "listCSS": [
+    "assets/index-DF8zQzA2.css"
+  ],
+  "listSyncJS": [
+    "inline.js"
+  ],
+  "listAsyncJS": []
+}

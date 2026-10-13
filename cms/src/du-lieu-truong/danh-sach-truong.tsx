@@ -77,7 +77,7 @@ export default function DanhSachTruong() {
               const chon = chip.has(c.id);
               return (
                 <button key={c.id} type="button" onClick={() => batTat(c.id)} aria-pressed={chon}
-                  className={gop("min-h-10 px-3.5 rounded-full text-[13px] font-bold whitespace-nowrap border select-none shrink-0",
+                  className={gop("min-h-11 px-3.5 rounded-full text-[13px] font-bold whitespace-nowrap border select-none shrink-0",
                     chon ? "bg-xanh text-white border-xanh" : "bg-trang text-chu-phu border-vien active:bg-nen")}>
                   {c.nhan}
                 </button>
@@ -90,7 +90,7 @@ export default function DanhSachTruong() {
             <label className="flex gap-1.5 items-center">
               <span>Sắp xếp</span>
               <select value={sapXep} onChange={(e) => setSapXep(e.target.value as KieuSapXep)}
-                className="min-h-10 bg-trang border border-vien rounded-lg px-2 text-[13px] font-semibold text-chu">
+                className="min-h-11 bg-trang border border-vien rounded-lg px-2 text-[13px] font-semibold text-chu">
                 <option value="thieu">Thiếu nhiều trước</option>
                 <option value="ten">Tên A-Z</option>
               </select>

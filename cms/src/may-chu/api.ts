@@ -1,4 +1,4 @@
-import { LoiApi, SO_MOI_TRANG, type NguoiCms, type NhatKyCms, type PhanCongCms, type Toi, type Trang, type VaiTro } from "./kieu";
+import { LoiApi, SO_MOI_TRANG, type NguoiCms, type NguoiMoiCms, type NhatKyCms, type PhanCongCms, type Toi, type Trang, type VaiTro } from "./kieu";
 export * from "./kieu";
 
 type Query = Record<string, string | number | undefined>;
@@ -25,8 +25,7 @@ async function goi<T>(method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE", duong
   if (res.status === 204) return undefined as T;
   const loai = res.headers.get("content-type") ?? "";
   if (!loai.includes("json")) {
-    // Thường là trang đăng nhập của Cloudflare Access trả về khi phiên hết hạn.
-    throw new LoiApi(res.status === 200 ? 401 : res.status, "Phiên đăng nhập có thể đã hết hạn. Bạn tải lại trang để đăng nhập lại.");
+    throw new LoiApi(res.status === 200 ? 401 : res.status, "Máy chủ trả về dữ liệu không đọc được. Bạn tải lại trang rồi thử lại.");
   }
   let json: unknown;
   try { json = await res.json(); } catch { throw new LoiApi(res.status, "Máy chủ trả về dữ liệu không đọc được."); }
@@ -74,10 +73,15 @@ export async function layHetTrang<T>(lay: (trang: number) => Promise<Trang<T>>):
 
 // ---------- Phiên ----------
 export const layToi = () => goi<Toi>("GET", "/toi");
+export const dangNhap = (email: string, matKhau: string) => goi<{ email: string; vaiTro: VaiTro; phaiDoiMatKhau: boolean }>("POST", "/dang-nhap", { body: { email, matKhau } });
+export const dangXuat = () => goi<void>("POST", "/dang-xuat");
+export const doiMatKhau = (matKhauCu: string, matKhauMoi: string) => goi<{ email: string }>("POST", "/doi-mat-khau", { body: { matKhauCu, matKhauMoi } });
 
 // ---------- Người, phân công, nhật ký (qtv) ----------
 export const layNguoi = async () => (await goi<{ nguoi: NguoiCms[] }>("GET", "/nguoi")).nguoi;
-export const themNguoi = (email: string, vaiTro: VaiTro) => goi<NguoiCms>("POST", "/nguoi", { body: { email, vaiTro } });
+export const themNguoi = (email: string, vaiTro: VaiTro) => goi<NguoiMoiCms>("POST", "/nguoi", { body: { email, vaiTro } });
+export const doiVaiNguoi = (email: string, vaiTro: VaiTro) => goi<{ email: string; vaiTro: VaiTro }>("PATCH", "/nguoi", { query: { email }, body: { vaiTro } });
+export const datLaiMatKhau = (email: string) => goi<{ email: string; matKhauTam: string }>("PATCH", "/nguoi", { query: { email }, body: { datLaiMatKhau: true } });
 export const xoaNguoi = (email: string) => goi<void>("DELETE", "/nguoi", { query: { email } });
 export const layPhanCong = async (email?: string) => (await goi<{ phanCong: PhanCongCms[] }>("GET", "/phan-cong", { query: { email } })).phanCong;
 export const datPhanCong = (email: string, maTruong: string[]) => goi<{ email: string; maTruong: string[] }>("PUT", "/phan-cong", { body: { email, maTruong } });

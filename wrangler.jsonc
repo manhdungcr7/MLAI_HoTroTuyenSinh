@@ -6,7 +6,7 @@
     {
       "binding": "DB",
       "database_name": "nguyenvongai_db",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "3c9c7d34-ac41-4a52-89d6-d7566bc8aa31",
       "migrations_dir": "migrations"
     }
   ],
@@ -14,6 +14,19 @@
     {
       "binding": "KV_CONG_DONG",
       "id": "b6281182b7ff42bc8a23deb93ffdef94"
+    },
+    {
+      "binding": "RATE_KV",
+      "id": "dd9e8bea584d4b7c8af1dbe98a617535"
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+  "vectorize": [
+    {
+      "binding": "VECTORIZE",
+      "index_name": "nvai-kb"
     }
   ],
   "observability": {

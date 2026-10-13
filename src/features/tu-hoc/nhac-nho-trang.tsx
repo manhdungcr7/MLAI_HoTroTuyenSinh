@@ -71,7 +71,7 @@ export default function NhacNhoTrang() {
         </TheCaiDat>
 
         <section aria-labelledby="gui-thu" className="space-y-2">
-          <Nut kieu="vien" bieuTuong={Send} onClick={() => void guiThu()}><span id="gui-thu">Gửi thử một thông báo</span></Nut>
+          <Nut kieu="vien" bieuTuong={Send} onClick={() => void guiThu()}><span id="gui-thu">Gửi thử thông báo</span></Nut>
           {thu && (
             <div role="status" className="space-y-2">
               {thu.daGui ? (

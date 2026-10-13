@@ -2,10 +2,10 @@
 import { daCauHinhTelegram, guiTelegram, thoatHtml } from "../_thu-vien/telegram";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, json } from "../_thu-vien/phan-hoi";
-import { chay, khongHoTro } from "../_thu-vien/quyen";
+import { chay, khongHoTro, QUAN_TRI } from "../_thu-vien/quyen";
 
 export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
-  chay(ctx, o, ["qtv"], async (c) => {
+  chay(ctx, o, QUAN_TRI, async (c) => {
     if (c.request.method === "GET") return json({ daCauHinh: daCauHinhTelegram(c.env) });
     if (c.request.method !== "POST") throw khongHoTro();
     if (!daCauHinhTelegram(c.env)) throw new LoiHttp(503, "chua-cau-hinh", "Máy chủ chưa có secret TELEGRAM_BOT_TOKEN và TELEGRAM_CHAT_ID (wrangler pages secret put).");

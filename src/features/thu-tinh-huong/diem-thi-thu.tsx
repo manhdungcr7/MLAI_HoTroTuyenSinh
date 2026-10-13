@@ -13,7 +13,7 @@ import { useLuuCucBo } from "@/state/luu-cuc-bo";
 import { diemHienTaiCuaTungMon, useApp } from "@/state/store";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type LuaChon, type MaToHop, type MonId, type ToneTen } from "@/state/types";
 import { ANH_TRONG, CAC_TO_HOP, chonToHopHienThi, chupTruocSau, dieuKienTuHoSo, docODiem, tongCacToHop, vietDiem, type AnhTruocSau, type Diem } from "./tinh-toan";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDangDiem } from "@/engine/dinh-dang";
 import { ngayVN } from "@/features/muc-tieu/tinh-toan";
 
 const O_MON: { mon: MonId; icon: LucideIcon; tone: ToneTen; neuCo?: boolean }[] = [
@@ -112,7 +112,7 @@ export default function DiemThiThu() {
                   <p className="text-[12px] text-chu-phu">{TO_HOP[ma].map((m) => TEN_MON_NGAN[m]).join(" – ")}</p>
                   {sau.tong === null
                     ? <p className="mt-1 text-[13px] font-semibold text-cam-chu">Thiếu {sau.thieu.map((m) => TEN_MON_NGAN[m]).join(", ")}</p>
-                    : <p className={gop("mt-0.5 text-[24px] leading-tight font-extrabold", MAU_TO_HOP[ma])}>{dinhDang(sau.tong, 2)}</p>}
+                    : <p className={gop("mt-0.5 text-[24px] leading-tight font-extrabold", MAU_TO_HOP[ma])}>{dinhDangDiem(sau.tong)}</p>}
                   {chenh !== null && chenh !== 0 && (
                     <p className={gop("text-[12px] font-bold", chenh > 0 ? "text-luc-chu" : "text-do-chu")}>{chenh > 0 ? "▲ +" : "▼ "}{chenh} so với trước</p>
                   )}
@@ -140,7 +140,7 @@ export default function DiemThiThu() {
               {s.diemThi.map((d, i) => ({ d, i })).sort((a, b) => (a.d.ngay === b.d.ngay ? b.i - a.i : a.d.ngay < b.d.ngay ? 1 : -1)).map(({ d, i }) => (
                 <li key={i} className="rounded-xl bg-trang border border-vien px-3 py-2 flex items-center gap-2 min-h-12">
                   <span className="min-w-0 flex-1 text-[14px] text-chu">
-                    <b className="text-muc">{TEN_MON[d.mon]}</b> {dinhDang(d.diem, 2)} điểm
+                    <b className="text-muc">{TEN_MON[d.mon]}</b> {dinhDangDiem(d.diem)} điểm
                     <span className="block text-[12px] text-chu-phu">{ngayVN(d.ngay)}</span>
                   </span>
                   {xoaDang === i ? (

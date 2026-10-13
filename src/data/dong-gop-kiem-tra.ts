@@ -29,7 +29,9 @@ export type LoaiThongTin = (typeof LOAI_THONG_TIN)[number];
 export const NHAN_LOAI: Record<LoaiThongTin, string> = { hoc_phi: "Học phí", hoc_bong: "Học bổng", noi_luu_tru: "Nơi lưu trú", review: "Đánh giá", luu_y: "Lưu ý", khac: "Khác" };
 export const NHAN_CONG_DONG = "Thông tin cộng đồng cung cấp, chưa phải số liệu chính thức";
 export const NHAN_NOI_LUU_TRU = "Do sinh viên cung cấp";
-export type VaiTro = "qtv" | "ctv";
+export type VaiTro = "sa" | "qtv" | "ctv";
+/** sa (siêu quản trị) và qtv đều có quyền quản trị nội dung; sa hơn ở quản lý tài khoản quản trị và hành động hệ thống. */
+export const laQuanTri = (vaiTro: VaiTro | null | undefined): boolean => vaiTro === "sa" || vaiTro === "qtv";
 
 export interface DuLieuHocPhi { donVi: "trieu_nam" | "trieu_tin_chi"; mucThap: number; mucCao: number; phamVi: string; loTrinhTang?: string; ghiChu?: string }
 export interface DuLieuHocBong { ten: string; giaTri: string; dieuKien: string; hanNop?: string }
@@ -298,12 +300,12 @@ export function kiemTraThongTin(x: unknown, o: TuyChonKiemTra = {}): KetQua<Thon
 
 /** Quyền ghi: qtv sửa mọi trường; ctv chỉ sửa trường được giao. */
 export function coQuyenSuaTruong(vaiTro: VaiTro | null | undefined, maTruong: string, phanCong: TapMa): boolean {
-  if (vaiTro === "qtv") return true;
+  if (laQuanTri(vaiTro)) return true;
   return vaiTro === "ctv" && hopLeMa(maTruong, phanCong);
 }
 /** Quyền đặt trạng thái: ctv chỉ đặt nháp hoặc chờ duyệt; duyệt, ẩn (kể cả lưu ý) chỉ qtv. */
 export function duocDatTrangThai(vaiTro: VaiTro | null | undefined, trangThai: TrangThaiBai): boolean {
-  if (vaiTro === "qtv") return true;
+  if (laQuanTri(vaiTro)) return true;
   return vaiTro === "ctv" && (trangThai === "nhap" || trangThai === "cho");
 }
 /** Khóa lạc quan: true nếu phiên bản client gửi lên khớp phiên bản hiện có (lệch thì API trả 409). */

@@ -46,10 +46,10 @@ export function KhungKhongThanh() {
 
 export function Logo({ nho }: { nho?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-1.5 font-extrabold text-muc">
+    <Link to={DUONG_DAN.gioiThieu()} className="inline-flex items-center gap-1.5 font-extrabold text-muc hover:opacity-90 transition-opacity">
       <span className="size-8 rounded-lg gd-xanh text-white grid place-items-center"><GraduationCap size={18} /></span>
       <span className={gop("so-lon", nho ? "text-[14px]" : "text-[15px]")}>Nguyện Vọng AI</span>
-    </span>
+    </Link>
   );
 }
 

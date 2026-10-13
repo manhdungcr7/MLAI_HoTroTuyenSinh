@@ -8,7 +8,7 @@ import type { AppState } from "@/state/store";
 import { TEN_MON, TEN_MON_NGAN, TEN_MON_THEM, TEN_MON_THEM_NGAN, type DiemDayDu, type LuaChon, type MonId, type MonThem, type MucPhuHop, type ToneTen } from "@/state/types";
 import { khongRoNet, nhomNganhGoiY } from "@/features/huong-nghiep/cau-hoi";
 import { cungNoi } from "./bo-loc";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 
 export interface BoiCanh {
   tong: number | null; // tổng Toán + Lý + Anh hiện tại, null nếu chưa nhập đủ (cho các màn chưa tính theo tổ hợp từng ngành)
@@ -61,7 +61,7 @@ export interface KetQuaPhuHop {
   luuY: string[]; // điều cần lưu ý sinh từ hồ sơ của em
 }
 
-const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? dinhDang(n, 2) : dinhDang(Math.round(n * 10) / 10, 1));
+const so = (n: number) => (Math.abs(n) < 0.1 && n !== 0 ? dinhDangDiem(n) : dinhDang(Math.round(n * 10) / 10, 1));
 
 /** Trường có nằm trong khu vực em ưu tiên không. "Tỉnh khác" khớp mọi nơi ngoài 3 thành phố lớn. */
 export function dungKhuVuc(lc: LuaChon, uuTien: string[]): boolean | null {

@@ -45,6 +45,7 @@ const so = (n: number) => (Math.round(n * 10) / 10).toFixed(1).replace(".", ",")
 
 /** Ngân sách phút cho việc của tuần: dùng 80% thời gian trống (chừa chỗ dời lịch), mệt thì giảm một nửa, không quá 20 giờ. */
 export function nganSachPhut(phutTuHoc: number, tam: TamTrang = "binhThuong"): number {
+  if (!Number.isFinite(phutTuHoc) || phutTuHoc <= 0) return 0;
   const he = tam === "met" ? 0.5 : tam === "tot" ? 0.9 : 0.8;
   return Math.min(20 * 60, lam15(phutTuHoc * he));
 }
@@ -64,6 +65,7 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
     return { k, w: k.thieu + 0.3 + (dangXuong ? 0.25 : 0) + (chuaCoDiem ? 0.3 : 0), dangXuong, chuaCoDiem };
   });
   const tongW = trongSo.reduce((s, x) => s + x.w, 0);
+  if (tongW <= 0) return [];
   let phan = trongSo.map((x) => ({ ...x, phut: Math.max(45, lam15((ngan * x.w) / tongW)) }));
   // Vượt ngân sách thì bớt dần ở môn có trọng số thấp nhất (không bỏ hẳn môn nào dưới 45 phút nếu còn chỗ).
   let tong = phan.reduce((s, x) => s + x.phut, 0);

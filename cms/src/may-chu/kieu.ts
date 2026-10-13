@@ -4,8 +4,10 @@ import type { VaiTro } from "@/data/dong-gop-kiem-tra";
 
 export type { VaiTro };
 
-export interface Toi { email: string; vaiTro: VaiTro; truongDuocGiao: string[] }
-export interface NguoiCms { email: string; vaiTro: VaiTro; taoLuc: string }
+export interface Toi { email: string; vaiTro: VaiTro; truongDuocGiao: string[]; phaiDoiMatKhau?: boolean }
+export interface NguoiCms { email: string; vaiTro: VaiTro; taoLuc: string; soTruong?: number }
+/** Mật khẩu tạm chỉ có trong phản hồi tạo người hoặc đặt lại, một lần duy nhất. */
+export interface NguoiMoiCms extends NguoiCms { matKhauTam: string }
 export interface PhanCongCms { email: string; maTruong: string }
 export interface NhatKyCms { id: number | string; ai: string; hanhDong: string; doiTuong: string; luc: string }
 export interface Trang<T> { muc: T[]; tong: number }

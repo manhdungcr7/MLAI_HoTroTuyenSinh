@@ -13,7 +13,7 @@ import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, loiChaoTheoChang, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
 import { changCuaEm, type Chang } from "@/state/chang";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 
 const SO_DONG_GON = 3;
 
@@ -22,7 +22,8 @@ export default function HomNay() {
   const nav = useNavigate();
   const nv = chonNguyenVongLamMucTieu(s);
   // Chưa có hồ sơ (lần đầu mở ứng dụng): đưa tới màn Chào mừng.
-  if (!s.hoSo.hoanTat && !s.hoSo.hoTen) return <Navigate to={DUONG_DAN.chao()} replace />;
+  const daCoDuLieu = Boolean(s.hoSo.hoanTat || s.hoSo.hoTen.trim() || s.hoSo.khoi || s.hoSo.tinh || s.hoSo.nganhQuanTam.length || Object.values(s.hoSo.diem).some((d) => d !== null));
+  if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
 
   const m = mucTieuDayDu(s);
   const ten = s.hoSo.hoTen.trim() ? tenGoi(s.hoSo.hoTen) : "em";
@@ -98,7 +99,7 @@ function TheMucTieu({ m, thieuMon, ngayThi, onClick }: { m: MucTieuDayDu; thieuM
         </span>
         <span className="mt-2 flex items-center gap-1.5 text-[12px] text-chu-phu">
           <CalendarDays size={14} className="shrink-0" />
-          {dongDuoi}{m.uuTienCong > 0 && ` · gồm +${dinhDang(m.uuTienCong, 2)} ưu tiên`}
+          {dongDuoi}{m.uuTienCong > 0 && ` · gồm +${dinhDangDiem(m.uuTienCong)} ưu tiên`}
         </span>
       </NenHero>
     </button>

@@ -5,7 +5,7 @@ import { chuyenTrangThaiWorkflow, taoBanNhapMoi, taoPhienBanSuaDoi } from "../..
 import { cauChenBanGhi, cauKiemToan, daThayDoi, kiemTraData, kiemTraEntity, kiemTraGhiChu, kiemTraMucDo, kiemTraNguon, mapTuD1, maTruongCua, TRANG_THAI_CMS, type HangBanGhiD1 } from "../_thu-vien/ban-ghi-d1";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, cam, docThan, docTrang, json, khongTimThay, locEnum, sai } from "../_thu-vien/phan-hoi";
-import { chay, khongHoTro, TAP_TRUONG, type NguCanh } from "../_thu-vien/quyen";
+import { chay, khongHoTro, TAP_TRUONG, type NguCanh, MOI_VAI } from "../_thu-vien/quyen";
 import { thongBaoSuKien } from "../_thu-vien/telegram";
 
 const lech = () => new LoiHttp(409, "lech-trang-thai", "Bản ghi vừa được người khác thay đổi. Hãy tải lại rồi thao tác tiếp.");
@@ -30,8 +30,8 @@ async function layHang(c: NguCanh, id: string): Promise<HangBanGhiD1> {
 }
 
 export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
-  chay(ctx, o, ["qtv", "ctv"], async (c) => {
-    const vaiTroCms: VaiTroCms = c.vaiTro === "qtv" ? "admin" : "contributor";
+  chay(ctx, o, MOI_VAI, async (c) => {
+    const vaiTroCms: VaiTroCms = c.laQuanTri ? "admin" : "contributor";
     const m = c.request.method;
 
     // ===== GET: danh sách (phân trang) hoặc một bản ghi theo ?id= =====
@@ -63,7 +63,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       const tt = locEnum(c.url.searchParams.get("status"), TRANG_THAI_CMS, "status");
       if (tt) { dk.push("status = ?"); gt.push(tt); }
       const nguoiTao = c.url.searchParams.get("createdBy");
-      if (nguoiTao && c.vaiTro === "qtv") { dk.push("created_by = ?"); gt.push(nguoiTao.toLowerCase()); }
+      if (nguoiTao && c.laQuanTri) { dk.push("created_by = ?"); gt.push(nguoiTao.toLowerCase()); }
       const where = dk.length ? `WHERE ${dk.join(" AND ")}` : "";
       const [dem, ds] = (await c.d1.batch([
         c.d1.prepare(`SELECT COUNT(*) AS c FROM ban_ghi_cms ${where}`).bind(...gt),

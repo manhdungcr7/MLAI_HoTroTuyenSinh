@@ -7,6 +7,7 @@ import {
 import { CAC_TAB } from "@cms/duong-dan";
 import { gop } from "@cms/thanh-phan/ui/nut-the";
 import { KhungPhien, usePhien } from "@cms/trang-thai/phien";
+import { NutTaiKhoan } from "@cms/trang-thai/dang-nhap";
 
 const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
   tongQuan: LayoutDashboard,
@@ -46,7 +47,7 @@ function SidebarDesktop() {
     <aside className="hidden md:flex flex-col w-64 lg:w-72 bg-trang border-r border-vien shrink-0 sticky top-0 h-screen select-none z-30">
       <div className="p-5 border-b border-vien space-y-4">
         <Logo />
-        <div className="p-3 rounded-xl bg-nen border border-vien"><TheNguoiDung /></div>
+        <div className="p-3 rounded-xl bg-nen border border-vien space-y-2"><TheNguoiDung /><NutTaiKhoan /></div>
       </div>
       <nav aria-label="Điều hướng chính" className="flex-1 p-3.5 space-y-1.5 overflow-y-auto">
         {tabs.map((t) => {
@@ -105,11 +106,12 @@ function DauMobile() {
   return (
     <header className="md:hidden sticky top-0 z-30 bg-trang border-b border-vien px-4 py-2.5 flex items-center justify-between gap-2">
       <Logo nho />
-      <span title={toi.email} className={gop("px-2.5 py-1 rounded-full font-extrabold text-xs flex items-center gap-1 shrink-0",
+      <span title={toi.email} aria-label={laQtv ? "Quản trị viên" : "Cộng tác viên"} className={gop("px-2.5 py-1 rounded-full font-extrabold text-xs flex items-center gap-1 shrink-0",
         laQtv ? "bg-xanh-nhat text-xanh" : "bg-luc-nhat text-luc-chu")}>
         {laQtv ? <Shield size={12} /> : <UserCheck size={12} />}
-        {laQtv ? "Quản trị viên" : "Cộng tác viên"}
+        <span className="hidden min-[430px]:inline">{laQtv ? "Quản trị viên" : "Cộng tác viên"}</span>
       </span>
+      <NutTaiKhoan />
     </header>
   );
 }

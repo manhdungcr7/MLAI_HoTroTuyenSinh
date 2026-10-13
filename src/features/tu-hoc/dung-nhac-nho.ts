@@ -2,7 +2,7 @@
 //   function NhacNhoNen() { useNhacNho(); return null; }   rồi đặt <NhacNhoNen /> cạnh <RouterProvider />.
 // Giới hạn: chỉ nhắc được khi ứng dụng đang mở (hoặc đã thêm lên màn hình chính và còn chạy nền).
 // Nhắc khi đã tắt hẳn ứng dụng cần máy chủ gửi thông báo đẩy, sẽ làm khi có máy chủ.
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "@/state/store";
 import { nhacSapToi, type NhacSapToi } from "./nhac-nho";
 
@@ -46,6 +46,9 @@ const ghiDaNhac = (id: string) => { try { sessionStorage.setItem(KHOA_DA_NHAC, J
  */
 export function useNhacNho(onNhac?: (n: NhacSapToi) => void): { sapToi: NhacSapToi[] } {
   const { s } = useApp();
+  const onNhacRef = useRef(onNhac);
+  useEffect(() => { onNhacRef.current = onNhac; }, [onNhac]);
+
   // tính lại mỗi 30 phút để cửa sổ 24 giờ luôn trượt theo thời gian
   const [nhip, setNhip] = useState(0);
   useEffect(() => { const t = window.setInterval(() => setNhip((x) => x + 1), 30 * 60_000); return () => window.clearInterval(t); }, []);
@@ -62,10 +65,10 @@ export function useNhacNho(onNhac?: (n: NhacSapToi) => void): { sapToi: NhacSapT
       .map((n) => window.setTimeout(() => {
         ghiDaNhac(n.id);
         void guiThongBao(n.tieuDe, n.moTa, n.id);
-        onNhac?.(n);
+        onNhacRef.current?.(n);
       }, Math.max(0, n.luc.getTime() - Date.now())));
     return () => hen.forEach((t) => window.clearTimeout(t));
-  }, [sapToi, s.nhacNho.bat, onNhac]);
+  }, [sapToi, s.nhacNho.bat]);
 
   return { sapToi };
 }

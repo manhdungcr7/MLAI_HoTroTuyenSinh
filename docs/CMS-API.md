@@ -1,6 +1,6 @@
 # CMS API (Cloudflare Pages Functions + D1 + KV)
 
-Mã nguồn: `cms/functions/api/*`. Mọi endpoint đều: xác thực Cloudflare Access (JWT) -> tra bảng `quan_tri` -> kiểm vai trò ở MÁY CHỦ -> xử lý. Không có dữ liệu mẫu ở đường chạy thật; thiếu cấu hình thì trả lỗi JSON thật (500 `chua-cau-hinh`), không rơi về số 0.
+Mã nguồn: `cms/functions/api/*`. Mọi endpoint đều: cookie phiên `nv_cms` (đăng nhập email + mật khẩu) -> tra bảng `quan_tri` -> kiểm vai trò ở MÁY CHỦ -> xử lý. Không có dữ liệu mẫu ở đường chạy thật; thiếu cấu hình thì trả lỗi JSON thật (500 `chua-cau-hinh`), không rơi về số 0.
 
 ## Lỗi chuẩn
 `{ "loi": "...", "ma": "du-lieu-sai", "thongBao": "...", "chiTiet": [{ "truong": "source.url", "thongBao": "..." }] }`
@@ -8,11 +8,13 @@ Mã HTTP: 400 dữ liệu sai, 401 chưa đăng nhập, 403 thiếu quyền, 404
 Danh sách phân trang: `?trang=1&moi=50` (tối đa 50), trả `tong`.
 
 ## Xác thực và vai trò
-- Production: header `Cf-Access-Jwt-Assertion`, cần biến `TEAM_DOMAIN`, `ACCESS_AUD`. Email chưa có trong `quan_tri` thì 403.
-- `QTV_DAU_TIEN` (email, phân cách dấu phẩy): tự thành qtv khi bảng `quan_tri` còn rỗng.
+- Production: cookie `nv_cms` do `POST /api/dang-nhap` cấp (HMAC bằng secret `SESSION_SECRET`; thiếu secret thì 500 `chua-cau-hinh`). Không có cookie hợp lệ hoặc người đã bị xóa: 401 `chua-dang-nhap`. Yêu cầu ghi (không phải GET/HEAD) cần Origin/Referer cùng host, nếu không 403.
+- `POST /api/dang-nhap { email, matKhau }` -> `{ email, vaiTro, phaiDoiMatKhau }` + Set-Cookie. Sai email hay sai mật khẩu cùng một lỗi 401; sai 5 lần/15 phút theo IP + email thì 429. `POST /api/dang-xuat` xóa cookie (204). `POST /api/doi-mat-khau { matKhauCu, matKhauMoi }` (mật khẩu mới từ 8 ký tự) cấp cookie mới.
+- Khi `phaiDoiMatKhau` là true (mật khẩu tạm), mọi API khác trừ `/api/toi`, `/api/doi-mat-khau` trả 403 `phai-doi-mat-khau`.
+- Tạo `sa` đầu tiên bằng `scripts/tao-sa.ts` (không còn biến `QTV_DAU_TIEN`). Vai trò: sa > qtv > ctv, xem `docs/QUAN-TRI.md`. `/api/nguoi`: GET, POST (trả `matKhauTam` một lần), PATCH `?email=` với `{ vaiTro }` hoặc `{ datLaiMatKhau: true }` (trả `matKhauTam`; qtv chỉ với ctv, không tự đặt lại cho mình), DELETE.
 - Dev local: `GIA_DANH_DEV=1` trong `cms/.dev.vars` và host localhost thì đọc email từ header `X-Gia-Danh`. Production không bao giờ bật.
 - Vai `qtv` (quản trị viên): duyệt, từ chối, xuất bản, rollback, quản lý người dùng. Vai `ctv` (cộng tác viên): tạo nháp, sửa nháp của mình, gửi duyệt, chỉ với trường được giao (`phan_cong`).
-- `GET /api/toi` -> `{ email, vaiTro, truongDuocGiao }`.
+- `GET /api/toi` -> `{ email, vaiTro, phaiDoiMatKhau, truongDuocGiao }`.
 
 ## Quy trình bản ghi (pipeline chuẩn)
 `DRAFT -> SUBMITTED -> (IN_REVIEW) -> APPROVED -> PUBLISHED`; `SUBMITTED/IN_REVIEW -> REJECTED` (bắt buộc lý do) rồi ctv sửa và gửi lại; `DRAFT/REJECTED -> ARCHIVED` (qtv). Bản cũ cùng thực thể khi bản mới xuất bản thành `SUPERSEDED`.
@@ -74,6 +76,6 @@ Secret `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (`wrangler pages secret put ...`
 - D1 `nguyenvongai_db`: tài khoản Cloudflare hiện đã đạt giới hạn số D1 (lỗi `maximum number of D1 databases`). Cần xóa một DB không dùng hoặc nâng gói, rồi `wrangler d1 create nguyenvongai_db`, dán `database_id` vào `wrangler.jsonc` và `cms/wrangler.jsonc`, chạy `wrangler d1 migrations apply nguyenvongai_db --remote` (0001-0004).
 - KV `KV_CONG_DONG` đã tạo (id trong hai file wrangler).
 - Nạp dữ liệu thật: `npx tsx scripts/khoi-tao-d1-that.ts` sinh `.wrangler/seed-d1.sql` (50 trường và 24 mức học phí, đều có link nguồn thật, không có số suy diễn), nạp bằng `wrangler d1 execute nguyenvongai_db --local|--remote --file=.wrangler/seed-d1.sql`, rồi qtv gọi `POST /api/xuat-ban-snapshot`.
-- Chạy thử local: `npm run cms:build` rồi `npm run cms:api` (`cms/chay-api-local.mjs`), API ở `http://127.0.0.1:8788`; giao diện `npm run cms:dev` (cổng 3031, proxy /api sang 8788). Đặt `GIA_DANH_DEV=1` và `QTV_DAU_TIEN=<email>` trong `cms/.dev.vars`, gọi API với header `X-Gia-Danh: <email>`.
+- Chạy thử local: `npm run cms:build` rồi `npm run cms:api` (`cms/chay-api-local.mjs`), API ở `http://127.0.0.1:8788`; giao diện `npm run cms:dev` (cổng 3031, proxy /api sang 8788). Đặt `GIA_DANH_DEV=1` và `SESSION_SECRET=<chuỗi dài>` trong `cms/.dev.vars` (người giả danh phải có dòng trong `quan_tri`), gọi API với header `X-Gia-Danh: <email>`.
   - Vì sao không chạy `wrangler pages dev` thẳng trong `cms/`: wrangler đi lên thư mục cha, đọc `wrangler.jsonc` GỐC (Worker app học sinh, `assets` thiếu `directory`) và dừng với lỗi `The assets property ... missing the required directory`. Tệp `.wrangler/deploy/config.json` ở gốc chỉ là sản phẩm sinh ra bởi `npm run build` (gitignored, không có trong repo; xóa được nhưng build sẽ sinh lại) và không phải nguyên nhân chính. Script `cms:api` copy `cms/functions`, `cms/dist`, `src`, `migrations` sang `<thư mục tạm>/nv-cms` (không có wrangler.jsonc ở phía trên), dùng wrangler của repo, tự áp migrations cục bộ, ghi đè `compatibility_date` trong bản copy về 2026-07-01 nếu workerd cục bộ cũ hơn. Dữ liệu D1 cục bộ nằm ở `<tmp>/nv-cms/cms/.wrangler/state` và được giữ giữa các lần chạy.
 - Test: `npx tsx tests/cms-api-ban-ghi.test.ts` (SQLite thật trong bộ nhớ, migrations thật, không mạng).

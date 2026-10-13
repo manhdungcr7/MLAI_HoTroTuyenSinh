@@ -13,7 +13,7 @@ import { NGUONG_PHU_HOP } from "@/engine/phan-tich";
 import type { ToneTen } from "@/state/types";
 import { BaoNho, GhiChuDuLieu, ThieuDiem, TruocSau, useLuuTinhHuong, useTinhHuong } from "./dung-chung";
 import { TEN_TRANG_THAI, bangSoSanh, moTaCongDiem, tenTinhHuong, type DongKetQua, type NhomLoc, type TrangThaiThay } from "./tinh-toan";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDangDiem } from "@/engine/dinh-dang";
 
 const TONE_TRANG_THAI: Record<TrangThaiThay, ToneTen> = { moiPhuHop: "luc", tangCoHoi: "xanh", giuNguyen: "muc", vanKho: "cam", giamDi: "do" };
 type Loc = "tatCa" | NhomLoc;
@@ -52,7 +52,7 @@ export default function KetQuaTinhHuong() {
             <div>
               <h2 className="text-[21px] leading-tight font-extrabold text-muc">{tieuDe}</h2>
               {moTa && ten.includes(" · ") && <p className="text-[13px] text-chu mt-1">Tình huống: <b className="text-xanh">{ten}</b></p>}
-              <p className="text-[13px] text-chu-phu mt-1">Tổng {maToHop}: <TruocSau truoc={kq.tongTruoc} sau={kq.tongSau} viet={(n) => dinhDang(n, 2)} /></p>
+              <p className="text-[13px] text-chu-phu mt-1">Tổng {maToHop}: <TruocSau truoc={kq.tongTruoc} sau={kq.tongSau} viet={(n) => dinhDangDiem(n)} /></p>
             </div>
 
             <NenHero tone={kq.dem.moiMo > 0 ? "luc" : "xanh"} className="p-4">
@@ -106,7 +106,7 @@ export default function KetQuaTinhHuong() {
         {thieu.length === 0 && (
           <div className="space-y-2 pt-1">
             <BaoNho bao={bao} />
-            <Nut muiTen bieuTuong={Search} onClick={() => nav(DUONG_DAN.khamPha())}>Xem lựa chọn chi tiết</Nut>
+            <Nut muiTen bieuTuong={Search} onClick={() => nav(DUONG_DAN.khamPha())}>Xem các lựa chọn</Nut>
             {kq.coThayDoi && <Nut kieu="vien" bieuTuong={Bookmark} onClick={luu}>Lưu tình huống</Nut>}
           </div>
         )}
@@ -148,7 +148,7 @@ export function SoSanhDaLuu({ t, onLuu }: { t: ReturnType<typeof useTinhHuong>; 
             <ul className="flex gap-2 w-max pb-1">
               <li className="w-[128px] rounded-xl border border-vien bg-trang p-2.5">
                 <b className="block text-[14px] text-muc">Hiện tại</b>
-                <span className="block text-[12px] text-chu-phu">{dinhDang(bang.cot[0].tong, 2)} điểm</span>
+                <span className="block text-[12px] text-chu-phu">{dinhDangDiem(bang.cot[0].tong)} điểm</span>
                 <span className="block text-[12px] text-chu-phu">{dkGoc.nganSachTrieu} triệu/năm</span>
               </li>
               {daLuu.map((th) => {

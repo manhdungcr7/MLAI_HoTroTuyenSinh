@@ -37,7 +37,8 @@ const d1: KhoD1 = {
   },
 };
 const kvMap = new Map<string, string>();
-const env: Env = { DB: d1, KV_CONG_DONG: { get: async (k) => kvMap.get(k) ?? null, put: async (k, v) => { kvMap.set(k, v); } }, GIA_DANH_DEV: "1", QTV_DAU_TIEN: "qtv@test.local" };
+const env: Env = { DB: d1, KV_CONG_DONG: { get: async (k) => kvMap.get(k) ?? null, put: async (k, v) => { kvMap.set(k, v); } }, GIA_DANH_DEV: "1" };
+db.prepare("INSERT INTO quan_tri (email, vai_tro, tao_luc) VALUES ('qtv@test.local', 'sa', 't')").run();
 
 let dem = 0;
 const goi = async (h: typeof banGhi, method: string, url: string, ai: string | null, body?: unknown) => {
@@ -54,7 +55,7 @@ const nguon = { url: "https://tuyensinh.hust.edu.vn/ktx", tieuDe: "Thông tin k�
 // 1. Xác thực: không header -> 401; email lạ -> 403
 assert.equal((await goi(banGhi, "GET", "/api/ban-ghi", null)).status, 401);
 assert.equal((await goi(banGhi, "GET", "/api/ban-ghi", "la@test.local")).status, 403);
-// qtv đầu tiên tự khởi tạo từ QTV_DAU_TIEN, rồi thêm ctv và phân công
+// qtv có sẵn trong bảng, rồi thêm ctv và phân công
 assert.equal((await goi(nguoi, "GET", "/api/nguoi", QTV)).status, 200);
 assert.equal((await goi(nguoi, "POST", "/api/nguoi", QTV, { email: CTV, vaiTro: "ctv" })).status, 201);
 assert.equal((await goi(nguoi, "POST", "/api/nguoi", QTV, { email: CTV, vaiTro: "ctv" })).status, 409);

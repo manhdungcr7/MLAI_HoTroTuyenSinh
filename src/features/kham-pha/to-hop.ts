@@ -37,7 +37,7 @@ export function tongChoLuaChon(lc: Pick<LuaChon, "toHopXet">, diem: DiemTuyY): T
   const thieu = new Set<MonKhoi>();
   for (const ma of suyRa ? Object.keys(MON_CUA_TO_HOP) : khaiBao) {
     const mon = MON_CUA_TO_HOP[ma];
-    const thieuMon = mon.filter((m) => diem[m] === null || diem[m] === undefined);
+    const thieuMon = mon.filter((m) => diem[m] === null || diem[m] === undefined || typeof diem[m] !== "number" || !Number.isFinite(diem[m]));
     if (thieuMon.length) { if (!suyRa) thieuMon.forEach((m) => thieu.add(m)); continue; }
     const tong3 = Math.round(mon.reduce((s, m) => s + (diem[m] as number), 0) * 100) / 100;
     // Điểm xét tuyển = tổng ba môn + điểm ưu tiên (giảm dần khi tổng từ 22,5 trở lên); mỗi tổ hợp tính riêng vì mức cộng phụ thuộc tổng.

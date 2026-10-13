@@ -65,7 +65,7 @@ export default function ManBoLoc() {
           {tongEm !== null ? (
             <button type="button" onClick={() => sua({ diemTu: Math.max(0, lam(tongEm! - 3)), diemDen: Math.min(30, lam(tongEm! + 2)) })}
               className="w-full min-h-12 rounded-xl bg-xanh-nhat text-xanh text-[14px] font-bold inline-flex items-center justify-center gap-2 active:brightness-95">
-              <Target size={17} />Lấy quanh điểm của em ({dinhDang(tongEm, 1)})
+              <Target size={17} />Lọc quanh điểm em ({dinhDang(tongEm, 1)})
             </button>
           ) : (
             <p className="text-[13px] text-chu-phu">Nhập điểm 3 môn của một tổ hợp trong hồ sơ để lọc nhanh quanh điểm của em.</p>

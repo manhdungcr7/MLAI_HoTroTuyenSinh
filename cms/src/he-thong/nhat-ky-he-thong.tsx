@@ -9,8 +9,10 @@ import { dinhDangLuc } from "@cms/du-lieu-truong/dinh-dang";
 const NHAN_HANH_DONG: Record<string, string> = {
   CREATE: "Tạo bản nháp", EDIT: "Sửa bản nháp", SUBMIT: "Gửi duyệt", START_REVIEW: "Bắt đầu xem xét", APPROVE: "Duyệt", REJECT: "Trả lại",
   PUBLISH: "Xuất bản", ROLLBACK: "Quay về phiên bản cũ", ARCHIVE: "Bỏ bản nháp",
-  "nguoi.them.qtv": "Thêm quản trị viên", "nguoi.them.ctv": "Thêm cộng tác viên", "nguoi.xoa": "Xóa thành viên", "phan-cong.dat": "Giao trường",
-  "quan-tri.khoi-tao": "Tạo quản trị viên đầu tiên",
+  "nguoi.them.sa": "Thêm siêu quản trị", "nguoi.them.qtv": "Thêm quản trị viên", "nguoi.them.ctv": "Thêm cộng tác viên",
+  "nguoi.doi-vai.sa": "Đổi vai thành siêu quản trị", "nguoi.doi-vai.qtv": "Đổi vai thành quản trị viên", "nguoi.doi-vai.ctv": "Đổi vai thành cộng tác viên",
+  "nguoi.xoa": "Xóa thành viên", "nguoi.xoa.sa": "Xóa siêu quản trị", "nguoi.xoa.qtv": "Xóa quản trị viên", "nguoi.xoa.ctv": "Xóa cộng tác viên", "phan-cong.dat": "Giao trường",
+  "quan-tri.khoi-tao": "Tạo quản trị viên đầu tiên", "quan-tri.khoi-tao-sa": "Tạo siêu quản trị đầu tiên",
 };
 const nhanHanhDong = (h: string) => NHAN_HANH_DONG[h] ?? h;
 

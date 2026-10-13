@@ -32,3 +32,8 @@ src/data/chuong-trinh.*of*.json
 scripts/chuong-trinh-bao-cao.*of*.json
 src/data/chuong-trinh.sm.*.json
 scripts/chuong-trinh-bao-cao.sm.*.json
+
+# Ảnh chụp và thư mục chạy của agent (không commit)
+.agent-runtime/
+screenshots-zalo/
+docs/screenshots/

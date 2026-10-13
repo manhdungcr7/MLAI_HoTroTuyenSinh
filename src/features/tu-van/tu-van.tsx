@@ -17,16 +17,19 @@ export function NutTuVan({ nguCanh }: { nguCanh: string }) {
 
 const GOI_Y = ["Em nên bắt đầu tìm ngành từ đâu?", "Điểm của em đang thiếu gì để so sánh?", "Làm sao cân bằng danh sách nguyện vọng?"];
 
-interface TinNhan { vai: "em" | "mayChu"; chu: string; nguon?: string[]; cheDo?: "ai" | "tuDong" }
+interface TinNhan { vai: "em" | "mayChu"; chu: string; nguon?: string[]; cheDo?: "ai" | "tuDong"; tang?: "cache" | "llm"; congDong?: string[]; viecTiep?: string }
 
 /** Gọi dịch vụ AI. Trả null khi dịch vụ chưa bật hoặc không gọi được: khi đó app tự trả lời từ số liệu có sẵn. */
-async function hoiAI(y: YeuCauTuVan): Promise<TraLoiTuVan | null> {
+async function hoiAI(y: YeuCauTuVan): Promise<{ kq: TraLoiTuVan | null; viecTiep?: string }> {
   try {
     const r = await fetch("/api/tu-van", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(y), signal: AbortSignal.timeout(15000) });
-    if (!r.ok) return null;
-    const d = (await r.json()) as Partial<TraLoiTuVan>;
-    return typeof d.traLoi === "string" && d.traLoi ? { traLoi: d.traLoi, nguon: Array.isArray(d.nguon) ? d.nguon : [] } : null;
-  } catch { return null; }
+    const d = (await r.json().catch(() => ({}))) as Partial<TraLoiTuVan> & { goiY?: { viecTiep?: string } };
+    if (!r.ok) return { kq: null, viecTiep: typeof d.goiY?.viecTiep === "string" ? d.goiY.viecTiep : undefined };
+    const ds = (x: unknown) => (Array.isArray(x) ? x.filter((t): t is string => typeof t === "string") : []);
+    return typeof d.traLoi === "string" && d.traLoi
+      ? { kq: { traLoi: d.traLoi, nguon: ds(d.nguon), tang: d.tang, congDong: ds(d.congDong), viecTiep: typeof d.viecTiep === "string" ? d.viecTiep : undefined } }
+      : { kq: null };
+  } catch { return { kq: null }; }
 }
 
 export default function TuVan() {
@@ -53,9 +56,9 @@ export default function TuVan() {
     setCauHoi(""); setDang(true);
     setTin((t) => [...t, { vai: "em", chu: cau }]);
     try {
-      const ai = await hoiAI(dungYeuCau(cau));
-      if (ai) setTin((t) => [...t, { vai: "mayChu", chu: ai.traLoi, nguon: ai.nguon, cheDo: "ai" }]);
-      else { const td = traLoiTuDong(cau, s, nguon); setTin((t) => [...t, { vai: "mayChu", chu: td.traLoi, nguon: td.nguon, cheDo: "tuDong" }]); }
+      const { kq: ai, viecTiep } = await hoiAI(dungYeuCau(cau));
+      if (ai) setTin((t) => [...t, { vai: "mayChu", chu: ai.traLoi, nguon: ai.nguon, cheDo: "ai", tang: ai.tang, congDong: ai.congDong, viecTiep: ai.viecTiep }]);
+      else { const td = traLoiTuDong(cau, s, nguon); setTin((t) => [...t, { vai: "mayChu", chu: td.traLoi, nguon: td.nguon, cheDo: "tuDong", viecTiep }]); }
     } finally { setDang(false); }
   };
 
@@ -91,7 +94,9 @@ export default function TuVan() {
                         })}
                       </div>
                     )}
-                    <p className="mt-1.5 text-[12px] text-chu-phu">{t.cheDo === "ai" ? "Trả lời bởi AI, chỉ dùng số liệu trong app" : "Trả lời tự động từ số liệu trong app"}</p>
+                    {t.congDong && t.congDong.length > 0 && <p className="mt-1.5 text-[12px] text-chu-phu">Có dùng ghi chú của cộng đồng, chưa phải thông tin chính thức.</p>}
+                    {t.viecTiep && <p className="mt-1.5 text-[13px] font-bold text-muc">Việc nên làm tiếp: <span className="font-normal">{t.viecTiep}</span></p>}
+                    <p className="mt-1.5 text-[12px] text-chu-phu">{t.cheDo === "ai" ? (t.tang === "cache" ? "Trả lời AI đã lưu, chỉ dùng số liệu trong app" : "Trả lời bởi AI, chỉ dùng số liệu trong app") : "Trả lời tự động từ số liệu trong app"}</p>
                   </>
                 )}
               </div>

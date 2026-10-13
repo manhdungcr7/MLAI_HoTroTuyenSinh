@@ -3,7 +3,7 @@
 import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, lyDoKhacPhuongThuc, nhanNguyenVong, type DieuKienThu } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type LuaChon, type MaToHop, type MonId, type MonThem, type NhanNguyenVong, type TinhHuongDaLuu } from "@/state/types";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 
 export type Diem = Record<MonId, number | null>;
 /** Điểm các môn thêm (Sử, Địa, Tin...) trong hồ sơ: không đổi khi em kéo thử điểm, nhưng cần để tính đúng tổ hợp của từng ngành. */
@@ -19,8 +19,8 @@ export const tongTheoNganh = (lc: LuaChon, diem: Diem, them?: DiemThem): number 
 /** Tổ hợp (trong 4 tổ hợp của app) dùng để hiện tổng điểm: theo mục tiêu nếu có, không thì tổ hợp em đủ điểm và cao nhất. */
 export function chonToHopHienThi(diem: Diem, mucTieu: { maToHop: MaToHop; toHop: MonId[] } | null): { ma: MaToHop; toHop: MonId[] } {
   if (mucTieu) return { ma: mucTieu.maToHop, toHop: mucTieu.toHop };
-  const du = (["A01", "A00", "D01", "B00"] as MaToHop[]).filter((ma) => TO_HOP[ma].every((m) => diem[m] !== null && diem[m] !== undefined));
-  const tot = du.sort((a, b) => TO_HOP[b].reduce((t, m) => t + diem[m]!, 0) - TO_HOP[a].reduce((t, m) => t + diem[m]!, 0))[0] ?? "A01";
+  const du = (["A01", "A00", "D01", "B00"] as MaToHop[]).filter((ma) => TO_HOP[ma].every((m) => typeof diem[m] === "number" && Number.isFinite(diem[m])));
+  const tot = du.sort((a, b) => TO_HOP[b].reduce((t, m) => t + (diem[m] ?? 0), 0) - TO_HOP[a].reduce((t, m) => t + (diem[m] ?? 0), 0))[0] ?? "A01";
   return { ma: tot, toHop: TO_HOP[tot] };
 }
 export type UuTien = DieuKienThu["uuTien"];
@@ -52,7 +52,7 @@ export function dieuKienTuHoSo(h: Pick<HoSo, "nganSach" | "khuVuc" | "quanTamVie
     nganSachTrieu: h.nganSach ? NGAN_SACH_TOI_DA[h.nganSach] : NGAN_SACH_KHONG_GIOI_HAN,
     coNganSach: !!h.nganSach,
     // Một nơi cụ thể thì ràng buộc theo nơi đó. Nhiều nơi hoặc "Tỉnh khác" thì không ràng buộc (tránh phạt oan trường ở nơi em đã chọn).
-    khuVuc: h.khuVuc.length === 1 && h.khuVuc[0] !== "Tỉnh khác" ? h.khuVuc[0] : "",
+    khuVuc: Array.isArray(h.khuVuc) && h.khuVuc.length === 1 && h.khuVuc[0] !== "Tỉnh khác" ? h.khuVuc[0] : "",
     uuTien,
   };
 }
@@ -81,7 +81,11 @@ export function gonCongMon(c: Partial<Record<MonId, number>>): Partial<Record<Mo
 /** Điểm sau khi cộng/trừ, giữ trong khoảng 0–10. Môn chưa có điểm vẫn là null. */
 export function apDungCong(diem: Diem, congMon: Partial<Record<MonId, number>>): Diem {
   const ra = { ...diem };
-  for (const m of CAC_MON) if (ra[m] !== null && congMon[m]) ra[m] = lam(kep(ra[m]! + congMon[m]!, 0, 10));
+  for (const m of CAC_MON) {
+    if (ra[m] !== null && typeof ra[m] === "number" && Number.isFinite(ra[m]) && congMon[m] && Number.isFinite(congMon[m])) {
+      ra[m] = lam(kep(ra[m]! + congMon[m]!, 0, 10));
+    }
+  }
   return ra;
 }
 
@@ -89,9 +93,11 @@ export function apDungCong(diem: Diem, congMon: Partial<Record<MonId, number>>):
  * Tổng 3 môn, làm tròn 2 chữ số. engine/tongDiem làm tròn 1 chữ số nên 8.75 + 8.5 + 8.5 thành 25.8;
  * ở đây em kéo từng 0.25 điểm nên cần tổng chính xác như cách cộng điểm xét tuyển.
  */
-export const tongDiem = (diem: Diem, toHop: MonId[]) => lam(toHop.reduce((t, m) => t + (diem[m] ?? 0), 0));
+export const tongDiem = (diem: Diem, toHop: MonId[]) =>
+  lam(toHop.reduce((t, m) => t + (typeof diem[m] === "number" && Number.isFinite(diem[m]) ? diem[m]! : 0), 0));
 
-export const monThieu = (diem: Diem, toHop: MonId[]) => toHop.filter((m) => diem[m] === null);
+export const monThieu = (diem: Diem, toHop: MonId[]) =>
+  toHop.filter((m) => diem[m] === null || diem[m] === undefined || typeof diem[m] !== "number" || !Number.isFinite(diem[m]));
 
 // ---------- Kết quả một tình huống ----------
 
@@ -347,7 +353,7 @@ const phoBien = (ds: DongTruocSau[]) => {
 function dongChuyenNhom(a: AnhTruocSau, ten: string): DongTomTat {
   if (!a.coTruoc) {
     const vua = a.dong.filter((d) => d.nhanSau !== "Thử sức").length;
-    return { loai: "len", tieuDe: `Lần đầu đủ điểm ${a.maToHop}: ${dinhDang(a.tongSau, 2)}`, moTa: `${vua}/${a.dong.length} ${ten} ở mức Vừa sức trở lên` };
+    return { loai: "len", tieuDe: `Lần đầu đủ điểm ${a.maToHop}: ${dinhDangDiem(a.tongSau)}`, moTa: `${vua}/${a.dong.length} ${ten} ở mức Vừa sức trở lên` };
   }
   const len = a.dong.filter((d) => HANG_NHAN[d.nhanSau] > HANG_NHAN[d.nhanTruoc]);
   const xuong = a.dong.filter((d) => HANG_NHAN[d.nhanSau] < HANG_NHAN[d.nhanTruoc]);

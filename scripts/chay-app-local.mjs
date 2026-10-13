@@ -11,7 +11,7 @@ import { spawnSync } from "node:child_process";
 const goc = join(dirname(fileURLToPath(import.meta.url)), "..");
 const g = join(tmpdir(), "nv-app");
 const wrangler = join(goc, "node_modules", ".bin", process.platform === "win32" ? "wrangler.cmd" : "wrangler");
-const trangThai = join(tmpdir(), "nv-cms", "cms", ".wrangler", "state"); // cùng nơi `cms:api` lưu D1/KV
+const trangThai = process.env.NV_TRANG_THAI || join(tmpdir(), "nv-cms", "cms", ".wrangler", "state"); // cùng nơi `cms:api` lưu D1/KV (đặt NV_TRANG_THAI để dùng thư mục khác)
 
 if (!existsSync(join(goc, "dist"))) { console.error("Chưa có dist. Chạy `npm run build` trước."); process.exit(1); }
 for (const t of ["dist", "functions", "src", "cms"]) rmSync(join(g, t), { recursive: true, force: true });

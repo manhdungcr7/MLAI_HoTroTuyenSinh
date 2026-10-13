@@ -19,7 +19,7 @@ import type { LuaChon, ToneTen } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
-import { dinhDang } from "@/engine/dinh-dang";
+import { dinhDangDiem } from "@/engine/dinh-dang";
 import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
 import { NutBaoSai } from "./bao-sai-sheet";
 import { KhoiDuBao } from "./khoi-du-bao";
@@ -102,13 +102,13 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
               <span className="text-[14px] text-chu">Năm {n}</span>
               <span className="flex items-center gap-3">
                 {link && <span className="text-[13px]"><LinkNguon url={link.url} trang={link.trang} /></span>}
-                <b className="text-[16px] text-muc tabular-nums">{dinhDang(d, 2)}</b>
+                <b className="text-[16px] text-muc tabular-nums">{dinhDangDiem(d)}</b>
               </span>
             </li>
           );
         })}
       </ul>
-      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em: <b className="text-chu">{dinhDang(diemEm, 2)}</b>{uuTienCong ? ` (gồm +${dinhDang(uuTienCong, 2)} ưu tiên)` : ""}</p>}
+      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của em: <b className="text-chu">{dinhDangDiem(diemEm)}</b>{uuTienCong ? ` (gồm +${dinhDangDiem(uuTienCong)} ưu tiên)` : ""}</p>}
     </section>
   );
 }

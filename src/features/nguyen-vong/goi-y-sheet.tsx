@@ -17,7 +17,7 @@ export function NutGoiYDanhSach({ onMo, kieu = "mac-dinh" }: { onMo: () => void;
   const co = coDiemDeSo(boiCanhTu(s));
   return (
     <Nut kieu={kieu === "vien" ? "vien" : undefined} bieuTuong={Sparkles} onClick={onMo} disabled={!co}>
-      {co ? "Gợi ý danh sách cho em" : "Nhập điểm để mình gợi ý danh sách"}
+      {co ? "Gợi ý danh sách cho em" : "Nhập điểm để nhận gợi ý"}
     </Nut>
   );
 }
@@ -53,7 +53,7 @@ export function GoiYSheet({ mo, dong }: { mo: boolean; dong: () => void }) {
         </ul>
       )}
       <p className="mt-3 text-[12px] text-chu-phu">Nhãn là gợi ý theo điểm chuẩn các năm trước, không phải cam kết trúng tuyển. Em đối chiếu với đề án của trường trước khi quyết định.</p>
-      {ds.length > 0 && <div className="mt-3"><Nut bieuTuong={Plus} onClick={themTatCa}>Thêm cả {ds.length} ngành vào danh sách</Nut></div>}
+      {ds.length > 0 && <div className="mt-3"><Nut bieuTuong={Plus} onClick={themTatCa}>Lưu cả {ds.length} ngành vào danh sách</Nut></div>}
     </HopTruot>
   );
 }

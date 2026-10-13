@@ -2,11 +2,11 @@
 import { cauNhatKy, TOI_DA_PHAN_CONG } from "../_thu-vien/d1";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, cam, docThan, docTrang, json, sai } from "../_thu-vien/phan-hoi";
-import { chay, khongHoTro, TAP_TRUONG } from "../_thu-vien/quyen";
-import { chuanHoaEmail, laEmail } from "../_thu-vien/xac-thuc-access";
+import { chay, khongHoTro, TAP_TRUONG, MOI_VAI } from "../_thu-vien/quyen";
+import { chuanHoaEmail, laEmail } from "../_thu-vien/xac-thuc";
 
 export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
-  chay(ctx, o, ["qtv", "ctv"], async (c) => {
+  chay(ctx, o, MOI_VAI, async (c) => {
     if (c.request.method === "GET") {
       const t = docTrang(c.url);
       const hoi = c.url.searchParams.get("email");

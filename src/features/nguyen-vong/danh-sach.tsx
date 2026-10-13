@@ -27,7 +27,7 @@ const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lự
 
 export default function DanhSachNguyenVong() {
   const nav = useNavigate();
-  const { s, themNguyenVong, xoaNguyenVong, doiViTri } = useApp();
+  const { s, datNguyenVong, xoaNguyenVong, doiViTri } = useApp();
   const diemMon = diemDayDu(s);
   const tongTot = toHopTotNhat(diemMon);
   const tong = tongTot.tong;
@@ -53,11 +53,11 @@ export default function DanhSachNguyenVong() {
   const xoa = (id: string) => {
     const viTri = s.nguyenVong.indexOf(id);
     const d = ds[viTri];
-    const conLai = s.nguyenVong.length - 1;
+    const snapshotCu = [...s.nguyenVong];
     xoaNguyenVong(id);
     setDangXoa(null); setDangSua(null);
-    // Hoàn tác: thêm lại (vào cuối) rồi kéo về đúng chỗ cũ. Hai lệnh nối tiếp nên store áp dụng theo thứ tự.
-    bao(`Đã xóa NV${viTri + 1} · ${d?.lc?.truong ?? "nguyện vọng"}`, () => { themNguyenVong(id); doiViTri(conLai, viTri); });
+    // Hoàn tác: khôi phục chính xác danh sách cũ bằng snapshot
+    bao(`Đã xóa NV${viTri + 1} · ${d?.lc?.truong ?? "nguyện vọng"}`, () => datNguyenVong(snapshotCu));
   };
 
   const dongSua = ds.find((d) => d.id === dangSua);

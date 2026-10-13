@@ -5,7 +5,7 @@ Tài liệu cho người quản trị hệ thống (chủ tài khoản Cloudflar
 ## 1. Bức tranh tổng
 
 ```
-Tình nguyện viên (điện thoại) -> CMS (project Pages `nguyenvongai-cms`, sau Cloudflare Access)
+Tình nguyện viên (điện thoại) -> CMS (project Pages `nguyenvongai-cms`, đăng nhập email + mật khẩu)
         -> D1 `nguyenvongai_db`  (bản ghi, nhật ký, hộp thư, snapshot)
         -> quản trị viên duyệt -> Xuất bản -> D1 + KV `KV_CONG_DONG` (manifest + snapshot có mã băm)
 Học sinh (app, project Pages `nguyenvongai`)
@@ -21,7 +21,8 @@ Hai project Pages dùng chung **một** D1 và **một** KV (cùng id, cùng tê
 
 ```
 npm run build && npm run cms:build
-echo "GIA_DANH_DEV=1`nQTV_DAU_TIEN=ban@example.com" > cms/.dev.vars   # (PowerShell) hai dòng, tệp bị .gitignore
+echo "GIA_DANH_DEV=1`nSESSION_SECRET=bi-mat-cuc-bo-0123456789" > cms/.dev.vars   # (PowerShell) hai dòng, tệp bị .gitignore
+# GIA_DANH_DEV chỉ để chạy thử: bỏ qua mật khẩu, chỉ có tác dụng ở localhost; người đó phải có dòng trong `quan_tri`
 npm run cms:api        # CMS + API, http://127.0.0.1:8788 (D1/KV cục bộ, tự áp migrations)
 npm run app:local      # app học sinh + Functions, http://127.0.0.1:8790, DÙNG CHUNG D1/KV với CMS
 ```
@@ -31,16 +32,34 @@ Thử vòng: nhập điểm chuẩn ở CMS (Dữ liệu trường, một trư�
 ## 3. Tạo hạ tầng thật (một lần, cần chủ tài khoản)
 
 1. **D1**: `npx wrangler d1 create nguyenvongai_db`. *Lưu ý:* tài khoản hiện báo `maximum number of D1 databases`; cần xóa một DB không dùng hoặc nâng gói trước. Dán `database_id` vào `wrangler.jsonc` và `cms/wrangler.jsonc` (đang là `00000000-…`).
-2. **Migrations**: `npx wrangler d1 migrations apply nguyenvongai_db --remote` (0001 đến 0005).
+2. **Migrations**: `npx wrangler d1 migrations apply nguyenvongai_db --remote` (0001 đến 0007). Migration 0006 dựng lại bảng `quan_tri` để nhận vai `sa`; 0007 thêm cột mật khẩu (`mat_khau`, `phai_doi_mat_khau`, `mat_khau_luc`). Dữ liệu cũ giữ nguyên, nhưng những người đã có trong bảng chưa có mật khẩu: sa/qtv phải "Đặt lại mật khẩu" cho họ (hoặc chạy lại `scripts/tao-sa.ts` cho chính mình).
 3. **KV**: namespace `KV_CONG_DONG` đã tạo (id nằm trong hai tệp wrangler). Tư vấn AI dùng một KV riêng cho giới hạn tần suất (`RATE_KV`), đừng nhầm.
 4. **Gắn binding** ở cả hai project Pages (Settings > Bindings): D1 `DB`, KV `KV_CONG_DONG`.
-5. **Project CMS**: tạo project Pages `nguyenvongai-cms` (Direct Upload). Đặt biến `TEAM_DOMAIN` (ví dụ `ten-nhom.cloudflareaccess.com`), `ACCESS_AUD` (Application Audience tag), `QTV_DAU_TIEN` (email quản trị viên đầu tiên). Secret tùy chọn `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` để nhận thông báo.
-6. **Cloudflare Access** (Zero Trust > Access > Applications): bảo vệ toàn bộ tên miền CMS, chính sách cho phép danh sách email, xác thực một lần qua email. **Không bao giờ** đặt `GIA_DANH_DEV` ở production.
+5. **Project CMS**: tạo project Pages `nguyenvongai-cms` (Direct Upload). Đặt secret ký phiên (bắt buộc, thiếu thì mọi API trả 500 `chua-cau-hinh`): `openssl rand -base64 32` rồi `npx wrangler pages secret put SESSION_SECRET --project-name=nguyenvongai-cms`. Đổi secret này thì mọi người bị đăng xuất. Secret tùy chọn `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` để nhận thông báo. Không dùng Cloudflare Access; **không bao giờ** đặt `GIA_DANH_DEV` ở production.
+6. **Siêu quản trị đầu tiên**: `npx tsx scripts/tao-sa.ts ban@example.com --remote` (thêm `--mat-khau=...` nếu muốn tự chọn; bỏ cờ `--remote` thì chỉ in SQL). Mật khẩu tạm in ra màn hình một lần; đăng nhập vào CMS rồi đổi ngay. Chạy lại lệnh này cũng là cách cứu hộ khi mất mật khẩu của sa cuối cùng.
 7. **CI**: đặt Repository variable `DEPLOY_CMS = true` (Settings > Secrets and variables > Actions > Variables) để mỗi lần đẩy `main` tự triển khai CMS (`.github/workflows/deploy.yml`). Cần secret `CLOUDFLARE_API_TOKEN` (quyền Pages, D1).
 8. **Nạp dữ liệu ban đầu** (tùy chọn): `npx tsx scripts/khoi-tao-d1-that.ts` rồi `wrangler d1 execute nguyenvongai_db --remote --file=.wrangler/seed-d1.sql`. Kiểm lại nội dung tệp seed trước khi nạp: dữ liệu CMS luôn phải có nguồn thật (xem `docs/DU-LIEU.md`).
+8b. **Bản xuất bản đầu tiên** (thay cho bước 8 nếu chỉ cần dữ liệu có nguồn thật): `npx tsx scripts/xuat-ban-ban-dau.ts --local` để thử (D1/KV cục bộ; xem bằng `NV_TRANG_THAI=<thư mục --state> node scripts/chay-app-local.mjs`), rồi `--remote` (cần `wrangler login`; tự dừng nếu D1 đã có dữ liệu của CMS). Nạp 66 trường + 721 học phí có link đề án, ghi D1, KV và Vectorize qua một Worker tạm (không deploy). Chạy lại an toàn; `--chi-vector` chỉ nhúng lại.
 9. **Tư vấn AI**: thêm secret `ANTHROPIC_API_KEY` (hoặc `OPENAI_API_KEY`) cho project `nguyenvongai`. Thiếu khóa thì app tự trả lời từ dữ liệu.
 
-Kiểm sau khi dựng: mở `/api/manifest` của app học sinh (200, JSON), mở CMS (đăng nhập qua Access, thấy Tổng quan), thử một vòng nhập > duyệt > xuất bản > xem ở app.
+### Vai trò và cách thêm người
+
+| Việc | Siêu quản trị (`sa`) | Quản trị viên (`qtv`) | Cộng tác viên (`ctv`) |
+|---|---|---|---|
+| Nhập, sửa dữ liệu | mọi trường | mọi trường | chỉ trường được giao |
+| Duyệt, xuất bản, hộp thư | có | có | không |
+| Thêm, đổi vai, xóa `ctv`, giao trường | có | có | không |
+| Thêm, đổi vai, xóa `qtv` và `sa` | có | không | không |
+| Quay về bản cũ, đồng bộ KV/vector | có | không | không |
+| Nhật ký đầy đủ | có | trừ thao tác lên `sa`/`qtv` | không |
+
+Luôn đúng: không tự xóa hay tự hạ quyền chính mình; không bao giờ xóa hay hạ quyền siêu quản trị cuối cùng; email lưu chữ thường. Gỡ quyền hẳn thì dùng CMS > Hệ thống > Thành viên (xóa có hiệu lực ngay, kể cả khi người đó còn phiên đăng nhập).
+
+Đăng nhập: email + mật khẩu (băm SHA-256 có muối, lưu ở `quan_tri.mat_khau`). Phiên là cookie `nv_cms` (HttpOnly, Secure, SameSite=Strict) ký HMAC bằng `SESSION_SECRET`, sống 12 giờ; mỗi yêu cầu vẫn tra `quan_tri` nên xóa người hoặc đặt lại mật khẩu là mất phiên ngay. Sai 5 lần trong 15 phút (theo IP + email) thì bị khóa 15 phút (429). Yêu cầu ghi phải có Origin/Referer cùng host.
+
+Thêm người: CMS > Hệ thống > Thành viên, nhập email và vai trò. Hệ thống sinh **mật khẩu tạm 14 ký tự, chỉ hiện một lần** (có nút sao chép): gửi riêng cho người đó. Họ đăng nhập, bị buộc đổi mật khẩu rồi mới dùng được CMS. **Quên mật khẩu**: sa (với mọi người) hoặc qtv (với ctv) bấm "Đặt lại mật khẩu" để lấy mật khẩu tạm mới. Mọi người tự đổi mật khẩu bằng nút "Đổi mật khẩu" ở đầu trang. Với ctv, nhớ bấm "Giao trường". Nhật ký ghi đăng nhập thành công, đổi và đặt lại mật khẩu (không bao giờ ghi mật khẩu).
+
+Kiểm sau khi dựng: mở `/api/manifest` của app học sinh (200, JSON), mở CMS (đăng nhập bằng email + mật khẩu, thấy Tổng quan), thử một vòng nhập > duyệt > xuất bản > xem ở app.
 
 ## 4. Mùa tuyển sinh: cập nhật dữ liệu hằng năm
 

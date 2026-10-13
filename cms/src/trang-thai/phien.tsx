@@ -1,8 +1,9 @@
 // Phiên làm việc thật: hỏi máy chủ "tôi là ai, vai gì, được giao trường nào" (GET /api/toi).
-// Đăng nhập do Cloudflare Access lo; trang này không giả lập tài khoản hay vai trò.
+// Đăng nhập bằng email + mật khẩu (dang-nhap.tsx); trang này không giả lập tài khoản hay vai trò.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { layToi, thongBaoLoi, LoiApi, type Toi } from "@cms/may-chu/api";
 import { KhungDangTai, KhungLoi } from "@cms/thanh-phan/ui/hien-thi";
+import { ManBatBuocDoiMatKhau, ManDangNhap } from "@cms/trang-thai/dang-nhap";
 
 type TrangThaiPhien =
   | { kieu: "dang-tai" }
@@ -11,7 +12,9 @@ type TrangThaiPhien =
 
 interface GiaTriPhien {
   toi: Toi;
+  /** sa hoặc qtv. */
   laQtv: boolean;
+  laSa: boolean;
   /** Được sửa trường này không (qtv: mọi trường, ctv: chỉ trường được giao). */
   duocSua: (maTruong: string) => boolean;
 }
@@ -27,7 +30,6 @@ export function usePhien(): GiaTriPhien {
 
 /** Lời giải thích cho người không rành kỹ thuật, theo mã lỗi. */
 function loiPhien(status: number, thongBao: string): { tieuDe: string; moTa: string } {
-  if (status === 401) return { tieuDe: "Bạn chưa đăng nhập", moTa: "Phiên đăng nhập đã hết hạn hoặc chưa có. Tải lại trang để đăng nhập bằng email được cấp quyền." };
   if (status === 403) return { tieuDe: "Email của bạn chưa được cấp quyền", moTa: `${thongBao} Nhờ quản trị viên thêm email của bạn vào mục Hệ thống, rồi tải lại trang.` };
   if (status === 0) return { tieuDe: "Không kết nối được máy chủ", moTa: "Bạn kiểm tra mạng rồi bấm Thử lại." };
   return { tieuDe: "Chưa vào được trang quản trị", moTa: thongBao };
@@ -49,10 +51,13 @@ export function KhungPhien({ children }: { children: ReactNode }) {
     if (tt.kieu !== "san-sang") return null;
     const toi = tt.toi;
     const giao = new Set(toi.truongDuocGiao);
-    return { toi, laQtv: toi.vaiTro === "qtv", duocSua: (ma) => toi.vaiTro === "qtv" || giao.has(ma) };
+    const laQtv = toi.vaiTro === "sa" || toi.vaiTro === "qtv";
+    return { toi, laQtv, laSa: toi.vaiTro === "sa", duocSua: (ma) => laQtv || giao.has(ma) };
   }, [tt]);
 
   if (tt.kieu === "dang-tai") return <div className="p-4 pt-10"><KhungDangTai soKhung={3} /></div>;
+  if (tt.kieu === "loi" && tt.status === 401) return <ManDangNhap onXong={tai} />;
+  if (tt.kieu === "san-sang" && tt.toi.phaiDoiMatKhau) return <ManBatBuocDoiMatKhau onXong={tai} />;
   if (tt.kieu === "loi") {
     const l = loiPhien(tt.status, tt.thongBao);
     return <div className="p-4 pt-10"><KhungLoi tieuDe={l.tieuDe} moTa={l.moTa} thuLai={tai} /></div>;
