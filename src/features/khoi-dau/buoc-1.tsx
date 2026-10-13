@@ -68,7 +68,7 @@ export default function Buoc1({ h, sua, loi }: P) {
       </div>
 
       <CauHoi tieuDe="Lớp" icon={GraduationCap} batBuoc loi={loi.khoi}>
-        <ChonO nhan="Lớp" cot={3} kieu="o" idDau={ID_TRUONG.khoi} coLoi={!!loi.khoi}
+        <ChonO nhan="Lớp" cot={3} idDau={ID_TRUONG.khoi} coLoi={!!loi.khoi}
           cacLua={CAC_CHANG} giaTri={h.khoi === null ? null : changCuaEm({ hoSo: h })} onChange={(c: Chang) => sua(hoSoTheoChang(h, c))} />
       </CauHoi>
 
@@ -92,7 +92,7 @@ export default function Buoc1({ h, sua, loi }: P) {
             <Layers size={18} className="text-xanh" />Nhóm ngành quan tâm<span className="text-do" aria-label="bắt buộc">*</span>
           </label>
           {h.nganhQuanTam.length > 0 && (
-            <span className="text-[13px] font-bold text-xanh bg-xanh-nhat px-2.5 py-0.5 rounded-full">
+            <span className="text-[12.5px] font-bold text-xanh bg-xanh-nhat px-2.5 py-0.5 rounded-full">
               Đã chọn {h.nganhQuanTam.length}
             </span>
           )}
@@ -107,7 +107,7 @@ export default function Buoc1({ h, sua, loi }: P) {
             onChange={(e) => setTuKhoa(e.target.value)}
             placeholder="Tìm nhanh ngành (CNTT, Kinh tế, Y Dược, Luật...)"
             aria-label="Tìm nhanh nhóm ngành"
-            className="w-full min-h-10 rounded-xl border border-vien bg-trang pl-9 pr-9 text-[14px] focus:border-xanh outline-none"
+            className="w-full min-h-11 rounded-xl border border-vien bg-trang pl-9 pr-9 text-[14px] focus:border-xanh outline-none"
           />
           {tuKhoa && (
             <button
@@ -122,7 +122,7 @@ export default function Buoc1({ h, sua, loi }: P) {
 
         {/* Danh mục phân loại nếu không tìm kiếm */}
         {!tuKhoa && (
-          <div className="flex gap-1.5 overflow-x-auto an-thanh-cuon pb-1">
+          <div className="flex gap-1.5 overflow-x-auto an-thanh-cuon pb-0.5">
             {["Tất cả", "Công nghệ", "Kinh tế", "Y Dược", "Xã hội", "Mỹ thuật"].map((tab) => {
               const chon = tabNhom === tab;
               return (
@@ -131,7 +131,7 @@ export default function Buoc1({ h, sua, loi }: P) {
                   type="button"
                   onClick={() => setTabNhom(tab)}
                   className={gop(
-                    "min-h-8 px-2.5 rounded-lg text-[12.5px] font-semibold whitespace-nowrap transition-colors",
+                    "min-h-8 px-3 rounded-lg text-[12.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
                     chon ? "bg-xanh text-white shadow-sm" : "bg-nen text-chu hover:bg-vien/40"
                   )}
                 >
@@ -142,7 +142,7 @@ export default function Buoc1({ h, sua, loi }: P) {
           </div>
         )}
 
-        {/* Lưới các thẻ ngành có thể chạm bật/tắt tức thì */}
+        {/* Lưới các thẻ ngành cân đối và đồng đều kích thước */}
         <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
           {danhSachHien.map((item) => {
             const daChon = h.nganhQuanTam.includes(item.gia);
@@ -152,14 +152,14 @@ export default function Buoc1({ h, sua, loi }: P) {
                 type="button"
                 onClick={() => toggleNganh(item.gia)}
                 className={gop(
-                  "flex items-center justify-between p-2.5 rounded-xl border text-left transition-all active:scale-[0.98] cursor-pointer min-h-12",
+                  "flex items-center justify-between px-3 py-2 rounded-xl border text-left transition-all active:scale-[0.98] cursor-pointer h-[58px]",
                   daChon
                     ? "bg-xanh-nhat border-xanh text-xanh shadow-sm ring-1 ring-xanh"
                     : "bg-trang border-vien text-chu hover:border-xanh/40"
                 )}
               >
-                <div className="min-w-0 flex-1 pr-1.5">
-                  <b className="block text-[13.5px] leading-snug">{item.gia}</b>
+                <div className="min-w-0 flex-1 pr-2">
+                  <b className="block text-[13.5px] font-bold leading-tight truncate">{item.gia}</b>
                   <span className="block text-[11.5px] text-chu-phu leading-tight truncate mt-0.5">
                     {item.nhan.replace(`${item.gia} / `, "").replace(`${item.gia} - `, "")}
                   </span>

@@ -46,18 +46,36 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             const Icon = ICON_MON[m];
             const sai = kq.loai === "khongPhaiSo" || kq.loai === "ngoaiKhoang";
             return (
-              <div key={m} className={gop("rounded-the border bg-trang p-1.5 sm:p-2 shadow-the min-w-0", sai ? "border-do/60" : "border-vien")}>
-                <label htmlFor={idDiem(m)} className="flex items-center gap-1 text-[13px] sm:text-[14px] font-bold text-chu mb-1">
-                  <span className={gop("size-5 sm:size-6 rounded-lg grid place-items-center shrink-0", TONE_NEN[TONE_MON[m]], TONE_CHU[TONE_MON[m]])}><Icon size={13} /></span>
+              <div
+                key={m}
+                className={gop(
+                  "rounded-2xl border bg-trang p-2 sm:p-2.5 shadow-sm transition-all flex flex-col justify-between min-h-[96px]",
+                  sai ? "border-do ring-1 ring-do" : "border-vien hover:border-xanh/50 focus-within:border-xanh focus-within:ring-2 focus-within:ring-xanh/15"
+                )}
+              >
+                <label htmlFor={idDiem(m)} className="flex items-center justify-center gap-1.5 text-[13px] sm:text-[14px] font-bold text-chu cursor-pointer">
+                  <span className={gop("size-5 sm:size-6 rounded-lg grid place-items-center shrink-0", TONE_NEN[TONE_MON[m]], TONE_CHU[TONE_MON[m]])}>
+                    <Icon size={13} />
+                  </span>
                   <span className="truncate">{TEN_MON_NGAN[m]}</span>
                 </label>
-                <div className="flex items-center gap-0.5 sm:gap-1">
-                  <input id={idDiem(m)} inputMode="decimal" autoComplete="off" placeholder="–" value={chuDiem[m]} maxLength={5}
-                    onChange={(e) => goDiem(m, e.target.value)} aria-invalid={sai}
+                <div className="flex items-baseline justify-center mt-1">
+                  <input
+                    id={idDiem(m)}
+                    inputMode="decimal"
+                    autoComplete="off"
+                    placeholder="–"
+                    value={chuDiem[m]}
+                    maxLength={5}
+                    onChange={(e) => goDiem(m, e.target.value)}
+                    aria-invalid={sai}
                     aria-describedby={sai ? "loi-diem" : undefined}
-                    className={gop("w-full min-w-0 min-h-11 sm:min-h-12 rounded-xl border bg-trang px-1 text-center text-[15px] sm:text-[17px] font-bold text-muc placeholder:text-chu-phu/60 focus:border-xanh",
-                      sai ? "border-do text-do-chu" : "border-vien")} />
-                  <span className="text-[12px] text-chu-phu shrink-0">/10</span>
+                    className={gop(
+                      "w-14 text-center text-[22px] sm:text-[24px] font-black text-muc placeholder:text-chu-phu/30 outline-none bg-transparent",
+                      sai && "text-do"
+                    )}
+                  />
+                  <span className="text-[12px] font-semibold text-chu-phu -ml-1">/10</span>
                 </div>
               </div>
             );

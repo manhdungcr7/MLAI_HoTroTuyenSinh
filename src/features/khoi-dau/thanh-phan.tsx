@@ -89,16 +89,18 @@ export function ChonO<T extends string | number | boolean>({ cacLua, giaTri, onC
           <button key={String(c.gia)} type="button" id={i === 0 ? idDau : undefined} onClick={() => bam(c.gia)}
             {...(nhieu ? { "aria-pressed": chon } : { role: "radio", "aria-checked": chon })}
             className={gop(
-              "relative rounded-xl border font-semibold transition-colors",
-              kieu === "o" ? "min-h-[76px] px-1.5 py-2 flex flex-col items-center justify-center gap-1 text-center text-[13px] leading-tight"
-                : "min-h-12 px-3.5 inline-flex items-center justify-center gap-1.5 text-[14px]",
-              chon ? "bg-xanh-nhat border-xanh text-xanh border-[1.5px]" : gop("bg-trang text-chu active:bg-xanh-nhat", coLoi ? "border-do/60" : "border-vien"),
+              "relative rounded-xl border font-semibold transition-all cursor-pointer",
+              kieu === "o" ? "min-h-[72px] px-2 py-2 flex flex-col items-center justify-center gap-1 text-center text-[13px] leading-tight"
+                : "min-h-12 px-3 inline-flex items-center justify-center gap-1.5 text-[14px]",
+              chon ? "bg-xanh-nhat border-xanh text-xanh border-[1.5px] shadow-sm font-bold" : gop("bg-trang text-chu active:bg-xanh-nhat hover:border-xanh/40", coLoi ? "border-do/60" : "border-vien"),
             )}>
-            {Icon && <Icon size={kieu === "o" ? 22 : 18} className={chon ? "text-xanh" : "text-chu-phu"} />}
+            {Icon && <Icon size={kieu === "o" ? 20 : 17} className={chon ? "text-xanh" : "text-chu-phu"} />}
             <span>{c.nhan}</span>
-            {chon && (kieu === "o"
-              ? <span className="absolute top-1.5 right-1.5 size-4 rounded-full bg-xanh text-white grid place-items-center"><Check size={11} strokeWidth={4} /></span>
-              : <span className="size-4 rounded-full bg-xanh text-white grid place-items-center"><Check size={11} strokeWidth={4} /></span>)}
+            {chon && (
+              <span className={gop("size-4 rounded-full bg-xanh text-white grid place-items-center", kieu === "o" ? "absolute top-1.5 right-1.5" : "absolute right-2.5 top-1/2 -translate-y-1/2")}>
+                <Check size={10} strokeWidth={4} />
+              </span>
+            )}
           </button>
         );
       })}

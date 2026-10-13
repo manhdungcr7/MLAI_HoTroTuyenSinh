@@ -54,53 +54,53 @@ export default function KhamPha() {
       <DauTrangChinh tieuDe="Khám phá" />
       <NoiDung>
         <NutTuVan nguCanh="Khám phá ngành học" />
-        <div className="relative">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu pointer-events-none" />
-          <input type="search" value={tuKhoa} onChange={(e) => { setTuKhoa(e.target.value); if (e.target.value.trim() && b.nhom) sua({ nhom: "" }); /* tìm theo tên thì tìm trong mọi nhóm ngành */ }} placeholder="Tìm trường hoặc ngành..." aria-label="Tìm trường hoặc ngành"
-            className="w-full min-h-12 rounded-xl border border-vien bg-trang pl-10 pr-12 text-[15px] focus:border-xanh [&::-webkit-search-cancel-button]:hidden" />
-          {tuKhoa && (
-            <button type="button" onClick={() => setTuKhoa("")} aria-label="Xóa ô tìm" className="absolute right-0.5 top-1/2 -translate-y-1/2 size-11 grid place-items-center rounded-full text-chu-phu">
-              <X size={18} />
-            </button>
-          )}
-        </div>
-
         <div className="flex gap-2 items-center">
-          <div className="flex-1 min-w-0 overflow-x-auto an-thanh-cuon -ml-4 pl-4" role="group" aria-label="Nhóm ngành">
-            <div className="flex gap-2 w-max pr-1">
-              {s.yeuThich.length > 0 && (
-                <button
-                  type="button"
-                  aria-pressed={chiHienYeuThich}
-                  onClick={() => setChiHienYeuThich(!chiHienYeuThich)}
-                  className={gop(
-                    "min-h-11 px-3.5 rounded-xl border text-[14px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer",
-                    chiHienYeuThich
-                      ? "bg-do text-white border-transparent shadow-nut"
-                      : "bg-trang border-vien text-chu active:bg-xanh-nhat"
-                  )}
-                >
-                  <Heart size={15} fill={chiHienYeuThich ? "currentColor" : "none"} className={chiHienYeuThich ? "text-white" : "text-do"} />
-                  Đã lưu ({s.yeuThich.length})
-                </button>
-              )}
-              {nhomChip.map((c) => {
-                const chon = !chiHienYeuThich && b.nhom === c.gia;
-                return (
-                  <button key={c.gia || "tat-ca"} type="button" aria-pressed={chon} onClick={() => { setChiHienYeuThich(false); sua({ nhom: c.gia }); }}
-                    className={gop("min-h-11 px-3.5 rounded-xl border text-[14px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
-                      chon ? "gd-xanh text-white border-transparent shadow-nut" : "bg-trang border-vien text-chu active:bg-xanh-nhat")}>
-                    {c.nhan}
-                  </button>
-                );
-              })}
-            </div>
+          <div className="relative flex-1">
+            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu pointer-events-none" />
+            <input type="search" value={tuKhoa} onChange={(e) => { setTuKhoa(e.target.value); if (e.target.value.trim() && b.nhom) sua({ nhom: "" }); /* tìm theo tên thì tìm trong mọi nhóm ngành */ }} placeholder="Tìm trường hoặc ngành..." aria-label="Tìm trường hoặc ngành"
+              className="w-full min-h-12 rounded-xl border border-vien bg-trang pl-10 pr-10 text-[15px] focus:border-xanh [&::-webkit-search-cancel-button]:hidden" />
+            {tuKhoa && (
+              <button type="button" onClick={() => setTuKhoa("")} aria-label="Xóa ô tìm" className="absolute right-0.5 top-1/2 -translate-y-1/2 size-11 grid place-items-center rounded-full text-chu-phu">
+                <X size={18} />
+              </button>
+            )}
           </div>
           <button type="button" onClick={() => nav(DUONG_DAN.boLoc())}
-            className="min-h-11 px-3 rounded-xl bg-trang border border-xanh text-[14px] font-bold text-xanh inline-flex items-center gap-1.5 shrink-0 active:bg-xanh-nhat">
-            <SlidersHorizontal size={16} />Bộ lọc
+            className="min-h-12 px-3.5 rounded-xl bg-trang border border-vien text-[14px] font-bold text-chu inline-flex items-center gap-1.5 shrink-0 active:bg-xanh-nhat hover:border-xanh transition-colors shadow-sm cursor-pointer">
+            <SlidersHorizontal size={16} className="text-xanh" />Bộ lọc
             {soLoc > 0 && <span className="min-w-5 h-5 px-1 rounded-full gd-xanh text-white text-[11px] grid place-items-center">{soLoc}<span className="sr-only"> bộ lọc đang bật</span></span>}
           </button>
+        </div>
+
+        <div className="overflow-x-auto an-thanh-cuon -mx-4 px-4 py-0.5" role="group" aria-label="Nhóm ngành">
+          <div className="flex gap-2 w-max">
+            {s.yeuThich.length > 0 && (
+              <button
+                type="button"
+                aria-pressed={chiHienYeuThich}
+                onClick={() => setChiHienYeuThich(!chiHienYeuThich)}
+                className={gop(
+                  "min-h-10 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer",
+                  chiHienYeuThich
+                    ? "bg-do text-white border-transparent shadow-nut"
+                    : "bg-trang border-vien text-chu active:bg-xanh-nhat"
+                )}
+              >
+                <Heart size={14} fill={chiHienYeuThich ? "currentColor" : "none"} className={chiHienYeuThich ? "text-white" : "text-do"} />
+                Đã lưu ({s.yeuThich.length})
+              </button>
+            )}
+            {nhomChip.map((c) => {
+              const chon = !chiHienYeuThich && b.nhom === c.gia;
+              return (
+                <button key={c.gia || "tat-ca"} type="button" aria-pressed={chon} onClick={() => { setChiHienYeuThich(false); sua({ nhom: c.gia }); }}
+                  className={gop("min-h-10 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
+                    chon ? "gd-xanh text-white border-transparent shadow-nut" : "bg-trang border-vien text-chu active:bg-xanh-nhat")}>
+                  {c.nhan}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {coHoi && (

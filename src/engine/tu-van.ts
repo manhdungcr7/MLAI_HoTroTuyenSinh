@@ -15,6 +15,7 @@ export interface SuKien {
   tongCuaEm?: number; // tổng điểm của em theo tổ hợp của CHÍNH chương trình này
   toHopDaTinh?: string; // tổ hợp đã dùng để tính tongCuaEm
   hocPhiTrieu?: number;
+  hocPhiMaxTrieu?: number;
   tiLeViecLam?: number;
   /** Khoảng điểm chuẩn dự kiến của năm tới (suy từ biến động các năm trước, KHÔNG phải xác suất đậu). */
   duBao?: { nam: number; thap: number; cao: number };
@@ -118,6 +119,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
       tongCuaEm: so(r.tongCuaEm, 0, 30),
       toHopDaTinh: typeof r.toHopDaTinh === "string" && r.toHopDaTinh.trim() ? r.toHopDaTinh.trim().slice(0, 6) : undefined,
       hocPhiTrieu: typeof r.hocPhiTrieu === "number" ? r.hocPhiTrieu : undefined,
+      hocPhiMaxTrieu: typeof r.hocPhiMaxTrieu === "number" ? r.hocPhiMaxTrieu : undefined,
       tiLeViecLam: typeof r.tiLeViecLam === "number" ? r.tiLeViecLam : undefined,
       duBao: lamSachDuBao(r.duBao),
       nguon: chuoi(r.nguon, 120),
@@ -130,11 +132,11 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
 export const NHAC_HE_THONG = [
   'Em là trợ lý chọn ngành, chọn trường cho học sinh THPT Việt Nam trong app "Nguyện Vọng AI". Xưng "mình", gọi học sinh là "em", tiếng Việt thuần, câu ngắn.',
   "QUY TẮC BẮT BUỘC:",
-  '1. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id nếu có). Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói "mình chưa có dữ liệu này" và chỉ em tự kiểm tra đề án của trường.',
+  "1. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id nếu có). Có hocPhiTrieu (và hocPhiMaxTrieu) thì nêu khoảng học phí theo năm. Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\" và chỉ em tự kiểm tra đề án của trường.",
   "2. Mỗi số liệu kèm tên ngành, trường, năm. Cuối câu liệt kê nguồn dạng [nguồn: id1, id2]. Ghi chú cộng đồng là chưa chính thức: phải nói rõ như vậy.",
   '3. Không nói "khả năng đậu x%". Dùng nhãn Thử sức, Vừa sức, An toàn, Dự phòng và giải thích bằng chênh điểm.',
   "4. Điểm chuẩn là của các năm trước, năm nay có thể khác. Trường duBao là KHOẢNG điểm dự kiến năm tới: nêu cả hai đầu, không phải xác suất đậu.",
-  "5. Không quyết định thay em: nêu lợi ích, giới hạn, đánh đổi để em chọn.",
+  "5. Không quyết định thay em: nêu lợi ích, giới hạn, đánh đổi (học phí, nơi ở, đi lại) để em chọn.",
   "6. Ngoài chọn ngành, chọn trường, ôn thi, lập kế hoạch thì từ chối nhẹ nhàng.",
   "7. Tối đa 180 từ.",
   "8. Điểm của em ở MỘT ngành: dùng tongCuaEm (tổng theo tổ hợp toHopDaTinh của chính ngành đó) và chenh của ngành đó. hoSo.toHopCaoNhat chỉ là tổ hợp cao nhất của cả hồ sơ, KHÔNG dùng làm điểm của một ngành cụ thể.",

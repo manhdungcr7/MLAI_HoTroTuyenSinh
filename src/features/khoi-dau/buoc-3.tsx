@@ -19,11 +19,11 @@ export default function Buoc3({ h, sua }: P) {
       </CauHoi>
 
       <CauHoi tieuDe="Chỗ ở dự kiến" icon={House}>
-        <ChonO nhan="Chỗ ở dự kiến" kieu="o" cot={3} cacLua={CHO_O} giaTri={h.choO} onChange={(v) => sua({ choO: v })} />
+        <ChonO nhan="Chỗ ở dự kiến" cot={3} cacLua={CHO_O} giaTri={h.choO} onChange={(v) => sua({ choO: v })} />
       </CauHoi>
 
       <CauHoi tieuDe="Khu vực ưu tiên" icon={MapPin}>
-        <ChonO nhan="Khu vực ưu tiên" nhieu cacLua={KHU_VUC.map((x) => ({ gia: x, nhan: x }))} giaTri={h.khuVuc} onChange={(v) => sua({ khuVuc: v })} />
+        <ChonO nhan="Khu vực ưu tiên" nhieu cot={3} cacLua={KHU_VUC.map((x) => ({ gia: x, nhan: x }))} giaTri={h.khuVuc} onChange={(v) => sua({ khuVuc: v })} />
       </CauHoi>
 
       <CauHoi tieuDe="Em có sẵn sàng học xa nhà?" icon={Plane}>
