@@ -5,6 +5,7 @@ import { ArrowLeft, Bell, CalendarDays, GraduationCap, Heart, Home, Search, User
 import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
 import { gop } from "@/components/ui/nut-the";
 import { BannerKhongLuu } from "./banner-khong-luu";
+import { ThongBaoYeuThich } from "./thong-bao-yeu-thich";
 
 const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
   homNay: Home, khamPha: Search, nguyenVong: Heart, keHoach: CalendarDays, hoSo: UserRound,
@@ -17,6 +18,7 @@ export function KhungCoThanhDuoi() {
     <div className="khung-ung-dung pb-24">
       <BannerKhongLuu />
       <Outlet />
+      <ThongBaoYeuThich />
       <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang/95 backdrop-blur border-t border-vien vung-an-toan-duoi">
         <ul className="grid grid-cols-5">
           {CAC_TAB.map((t) => {
@@ -41,7 +43,13 @@ export function KhungCoThanhDuoi() {
 }
 
 export function KhungKhongThanh() {
-  return <div className="khung-ung-dung"><BannerKhongLuu /><Outlet /></div>;
+  return (
+    <div className="khung-ung-dung">
+      <BannerKhongLuu />
+      <Outlet />
+      <ThongBaoYeuThich />
+    </div>
+  );
 }
 
 export function Logo({ nho }: { nho?: boolean }) {

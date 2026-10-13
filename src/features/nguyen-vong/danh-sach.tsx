@@ -22,16 +22,20 @@ import { CanhBaoThuTuThe, CoCauMini, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHo
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
+import { kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
+
 
 const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lựa chọn này");
 
 export default function DanhSachNguyenVong() {
   const nav = useNavigate();
-  const { s, datNguyenVong, xoaNguyenVong, doiViTri } = useApp();
+  const { s, datNguyenVong, themNguyenVong, xoaNguyenVong, doiViTri } = useApp();
   const diemMon = diemDayDu(s);
   const tongTot = toHopTotNhat(diemMon);
   const tong = tongTot.tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
+  const dsYeuThich = useMemo(() => s.yeuThich.map(tim).filter((l): l is NonNullable<typeof l> => !!l), [s.yeuThich]);
+  const yeuThichChuaThem = useMemo(() => dsYeuThich.filter((l) => !s.nguyenVong.includes(l.id)), [dsYeuThich, s.nguyenVong]);
   const coCau = xetCoCau(demNhan(ds), ds.length);
   const kl = ketLuan(coCau);
   const canhBao = useMemo(() => canhBaoThuTu(ds), [ds]);
@@ -69,14 +73,110 @@ export default function DanhSachNguyenVong() {
       <NoiDung>
         <NutTuVan nguCanh="Danh sách nguyện vọng" />
         {ds.length === 0 ? (
-          <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Em chưa có nguyện vọng nào"
-            moTa="Vào Khám phá, mở một trường em thích rồi bấm “Thêm vào nguyện vọng”. Danh sách sẽ hiện ở đây để em sắp xếp.">
-            <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
-            <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Tự chọn trong Khám phá</Nut>
-          </TrangThaiTrong>
+          <>
+            {dsYeuThich.length > 0 ? (
+              <div className="rounded-the bg-trang border border-vien p-4 shadow-the space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="size-9 rounded-xl bg-do/10 text-do grid place-items-center shrink-0">
+                      <Heart size={20} fill="currentColor" />
+                    </span>
+                    <div>
+                      <h2 className="text-[16px] font-extrabold text-muc leading-tight">
+                        Ngành em đã lưu yêu thích ({dsYeuThich.length})
+                      </h2>
+                      <p className="text-[12px] text-chu-phu mt-0.5">
+                        Chọn nhanh để đưa vào danh sách nguyện vọng
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      datNguyenVong([...new Set([...s.nguyenVong, ...dsYeuThich.map((l) => l.id)])]);
+                      bao(`Đã thêm tất cả ${dsYeuThich.length} ngành vào danh sách NV`);
+                    }}
+                    className="min-h-9 px-3 rounded-lg bg-xanh text-white text-[12px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
+                  >
+                    + Thêm tất cả
+                  </button>
+                </div>
+
+                <ul className="divide-y divide-vien border-t border-vien pt-1">
+                  {dsYeuThich.map((l) => (
+                    <li key={l.id} className="py-2.5 flex items-center justify-between gap-2.5">
+                      <button
+                        type="button"
+                        onClick={() => nav(DUONG_DAN.chiTiet(l.id))}
+                        className="flex items-center gap-2.5 text-left min-w-0 flex-1 active:opacity-75 cursor-pointer"
+                      >
+                        <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={38} />
+                        <div className="min-w-0 flex-1">
+                          <b className="block text-[14px] text-muc leading-tight truncate">{l.nganh}</b>
+                          <span className="block text-[12px] text-chu-phu truncate mt-0.5">
+                            {l.truong} · {l.khuVuc} · {khoangDiem(l)} điểm
+                          </span>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          themNguyenVong(l.id);
+                          bao(`Đã thêm ${l.nganh} – ${l.truong} vào nguyện vọng`);
+                        }}
+                        className="min-h-9 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[12px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
+                      >
+                        + Thêm vào NV
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="pt-2 border-t border-vien flex gap-2">
+                  <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá thêm</Nut>
+                  <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
+                </div>
+              </div>
+            ) : (
+              <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Em chưa có nguyện vọng nào"
+                moTa="Vào Khám phá, mở một trường em thích rồi bấm “Thêm vào nguyện vọng” hoặc thả tim để lưu. Danh sách sẽ hiện ở đây để em sắp xếp.">
+                <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
+                <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Tự chọn trong Khám phá</Nut>
+              </TrangThaiTrong>
+            )}
+          </>
         ) : (
           <>
             <TheTomTat tong={tong} kl={kl} dem={coCau.dem} onClick={() => nav(DUONG_DAN.nguyenVongAnToan())} />
+
+            {yeuThichChuaThem.length > 0 && (
+              <div className="rounded-the bg-xanh-nhat border border-xanh/30 p-3 flex items-center justify-between gap-2 shadow-sm">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="size-8 rounded-lg bg-trang text-do grid place-items-center shrink-0 shadow-sm">
+                    <Heart size={16} fill="currentColor" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-bold text-muc leading-snug">
+                      Có {yeuThichChuaThem.length} ngành em đã thả tim chưa đưa vào danh sách
+                    </p>
+                    <p className="text-[12px] text-chu-phu leading-snug truncate">
+                      {yeuThichChuaThem.map((x) => x.nganh).slice(0, 2).join(", ")}
+                      {yeuThichChuaThem.length > 2 ? "..." : ""}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    datNguyenVong([...s.nguyenVong, ...yeuThichChuaThem.map((l) => l.id)]);
+                    bao(`Đã thêm ${yeuThichChuaThem.length} ngành yêu thích vào danh sách`);
+                  }}
+                  className="min-h-9 px-3 rounded-lg bg-xanh text-white text-[12px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
+                >
+                  Thêm tất cả
+                </button>
+              </div>
+            )}
 
             {tong === null && (
               <DongThongBao tone="cam" icon={GraduationCap} tieuDe="Chưa đủ điểm để xếp nhãn"

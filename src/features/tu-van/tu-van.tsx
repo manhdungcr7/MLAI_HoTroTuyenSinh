@@ -39,7 +39,7 @@ const ganDay = () => window.innerHeight + window.scrollY >= document.documentEle
 export default function TuVan() {
   const nav = useNavigate();
   const location = useLocation();
-  const { s } = useApp();
+  const { s, themNguyenVong } = useApp();
   const manHinh = (location.state as { nguCanh?: string } | null)?.nguCanh ?? "Tư vấn chung";
   // Rời màn khi đang chờ trả lời thì tin cuối là câu hỏi chưa có đáp: bỏ khỏi lịch sử và trả về ô nhập để em gửi lại.
   const [khoiDau] = useState(() => { const h = docLichSu(localStorage); const cuoiTin = h[h.length - 1]; return cuoiTin?.vai === "em" ? { tin: h.slice(0, -1), cau: cuoiTin.chu } : { tin: h, cau: "" }; });
@@ -150,11 +150,36 @@ export default function TuVan() {
                 {t.vai === "mayChu" && (
                   <>
                     {t.nguon && t.nguon.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Nguồn số liệu">
-                        {t.nguon.map((id) => {
-                          const l = LUA_CHON_MAU.find((x) => x.id === id);
-                          return l ? <Link key={id} to={DUONG_DAN.chiTiet(id)} className="inline-flex items-center min-h-11 px-2.5 rounded-lg bg-xanh-nhat text-[12px] font-bold text-xanh">Xem nguồn: {l.truong} · {l.nganh.slice(0, 28)}</Link> : null;
-                        })}
+                      <div className="mt-2.5 space-y-1.5" role="group" aria-label="Nguồn số liệu và hành động">
+                        <p className="text-[12px] font-bold text-chu-phu">Các ngành liên quan:</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {t.nguon.map((id) => {
+                            const l = LUA_CHON_MAU.find((x) => x.id === id);
+                            if (!l) return null;
+                            const daCo = s.nguyenVong.includes(id);
+                            return (
+                              <div key={id} className="inline-flex items-center gap-1 rounded-xl bg-xanh-nhat p-1 border border-xanh/20">
+                                <Link to={DUONG_DAN.chiTiet(id)} className="inline-flex items-center min-h-8 px-2 text-[12px] font-bold text-xanh hover:underline">
+                                  {l.truong} · {l.nganh.slice(0, 24)}
+                                </Link>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (!daCo) themNguyenVong(id);
+                                  }}
+                                  title={daCo ? "Đã có trong danh sách nguyện vọng" : "Thêm vào danh sách nguyện vọng"}
+                                  className={`min-h-8 px-2 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
+                                    daCo
+                                      ? "bg-luc/20 text-luc-chu cursor-default"
+                                      : "bg-xanh text-white active:brightness-90 shadow-sm"
+                                  }`}
+                                >
+                                  {daCo ? "✓ Đã trong NV" : "+ Thêm NV"}
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                     {t.congDong && t.congDong.length > 0 && <p className="mt-1.5 text-[12px] text-chu-phu">Có dùng ghi chú của cộng đồng, chưa phải thông tin chính thức.</p>}

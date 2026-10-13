@@ -340,7 +340,7 @@ export default function ChiTiet() {
       {/* Thanh dính dưới với 2 nút chính */}
       <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 pb-1.5">
         <div className="grid grid-cols-[1fr_1.5fr] gap-2.5">
-          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã lưu" : "Thêm NV"}</Nut>
+          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã trong NV" : "Thêm NV"}</Nut>
           {!laMucTieu && dat.ok && <Nut bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu" : "Đặt mục tiêu"}</Nut>}
         </div>
       </div>

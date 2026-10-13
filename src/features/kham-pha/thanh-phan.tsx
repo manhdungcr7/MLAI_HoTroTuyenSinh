@@ -40,9 +40,18 @@ export function NhanPhuHop({ kq, xuongDong }: { kq: KetQuaPhuHop; xuongDong?: bo
 export function NutTim({ id, ten, className }: { id: string; ten: string; className?: string }) {
   const { s, doiYeuThich } = useApp();
   const dang = s.yeuThich.includes(id);
+  const xuLy = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    doiYeuThich(id);
+    window.dispatchEvent(
+      new CustomEvent("nvai-thong-bao-tim", {
+        detail: { id, ten, daThich: !dang },
+      })
+    );
+  };
   return (
-    <button type="button" onClick={() => doiYeuThich(id)} aria-pressed={dang} aria-label={dang ? `Bỏ lưu ${ten}` : `Lưu ${ten} vào yêu thích`}
-      className={gop("size-11 grid place-items-center rounded-full transition-colors active:scale-95", dang ? "text-do" : "text-chu-phu active:bg-xanh-nhat", className)}>
+    <button type="button" onClick={xuLy} aria-pressed={dang} aria-label={dang ? `Bỏ lưu ${ten}` : `Lưu ${ten} vào yêu thích`}
+      className={gop("size-11 grid place-items-center rounded-full transition-colors active:scale-95 cursor-pointer", dang ? "text-do" : "text-chu-phu active:bg-xanh-nhat", className)}>
       <Heart size={22} strokeWidth={2.2} fill={dang ? "currentColor" : "none"} />
     </button>
   );

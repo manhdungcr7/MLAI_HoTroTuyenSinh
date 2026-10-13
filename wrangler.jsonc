@@ -18,6 +18,10 @@
     {
       "binding": "RATE_KV",
       "id": "dd9e8bea584d4b7c8af1dbe98a617535"
+    },
+    {
+      "binding": "CACHE_KV",
+      "id": "dd9e8bea584d4b7c8af1dbe98a617535"
     }
   ],
   "ai": {
@@ -34,5 +38,8 @@
   },
   "assets": {
     "not_found_handling": "single-page-application"
+  },
+  "vars": {
+    "AI_MODEL": "@cf/meta/llama-3.3-70b-instruct"
   }
 }

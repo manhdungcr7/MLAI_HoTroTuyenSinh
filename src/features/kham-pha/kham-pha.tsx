@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpDown, ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Heart, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -32,16 +32,19 @@ export default function KhamPha() {
   const [tuKhoa, setTuKhoa] = useState("");
   const [kieu, setKieu] = useState<KieuSapXep>("phuHop");
   const [soHien, setSoHien] = useState(30);
+  const [chiHienYeuThich, setChiHienYeuThich] = useState(false);
   const bc = useMemo(() => boiCanhTu(s), [s]);
 
   const ds = useMemo(() => {
     const k = tuKhoa.trim().toLowerCase();
     const daLoc = loc(LUA_CHON_MAU, b, bc.tinh || undefined)
+      .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)))
       .filter((l) => !k || `${l.truong} ${l.tenTruong} ${l.nganh} ${l.nhomNganh}`.toLowerCase().includes(k));
     return sapXep(daLoc, kieu, bc);
-  }, [b, tuKhoa, kieu, bc]);
+  }, [b, tuKhoa, kieu, bc, chiHienYeuThich, s.yeuThich]);
   const coHoi = useMemo(() => tinhCoHoi(bc.diem), [bc.diem]);
   const hien = useMemo(() => ds.slice(0, soHien).map((l) => ({ l, kq: danhGia(l, bc) })), [ds, soHien, bc]);
+
 
   const soLoc = dem(b);
   const nhomChip = [{ gia: "", nhan: "Tất cả" }, ...CAC_NHOM.map((n) => ({ gia: n, nhan: n }))];
@@ -65,11 +68,27 @@ export default function KhamPha() {
         <div className="flex gap-2 items-center">
           <div className="flex-1 min-w-0 overflow-x-auto an-thanh-cuon -ml-4 pl-4" role="group" aria-label="Nhóm ngành">
             <div className="flex gap-2 w-max pr-1">
+              {s.yeuThich.length > 0 && (
+                <button
+                  type="button"
+                  aria-pressed={chiHienYeuThich}
+                  onClick={() => setChiHienYeuThich(!chiHienYeuThich)}
+                  className={gop(
+                    "min-h-11 px-3.5 rounded-xl border text-[14px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer",
+                    chiHienYeuThich
+                      ? "bg-do text-white border-transparent shadow-nut"
+                      : "bg-trang border-vien text-chu active:bg-xanh-nhat"
+                  )}
+                >
+                  <Heart size={15} fill={chiHienYeuThich ? "currentColor" : "none"} className={chiHienYeuThich ? "text-white" : "text-do"} />
+                  Đã lưu ({s.yeuThich.length})
+                </button>
+              )}
               {nhomChip.map((c) => {
-                const chon = b.nhom === c.gia;
+                const chon = !chiHienYeuThich && b.nhom === c.gia;
                 return (
-                  <button key={c.gia || "tat-ca"} type="button" aria-pressed={chon} onClick={() => sua({ nhom: c.gia })}
-                    className={gop("min-h-11 px-3.5 rounded-xl border text-[14px] font-semibold whitespace-nowrap transition-colors",
+                  <button key={c.gia || "tat-ca"} type="button" aria-pressed={chon} onClick={() => { setChiHienYeuThich(false); sua({ nhom: c.gia }); }}
+                    className={gop("min-h-11 px-3.5 rounded-xl border text-[14px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
                       chon ? "gd-xanh text-white border-transparent shadow-nut" : "bg-trang border-vien text-chu active:bg-xanh-nhat")}>
                     {c.nhan}
                   </button>

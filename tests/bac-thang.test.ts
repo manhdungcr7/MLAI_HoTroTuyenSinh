@@ -138,5 +138,25 @@ const body = { cauHoi: "Nơi ở quanh UIT thế nào?", hoSo: { tinh: "TP.HCM",
   assert.equal(goi, 2, "cùng nguCanh trúng cache, khác nguCanh thì hỏi lại");
 }
 
+// 8) Workers AI LLM: khi có AI và AI_MODEL (hoặc CF_AI_LLM)
+{
+  const { kv } = kvMoi();
+  let daGoiWorkersAI = false;
+  const aiLLM: KhoAI = {
+    run: async (model, input) => {
+      if (model.includes("llama")) {
+        daGoiWorkersAI = true;
+        return { response: "Điểm chuẩn 25 điểm. [nguồn: s0]" };
+      }
+      return aiGia().run(model, input);
+    },
+  };
+  const r = await goiXuLy({ RATE_KV: kv, AI: aiLLM, AI_MODEL: "@cf/meta/llama-3.3-70b-instruct" }, body);
+  assert.equal(r.status, 200);
+  assert.equal(daGoiWorkersAI, true);
+  assert.deepEqual(r.d.nguon, ["s0"]);
+}
+
 console.log = log;
 console.log("bac-thang: tất cả kiểm tra đều qua");
+
