@@ -82,8 +82,7 @@ export default function BatDau() {
     if (so === 1) {
       setDaThuBuoc1(true);
       if (thieu1.length) return denO(ID_TRUONG[thieu1[0]]);
-      chuyenSangKhamPha();
-      return;
+      return denBuoc(2);
     }
     if (so === 2) {
       if (monSai.length) return denO(idDiem(monSai[0]));
@@ -118,9 +117,14 @@ export default function BatDau() {
             <ul className="mt-1 ml-6 list-disc space-y-0.5 font-semibold">{thieu1.map((k) => <li key={k}>{loi1[k]}</li>)}</ul>
           </div>
         )}
+        {so === 1 && (
+          <button type="button" onClick={chuyenSangKhamPha} className="w-full min-h-12 text-[14px] font-bold text-xanh hover:underline">
+            Chưa muốn nhập điểm? Xem gợi ý trường trước
+          </button>
+        )}
         {so === 2 && (
-          <button type="button" onClick={chuyenSangKhamPha} className="w-full min-h-12 text-[14px] font-bold text-xanh">
-            Chưa nhớ điểm? Xem gợi ý trước
+          <button type="button" onClick={() => denBuoc(3)} className="w-full min-h-12 text-[14px] font-bold text-xanh hover:underline">
+            Chưa có điểm thi? Bỏ qua bước này
           </button>
         )}
       </NoiDung>
@@ -129,9 +133,9 @@ export default function BatDau() {
         <DaLuuTam daSua={daSua} />
         <div className="grid grid-cols-[1fr_1.5fr] gap-2.5 mt-2 mb-1.5">
           {so === 1
-            ? <Nut kieu="vien" onClick={() => denBuoc(2)}>Bổ sung điểm</Nut>
+            ? <Nut kieu="vien" onClick={chuyenSangKhamPha}>Bỏ qua điểm</Nut>
             : <Nut kieu="vien" onClick={() => denBuoc((so - 1) as BuocBatDau)}>Quay lại</Nut>}
-          <Nut muiTen onClick={tiepTuc}>{so === 1 ? "Xem gợi ý" : so === 3 ? "Hoàn tất" : "Tiếp tục"}</Nut>
+          <Nut muiTen onClick={tiepTuc}>{so === 3 ? "Phân tích cơ hội" : "Tiếp tục"}</Nut>
         </div>
       </div>
     </div>

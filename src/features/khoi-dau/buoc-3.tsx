@@ -1,17 +1,15 @@
 import { Briefcase, ChartColumn, House, MapPin, Plane, Wallet } from "lucide-react";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { gop } from "@/components/ui/nut-the";
-import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { HoSo } from "@/state/types";
 import { CHO_O, HOC_XA_NHA, KHU_VUC, NGAN_SACH, VIEC_LAM } from "./lua-chon";
 import { CauHoi, ChonO, TieuDeBuoc } from "./thanh-phan";
-import { demVuaNganSach, goiYHocPhi } from "./tinh-toan";
+import { goiYHocPhi } from "./tinh-toan";
 
 type P = { h: HoSo; sua: (p: Partial<HoSo>) => void };
 
 export default function Buoc3({ h, sua }: P) {
   const goiY = goiYHocPhi(h.nganSach, h.choO);
-  const soVua = h.nganSach ? demVuaNganSach(h.nganSach, LUA_CHON_MAU) : 0;
   return (
     <>
       <TieuDeBuoc tieuDe="Mục tiêu & ưu tiên" moTa="Điều kiện gia đình và mong muốn của em." />
@@ -42,9 +40,9 @@ export default function Buoc3({ h, sua }: P) {
           <div className="min-w-0 text-[13px] text-chu">
             <p className="text-chu-phu font-medium">Khoảng học phí khuyến nghị:</p>
             <p className="text-[16px] font-extrabold text-luc-chu leading-snug">{goiY.khoang}</p>
-            {goiY.ghiChu && <p className="mt-1 font-medium">{goiY.ghiChu}</p>}
-            <p className="mt-1 text-chu-phu">
-              {soVua > 0 ? `Đã có ${soVua}/${LUA_CHON_MAU.length} chương trình đào tạo nằm trong khoảng này.` : "Hệ thống sẽ lọc các trường có học phí phù hợp."}
+            {goiY.ghiChu && <p className="mt-1 font-medium text-chu-phu">{goiY.ghiChu}</p>}
+            <p className="mt-1 text-chu-phu leading-relaxed">
+              Hệ thống sẽ tự động đối chiếu dữ liệu học phí các trường để ưu tiên gợi ý các chương trình đào tạo phù hợp nhất với điều kiện gia đình em.
             </p>
           </div>
         ) : (
