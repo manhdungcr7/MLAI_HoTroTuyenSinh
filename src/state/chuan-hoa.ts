@@ -69,6 +69,49 @@ function chuanHoaHoSo(raw: unknown): HoSo {
     };
   }
   if (o.laMau === true) h.laMau = true;
+  if (laObj(o.chungChiNgoaiNgu)) {
+    const loai = trong(o.chungChiNgoaiNgu.loai, ["IELTS", "TOEFL", "TOEIC", "VSTEP", "HSK", "JLPT", "khac"] as const);
+    const diem = so(o.chungChiNgoaiNgu.diem);
+    if (loai && diem !== null && diem >= 0) {
+      h.chungChiNgoaiNgu = { loai, diem };
+      if (typeof o.chungChiNgoaiNgu.ngayCap === "string") h.chungChiNgoaiNgu.ngayCap = o.chungChiNgoaiNgu.ngayCap;
+    }
+  }
+  if (laObj(o.diemDgnl)) {
+    const dgnl: NonNullable<HoSo["diemDgnl"]> = {};
+    if ("hcm" in o.diemDgnl) dgnl.hcm = so(o.diemDgnl.hcm);
+    if ("hn" in o.diemDgnl) dgnl.hn = so(o.diemDgnl.hn);
+    if ("tsa" in o.diemDgnl) dgnl.tsa = so(o.diemDgnl.tsa);
+    if ("khac" in o.diemDgnl) dgnl.khac = so(o.diemDgnl.khac);
+    h.diemDgnl = dgnl;
+  }
+  if (laObj(o.hocBa)) {
+    const hb: NonNullable<HoSo["hocBa"]> = {};
+    if ("dtbLop10" in o.hocBa) hb.dtbLop10 = diem10(o.hocBa.dtbLop10);
+    if ("dtbLop11" in o.hocBa) hb.dtbLop11 = diem10(o.hocBa.dtbLop11);
+    if ("dtbLop12" in o.hocBa) hb.dtbLop12 = diem10(o.hocBa.dtbLop12);
+    if ("dtb3Nam" in o.hocBa) hb.dtb3Nam = diem10(o.hocBa.dtb3Nam);
+    if ("hocLuc" in o.hocBa) hb.hocLuc = trong(o.hocBa.hocLuc, ["xuatSac", "gioi", "kha", "trungBinh"] as const);
+    if ("hanhKiem" in o.hocBa) hb.hanhKiem = trong(o.hocBa.hanhKiem, ["tot", "kha", "trungBinh"] as const);
+    if ("truongChuyen" in o.hocBa) hb.truongChuyen = typeof o.hocBa.truongChuyen === "boolean" ? o.hocBa.truongChuyen : null;
+    h.hocBa = hb;
+  }
+  if (laObj(o.giaiThuongHsg)) {
+    h.giaiThuongHsg = {
+      cap: trong(o.giaiThuongHsg.cap, ["quocGia", "tinh", "truongChuyen"] as const),
+      mon: typeof o.giaiThuongHsg.mon === "string" ? o.giaiThuongHsg.mon : undefined,
+      giai: trong(o.giaiThuongHsg.giai, ["nhat", "nhi", "ba", "khuyenKhich"] as const),
+    };
+  }
+  if (laObj(o.tienDoKienThuc)) {
+    const td: Record<string, "chuaHoc" | "dangHoc" | "namVung" | "canOnTap"> = {};
+    for (const [k, v] of Object.entries(o.tienDoKienThuc)) {
+      if (!KHOA_NGUY_HIEM.has(k) && ["chuaHoc", "dangHoc", "namVung", "canOnTap"].includes(v as string)) {
+        td[k] = v as "chuaHoc" | "dangHoc" | "namVung" | "canOnTap";
+      }
+    }
+    h.tienDoKienThuc = td;
+  }
   const st = o.soThich;
   if (laObj(st) && laObj(st.diem) && NHOM_SO_THICH.every((k) => so((st.diem as Obj)[k]) !== null) && Array.isArray(st.top)) {
     const d = {} as Record<LoaiSoThich, number>;

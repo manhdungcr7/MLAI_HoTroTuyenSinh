@@ -118,6 +118,39 @@ export default function HoSo() {
         <KhoiNhanXet tone="cam" icon={AlertTriangle} tieuDe="Cần lưu ý" dong={x.luuY} onClick={() => nav(mucLuuY)}
           trong="Chưa thấy điều gì đáng lo." />
 
+        <TieuDeMuc>Xét tuyển sớm & Ngoại ngữ</TieuDeMuc>
+        <div className="rounded-the border border-vien bg-trang p-3.5 shadow-the space-y-3">
+          <div className="grid grid-cols-2 gap-2 text-[13px]">
+            <div className="rounded-xl bg-nen p-2.5">
+              <span className="block text-[11px] font-bold text-chu-phu">Chứng chỉ ngoại ngữ</span>
+              <b className="block text-[14px] text-muc mt-0.5 truncate">
+                {h.chungChiNgoaiNgu?.diem ? `${h.chungChiNgoaiNgu.loai} ${h.chungChiNgoaiNgu.diem}` : "Chưa có"}
+              </b>
+            </div>
+            <div className="rounded-xl bg-nen p-2.5">
+              <span className="block text-[11px] font-bold text-chu-phu">Đánh giá năng lực</span>
+              <b className="block text-[14px] text-muc mt-0.5 truncate">
+                {h.diemDgnl?.hcm ? `HCM ${h.diemDgnl.hcm}/1200` : h.diemDgnl?.hn ? `HSA ${h.diemDgnl.hn}/150` : "Chưa thi"}
+              </b>
+            </div>
+            <div className="rounded-xl bg-nen p-2.5">
+              <span className="block text-[11px] font-bold text-chu-phu">Học bạ THPT</span>
+              <b className="block text-[14px] text-muc mt-0.5 truncate">
+                {h.hocBa?.dtb3Nam ? `ĐTB 3 năm: ${h.hocBa.dtb3Nam}` : h.hocBa?.dtbLop12 ? `Lớp 12: ${h.hocBa.dtbLop12}` : "Chưa nhập"}
+              </b>
+            </div>
+            <div className="rounded-xl bg-nen p-2.5">
+              <span className="block text-[11px] font-bold text-chu-phu">Giải học sinh giỏi</span>
+              <b className="block text-[14px] text-muc mt-0.5 truncate">
+                {h.giaiThuongHsg?.cap ? `${h.giaiThuongHsg.giai ? `Giải ${h.giaiThuongHsg.giai}` : "Có giải"} ${h.giaiThuongHsg.mon ?? ""}` : "Chưa có"}
+              </b>
+            </div>
+          </div>
+          <Nut kieu="vien" onClick={() => nav(DUONG_DAN.batDau(2))}>
+            Cập nhật xét tuyển sớm
+          </Nut>
+        </div>
+
         <TieuDeMuc>Tiến bộ của em</TieuDeMuc>
         <ChiSoTheoDoi s={s} gon />
 

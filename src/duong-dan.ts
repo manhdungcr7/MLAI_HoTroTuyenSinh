@@ -71,8 +71,8 @@ export const DUONG_DAN = {
   keHoach: () => "/ke-hoach",
   mucTieu: () => "/ke-hoach/muc-tieu",
   monKeoDiem: () => "/ke-hoach/muc-tieu/mon-keo-diem",
-  /** Kế hoạch tuần. xem = "lich" mở thẳng chế độ Lịch, mặc định là danh sách việc. */
-  tuan: (xem?: "lich" | "viec") => (xem === "lich" ? "/ke-hoach/tuan?xem=lich" : "/ke-hoach/tuan"),
+  /** Kế hoạch tuần. xem = "lich" mở thẳng chế độ Lịch, "chienLuoc" mở Chiến lược, mặc định là danh sách việc. */
+  tuan: (xem?: "lich" | "viec" | "chienLuoc") => (xem === "lich" ? "/ke-hoach/tuan?xem=lich" : xem === "chienLuoc" ? "/ke-hoach/tuan?xem=chienLuoc" : "/ke-hoach/tuan"),
   viec: (id: string) => `/ke-hoach/viec/${id}`,
   tienDo: () => "/ke-hoach/tien-do",
   caiDatLichHoc: () => "/ke-hoach/cai-dat/lich-hoc",

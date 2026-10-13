@@ -189,6 +189,15 @@ export function hieuEm(s: AppState): HieuEm {
   if (h.soThich && !khongRoNet(h.soThich)) manh.push(`Sở thích: ${moTaTop(h.soThich).toLowerCase()}`);
   const tangNhat = xu.filter((x) => x.tongTang >= 0.3).sort((a, b) => b.tongTang - a.tongTang)[0];
   if (tangNhat) manh.push(`${TEN_MON[tangNhat.mon]} +${lam1(tangNhat.tongTang)} qua ${tangNhat.soLan} lần thi thử`);
+  if (h.chungChiNgoaiNgu && h.chungChiNgoaiNgu.diem > 0) manh.push(`Ngoại ngữ: ${h.chungChiNgoaiNgu.loai} ${h.chungChiNgoaiNgu.diem}`);
+  if (h.diemDgnl?.hcm) manh.push(`ĐGNL ĐHQG-HCM: ${h.diemDgnl.hcm}/1200 điểm`);
+  if (h.diemDgnl?.hn) manh.push(`ĐGNL HSA: ${h.diemDgnl.hn}/150 điểm`);
+  if (h.diemDgnl?.tsa) manh.push(`TSA Bách Khoa: ${h.diemDgnl.tsa}/100 điểm`);
+  if (h.hocBa?.dtb3Nam && h.hocBa.dtb3Nam >= 8.0) manh.push(`Học bạ 3 năm: ${lam1(h.hocBa.dtb3Nam)} điểm`);
+  if (h.giaiThuongHsg?.cap) {
+    const giai = h.giaiThuongHsg.giai ? `Giải ${h.giaiThuongHsg.giai}` : "Giải HSG";
+    manh.push(`${giai} ${h.giaiThuongHsg.mon ?? ""} cấp ${h.giaiThuongHsg.cap === "quocGia" ? "quốc gia" : h.giaiThuongHsg.cap === "tinh" ? "tỉnh" : "trường chuyên"}`);
+  }
   if (h.diemManh.length) manh.push(`Tự nhận: ${noi(h.diemManh.slice(0, 3).map(viThuong))}`);
 
   // Điều cần lưu ý

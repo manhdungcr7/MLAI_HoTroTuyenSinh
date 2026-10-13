@@ -29,6 +29,8 @@ export interface DauVaoViecTuan {
   lop?: 11 | 12;
   /** Ôn nhẹ khi em chưa có mục tiêu: không nói về phần thiếu điểm, ngân sách tối đa NGAN_SACH_ON_NHE phút. */
   nhe?: boolean;
+  /** Tiến độ nắm vững chuyên đề theo tự đánh giá của em. */
+  tienDoKienThuc?: Record<string, "chuaHoc" | "dangHoc" | "namVung" | "canOnTap">;
 }
 
 export const NGAN_SACH_ON_NHE = 4 * 60;
@@ -87,7 +89,12 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
       const phut = con > 90 + 25 ? 90 : con;
       con -= phut;
       const deTinhGio = i === 0;
-      const chuDe = NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
+      const chuDeCanOn = dv.tienDoKienThuc
+        ? Object.entries(dv.tienDoKienThuc).find(([ten, td]) => td === "canOnTap" && NOI_DUNG_ON[k.mon]?.includes(ten))?.[0]
+        : undefined;
+      const chuDe = (!deTinhGio && chuDeCanOn)
+        ? chuDeCanOn
+        : NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
       const tieuDe = deTinhGio ? `${TEN_MON[k.mon]} – ${tenPhanDe(lam15(phut * 0.6))}, chữa câu sai` : `${TEN_MON[k.mon]} – ${chuDe[0].toLowerCase()}${chuDe.slice(1)}`;
       const pLam = deTinhGio ? lam15(phut * 0.6) : lam15(phut * 0.55), pChua = deTinhGio ? lam15(phut * 0.35) : lam15(phut * 0.35);
       const pCuoi = Math.max(5, phut - pLam - pChua);

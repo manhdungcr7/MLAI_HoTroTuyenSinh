@@ -13,6 +13,7 @@ import { homNay, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import { CheDoLich } from "./che-do-lich";
 import { CheDoViec } from "./che-do-viec";
+import { CheDoChienLuoc } from "./che-do-chien-luoc";
 import { phutBayGio } from "./dinh-dang";
 import { ngayBatDauXep } from "./lich-tuan";
 import { HopXepLich, type KetQuaXep } from "./hop-xep-lich";
@@ -20,15 +21,19 @@ import { useThongBaoNgan } from "./thanh-phan";
 import { TheViecDoTuanTruoc, TuanMoiTuTao } from "./tuan-moi";
 import { daKetThuc, soBuoiTuHoc } from "./tinh-toan";
 
-type CheDo = "viec" | "lich";
-const CAC_CHE_DO: { gia: CheDo; nhan: string }[] = [{ gia: "viec", nhan: "Việc cần làm" }, { gia: "lich", nhan: "Lịch" }];
+type CheDo = "viec" | "lich" | "chienLuoc";
+const CAC_CHE_DO: { gia: CheDo; nhan: string }[] = [
+  { gia: "viec", nhan: "Việc cần làm" },
+  { gia: "lich", nhan: "Lịch" },
+  { gia: "chienLuoc", nhan: "Chiến lược" },
+];
 
 export default function KeHoachTuan() {
   const { s, xepLai } = useApp();
   const nav = useNavigate();
   const loc = useLocation();
   const [params, setParams] = useSearchParams();
-  const cheDo: CheDo = params.get("xem") === "lich" ? "lich" : "viec";
+  const cheDo: CheDo = params.get("xem") === "lich" ? "lich" : params.get("xem") === "chienLuoc" ? "chienLuoc" : "viec";
   // Ngày hôm nay tính lại khi qua nửa đêm hoặc khi quay lại tab, để tuần hiện tại không kẹt ở tuần cũ.
   const [hom, setHom] = useState(homNay);
   const tuanHienRef = useRef(tuanHienTai());
@@ -115,25 +120,31 @@ export default function KeHoachTuan() {
       <NoiDung>
         <TieuDeTuan thuHai={tuan} onDoi={doiTuan} />
         <DaiNgay cacNgay={ngays} chon={ngayChon} onChon={setNgay} soViec={soTuHocTheoNgay} />
-        <ThanhChuyen cacMuc={CAC_CHE_DO} giaTri={cheDo} onChange={(v) => setParams(v === "lich" ? { xem: "lich" } : {}, { replace: true })} />
+        <ThanhChuyen cacMuc={CAC_CHE_DO} giaTri={cheDo} onChange={(v) => setParams(v === "lich" ? { xem: "lich" } : v === "chienLuoc" ? { xem: "chienLuoc" } : {}, { replace: true })} />
 
-        {quaKhu ? (
-          <DongThongBao tone="muc" icon={History} tieuDe="Tuần đã qua" moTa="Em chỉ xem lại được lịch và việc của tuần này." />
-        ) : nenGoiYXep ? (
-          <DongThongBao tone="xanh" icon={Sparkles} tieuDe="Tuần này chưa có giờ tự học"
-            moTa={`Bấm để mình chia ${conViec} việc vào các khung trống quanh lịch học của em.`} hanhDong="Xếp lịch giúp em" onClick={xep} />
-        ) : conViec > 0 ? (
-          <div className="space-y-2">
-            <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Xếp lịch giúp em</Nut>
-          </div>
-        ) : null}
+        {cheDo === "chienLuoc" ? (
+          <CheDoChienLuoc hienThongBao={hienThongBao} />
+        ) : (
+          <>
+            {quaKhu ? (
+              <DongThongBao tone="muc" icon={History} tieuDe="Tuần đã qua" moTa="Em chỉ xem lại được lịch và việc của tuần này." />
+            ) : nenGoiYXep ? (
+              <DongThongBao tone="xanh" icon={Sparkles} tieuDe="Tuần này chưa có giờ tự học"
+                moTa={`Bấm để mình chia ${conViec} việc vào các khung trống quanh lịch học của em.`} hanhDong="Xếp lịch giúp em" onClick={xep} />
+            ) : conViec > 0 ? (
+              <div className="space-y-2">
+                <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Xếp lịch giúp em</Nut>
+              </div>
+            ) : null}
 
-        {!quaKhu && <TuanMoiTuTao tuan={tuan} hienThongBao={hienThongBao} />}
-        {!quaKhu && <TheViecDoTuanTruoc tuan={tuan} hienThongBao={hienThongBao} />}
+            {!quaKhu && <TuanMoiTuTao tuan={tuan} hienThongBao={hienThongBao} />}
+            {!quaKhu && <TheViecDoTuanTruoc tuan={tuan} hienThongBao={hienThongBao} />}
 
-        {cheDo === "viec"
-          ? <CheDoViec ngays={ngays} ngayChon={ngayChon} quaKhu={quaKhu} hienThongBao={hienThongBao} />
-          : <CheDoLich ngayChon={ngayChon} quaKhu={quaKhu} hienThongBao={hienThongBao} />}
+            {cheDo === "viec"
+              ? <CheDoViec ngays={ngays} ngayChon={ngayChon} quaKhu={quaKhu} hienThongBao={hienThongBao} />
+              : <CheDoLich ngayChon={ngayChon} quaKhu={quaKhu} hienThongBao={hienThongBao} />}
+          </>
+        )}
       </NoiDung>
 
       <HopXepLich ketQua={ketQua} ngays={ngays} dong={() => setKetQua(null)}

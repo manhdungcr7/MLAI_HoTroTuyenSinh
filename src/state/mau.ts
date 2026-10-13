@@ -46,6 +46,10 @@ export function taoHoSoMau(): AppState {
       diemManh: ["Tư duy logic", "Giải quyết vấn đề", "Tiếng Anh"], canCaiThien: ["Vật lý", "Diễn đạt", "Quản lý thời gian"],
       nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"],
       hocXaNha: true, quanTamViecLam: "rat", hoanTat: true,
+      chungChiNgoaiNgu: { loai: "IELTS", diem: 7.0 },
+      diemDgnl: { hcm: 875, hn: null, tsa: null },
+      hocBa: { dtbLop10: 8.6, dtbLop11: 8.8, dtbLop12: 9.0, dtb3Nam: 8.8, hocLuc: "gioi", hanhKiem: "tot" },
+      giaiThuongHsg: { cap: "tinh", mon: "Toán", giai: "ba" },
     },
     // Điểm mục tiêu đúng bằng điểm chuẩn của ngành mục tiêu (NV1); idHoSoMau chọn ngành thiếu khoảng 1–2,5 điểm, không vượt ngân sách.
     mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop: "A01", toHop: TO_HOP.A01, diemMucTieu: timLuaChon(ids[0])?.diemMin ?? 26, ngayThi: congNgay(isoNgay(hom), 266) },

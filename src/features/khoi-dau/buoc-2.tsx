@@ -5,6 +5,7 @@ import { CAC_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type MonId } from "@/state/ty
 import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP } from "./lua-chon";
 import DiemMonThem from "./diem-mon-them";
 import DiemUuTien from "./diem-uu-tien";
+import DiemXetTuyenSom from "./diem-xet-tuyen-som";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop, toHopCaoNhatDayDu } from "./tinh-toan";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
@@ -71,6 +72,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
 
       <DiemMonThem h={h} sua={sua} />
       <DiemUuTien h={h} sua={sua} />
+      <DiemXetTuyenSom h={h} sua={sua} />
 
       <section aria-labelledby="tieu-de-to-hop">
         <div className="flex items-center justify-between gap-2 mb-2">

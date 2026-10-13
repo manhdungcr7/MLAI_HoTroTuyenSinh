@@ -28,6 +28,10 @@ export interface HoSoTomTat { // không có tên, không có thông tin liên h�
   nganSachToiDaTrieu?: number | null;
   khuVuc?: string[];
   toHopCaoNhat?: { ma: string; tong: number } | null;
+  chungChiNgoaiNgu?: string | null;
+  diemDgnl?: string | null;
+  hocBa?: string | null;
+  giaiThuongHsg?: string | null;
 }
 
 export interface YeuCauTuVan { cauHoi: string; nguCanh?: string; hoSo?: HoSoTomTat | null; duLieu: SuKien[] }
@@ -68,6 +72,10 @@ export function lamSachHoSo(x: unknown): HoSoTomTat | null {
     const t = th as Record<string, unknown>; const tong = so(t.tong, 0, 30);
     if (typeof t.ma === "string" && tong !== undefined) r.toHopCaoNhat = { ma: t.ma.slice(0, 6), tong };
   }
+  if (typeof o.chungChiNgoaiNgu === "string") r.chungChiNgoaiNgu = o.chungChiNgoaiNgu.slice(0, 30);
+  if (typeof o.diemDgnl === "string") r.diemDgnl = o.diemDgnl.slice(0, 60);
+  if (typeof o.hocBa === "string") r.hocBa = o.hocBa.slice(0, 30);
+  if (typeof o.giaiThuongHsg === "string") r.giaiThuongHsg = o.giaiThuongHsg.slice(0, 50);
   return r;
 }
 

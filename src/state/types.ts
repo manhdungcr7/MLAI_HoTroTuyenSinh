@@ -60,6 +60,33 @@ export interface HoSo {
   hocXaNha: boolean | null;
   quanTamViecLam: "rat" | "binhThuong" | "chuaRo" | null;
   hoanTat: boolean;
+  // ---- Hồ sơ tuyển sinh đa phương thức (IELTS, ĐGNL, Học bạ, HSG) ----
+  chungChiNgoaiNgu?: {
+    loai: "IELTS" | "TOEFL" | "TOEIC" | "VSTEP" | "HSK" | "JLPT" | "khac";
+    diem: number; // Điểm đạt được (ví dụ IELTS 6.5, 7.0; VSTEP 8.0)
+    ngayCap?: string;
+  } | null;
+  diemDgnl?: {
+    hcm?: number | null; // ĐHQG TP.HCM (thang 1200)
+    hn?: number | null;  // ĐHQG Hà Nội HSA (thang 150)
+    tsa?: number | null; // ĐGTD Bách Khoa TSA (thang 100)
+    khac?: number | null;
+  } | null;
+  hocBa?: {
+    dtbLop10?: number | null;
+    dtbLop11?: number | null;
+    dtbLop12?: number | null;
+    dtb3Nam?: number | null;
+    hocLuc?: "xuatSac" | "gioi" | "kha" | "trungBinh" | null;
+    hanhKiem?: "tot" | "kha" | "trungBinh" | null;
+    truongChuyen?: boolean | null;
+  } | null;
+  giaiThuongHsg?: {
+    cap: "quocGia" | "tinh" | "truongChuyen" | null;
+    mon?: string;
+    giai?: "nhat" | "nhi" | "ba" | "khuyenKhich" | null;
+  } | null;
+  tienDoKienThuc?: Record<string, "chuaHoc" | "dangHoc" | "namVung" | "canOnTap">;
 }
 
 export type BacHoc = "Đại học" | "Cao đẳng";

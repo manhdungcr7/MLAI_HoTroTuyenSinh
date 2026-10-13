@@ -27,6 +27,7 @@ export function dauVaoViecTuan(s: AppState, tuan: string, tuNgay?: string): DauV
     toHop: m.toHop, diem: diemHienTaiCuaTungMon(s), diemMucTieu: m.mucTieuTho, canCaiThien: s.hoSo.canCaiThien, doDoc,
     tuan, chiSoTuan: chiSoTuanCua(tuan), phutTuHoc: gio.tongPhut, tamTrang: tamTrangVanHieuLuc(s),
     ngayConDenThi: m.soNgayCon > 0 ? m.soNgayCon : undefined, lop: lopCuaEm(s),
+    tienDoKienThuc: s.hoSo.tienDoKienThuc,
   };
 }
 
