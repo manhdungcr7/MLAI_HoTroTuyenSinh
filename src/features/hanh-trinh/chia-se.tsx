@@ -43,7 +43,7 @@ export default function ChiaSe() {
     <>
       <DauTrangCoQuayLai tieuDe="Chia sẻ với người đồng hành" quayLai={DUONG_DAN.hoSo()} />
       <NoiDung className="space-y-4">
-        <DongThongBao tone="xanh" icon={Users} tieuDe="Để người lớn cùng em cân nhắc"
+        <DongThongBao tone="xanh" icon={Users} tieuDe="Để phụ huynh, thầy cô cùng cân nhắc"
           moTa="Gửi bản tóm tắt cho phụ huynh, thầy cô. Không lưu trên máy chủ." />
 
         <section aria-label="Chỉ số theo dõi">
@@ -53,15 +53,15 @@ export default function ChiaSe() {
         <section aria-label="Liên kết cho người đồng hành" className="space-y-2.5 print:hidden">
           <TieuDeMuc>Gửi liên kết</TieuDeMuc>
           <The className="space-y-3">
-            <p className="text-[14px] text-chu leading-snug">Người nhận xem tóm tắt và nhắn lại em, không cần tài khoản.</p>
+            <p className="text-[14px] text-chu leading-snug">Người nhận xem tóm tắt và gửi phản hồi, không cần tài khoản.</p>
             {!lienKet && (
               <p className="rounded-the bg-cam-nhat px-3 py-2 text-[13px] text-cam-chu leading-snug">
-                <b>Riêng tư:</b> ai có liên kết đều xem được điểm, tỉnh, ngân sách và không thu hồi được. Chỉ gửi người em tin.
+                <b>Riêng tư:</b> ai có liên kết đều xem được điểm, tỉnh, ngân sách và không thu hồi được. Chỉ gửi người bạn tin cậy.
               </p>
             )}
             <div className="flex items-center justify-between gap-3 min-h-11">
-              <span className="text-[14px] text-chu leading-snug">Kèm tên của em trong liên kết</span>
-              <CongTac dang={kemTen} onChange={(v) => { setKemTen(v); setLienKet(""); }} nhan="Kèm tên của em trong liên kết" />
+              <span className="text-[14px] text-chu leading-snug">Kèm tên của bạn trong liên kết</span>
+              <CongTac dang={kemTen} onChange={(v) => { setKemTen(v); setLienKet(""); }} nhan="Kèm tên của bạn trong liên kết" />
             </div>
             <Nut bieuTuong={Link2} onClick={taoLienKet}>Tạo liên kết</Nut>
             {lienKet && (

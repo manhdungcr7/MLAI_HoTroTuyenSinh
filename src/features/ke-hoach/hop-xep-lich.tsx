@@ -54,7 +54,7 @@ export function HopXepLich({ ketQua, ngays, dong, xemLich, daXepCaBoQua }: {
                 </li>
               ))}
             </ul>
-            <p className="text-[13px] text-chu-phu">Em có thể nới giờ tự học mỗi ngày, bớt ngày nghỉ, hoặc làm việc này vào tuần sau.</p>
+            <p className="text-[13px] text-chu-phu">Bạn có thể nới giờ tự học mỗi ngày, bớt ngày nghỉ, hoặc làm việc này vào tuần sau.</p>
             <Nut kieu="nhe" bieuTuong={Settings2} onClick={() => nav(DUONG_DAN.caiDatTuHoc())}>Nới giờ tự học</Nut>
           </div>
         ) : (
@@ -63,7 +63,7 @@ export function HopXepLich({ ketQua, ngays, dong, xemLich, daXepCaBoQua }: {
 
         {!ketQua.hetTuan && boQua.length > 0 && (
           <div className="rounded-the bg-nen p-3.5 space-y-2">
-            <p className="text-[14px] text-chu"><b>{boQua.length} việc em đã bỏ qua</b> chưa được xếp: {boQua.map((v) => v.tieuDe).join("; ")}.</p>
+            <p className="text-[14px] text-chu"><b>{boQua.length} việc bạn đã bỏ qua</b> chưa được xếp: {boQua.map((v) => v.tieuDe).join("; ")}.</p>
             <Nut kieu="vien" bieuTuong={Undo2} onClick={() => { boQua.forEach((v) => datTrangThaiViec(v, "chua")); daXepCaBoQua(); }}>Xếp cả việc đã bỏ qua</Nut>
           </div>
         )}

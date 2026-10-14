@@ -85,7 +85,7 @@ export default function KeHoachTuan() {
     const bd = ngayBatDauXep(tuan, hom, phutBayGio(), s.cauHinh.ngayNghi);
     const { tuNgay } = bd;
     if (bd.hetTuan) {
-      setKetQua({ chuaXep: 0, ghiChu: [bd.ghiChu ?? "Tuần này đã gần hết. Em chuyển sang tuần sau rồi bấm Xếp lịch giúp em nhé."], tuNgay, hetTuan: true });
+      setKetQua({ chuaXep: 0, ghiChu: [bd.ghiChu ?? "Tuần này đã gần hết. Bạn chuyển sang tuần sau rồi bấm Tự động xếp lịch nhé."], tuNgay, hetTuan: true });
       return;
     }
     const r = xepLai(tuan, tuNgay);
@@ -127,13 +127,13 @@ export default function KeHoachTuan() {
         ) : (
           <>
             {quaKhu ? (
-              <DongThongBao tone="muc" icon={History} tieuDe="Tuần đã qua" moTa="Em chỉ xem lại được lịch và việc của tuần này." />
+              <DongThongBao tone="muc" icon={History} tieuDe="Tuần đã qua" moTa="Bạn có thể xem lại lịch và việc của tuần này." />
             ) : nenGoiYXep ? (
               <DongThongBao tone="xanh" icon={Sparkles} tieuDe="Tuần này chưa có giờ tự học"
-                moTa={`Bấm để mình chia ${conViec} việc vào các khung trống quanh lịch học của em.`} hanhDong="Xếp lịch giúp em" onClick={xep} />
+                moTa={`Hệ thống sẽ phân bổ ${conViec} việc vào các khung trống quanh lịch học của bạn.`} hanhDong="Tự động xếp lịch" onClick={xep} />
             ) : conViec > 0 ? (
               <div className="space-y-2">
-                <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Xếp lịch giúp em</Nut>
+                <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Tự động xếp lịch</Nut>
               </div>
             ) : null}
 

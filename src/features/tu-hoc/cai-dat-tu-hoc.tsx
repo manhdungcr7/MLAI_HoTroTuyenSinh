@@ -51,7 +51,7 @@ export default function CaiDatTuHoc() {
       <NoiDung>
         <NenHero tone="luc" className="p-4">
           <p className="text-[13px] font-bold text-chu-phu">Xem trước · tuần này</p>
-          <p className="text-[15px] text-chu leading-snug mt-0.5">Mỗi tuần em có khoảng</p>
+          <p className="text-[15px] text-chu leading-snug mt-0.5">Mỗi tuần bạn có khoảng</p>
           <p className="text-[28px] font-extrabold text-muc leading-tight">{soViet(Math.round(uoc.tongPhut / 6) / 10)} giờ tự học</p>
           <p className="text-[13px] text-chu">{soNgayHoc} ngày học · tối đa {soViet(cfg.gioHocToiDaMoiNgay)} giờ mỗi ngày</p>
           <ul className="grid grid-cols-7 gap-1.5 mt-3" aria-label="Giờ tự học từng ngày">
@@ -65,7 +65,7 @@ export default function CaiDatTuHoc() {
               </li>
             ))}
           </ul>
-          {uoc.tongPhut < 180 && <p className="text-[13px] text-cam-chu font-semibold mt-2">Tuần này còn ít giờ trống. Em có thể nới khung giờ hoặc bớt ngày nghỉ.</p>}
+          {uoc.tongPhut < 180 && <p className="text-[13px] text-cam-chu font-semibold mt-2">Tuần này còn ít giờ trống. Bạn có thể nới khung giờ hoặc bớt ngày nghỉ.</p>}
         </NenHero>
 
         <TheCaiDat icon={Clock} tone="xanh" tieuDe="Khung giờ mỗi ngày" moTa="Mình chỉ xếp giờ tự học trong khoảng này.">
@@ -96,25 +96,25 @@ export default function CaiDatTuHoc() {
             cacLua={[{ gia: "sang", nhan: "Sáng", icon: Sun }, { gia: "chieu", nhan: "Chiều", icon: Sunset }, { gia: "toi", nhan: "Tối", icon: Moon }]} />
         </TheCaiDat>
 
-        <TheCaiDat icon={CalendarOff} tone="do" tieuDe="Ngày nghỉ hẳn" moTa="Không xếp tự học vào những ngày em chọn.">
+        <TheCaiDat icon={CalendarOff} tone="do" tieuDe="Ngày nghỉ hẳn" moTa="Không xếp tự học vào những ngày bạn chọn.">
           <NhomChon nhan="Ngày nghỉ hẳn" cot={7} giaTri={cfg.ngayNghi} onChange={doiNgayNghi}
             cacLua={[1, 2, 3, 4, 5, 6, 7].map((t) => ({ gia: t, nhan: NHAN_THU[t] }))} />
-          {canhBaoNghi && <p role="alert" className="text-[13px] text-do-chu mt-1.5">Em cần ít nhất một ngày để tự học.</p>}
+          {canhBaoNghi && <p role="alert" className="text-[13px] text-do-chu mt-1.5">Bạn cần ít nhất một ngày để tự học.</p>}
         </TheCaiDat>
 
-        <TheCaiDat icon={Coffee} tone="luc" tieuDe="Nghỉ giữa các buổi" moTa="Khoảng nghỉ ngắn giúp em tập trung lại.">
+        <TheCaiDat icon={Coffee} tone="luc" tieuDe="Nghỉ giữa các buổi" moTa="Khoảng nghỉ ngắn giúp bạn tập trung lại.">
           <NhomChon nhan="Nghỉ giữa các buổi" cot={4} giaTri={cfg.nghiGiuaBuoi} onChange={(v) => doi({ nghiGiuaBuoi: v })}
             cacLua={[5, 10, 15, 20].map((p) => ({ gia: p, nhan: `${p} phút` }))} />
         </TheCaiDat>
 
         <DongThongBao tone="xanh" icon={Utensils} tieuDe="Giờ ăn luôn được giữ trống"
-          moTa="Mình không xếp tự học vào 11:45 – 13:00 và 18:00 – 19:00 để em ăn uống, nghỉ ngơi." />
+          moTa="Hệ thống luôn giữ trống 11:45 – 13:00 và 18:00 – 19:00 để bạn ăn uống, nghỉ ngơi." />
         <DongThongBao tone="tim" icon={HeartHandshake} tieuDe="Học vừa sức quan trọng hơn học nhiều"
-          moTa="Nếu thấy mệt, em giảm số giờ tối đa hoặc chọn “Hơi mệt” ở trang Hôm nay, lịch sẽ nhẹ đi." />
+          moTa="Nếu thấy mệt, bạn giảm số giờ tối đa hoặc chọn “Hơi mệt” ở trang Hôm nay, lịch sẽ tự động giảm tải." />
 
         {daDoi && <p role="status" className="text-[13px] font-semibold text-luc-chu text-center">Đã lưu cài đặt. Bấm “Xếp lại lịch” để lịch tuần này đổi theo.</p>}
         <Nut bieuTuong={Wand2} onClick={xepLaiGiupEm}>Xếp lại lịch tuần</Nut>
-        <HangBam bieuTuong={CalendarDays} tieuDe="Lịch học của em"
+        <HangBam bieuTuong={CalendarDays} tieuDe="Lịch học của bạn"
           phu={s.coDinh.length ? `${s.coDinh.length} tiết cố định, giờ tự học sẽ tránh các tiết này` : "Chưa nhập lịch ở trường, học thêm"} onClick={() => nav(DUONG_DAN.caiDatLichHoc())} />
       </NoiDung>
     </>

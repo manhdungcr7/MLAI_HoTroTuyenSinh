@@ -53,8 +53,8 @@ export function TuanMoiTuTao({ tuan, hienThongBao }: { tuan: string; hienThongBa
     hienThongBao("Đã hoàn tác, tuần này chưa có việc");
   };
   return (
-    <DongThongBao tone="luc" icon={Sparkles} tieuDe="Mình đã tạo việc cho tuần này, em xem lại nhé"
-      moTa={`Có ${ban.moi} việc theo mục tiêu của em, đã xếp vào giờ tự học còn trống.`}>
+    <DongThongBao tone="luc" icon={Sparkles} tieuDe="Đã tạo kế hoạch học tập cho tuần này"
+      moTa={`Có ${ban.moi} việc theo mục tiêu của bạn, đã xếp vào giờ tự học còn trống.`}>
       <span className="grid grid-cols-2 gap-2 mt-3">
         <Nut kieu="vien" bieuTuong={Undo2} onClick={hoanTac}>Hoàn tác</Nut>
         <Nut kieu="nhe" onClick={() => setBan(null)}>Bỏ</Nut>

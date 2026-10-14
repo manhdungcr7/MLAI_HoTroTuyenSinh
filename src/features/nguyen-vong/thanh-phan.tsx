@@ -96,7 +96,7 @@ export function CanhBaoThuTuThe({ ds, onDua }: { ds: CanhBaoThuTu[]; onDua: (c: 
   if (ds.length === 0) return null;
   return (
     <div role="status" className="rounded-the bg-cam-nhat p-3.5">
-      <p className="flex items-center gap-2 font-bold text-[15px] text-cam-chu leading-snug"><AlertTriangle size={20} className="shrink-0" />Em xem lại thứ tự này nhé</p>
+      <p className="flex items-center gap-2 font-bold text-[15px] text-cam-chu leading-snug"><AlertTriangle size={20} className="shrink-0" />Bạn xem lại thứ tự này nhé</p>
       <ul className="mt-2 space-y-3">
         {ds.map((c) => (
           <li key={c.sau.id}>
@@ -105,7 +105,6 @@ export function CanhBaoThuTuThe({ ds, onDua }: { ds: CanhBaoThuTu[]; onDua: (c: 
           </li>
         ))}
       </ul>
-      <p className="mt-2 text-[12.5px] text-chu-phu leading-snug">Nếu em muốn giữ như vậy cũng được, đây chỉ là nhắc.</p>
     </div>
   );
 }

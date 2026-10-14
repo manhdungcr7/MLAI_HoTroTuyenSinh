@@ -38,8 +38,8 @@ export function CheDoLich({ ngayChon, quaKhu, hienThongBao }: { ngayChon: string
   if (s.coDinh.length === 0) {
     return (
       <>
-        <TrangThaiTrong bieuTuong={<CalendarPlus size={26} />} tieuDe="Em chưa nhập lịch học"
-          moTa="Nhập giờ học trên lớp và học thêm trước, mình mới xếp giờ tự học vào đúng khung trống được.">
+        <TrangThaiTrong bieuTuong={<CalendarPlus size={26} />} tieuDe="Bạn chưa nhập lịch học"
+          moTa="Nhập giờ học trên lớp và học thêm trước để hệ thống xếp giờ tự học vào khung trống phù hợp nhất.">
           <div className="space-y-2">
             <Nut bieuTuong={CalendarPlus} onClick={() => setMoNhanh(true)}>Nhập nhanh</Nut>
             <Nut kieu="vien" muiTen onClick={() => nav(DUONG_DAN.caiDatLichHoc())}>Nhập từng tiết</Nut>
@@ -84,7 +84,7 @@ export function CheDoLich({ ngayChon, quaKhu, hienThongBao }: { ngayChon: string
 
       <div className="flex items-center justify-between pt-1">
         <h2 className="text-[16px] font-extrabold text-muc">{tenThu(ngayChon)}, {ngayThang(ngayChon)}{ngayChon === hom && <span className="text-chu-phu font-semibold"> · Hôm nay</span>}</h2>
-        {ngayNghi && <Nhan tone="tim">Ngày nghỉ của em</Nhan>}
+        {ngayNghi && <Nhan tone="tim">Ngày nghỉ của bạn</Nhan>}
       </div>
 
       <ol className="space-y-2" aria-label={`Lịch ${tenNgay(ngayChon, hom)}`}>

@@ -42,8 +42,8 @@ export type MucChacChan = "Cao" | "Vừa" | "Thấp";
 export const TONE_CHAC_CHAN: Record<MucChacChan, ToneTen> = { Cao: "luc", "Vừa": "cam", "Thấp": "do" };
 /** Chữ hiển thị cho `chacChan`: chỉ mô tả vị trí điểm của em so với điểm chuẩn, không hứa kết quả. */
 export const CHU_SO_VOI_DIEM_CHUAN: Record<MucChacChan, string> = { Cao: "Vượt điểm chuẩn", "Vừa": "Sát điểm chuẩn", "Thấp": "Thấp hơn điểm chuẩn" };
-export const TONE_MUC: Record<MucPhuHop, ToneTen> = { "Phù hợp": "luc", "Có thể thử sức": "tim", "Cần cân nhắc": "cam" };
-const THU_TU_MUC: Record<MucPhuHop, number> = { "Phù hợp": 0, "Có thể thử sức": 1, "Cần cân nhắc": 2 };
+export const TONE_MUC: Record<MucPhuHop, ToneTen> = { "Có thể thử sức": "tim", "Phù hợp": "luc", "Cần cân nhắc": "cam" };
+const THU_TU_MUC: Record<MucPhuHop, number> = { "Có thể thử sức": 0, "Phù hợp": 1, "Cần cân nhắc": 2 };
 
 export interface KetQuaPhuHop {
   muc: MucPhuHop | null; // null = em chưa nhập đủ điểm để so
@@ -155,32 +155,32 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   return { muc, tong, chenh, diemGoiY, chacChan, lyDoKhongSo: null, vuotNganSach, ngoaiKhuVuc, tomTat, giaiThich, tot, luuY };
 }
 
-export type KieuSapXep = "phuHop" | "hocPhi" | "diem";
+export type KieuSapXep = "phuHop" | "diemCao" | "hocPhi" | "diem";
 export const CAC_KIEU_SAP_XEP: { gia: KieuSapXep; nhan: string }[] = [
-  { gia: "phuHop", nhan: "Phù hợp nhất" }, { gia: "hocPhi", nhan: "Học phí thấp" }, { gia: "diem", nhan: "Điểm thấp" },
+  { gia: "phuHop", nhan: "Thử sức → Phù hợp" }, { gia: "diemCao", nhan: "Điểm chuẩn cao" }, { gia: "hocPhi", nhan: "Học phí thấp" }, { gia: "diem", nhan: "Điểm thấp" },
 ];
 
-/** Em đã nhập đủ điểm cho ít nhất một tổ hợp 3 môn nào đó. */
+/** Bạn đã nhập đủ điểm cho ít nhất một tổ hợp 3 môn nào đó. */
 export const coDiemDeSo = (bc: BoiCanh): boolean => tongChoLuaChon({ toHopXet: [] }, bc.diem).tong !== null;
 
 export function sapXep(ds: LuaChon[], kieu: KieuSapXep, bc: BoiCanh): LuaChon[] {
   const kq = new Map(ds.map((l) => [l.id, danhGia(l, bc)]));
   return [...ds].sort((a, b) => {
     if (kieu === "hocPhi") return (a.hocPhiMin ?? Infinity) - (b.hocPhiMin ?? Infinity) || 0;
+    if (kieu === "diemCao") return b.diemMin - a.diemMin;
     if (kieu === "diem") return a.diemMin - b.diemMin;
     const ka = kq.get(a.id)!, kb = kq.get(b.id)!;
-    // 1) Đúng nhóm ngành em quan tâm (nếu em có chọn). 2) Đúng khu vực ưu tiên.
+    // 1) Đúng nhóm ngành bạn quan tâm (nếu bạn có chọn). 2) Đúng khu vực ưu tiên.
     const nganh = (l: LuaChon) => (bc.nganhQuanTam.length === 0 || bc.nganhQuanTam.includes(l.nhomNganh) ? 0 : 1);
     const kv = (l: LuaChon) => (dungKhuVuc(l, bc.khuVucUuTien) === false ? 2 : bc.tinh && cungNoi(l.khuVuc, bc.tinh) ? 0 : 1);
     // Điểm của phương thức khác (học bạ, ĐGNL...) không cùng thang với điểm thi tốt nghiệp nên xếp sau cùng nhóm.
     const pt = (l: LuaChon) => (l.phuongThuc && l.phuongThuc !== "THPT" ? 1 : 0);
     const dau = nganh(a) - nganh(b) || pt(a) - pt(b);
     if (dau) return dau;
-    // 3) Mức phù hợp (ngành chưa so được xếp cuối). 4) Trong cùng mức: trường điểm chuẩn sát điểm của em nhất (sát mà vẫn đủ điểm) lên trước,
-    //    để em thấy trường tốt nhất mình với tới, không phải trường dễ nhất. Điểm gợi ý ở mức tối đa nên không đủ để phân biệt.
-    const gan = (k: KetQuaPhuHop) => (k.chenh === null ? 999 : k.chenh >= 0 ? k.chenh : 100 - k.chenh);
+    // 3) Mức từ khó vào/thử sức nhất -> phù hợp -> cần cân nhắc.
+    // 4) Trong cùng mức: điểm chuẩn cao hơn (khó vào hơn) lên trước, giảm dần đến điểm chuẩn thấp hơn.
     const hang = (k: KetQuaPhuHop) => (k.muc ? THU_TU_MUC[k.muc] : 3);
-    return hang(ka) - hang(kb) || kv(a) - kv(b) || (ka.muc ? gan(ka) - gan(kb) : a.diemMin - b.diemMin);
+    return hang(ka) - hang(kb) || kv(a) - kv(b) || (b.diemMin - a.diemMin);
   });
 }
 

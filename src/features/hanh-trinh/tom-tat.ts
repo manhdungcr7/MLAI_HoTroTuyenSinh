@@ -71,11 +71,11 @@ export function chiSoTheoDoi(s: AppState): ChiSo[] {
       moTa: x.boSung.length ? `Còn thiếu: ${x.boSung.slice(0, 3).map((b) => b.ten.toLowerCase()).join(", ")}${x.boSung.length > 3 ? "…" : ""}.` : "Hồ sơ đã có đủ thông tin chính." },
     { khoa: "nguyenVong", ten: "Nguyện vọng có căn cứ", giaTri: s.nguyenVong.length ? `${coCan}/${s.nguyenVong.length}` : "0",
       phanTram: s.nguyenVong.length ? Math.round((coCan / s.nguyenVong.length) * 100) : null, tone: "luc",
-      moTa: !s.nguyenVong.length ? "Em chưa lưu nguyện vọng nào."
-        : coCan === s.nguyenVong.length ? "Mọi nguyện vọng đều đã được so với điểm của em và ghi rõ nguồn điểm chuẩn."
-          : `${s.nguyenVong.length - coCan} nguyện vọng chưa đủ điểm các môn của tổ hợp để xếp nhãn. Em bổ sung điểm nhé.` },
+      moTa: !s.nguyenVong.length ? "Bạn chưa lưu nguyện vọng nào."
+        : coCan === s.nguyenVong.length ? "Mọi nguyện vọng đều đã được so với điểm của bạn và ghi rõ nguồn điểm chuẩn."
+          : `${s.nguyenVong.length - coCan} nguyện vọng chưa đủ điểm các môn của tổ hợp để xếp nhãn. Bạn bổ sung điểm nhé.` },
     { khoa: "nhiemVu", ten: "Nhiệm vụ tuần này", giaTri: tuan.tong ? `${tuan.xong}/${tuan.tong}` : "–", phanTram: tuan.tong ? tuan.phanTram : null, tone: "cam",
-      moTa: tuan.tong ? `Đã xong ${tuan.xong} trên ${tuan.tong} việc của tuần này.` : "Tuần này chưa có việc. Em tạo việc ở Kế hoạch tuần." },
+      moTa: tuan.tong ? `Đã xong ${tuan.xong} trên ${tuan.tong} việc của tuần này.` : "Tuần này chưa có việc. Tạo việc ở Kế hoạch tuần." },
     khoang,
   ];
 }
@@ -84,7 +84,7 @@ export function chiSoTheoDoi(s: AppState): ChiSo[] {
 
 export interface MucTomTat { tieuDe: string; dong: string[] }
 
-/** Điều em nên trao đổi với người lớn, rút từ chính dữ liệu của em (ngân sách, nơi ở, cơ cấu danh sách...). */
+/** Điều bạn nên trao đổi với người lớn, rút từ chính dữ liệu của bạn (ngân sách, nơi ở, cơ cấu danh sách...). */
 export function cauHoiTraoDoi(s: AppState): string[] {
   const h = s.hoSo;
   const ra: string[] = [];
@@ -95,16 +95,16 @@ export function cauHoiTraoDoi(s: AppState): string[] {
   if (h.nganSach) {
     const tran = NGAN_SACH_TOI_DA[h.nganSach];
     const vuot = lc.filter((l) => coHocPhi(l) && (l.hocPhiMin ?? 0) > tran);
-    if (vuot.length) ra.push(`Học phí của ${vuot.slice(0, 2).map((l) => `${l.truong} – ${l.nganh}`).join(" và ")} cao hơn mức gia đình dự kiến (${TEN_NGAN_SACH[h.nganSach].toLowerCase()} mỗi năm). Gia đình có thể hỗ trợ thêm, hay em cần tìm học bổng?`);
-  } else ra.push("Gia đình có thể lo học phí khoảng bao nhiêu mỗi năm? Em chưa chọn mức này nên mình chưa lọc được trường theo tiền.");
-  if (h.choO === null) ra.push("Em sẽ ở nhà, ở trọ hay ký túc xá khi học đại học?");
-  else if (h.choO === "oNha" && lc.some((l) => h.khuVuc.length > 0 && !h.khuVuc.includes(l.khuVuc))) ra.push("Em chọn ở nhà nhưng có nguyện vọng ở nơi khác. Em có đi lại hằng ngày được không, hay cần chỗ ở?");
-  if (h.hocXaNha === null) ra.push("Gia đình có đồng ý cho em học xa nhà không?");
+    if (vuot.length) ra.push(`Học phí của ${vuot.slice(0, 2).map((l) => `${l.truong} – ${l.nganh}`).join(" và ")} cao hơn mức gia đình dự kiến (${TEN_NGAN_SACH[h.nganSach].toLowerCase()} mỗi năm). Gia đình có thể hỗ trợ thêm, hay cần tìm học bổng?`);
+  } else ra.push("Gia đình có thể lo học phí khoảng bao nhiêu mỗi năm? Bạn chưa chọn mức này nên hệ thống chưa lọc được trường theo học phí.");
+  if (h.choO === null) ra.push("Bạn sẽ ở nhà, ở trọ hay ký túc xá khi học đại học?");
+  else if (h.choO === "oNha" && lc.some((l) => h.khuVuc.length > 0 && !h.khuVuc.includes(l.khuVuc))) ra.push("Bạn chọn ở nhà nhưng có nguyện vọng ở nơi khác. Bạn có đi lại hằng ngày được không, hay cần chỗ ở?");
+  if (h.hocXaNha === null) ra.push("Gia đình có đồng ý cho bạn học xa nhà không?");
 
   const c = xetCoCau(demNhan(ds), ds.length);
   if (c.chuaDuCanCu > 0) ra.push(`Chưa đủ căn cứ cho ${c.chuaDuCanCu} nguyện vọng (thiếu điểm môn hoặc điểm thuộc phương thức khác), nên chưa nhận xét được cơ cấu danh sách.`);
-  if (c.n > 0 && c.chuaDuCanCu === 0 && c.chacChan === 0) ra.push("Danh sách chưa có nguyện vọng An toàn hay Dự phòng (điểm chuẩn thấp hơn điểm của em từ 1,5 điểm). Em hỏi thầy cô xem có nên thêm không.");
-  if (c.thuSucNhieu) ra.push("Hơn một nửa nguyện vọng đang ở mức thử sức. Em hỏi thầy cô xem nên giữ hay đổi bớt.");
+  if (c.n > 0 && c.chuaDuCanCu === 0 && c.chacChan === 0) ra.push("Danh sách chưa có nguyện vọng An toàn hay Dự phòng (điểm chuẩn thấp hơn điểm của bạn từ 1,5 điểm). Bạn hỏi thầy cô xem có nên thêm không.");
+  if (c.thuSucNhieu) ra.push("Hơn một nửa nguyện vọng đang ở mức thử sức. Bạn hỏi thầy cô xem nên giữ hay đổi bớt.");
   const m = mucTieuDayDu(s);
   if (m && m.conThieu > 0 && m.duDiem) ra.push(`Em còn thiếu khoảng ${so(m.conThieu)} điểm để đạt mục tiêu. Thầy cô hoặc gia đình có thể giúp em chọn cách ôn nào?`);
   if (m && m.monThieu.length) ra.push(`Em chưa có điểm ${m.monThieu.map((k) => TEN_MON[k]).join(", ")}. Thầy cô cho em xin điểm học bạ hoặc điểm thi thử gần nhất.`);

@@ -14,7 +14,7 @@ export function TrangLoi() {
     <div className="khung-ung-dung p-4 pt-10 space-y-3">
       <KhungLoi
         tieuDe={doTai ? "Chưa tải được trang này" : "Có lỗi xảy ra"}
-        moTa={doTai ? "Có thể máy em mất mạng, hoặc ứng dụng vừa được cập nhật. Em tải lại trang là được. Thông tin em đã nhập vẫn còn trên máy." : "Em tải lại trang thử nhé. Thông tin em đã nhập vẫn còn trên máy."}
+        moTa={doTai ? "Có thể thiết bị mất kết nối mạng hoặc ứng dụng vừa được cập nhật. Bạn tải lại trang là được. Thông tin đã lưu vẫn được giữ nguyên." : "Bạn thử tải lại trang nhé. Thông tin đã lưu vẫn được giữ nguyên."}
         thuLai={() => window.location.reload()}
       />
       <Nut kieu="vien" onClick={() => nav(DUONG_DAN.homNay())}>Về trang Hôm nay</Nut>

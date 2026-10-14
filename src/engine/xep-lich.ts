@@ -144,7 +144,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
     (n) => !cfg.ngayNghi.includes(thuCuaNgay(n)) && (!dv.tuNgay || n >= dv.tuNgay),
   );
   const tran = Math.round(cfg.gioHocToiDaMoiNgay * 60 * hesoTam);
-  if (tam === "met") ghiChu.push("Em đang mệt nên lịch được làm nhẹ đi một nửa.");
+  if (tam === "met") ghiChu.push("Tâm trạng đang mệt nên lịch được giảm tải một nửa.");
 
   const khungTheoNgay = new Map<string, Khung[]>();
   const taiTheoNgay = new Map<string, number>();
@@ -239,7 +239,7 @@ export function xepLichTuan(dv: DauVao): KetQuaXepLich {
   }
 
   const chuaXep = viec.filter((v) => thieu.has(v.id)).map((v) => ({ viec: v, phutThieu: thieu.get(v.id)! }));
-  if (chuaXep.length) ghiChu.push(`Còn ${chuaXep.length} việc chưa có chỗ trong tuần này. Em có thể giảm bớt hoặc nới giờ học.`);
+  if (chuaXep.length) ghiChu.push(`Còn ${chuaXep.length} việc chưa có chỗ trong tuần này. Bạn có thể nới giờ học hoặc dời bớt việc.`);
   ra.sort((a, b) => a.ngay.localeCompare(b.ngay) || a.batDau.localeCompare(b.batDau));
   return { khoi: ra, chuaXep, ghiChu };
 }

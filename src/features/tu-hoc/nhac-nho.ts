@@ -48,7 +48,7 @@ export function nhacSapToi(
       const cacMon = [...new Set(s.coDinh.filter((t) => t.thu === thuCuaNgay(mai) && t.mon).map((t) => TEN_MON[t.mon!]))];
       const luc = lucCua(ngay, gioChuanBiBai);
       if (cacMon.length && trongKhoang(luc)) {
-        ra.push({ id: `chuanBi:${ngay}`, luc, loai: "chuanBi", tieuDe: "Chuẩn bị bài cho ngày mai", moTa: `Ngày mai em có ${cacMon.join(", ")}. Soạn sách vở và xem lại bài cũ nhé.` });
+        ra.push({ id: `chuanBi:${ngay}`, luc, loai: "chuanBi", tieuDe: "Chuẩn bị bài cho ngày mai", moTa: `Ngày mai bạn có ${cacMon.join(", ")}. Soạn sách vở và xem lại bài cũ nhé.` });
       }
     }
   }

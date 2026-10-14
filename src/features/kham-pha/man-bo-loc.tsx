@@ -65,16 +65,16 @@ export default function ManBoLoc() {
           {tongEm !== null ? (
             <button type="button" onClick={() => sua({ diemTu: Math.max(0, lam(tongEm! - 3)), diemDen: Math.min(30, lam(tongEm! + 2)) })}
               className="w-full min-h-12 rounded-xl bg-xanh-nhat text-xanh text-[14px] font-bold inline-flex items-center justify-center gap-2 active:brightness-95">
-              <Target size={17} />Lọc quanh điểm em ({dinhDang(tongEm, 1)})
+              <Target size={17} />Lọc quanh điểm của bạn ({dinhDang(tongEm, 1)})
             </button>
           ) : (
-            <p className="text-[13px] text-chu-phu">Nhập điểm 3 môn của một tổ hợp trong hồ sơ để lọc nhanh quanh điểm của em.</p>
+            <p className="text-[13px] text-chu-phu">Nhập điểm 3 môn của một tổ hợp trong hồ sơ để lọc nhanh quanh điểm của bạn.</p>
           )}
         </Muc>
 
         <Muc tieuDe="Học phí tối đa" phu="(triệu đồng/năm)">
           <ChonNhanh cot={2} cacLua={CAC_MUC_HOC_PHI} giaTri={b.hocPhi} onChange={(v: BoLoc["hocPhi"]) => sua({ hocPhi: v })} />
-          {bc.nganSach !== null && <p className="text-[13px] text-chu-phu">Ngân sách trong hồ sơ của em: tối đa khoảng {bc.nganSach} triệu/năm.</p>}
+          {bc.nganSach !== null && <p className="text-[13px] text-chu-phu">Ngân sách trong hồ sơ của bạn: tối đa khoảng {bc.nganSach} triệu/năm.</p>}
         </Muc>
 
         <Muc tieuDe="Khu vực">

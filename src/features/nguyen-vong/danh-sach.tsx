@@ -83,7 +83,7 @@ export default function DanhSachNguyenVong() {
                     </span>
                     <div>
                       <h2 className="text-[16px] font-extrabold text-muc leading-tight">
-                        Ngành em đã lưu yêu thích ({dsYeuThich.length})
+                        Ngành bạn đã lưu yêu thích ({dsYeuThich.length})
                       </h2>
                       <p className="text-[12px] text-chu-phu mt-0.5">
                         Chọn nhanh để đưa vào danh sách nguyện vọng
@@ -138,8 +138,8 @@ export default function DanhSachNguyenVong() {
                 </div>
               </div>
             ) : (
-              <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Em chưa có nguyện vọng nào"
-                moTa="Vào Khám phá, mở một trường em thích rồi bấm “Thêm vào nguyện vọng” hoặc thả tim để lưu. Danh sách sẽ hiện ở đây để em sắp xếp.">
+              <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Bạn chưa có nguyện vọng nào"
+                moTa="Vào Khám phá, mở một trường bạn quan tâm rồi bấm “Thêm vào nguyện vọng” hoặc thả tim để lưu.">
                 <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
                 <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Tự chọn trong Khám phá</Nut>
               </TrangThaiTrong>
@@ -157,7 +157,7 @@ export default function DanhSachNguyenVong() {
                   </span>
                   <div className="min-w-0">
                     <p className="text-[13px] font-bold text-muc leading-snug">
-                      Có {yeuThichChuaThem.length} ngành em đã thả tim chưa đưa vào danh sách
+                      Có {yeuThichChuaThem.length} ngành bạn đã thả tim chưa đưa vào danh sách
                     </p>
                     <p className="text-[12px] text-chu-phu leading-snug truncate">
                       {yeuThichChuaThem.map((x) => x.nganh).slice(0, 2).join(", ")}
@@ -192,7 +192,7 @@ export default function DanhSachNguyenVong() {
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
             <TieuDeMuc phai={<span className="text-chu-phu font-semibold">{tong !== null ? `Cao nhất: ${dinhDang(tong, 1)}${tongTot.toHop ? ` (${tongTot.toHop})` : ""}` : `${ds.length} nguyện vọng`}</span>}>
-              Thứ tự của em
+              Thứ tự của bạn
             </TieuDeMuc>
 
             <ol className={gop("space-y-3", keo && "select-none")} aria-label="Danh sách nguyện vọng theo thứ tự ưu tiên">
@@ -264,14 +264,14 @@ export default function DanhSachNguyenVong() {
   );
 }
 
-/** Thẻ đầu trang: "Cơ cấu danh sách của em" + cơ cấu mini + một câu kết luận. */
+/** Thẻ đầu trang: "Cơ cấu danh sách của bạn" + cơ cấu mini + một câu kết luận. */
 function TheTomTat({ tong, kl, dem, onClick }: { tong: number | null; kl: ReturnType<typeof ketLuan>; dem: ReturnType<typeof demNhan>; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="w-full text-left active:opacity-90">
       <NenHero tone={tong === null ? "xanh" : kl.tone} className="p-4">
         <span className="flex items-center gap-3">
           <BieuTuongTron icon={ShieldCheck} tone={tong === null ? "xanh" : kl.tone} kichThuoc={40} />
-          <b className="flex-1 min-w-0 text-[16px] leading-snug text-muc">Cơ cấu danh sách của em</b>
+          <b className="flex-1 min-w-0 text-[16px] leading-snug text-muc">Cơ cấu danh sách của bạn</b>
           <ChevronRight size={20} className="text-chu-phu shrink-0" />
         </span>
         {tong === null ? (

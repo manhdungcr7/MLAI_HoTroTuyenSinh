@@ -97,7 +97,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
   if (!x || typeof x !== "object") return { ok: false, loi: "Yêu cầu không hợp lệ" };
   const o = x as Record<string, unknown>;
   const cauHoi = typeof o.cauHoi === "string" ? o.cauHoi.trim() : "";
-  if (cauHoi.length < 3) return { ok: false, loi: "Em viết rõ hơn câu hỏi nhé" };
+  if (cauHoi.length < 3) return { ok: false, loi: "Bạn viết rõ hơn câu hỏi nhé" };
   if (cauHoi.length > GIOI_HAN.cauHoi) return { ok: false, loi: "Câu hỏi quá dài" };
   const duLieu = Array.isArray(o.duLieu) ? o.duLieu.slice(0, GIOI_HAN.suKien) : [];
   const sach: SuKien[] = [];

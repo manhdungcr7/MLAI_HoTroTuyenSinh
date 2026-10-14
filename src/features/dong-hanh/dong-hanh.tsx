@@ -80,8 +80,8 @@ export default function DongHanh() {
         </section>
 
         <section aria-label="Viết lời nhắn" className="space-y-3">
-          <TieuDeMuc>Gửi lời nhắn cho em</TieuDeMuc>
-          <p className="text-[13px] text-chu-phu leading-snug">Bạn viết vài dòng động viên hoặc góp ý. Mình tạo một liên kết, bạn gửi lại cho em; em mở liên kết thì lời nhắn được lưu vào hồ sơ của em.</p>
+          <TieuDeMuc>Gửi lời nhắn động viên</TieuDeMuc>
+          <p className="text-[13px] text-chu-phu leading-snug">Bạn viết vài dòng động viên hoặc góp ý để gửi cho học sinh.</p>
           <fieldset>
             <legend className="text-[14px] font-bold text-chu mb-1.5">Bạn là</legend>
             <div role="radiogroup" className="grid grid-cols-3 gap-2">
@@ -93,13 +93,13 @@ export default function DongHanh() {
           </fieldset>
           <div className="space-y-1.5">
             <label htmlFor="dh-ten" className="text-[14px] font-bold text-chu">Tên của bạn</label>
-            <OInput id="dh-ten" value={tu} maxLength={TOI_DA_TEN} placeholder="Ví dụ: Mẹ của Minh Anh, Cô Lan" onChange={(e) => { setTu(e.target.value); setLienKet(""); }} />
+            <OInput id="dh-ten" value={tu} maxLength={TOI_DA_TEN} placeholder="Ví dụ: Phụ huynh Minh Anh, Thầy Tuấn" onChange={(e) => { setTu(e.target.value); setLienKet(""); }} />
           </div>
           <div className="space-y-1.5">
             <label htmlFor="dh-noi-dung" className="text-[14px] font-bold text-chu">Lời nhắn</label>
             <div className="rounded-xl border border-vien bg-trang focus-within:border-xanh">
               <textarea id="dh-noi-dung" rows={4} maxLength={TOI_DA_LOI_NHAN} value={noiDung} onChange={(e) => { setNoiDung(e.target.value); setLienKet(""); }}
-                placeholder="Ví dụ: Gia đình ủng hộ em theo ngành này. Em nhớ giữ thêm một trường an toàn nhé."
+                placeholder="Ví dụ: Chúc bạn luôn giữ vững phong độ và đạt kết quả tốt nhất."
                 className="block w-full resize-none rounded-xl bg-transparent px-3 pt-2.5 text-[15px] text-chu placeholder:text-chu-phu/70 outline-none" />
               <p className="px-3 pb-2 text-right text-[12px] font-semibold text-chu-phu">{noiDung.length}/{TOI_DA_LOI_NHAN}</p>
             </div>
@@ -109,7 +109,7 @@ export default function DongHanh() {
 
           {lienKet && (
             <The className="space-y-2.5">
-              <p className="text-[13px] text-chu">Liên kết đã sẵn sàng. Gửi cho em:</p>
+              <p className="text-[13px] text-chu">Liên kết đã sẵn sàng để gửi:</p>
               <p className="break-all rounded-lg bg-nen p-2.5 text-[12px] text-chu-phu select-all max-h-24 overflow-y-auto">{lienKet}</p>
               <Nut bieuTuong={Copy} onClick={sao}>Sao chép liên kết</Nut>
               {coShare && <Nut kieu="vien" bieuTuong={Share2} onClick={chiaSe}>Gửi qua ứng dụng khác</Nut>}

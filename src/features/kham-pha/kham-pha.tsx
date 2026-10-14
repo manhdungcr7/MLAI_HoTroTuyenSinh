@@ -104,10 +104,10 @@ export default function KhamPha() {
         </div>
 
         {coHoi && (
-          <section aria-label="Cơ hội của em" className="rounded-the nen-xanh p-3.5">
-            <p className="text-[13px] font-bold text-xanh">Với điểm của em</p>
+          <section aria-label="Cơ hội của bạn" className="rounded-the nen-xanh p-3.5">
+            <p className="text-[13px] font-bold text-xanh">Với điểm của bạn</p>
             <p className="mt-0.5 text-[15px] text-chu leading-snug">
-              Tổ hợp <b>{coHoi.toHop}</b> được <b>{dinhDang(coHoi.tong, 1).replace(".", ",")}</b> điểm: đủ điểm chuẩn năm gần nhất của <b className="text-luc-chu">{coHoi.soDuDiem}</b> ngành, thử sức thêm <b className="text-cam-chu">{coHoi.soThuSuc}</b> ngành (trong {coHoi.soNganh} ngành mình so được).
+              Tổ hợp <b>{coHoi.toHop}</b> được <b>{dinhDang(coHoi.tong, 1).replace(".", ",")}</b> điểm: đủ điểm chuẩn năm gần nhất của <b className="text-luc-chu">{coHoi.soDuDiem}</b> ngành, thử sức thêm <b className="text-cam-chu">{coHoi.soThuSuc}</b> ngành (trong {coHoi.soNganh} ngành đã đối soát).
             </p>
             {coHoi.theoNhom.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5" role="group" aria-label="Nhóm ngành nhiều cơ hội">

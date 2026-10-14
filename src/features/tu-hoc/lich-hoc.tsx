@@ -48,18 +48,18 @@ export default function LichHoc() {
     const them = LICH_PHO_THONG_MAU.filter((m) => !coDinh.some((c) => c.id === m.id || (c.thu === m.thu && c.loai === m.loai && c.batDau === m.batDau && c.ketThuc === m.ketThuc)));
     datCoDinh(cheDo === "thay" ? LICH_PHO_THONG_MAU : [...coDinh, ...them]);
     setHoiMau(false);
-    setDaDoi(cheDo === "thay" ? `Đã dùng lịch mẫu (${LICH_PHO_THONG_MAU.length} tiết). Em sửa lại cho đúng lịch của mình nhé.` : `Đã thêm ${them.length} tiết từ lịch mẫu. Em sửa lại cho đúng lịch của mình nhé.`);
+    setDaDoi(cheDo === "thay" ? `Đã dùng lịch mẫu (${LICH_PHO_THONG_MAU.length} tiết). Bạn sửa lại cho đúng lịch của mình nhé.` : `Đã thêm ${them.length} tiết từ lịch mẫu. Bạn sửa lại cho đúng lịch của mình nhé.`);
   };
   const xepLaiGiupEm = () => { xepLai(tuanHienTai(), homNay()); nav(DUONG_DAN.tuan("lich")); };
 
   return (
     <>
-      <DauTrangCoQuayLai tieuDe="Lịch học của em" />
+      <DauTrangCoQuayLai tieuDe="Lịch học của bạn" />
       <NoiDung>
         {daDoi && (
           <div role="status" className="rounded-the bg-xanh-nhat p-4 space-y-3">
             <p className="text-[14px] text-chu"><b className="block text-xanh text-[15px]">{daDoi}</b>
-              {viecCuaTuan(s.viec, tuanHienTai()).length ? "Xếp lại lịch tự học giúp em để không bị trùng giờ?" : "Khi có việc cần học, mình sẽ xếp giờ tự học tránh các tiết này."}</p>
+              {viecCuaTuan(s.viec, tuanHienTai()).length ? "Xếp lại lịch tự học giúp bạn để không bị trùng giờ?" : "Khi có việc cần học, mình sẽ xếp giờ tự học tránh các tiết này."}</p>
             {viecCuaTuan(s.viec, tuanHienTai()).length > 0 && (
               <div className="grid grid-cols-2 gap-2">
                 <Nut kieu="vien" onClick={() => setDaDoi(null)}>Để sau</Nut>
@@ -81,7 +81,7 @@ export default function LichHoc() {
         ) : (
           <>
             <NenHero tone="xanh" className="p-4">
-              <p className="text-[13px] font-bold text-chu-phu">Mỗi tuần em có</p>
+              <p className="text-[13px] font-bold text-chu-phu">Mỗi tuần bạn có</p>
               <p className="text-[22px] font-extrabold text-muc leading-tight">{coDinh.length} tiết cố định</p>
               <p className="text-[13px] text-chu mt-0.5">
                 {phutTruong > 0 && <>Ở trường {soViet(Math.round(phutTruong / 6) / 10)} giờ</>}
@@ -169,8 +169,8 @@ export default function LichHoc() {
 
       <HopTruot mo={hoiMau} dong={() => setHoiMau(false)} tieuDe="Dùng lịch mẫu?">
         <div className="space-y-4">
-          <p className="text-[14px] text-chu">Lịch mẫu có {LICH_PHO_THONG_MAU.length} tiết: học ở trường sáng Thứ 2 đến Thứ 6, chiều Thứ 2, 4, 6 và một buổi học thêm tối. Đây chỉ là mẫu chung, em nên sửa cho đúng lịch của mình.</p>
-          <p className="text-[14px] font-bold text-do-chu flex gap-2"><AlertTriangle size={18} className="shrink-0 mt-0.5" />Em đang có {coDinh.length} tiết. Em muốn thêm mẫu vào hay thay hẳn?</p>
+          <p className="text-[14px] text-chu">Lịch mẫu có {LICH_PHO_THONG_MAU.length} tiết: học ở trường sáng Thứ 2 đến Thứ 6, chiều Thứ 2, 4, 6 và một buổi học thêm tối. Đây chỉ là mẫu chung, bạn nên sửa cho đúng lịch của mình.</p>
+          <p className="text-[14px] font-bold text-do-chu flex gap-2"><AlertTriangle size={18} className="shrink-0 mt-0.5" />Bạn đang có {coDinh.length} tiết. Bạn muốn thêm mẫu vào hay thay hẳn?</p>
           <div className="space-y-2">
             <Nut onClick={() => dungMau("them")}>Thêm vào lịch hiện có</Nut>
             <Nut kieu="nguyHiem" onClick={() => dungMau("thay")}>Thay bằng lịch mẫu</Nut>
@@ -229,7 +229,7 @@ function HopThemTiet({ thuSan, dong, xong }: { thuSan: number; dong: () => void;
           <NhomChon nhan="Loại tiết" cot={3} giaTri={loai} onChange={doiLoai}
             cacLua={(Object.keys(LOAI_TIET) as TietCoDinh["loai"][]).map((l) => ({ gia: l, nhan: l === "khac" ? "Khác" : LOAI_TIET[l].nhan }))} />
         </div>
-        <Truong nhan="Môn học" goiY="Có môn thì mình nhắc em xem trước bài vào tối hôm trước.">
+        <Truong nhan="Môn học">
           <OChon value={mon} onChange={(e) => setMon(e.target.value as MonId | "")}>
             <option value="">Không theo môn</option>
             {CAC_MON.map((m) => <option key={m} value={m}>{TEN_MON[m]}</option>)}

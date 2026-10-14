@@ -229,8 +229,8 @@ export function hieuEm(s: AppState): HieuEm {
     if (tiep) uuTien.push(`Làm trước: ${tiep.tieuDe}`);
     else if (!m.anDemNguoc && m.soNgayCon > 0) uuTien.push(`Ôn thi THPT, còn ${m.soNgayCon} ngày`);
   } else {
-    uuTien.push(h.nganhQuanTam.length ? `Tìm hiểu ${noi(h.nganhQuanTam)} để chọn mục tiêu` : "Chọn một ngành em muốn theo");
-    if (coDiem.length < CAC_MON.length) uuTien.push("Nhập đủ điểm để biết tổ hợp hợp em");
+    uuTien.push(h.nganhQuanTam.length ? `Tìm hiểu ${noi(h.nganhQuanTam)} để chọn mục tiêu` : "Chọn một ngành bạn muốn theo");
+    if (coDiem.length < CAC_MON.length) uuTien.push("Nhập đủ điểm để biết tổ hợp hợp bạn");
     const chang = changCuaEm(s);
     if (chang === "dinhHuong") uuTien.push("Giữ điểm học bạ lớp 10–11 đều các môn");
     else if (chang === "thiLai") uuTien.push("Xem lại điểm năm trước, chọn hướng năm nay");
@@ -246,10 +246,10 @@ export function hieuEm(s: AppState): HieuEm {
     [!!h.tinh, { ten: "Tỉnh/thành phố", den: b1 }],
     [h.nganhQuanTam.length > 0, { ten: "Nhóm ngành quan tâm", den: b1 }],
     [chuaCoDiem.length === 0, { ten: chuaCoDiem.length === CAC_MON.length ? "Điểm các môn" : `Điểm ${chuaCoDiem.map((x) => TEN_MON_NGAN[x]).join(", ")}`, den: b2 }],
-    [h.diemManh.length > 0, { ten: "Điểm mạnh của em", den: b2 }],
+    [h.diemManh.length > 0, { ten: "Điểm mạnh của bạn", den: b2 }],
     [!!h.soThich, { ten: "Trắc nghiệm hướng nghiệp", den: DUONG_DAN.tracNghiem() }],
     [h.nganSach !== null, { ten: "Mức học phí gia đình chi trả được", den: b3 }],
-    [h.khuVuc.length > 0, { ten: "Nơi em muốn học", den: b3 }],
+    [h.khuVuc.length > 0, { ten: "Nơi bạn muốn học", den: b3 }],
     [h.choO !== null, { ten: "Chỗ ở dự kiến", den: b3 }],
     [h.hocXaNha !== null, { ten: "Có học xa nhà được không", den: b3 }],
     [s.mucTieu !== null, { ten: "Mục tiêu chính", den: DUONG_DAN.khamPha() }],

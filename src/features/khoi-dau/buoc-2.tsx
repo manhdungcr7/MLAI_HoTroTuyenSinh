@@ -93,7 +93,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
       <section aria-labelledby="tieu-de-to-hop">
         <div className="flex items-center justify-between gap-2 mb-2">
           <h3 id="tieu-de-to-hop" className="flex items-center gap-1.5 text-[15px] font-bold text-chu"><Sparkles size={18} className="text-xanh" />Tổ hợp xét tuyển tự tính</h3>
-          <Nhan tone="xanh">Theo điểm của em</Nhan>
+          <Nhan tone="xanh">Theo điểm của bạn</Nhan>
         </div>
         <ul className="grid grid-cols-2 gap-2" aria-live="polite">
           {toHop.map((t) => {

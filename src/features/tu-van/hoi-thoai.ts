@@ -97,8 +97,8 @@ export function nganhLuotTruoc(tin: TinNhan[], toiDa = 8): string[] {
 /** Câu hỏi mẫu ở trạng thái trống, sinh từ hồ sơ (nguyện vọng, ngành quan tâm), luôn đủ 4 câu. */
 export function goiYBanDau(h: { soNguyenVong: number; nganhQuanTam: string[] }): string[] {
   const r: string[] = [];
-  if (h.soNguyenVong > 0) r.push("Danh sách nguyện vọng của em có cân bằng không?");
-  if (h.nganhQuanTam[0]) r.push(`Điểm của em đã đủ cho ngành ${h.nganhQuanTam[0]} chưa?`);
-  r.push("Em nên bắt đầu tìm ngành từ đâu?", "Điểm của em đang thiếu gì để so sánh?", "Làm sao cân bằng danh sách nguyện vọng?");
+  if (h.soNguyenVong > 0) r.push("Danh sách nguyện vọng của mình có cân bằng không?");
+  if (h.nganhQuanTam[0]) r.push(`Điểm của mình đã đủ cho ngành ${h.nganhQuanTam[0]} chưa?`);
+  r.push("Nên bắt đầu tìm ngành từ đâu?", "Điểm số của mình đang thiếu gì để so sánh?", "Làm sao cân bằng danh sách nguyện vọng?");
   return [...new Set(r)].slice(0, 4);
 }

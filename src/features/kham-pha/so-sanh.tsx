@@ -159,12 +159,12 @@ export default function SoSanh() {
               )}
               <p className="flex items-start gap-1.5 text-[12px] text-chu-phu pt-1.5 pb-1 border-t border-vien mt-1">
                 <span className="mt-0.5 size-3 rounded bg-luc-nhat ring-1 ring-luc/30 shrink-0" aria-hidden />
-                Ô nền xanh lá là bên có lợi hơn cho em ở tiêu chí đó (điểm và học phí thấp hơn thì dễ hơn).
+                Ô nền xanh lá là bên có lợi thế hơn ở tiêu chí đó.
               </p>
             </section>
 
             {!coDiemDeSo(bc) && (
-              <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để so mức phù hợp" moTa="Em chưa nhập đủ điểm 3 môn của một tổ hợp nên chưa so được mức phù hợp và vị trí điểm của em so với điểm chuẩn."
+              <DongThongBao tone="xanh" icon={PencilLine} tieuDe="Nhập điểm để so mức phù hợp" moTa="Bạn chưa nhập đủ điểm 3 môn của một tổ hợp nên chưa so được mức phù hợp và vị trí điểm so với điểm chuẩn."
                 hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
             )}
 
@@ -196,7 +196,7 @@ export default function SoSanh() {
 
       <HopTruot mo={hopMucTieu} dong={() => setHopMucTieu(false)} tieuDe="Chọn làm mục tiêu chính">
         <p className="text-[14px] text-chu mb-3">
-          Mình sẽ lấy điểm tham khảo thấp nhất của trường làm điểm mục tiêu và lập kế hoạch cho em.
+          Mình sẽ lấy điểm tham khảo của trường làm điểm mục tiêu và lập kế hoạch cho bạn.
           {mucTieuCu && <> Mục tiêu hiện tại (<b>{mucTieuCu.nganh} – {mucTieuCu.truong}</b>) sẽ được thay.</>}
         </p>
         <div className="space-y-2">

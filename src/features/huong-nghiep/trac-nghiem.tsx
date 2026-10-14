@@ -111,10 +111,10 @@ export default function TracNghiem() {
         <DauTrangCoQuayLai tieuDe="Trắc nghiệm hướng nghiệp" quayLai={DUONG_DAN.hoSo()} />
         <NoiDung className="space-y-4">
           <The className="space-y-2">
-            <p className="text-[18px] font-extrabold text-muc leading-tight">Em hợp kiểu việc nào?</p>
-            <p className="text-[14px] text-chu leading-snug">{TONG_CAU} tình huống quen thuộc, mỗi câu em chọn một lựa chọn giống mình nhất, khoảng 2 phút. Không có đáp án đúng hay sai. Mình dùng câu trả lời để gợi ý nhóm ngành hợp với em, bên cạnh điểm số.</p>
+            <p className="text-[18px] font-extrabold text-muc leading-tight">Bạn hợp kiểu việc nào?</p>
+            <p className="text-[14px] text-chu leading-snug">{TONG_CAU} tình huống thực tế, mỗi câu chọn phương án phù hợp nhất với bạn (khoảng 2 phút). Hệ thống dùng kết quả để gợi ý nhóm ngành và hướng đi phù hợp.</p>
           </The>
-          <DongThongBao tone="xanh" icon={Compass} tieuDe="Câu trả lời ở lại trên máy em" moTa="Chỉ lưu trên thiết bị này, cùng hồ sơ của em." />
+          <DongThongBao tone="xanh" icon={Compass} tieuDe="Dữ liệu lưu an toàn trên máy" moTa="Thông tin chỉ lưu trên thiết bị này, đồng bộ cùng hồ sơ của bạn." />
           <Nut muiTen onClick={() => setBuoc(0)}>Bắt đầu</Nut>
         </NoiDung>
       </>
@@ -129,7 +129,7 @@ export default function TracNghiem() {
         <NoiDung className="space-y-4">
           <ThanhTienDo phanTram={92} nhan="Tiến độ trắc nghiệm" />
           <The className="space-y-1">
-            <p className="text-[18px] font-bold text-chu leading-snug" id="cau-gia-tri">Khi nghĩ về công việc sau này, em coi trọng điều gì nhất?</p>
+            <p className="text-[18px] font-bold text-chu leading-snug" id="cau-gia-tri">Khi nghĩ về công việc sau này, bạn coi trọng điều gì nhất?</p>
             <p className="text-[13px] text-chu-phu">Chọn tối đa {TOI_DA_GIA_TRI} điều, hoặc bỏ qua.</p>
           </The>
           <div role="group" aria-labelledby="cau-gia-tri" className="grid grid-cols-1 gap-2">

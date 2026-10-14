@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  BookMarked, CalendarClock, CalendarDays, Check, CheckCircle2, Clock, ExternalLink, Info, Lightbulb, ListChecks, ListOrdered, RotateCcw, SearchX, SkipForward, Target,
+  BookMarked, CalendarClock, CalendarDays, Check, CheckCircle2, Clock, ExternalLink, Lightbulb, ListChecks, ListOrdered, RotateCcw, SearchX, SkipForward, Target,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -90,8 +90,8 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
         </div>
       </The>
 
-      {tt === "xong" && <DongThongBao tone="luc" icon={CheckCircle2} tieuDe="Em đã hoàn thành việc này" moTa="Làm tốt lắm! Việc đã được tính vào tiến độ tuần." />}
-      {tt === "boQua" && <DongThongBao tone="muc" icon={SkipForward} tieuDe="Em đã bỏ qua việc này" moTa="Việc bỏ qua sẽ được cân nhắc xếp lại, em có thể bấm Xếp lịch giúp em." />}
+      {tt === "xong" && <DongThongBao tone="luc" icon={CheckCircle2} tieuDe="Bạn đã hoàn thành việc này" moTa="Làm tốt lắm! Việc đã được tính vào tiến độ tuần." />}
+      {tt === "boQua" && <DongThongBao tone="muc" icon={SkipForward} tieuDe="Bạn đã bỏ qua việc này" moTa="Việc bỏ qua sẽ được xếp lại khi bạn bấm xếp lịch." />}
 
       <The className="space-y-2">
         <TieuDeKhoi icon={Target}>Mục tiêu buổi học</TieuDeKhoi>
@@ -153,7 +153,7 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
         <div className="min-w-0">
           <h2 className="text-[15px] font-extrabold text-cam-chu">Vì sao buổi này quan trọng với mục tiêu?</h2>
           <p className="text-[14px] text-chu leading-relaxed mt-1">{v.lyDo}</p>
-          {m && <p className="text-[13px] text-chu-phu mt-1.5">Mục tiêu của em: <b className="text-chu">{m.lc.nganh} – {m.lc.truong}</b></p>}
+          {m && <p className="text-[13px] text-chu-phu mt-1.5">Mục tiêu của bạn: <b className="text-chu">{m.lc.nganh} – {m.lc.truong}</b></p>}
         </div>
       </div>
 
@@ -168,7 +168,6 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
             <Nut kieu="vien" bieuTuong={CalendarClock} onClick={() => setMoDoi(true)}>Dời lịch</Nut>
             <Nut kieu="nguyHiem" bieuTuong={SkipForward} onClick={() => setMoBoQua(true)}>Bỏ qua</Nut>
           </div>
-          <p className="flex gap-1.5 text-[13px] text-chu-phu leading-snug pt-1"><Info size={15} className="shrink-0 mt-0.5" />Việc bỏ qua sẽ được cân nhắc xếp lại, em có thể bấm Xếp lịch giúp em.</p>
         </div>
       )}
 
@@ -196,15 +195,14 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
           </ul>
         ) : (
           <div className="space-y-2">
-            <p className="text-[14px] text-chu">Tuần này không còn khung trống đủ dài. Em có thể nới giờ tự học hoặc bớt ngày nghỉ.</p>
+            <p className="text-[14px] text-chu">Tuần này không còn khung trống đủ dài. Bạn có thể nới giờ tự học hoặc bớt ngày nghỉ.</p>
             <Nut kieu="vien" onClick={() => nav(DUONG_DAN.caiDatTuHoc())}>Nới giờ tự học</Nut>
           </div>
         )}
       </HopTruot>
 
       <HopTruot mo={moBoQua} dong={() => setMoBoQua(false)} tieuDe="Bỏ qua việc này?">
-        <p className="text-[14px] text-chu mb-1"><b>{v.tieuDe}</b> sẽ được bỏ khỏi danh sách cần làm tuần này.</p>
-        <p className="text-[13px] text-chu-phu mb-4">Việc bỏ qua sẽ được cân nhắc xếp lại, em có thể bấm Xếp lịch giúp em.</p>
+        <p className="text-[14px] text-chu mb-4"><b>{v.tieuDe}</b> sẽ được bỏ khỏi danh sách cần làm tuần này.</p>
         <div className="grid grid-cols-2 gap-2">
           <Nut kieu="vien" onClick={() => setMoBoQua(false)}>Giữ lại</Nut>
           <Nut kieu="nguyHiem" bieuTuong={SkipForward} onClick={() => { datTrangThaiViec(v, "boQua"); veTuan("Đã bỏ qua việc này"); }}>Bỏ qua</Nut>

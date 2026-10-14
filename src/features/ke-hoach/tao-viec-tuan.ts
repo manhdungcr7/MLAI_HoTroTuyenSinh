@@ -51,8 +51,8 @@ export type KetQuaTaoViec = { ok: true; viec: ViecCanHoc[]; moi: number } | { ok
  */
 export function viecChoTuan(s: AppState, tuan: string, tuNgay?: string, bayGio: Date = new Date(), nhe = false): KetQuaTaoViec {
   const dv = nhe ? dauVaoViecTuanNhe(s, tuan, tuNgay) : dauVaoViecTuan(s, tuan, tuNgay);
-  if (!dv) return { ok: false, lyDo: "Em chọn mục tiêu chính trước, mình mới biết nên ôn môn nào." };
-  if (nganSachPhut(dv.phutTuHoc, dv.tamTrang) < 45) return { ok: false, lyDo: "Tuần này gần như không còn giờ tự học trống. Em nới giờ học trong Cài đặt tự học hoặc bớt ngày nghỉ." };
+  if (!dv) return { ok: false, lyDo: "Bạn chọn mục tiêu chính trước, mình mới biết nên ôn môn nào." };
+  if (nganSachPhut(dv.phutTuHoc, dv.tamTrang) < 45) return { ok: false, lyDo: "Tuần này gần như không còn giờ tự học trống. Bạn nới giờ học trong Cài đặt tự học hoặc bớt ngày nghỉ." };
   const xong = new Set(s.viec.filter((v) => v.tuan === tuan && s.trangThaiViec[v.id] === "xong").map((v) => v.id));
   // Thời gian trống ước tính chưa tính các buổi xem trước bài, giờ nghỉ giữa buổi, giới hạn mỗi ngày và các ngày đã qua.
   // Nên thử xếp thật: giảm dần khối lượng cho tới khi mọi việc đều có chỗ, để không tạo ra việc không thể làm.

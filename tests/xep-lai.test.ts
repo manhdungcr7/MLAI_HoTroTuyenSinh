@@ -153,7 +153,7 @@ const nen: AppState = { ...goc, coDinh: LICH_CO_DINH_MAU, cauHinh: cfgNghiCN, vi
   const l12 = taoViecTuan(dv());
   assert.ok(l12.every((v) => /12$/.test(v.taiLieu![0].ten)), "mặc định là lớp 12");
   const l11 = taoViecTuan(dv({ lop: 11 }));
-  assert.ok(l11.length > 0 && l11.every((v) => v.taiLieu![0].ten.endsWith("(chương trình em đang học)") && !/ 12/.test(v.taiLieu![0].ten)), "lớp 11 không ghi SGK 12");
+  assert.ok(l11.length > 0 && l11.every((v) => v.taiLieu![0].ten.endsWith("(chương trình bạn đang học)") && !/ 12/.test(v.taiLieu![0].ten)), "lớp 11 không ghi SGK 12");
   assert.ok(l11.every((v) => !v.lyDo.includes("ngày đến kỳ thi")), "không có ngày thi thì bỏ câu đếm ngày");
   assert.ok(taoViecTuan(dv({ ngayConDenThi: 0 })).every((v) => !v.lyDo.includes("ngày đến kỳ thi")), "0 ngày cũng không in");
   assert.ok(taoViecTuan(dv({ ngayConDenThi: 120 })).some((v) => v.lyDo.includes("Còn 120 ngày đến kỳ thi")), "có ngày thi thì vẫn in");
@@ -174,7 +174,7 @@ const nen: AppState = { ...goc, coDinh: LICH_CO_DINH_MAU, cauHinh: cfgNghiCN, vi
   assert.ok(v.reduce((t, x) => t + x.phut, 0) <= NGAN_SACH_ON_NHE + 45, "ôn nhẹ không quá khoảng 4 giờ");
   assert.ok(v.every((x) => x.mucUuTien === "thap"), "ôn nhẹ không có việc ưu tiên cao");
   assert.ok(v.every((x) => !/còn thiếu \d|cần khoảng \d/.test(x.lyDo)), "không nói về điểm thiếu cụ thể khi chưa có mục tiêu");
-  assert.ok(v.some((x) => x.lyDo.includes("chưa chọn mục tiêu")) && v.every((x) => x.taiLieu![0].ten.includes("chương trình em đang học")));
+  assert.ok(v.some((x) => x.lyDo.includes("chưa chọn mục tiêu")) && v.every((x) => x.taiLieu![0].ten.includes("chương trình bạn đang học")));
   const kq = viecChoTuan(chuaMucTieu, TUAN, undefined, ngayThu(0), true);
   assert.ok(kq.ok && kq.viec.length > 0, "viecChoTuan có cờ nhẹ chạy được khi chưa có mục tiêu");
   assert.equal(viecChoTuan(chuaMucTieu, TUAN, undefined, ngayThu(0)).ok, false, "không có cờ thì vẫn đòi mục tiêu");

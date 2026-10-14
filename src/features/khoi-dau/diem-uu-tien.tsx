@@ -29,19 +29,17 @@ export default function DiemUuTien({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo>
           <div>
             <label htmlFor="bd-ut-kv" className="block text-[14px] font-bold text-chu mb-1.5">Khu vực ưu tiên</label>
             <OChon id="bd-ut-kv" value={u.khuVuc ?? ""} onChange={(e) => dat({ khuVuc: (e.target.value || null) as KhuVucUuTien | null })}>
-              <option value="">Em chưa biết hoặc chưa chọn</option>
+              <option value="">Bạn chưa biết hoặc chưa chọn</option>
               {(Object.keys(MUC_KHU_VUC) as KhuVucUuTien[]).map((k) => <option key={k} value={k}>{TEN_KHU_VUC[k]} · +{dinhDangDiem(MUC_KHU_VUC[k])}</option>)}
             </OChon>
-            <p className="mt-1 text-[12px] text-chu-phu">Tính theo nơi em học THPT lâu nhất. Em xem trong phiếu đăng ký dự thi hoặc hỏi thầy cô chủ nhiệm.</p>
           </div>
           <div>
             <label htmlFor="bd-ut-dt" className="block text-[14px] font-bold text-chu mb-1.5">Đối tượng ưu tiên</label>
             <OChon id="bd-ut-dt" value={u.doiTuong ?? ""} onChange={(e) => dat({ doiTuong: (e.target.value || null) as DoiTuongUuTien | null })}>
-              <option value="">Em chưa biết hoặc chưa chọn</option>
+              <option value="">Bạn chưa biết hoặc chưa chọn</option>
               {(Object.keys(MUC_DOI_TUONG) as DoiTuongUuTien[]).map((k) => <option key={k} value={k}>{TEN_DOI_TUONG[k]}{MUC_DOI_TUONG[k] > 0 ? ` · +${dinhDang(MUC_DOI_TUONG[k], 0)}` : ""}</option>)}
             </OChon>
           </div>
-          <p className="text-[12px] text-chu-phu leading-snug">Khi tổng điểm của em từ 22,5 trở lên, điểm ưu tiên được giảm dần theo công thức của Bộ GD&ĐT, nên mình tính riêng cho từng ngành. Mức cộng có thể đổi theo quy chế từng năm; em đối chiếu với thông báo chính thức của năm xét tuyển.</p>
         </div>
       )}
     </section>

@@ -100,8 +100,8 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
     const v = boQua.find((x) => x.id === ganNhat?.viecId) ?? boQua[0];
     ra.push({
       id: `boQua:${v.id}`, tone: "cam",
-      tieuDe: boQua.length > 1 ? `Em đã bỏ qua ${boQua.length} việc` : `Em đã bỏ qua “${v.tieuDe}”`,
-      moTa: "Nếu việc này vẫn cần, em có thể làm vào lúc khác. Bỏ qua khi quá tải cũng không sao.",
+      tieuDe: boQua.length > 1 ? `Bạn đã bỏ qua ${boQua.length} việc` : `Bạn đã bỏ qua “${v.tieuDe}”`,
+      moTa: "Nếu việc này vẫn cần, bạn có thể làm vào lúc khác.",
       hanhDong: { nhan: "Xem việc", den: DUONG_DAN.viec(v.id) },
     });
   }
@@ -110,7 +110,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
   if (viecTuan.length && !s.coDinh.length) {
     ra.push({
       id: "chuaLich:coDinh", tone: "xanh",
-      tieuDe: "Em chưa nhập lịch học",
+      tieuDe: "Bạn chưa nhập lịch học",
       moTa: "Nhập giờ học ở trường và học thêm để giờ tự học không bị trùng.",
       hanhDong: { nhan: "Nhập lịch học", den: DUONG_DAN.caiDatLichHoc() },
     });

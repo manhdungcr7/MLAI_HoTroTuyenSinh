@@ -74,8 +74,8 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
         {hopCanLich}
       </>
     ) : (
-      <TrangThaiTrong bieuTuong={<Target size={26} />} tieuDe="Em chưa có mục tiêu"
-        moTa="Chọn một mục tiêu trước, mình sẽ tạo việc cần học mỗi tuần theo môn còn thiếu điểm.">
+      <TrangThaiTrong bieuTuong={<Target size={26} />} tieuDe="Bạn chưa có mục tiêu"
+        moTa="Chọn một mục tiêu để hệ thống lập kế hoạch học tập cá nhân hóa theo điểm số của bạn.">
         <div className="space-y-2">
           <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Chọn mục tiêu ở Khám phá</Nut>
         </div>

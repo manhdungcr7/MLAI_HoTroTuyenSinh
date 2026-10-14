@@ -26,7 +26,7 @@ export default function HomNay() {
   if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
 
   const m = mucTieuDayDu(s);
-  const ten = s.hoSo.hoTen.trim() ? tenGoi(s.hoSo.hoTen) : "em";
+  const ten = s.hoSo.hoTen.trim() ? tenGoi(s.hoSo.hoTen) : "bạn";
   const chang = changCuaEm(s);
   const goiY = goiYChoEm(s, chang);
   const coKeHoach = viecCuaTuan(s.viec, tuanHienTai()).length > 0 || s.khoiHoc.length > 0;
@@ -63,7 +63,7 @@ export default function HomNay() {
 
         <CauNoiDongLuc />
 
-        <DongThongBao tone="tim" icon={Lightbulb} tieuDe="Gợi ý cho em" moTa={goiY.moTa} onClick={() => nav(goiY.den)} />
+        <DongThongBao tone="tim" icon={Lightbulb} tieuDe="Gợi ý cho bạn" moTa={goiY.moTa} onClick={() => nav(goiY.den)} />
         {goiY.nhacHocPhi && <DongThongBao tone="cam" icon={Wallet} tieuDe="Lọc theo học phí" moTa={goiY.nhacHocPhi} onClick={() => nav(DUONG_DAN.khamPha())} />}
       </NoiDung>
     </>
@@ -121,7 +121,7 @@ function ChuaCoMucTieu({ chang, onClick, soNguyenVong, nganhNV, lyDo, onNguyenVo
       <span className="flex items-start gap-3">
         <BieuTuongTron icon={Compass} tone="cam" kichThuoc={48} />
         <span className="min-w-0">
-          <b className="block text-[18px] leading-snug text-muc">{chang === "dinhHuong" ? "Em chưa cần chốt mục tiêu ngay" : "Em chưa chọn mục tiêu chính"}</b>
+          <b className="block text-[18px] leading-snug text-muc">{chang === "dinhHuong" ? "Bạn chưa cần chốt mục tiêu ngay" : "Bạn chưa chọn mục tiêu chính"}</b>
           <span className="block text-[14px] text-chu mt-1">
             {chang === "dinhHuong"
               ? "Khám phá và lưu vài ngành thấy hợp trước đã."
@@ -176,7 +176,7 @@ function ViecHomNay() {
     return (
       <The className="space-y-3">
         {dauMuc}
-        <p className="text-[14px] text-chu">{tiep ? "Hôm nay trống lịch. Rảnh thì làm trước:" : "Em đã xong hết việc tuần này!"}</p>
+        <p className="text-[14px] text-chu">{tiep ? "Hôm nay trống lịch. Rảnh thì làm trước:" : "Bạn đã xong hết việc tuần này!"}</p>
         {tiep ? (
           <HangBam bieuTuong={ListTodo} tone="cam" tieuDe={tiep.tieuDe} phu={`${tiep.phut} phút · nên làm trước`} onClick={() => nav(DUONG_DAN.viec(tiep.id))} />
         ) : (

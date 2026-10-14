@@ -99,9 +99,9 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
       const pLam = deTinhGio ? lam15(phut * 0.6) : lam15(phut * 0.55), pChua = deTinhGio ? lam15(phut * 0.35) : lam15(phut * 0.35);
       const pCuoi = Math.max(5, phut - pLam - pChua);
       const lyDo = x.chuaCoDiem
-        ? `Em chưa có điểm ${TEN_MON[k.mon]}, nên mình chưa biết em thiếu bao nhiêu. Làm đề tính giờ (đủ cả đề càng tốt) để có điểm đầu vào cho môn này.`
+        ? `Bạn chưa có điểm ${TEN_MON[k.mon]}, nên mình chưa biết bạn thiếu bao nhiêu. Làm đề tính giờ (đủ cả đề càng tốt) để có điểm đầu vào cho môn này.`
         : dv.nhe
-          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm. Em chưa chọn mục tiêu nên mình chỉ gợi ý ôn nhẹ để giữ nhịp, chưa tính phần còn thiếu.`
+          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm. Bạn chưa chọn mục tiêu nên mình chỉ gợi ý ôn nhẹ để giữ nhịp, chưa tính phần còn thiếu.`
         : k.thieu > 0
           ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm, cần khoảng ${so(k.mucTieu)} để tổ hợp đạt ${so(dv.diemMucTieu)} điểm (còn thiếu ${so(k.thieu)}).${x.dangXuong ? " Điểm thi thử gần đây của môn này đang giảm, nên cần ôn đều hơn." : ""}${dv.ngayConDenThi !== undefined && dv.ngayConDenThi > 0 ? ` Còn ${dv.ngayConDenThi} ngày đến kỳ thi.` : ""}`
           : `${TEN_MON[k.mon]} đã đủ mức cần cho mục tiêu (${so(k.hienTai)} điểm). Giữ nhịp để điểm không tụt.`;
@@ -114,7 +114,7 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
         tieuChi: deTinhGio
           ? ["Làm xong phần đề đã chọn trong đúng thời gian quy định.", "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.", "Đánh dấu 3 dạng bài cần ôn lại."]
           : ["Nhắc lại được ý chính hoặc công thức mà không nhìn sách.", "Làm đúng ít nhất 80% số câu cơ bản.", "Ghi lại các câu còn sai để ôn lại sau 2 ngày."],
-        taiLieu: [{ ten: lop === 11 ? `Sách giáo khoa ${TEN_MON[k.mon]} (chương trình em đang học)` : `Sách giáo khoa ${TEN_MON[k.mon]} 12` }, { ten: "Đề minh họa và đề thi thử gần nhất em đã có" }],
+        taiLieu: [{ ten: lop === 11 ? `Sách giáo khoa ${TEN_MON[k.mon]} (chương trình bạn đang học)` : `Sách giáo khoa ${TEN_MON[k.mon]} 12` }, { ten: "Đề minh họa và đề thi thử gần nhất bạn đã có" }],
       });
     }
   }

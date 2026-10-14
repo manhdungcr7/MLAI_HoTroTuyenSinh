@@ -40,7 +40,7 @@ assert.equal(ccNguyHiem.chacChan, 0);
 assert.equal(ccNguyHiem.canThemAnToan, true);
 const klNguyHiem = ketLuan(ccNguyHiem);
 assert.equal(klNguyHiem.tone, "do", "Không có an toàn phải cảnh báo đỏ");
-assert.equal(klNguyHiem.tieuDe, "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm em");
+assert.equal(klNguyHiem.tieuDe, "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm của bạn");
 assert.equal(klNguyHiem.onDinh, false);
 
 // Trường hợp 2: Tỉ lệ Thử sức quá nhiều (>50%) dù có 1 An toàn

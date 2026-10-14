@@ -68,9 +68,9 @@ export default function HoSo() {
   if (!daCoDuLieu) {
     return (
       <>
-        <DauTrangChinh tieuDe="Hồ sơ của em" phai={nutCaiDat} />
+        <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} />
         <NoiDung>
-          <TrangThaiTrong bieuTuong={<FileText size={28} />} tieuDe="Chưa có hồ sơ" moTa="Chỉ mất khoảng 1 phút. Phần nào chưa chắc, em có thể điền sau.">
+          <TrangThaiTrong bieuTuong={<FileText size={28} />} tieuDe="Chưa có hồ sơ" moTa="Chỉ mất khoảng 1 phút. Bạn có thể cập nhật sau.">
             <div className="space-y-2">
               <Nut muiTen onClick={() => nav(DUONG_DAN.batDau(1))}>Tạo hồ sơ</Nut>
               <Nut kieu="vien" bieuTuong={Sparkles} onClick={dungHoSoMau}>Xem thử hồ sơ mẫu</Nut>
@@ -88,13 +88,13 @@ export default function HoSo() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Hồ sơ của em" phai={nutCaiDat} />
+      <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} />
       <NoiDung>
         <NenHero tone="xanh" className="p-4">
           <div className="flex items-center gap-3">
             <span aria-hidden className="size-14 rounded-full gd-xanh text-white grid place-items-center text-[18px] font-extrabold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
             <div className="min-w-0 flex-1">
-              <p className="text-[18px] font-extrabold text-muc leading-tight truncate">{h.hoTen.trim() || "Em chưa điền tên"}</p>
+              <p className="text-[18px] font-extrabold text-muc leading-tight truncate">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
               <p className="text-[13px] text-chu">{thongTin}</p>
               {h.laMau && <Nhan tone="cam" className="mt-1 bg-trang/80">Hồ sơ mẫu, không phải người thật</Nhan>}
             </div>
@@ -151,7 +151,7 @@ export default function HoSo() {
           </Nut>
         </div>
 
-        <TieuDeMuc>Tiến bộ của em</TieuDeMuc>
+        <TieuDeMuc>Tiến bộ của bạn</TieuDeMuc>
         <ChiSoTheoDoi s={s} gon />
 
         <TieuDeMuc>Hành động nhanh</TieuDeMuc>

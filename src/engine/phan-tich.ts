@@ -96,18 +96,18 @@ export function phanTichDanhSach(ds: { lc: LuaChon; nhan: NhanNguyenVong }[], ho
 
   const canhBao: string[] = [];
   let diemCB = 100;
-  if (ds.length === 0) { diemCB = 0; canhBao.push("Em chưa thêm nguyện vọng nào."); }
+  if (ds.length === 0) { diemCB = 0; canhBao.push("Bạn chưa thêm nguyện vọng nào."); }
   else {
-    if (dem["An toàn"] + dem["Dự phòng"] === 0) { diemCB -= 40; canhBao.push("Danh sách chưa có nguyện vọng An toàn hay Dự phòng. Em có thể thêm ít nhất 1 nguyện vọng có điểm chuẩn thấp hơn điểm của em."); }
-    if (dem["Thử sức"] / n > 0.5) { diemCB -= 20; canhBao.push("Hơn một nửa danh sách là thử sức (điểm chuẩn cao hơn điểm của em)."); }
+    if (dem["An toàn"] + dem["Dự phòng"] === 0) { diemCB -= 40; canhBao.push("Danh sách chưa có nguyện vọng An toàn hay Dự phòng. Bạn có thể thêm ít nhất 1 nguyện vọng có điểm chuẩn thấp hơn điểm của bạn."); }
+    if (dem["Thử sức"] / n > 0.5) { diemCB -= 20; canhBao.push("Hơn một nửa danh sách là thử sức (điểm chuẩn cao hơn điểm của bạn)."); }
     if (dem["Vừa sức"] === 0) { diemCB -= 15; canhBao.push("Chưa có nguyện vọng vừa sức với điểm hiện tại."); }
     if (dem["Dự phòng"] === 0 && dem["An toàn"] < 2) diemCB -= 5;
-    if (dem["Thử sức"] === 0 && ds.length >= 3) { diemCB -= 5; canhBao.push("Danh sách hơi an toàn, em có thể thêm một nguyện vọng thử sức."); }
+    if (dem["Thử sức"] === 0 && ds.length >= 3) { diemCB -= 5; canhBao.push("Danh sách hơi an toàn, bạn có thể thêm một nguyện vọng thử sức."); }
   }
   diemCB = kep(diemCB, 0, 100);
 
   const ns = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : null;
-  let diemTC = 0, chiTietTC = "Em chưa chọn ngân sách học phí.";
+  let diemTC = 0, chiTietTC = "Bạn chưa chọn ngân sách học phí.";
   if (ns !== null && ds.length) {
     const coPhi = ds.filter((d) => coHocPhi(d.lc));
     if (coPhi.length === 0) chiTietTC = "Các nguyện vọng này chưa có dữ liệu học phí để so với ngân sách.";
@@ -115,14 +115,14 @@ export function phanTichDanhSach(ds: { lc: LuaChon; nhan: NhanNguyenVong }[], ho
       const vua = coPhi.filter((d) => (d.lc.hocPhiMin as number) <= ns).length;
       diemTC = Math.round((vua / coPhi.length) * 100);
       chiTietTC = `${vua}/${coPhi.length} nguyện vọng có học phí nằm trong ngân sách ${ns} triệu/năm${coPhi.length < ds.length ? ` (${ds.length - coPhi.length} nguyện vọng chưa có dữ liệu học phí)` : ""}.`;
-      if (vua < coPhi.length) canhBao.push(`Có ${coPhi.length - vua} nguyện vọng vượt ngân sách học phí của em.`);
+      if (vua < coPhi.length) canhBao.push(`Có ${coPhi.length - vua} nguyện vọng vượt ngân sách học phí của bạn.`);
     }
   }
-  let diemKV = 0, chiTietKV = "Em chưa chọn khu vực ưu tiên.";
+  let diemKV = 0, chiTietKV = "Bạn chưa chọn khu vực ưu tiên.";
   if (Array.isArray(hoSo.khuVuc) && hoSo.khuVuc.length && ds.length) {
     const dung = ds.filter((d) => hoSo.khuVuc.some((k) => d.lc.khuVuc.replace(/\s/g, "").includes(k.replace(/\s/g, "")))).length;
     diemKV = Math.round((dung / ds.length) * 100);
-    chiTietKV = `${dung}/${ds.length} nguyện vọng ở khu vực em ưu tiên.`;
+    chiTietKV = `${dung}/${ds.length} nguyện vọng ở khu vực bạn ưu tiên.`;
   }
   return {
     dem, tyLe, canhBao,

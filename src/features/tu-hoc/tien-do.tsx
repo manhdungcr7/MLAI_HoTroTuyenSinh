@@ -50,7 +50,7 @@ export default function TienDo() {
       <NoiDung>
         {trongHet ? (
           <TrangThaiTrong bieuTuong={<BarChart3 size={26} />} tieuDe="Chưa có gì để theo dõi"
-            moTa="Khi em có kế hoạch tuần và bắt đầu làm việc, tiến độ và lời nhắc điều chỉnh sẽ hiện ở đây.">
+            moTa="Khi bạn có kế hoạch tuần và bắt đầu làm việc, tiến độ và lời nhắc điều chỉnh sẽ hiện ở đây.">
             <div className="space-y-2">
               <Nut muiTen onClick={() => nav(DUONG_DAN.tuan())}>Lập kế hoạch tuần</Nut>
               <Nut kieu="vien" bieuTuong={NotebookPen} onClick={() => nav(DUONG_DAN.diemThiThu())}>Nhập điểm thi thử</Nut>
@@ -59,7 +59,7 @@ export default function TienDo() {
         ) : (
           <>
             <TheTienDoTuan td={td} ss={ss} moTuan={() => nav(DUONG_DAN.tuan())} />
-            {ghiNhan && <DongThongBao tone="luc" icon={Sparkles} tieuDe="Ghi nhận cho em" moTa={ghiNhan} />}
+            {ghiNhan && <DongThongBao tone="luc" icon={Sparkles} tieuDe="Ghi nhận cho bạn" moTa={ghiNhan} />}
 
             <section aria-labelledby="kq-hoc-tap">
               <TieuDeMuc phai={<button type="button" onClick={() => nav(DUONG_DAN.diemThiThu())} className="min-h-11 -my-2 px-1">Nhập điểm</button>}>
@@ -76,7 +76,7 @@ export default function TienDo() {
                 {s.lichSu.length ? (
                   <DanhSachHoatDong ds={s.lichSu.slice(0, 4)} bayGio={bayGio} />
                 ) : (
-                  <p className="py-3 text-[14px] text-chu-phu">Chưa có hoạt động nào. Khi em hoàn thành, dời hay bỏ qua một việc, nó sẽ hiện ở đây.</p>
+                  <p className="py-3 text-[14px] text-chu-phu">Chưa có hoạt động nào. Khi hoàn thành, dời hay bỏ qua một việc, hoạt động sẽ hiện ở đây.</p>
                 )}
               </The>
             </section>
@@ -89,7 +89,7 @@ export default function TienDo() {
                   onClick={c.hanhDong ? () => nav(c.hanhDong!.den) : undefined} />
               )) : (
                 <DongThongBao tone="luc" icon={ShieldCheck} tieuDe="Mọi thứ đang ổn"
-                  moTa="Không có lịch trùng giờ hay buổi bị bỏ lỡ. Em cứ giữ nhịp như hiện tại nhé." />
+                  moTa="Không có lịch trùng giờ hay buổi bị bỏ lỡ. Bạn cứ giữ nhịp như hiện tại nhé." />
               )}
             </section>
 
@@ -100,8 +100,8 @@ export default function TienDo() {
         )}
 
         <section aria-labelledby="cai-dat" className="space-y-2 pt-1">
-          <TieuDeMuc><span id="cai-dat">Điều chỉnh theo em</span></TieuDeMuc>
-          <HangBam bieuTuong={CalendarDays} tone="xanh" tieuDe="Lịch học của em"
+          <TieuDeMuc><span id="cai-dat">Điều chỉnh theo bạn</span></TieuDeMuc>
+          <HangBam bieuTuong={CalendarDays} tone="xanh" tieuDe="Lịch học của bạn"
             phu={s.coDinh.length ? `${s.coDinh.length} tiết cố định mỗi tuần` : "Chưa nhập lịch ở trường, học thêm"} onClick={() => nav(DUONG_DAN.caiDatLichHoc())} />
           <HangBam bieuTuong={Clock} tone="luc" tieuDe="Cài đặt tự học"
             phu={`${s.cauHinh.gioBatDau} – ${s.cauHinh.gioKetThuc} · tối đa ${soViet(s.cauHinh.gioHocToiDaMoiNgay)} giờ/ngày`} onClick={() => nav(DUONG_DAN.caiDatTuHoc())} />
@@ -125,7 +125,7 @@ function TheTienDoTuan({ td, ss, moTuan }: {
     return (
       <The className="text-center space-y-3">
         <p className="font-extrabold text-muc text-[16px]">Tuần này chưa có việc nào</p>
-        <p className="text-[14px] text-chu-phu">Lập kế hoạch tuần để mình theo dõi tiến độ cùng em.</p>
+        <p className="text-[14px] text-chu-phu">Lập kế hoạch tuần để theo dõi tiến độ học tập.</p>
         <Nut muiTen onClick={moTuan}>Lập kế hoạch tuần</Nut>
       </The>
     );
@@ -146,7 +146,7 @@ function TheTienDoTuan({ td, ss, moTuan }: {
           {ss && (
             <p className={gop("mt-1 text-[13px] font-bold flex items-center gap-1", ss.chenh > 0 ? "text-luc-chu" : "text-chu-phu")}>
               {ss.chenh > 0 ? <TrendingUp size={16} /> : ss.chenh < 0 ? <TrendingDown size={16} /> : <ArrowRight size={16} />}
-              {ss.chenh > 0 ? `+${ss.chenh} việc so với tuần trước` : ss.chenh < 0 ? `Tuần trước em xong ${ss.tuanTruoc} việc` : "Bằng tuần trước"}
+              {ss.chenh > 0 ? `+${ss.chenh} việc so với tuần trước` : ss.chenh < 0 ? `Tuần trước bạn xong ${ss.tuanTruoc} việc` : "Bằng tuần trước"}
             </p>
           )}
         </div>
@@ -168,7 +168,7 @@ function KetQuaHocTap({ xuHuong, nhapDiem }: { xuHuong: XuHuongMon[]; nhapDiem: 
   if (!xuHuong.length || xuHuong.every((x) => !x.gia.length)) {
     return (
       <The className="space-y-3">
-        <p className="text-[14px] text-chu">Chưa có điểm thi thử nào. Sau mỗi lần thi, em nhập điểm để thấy mình tiến bộ thế nào.</p>
+        <p className="text-[14px] text-chu">Chưa có điểm thi thử nào. Nhập điểm sau mỗi lần thi để theo dõi tiến độ ôn tập.</p>
         <Nut kieu="nhe" bieuTuong={NotebookPen} onClick={nhapDiem}>Nhập điểm thi thử</Nut>
       </The>
     );

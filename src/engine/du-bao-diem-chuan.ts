@@ -112,11 +112,11 @@ export function viTriSoVoiDuBao(diemEm: number, d: DuBaoDiemChuan): ViTriSoVoiDu
 }
 
 export const MO_TA_VI_TRI: Record<ViTriSoVoiDuBao, string> = {
-  caoHonCa: "Điểm của em cao hơn cả mức dự kiến cao nhất. Nếu năm tới điểm chuẩn biến động như các năm trước, em vẫn ở phía trên.",
-  tren: "Điểm của em nằm trên mức giữa của khoảng dự kiến. Còn lệ thuộc điểm chuẩn năm tới thực sự thế nào.",
-  trongKhoang: "Điểm của em nằm trong khoảng dự kiến, dưới mức giữa. Kết quả có thể đi cả hai hướng.",
-  duoi: "Điểm của em hơi thấp hơn mức dự kiến thấp nhất. Chỉ khi điểm chuẩn năm tới giảm nhiều hơn các năm trước thì em mới kịp.",
-  thapHonCa: "Điểm của em thấp hơn khá xa mức dự kiến thấp nhất. Ngành này đang là mục tiêu cần thêm nhiều điểm.",
+  caoHonCa: "Điểm của bạn cao hơn cả mức dự kiến cao nhất. Nếu năm tới điểm chuẩn biến động như các năm trước, bạn vẫn ở phía trên.",
+  tren: "Điểm của bạn nằm trên mức giữa của khoảng dự kiến.",
+  trongKhoang: "Điểm của bạn nằm trong khoảng dự kiến, dưới mức giữa. Kết quả có thể đi cả hai hướng.",
+  duoi: "Điểm của bạn hơi thấp hơn mức dự kiến thấp nhất. Cần điểm chuẩn năm tới giảm hoặc nỗ lực nâng thêm điểm.",
+  thapHonCa: "Điểm của bạn thấp hơn khá xa mức dự kiến thấp nhất. Ngành này đang là mục tiêu cần thêm nhiều điểm.",
 };
 
 /** Năm tuyển sinh tiếp theo chưa có điểm chuẩn: sau tháng 8 (điểm chuẩn năm nay đã công bố) là năm sau, trước đó là năm nay. */

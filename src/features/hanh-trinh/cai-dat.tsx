@@ -54,22 +54,22 @@ export default function CaiDat() {
         <section>
           <TieuDeMuc>Học tập</TieuDeMuc>
           <div className="space-y-2">
-            <HangBam bieuTuong={CalendarDays} tone="xanh" tieuDe="Lịch học của em" onClick={() => nav(DUONG_DAN.caiDatLichHoc())}
+            <HangBam bieuTuong={CalendarDays} tone="xanh" tieuDe="Lịch học của bạn" onClick={() => nav(DUONG_DAN.caiDatLichHoc())}
               phu={soTiet ? `${soTiet} buổi cố định mỗi tuần` : "Chưa nhập lịch ở trường và lớp học thêm"} />
             <HangBam bieuTuong={BookOpenCheck} tone="luc" tieuDe="Cài đặt tự học" onClick={() => nav(DUONG_DAN.caiDatTuHoc())}
               phu={`${c.gioBatDau}–${c.gioKetThuc}, tối đa ${c.gioHocToiDaMoiNgay} giờ mỗi ngày`} />
             <HangBam bieuTuong={Bell} tone="cam" tieuDe="Nhắc nhở" onClick={() => nav(DUONG_DAN.nhacNho())}
-              phu={s.nhacNho.bat ? `Nhắc trước ${s.nhacNho.truocPhut} phút mỗi buổi học` : "Nhắc trước giờ học để em không quên"}
+              phu={s.nhacNho.bat ? `Nhắc trước ${s.nhacNho.truocPhut} phút mỗi buổi học` : "Nhắc trước giờ học để bạn không quên"}
               nhan={<Nhan tone={s.nhacNho.bat ? "luc" : "xanh"}>{s.nhacNho.bat ? "Đang bật" : "Đang tắt"}</Nhan>} />
           </div>
         </section>
 
         <section>
-          <TieuDeMuc>Dữ liệu của em</TieuDeMuc>
+          <TieuDeMuc>Dữ liệu của bạn</TieuDeMuc>
           <The className="space-y-3">
             <p className="flex gap-2.5 text-[14px] text-chu leading-snug">
               <ShieldCheck size={22} className="text-luc shrink-0" />
-              <span>Mọi thông tin em nhập chỉ lưu trên điện thoại này, chưa gửi lên máy chủ nào. Nếu xóa dữ liệu trình duyệt, hồ sơ cũng mất theo.</span>
+              <span>Mọi thông tin bạn nhập được lưu an toàn trên thiết bị này. Bạn có thể xuất bản sao lưu bất cứ lúc nào.</span>
             </p>
             <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu</Nut>
             <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục sao lưu</Nut>
@@ -85,9 +85,9 @@ export default function CaiDat() {
           <div className="space-y-2">
             <HangBam bieuTuong={HeartHandshake} tone="luc" tieuDe="Cùng cập nhật dữ liệu trường" onClick={() => nav(DUONG_DAN.dongGop())} phu="Dành cho sinh viên, thầy cô, cán bộ tuyển sinh" />
             <DongThongBao tone="cam" icon={Database} tieuDe="Điểm chuẩn là số của các năm trước"
-              moTa="Điểm chuẩn lấy từ đề án tuyển sinh của trường hoặc trang tổng hợp, mỗi ngành đều ghi nguồn. Học phí và việc làm nhiều ngành chưa có. Em luôn đối chiếu với đề án chính thức của trường trước khi quyết định." />
+              moTa="Điểm chuẩn lấy từ đề án tuyển sinh của trường hoặc trang tổng hợp, mỗi ngành đều ghi nguồn. Học phí và việc làm nhiều ngành chưa có. Bạn luôn đối chiếu với đề án chính thức của trường trước khi quyết định." />
             <DongThongBao tone="xanh" icon={Info} tieuDe="Điểm phù hợp không phải khả năng đậu"
-              moTa="Điểm phù hợp là điểm gợi ý trên 100, tính từ điểm, học phí, khu vực và cơ hội việc làm. Nó giúp em so sánh, không dự đoán kết quả xét tuyển." />
+              moTa="Điểm phù hợp là điểm gợi ý trên 100, tính từ điểm, học phí, khu vực và cơ hội việc làm, hỗ trợ bạn so sánh và cân nhắc." />
           </div>
         </section>
 
@@ -98,10 +98,10 @@ export default function CaiDat() {
       </NoiDung>
 
       <HopTruot mo={hoi === "mau"} dong={dong} tieuDe="Dùng hồ sơ mẫu?">
-        <p className="text-[14px] text-chu mb-4">Hồ sơ mẫu sẽ thay toàn bộ thông tin em đang có trên máy này (điểm, mục tiêu, nguyện vọng, lịch học). Thông tin hiện tại không lấy lại được.</p>
+        <p className="text-[14px] text-chu mb-4">Hồ sơ mẫu sẽ thay toàn bộ thông tin bạn đang có trên máy này (điểm, mục tiêu, nguyện vọng, lịch học). Thông tin hiện tại không lấy lại được.</p>
         <div className="space-y-2">
           <Nut onClick={dungMau}>Dùng hồ sơ mẫu</Nut>
-          <Nut kieu="vien" onClick={dong}>Giữ hồ sơ của em</Nut>
+          <Nut kieu="vien" onClick={dong}>Giữ hồ sơ của bạn</Nut>
         </div>
       </HopTruot>
 

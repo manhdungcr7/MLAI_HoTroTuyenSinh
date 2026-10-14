@@ -58,17 +58,17 @@ export default function DanhSachAnToan() {
 
   const goiYThuTu = () => {
     const moi = deXuatThuTu(ds);
-    if (giongNhau(s.nguyenVong, moi)) return bao("Thứ tự của em đã hợp lý, mình không cần đổi gì.");
+    if (giongNhau(s.nguyenVong, moi)) return bao("Thứ tự của bạn đã hợp lý, mình không cần đổi gì.");
     setXemTruoc(moi);
   };
 
-  /** Mở Khám phá, đặt sẵn khoảng điểm chuẩn thấp hơn điểm em từ 1,5 điểm (ngưỡng An toàn). */
+  /** Mở Khám phá, đặt sẵn khoảng điểm chuẩn thấp hơn điểm bạn từ 1,5 điểm (ngưỡng An toàn). */
   const themAnToan = () => {
     if (tong !== null) suaBoLoc({ diemTu: Math.max(15, Math.floor(tong - 6)), diemDen: Math.min(30, Math.floor((tong - 1.5) * 10) / 10) });
     nav(DUONG_DAN.khamPha());
   };
 
-  const dau = <DauTrangCoQuayLai tieuDe="Cơ cấu danh sách của em" quayLai={DUONG_DAN.nguyenVong()}
+  const dau = <DauTrangCoQuayLai tieuDe="Cơ cấu danh sách của bạn" quayLai={DUONG_DAN.nguyenVong()}
     phai={<button type="button" onClick={() => setGiaiThich("nhan")} aria-label="Cách xếp nhãn" className="size-11 grid place-items-center rounded-full text-chu-phu active:bg-xanh-nhat"><Info size={21} /></button>} />;
 
   if (ds.length === 0) {
@@ -76,7 +76,7 @@ export default function DanhSachAnToan() {
       <>
         {dau}
         <NoiDung>
-          <TrangThaiTrong bieuTuong={<ListChecks size={26} />} tieuDe="Chưa có gì để xem" moTa="Em cần thêm ít nhất 1 nguyện vọng thì mình mới xem được cơ cấu danh sách.">
+          <TrangThaiTrong bieuTuong={<ListChecks size={26} />} tieuDe="Chưa có gì để xem" moTa="Bạn cần thêm ít nhất 1 nguyện vọng thì mình mới xem được cơ cấu danh sách.">
             <Nut bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Thêm nguyện vọng</Nut>
           </TrangThaiTrong>
         </NoiDung>
@@ -272,7 +272,7 @@ function HopXemTruoc({ moi, ds, dong, apDung }: { moi: string[] | null; ds: Retu
     <HopTruot mo={moi !== null} dong={dong} tieuDe="Gợi ý thứ tự">
       {moi && (
         <div className="space-y-3 text-[14px] text-chu">
-          <p>Đưa các lựa chọn An toàn và Dự phòng xuống cuối, giữ nguyên thứ tự ưu tiên các ngành còn lại của em.</p>
+          <p>Đưa các lựa chọn An toàn và Dự phòng xuống cuối, giữ nguyên thứ tự ưu tiên các ngành còn lại của bạn.</p>
           <ol className="space-y-1.5">
             {moi.map((id, i) => {
               const d = ds.find((x) => x.id === id);
@@ -303,7 +303,7 @@ function HopGiaiThich({ giaiThich, dong, ds = [] }: { giaiThich: DiemDanhGia | "
     <HopTruot mo={giaiThich !== null} dong={dong} tieuDe={laNhan ? "Cách xếp nhãn" : giaiThich ? `Cách tính: ${giaiThich.ten}` : ""}>
       {laNhan ? (
         <div className="space-y-3 text-[14px] text-chu">
-          <p>So điểm hiện tại của em (theo tổ hợp của từng ngành) với điểm chuẩn năm trước:</p>
+          <p>So điểm hiện tại của bạn (theo tổ hợp của từng ngành) với điểm chuẩn năm trước:</p>
           <ul className="space-y-2">
             {CAC_NHAN.map((n) => <li key={n} className="flex items-center gap-2"><NhanNguyenVongTag nhan={n} /><span>{MO_TA_NHAN[n]}</span></li>)}
           </ul>
@@ -315,7 +315,7 @@ function HopGiaiThich({ giaiThich, dong, ds = [] }: { giaiThich: DiemDanhGia | "
               </ul>
             </div>
           )}
-          <p className="text-chu-phu text-[13px]">Nhãn là gợi ý, không phải cam kết trúng tuyển. Điểm chuẩn mỗi năm có thể đổi.</p>
+          <p className="text-chu-phu text-[13px]">Nhãn là gợi ý để cân bằng danh sách, điểm chuẩn mỗi năm có thể dao động.</p>
         </div>
       ) : giaiThich ? (
         <div className="space-y-2 text-[14px] text-chu">

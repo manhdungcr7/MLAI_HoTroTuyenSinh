@@ -17,7 +17,7 @@ export function NutGoiYDanhSach({ onMo, kieu = "mac-dinh" }: { onMo: () => void;
   const co = coDiemDeSo(boiCanhTu(s));
   return (
     <Nut kieu={kieu === "vien" ? "vien" : undefined} bieuTuong={Sparkles} onClick={onMo} disabled={!co}>
-      {co ? "Gợi ý danh sách cho em" : "Nhập điểm để nhận gợi ý"}
+      {co ? "Gợi ý danh sách phù hợp" : "Nhập điểm để nhận gợi ý"}
     </Nut>
   );
 }
@@ -27,10 +27,10 @@ export function GoiYSheet({ mo, dong }: { mo: boolean; dong: () => void }) {
   const ds = useMemo(() => (mo ? goiYDanhSach(diemDayDu(s), s.hoSo, s.nguyenVong) : []), [mo, s]);
   const themTatCa = () => { ds.forEach((d) => themNguyenVong(d.lc.id)); dong(); };
   return (
-    <HopTruot mo={mo} dong={dong} tieuDe="Gợi ý danh sách cho em">
-      <p className="text-[14px] text-chu">Mình chọn các ngành theo điểm, nhóm ngành, khu vực và ngân sách của em, để danh sách có đủ Thử sức, Vừa sức, An toàn và Dự phòng. Em bỏ bớt hoặc sắp lại sau cũng được.</p>
+    <HopTruot mo={mo} dong={dong} tieuDe="Gợi ý danh sách phù hợp">
+      <p className="text-[14px] text-chu">Mình chọn các ngành theo điểm, nhóm ngành, khu vực và ngân sách của bạn, để danh sách có đủ Thử sức, Vừa sức, An toàn và Dự phòng.</p>
       {ds.length === 0 ? (
-        <p className="mt-3 text-[14px] text-chu-phu">Chưa tìm được ngành nào hợp. Em thử nới ngân sách hoặc khu vực trong hồ sơ nhé.</p>
+        <p className="mt-3 text-[14px] text-chu-phu">Chưa tìm được ngành nào khớp. Bạn thử nới ngân sách hoặc khu vực trong hồ sơ nhé.</p>
       ) : (
         <ul className="mt-3 space-y-2">
           {ds.map((d) => (
@@ -52,7 +52,6 @@ export function GoiYSheet({ mo, dong }: { mo: boolean; dong: () => void }) {
           ))}
         </ul>
       )}
-      <p className="mt-3 text-[12px] text-chu-phu">Nhãn là gợi ý theo điểm chuẩn các năm trước, không phải cam kết trúng tuyển. Em đối chiếu với đề án của trường trước khi quyết định.</p>
       {ds.length > 0 && <div className="mt-3"><Nut bieuTuong={Plus} onClick={themTatCa}>Lưu cả {ds.length} ngành vào danh sách</Nut></div>}
     </HopTruot>
   );

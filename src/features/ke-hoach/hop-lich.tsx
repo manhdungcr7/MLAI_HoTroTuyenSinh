@@ -38,7 +38,7 @@ export function HopThemKhoi({ mo, dong, ngay, hienThongBao }: { mo: boolean; don
     const cungNgay = mucLichTrongNgay(s.coDinh, s.khoiHoc, ngay).map(({ id, ten: t, batDau: a, ketThuc: b }) => ({ id, ten: t, batDau: a, ketThuc: b }));
     const biTrung = phatHienTrung([...cungNgay, { id: "moi", ten: tenSach, batDau, ketThuc }]).some(([a, b]) => a.id === "moi" || b.id === "moi");
     themKhoi(moi);
-    hienThongBao(biTrung ? "Đã thêm. Khối này trùng giờ, em xem gợi ý nhé" : "Đã thêm vào lịch");
+    hienThongBao(biTrung ? "Đã thêm. Khối này trùng giờ, bạn xem gợi ý nhé" : "Đã thêm vào lịch");
     setTen(""); setMon(""); setLoi(null);
     dong();
   };
@@ -46,7 +46,7 @@ export function HopThemKhoi({ mo, dong, ngay, hienThongBao }: { mo: boolean; don
   return (
     <HopTruot mo={mo} dong={dong} tieuDe="Thêm giờ học/hoạt động">
       <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); luu(); }} noValidate>
-        <p className="text-[14px] text-chu-phu">Thêm vào <b className="text-chu">{tenNgay(ngay, homNay())}</b>. Xếp lịch giúp em sẽ không động vào khối này.</p>
+        <p className="text-[14px] text-chu-phu">Thêm vào <b className="text-chu">{tenNgay(ngay, homNay())}</b>. Tự động xếp lịch sẽ giữ nguyên khối này.</p>
         <div role="group" aria-labelledby="loai-khoi">
           <span id="loai-khoi" className="block text-[14px] font-bold text-chu mb-1.5">Loại</span>
           <ChonNhanh cacLua={CAC_LOAI} giaTri={loai} onChange={(v: LoaiThem) => { setLoai(v); setLoi(null); }} />
@@ -93,7 +93,7 @@ export function HopTrungGio({ mo, dong, trung, hienThongBao }: { mo: boolean; do
               </p>
               {!k ? (
                 <>
-                  <p className="text-[13px] text-chu-phu">{c.a.nguon === "baoVe" || c.b.nguon === "baoVe" ? "Lớp học cố định đang đè lên giờ ăn nghỉ." : "Hai lớp học cố định trùng nhau."} Em kiểm tra lại lịch học nhé.</p>
+                  <p className="text-[13px] text-chu-phu">{c.a.nguon === "baoVe" || c.b.nguon === "baoVe" ? "Lớp học cố định đang đè lên giờ ăn nghỉ." : "Hai lớp học cố định trùng nhau."} Bạn kiểm tra lại lịch học nhé.</p>
                   <Nut kieu="vien" bieuTuong={CalendarCog} onClick={() => nav(DUONG_DAN.caiDatLichHoc())}>Sửa lịch học</Nut>
                 </>
               ) : (
@@ -119,16 +119,16 @@ export function HopTrungGio({ mo, dong, trung, hienThongBao }: { mo: boolean; do
   );
 }
 
-/** Xem một mục trong lịch không gắn việc: lớp học cố định, buổi xem trước bài, khối em tự thêm. */
+/** Xem một mục trong lịch không gắn việc: lớp học cố định, buổi xem trước bài, khối bạn tự thêm. */
 export function HopMucLich({ muc, dong, quaKhu, hienThongBao }: { muc: MucLich | null; dong: () => void; quaKhu: boolean; hienThongBao: (c: string) => void }) {
   const { xoaKhoi } = useApp();
   const nav = useNavigate();
   if (!muc) return null;
   const k = muc.khoi;
   const moTa = muc.nguon === "coDinh"
-    ? "Đây là giờ học cố định em đã nhập. Mình luôn chừa 10 phút trước và sau để em di chuyển, chuẩn bị."
-    : k && !k.id.startsWith("auto-") ? "Khối em tự thêm. Xếp lịch giúp em sẽ giữ nguyên giờ này."
-      : "Khối do mình xếp. Bấm Xếp lịch giúp em để sắp xếp lại khi lịch của em thay đổi.";
+    ? "Giờ học cố định bạn đã nhập. Hệ thống luôn chừa 10 phút trước và sau để bạn di chuyển, chuẩn bị."
+    : k && !k.id.startsWith("auto-") ? "Khối bạn tự thêm. Tự động xếp lịch sẽ giữ nguyên giờ này."
+      : "Khối do hệ thống xếp. Bấm Tự động xếp lịch để sắp xếp lại khi lịch của bạn thay đổi.";
   return (
     <HopTruot mo dong={dong} tieuDe={muc.ten}>
       <div className="space-y-3">
