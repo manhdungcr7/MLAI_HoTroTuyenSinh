@@ -23,13 +23,13 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
         Khoảng <b>{dinhDang(d.thap, 1)} đến {dinhDang(d.cao, 1)} điểm</b>, mức giữa {dinhDang(d.kyVong, 1)} (bằng điểm năm {d.namCuoi}).
       </p>
 
-      <div role="img" aria-label={`Khoảng dự kiến từ ${dinhDang(d.thap, 1)} đến ${dinhDang(d.cao, 1)} điểm${diemEm !== null ? `, điểm của em ${dinhDang(diemEm, 1)}` : ""}`} className="relative h-12 mt-1">
+      <div role="img" aria-label={`Khoảng dự kiến từ ${dinhDang(d.thap, 1)} đến ${dinhDang(d.cao, 1)} điểm${diemEm !== null ? `, điểm của bạn ${dinhDang(diemEm, 1)}` : ""}`} className="relative h-12 mt-1">
         <div className="absolute inset-x-0 top-5 h-2 rounded-full bg-vien" />
         <div className="absolute top-5 h-2 rounded-full bg-xanh/35" style={{ left: vt(d.thap), width: `calc(${vt(d.cao)} - ${vt(d.thap)})` }} />
         <div className="absolute top-3.5 h-5 w-0.5 bg-xanh" style={{ left: vt(d.kyVong) }} />
         {diemEm !== null && (
           <div className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: vt(diemEm), top: 0 }}>
-            <span className="text-[12px] font-extrabold text-do-chu leading-none whitespace-nowrap">Em {dinhDang(diemEm, 1)}</span>
+            <span className="text-[12px] font-extrabold text-do-chu leading-none whitespace-nowrap">Bạn {dinhDang(diemEm, 1)}</span>
             <span className="mt-0.5 size-3 rounded-full bg-do border-2 border-trang" />
           </div>
         )}

@@ -149,7 +149,7 @@ export default function ThuTinhHuong() {
                   </li>
                 ))}
               </ul>
-              <p className="text-[12px] text-chu-phu mt-1">Tính trên {kq.dong.length} ngành mình so được với điểm của em (mỗi ngành theo đúng tổ hợp xét tuyển của nó).{kq.khacPhuongThuc > 0 ? ` ${kq.khacPhuongThuc} chương trình có điểm thuộc phương thức khác (học bạ, ĐGNL, năng khiếu...) chưa so được với điểm thi THPT nên không nằm trong phần này.` : ""}</p>
+              <p className="text-[12px] text-chu-phu mt-1">Tính trên {kq.dong.length} ngành mình so được với điểm của bạn (mỗi ngành theo đúng tổ hợp xét tuyển của nó).{kq.khacPhuongThuc > 0 ? ` ${kq.khacPhuongThuc} chương trình có điểm thuộc phương thức khác (học bạ, ĐGNL, năng khiếu...) chưa so được với điểm thi THPT nên không nằm trong phần này.` : ""}</p>
             </The>
 
             {/* Thêm điều kiện (thu gọn) */}

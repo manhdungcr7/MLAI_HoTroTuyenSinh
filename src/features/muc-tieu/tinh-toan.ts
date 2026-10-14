@@ -143,7 +143,7 @@ export function nhanDinhMucTieu(ds: KhoangCachMon[], conThieu: number, hienTai: 
     const du = lam1(hienTai - mucTieu);
     return {
       datRoi: true,
-      tieuDe: "Em đã đạt mục tiêu rồi!",
+      tieuDe: "Bạn đã đạt mục tiêu rồi!",
       moTa: du > 0
         ? `Điểm dự kiến đang cao hơn mục tiêu ${diem1(du)} điểm. Giữ vững phong độ, mỗi tuần làm một đề để không bị tụt.`
         : "Điểm dự kiến đúng bằng mục tiêu. Giữ vững phong độ và luyện đề đều đặn nhé.",
@@ -151,7 +151,7 @@ export function nhanDinhMucTieu(ds: KhoangCachMon[], conThieu: number, hienTai: 
   }
   const xep = [...ds].sort((a, b) => b.thieu - a.thieu);
   const [nhat, nhi] = xep;
-  if (!nhat) return { datRoi: false, tieuDe: "Chưa đủ dữ liệu để nhận định", moTa: "Em nhập điểm các môn để mình tính tiếp nhé." };
+  if (!nhat) return { datRoi: false, tieuDe: "Chưa đủ dữ liệu để nhận định", moTa: "Bạn nhập điểm các môn để mình tính tiếp nhé." };
   // Hai môn đầu chênh nhau dưới 0.15 điểm: coi như thiếu đều, không nói "chủ yếu".
   if (nhi && nhat.thieu - nhi.thieu < 0.15) {
     return {
@@ -162,7 +162,7 @@ export function nhanDinhMucTieu(ds: KhoangCachMon[], conThieu: number, hienTai: 
   }
   return {
     datRoi: false,
-    tieuDe: `Em đang thiếu chủ yếu ở môn ${nhat.ten}`,
+    tieuDe: `Bạn đang thiếu chủ yếu ở môn ${nhat.ten}`,
     moTa: `${nhat.ten} còn thiếu ${diem1(nhat.thieu)} điểm, nhiều nhất trong tổ hợp ${maToHop}. Tập trung môn này sẽ thu hẹp khoảng cách nhanh hơn.`,
   };
 }
@@ -174,7 +174,7 @@ export type KetQuaNhap<T> = { ok: true; gia: T } | { ok: false; loi: string };
 /** Điểm mục tiêu: số từ 1 đến 30, chấp nhận dấu phẩy, làm tròn 1 chữ số thập phân. */
 export function kiemTraDiemMucTieu(chu: string): KetQuaNhap<number> {
   const t = chu.trim().replace(",", ".");
-  if (!t) return { ok: false, loi: "Em nhập điểm mục tiêu nhé." };
+  if (!t) return { ok: false, loi: "Bạn nhập điểm mục tiêu nhé." };
   if (!/^\d+(\.\d+)?$/.test(t)) return { ok: false, loi: "Điểm chỉ gồm chữ số, ví dụ 26 hoặc 26.5." };
   const n = Number(t);
   if (n > 30) return { ok: false, loi: "Tổng 3 môn tối đa là 30 điểm." };
@@ -184,8 +184,8 @@ export function kiemTraDiemMucTieu(chu: string): KetQuaNhap<number> {
 
 /** Ngày thi: đúng dạng yyyy-mm-dd, không ở quá khứ. */
 export function kiemTraNgayThi(iso: string, homNay: string): KetQuaNhap<string> {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso) || Number.isNaN(new Date(iso).getTime())) return { ok: false, loi: "Em chọn ngày thi dự kiến nhé." };
-  if (iso < homNay) return { ok: false, loi: "Ngày thi đã qua. Em chọn một ngày từ hôm nay trở đi." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso) || Number.isNaN(new Date(iso).getTime())) return { ok: false, loi: "Bạn chọn ngày thi dự kiến nhé." };
+  if (iso < homNay) return { ok: false, loi: "Ngày thi đã qua. Bạn chọn một ngày từ hôm nay trở đi." };
   return { ok: true, gia: iso };
 }
 

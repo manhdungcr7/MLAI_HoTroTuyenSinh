@@ -81,9 +81,9 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const chenh = tong === null ? null : Math.round((tong - lc.diemMin) * 100) / 100; // 2 chữ số: quyết định mức theo số thật, chỉ khi hiển thị mới làm tròn 1 chữ số
   const moNhom = tl.toHop ? ` (tổ hợp ${tl.toHop})` : "";
   if (!khac && tong !== null && chenh !== null) {
-    if (chenh >= 0) tot.push(chenh < 0.05 ? `Điểm em${moNhom} ${so(tong)}, bằng mức tham khảo, chưa có dự phòng.` : `Điểm em${moNhom} ${so(tong)}, hơn mức tham khảo ${so(chenh)}.`);
-    else luuY.push(`Điểm em${moNhom} ${so(tong)}, thiếu ${so(-chenh)} so với mức tham khảo.`);
-    if (tl.suyRa) luuY.push(`Đề án chưa ghi tổ hợp, tạm dùng ${tl.toHop} của em. Nên kiểm tra đề án.`);
+    if (chenh >= 0) tot.push(chenh < 0.05 ? `Điểm bạn${moNhom} ${so(tong)}, bằng mức tham khảo, chưa có dự phòng.` : `Điểm bạn${moNhom} ${so(tong)}, hơn mức tham khảo ${so(chenh)}.`);
+    else luuY.push(`Điểm bạn${moNhom} ${so(tong)}, thiếu ${so(-chenh)} so với mức tham khảo.`);
+    if (tl.suyRa) luuY.push(`Đề án chưa ghi tổ hợp, tạm dùng ${tl.toHop} của bạn. Nên kiểm tra đề án.`);
   }
 
   // 2) Học phí so với ngân sách
@@ -98,15 +98,15 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   // 3) Khu vực
   const dung = dungKhuVuc(lc, bc.khuVucUuTien);
   const xaNha = bc.hocXaNha === false && !!bc.tinh && !cungNoi(lc.khuVuc, bc.tinh);
-  if (dung === true) tot.push(`Ở ${lc.khuVuc}, đúng khu vực em ưu tiên.`);
-  else if (xaNha) luuY.push(`Ở ${lc.khuVuc}, xa nơi em muốn học.`);
+  if (dung === true) tot.push(`Ở ${lc.khuVuc}, đúng khu vực bạn ưu tiên.`);
+  else if (xaNha) luuY.push(`Ở ${lc.khuVuc}, xa nơi bạn muốn học.`);
   else if (dung === false) luuY.push(`Ở ${lc.khuVuc}, ngoài khu vực ưu tiên: tính thêm ăn ở.`);
   const ngoaiKhuVuc = xaNha;
 
   // 4) Ngành
   const khacNganh = bc.nganhQuanTam.length > 0 && !bc.nganhQuanTam.includes(lc.nhomNganh);
-  if (bc.nganhQuanTam.includes(lc.nhomNganh)) tot.push(`Đúng nhóm ngành ${lc.nhomNganh} em quan tâm.`);
-  else if (khacNganh) luuY.push(`Khác nhóm ngành em đã chọn (${bc.nganhQuanTam.join(", ")}).`);
+  if (bc.nganhQuanTam.includes(lc.nhomNganh)) tot.push(`Đúng nhóm ngành ${lc.nhomNganh} bạn quan tâm.`);
+  else if (khacNganh) luuY.push(`Khác nhóm ngành bạn đã chọn (${bc.nganhQuanTam.join(", ")}).`);
   if (bc.nganhHopSoThich.includes(lc.nhomNganh)) tot.push("Hợp sở thích theo trắc nghiệm hướng nghiệp.");
 
   if (khac || tong === null || chenh === null) {

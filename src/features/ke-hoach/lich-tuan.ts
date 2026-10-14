@@ -26,7 +26,7 @@ export function ngayBatDauXep(tuan: string, hom: string, phutBayGio: number, nga
   let tuNgay = goc;
   while (tuNgay <= cuoiTuan && ngayNghi.includes(thuCuaNgay(tuNgay))) tuNgay = congNgay(tuNgay, 1);
   if (tuNgay > cuoiTuan) {
-    return goc > cuoiTuan ? { tuNgay: goc, hetTuan: true } : { tuNgay: goc, hetTuan: true, ghiChu: "Những ngày còn lại của tuần này đều là ngày nghỉ của em. Em chuyển sang tuần sau, hoặc bớt ngày nghỉ trong Cài đặt tự học." };
+    return goc > cuoiTuan ? { tuNgay: goc, hetTuan: true } : { tuNgay: goc, hetTuan: true, ghiChu: "Những ngày còn lại của tuần này đều là ngày nghỉ của bạn. Bạn chuyển sang tuần sau, hoặc bớt ngày nghỉ trong Cài đặt tự học." };
   }
   if (tuNgay === goc) return { tuNgay, hetTuan: false };
   const tenGoc = goc === hom ? "Hôm nay" : tenThu(goc);

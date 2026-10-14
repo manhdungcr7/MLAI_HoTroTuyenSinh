@@ -66,10 +66,10 @@ export default function VeDuLieu() {
           <h2 className="text-[16px] font-extrabold text-muc">Khác gì hỏi một chatbot?</h2>
           <div className="space-y-3">
             {[
-              [FileSearch, "Có thể kiểm tra", "Chatbot nói kết quả nhưng không chỉ được trang nào. Ở đây em bấm vào là thấy đúng dòng trong file đề án của trường."],
-              [GraduationCap, "Tính đúng tổ hợp", "Mỗi ngành xét tổ hợp khác nhau. Mình cộng đúng 3 môn của tổ hợp đó từ điểm em nhập, không dùng một tổng chung cho mọi ngành."],
-              [BadgeCheck, "Không bịa chỗ trống", "Thiếu học phí hay việc làm thì ghi rõ là chưa có, kèm trang đề án để em tự xem."],
-              [FileText, "Nhớ em và theo em đến cùng", "Hồ sơ, danh sách nguyện vọng, mục tiêu và kế hoạch học được lưu trên máy em, cập nhật khi điểm đổi."],
+              [FileSearch, "Có thể kiểm tra", "Chatbot nói kết quả nhưng không chỉ được trang nào. Ở đây bạn bấm vào là thấy đúng dòng trong file đề án của trường."],
+              [GraduationCap, "Tính đúng tổ hợp", "Mỗi ngành xét tổ hợp khác nhau. Mình cộng đúng 3 môn của tổ hợp đó từ điểm bạn nhập, không dùng một tổng chung cho mọi ngành."],
+              [BadgeCheck, "Không bịa chỗ trống", "Thiếu học phí hay việc làm thì ghi rõ là chưa có, kèm trang đề án để bạn tự xem."],
+              [FileText, "Đồng hành cùng bạn đến cùng", "Hồ sơ, danh sách nguyện vọng, mục tiêu và kế hoạch học được lưu trên máy của bạn, cập nhật khi điểm đổi."],
             ].map(([Icon, tieuDe, moTa]) => {
               const I = Icon as typeof FileText;
               return (

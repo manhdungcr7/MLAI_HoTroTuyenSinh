@@ -52,7 +52,7 @@ function O({ tot, children }: { tot: boolean; children: ReactNode }) {
   return (
     <div className={gop("rounded-xl px-1.5 py-2 text-center text-[14px] leading-snug min-w-0 break-words flex flex-col items-center justify-center", tot ? "bg-luc-nhat ring-1 ring-luc/30" : "bg-nen")}>
       {children}
-      {tot && <span className="sr-only">(tốt hơn cho em)</span>}
+      {tot && <span className="sr-only">(tốt hơn cho bạn)</span>}
     </div>
   );
 }

@@ -60,7 +60,7 @@ export default function KetQuaDiemThi() {
         <div>
           <h2 className="text-[22px] leading-tight font-extrabold text-muc">Danh sách đã thay đổi thế nào?</h2>
           <p className="text-[14px] text-chu-phu mt-1">
-            Dựa trên điểm thi thử ngày {ngay}, gợi ý {anh.nguon === "nguyenVong" ? "nguyện vọng của em" : "trường (em chưa có nguyện vọng nên dùng danh sách gợi ý)"} đã được cập nhật.
+            Dựa trên điểm thi thử ngày {ngay}, gợi ý {anh.nguon === "nguyenVong" ? "nguyện vọng của bạn" : "trường (bạn chưa có nguyện vọng nên dùng danh sách gợi ý)"} đã được cập nhật.
           </p>
         </div>
 

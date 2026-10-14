@@ -71,7 +71,7 @@ export function viecChoTuan(s: AppState, tuan: string, tuNgay?: string, bayGio: 
     });
     if (thu.chuaXep.length === 0) break;
   }
-  if (taoMoi.length === 0 && xong.size === 0) return { ok: false, lyDo: "Chưa còn chỗ trống để xếp việc trong phần còn lại của tuần này. Em thử sang tuần sau hoặc nới giờ học trong Cài đặt tự học." };
+  if (taoMoi.length === 0 && xong.size === 0) return { ok: false, lyDo: "Chưa còn chỗ trống để xếp việc trong phần còn lại của tuần này. Bạn thử sang tuần sau hoặc nới giờ học trong Cài đặt tự học." };
   // Giữ việc của các tuần khác trong vòng 6 tuần (để xem lại tiến độ), và việc đã xong của tuần này.
   const giu = s.viec.filter((v) => (v.tuan && v.tuan !== tuan && Math.abs(soNgayTu(tuan, v.tuan)) / 7 <= SO_TUAN_GIU_LAI) || (v.tuan === tuan && xong.has(v.id)));
   return { ok: true, viec: [...giu, ...taoMoi], moi: taoMoi.length };

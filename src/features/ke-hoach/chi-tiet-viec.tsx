@@ -28,7 +28,7 @@ export default function ChiTietViec() {
       <DauTrangCoQuayLai tieuDe="Chi tiết việc" quayLai={DUONG_DAN.tuan()} />
       <NoiDung>
         {v ? <NoiDungViec v={v} /> : (
-          <TrangThaiTrong bieuTuong={<SearchX size={26} />} tieuDe="Không tìm thấy việc này" moTa="Việc có thể đã bị xóa khi kế hoạch tuần thay đổi. Em quay lại Kế hoạch tuần để xem việc cần làm.">
+          <TrangThaiTrong bieuTuong={<SearchX size={26} />} tieuDe="Không tìm thấy việc này" moTa="Việc có thể đã bị xóa khi kế hoạch tuần thay đổi. Bạn quay lại Kế hoạch tuần để xem việc cần làm.">
             <Nut muiTen onClick={() => nav(DUONG_DAN.tuan())}>Về Kế hoạch tuần</Nut>
           </TrangThaiTrong>
         )}
@@ -128,7 +128,7 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
               );
             })}
           </ul>
-        ) : <p className="text-[14px] text-chu-phu">Việc này chưa có tiêu chí. Em tự đặt một kết quả nhỏ để biết mình đã làm đủ.</p>}
+        ) : <p className="text-[14px] text-chu-phu">Việc này chưa có tiêu chí. Bạn tự đặt một kết quả nhỏ để biết mình đã làm đủ.</p>}
       </The>
 
       <The className="space-y-2">
@@ -145,7 +145,7 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
               </li>
             ))}
           </ul>
-        ) : <p className="text-[14px] text-chu-phu">Chưa có tài liệu gợi ý. Em dùng sách giáo khoa và vở ghi của mình là đủ.</p>}
+        ) : <p className="text-[14px] text-chu-phu">Chưa có tài liệu gợi ý. Bạn dùng sách giáo khoa và vở ghi của mình là đủ.</p>}
       </The>
 
       <div className="rounded-the bg-cam-nhat p-4 flex gap-3">
