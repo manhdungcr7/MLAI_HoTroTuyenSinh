@@ -60,7 +60,7 @@ export default function KetQuaTinhHuong() {
                 <span className={gop("size-11 rounded-xl grid place-items-center text-white shrink-0", kq.dem.moiMo > 0 ? "gd-luc" : "gd-xanh")}><BarChart3 size={22} /></span>
                 <p className="text-[15px] leading-snug font-bold text-muc">
                   {kq.dem.moiMo > 0
-                    ? <>{neu}, em mở thêm <span className="text-luc-chu">{kq.dem.moiMo} lựa chọn</span> nổi bật.</>
+                    ? <>{neu}, bạn mở thêm <span className="text-luc-chu">{kq.dem.moiMo} lựa chọn</span> nổi bật.</>
                     : kq.dem.tang > 0
                       ? <>{neu}, chưa mở thêm lựa chọn mới, nhưng <span className="text-xanh">{kq.dem.tang} lựa chọn</span> có điểm phù hợp cao hơn.</>
                       : <>{neu}, danh sách gần như không đổi{kq.dem.giam > 0 ? <>, có <span className="text-do-chu">{kq.dem.giam} lựa chọn</span> giảm đi</> : ""}.</>}

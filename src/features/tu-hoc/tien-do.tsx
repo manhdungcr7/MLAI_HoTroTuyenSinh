@@ -76,7 +76,7 @@ export default function TienDo() {
                 {s.lichSu.length ? (
                   <DanhSachHoatDong ds={s.lichSu.slice(0, 4)} bayGio={bayGio} />
                 ) : (
-                  <p className="py-3 text-[14px] text-chu-phu">Chưa có hoạt động nào. Khi hoàn thành, dời hay bỏ qua một việc, hoạt động sẽ hiện ở đây.</p>
+                  <p className="py-3 text-[14px] text-chu-phu">Chưa có hoạt động nào. Lịch sử hoàn thành và điều chỉnh việc học sẽ hiển thị tại đây.</p>
                 )}
               </The>
             </section>
@@ -89,7 +89,7 @@ export default function TienDo() {
                   onClick={c.hanhDong ? () => nav(c.hanhDong!.den) : undefined} />
               )) : (
                 <DongThongBao tone="luc" icon={ShieldCheck} tieuDe="Mọi thứ đang ổn"
-                  moTa="Không có lịch trùng giờ hay buổi bị bỏ lỡ. Bạn cứ giữ nhịp như hiện tại nhé." />
+                  moTa="Không có lịch trùng hay buổi bị bỏ lỡ. Bạn hãy duy trì nhịp học đều đặn nhé." />
               )}
             </section>
 
@@ -199,10 +199,10 @@ function KetQuaHocTap({ xuHuong, nhapDiem }: { xuHuong: XuHuongMon[]; nhapDiem: 
         })}
       </ul>
       {thieu && (
-        <p className="mt-2 text-[13px] text-chu-phu">
-          Cần ít nhất 2 lần thi của một môn để thấy xu hướng.{" "}
-          <button type="button" onClick={nhapDiem} className="font-bold text-xanh min-h-11 align-middle">Nhập điểm thi thử</button>
-        </p>
+        <div className="mt-2.5 flex items-center justify-between gap-2 text-[13px] text-chu-phu">
+          <span>Cần ít nhất 2 lần thi để phân tích xu&nbsp;hướng.</span>
+          <button type="button" onClick={nhapDiem} className="font-bold text-xanh hover:underline shrink-0 min-h-10">Nhập điểm thi thử</button>
+        </div>
       )}
     </>
   );

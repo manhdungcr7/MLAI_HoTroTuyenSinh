@@ -159,7 +159,7 @@ export default function ThuTinhHuong() {
                 <SlidersHorizontal size={20} className="text-xanh shrink-0" />
                 <span className="flex-1 min-w-0">
                   <b className="block text-[15px] text-muc">Thêm điều kiện</b>
-                  <span className="block text-[12px] text-chu-phu">Ngân sách, khu vực, điều em ưu tiên</span>
+                  <span className="block text-[12px] text-chu-phu">Ngân sách, khu vực, điều bạn ưu tiên</span>
                 </span>
                 {soDieuKienDoi > 0 && <Nhan tone="xanh">Đã đổi {soDieuKienDoi}</Nhan>}
                 <ChevronDown size={20} className={gop("text-chu-phu shrink-0 transition-transform", moDieuKien && "rotate-180")} />
@@ -197,7 +197,7 @@ export default function ThuTinhHuong() {
             </div>
 
             {kq.dem.moiMo > 0 && (
-              <DongThongBao tone="luc" icon={GraduationCap} tieuDe={`Em mở thêm ${kq.dem.moiMo} lựa chọn phù hợp`} moTa="Bấm Xem thay đổi để biết đó là trường nào." />
+              <DongThongBao tone="luc" icon={GraduationCap} tieuDe={`Bạn mở thêm ${kq.dem.moiMo} lựa chọn phù hợp`} moTa="Bấm Xem thay đổi để biết đó là trường nào." />
             )}
             <GhiChuDuLieu />
 

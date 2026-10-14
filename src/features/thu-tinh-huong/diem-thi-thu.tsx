@@ -50,7 +50,7 @@ export default function DiemThiThu() {
   const soLoi = CAC_MON.filter((m) => doc[m].loi).length;
 
   const capNhat = () => {
-    if (soLoi) return setBao({ tone: "do", chu: soLoi === 1 ? "Còn 1 ô điểm chưa đúng, em sửa lại nhé." : `Còn ${soLoi} ô điểm chưa đúng, em sửa lại nhé.` });
+    if (soLoi) return setBao({ tone: "do", chu: soLoi === 1 ? "Còn 1 ô điểm chưa đúng, bạn sửa lại nhé." : `Còn ${soLoi} ô điểm chưa đúng, bạn sửa lại nhé.` });
     const doi = CAC_MON.filter((m) => doc[m].gia !== null && doc[m].gia !== diemTruoc[m]);
     if (!doi.length) return setBao({ tone: "cam", chu: "Điểm chưa thay đổi so với lần trước, nên chưa có gì để cập nhật." });
     const coNv = s.nguyenVong.length > 0;

@@ -40,7 +40,7 @@ export const TEN_UU_TIEN: Record<UuTien, string> = { viecLam: "Đi làm sớm", 
 export const MO_TA_UU_TIEN: Record<UuTien, string> = {
   viecLam: "Coi trọng cơ hội việc làm sau khi ra trường",
   hocPhi: "Coi trọng học phí vừa túi tiền",
-  gan: "Coi trọng trường ở khu vực em chọn",
+  gan: "Coi trọng trường ở khu vực bạn chọn",
 };
 /** Ngân sách khi em chưa chọn trong hồ sơ: tính như không giới hạn (mức cao nhất của thanh trượt). */
 export const NGAN_SACH_KHONG_GIOI_HAN = 150;
@@ -129,7 +129,7 @@ function lyDoThay(lc: LuaChon, tongTruoc: number, tongSau: number, dkGoc: DieuKi
   const ns = dkMoi.nganSachTrieu, nsDoi = ns !== dkGoc.nganSachTrieu, kvDoi = dkMoi.khuVuc !== dkGoc.khuVuc;
   const ngoaiKv = !!dkMoi.khuVuc && lc.khuVuc.replace(/\s/g, "") !== dkMoi.khuVuc.replace(/\s/g, "");
   if (nsDoi && typeof lc.hocPhiMin === "number" && ns < lc.hocPhiMin && chenh < 0) return `Học phí từ ${lc.hocPhiMin} triệu/năm, cao hơn ngân sách ${ns} triệu.`;
-  if (kvDoi && ngoaiKv && chenh < 0) return `Trường ở ${lc.khuVuc}, ngoài khu vực em ưu tiên.`;
+  if (kvDoi && ngoaiKv && chenh < 0) return `Trường ở ${lc.khuVuc}, ngoài khu vực bạn ưu tiên.`;
   if (tongSau > tongTruoc) {
     if (tongTruoc < lc.diemMin && tongSau >= lc.diemMin) return `Điểm sau khi tăng (${vietDiem(tongSau)}) đã chạm mức tham khảo ${vietDiem(lc.diemMin)}.`;
     if (tongSau >= lc.diemMin && goc < NGUONG_PHU_HOP && goc + chenh >= NGUONG_PHU_HOP) return `Điểm phù hợp vượt mốc ${NGUONG_PHU_HOP} nhờ tổng điểm cao hơn mức tham khảo ${vietDiem(lam(tongSau - lc.diemMin, 1))}.`;
@@ -138,7 +138,7 @@ function lyDoThay(lc: LuaChon, tongTruoc: number, tongSau: number, dkGoc: DieuKi
   }
   if (tongSau < tongTruoc && tongSau < lc.diemMin) return `Điểm sau khi giảm thấp hơn mức tham khảo ${vietDiem(lc.diemMin)}.`;
   if (nsDoi && typeof lc.hocPhiMax === "number" && ns >= lc.hocPhiMax && chenh > 0) return `Học phí ${lc.hocPhiMin}–${lc.hocPhiMax} triệu/năm nằm gọn trong ngân sách.`;
-  if (kvDoi && !ngoaiKv && chenh > 0) return `Trường ở ${lc.khuVuc}, đúng khu vực em ưu tiên.`;
+  if (kvDoi && !ngoaiKv && chenh > 0) return `Trường ở ${lc.khuVuc}, đúng khu vực bạn ưu tiên.`;
   if (chenh !== 0) return `Ưu tiên "${TEN_UU_TIEN[dkMoi.uuTien]}" làm điểm phù hợp ${chenh > 0 ? "tăng" : "giảm"}.`;
   if (tongSau < lc.diemMin) return `Vẫn còn cách mức tham khảo ${vietDiem(lam(lc.diemMin - tongSau, 1))} điểm.`;
   return "Tình huống này chưa làm thay đổi lựa chọn này.";
@@ -375,8 +375,8 @@ export function tomTatTruocSau(a: AnhTruocSau, tim: (id: string) => LuaChon | un
   const giuChac = a.dong.filter((d) => chac(d.nhanTruoc) && chac(d.nhanSau)).length;
   const moiChac = a.dong.filter((d) => !chac(d.nhanTruoc) && chac(d.nhanSau)).length;
   const soChacSau = a.dong.filter((d) => chac(d.nhanSau)).length;
-  if (!a.coTruoc) ra.push(soChacSau ? { loai: "anToan", tieuDe: `${soChacSau} ${ten} an toàn`, moTa: "với điểm vừa nhập" } : { loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "em có thể thêm ít nhất 1 lựa chọn có điểm chuẩn thấp hơn điểm em" });
-  else if (soChacSau === 0) ra.push({ loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "em có thể thêm ít nhất 1 lựa chọn có điểm chuẩn thấp hơn điểm em" });
+  if (!a.coTruoc) ra.push(soChacSau ? { loai: "anToan", tieuDe: `${soChacSau} ${ten} an toàn`, moTa: "với điểm vừa nhập" } : { loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "bạn có thể thêm ít nhất 1 lựa chọn có điểm chuẩn thấp hơn điểm bạn" });
+  else if (soChacSau === 0) ra.push({ loai: "thieuAnToan", tieuDe: `Chưa có ${ten} an toàn`, moTa: "bạn có thể thêm ít nhất 1 lựa chọn có điểm chuẩn thấp hơn điểm bạn" });
   else if (moiChac) ra.push({ loai: "anToan", tieuDe: `${soChacSau} ${ten} an toàn`, moTa: giuChac ? `${giuChac} vẫn giữ nguyên, thêm ${moiChac} mới` : `thêm ${moiChac} so với trước` });
   else ra.push({ loai: "anToan", tieuDe: `${giuChac} ${ten} an toàn`, moTa: "vẫn giữ nguyên" });
   // 3) Trường nên xem lại: học phí vượt ngân sách, rồi tới trường còn cách xa mức tham khảo

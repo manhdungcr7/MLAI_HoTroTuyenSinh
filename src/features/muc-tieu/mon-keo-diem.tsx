@@ -69,10 +69,9 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
 
   return (
     <>
-      <p className="text-[14px] text-chu-phu text-center px-2">
-        <b className="block text-[16px] text-muc mb-0.5">Môn nào kéo điểm nhanh nhất?</b>
-        Dựa trên điểm hiện tại, xu hướng các lần thi thử{d.anDemNguoc ? "." : <> và thời gian còn lại {d.soNgayCon > 0 ? <b className="text-chu">({d.soNgayCon} ngày)</b> : "(ngày thi dự kiến đã qua)"}.</>}
-      </p>
+      <div className="text-center px-2">
+        <h2 className="text-[17px] font-extrabold text-muc">Môn nào kéo điểm nhanh nhất?</h2>
+      </div>
 
       <div className="rounded-the bg-trang border border-vien shadow-the p-3">
         <div className="grid grid-cols-3 divide-x divide-vien text-center">

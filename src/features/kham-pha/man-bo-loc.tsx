@@ -100,7 +100,12 @@ export default function ManBoLoc() {
           <ChonNhanh cot={3} cacLua={[{ gia: "khong", nhan: "Không" }, { gia: "co", nhan: "Có" }, { gia: "tuyTruongHop", nhan: "Tùy trường" }]} giaTri={b.hocXa} onChange={(v: BoLoc["hocXa"]) => sua({ hocXa: v })} />
           {b.hocXa === "khong" && (bc.tinh
             ? <p className="text-[13px] text-chu-phu">Chỉ giữ trường ở {bc.tinh}.</p>
-            : <p className="text-[13px] text-cam-chu">Bạn chưa chọn nơi đang sống trong hồ sơ nên mục này chưa lọc được. <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="font-bold text-xanh underline min-h-11">Cập nhật hồ sơ</button></p>)}
+            : (
+              <div className="mt-1 flex items-center justify-between gap-2 text-[13px] text-cam-chu">
+                <span>Chưa chọn nơi sống trong hồ sơ.</span>
+                <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="font-bold text-xanh hover:underline shrink-0 min-h-10">Cập nhật hồ sơ</button>
+              </div>
+            ))}
         </Muc>
 
         {/* Thanh nút dính ngay trên thanh tab (cao khoảng 72px) để luôn thấy số kết quả khi chỉnh. */}
