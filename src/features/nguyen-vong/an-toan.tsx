@@ -150,10 +150,10 @@ export default function DanhSachAnToan() {
 }
 
 const MO_TA_NHAN: Record<(typeof CAC_NHAN)[number], string> = {
-  "Thử sức": "điểm em thấp hơn điểm tham khảo",
-  "Vừa sức": "điểm em cao hơn chưa tới 1,5 điểm",
-  "An toàn": "điểm em cao hơn 1,5 đến dưới 4 điểm",
-  "Dự phòng": "điểm em cao hơn từ 4 điểm trở lên",
+  "Thử sức": "điểm bạn thấp hơn điểm tham khảo",
+  "Vừa sức": "điểm bạn cao hơn chưa tới 1,5 điểm",
+  "An toàn": "điểm bạn cao hơn 1,5 đến dưới 4 điểm",
+  "Dự phòng": "điểm bạn cao hơn từ 4 điểm trở lên",
 };
 
 /** Khung cảnh báo lớn, chữ sinh từ danh sách thật. */

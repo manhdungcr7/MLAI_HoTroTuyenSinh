@@ -46,14 +46,14 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   if (!env.RATE_KV) return json({ loi: "Dịch vụ tư vấn chưa được cấu hình giới hạn truy cập" }, 503);
   const ip = request.headers.get("cf-connecting-ip") ?? "khong-ro";
   try {
-    if (!await choPhepTanSuat(env.RATE_KV, ip, Date.now())) return json({ loi: "Em hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
+    if (!await choPhepTanSuat(env.RATE_KV, ip, Date.now())) return json({ loi: "Bạn hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
   } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
   try {
     const r = await traLoiBacThang(env, kt.v, f);
     if (!r.ok) return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, 503);
     return json(r.kq);
   } catch {
-    return json({ loi: "Dịch vụ tư vấn đang bận, em thử lại sau ít phút" }, 502);
+    return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút" }, 502);
   }
 }
 

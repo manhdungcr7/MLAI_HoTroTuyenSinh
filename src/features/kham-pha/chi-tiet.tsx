@@ -200,7 +200,7 @@ export default function ChiTiet() {
       <>
         <DauTrangCoQuayLai tieuDe="Chi tiết lựa chọn" quayLai={DUONG_DAN.khamPha()} />
         <NoiDung>
-          <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Không tìm thấy lựa chọn này" moTa="Có thể đường dẫn đã cũ hoặc lựa chọn đã bị bỏ khỏi danh sách. Em xem các gợi ý khác nhé.">
+          <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Không tìm thấy lựa chọn này" moTa="Có thể đường dẫn đã cũ hoặc lựa chọn đã bị bỏ khỏi danh sách. Bạn xem các gợi ý khác nhé.">
             <Nut onClick={() => nav(DUONG_DAN.khamPha())}>Về Khám phá</Nut>
           </TrangThaiTrong>
         </NoiDung>

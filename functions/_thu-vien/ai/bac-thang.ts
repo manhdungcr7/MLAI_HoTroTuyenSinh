@@ -16,8 +16,8 @@ const NHAN_EN: Record<string, NhanEn> = { "Thử sức": "trial", "Vừa sức":
 const VIEC_TIEP: Record<HanhDong, string> = {
   enter_more_scores: "Nhập thêm điểm các môn còn thiếu để mình so được với điểm chuẩn.",
   add_safe_option: "Thêm vài lựa chọn An toàn hoặc Dự phòng vào danh sách.",
-  keep_list: "Danh sách đang cân đối, em chưa cần đổi gì.",
-  review_tuition: "Xem lại học phí: một số ngành đang vượt ngân sách của em.",
+  keep_list: "Danh sách đang cân đối, bạn chưa cần đổi gì.",
+  review_tuition: "Xem lại học phí: một số ngành đang vượt ngân sách của bạn.",
   widen_region: "Mở rộng sang các trường ở tỉnh khác, vì trong tỉnh còn ít lựa chọn.",
 };
 const MIN_SU_KIEN = 4, MAX_SU_KIEN = 6, MAX_MANH = 6;
@@ -94,7 +94,7 @@ function phanMoRong(manh: MangChiMuc[], viec?: HanhDong): string {
   const cd = manh.filter((m) => !m.chinhThuc), ct = manh.filter((m) => m.chinhThuc);
   const dong = (m: MangChiMuc) => `[${m.id}] ${m.noiDung}`;
   return [
-    viec ? `\n\nTÍN HIỆU THỨ HAI (không đổi nhãn, chỉ để em gợi ý): việc nên làm tiếp là "${HANH_DONG[viec]}".` : "",
+    viec ? `\n\nTÍN HIỆU THỨ HAI (không đổi nhãn, chỉ để bạn gợi ý): việc nên làm tiếp là "${HANH_DONG[viec]}".` : "",
     ct.length ? `\n\nTƯ LIỆU CHÍNH THỨC BỔ SUNG (mỗi dòng có id để trích nguồn):\n${ct.map(dong).join("\n")}` : "",
     cd.length ? `\n\nGHI CHÚ CỘNG ĐỒNG (chưa chính thức, mỗi dòng có id; khi dùng phải nói rõ là ý kiến cộng đồng chưa kiểm chứng và trích [nguồn: id]):\n${cd.map(dong).join("\n")}` : "",
   ].join("");

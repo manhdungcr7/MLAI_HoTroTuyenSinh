@@ -132,7 +132,7 @@ function ChuaCoMucTieu({ chang, onClick, soNguyenVong, nganhNV, lyDo, onNguyenVo
       <div className="mt-4 space-y-2">
         <Nut muiTen onClick={onClick}>Khám phá ngành học</Nut>
         {Boolean(soNguyenVong && soNguyenVong > 0 && onNguyenVong) && (
-          <Nut kieu="vien" onClick={onNguyenVong}>{nganhNV ? `Chọn ${nganhNV} làm mục tiêu` : `Xem ${soNguyenVong} nguyện vọng đã lưu`}</Nut>
+          <Nut kieu="vien" onClick={onNguyenVong}>{nganhNV ? (nganhNV.length > 25 ? "Đặt NV1 làm mục tiêu chính" : `Chọn ${nganhNV} làm mục tiêu`) : `Xem ${soNguyenVong} nguyện vọng đã lưu`}</Nut>
         )}
         {lyDo && <span className="block text-[13px] text-chu-phu">Chưa đặt được từ nguyện vọng: {lyDo}</span>}
       </div>

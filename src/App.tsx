@@ -30,7 +30,7 @@ const TIEU_DE: [string, string][] = [
   ["/nguyen-vong/an-toan", "Cơ cấu danh sách"], ["/nguyen-vong", "Nguyện vọng"],
   ["/thu-tinh-huong", "Thử tình huống"], ["/diem-thi-thu", "Điểm thi thử"],
   ["/ke-hoach/tuan", "Kế hoạch tuần"], ["/ke-hoach/tien-do", "Tiến độ"], ["/ke-hoach/viec", "Chi tiết việc"], ["/ke-hoach/cai-dat", "Cài đặt"], ["/ke-hoach", "Mục tiêu"],
-  ["/ho-so/chia-se", "Chia sẻ với người đồng hành"], ["/ho-so", "Hồ sơ"], ["/huong-nghiep", "Trắc nghiệm hướng nghiệp"], ["/dong-hanh", "Người đồng hành"], ["/dong-gop", "Cùng cập nhật dữ liệu"], ["/loi-nhan", "Lời nhắn cho em"], ["/tu-van", "Tư vấn"], ["/bat-dau", "Tạo hồ sơ"], ["/chao", "Chào mừng"],
+  ["/ho-so/chia-se", "Chia sẻ với người đồng hành"], ["/ho-so", "Hồ sơ"], ["/huong-nghiep", "Trắc nghiệm hướng nghiệp"], ["/dong-hanh", "Người đồng hành"], ["/dong-gop", "Cùng cập nhật dữ liệu"], ["/loi-nhan", "Lời nhắn cho bạn"], ["/tu-van", "Tư vấn"], ["/bat-dau", "Tạo hồ sơ"], ["/chao", "Chào mừng"],
 ];
 const tieuDeCua = (p: string) => (p === "/" ? "Hôm nay" : [...TIEU_DE].sort((a, b) => b[0].length - a[0].length).find(([d]) => p.startsWith(d))?.[1]);
 

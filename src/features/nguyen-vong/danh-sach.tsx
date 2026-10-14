@@ -185,7 +185,7 @@ export default function DanhSachNguyenVong() {
             )}
 
             {ds.length > SO_NV_GOI_Y && (
-              <DongThongBao tone="xanh" icon={ListPlus} tieuDe={`Em đang có ${ds.length} nguyện vọng`}
+              <DongThongBao tone="xanh" icon={ListPlus} tieuDe={`Bạn đang có ${ds.length} nguyện vọng`}
                 moTa={`Khoảng 5–${SO_NV_GOI_Y} nguyện vọng là dễ cân nhắc nhất.`} />
             )}
 
@@ -290,7 +290,7 @@ function TheTomTat({ tong, kl, dem, onClick }: { tong: number | null; kl: Return
 }
 
 function TomTatTruong({ d }: { d: DongNV }) {
-  if (!d.lc) return <p className="text-[14px] text-chu-phu">Lựa chọn này không còn trong dữ liệu. Em có thể xóa khỏi danh sách.</p>;
+  if (!d.lc) return <p className="text-[14px] text-chu-phu">Lựa chọn này không còn trong dữ liệu. Bạn có thể xóa khỏi danh sách.</p>;
   return (
     <div className="flex items-center gap-3 rounded-the bg-nen p-3">
       <HuyHieuTruong ten={d.lc.truong} tone={d.lc.tone} kichThuoc={40} />
@@ -339,7 +339,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
               ) : (
                 <>
                   <b className="block text-[15px] text-muc">Chưa có dữ liệu</b>
-                  <span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong danh mục. Em có thể xóa đi.</span>
+                  <span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong danh mục. Bạn có thể xóa đi.</span>
                 </>
               )}
             </span>
@@ -348,8 +348,8 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
             <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-chu-phu">
               <span className="inline-flex items-center gap-1"><GraduationCap size={14} />{d.lc.namDiem}: <b className="text-chu">{dinhDang(d.lc.diemMin, 1)}</b></span>
               {d.chenh !== null && (
-                <b className={d.chenh < 0 ? "text-cam-chu" : "text-luc-chu"} title={`Điểm em so với điểm chuẩn ${d.lc.namDiem}`}>
-                  em {d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 1)}
+                <b className={d.chenh < 0 ? "text-cam-chu" : "text-luc-chu"} title={`Điểm bạn so với điểm chuẩn ${d.lc.namDiem}`}>
+                  {d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 1)}
                 </b>
               )}
               {d.toHop && <span className="inline-flex items-center rounded-full bg-nen px-2 py-0.5 text-[12px]">{d.toHop}{d.suyRa ? " · suy ra" : ""}</span>}

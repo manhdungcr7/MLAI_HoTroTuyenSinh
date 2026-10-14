@@ -278,7 +278,7 @@ export function canhBaoThuTu(ds: DongNV[]): CanhBaoThuTu[] {
     if (!laCaoHon(sau)) continue;
     const truoc = ds.find((d) => d.viTri < sau.viTri && laChacChan(d));
     if (!truoc) continue;
-    ra.push({ truoc, sau, cau: `NV${truoc.viTri + 1} (${truoc.nhan}) đứng trước NV${sau.viTri + 1} (${sau.nhan}). Nếu em đủ điểm NV${truoc.viTri + 1} thì sẽ không xét NV${sau.viTri + 1}.` });
+    ra.push({ truoc, sau, cau: `NV${truoc.viTri + 1} (${truoc.nhan}) đứng trước NV${sau.viTri + 1} (${sau.nhan}). Nếu bạn đủ điểm NV${truoc.viTri + 1} thì sẽ không xét NV${sau.viTri + 1}.` });
   }
   return ra;
 }

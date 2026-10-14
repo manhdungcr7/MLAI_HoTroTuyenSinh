@@ -19,7 +19,7 @@ export const coKhoaLLM = (env: EnvLLM) =>
 
 // Client chờ 15 giây, Clef tối đa 4 giây trước đó: giữ LLM dưới 10 giây để còn kịp trả.
 const HAN_GOI_MS = 10_000;
-const TOKEN_RA = 450;
+const TOKEN_RA = 1000;
 
 export async function goiMoHinh(env: EnvLLM, noiDung: string, f: typeof fetch = fetch, hanMs = HAN_GOI_MS): Promise<string> {
   const han = Math.min(HAN_GOI_MS, hanMs);

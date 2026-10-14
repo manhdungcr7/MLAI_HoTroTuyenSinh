@@ -42,8 +42,7 @@ export default function ManBoLoc() {
   return (
     <>
       <DauTrangCoQuayLai tieuDe="Bộ lọc" quayLai={DUONG_DAN.khamPha()} />
-      <NoiDung className="space-y-3">
-        <p className="text-[14px] text-chu-phu -mt-1">Chọn vài tiêu chí để chỉ thấy những trường đúng ngành, đúng tầm điểm và vừa học phí.</p>
+      <NoiDung className="space-y-3 pb-24">
 
         <Muc tieuDe="Ngành quan tâm" phu={bc.nganhQuanTam.length ? `(hồ sơ: ${bc.nganhQuanTam.join(", ")})` : undefined}>
           <ChonNhanh cacLua={[{ gia: "", nhan: "Tất cả" }, ...CAC_NHOM.map((n) => ({ gia: n, nhan: n }))]} giaTri={b.nhom} onChange={(v: string) => sua({ nhom: v })} />
@@ -97,11 +96,11 @@ export default function ManBoLoc() {
           <p className="text-[12px] text-chu-phu">Cần chọn ít nhất một loại hình.</p>
         </Muc>
 
-        <Muc tieuDe="Em có sẵn sàng học xa nhà?">
+        <Muc tieuDe="Bạn có sẵn sàng học xa nhà?">
           <ChonNhanh cot={3} cacLua={[{ gia: "khong", nhan: "Không" }, { gia: "co", nhan: "Có" }, { gia: "tuyTruongHop", nhan: "Tùy trường" }]} giaTri={b.hocXa} onChange={(v: BoLoc["hocXa"]) => sua({ hocXa: v })} />
           {b.hocXa === "khong" && (bc.tinh
             ? <p className="text-[13px] text-chu-phu">Chỉ giữ trường ở {bc.tinh}.</p>
-            : <p className="text-[13px] text-cam-chu">Em chưa chọn nơi đang sống trong hồ sơ nên mục này chưa lọc được. <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="font-bold text-xanh underline min-h-11">Cập nhật hồ sơ</button></p>)}
+            : <p className="text-[13px] text-cam-chu">Bạn chưa chọn nơi đang sống trong hồ sơ nên mục này chưa lọc được. <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="font-bold text-xanh underline min-h-11">Cập nhật hồ sơ</button></p>)}
         </Muc>
 
         {/* Thanh nút dính ngay trên thanh tab (cao khoảng 72px) để luôn thấy số kết quả khi chỉnh. */}
