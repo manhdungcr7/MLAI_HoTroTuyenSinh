@@ -101,19 +101,19 @@ function thieuChoAnToan(s: AppState): boolean {
 /** Lời chào dưới tên ở trang Hôm nay, theo chặng. Em mệt thì nhẹ nhàng trước. */
 export function loiChaoTheoChang(s: AppState, chang: Chang = changCuaEm(s)): string {
   if (s.tamTrang === "met") return "Hôm nay mình học nhẹ thôi nhé.";
-  if (chang === "dinhHuong") return "Mình làm từng bước nhỏ để hiểu bản thân và các ngành nhé.";
+  if (chang === "dinhHuong") return "Khám phá bản thân và tìm ngành học phù hợp nhé.";
   if (chang === "thiLai") return s.mucTieu ? "Năm nay mình làm chắc hơn, từng việc một nhé." : "Mình xem lại điểm năm trước rồi chọn hướng đi cho sát nhé.";
   return s.mucTieu ? "Cùng cố gắng hôm nay nhé." : "Hôm nay mình bắt đầu từ đâu nhỉ?";
 }
 
-/** Câu gợi ý ngắn cho em theo chặng: việc đáng làm tiếp theo, đúng một việc. */
+/** Câu gợi ý ngắn cho bạn theo chặng: việc đáng làm tiếp theo, đúng một việc. */
 export function goiYChoEm(s: AppState, chang: Chang = changCuaEm(s)): GoiY {
   const nhac = nhacLocHocPhi(s.hoSo);
   const ra = (moTa: string, den: string): GoiY => ({ moTa, den, nhacHocPhi: chang === "dinhHuong" ? null : nhac });
 
   if (chang === "dinhHuong") {
-    if (!s.hoSo.soThich) return ra("Làm trắc nghiệm 12 tình huống để biết nhóm ngành hợp em.", DUONG_DAN.tracNghiem());
-    if (s.yeuThich.length > 0 && s.nguyenVong.length === 0) return ra(`Em đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
+    if (!s.hoSo.soThich) return ra("Làm trắc nghiệm 12 tình huống để biết nhóm ngành hợp bạn.", DUONG_DAN.tracNghiem());
+    if (s.yeuThich.length > 0 && s.nguyenVong.length === 0) return ra(`Bạn đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
     if (s.nguyenVong.length < 2) return ra("Lưu 2–3 ngành thấy hợp để so sánh dần.", DUONG_DAN.khamPha());
     if (!coDiemNaoDo(s)) return ra("Nhập điểm học bạ để so tham khảo với điểm chuẩn.", DUONG_DAN.batDau(2));
     return ra("Giữ điểm đều các môn, xem thêm vài ngành.", DUONG_DAN.khamPha());
@@ -123,16 +123,16 @@ export function goiYChoEm(s: AppState, chang: Chang = changCuaEm(s)): GoiY {
   if (chang === "thiLai") {
     if (!coDiemNaoDo(s)) return ra("Nhập điểm thi năm trước để so với điểm chuẩn.", DUONG_DAN.batDau(2));
     if (!s.nguyenVong.length) {
-      if (s.yeuThich.length > 0) return ra(`Em đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
+      if (s.yeuThich.length > 0) return ra(`Bạn đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
       return ra("So học phí, khu vực ở Khám phá rồi lưu nguyện vọng.", DUONG_DAN.khamPha());
     }
     if (!m) return ra("So điểm năm trước với điểm chuẩn, rồi chọn mục tiêu.", DUONG_DAN.nguyenVong());
   } else if (!m) {
-    if (s.yeuThich.length > 0 && s.nguyenVong.length === 0) return ra(`Em đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
+    if (s.yeuThich.length > 0 && s.nguyenVong.length === 0) return ra(`Bạn đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
     if (s.nguyenVong.length) return ra("Chọn NV1 làm mục tiêu để tính điểm còn thiếu.", DUONG_DAN.nguyenVong());
     return ra("Chọn một ngành làm mục tiêu để tính điểm còn thiếu.", DUONG_DAN.khamPha());
   }
-  if (!m) return ra("Em chọn một ngành làm mục tiêu để bắt đầu.", DUONG_DAN.khamPha());
+  if (!m) return ra("Bạn chọn một ngành làm mục tiêu để bắt đầu.", DUONG_DAN.khamPha());
   if (thieuChoAnToan(s)) return ra("Danh sách chưa có NV An toàn hay Dự phòng. Thêm một chỗ nhé.", DUONG_DAN.nguyenVongAnToan());
   const chuaCo = monThieuDiem(s, m.toHop);
   if (chuaCo.length) {

@@ -25,7 +25,7 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
           <span className="flex items-center gap-3">
             <BieuTuongTron icon={CheckCircle2} tone="luc" kichThuoc={48} />
             <span className="min-w-0">
-              <b className="block text-[20px] leading-tight text-muc">Hồ sơ của em đã sẵn sàng</b>
+              <b className="block text-[20px] leading-tight text-muc">Hồ sơ của bạn đã sẵn sàng</b>
               <span className="block text-[13px] text-chu-phu mt-0.5">Mình đã so với {so(LUA_CHON.length)} chương trình của {SO_TRUONG} trường.</span>
             </span>
           </span>
@@ -35,7 +35,7 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
           <>
             <The className="space-y-3">
               <p className="text-[14px] text-chu">
-                Tổ hợp cao nhất của em: <b className="text-muc">{kq.toHop}</b> · <b className="text-[18px] text-muc">{dinhDang(kq.tong, 1)}</b> điểm
+                Tổ hợp cao nhất của bạn: <b className="text-muc">{kq.toHop}</b> · <b className="text-[18px] text-muc">{dinhDang(kq.tong, 1)}</b> điểm
               </p>
               <div className="grid grid-cols-2 gap-2.5">
                 <div className="rounded-xl bg-luc-nhat p-3">
@@ -50,8 +50,8 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
             </The>
 
             {kq.nhomQuanTam.length > 0 && (
-              <section aria-label="Nhóm ngành em quan tâm">
-                <h2 className="text-[15px] font-bold text-muc mb-2">Nhóm ngành em quan tâm</h2>
+              <section aria-label="Nhóm ngành bạn quan tâm">
+                <h2 className="text-[15px] font-bold text-muc mb-2">Nhóm ngành bạn quan tâm</h2>
                 <ul className="space-y-2">
                   {kq.nhomQuanTam.map((g) => (
                     <li key={g.nhom} className="flex items-center justify-between gap-2 rounded-xl border border-vien bg-trang px-3 min-h-12">
@@ -67,12 +67,12 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
               </section>
             )}
 
-            <p className="text-[12px] text-chu-phu">Chỉ tính ngành xét điểm thi tốt nghiệp THPT, so với điểm chuẩn các năm trước, đã gồm điểm ưu tiên em khai. Không phải xác suất đậu.</p>
+            <p className="text-[12px] text-chu-phu">Chỉ tính ngành xét điểm thi tốt nghiệp THPT, so với điểm chuẩn các năm trước, đã gồm điểm ưu tiên bạn khai. Không phải xác suất đậu.</p>
           </>
         ) : (
           <The className="flex items-start gap-3">
             <Sparkles size={22} className="text-xanh shrink-0 mt-0.5" />
-            <p className="text-[14px] text-chu">Em chưa nhập đủ điểm 3 môn của một tổ hợp, nên mình chưa so được với điểm chuẩn. Em vẫn xem được các ngành, và nhập điểm lúc nào cũng được.</p>
+            <p className="text-[14px] text-chu">Bạn chưa nhập đủ điểm 3 môn của một tổ hợp, nên mình chưa so được với điểm chuẩn. Bạn vẫn xem được các ngành, và nhập điểm lúc nào cũng được.</p>
           </The>
         )}
       </NoiDung>

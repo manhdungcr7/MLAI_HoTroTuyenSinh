@@ -25,11 +25,11 @@ export default function Buoc3({ h, sua }: P) {
         <ChonO nhan="Khu vực ưu tiên" nhieu cot={3} cacLua={KHU_VUC.map((x) => ({ gia: x, nhan: x }))} giaTri={h.khuVuc} onChange={(v) => sua({ khuVuc: v })} />
       </CauHoi>
 
-      <CauHoi tieuDe="Em có sẵn sàng học xa nhà?" icon={Plane}>
+      <CauHoi tieuDe="Bạn có sẵn sàng học xa nhà?" icon={Plane}>
         <ChonO nhan="Sẵn sàng học xa nhà" cot={2} cacLua={HOC_XA_NHA} giaTri={h.hocXaNha} onChange={(v) => sua({ hocXaNha: v })} />
       </CauHoi>
 
-      <CauHoi tieuDe="Em quan tâm việc làm sau khi ra trường?" icon={Briefcase}>
+      <CauHoi tieuDe="Bạn quan tâm việc làm sau khi ra trường?" icon={Briefcase}>
         <ChonO nhan="Mức quan tâm việc làm" cot={3} cacLua={VIEC_LAM} giaTri={h.quanTamViecLam} onChange={(v) => sua({ quanTamViecLam: v })} />
       </CauHoi>
 

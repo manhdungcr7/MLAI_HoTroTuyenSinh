@@ -45,7 +45,7 @@ export function TamTrangHomNay() {
 
   return (
     <The className="space-y-2.5">
-      <p id="tam-trang" className="font-extrabold text-muc text-[15px]">Hôm nay em thấy thế nào?</p>
+      <p id="tam-trang" className="font-extrabold text-muc text-[15px]">Hôm nay bạn thấy thế nào?</p>
       <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-labelledby="tam-trang">
         {CAC_TAM_TRANG.map((t) => {
           const dang = s.tamTrang === t.gia;

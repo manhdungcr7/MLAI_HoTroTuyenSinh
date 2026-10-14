@@ -136,16 +136,16 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
         <button type="button" onClick={() => setMoThem(!moThem)} aria-expanded={moThem} aria-controls="bd-them"
           className="w-full min-h-12 flex items-center gap-3 px-4 text-left">
           <span className="flex-1">
-            <b className="block text-[15px] text-chu">Thêm về cách em học</b>
+            <b className="block text-[15px] text-chu">Thêm về cách bạn học</b>
           </span>
           <ChevronDown size={20} className={gop("text-chu-phu transition-transform", moThem && "rotate-180")} />
         </button>
         {moThem && (
           <div id="bd-them" className="px-4 pb-4 space-y-4 border-t border-vien pt-3">
-            <CauHoi tieuDe="Điểm mạnh của em" icon={ThumbsUp}>
+            <CauHoi tieuDe="Điểm mạnh của bạn" icon={ThumbsUp}>
               <ChonO nhan="Điểm mạnh" nhieu cacLua={DIEM_MANH.map((x) => ({ gia: x, nhan: x }))} giaTri={h.diemManh} onChange={(v) => sua({ diemManh: v })} />
             </CauHoi>
-            <CauHoi tieuDe="Điều em muốn cải thiện" icon={TrendingUp}>
+            <CauHoi tieuDe="Điều bạn muốn cải thiện" icon={TrendingUp}>
               <ChonO nhan="Điều muốn cải thiện" nhieu cacLua={CAN_CAI_THIEN.map((x) => ({ gia: x, nhan: x }))} giaTri={h.canCaiThien} onChange={(v) => sua({ canCaiThien: v })} />
             </CauHoi>
           </div>

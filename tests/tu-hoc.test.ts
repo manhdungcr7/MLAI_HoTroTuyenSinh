@@ -42,7 +42,7 @@ assert.equal(buoiBoLo(boLo, BAY_GIO).length, 3);
 const cb1 = taoCanhBao(boLo, BAY_GIO);
 const canhBaoBoLo = cb1.find((c) => loaiCuaCanhBao(c) === "boLo");
 assert.ok(canhBaoBoLo, "phải có cảnh báo bỏ lỡ");
-assert.equal(canhBaoBoLo!.tieuDe, "Em đã bỏ lỡ 2 buổi Vật lý");
+assert.equal(canhBaoBoLo!.tieuDe, "Bạn đã bỏ lỡ 2 buổi Vật lý");
 assert.equal(canhBaoBoLo!.hanhDong?.den, DUONG_DAN.tuan("lich"));
 const td1 = demTienDo(boLo, BAY_GIO);
 assert.equal(td1.quaHan, 2, "2 việc có buổi quá giờ");

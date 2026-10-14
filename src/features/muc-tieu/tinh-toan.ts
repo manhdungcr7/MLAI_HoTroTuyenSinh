@@ -201,19 +201,55 @@ export const NOI_DUNG_ON: Record<MonId, string[]> = {
   tiengAnh: ["Làm 3 bài đọc hiểu Tiếng Anh, ghi từ mới", "Ôn câu điều kiện, mệnh đề quan hệ (Anh)", "Làm 1 đề Tiếng Anh và chữa lỗi sai"],
 };
 
-/** 3 gợi ý: lần lượt theo các môn còn thiếu (đã xếp ưu tiên); đã đạt hết thì mỗi môn một bài giữ phong độ. */
-export function goiYTuanNay(ds: { mon: MonId; thieu: number }[], so = 3): { mon: MonId; noiDung: string }[] {
+/** Gợi ý chiến lược ôn tập tuần này: cá nhân hóa theo mức điểm, khoảng thiếu và môn ưu tiên; đạt mục tiêu thì gợi ý giữ phong độ. */
+export function goiYTuanNay(
+  ds: { mon: MonId; thieu: number; hienTai?: number; mucTieu?: number; xuHuong?: string }[],
+  so = 3
+): { mon: MonId; noiDung: string }[] {
   const canTang = ds.filter((x) => x.thieu > 0);
-  const nguon = canTang.length ? canTang : ds;
   const ra: { mon: MonId; noiDung: string }[] = [];
-  for (let vong = 0; ra.length < so && vong < 3; vong++) {
-    for (const x of nguon) {
-      if (ra.length >= so) break;
-      const nd = NOI_DUNG_ON[x.mon][vong];
-      if (nd) ra.push({ mon: x.mon, noiDung: nd });
+
+  if (canTang.length > 0) {
+    for (let vong = 0; ra.length < so && vong < 3; vong++) {
+      for (const x of canTang) {
+        if (ra.length >= so) break;
+        const tenMon = TEN_MON[x.mon];
+        const mucDiem = x.hienTai ?? 7;
+        let nd: string;
+        if (vong === 0) {
+          nd = mucDiem < 7
+            ? `Củng cố chắc kiến thức nhận biết – thông hiểu ${tenMon} (đúng trọn 30 câu đầu, bù +${diem1(x.thieu)}đ)`
+            : mucDiem >= 8.5
+              ? `Luyện chuyên đề phân loại 8.5+ môn ${tenMon} và rà soát bẫy đề thi (+${diem1(x.thieu)}đ)`
+              : `${NOI_DUNG_ON[x.mon][0]} (mục tiêu bù +${diem1(x.thieu)}đ)`;
+        } else if (vong === 1) {
+          nd = `Làm đề ${tenMon} bấm giờ, chữa kỹ các câu sai để bù điểm`;
+        } else {
+          nd = NOI_DUNG_ON[x.mon][2] ?? `Rà soát bẫy lý thuyết môn ${tenMon}`;
+        }
+        ra.push({ mon: x.mon, noiDung: nd });
+      }
+    }
+  } else {
+    // Đã đạt mục tiêu: Gợi ý duy trì phong độ và phản xạ làm bài
+    for (let i = 0; i < ds.length && ra.length < so; i++) {
+      const x = ds[i];
+      const tenMon = TEN_MON[x.mon];
+      const nd = i === 0
+        ? `Làm 1 đề ${tenMon} chuẩn thời gian, chữa kỹ các câu sai để duy trì phong độ`
+        : i === 1
+          ? `Rà soát lại các dạng bài hay nhầm lẫn ở lần thi thử gần nhất (${tenMon})`
+          : `Ôn nhanh sơ đồ công thức then chốt môn ${tenMon}`;
+      ra.push({ mon: x.mon, noiDung: nd });
     }
   }
-  return ra;
+
+  while (ra.length < so && ds.length > 0) {
+    const x = ds[ra.length % ds.length];
+    ra.push({ mon: x.mon, noiDung: `Luyện 1 đề ${TEN_MON[x.mon]} tính giờ để giữ nhịp` });
+  }
+
+  return ra.slice(0, so);
 }
 
 /** Tổng các phần bù (sau làm tròn) và độ lệch so với khoảng cách tổng. */

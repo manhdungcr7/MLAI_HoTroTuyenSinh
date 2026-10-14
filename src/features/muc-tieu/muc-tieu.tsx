@@ -43,8 +43,8 @@ export default function MucTieu() {
         <NoiDung>
           <NutTuVan nguCanh="Mục tiêu học tập" />
           <TrangThaiTrong bieuTuong={<Target size={28} />}
-            tieuDe={mucTieuCu ? "Không tìm thấy mục tiêu cũ" : "Em chưa chọn mục tiêu chính"}
-            moTa={mucTieuCu ? "Ngành em chọn trước đây không còn trong danh sách. Em chọn lại một mục tiêu nhé." : "Chọn một ngành, trường em muốn vào. Mình sẽ tính em còn cách bao xa và nên tập trung môn nào."}>
+            tieuDe={mucTieuCu ? "Không tìm thấy mục tiêu cũ" : "Bạn chưa chọn mục tiêu chính"}
+            moTa={mucTieuCu ? "Ngành bạn chọn trước đây không còn trong danh sách. Bạn chọn lại một mục tiêu nhé." : "Chọn ngành, trường bạn hướng tới để tính khoảng cách điểm và gợi ý môn cần tập trung."}>
             <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá ngành học</Nut>
             {s.nguyenVong.length > 0 && (
               <Nut kieu="vien" onClick={() => (nv.ok ? datMucTieu(nv.mucTieu) : nav(DUONG_DAN.nguyenVong()))}>
@@ -95,7 +95,7 @@ export default function MucTieu() {
 
         {phuongThuc !== "THPT" ? (
           <DongThongBao tone="xanh" icon={Hammer} tieuDe={`Cách tính theo ${pt.day}: đang phát triển`}
-            moTa="Hiện mình mới tính được theo điểm thi THPT, nên chưa có con số nào cho cách này. Em chọn THPT để xem khoảng cách và số ngày còn lại."
+            moTa="Hiện mới tính được theo điểm thi THPT, chưa có dữ liệu cho phương thức này. Bạn chọn THPT để xem khoảng cách và số ngày còn lại."
             hanhDong="Xem theo THPT" onClick={() => setPhuongThuc("THPT")} />
         ) : (
           <KhoiTHPT d={d} doiToHop={doiToHop} moSua={() => setMoSua(true)} />
@@ -122,7 +122,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
   const phanTram = d.mucTieu > 0 ? (d.hienTai / d.mucTieu) * 100 : 0;
   const ghiChuNguon = d.nguon.loai === "thiThu" && d.nguon.ngayGanNhat
     ? `Dự kiến từ lần thi thử gần nhất (${ngayVN(d.nguon.ngayGanNhat)})`
-    : d.nguon.loai === "tronLan" ? "Dự kiến từ điểm thi thử và điểm em nhập" : "Dự kiến từ điểm em nhập ở hồ sơ";
+    : d.nguon.loai === "tronLan" ? "Dự kiến từ điểm thi thử và điểm bạn nhập" : "Dự kiến từ điểm bạn nhập ở hồ sơ";
 
   return (
     <>

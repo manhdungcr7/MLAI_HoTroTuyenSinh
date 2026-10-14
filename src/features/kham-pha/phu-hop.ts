@@ -114,15 +114,15 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
       muc: null, tong: null, chenh: null, diemGoiY: null, chacChan: null, lyDoKhongSo: khac, vuotNganSach, ngoaiKhuVuc, tot, luuY,
       tomTat: khac ? "Khác phương thức, chưa so được điểm" : tl.khongTinhDuoc ? `Ngành xét tổ hợp ${tl.khongTinhDuoc.slice(0, 3).join(", ")}, mình chưa so được`
         : tl.thieuMon ? `Thêm điểm ${tl.thieuMon.map((m) => TEN_MON_THEM_NGAN[m as MonThem] ?? TEN_MON_NGAN[m as MonId]).slice(0, 3).join(", ")} để so` : "Nhập đủ điểm 3 môn của một tổ hợp để so",
-      giaiThich: khac ? `${khac} Em xem điểm chuẩn ở bảng bên dưới theo đúng phương thức đó.` : tl.khongTinhDuoc
-        ? `Ngành này xét tổ hợp ${tl.khongTinhDuoc.join(", ")} (có môn năng khiếu hoặc ngoại ngữ khác), mình chưa tính được. Em so điểm chuẩn ở bảng bên dưới với điểm của em.`
+      giaiThich: khac ? `${khac} Bạn xem điểm chuẩn ở bảng bên dưới theo đúng phương thức đó.` : tl.khongTinhDuoc
+        ? `Ngành này xét tổ hợp ${tl.khongTinhDuoc.join(", ")} (có môn năng khiếu hoặc ngoại ngữ khác), mình chưa tính được. Bạn so điểm chuẩn ở bảng bên dưới với điểm của bạn.`
         : tl.thieuMon
-          ? `Ngành này xét tổ hợp cần điểm ${tl.thieuMon.map((m) => TEN_MON[m as MonId] ?? TEN_MON_THEM[m as MonThem]).join(", ")}. Em thêm điểm các môn đó ở Hồ sơ (bước Điểm các môn) để mình so.`
-          : "Em chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
+          ? `Ngành này xét tổ hợp cần điểm ${tl.thieuMon.map((m) => TEN_MON[m as MonId] ?? TEN_MON_THEM[m as MonThem]).join(", ")}. Bạn thêm điểm các môn đó ở Hồ sơ (bước Điểm các môn) để mình so.`
+          : "Bạn chưa nhập đủ điểm 3 môn của tổ hợp xét tuyển ngành này nên chưa so được với điểm tham khảo.",
     };
   }
 
-  // Mức theo điểm, rồi hạ xuống "Cần cân nhắc" nếu vướng học phí, khoảng cách, hoặc khác hẳn ngành em chọn.
+  // Mức theo điểm, rồi hạ xuống "Cần cân nhắc" nếu vướng học phí, khoảng cách, hoặc khác hẳn ngành bạn chọn.
   const theoDiem: MucPhuHop = chenh >= 0 ? "Phù hợp" : chenh >= -2 ? "Có thể thử sức" : "Cần cân nhắc";
   let muc = theoDiem;
   if (vuotNganSach || ngoaiKhuVuc || khacNganh) muc = "Cần cân nhắc";
@@ -141,16 +141,16 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const diemGoiY = muc === "Cần cân nhắc" ? Math.min(diemTho, NGUONG_PHU_HOP - 1) : diemTho;
 
   const phanDiem = chenh >= 0 ? (chenh < 0.05 ? "bằng mức tham khảo" : `cao hơn mức tham khảo ${so(chenh)} điểm`) : `thấp hơn mức tham khảo ${so(-chenh)} điểm`;
-  const tomTat = vuotNganSach ? "Học phí vượt ngân sách của em" : ngoaiKhuVuc ? "Ở xa nơi em muốn học"
-    : khacNganh ? "Khác nhóm ngành em quan tâm" : `Điểm của em ${phanDiem}`;
+  const tomTat = vuotNganSach ? "Học phí vượt ngân sách của bạn" : ngoaiKhuVuc ? "Ở xa nơi bạn muốn học"
+    : khacNganh ? "Khác nhóm ngành bạn quan tâm" : `Điểm của bạn ${phanDiem}`;
   const giaiThich = muc === "Phù hợp"
-    ? `Điểm của em ${phanDiem}${vuaNganSach ? ", học phí vừa ngân sách" : ""}.`
+    ? `Điểm của bạn ${phanDiem}${vuaNganSach ? ", học phí vừa ngân sách" : ""}.`
     : muc === "Có thể thử sức"
-      ? `Điểm của em ${phanDiem}. Cố thêm là có thể với tới.`
+      ? `Điểm của bạn ${phanDiem}. Cố thêm là có thể với tới.`
       : vuotNganSach ? "Học phí vượt ngân sách, cần bàn với gia đình."
-        : ngoaiKhuVuc ? "Trường ở xa nơi em muốn học."
-          : khacNganh ? `Ngành này khác nhóm ngành em quan tâm. Điểm của em ${phanDiem}.`
-            : `Điểm của em ${phanDiem}, khoảng cách còn khá xa.`;
+        : ngoaiKhuVuc ? "Trường ở xa nơi bạn muốn học."
+          : khacNganh ? `Ngành này khác nhóm ngành bạn quan tâm. Điểm của bạn ${phanDiem}.`
+            : `Điểm của bạn ${phanDiem}, khoảng cách còn khá xa.`;
 
   return { muc, tong, chenh, diemGoiY, chacChan, lyDoKhongSo: null, vuotNganSach, ngoaiKhuVuc, tomTat, giaiThich, tot, luuY };
 }

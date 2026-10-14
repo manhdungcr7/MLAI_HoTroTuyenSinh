@@ -101,7 +101,7 @@ export default function Buoc1({ h, sua, loi }: P) {
         </label>
         <OChon id={ID_TRUONG.tinh} value={h.tinh} onChange={(e) => sua({ tinh: e.target.value })} aria-invalid={!!loi.tinh}
           className={gop(!h.tinh && "text-chu-phu", loi.tinh && "border-do/60")}>
-          <option value="">Chọn nơi em đang sống</option>
+          <option value="">Chọn nơi bạn đang sống</option>
           {tinhLa && <option value={tinhLa}>{tinhLa}</option>}
           <optgroup label="Thành phố">{THANH_PHO.map((t) => <option key={t} value={t}>{t}</option>)}</optgroup>
           <optgroup label="Tỉnh">{TINH.map((t) => <option key={t} value={t}>{t}</option>)}</optgroup>

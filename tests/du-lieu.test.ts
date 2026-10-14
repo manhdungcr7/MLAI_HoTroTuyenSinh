@@ -127,7 +127,7 @@ if (kq.muc === "Cần cân nhắc") assert.ok((kq.diemGoiY ?? 0) < NGUONG_PHU_HO
 // 8) Ngành chỉ xét tổ hợp chưa có môn (Sử, Địa) không bị so nhầm
 const chiC00 = LUA_CHON.find((l) => l.toHopXet?.length && l.toHopXet.every((c) => ["C00", "C03", "C04", "D14", "D15"].includes(c)));
 if (chiC00) {
-  const k = danhGia(chiC00, bcGioi); assert.equal(k.muc, null); assert.match(k.giaiThich, /Em thêm điểm/);
+  const k = danhGia(chiC00, bcGioi); assert.equal(k.muc, null); assert.match(k.giaiThich, /Bạn thêm điểm/);
   const kx = danhGia(chiC00, { ...bcGioi, diem: diem({ nguVan: 8, lichSu: 9, diaLy: 8.5, toan: 6, tiengAnh: 7 }) });
   assert.notEqual(kx.muc, null, "nhập đủ Sử, Địa thì phải so được");
 }

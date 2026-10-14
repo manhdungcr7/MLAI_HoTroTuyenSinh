@@ -35,8 +35,8 @@ export default function MonKeoDiem() {
       <DauTrangCoQuayLai tieuDe="Môn kéo điểm nhanh nhất" quayLai={DUONG_DAN.mucTieu()} phai={d ? nutCachTinh : undefined} />
       <NoiDung>
         {!d ? (
-          <TrangThaiTrong bieuTuong={<Target size={28} />} tieuDe="Em chưa chọn mục tiêu chính"
-            moTa="Cần biết em muốn vào ngành, trường nào thì mình mới tính được môn nào nên ưu tiên.">
+          <TrangThaiTrong bieuTuong={<Target size={28} />} tieuDe="Bạn chưa chọn mục tiêu chính"
+            moTa="Cần biết ngành và trường bạn hướng tới để tính toán môn ưu tiên.">
             <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá ngành học</Nut>
           </TrangThaiTrong>
         ) : d.thieuDiem.length > 0 ? (
@@ -104,12 +104,12 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
             <CircleCheck size={20} className="text-luc shrink-0 mt-0.5" />
             <span>
               <b className="block text-[14px] text-luc-chu leading-snug">Cách bù điểm ít tốn sức nhất theo số liệu hiện có</b>
-              <span className="block text-[13px] text-chu mt-0.5">Môn còn nhiều dư địa và môn em muốn cải thiện nhận phần lớn hơn. Đây là ước tính, không phải cam kết.</span>
+              <span className="block text-[13px] text-chu mt-0.5">Môn còn nhiều dư địa và môn bạn muốn cải thiện nhận phần lớn hơn.</span>
             </span>
           </div>
         </div>
       ) : (
-        <DongThongBao tone="luc" icon={Trophy} tieuDe="Em đã đạt mục tiêu, không cần bù thêm điểm"
+        <DongThongBao tone="luc" icon={Trophy} tieuDe="Bạn đã đạt mục tiêu, không cần bù thêm điểm"
           moTa="Giữ vững cả 3 môn: mỗi tuần làm một đề và chữa kỹ câu sai để không bị tụt điểm." />
       )}
 
@@ -126,7 +126,6 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
       </button>
 
       <Nut muiTen onClick={() => nav(DUONG_DAN.tuan())}>Lập kế hoạch học</Nut>
-      <p className="text-[12px] text-chu-phu px-1 text-center">Công sức và đề xuất bù điểm là ước tính từ điểm em đã nhập, không phải cam kết.</p>
     </>
   );
 }

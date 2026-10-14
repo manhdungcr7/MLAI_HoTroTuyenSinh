@@ -236,17 +236,17 @@ export function goiYHanhDong(ds: DongNV[], dk: DkGoiY): GoiY[] {
     ra.push({
       loai: "themAnToan", tieuDe: "Nên thêm 1 nguyện vọng An toàn", thuSuc: [], truong,
       moTa: c.chacChan === 0
-        ? "Thêm 1 trường có điểm tham khảo thấp hơn điểm của em từ 1,5 điểm để dự phòng an toàn."
-        : `Thêm 1 trường điểm tham khảo thấp hơn điểm em từ 1,5 điểm trở lên để làm chỗ lùi.`,
+        ? "Thêm 1 trường có điểm tham khảo thấp hơn điểm của bạn từ 1,5 điểm để dự phòng an toàn."
+        : `Thêm 1 trường điểm tham khảo thấp hơn điểm bạn từ 1,5 điểm trở lên để làm chỗ lùi.`,
     });
   }
   if (c.thuSucNhieu) {
-    // Giữ lại 1–2 trường thử sức xếp trên cùng (em muốn nhất), đề xuất cân nhắc đổi các trường còn lại.
+    // Giữ lại 1–2 trường thử sức xếp trên cùng (bạn muốn nhất), đề xuất cân nhắc đổi các trường còn lại.
     const tatCaThuSuc = ds.filter((d) => d.nhan === "Thử sức");
     const giu = Math.max(1, Math.min(2, tatCaThuSuc.length - 1));
     ra.push({
       loai: "giamThuSuc", tieuDe: "Có thể giảm bớt nguyện vọng thử sức", truong: [], thuSuc: tatCaThuSuc.slice(giu),
-      moTa: `Em đang có ${c.dem["Thử sức"]}/${c.n} nguyện vọng thử sức (điểm tham khảo cao hơn điểm em). Giữ ${giu} trường em muốn nhất, cân nhắc đổi ${tatCaThuSuc.length - giu === 1 ? "trường" : "các trường"} dưới đây sang trường vừa sức.`,
+      moTa: `Bạn đang có ${c.dem["Thử sức"]}/${c.n} nguyện vọng thử sức (điểm tham khảo cao hơn điểm bạn). Giữ ${giu} trường bạn muốn nhất, cân nhắc đổi ${tatCaThuSuc.length - giu === 1 ? "trường" : "các trường"} dưới đây sang trường vừa sức.`,
     });
   }
   if (c.thieuVuaSuc || c.danhSachNgan) {
@@ -255,8 +255,8 @@ export function goiYHanhDong(ds: DongNV[], dk: DkGoiY): GoiY[] {
     ra.push({
       loai: "themPhuHop", tieuDe: "Gợi ý thêm trường phù hợp", thuSuc: [], truong,
       moTa: c.thieuVuaSuc
-        ? "Chưa có trường vừa sức. Đây là những trường có điểm tham khảo gần với điểm của em."
-        : `Danh sách mới có ${c.n} nguyện vọng. Thêm vài trường hợp điểm để em có nhiều lựa chọn hơn.`,
+        ? "Chưa có trường vừa sức. Đây là những trường có điểm tham khảo gần với điểm của bạn."
+        : `Danh sách mới có ${c.n} nguyện vọng. Thêm vài trường hợp điểm để bạn có nhiều lựa chọn hơn.`,
     });
   }
   return ra;

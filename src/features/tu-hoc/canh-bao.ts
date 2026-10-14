@@ -40,7 +40,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
     const ngays = [...new Set(nhieuNhat.map((k) => k.ngay))].sort().map(ngayThang);
     ra.push({
       id: `boLo:${k0.mon ?? k0.viecId}`, tone: "do",
-      tieuDe: `Em đã bỏ lỡ ${nhieuNhat.length} buổi ${ten}`,
+      tieuDe: `Bạn đã bỏ lỡ ${nhieuNhat.length} buổi ${ten}`,
       moTa: `Buổi ngày ${noi(ngays)} chưa xong. Không sao cả, mình xếp lại cho vừa sức nhé.`,
       hanhDong: { nhan: "Xếp lại lịch", den: DUONG_DAN.tuan("lich") },
     });

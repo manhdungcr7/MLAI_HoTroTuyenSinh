@@ -9,10 +9,10 @@ import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
 
-const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string; phu: string }[] = [
-  { icon: Target, tone: "do", tieu: "Biết mình hợp ngành nào", phu: "Dựa trên sở thích, năng lực và điểm số của em." },
-  { icon: GraduationCap, tone: "xanh", tieu: "Lọc trường vừa sức, vừa túi tiền", phu: "Gợi ý theo điểm, học phí và cơ hội việc làm." },
-  { icon: ChartColumn, tone: "luc", tieu: "Có lộ trình học để kéo gần mục tiêu", phu: "Biết cần chuẩn bị gì từ bây giờ." },
+const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string }[] = [
+  { icon: Target, tone: "do", tieu: "Biết mình hợp ngành nào" },
+  { icon: GraduationCap, tone: "xanh", tieu: "Lọc trường vừa sức, vừa túi tiền" },
+  { icon: ChartColumn, tone: "luc", tieu: "Có lộ trình học để kéo gần mục tiêu" },
 ];
 
 /** Ba ô trên phiếu nguyện vọng minh họa: tên nhóm ngành chung, không phải dữ liệu của ai. */
@@ -22,7 +22,7 @@ const PHIEU: { nganh: string; nhan: string; vien: string; chu: string }[] = [
   { nganh: "Hệ thống thông tin", nhan: "An toàn", vien: "border-luc", chu: "text-luc-chu" },
 ];
 
-/** Minh họa: một tờ phiếu nguyện vọng đặt nghiêng trên giấy ô ly, đúng việc app giúp em làm. */
+/** Minh họa: một tờ phiếu nguyện vọng đặt nghiêng trên giấy ô ly. */
 function MinhHoa() {
   return (
     <div aria-hidden className="relative mt-4 mb-1 mx-1 -rotate-[1.5deg] rounded-the bg-trang border border-vien shadow-the p-3">
@@ -53,7 +53,7 @@ export default function ChaoMung() {
   const dangDienDo = daCoThongTin && !h.hoanTat && !h.laMau;
 
   const xemMau = () => { dungHoSoMau(); nav(DUONG_DAN.homNay()); };
-  // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu em đã nhập gì đó.
+  // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu bạn đã nhập gì đó.
   const bamXemMau = () => (daCoThongTin ? setHoiThay(true) : xemMau());
 
   const thucLamLai = () => {
@@ -88,7 +88,7 @@ export default function ChaoMung() {
           Xếp nguyện vọng vừa sức, rồi học để đạt
         </h1>
         <p className="text-[14.5px] text-chu mt-2 max-w-[340px] leading-relaxed">
-          So điểm của em với điểm chuẩn thật các năm trước, chọn ngành hợp và lập kế hoạch học từng tuần.
+          So điểm với điểm chuẩn các năm trước, chọn ngành phù hợp và lập kế hoạch học từng tuần.
         </p>
       </NenHero>
 
@@ -96,11 +96,8 @@ export default function ChaoMung() {
         {LOI_ICH.map((g) => (
           <li key={g.tieu}>
             <The className="flex items-center gap-3 !py-3">
-              <BieuTuongTron icon={g.icon} tone={g.tone} kichThuoc={44} />
-              <span className="min-w-0">
-                <b className="block text-[15px] text-muc leading-snug">{g.tieu}</b>
-                <span className="block text-[13px] text-chu-phu leading-snug mt-0.5">{g.phu}</span>
-              </span>
+              <BieuTuongTron icon={g.icon} tone={g.tone} kichThuoc={40} />
+              <b className="text-[15px] font-bold text-muc">{g.tieu}</b>
             </The>
           </li>
         ))}
@@ -121,7 +118,7 @@ export default function ChaoMung() {
       </p>
 
       <HopTruot mo={hoiThay} dong={() => setHoiThay(false)} tieuDe="Dùng hồ sơ mẫu?">
-        <p className="text-[14px] text-chu">Hồ sơ mẫu "Minh Anh" sẽ <b>thay toàn bộ</b> thông tin em đã nhập trên máy này (hồ sơ, nguyện vọng, kế hoạch).</p>
+        <p className="text-[14px] text-chu">Hồ sơ mẫu "Minh Anh" sẽ <b>thay toàn bộ</b> thông tin bạn đã nhập trên máy này (hồ sơ, nguyện vọng, kế hoạch).</p>
         <div className="mt-4 space-y-2.5">
           <Nut kieu="nguyHiem" onClick={xemMau}>Dùng hồ sơ mẫu</Nut>
           <Nut kieu="vien" onClick={() => setHoiThay(false)}>Giữ hồ sơ cũ</Nut>
@@ -129,7 +126,7 @@ export default function ChaoMung() {
       </HopTruot>
 
       <HopTruot mo={hoiLamLai} dong={() => setHoiLamLai(false)} tieuDe="Xóa hết và làm lại?">
-        <p className="text-[14px] text-chu">Mọi thông tin em đã nhập sẽ bị <b>xóa hoàn toàn</b> (hồ sơ, nguyện vọng, kế hoạch, mục tiêu). Em muốn xóa hết không?</p>
+        <p className="text-[14px] text-chu">Mọi thông tin bạn đã nhập sẽ bị <b>xóa hoàn toàn</b> (hồ sơ, nguyện vọng, kế hoạch, mục tiêu). Bạn muốn xóa hết không?</p>
         <div className="mt-4 space-y-2.5">
           <Nut kieu="nguyHiem" onClick={thucLamLai}>Xóa hết</Nut>
           <Nut kieu="vien" onClick={() => setHoiLamLai(false)}>Giữ lại</Nut>
@@ -138,3 +135,4 @@ export default function ChaoMung() {
     </div>
   );
 }
+

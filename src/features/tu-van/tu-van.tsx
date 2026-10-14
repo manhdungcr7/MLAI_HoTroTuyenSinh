@@ -110,12 +110,11 @@ export default function TuVan() {
             </span>
             <div className="min-w-0">
               <span className="text-[13.5px] font-bold text-muc">Trợ lý Tuyển sinh AI</span>
-              <span className="text-[12px] text-chu-phu hidden sm:inline ml-1.5">· Dữ liệu chuẩn hoá từ đề án</span>
             </div>
           </div>
           <label className="flex items-center gap-1.5 text-[12.5px] font-semibold text-chu cursor-pointer shrink-0 ml-2">
             <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="size-4 accent-[var(--color-xanh)]" />
-            <span>Kèm hồ sơ của em</span>
+            <span>Kèm hồ sơ của bạn</span>
           </label>
         </div>
 
@@ -201,7 +200,7 @@ export default function TuVan() {
 
           {!dang && viTriCuoi >= 0 && tin[viTriCuoi].vai === "mayChu" && (
             <div className="flex flex-wrap gap-2" role="group" aria-label="Gợi ý hỏi tiếp">
-              {tin[viTriCuoi].viecTiep && <button type="button" onClick={() => gui(`Giải thích giúp em: ${tin[viTriCuoi].viecTiep}`)} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-left text-[13px] text-xanh active:bg-xanh-nhat">Hỏi thêm về việc này</button>}
+              {tin[viTriCuoi].viecTiep && <button type="button" onClick={() => gui(`Giải thích giúp bạn: ${tin[viTriCuoi].viecTiep}`)} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-left text-[13px] text-xanh active:bg-xanh-nhat">Hỏi thêm về việc này</button>}
               {(tin[viTriCuoi].nguon?.length ?? 0) > 0 && (
                 <>
                   <button type="button" onClick={() => gui("Học phí của ngành này thế nào?")} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-[13px] text-xanh active:bg-xanh-nhat">Học phí thế nào?</button>
@@ -224,12 +223,33 @@ export default function TuVan() {
 
         {/* Ô nhập dính phía trên thanh điều hướng dưới (cao 64px + vùng an toàn) nên nút Gửi không bị che. */}
         <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 -mx-4 border-t border-vien bg-nen px-4 pb-2 pt-2">
-          <label htmlFor="tu-van-cau-hoi" className="sr-only">Câu hỏi của em</label>
-          <div className="flex items-end gap-2">
-            <textarea id="tu-van-cau-hoi" value={cauHoi} onChange={(e) => setCauHoi(e.target.value)} readOnly={dang} maxLength={1000} rows={2}
+          <label htmlFor="tu-van-cau-hoi" className="sr-only">Câu hỏi của bạn</label>
+          <div className="flex items-center gap-2">
+            <input
+              id="tu-van-cau-hoi"
+              type="text"
+              value={cauHoi}
+              onChange={(e) => setCauHoi(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !dang && cauHoi.trim().length >= 3) {
+                  e.preventDefault();
+                  gui(cauHoi);
+                }
+              }}
+              readOnly={dang}
+              maxLength={1000}
               placeholder={tin.length ? "Hỏi tiếp, ví dụ: Còn ngành kia thì sao?" : "Ví dụ: Điểm chuẩn Khoa học máy tính UIT?"}
-              className="min-h-12 min-w-0 flex-1 resize-none rounded-xl border border-vien bg-trang p-2.5 text-[15px] text-chu placeholder:text-chu-phu focus:border-xanh" />
-            <Nut rong={false} bieuTuong={Send} className="shrink-0 px-4" disabled={dang || cauHoi.trim().length < 3} onClick={() => gui(cauHoi)}>Gửi</Nut>
+              className="h-12 min-w-0 flex-1 rounded-xl border border-vien bg-trang px-3.5 text-[15px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none"
+            />
+            <Nut
+              rong={false}
+              bieuTuong={Send}
+              className="h-12 shrink-0 px-4 !rounded-xl"
+              disabled={dang || cauHoi.trim().length < 3}
+              onClick={() => gui(cauHoi)}
+            >
+              Gửi
+            </Nut>
           </div>
         </div>
 

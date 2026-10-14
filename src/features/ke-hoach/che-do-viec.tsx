@@ -38,7 +38,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
     if (s.coDinh.length === 0 && !daXacNhan) { setHoiLich(true); return; }
     setHoiLich(false);
     const bd = ngayBatDauXep(tuan, hom, phutBayGio(), s.cauHinh.ngayNghi);
-    if (bd.hetTuan) return hienThongBao(bd.ghiChu ?? "Tuần này đã gần hết. Em chuyển sang tuần sau rồi tạo việc nhé.");
+    if (bd.hetTuan) return hienThongBao(bd.ghiChu ?? "Tuần này đã gần hết. Bạn chuyển sang tuần sau rồi tạo việc nhé.");
     const kq = viecChoTuan(s, tuan, bd.tuNgay);
     if (!kq.ok) return hienThongBao(kq.lyDo);
     const r = xepLai(tuan, bd.tuNgay, kq.viec);
@@ -50,7 +50,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
     <>
       <HopTruot mo={hoiLich} dong={() => setHoiLich(false)} tieuDe="Chưa có lịch học trên lớp">
         <div className="space-y-4">
-          <p className="text-[14px] text-chu">Chưa có lịch học trên lớp, việc có thể rơi vào giờ em đang học. Nhập lịch học trước nhé.</p>
+          <p className="text-[14px] text-chu">Chưa có lịch học trên lớp, việc có thể rơi vào giờ bạn đang học. Nhập lịch học trước nhé.</p>
           <div className="space-y-2">
             <Nut bieuTuong={CalendarPlus} onClick={() => { setHoiLich(false); setMoNhanh(true); }}>Nhập lịch học</Nut>
             <Nut kieu="nhe" onClick={() => taoVaXep(true)}>Vẫn tạo</Nut>
@@ -65,7 +65,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
     return s.mucTieu ? (
       <>
         <TrangThaiTrong bieuTuong={<ListPlus size={26} />} tieuDe="Tuần này chưa có việc cần học"
-          moTa={`Tự động xếp việc ôn theo môn cần cải thiện vào khung giờ trống của em.`}>
+          moTa={`Tự động xếp việc ôn theo môn cần cải thiện vào khung giờ trống của bạn.`}>
           <div className="space-y-2">
             <Nut bieuTuong={ListPlus} onClick={() => taoVaXep()}>Tạo việc và xếp lịch</Nut>
             <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn nên ưu tiên</Nut>

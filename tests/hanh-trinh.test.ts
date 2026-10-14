@@ -14,7 +14,7 @@ const diemDu = { toan: 8, vatLy: 7.5, hoaHoc: 7, sinh: 7, nguVan: 7, tiengAnh: 8
 const sachChu = (a: string[]) => a.every((x) => !/NaN|undefined|null/.test(x));
 
 // ---------- Lời chào theo chặng ----------
-assert.match(loiChaoTheoChang(voi({ khoi: 11 })), /từng bước nhỏ/);
+assert.match(loiChaoTheoChang(voi({ khoi: 11 })), /Khám phá bản thân/);
 assert.match(loiChaoTheoChang(voi({ khoi: 12, giaiDoan: "Đã tốt nghiệp THPT" })), /điểm năm trước/);
 assert.equal(loiChaoTheoChang(voi({ khoi: 12 }, { tamTrang: "met" })), "Hôm nay mình học nhẹ thôi nhé.", "mệt thì nói nhẹ trước");
 
