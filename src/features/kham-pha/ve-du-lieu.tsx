@@ -49,7 +49,7 @@ export default function VeDuLieu() {
       <DauTrangCoQuayLai tieuDe="Số liệu từ đâu ra?" />
       <NoiDung className="pb-8">
         <section className="rounded-lon nen-xanh p-4">
-          <h2 className="text-[19px] font-extrabold text-muc leading-snug">Mỗi con số đều có nguồn để em tự kiểm tra</h2>
+          <h2 className="text-[19px] font-extrabold text-muc leading-snug">Mỗi con số đều có nguồn để bạn tự kiểm tra</h2>
           <p className="mt-1 text-[14px] text-chu">Điểm chuẩn, tổ hợp, học phí, việc làm trong app lấy từ đề án tuyển sinh của chính các trường. Chỗ nào chưa có, mình ghi chưa có dữ liệu chứ không đoán.</p>
         </section>
 
@@ -58,7 +58,7 @@ export default function VeDuLieu() {
           <The so={so(tk.chinhThuc)} nhan="lấy từ đề án PDF của trường" phu={`${tk.truongChinhThuc} trường`} />
           <The so={dem ? so(dem.dungTrang) : "..."} nhan="mở được đúng trang PDF có điểm" phu="chỉ được trang chi tiết điểm" />
           <The so={so(tk.nhieuNam)} nhan="có điểm chuẩn từ 2 năm trở lên" />
-          <The so={so(tk.coToHop)} nhan="có ghi rõ tổ hợp xét tuyển" phu="điểm của em tính đúng tổ hợp đó" />
+          <The so={so(tk.coToHop)} nhan="có ghi rõ tổ hợp xét tuyển" phu="điểm của bạn tính đúng tổ hợp đó" />
           <The so={dem ? so(dem.trangNganh) : "..."} nhan="có trang giới thiệu ngành của trường" phu="đã mở thử, đúng tên ngành" />
         </section>
 
@@ -85,7 +85,7 @@ export default function VeDuLieu() {
         <DongThongBao tone="cam" icon={ShieldAlert} tieuDe="Những điều mình chưa có"
           moTa={<>
             <span className="block">- Điểm chuẩn năm nay chưa công bố: app dùng các năm trước và luôn ghi rõ năm.</span>
-            <span className="block">- Học phí theo năm chỉ có ở {so(tk.hocPhi)} ngành, tỷ lệ có việc làm ở {so(tk.viecLam)} ngành. Các ngành còn lại, em xem trang học phí trong đề án.</span>
+            <span className="block">- Học phí theo năm chỉ có ở {so(tk.hocPhi)} ngành, tỷ lệ có việc làm ở {so(tk.viecLam)} ngành. Các ngành còn lại, bạn xem trang học phí trong đề án.</span>
             <span className="block">- {so(tk.tong - tk.chinhThuc)} ngành lấy điểm từ trang tổng hợp, chưa đối chiếu được với đề án; trang chi tiết có ghi chưa kiểm chứng.</span>
             <span className="block">- Khung chương trình học chi tiết chưa có; mình dẫn tới trang ngành của trường khi tìm được.</span>
           </>} />
@@ -96,8 +96,8 @@ export default function VeDuLieu() {
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-do-nhat text-do"><AlertCircle size={20} /></span>
           <div className="flex-1 min-w-0">
             <b className="block text-[14px] text-muc">Báo số liệu sai lệch?</b>
-            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Nếu em phát hiện điểm chuẩn, học phí hoặc thông tin nào sai so với đề án thực, hãy báo cho mình để cập nhật.</p>
-            <p className="text-[13px] text-chu-phu leading-snug mt-1">Em thấy số sai ở ngành nào, mở trang ngành đó và bấm "Báo số liệu sai". Người phụ trách trường sẽ kiểm tra nguồn rồi sửa.</p>
+            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Nếu bạn phát hiện điểm chuẩn, học phí hoặc thông tin nào sai so với đề án thực, hãy báo cho mình để cập nhật.</p>
+            <p className="text-[13px] text-chu-phu leading-snug mt-1">Bạn thấy số sai ở ngành nào, mở trang ngành đó và bấm "Báo số liệu sai". Người phụ trách trường sẽ kiểm tra nguồn rồi sửa.</p>
             <a href={`mailto:${EMAIL_BAO_SAI}?subject=Góp ý dữ liệu - Nguyện Vọng AI`} className="inline-flex items-center min-h-11 text-[13px] font-bold text-do hover:underline">Góp ý khác qua email</a>
           </div>
         </section>
