@@ -13,7 +13,7 @@ import Buoc3 from "./buoc-3";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { ManHinhKetQua } from "./man-hinh-phan-tich";
-import { DaLuuTam, ThanhBuoc } from "./thanh-phan";
+import { ThanhBuoc } from "./thanh-phan";
 import { THU_TU_BAT_BUOC, docDiem, ketQuaBanDau, kiemTraBuoc1, vietDiem } from "./tinh-toan";
 
 /** Đưa con trỏ tới ô và cuộn ô đó ra giữa màn hình. */
@@ -36,7 +36,6 @@ export default function BatDau() {
   const so = Number(buoc) as BuocBatDau;
   const hopLe = so === 1 || so === 2 || so === 3;
 
-  const [daSua, setDaSua] = useState(() => !!s.hoSo.hoTen); // mở lại hồ sơ đang điền dở cũng là đã lưu
   const [daThuBuoc1, setDaThuBuoc1] = useState(false); // chỉ báo thiếu sau khi em bấm Tiếp tục
   // Chữ điểm đang gõ. Giữ riêng để "7," gõ dở không bị mất; số hợp lệ được ghi ngay vào hồ sơ.
   const [chuDiem, setChuDiem] = useState<Record<MonId, string>>(() =>
@@ -48,7 +47,7 @@ export default function BatDau() {
   // Mọi hook phải gọi trước câu return này: khi /bat-dau/abc chuyển về /bat-dau/1 trên cùng component, số hook không được đổi.
   if (!hopLe) return <Navigate to={DUONG_DAN.batDau(1)} replace />;
 
-  const sua = (p: Partial<HoSo>) => { capNhatHoSo(p); setDaSua(true); };
+  const sua = (p: Partial<HoSo>) => { capNhatHoSo(p); };
   const goDiem = (m: MonId, chu: string) => {
     setChuDiem((c) => ({ ...c, [m]: chu }));
     const kq = docDiem(chu);
@@ -106,7 +105,7 @@ export default function BatDau() {
     <div className="min-h-dvh flex flex-col">
       <DauTrangCoQuayLai tieuDe="Tạo hồ sơ" buoc={`Bước ${so}/3`} quayLai={so === 1 ? DUONG_DAN.chao() : DUONG_DAN.batDau((so - 1) as BuocBatDau)} />
       <ThanhBuoc hien={so} denBuoc={denBuoc} />
-      <NoiDung className="flex-1 !space-y-5 pt-1 !pb-36">
+      <NoiDung className="flex-1 !space-y-4 pt-1 !pb-24">
         {so === 1 && <Buoc1 h={h} sua={sua} loi={daThuBuoc1 ? loi1 : {}} />}
         {so === 2 && <Buoc2 h={h} sua={sua} chuDiem={chuDiem} goDiem={goDiem} />}
         {so === 3 && <Buoc3 h={h} sua={sua} />}
@@ -117,21 +116,10 @@ export default function BatDau() {
             <ul className="mt-1 ml-6 list-disc space-y-0.5 font-semibold">{thieu1.map((k) => <li key={k}>{loi1[k]}</li>)}</ul>
           </div>
         )}
-        {so === 1 && (
-          <button type="button" onClick={chuyenSangKhamPha} className="w-full min-h-12 text-[14px] font-bold text-xanh hover:underline">
-            Chưa muốn nhập điểm? Xem gợi ý trường trước
-          </button>
-        )}
-        {so === 2 && (
-          <button type="button" onClick={() => denBuoc(3)} className="w-full min-h-12 text-[14px] font-bold text-xanh hover:underline">
-            Chưa có điểm thi? Bỏ qua bước này
-          </button>
-        )}
       </NoiDung>
 
-      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 vung-an-toan-duoi">
-        <DaLuuTam daSua={daSua} />
-        <div className="grid grid-cols-[1fr_1.5fr] gap-2.5 mt-2 mb-1.5">
+      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 py-2.5 vung-an-toan-duoi">
+        <div className="grid grid-cols-[1fr_1.5fr] gap-2.5">
           {so === 1
             ? <Nut kieu="vien" onClick={chuyenSangKhamPha}>Bỏ qua điểm</Nut>
             : <Nut kieu="vien" onClick={() => denBuoc((so - 1) as BuocBatDau)}>Quay lại</Nut>}

@@ -28,8 +28,7 @@ export default function DiemMonThem({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo
       <button type="button" onClick={() => setMo(!mo)} aria-expanded={mo} aria-controls="bd-mon-them" className="w-full min-h-14 flex items-center gap-3 px-4 text-left">
         <span className="size-9 rounded-xl grid place-items-center bg-tim-nhat text-tim shrink-0"><BookOpenCheck size={18} /></span>
         <span className="flex-1">
-          <b className="block text-[15px] text-chu">Điểm các môn khác</b>
-          <span className="block text-[13px] text-chu-phu">Sử, Địa, Tin... · không bắt buộc · để so được ngành khối xã hội</span>
+          <b className="block text-[15px] text-chu">Điểm các môn khác (Sử, Địa, Tin...)</b>
         </span>
         <ChevronDown size={20} className={gop("text-chu-phu transition-transform", mo && "rotate-180")} />
       </button>

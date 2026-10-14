@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, NotebookPen, Pencil, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
+import { ChevronDown, Pencil, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
 import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { CAC_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type MonId } from "@/state/types";
 import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP } from "./lua-chon";
@@ -38,9 +38,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
         phai={<span className="mt-1.5 shrink-0 inline-flex items-center gap-1 rounded-lg bg-xanh-nhat px-2 py-1 text-[12px] font-bold text-xanh"><Pencil size={13} />Sửa sau được</span>} />
 
       <fieldset className="min-w-0">
-        <legend className="flex items-center gap-1.5 text-[15px] font-bold text-chu mb-2">
-          <NotebookPen size={18} className="text-xanh" />Điểm các môn <span className="text-[12px] font-semibold text-chu-phu">(thang 10)</span>
-        </legend>
+        <legend className="sr-only">Điểm các môn</legend>
         <div className="grid grid-cols-3 gap-2">
           {ketQua.map(({ m, kq }) => {
             const Icon = ICON_MON[m];
@@ -49,17 +47,17 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
               <div
                 key={m}
                 className={gop(
-                  "rounded-2xl border bg-trang p-2 sm:p-2.5 shadow-sm transition-all flex flex-col justify-between min-h-[96px]",
+                  "rounded-2xl border bg-trang p-2 shadow-sm transition-all flex flex-col justify-between min-h-[84px]",
                   sai ? "border-do ring-1 ring-do" : "border-vien hover:border-xanh/50 focus-within:border-xanh focus-within:ring-2 focus-within:ring-xanh/15"
                 )}
               >
-                <label htmlFor={idDiem(m)} className="flex items-center justify-center gap-1.5 text-[13px] sm:text-[14px] font-bold text-chu cursor-pointer">
-                  <span className={gop("size-5 sm:size-6 rounded-lg grid place-items-center shrink-0", TONE_NEN[TONE_MON[m]], TONE_CHU[TONE_MON[m]])}>
-                    <Icon size={13} />
+                <label htmlFor={idDiem(m)} className="flex items-center justify-center gap-1.5 text-[13px] font-bold text-chu cursor-pointer">
+                  <span className={gop("size-5 rounded-md grid place-items-center shrink-0", TONE_NEN[TONE_MON[m]], TONE_CHU[TONE_MON[m]])}>
+                    <Icon size={12} />
                   </span>
                   <span className="truncate">{TEN_MON_NGAN[m]}</span>
                 </label>
-                <div className="flex items-baseline justify-center mt-1">
+                <div className="flex items-baseline justify-center mt-0.5">
                   <input
                     id={idDiem(m)}
                     inputMode="decimal"
@@ -126,21 +124,19 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             );
           })}
         </ul>
-        <p className="mt-2 text-[12px] text-chu-phu">Tổng 3 môn, chưa cộng ưu tiên (app tự cộng khi so điểm chuẩn).</p>
         {dayDu && (dayDu.uuTienCong > 0 || !TO_HOP_APP.includes(dayDu.toHop)) && (
-          <p aria-live="polite" className="mt-2 rounded-xl bg-xanh-nhat px-3 py-2.5 text-[13px] text-chu">
+          <p aria-live="polite" className="mt-2 rounded-xl bg-xanh-nhat px-3 py-2 text-[13px] text-chu">
             Cao nhất (gồm môn khác, ưu tiên): <b className="text-muc">{dayDu.toHop} · {dinhDang(dayDu.tong, 1)}</b>
-            {dayDu.uuTienCong > 0 && <> (+{dinhDangDiem(dayDu.uuTienCong)} ưu tiên)</>}. Số này dùng để so điểm chuẩn.
+            {dayDu.uuTienCong > 0 && <> (+{dinhDangDiem(dayDu.uuTienCong)} ưu tiên)</>}
           </p>
         )}
       </section>
 
       <section className="rounded-the border border-vien bg-trang">
         <button type="button" onClick={() => setMoThem(!moThem)} aria-expanded={moThem} aria-controls="bd-them"
-          className="w-full min-h-14 flex items-center gap-3 px-4 text-left">
+          className="w-full min-h-12 flex items-center gap-3 px-4 text-left">
           <span className="flex-1">
             <b className="block text-[15px] text-chu">Thêm về cách em học</b>
-            <span className="block text-[13px] text-chu-phu">Không bắt buộc · kế hoạch sát hơn</span>
           </span>
           <ChevronDown size={20} className={gop("text-chu-phu transition-transform", moThem && "rotate-180")} />
         </button>

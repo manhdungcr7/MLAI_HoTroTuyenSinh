@@ -65,12 +65,9 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
     return s.mucTieu ? (
       <>
         <TrangThaiTrong bieuTuong={<ListPlus size={26} />} tieuDe="Tuần này chưa có việc cần học"
-          moTa={`Mình sẽ tạo việc ôn cho tổ hợp ${s.mucTieu.maToHop} theo môn em còn thiếu điểm và thời gian tự học còn trống, rồi xếp vào lịch giúp em.`}>
+          moTa={`Tự động xếp việc ôn theo môn cần cải thiện vào khung giờ trống của em.`}>
           <div className="space-y-2">
-            <div>
-              <Nut bieuTuong={ListPlus} onClick={() => taoVaXep()}>Tạo việc và xếp lịch</Nut>
-              <p className="mt-1.5 text-[12px] text-chu-phu">Tạo việc mới từ điểm hiện tại, xếp vào khung giờ trống.</p>
-            </div>
+            <Nut bieuTuong={ListPlus} onClick={() => taoVaXep()}>Tạo việc và xếp lịch</Nut>
             <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}>Xem môn nên ưu tiên</Nut>
           </div>
         </TrangThaiTrong>

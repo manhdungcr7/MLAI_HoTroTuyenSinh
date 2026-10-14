@@ -20,7 +20,7 @@ export default function DiemUuTien({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo>
         <span className="size-9 rounded-xl grid place-items-center bg-cam-nhat text-cam-chu shrink-0"><Scale size={18} /></span>
         <span className="flex-1">
           <b className="block text-[15px] text-chu">Điểm ưu tiên khu vực, đối tượng</b>
-          <span className="block text-[13px] text-chu-phu">{muc > 0 ? `Mức em khai: +${dinhDangDiem(muc)} điểm` : "Không bắt buộc · cộng vào điểm xét tuyển nếu em thuộc diện"}</span>
+          {muc > 0 && <span className="block text-[13px] font-bold text-cam-chu">+{dinhDangDiem(muc)} điểm ưu tiên</span>}
         </span>
         <ChevronDown size={20} className={gop("text-chu-phu transition-transform", mo && "rotate-180")} />
       </button>

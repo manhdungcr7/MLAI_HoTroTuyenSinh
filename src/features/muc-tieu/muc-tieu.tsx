@@ -223,8 +223,6 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
           </p>
         </div>
       )}
-
-      <p className="text-[12px] text-chu-phu px-1">Điểm hiện tại là điểm dự kiến (lấy lần thi thử gần nhất của từng môn, chưa có thì lấy điểm em nhập), không phải kết quả thi thật.</p>
     </>
   );
 }

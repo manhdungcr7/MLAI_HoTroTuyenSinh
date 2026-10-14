@@ -1,6 +1,5 @@
 import { Briefcase, ChartColumn, House, MapPin, Plane, Wallet } from "lucide-react";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
-import { gop } from "@/components/ui/nut-the";
 import type { HoSo } from "@/state/types";
 import { CHO_O, HOC_XA_NHA, KHU_VUC, NGAN_SACH, VIEC_LAM } from "./lua-chon";
 import { CauHoi, ChonO, TieuDeBuoc } from "./thanh-phan";
@@ -34,18 +33,16 @@ export default function Buoc3({ h, sua }: P) {
         <ChonO nhan="Mức quan tâm việc làm" cot={3} cacLua={VIEC_LAM} giaTri={h.quanTamViecLam} onChange={(v) => sua({ quanTamViecLam: v })} />
       </CauHoi>
 
-      <div aria-live="polite" className={gop("rounded-the p-3.5 flex gap-3 items-start", goiY ? "bg-luc-nhat" : "bg-xanh-nhat")}>
-        <BieuTuongTron icon={ChartColumn} tone={goiY ? "luc" : "xanh"} kichThuoc={40} />
-        {goiY ? (
+      {goiY && (
+        <div aria-live="polite" className="rounded-the p-3 flex gap-3 items-center bg-luc-nhat border border-luc/30">
+          <BieuTuongTron icon={ChartColumn} tone="luc" kichThuoc={36} />
           <div className="min-w-0 text-[13px] text-chu">
-            <p className="text-chu-phu font-medium">Khoảng học phí khuyến nghị:</p>
-            <p className="text-[16px] font-extrabold text-luc-chu leading-snug">{goiY.khoang}</p>
-            {goiY.ghiChu && <p className="mt-1 font-medium text-chu-phu">{goiY.ghiChu}</p>}
+            <span className="text-chu-phu font-medium">Học phí khuyến nghị: </span>
+            <b className="text-[15px] font-bold text-luc-chu">{goiY.khoang}</b>
+            {goiY.ghiChu && <p className="mt-0.5 text-[12px] text-chu-phu">{goiY.ghiChu}</p>}
           </div>
-        ) : (
-          <p className="text-[13.5px] text-chu pt-1 font-semibold text-xanh">Chọn mức học phí ở trên để hệ thống gợi ý khoảng chi phí phù hợp.</p>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

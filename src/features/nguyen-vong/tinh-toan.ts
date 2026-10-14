@@ -236,8 +236,8 @@ export function goiYHanhDong(ds: DongNV[], dk: DkGoiY): GoiY[] {
     ra.push({
       loai: "themAnToan", tieuDe: "Nên thêm 1 nguyện vọng An toàn", thuSuc: [], truong,
       moTa: c.chacChan === 0
-        ? "Danh sách chưa có trường nào có điểm tham khảo thấp hơn rõ so với điểm của em."
-        : `Em mới có ${c.chacChan} nguyện vọng An toàn hoặc Dự phòng. Thêm 1 trường điểm tham khảo thấp hơn điểm em từ 1,5 điểm trở lên.`,
+        ? "Thêm 1 trường có điểm tham khảo thấp hơn điểm của em từ 1,5 điểm để dự phòng an toàn."
+        : `Thêm 1 trường điểm tham khảo thấp hơn điểm em từ 1,5 điểm trở lên để làm chỗ lùi.`,
     });
   }
   if (c.thuSucNhieu) {

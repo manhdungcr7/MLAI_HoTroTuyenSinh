@@ -13,8 +13,31 @@ export const ID_TRUONG: Record<TruongBatBuoc, string> = { khoi: "bd-khoi", tinh:
 
 type P = { h: HoSo; sua: (p: Partial<HoSo>) => void; loi: Partial<Record<TruongBatBuoc, string>> };
 
+const TEN_HIEN_THI_NGANH: Record<string, string> = {
+  CNTT: "Công nghệ thông tin",
+  "Kỹ thuật": "Kỹ thuật & Cơ khí",
+  "Xây dựng": "Kiến trúc & Xây dựng",
+  "Khoa học tự nhiên": "Khoa học tự nhiên",
+  Logistics: "Logistics & Vận tải",
+  "Kinh tế": "Kinh tế & Quản trị",
+  "Tài chính": "Tài chính - Ngân hàng",
+  Marketing: "Marketing & Truyền thông",
+  "Du lịch": "Du lịch & Khách sạn",
+  "Y Dược": "Y khoa & Dược học",
+  "Điều dưỡng": "Điều dưỡng & Y tế",
+  "Sư phạm": "Sư phạm & Giáo dục",
+  "Luật": "Luật & Pháp lý",
+  "Ngôn ngữ": "Ngôn ngữ & Quốc tế học",
+  "Báo chí": "Báo chí & Truyền thông",
+  "Xã hội": "Khoa học Xã hội",
+  "Thiết kế": "Thiết kế & Mỹ thuật",
+  "Kiến trúc": "Kiến trúc & Quy hoạch",
+  "Nông Lâm": "Sinh học & Nông nghiệp",
+  "Thể thao": "Thể dục thể thao",
+};
+
 const CAC_CHANG: { gia: Chang; nhan: string }[] = [
-  { gia: "dinhHuong", nhan: "Lớp 10–11" }, { gia: "nuocRut", nhan: "Lớp 12" }, { gia: "thiLai", nhan: "Đã tốt nghiệp / thi lại" },
+  { gia: "dinhHuong", nhan: "Lớp 10–11" }, { gia: "nuocRut", nhan: "Lớp 12" }, { gia: "thiLai", nhan: "Đã tốt nghiệp" },
 ];
 
 /** Lưu chặng em chọn vào hồ sơ; chỉ ô "đã tốt nghiệp" mới giữ dấu giaiDoan, hai ô kia xóa dấu đó nếu đang có. */
@@ -143,27 +166,25 @@ export default function Buoc1({ h, sua, loi }: P) {
         )}
 
         {/* Lưới các thẻ ngành cân đối và đồng đều kích thước */}
-        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto pr-1">
+        <div className="grid grid-cols-2 gap-2 max-h-72 overflow-y-auto an-thanh-cuon pr-0.5">
           {danhSachHien.map((item) => {
             const daChon = h.nganhQuanTam.includes(item.gia);
+            const ten = TEN_HIEN_THI_NGANH[item.gia] || item.nhan.split("/")[0].trim();
             return (
               <button
                 key={item.gia}
                 type="button"
                 onClick={() => toggleNganh(item.gia)}
                 className={gop(
-                  "flex items-center justify-between px-3 py-2 rounded-xl border text-left transition-all active:scale-[0.98] cursor-pointer h-[58px]",
+                  "flex items-center justify-between px-3 py-2.5 rounded-xl border text-left transition-all active:scale-[0.98] cursor-pointer min-h-12",
                   daChon
-                    ? "bg-xanh-nhat border-xanh text-xanh shadow-sm ring-1 ring-xanh"
-                    : "bg-trang border-vien text-chu hover:border-xanh/40"
+                    ? "bg-xanh-nhat border-xanh text-xanh shadow-sm ring-1 ring-xanh font-bold"
+                    : "bg-trang border-vien text-chu hover:border-xanh/40 font-semibold"
                 )}
               >
-                <div className="min-w-0 flex-1 pr-2">
-                  <b className="block text-[13.5px] font-bold leading-tight truncate">{item.gia}</b>
-                  <span className="block text-[11.5px] text-chu-phu leading-tight truncate mt-0.5">
-                    {item.nhan.replace(`${item.gia} / `, "").replace(`${item.gia} - `, "")}
-                  </span>
-                </div>
+                <span className="text-[13px] leading-snug truncate pr-2">
+                  {ten}
+                </span>
                 {daChon ? (
                   <span className="size-5 rounded-full bg-xanh text-white grid place-items-center shrink-0">
                     <Check size={12} strokeWidth={3} />

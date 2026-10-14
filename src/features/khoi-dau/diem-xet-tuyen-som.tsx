@@ -120,9 +120,6 @@ export default function DiemXetTuyenSom({ h, sua }: P) {
             <b className="text-[15px] text-chu">Kỳ thi ĐGNL, Ngoại ngữ (IELTS) & Học bạ</b>
             {daCo && <Nhan tone="luc" className="text-[11px] py-0 px-1.5">Đã nhập</Nhan>}
           </span>
-          <span className="block text-[13px] text-chu-phu truncate">
-            Đánh giá năng lực · IELTS/VSTEP · học bạ 3 năm · giải HSG
-          </span>
         </span>
         <ChevronDown size={20} className={gop("text-chu-phu transition-transform", mo && "rotate-180")} />
       </button>
