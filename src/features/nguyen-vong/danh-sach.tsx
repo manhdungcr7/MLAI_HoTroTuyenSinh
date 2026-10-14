@@ -1,9 +1,9 @@
-// Màn 11 · Danh sách nguyện vọng: NV1..NVn, nhãn tính từ điểm của em, kéo thả + nút lên/xuống, sửa/xóa có hoàn tác.
+// Màn 11 · Danh sách nguyện vọng: NV1..NVn, nhãn tính từ điểm của bạn, kéo thả + nút lên/xuống, sửa/xóa có hoàn tác.
 import { useCallback, useMemo, useState } from "react";
 import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowDown, ArrowUp, ChevronRight, ClipboardPen, Eye, GraduationCap, GripVertical, Heart, ListPlus, Pencil, Plus, ShieldCheck, Trash2, TrendingUp, Wallet,
+  ArrowDown, ArrowUp, Check, ChevronDown, ChevronRight, ChevronUp, ClipboardPen, Eye, GraduationCap, GripVertical, Heart, ListPlus, Pencil, Plus, ShieldCheck, Trash2, TrendingUp, Wallet,
 } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NhanNguyenVongTag } from "@/components/ui/co-cau";
@@ -35,7 +35,6 @@ export default function DanhSachNguyenVong() {
   const tong = tongTot.tong;
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
   const dsYeuThich = useMemo(() => s.yeuThich.map(tim).filter((l): l is NonNullable<typeof l> => !!l), [s.yeuThich]);
-  const yeuThichChuaThem = useMemo(() => dsYeuThich.filter((l) => !s.nguyenVong.includes(l.id)), [dsYeuThich, s.nguyenVong]);
   const coCau = xetCoCau(demNhan(ds), ds.length);
   const kl = ketLuan(coCau);
   const canhBao = useMemo(() => canhBaoThuTu(ds), [ds]);
@@ -67,6 +66,18 @@ export default function DanhSachNguyenVong() {
   const dongSua = ds.find((d) => d.id === dangSua);
   const dongXoa = ds.find((d) => d.id === dangXoa);
 
+  const themTatCaYeuThich = useCallback(() => {
+    const chuaThem = dsYeuThich.filter((l) => !s.nguyenVong.includes(l.id));
+    if (chuaThem.length === 0) return;
+    datNguyenVong([...s.nguyenVong, ...chuaThem.map((l) => l.id)]);
+    bao(`Đã thêm ${chuaThem.length} ngành yêu thích vào danh sách`);
+  }, [dsYeuThich, s.nguyenVong, datNguyenVong, bao]);
+
+  const themNganhYeuThich = useCallback((id: string, nganh: string, truong: string) => {
+    themNguyenVong(id);
+    bao(`Đã thêm ${nganh} – ${truong} vào nguyện vọng`);
+  }, [themNguyenVong, bao]);
+
   return (
     <>
       <DauTrangChinh tieuDe="Danh sách nguyện vọng" />
@@ -75,68 +86,15 @@ export default function DanhSachNguyenVong() {
         {ds.length === 0 ? (
           <>
             {dsYeuThich.length > 0 ? (
-              <div className="rounded-the bg-trang border border-vien p-4 shadow-the space-y-3">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="size-9 rounded-xl bg-do/10 text-do grid place-items-center shrink-0">
-                      <Heart size={20} fill="currentColor" />
-                    </span>
-                    <div>
-                      <h2 className="text-[16px] font-extrabold text-muc leading-tight">
-                        Ngành bạn đã lưu yêu thích ({dsYeuThich.length})
-                      </h2>
-                      <p className="text-[12px] text-chu-phu mt-0.5">
-                        Chọn nhanh để đưa vào danh sách nguyện vọng
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      datNguyenVong([...new Set([...s.nguyenVong, ...dsYeuThich.map((l) => l.id)])]);
-                      bao(`Đã thêm tất cả ${dsYeuThich.length} ngành vào danh sách NV`);
-                    }}
-                    className="min-h-9 px-3 rounded-lg bg-xanh text-white text-[12px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
-                  >
-                    + Thêm tất cả
-                  </button>
-                </div>
-
-                <ul className="divide-y divide-vien border-t border-vien pt-1">
-                  {dsYeuThich.map((l) => (
-                    <li key={l.id} className="py-2.5 flex items-center justify-between gap-2.5">
-                      <button
-                        type="button"
-                        onClick={() => nav(DUONG_DAN.chiTiet(l.id))}
-                        className="flex items-center gap-2.5 text-left min-w-0 flex-1 active:opacity-75 cursor-pointer"
-                      >
-                        <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={38} />
-                        <div className="min-w-0 flex-1">
-                          <b className="block text-[14px] text-muc leading-tight truncate">{l.nganh}</b>
-                          <span className="block text-[12px] text-chu-phu truncate mt-0.5">
-                            {l.truong} · {l.khuVuc} · {khoangDiem(l)} điểm
-                          </span>
-                        </div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          themNguyenVong(l.id);
-                          bao(`Đã thêm ${l.nganh} – ${l.truong} vào nguyện vọng`);
-                        }}
-                        className="min-h-9 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[12px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
-                      >
-                        + Thêm vào NV
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="pt-2 border-t border-vien flex gap-2">
-                  <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá thêm</Nut>
-                  <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
-                </div>
-              </div>
+              <TheDanhSachYeuThich
+                dsYeuThich={dsYeuThich}
+                nguyenVong={s.nguyenVong}
+                onThemTatCa={themTatCaYeuThich}
+                onThemMot={themNganhYeuThich}
+                onDieuHuong={(id) => nav(DUONG_DAN.chiTiet(id))}
+                onKhamPhaThem={() => nav(DUONG_DAN.khamPha())}
+                onMoGoiY={() => setMoGoiY(true)}
+              />
             ) : (
               <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Bạn chưa có nguyện vọng nào"
                 moTa="Vào Khám phá, mở một trường bạn quan tâm rồi bấm “Thêm vào nguyện vọng” hoặc thả tim để lưu.">
@@ -149,33 +107,15 @@ export default function DanhSachNguyenVong() {
           <>
             <TheTomTat tong={tong} kl={kl} dem={coCau.dem} onClick={() => nav(DUONG_DAN.nguyenVongAnToan())} />
 
-            {yeuThichChuaThem.length > 0 && (
-              <div className="rounded-the bg-xanh-nhat border border-xanh/30 p-3 flex items-center justify-between gap-2 shadow-sm">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="size-8 rounded-lg bg-trang text-do grid place-items-center shrink-0 shadow-sm">
-                    <Heart size={16} fill="currentColor" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[13px] font-bold text-muc leading-snug">
-                      Có {yeuThichChuaThem.length} ngành bạn đã thả tim chưa đưa vào danh sách
-                    </p>
-                    <p className="text-[12px] text-chu-phu leading-snug truncate">
-                      {yeuThichChuaThem.map((x) => x.nganh).slice(0, 2).join(", ")}
-                      {yeuThichChuaThem.length > 2 ? "..." : ""}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    datNguyenVong([...s.nguyenVong, ...yeuThichChuaThem.map((l) => l.id)]);
-                    bao(`Đã thêm ${yeuThichChuaThem.length} ngành yêu thích vào danh sách`);
-                  }}
-                  className="min-h-9 px-3 rounded-lg bg-xanh text-white text-[12px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
-                >
-                  Thêm tất cả
-                </button>
-              </div>
+            {dsYeuThich.length > 0 && (
+              <TheDanhSachYeuThich
+                dsYeuThich={dsYeuThich}
+                nguyenVong={s.nguyenVong}
+                onThemTatCa={themTatCaYeuThich}
+                onThemMot={themNganhYeuThich}
+                onDieuHuong={(id) => nav(DUONG_DAN.chiTiet(id))}
+                choPhepThuGon={true}
+              />
             )}
 
             {tong === null && (
@@ -373,3 +313,135 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
     </div>
   );
 }
+
+/** Thẻ hiển thị các ngành học sinh đã thả tim/lưu yêu thích, cho phép xem chi tiết, thêm từng ngành hoặc thêm tất cả. */
+function TheDanhSachYeuThich({
+  dsYeuThich,
+  nguyenVong,
+  onThemTatCa,
+  onThemMot,
+  onDieuHuong,
+  choPhepThuGon = false,
+  onKhamPhaThem,
+  onMoGoiY,
+}: {
+  dsYeuThich: NonNullable<ReturnType<typeof tim>>[];
+  nguyenVong: string[];
+  onThemTatCa: () => void;
+  onThemMot: (id: string, nganh: string, truong: string) => void;
+  onDieuHuong: (id: string) => void;
+  choPhepThuGon?: boolean;
+  onKhamPhaThem?: () => void;
+  onMoGoiY?: () => void;
+}) {
+  const yeuThichChuaThem = useMemo(
+    () => dsYeuThich.filter((l) => !nguyenVong.includes(l.id)),
+    [dsYeuThich, nguyenVong]
+  );
+  const soDaThem = dsYeuThich.length - yeuThichChuaThem.length;
+  const [thuGon, setThuGon] = useState(false);
+
+  if (dsYeuThich.length === 0) return null;
+
+  return (
+    <div className="rounded-the bg-trang border border-vien p-4 shadow-the space-y-3">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="size-9 rounded-xl bg-do/10 text-do grid place-items-center shrink-0">
+            <Heart size={20} fill="currentColor" />
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-[15px] font-extrabold text-muc leading-tight">
+              Ngành đã lưu ({dsYeuThich.length})
+            </h2>
+            <p className="text-[12px] text-chu-phu mt-0.5">
+              {yeuThichChuaThem.length > 0
+                ? (soDaThem > 0
+                    ? `Đã thêm ${soDaThem}/${dsYeuThich.length} · Còn ${yeuThichChuaThem.length} ngành`
+                    : "Chọn nhanh để đưa vào danh sách NV")
+                : `Đã đưa tất cả ${dsYeuThich.length} ngành vào NV`}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          {yeuThichChuaThem.length > 0 && (
+            <button
+              type="button"
+              onClick={onThemTatCa}
+              className="min-h-8.5 px-2.5 rounded-lg bg-xanh text-white text-[12px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
+            >
+              + Thêm tất cả {soDaThem > 0 ? `(${yeuThichChuaThem.length})` : ""}
+            </button>
+          )}
+          {choPhepThuGon && (
+            <button
+              type="button"
+              onClick={() => setThuGon((t) => !t)}
+              aria-label={thuGon ? "Mở rộng danh sách đã lưu" : "Thu gọn danh sách đã lưu"}
+              className="size-8.5 rounded-lg border border-vien bg-nen hover:bg-vien/40 grid place-items-center text-chu-phu shrink-0 transition-colors"
+            >
+              {thuGon ? <ChevronDown size={17} /> : <ChevronUp size={17} />}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {!thuGon && (
+        <>
+          <ul className="divide-y divide-vien border-t border-vien pt-1">
+            {dsYeuThich.map((l) => {
+              const daThem = nguyenVong.includes(l.id);
+              const viTriNV = nguyenVong.indexOf(l.id);
+              return (
+                <li key={l.id} className="py-2.5 flex items-center justify-between gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => onDieuHuong(l.id)}
+                    className="flex items-center gap-2.5 text-left min-w-0 flex-1 active:opacity-75 cursor-pointer"
+                  >
+                    <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={38} />
+                    <div className="min-w-0 flex-1">
+                      <b className="block text-[14px] text-muc leading-tight truncate">{l.nganh}</b>
+                      <span className="block text-[12px] text-chu-phu truncate mt-0.5">
+                        {l.truong} · {l.khuVuc} · {khoangDiem(l)} điểm
+                      </span>
+                    </div>
+                  </button>
+                  {daThem ? (
+                    <span
+                      title={`Đã ở vị trí NV${viTriNV + 1} trong danh sách`}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-[12px] font-bold shrink-0 border border-emerald-200"
+                    >
+                      <Check size={13} className="stroke-[2.5]" /> NV{viTriNV + 1}
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => onThemMot(l.id, l.nganh, l.truong)}
+                      className="min-h-9 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[12px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
+                    >
+                      + Thêm vào NV
+                    </button>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          {(onKhamPhaThem || onMoGoiY) && (
+            <div className="pt-2 border-t border-vien flex gap-2">
+              {onKhamPhaThem && (
+                <Nut kieu="vien" bieuTuong={Plus} onClick={onKhamPhaThem}>
+                  Khám phá thêm
+                </Nut>
+              )}
+              {onMoGoiY && <NutGoiYDanhSach onMo={onMoGoiY} />}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+

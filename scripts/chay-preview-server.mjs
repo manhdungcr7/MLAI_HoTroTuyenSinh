@@ -61,6 +61,11 @@ const SEED_SCRIPT = `
   try {
     if (window.location.search.includes('seed=mau')) {
       localStorage.setItem('nvai:v2', JSON.stringify(${JSON.stringify(MOCK_STATE)}));
+    } else if (window.location.search.includes('seed=yeu-thich')) {
+      const s = ${JSON.stringify(MOCK_STATE)};
+      s.yeuThich = ["qsc-a65bd00b", "qsc-81e88be7", "qsc-77d4a3a1"];
+      s.nguyenVong = ["qsc-a65bd00b"];
+      localStorage.setItem('nvai:v2', JSON.stringify(s));
     } else if (window.location.search.includes('seed=empty')) {
       localStorage.removeItem('nvai:v2');
     }
