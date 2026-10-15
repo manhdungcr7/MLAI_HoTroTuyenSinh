@@ -112,7 +112,7 @@ export default function BatDau() {
 
         {so === 1 && daThuBuoc1 && thieu1.length > 0 && (
           <div role="alert" className="rounded-the bg-do-nhat p-3.5 text-[13px] text-do-chu">
-            <p className="flex items-center gap-1.5 font-extrabold text-[14px]"><CircleAlert size={17} />Em còn thiếu {thieu1.length} mục:</p>
+            <p className="flex items-center gap-1.5 font-extrabold text-[14px]"><CircleAlert size={17} />Bạn còn thiếu {thieu1.length} mục:</p>
             <ul className="mt-1 ml-6 list-disc space-y-0.5 font-semibold">{thieu1.map((k) => <li key={k}>{loi1[k]}</li>)}</ul>
           </div>
         )}

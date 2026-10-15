@@ -56,7 +56,7 @@ export default function DiemMonThem({ h, sua }: { h: HoSo; sua: (p: Partial<HoSo
               {loi.map(({ m, kq }) => <LoiNho key={m}>{TEN_MON_THEM[m]}: {LOI_DIEM[kq.loai as "khongPhaiSo" | "ngoaiKhoang"]}</LoiNho>)}
             </div>
           )}
-          <p className="mt-2 text-[12px] text-chu-phu">Công nghệ: nhập môn em học (công nghiệp hoặc nông nghiệp). Để trống môn em không thi.</p>
+          <p className="mt-2 text-[12px] text-chu-phu">Công nghệ: nhập môn bạn học (công nghiệp hoặc nông nghiệp). Để trống môn bạn không thi.</p>
         </div>
       )}
     </section>

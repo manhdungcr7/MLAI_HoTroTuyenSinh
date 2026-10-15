@@ -199,9 +199,9 @@ function KetQuaHocTap({ xuHuong, nhapDiem }: { xuHuong: XuHuongMon[]; nhapDiem: 
         })}
       </ul>
       {thieu && (
-        <div className="mt-2.5 flex items-center justify-between gap-2 text-[13px] text-chu-phu">
-          <span>Cần ít nhất 2 lần thi để phân tích xu&nbsp;hướng.</span>
-          <button type="button" onClick={nhapDiem} className="font-bold text-xanh hover:underline shrink-0 min-h-10">Nhập điểm thi thử</button>
+        <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[13px] text-chu-phu">
+          <span>Cần ít nhất 2 lần thi để phân tích xu hướng.</span>
+          <button type="button" onClick={nhapDiem} className="font-bold text-xanh hover:underline shrink-0 min-h-8 inline-flex items-center">Nhập điểm thi thử →</button>
         </div>
       )}
     </>

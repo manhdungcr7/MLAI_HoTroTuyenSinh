@@ -113,7 +113,7 @@ export function DaLuuTam({ daSua }: { daSua: boolean }) {
   return (
     <p role="status" aria-live="polite" className="flex items-center justify-center gap-1.5 text-[12px] font-semibold text-chu-phu">
       <CloudCheck size={15} className={daSua ? "text-luc" : "text-chu-phu"} />
-      {daSua ? "Đã lưu tạm trên máy này" : "Tự lưu ngay khi em nhập"}
+      {daSua ? "Đã lưu tạm trên máy này" : "Tự lưu ngay khi bạn nhập"}
     </p>
   );
 }

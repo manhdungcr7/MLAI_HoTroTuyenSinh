@@ -24,7 +24,7 @@ export function docDiem(chu: string): KetQuaDiem {
 }
 
 export const LOI_DIEM: Record<"khongPhaiSo" | "ngoaiKhoang", string> = {
-  khongPhaiSo: "Em nhập số nhé, ví dụ 7,5",
+  khongPhaiSo: "Bạn nhập số nhé, ví dụ 7,5",
   ngoaiKhoang: "Điểm từ 0 đến 10 nhé",
 };
 
@@ -90,7 +90,7 @@ export function goiYHocPhi(nganSach: HoSo["nganSach"], choO: HoSo["choO"]): GoiY
   const k = KHOANG_NGAN_SACH[nganSach];
   const khoang = k.den === null ? `từ ${k.tu} triệu đồng/năm trở lên` : k.tu === 0 ? `dưới ${k.den} triệu đồng/năm` : `${k.tu}–${k.den} triệu đồng/năm`;
   const ghiChu = choO === "oTro" || choO === "kyTucXa"
-    ? `Em dự định ${choO === "oTro" ? "ở trọ" : "ở ký túc xá"}, nên chọn trường ở nửa dưới khoảng này để còn tiền ở và ăn uống.`
+    ? `Bạn dự định ${choO === "oTro" ? "ở trọ" : "ở ký túc xá"}, nên chọn trường ở nửa dưới khoảng này để còn tiền ở và ăn uống.`
     : null;
   return { khoang, ghiChu };
 }
