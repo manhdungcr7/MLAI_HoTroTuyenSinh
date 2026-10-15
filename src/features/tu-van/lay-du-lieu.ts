@@ -149,6 +149,22 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
   const coHoi = tinhCoHoi(diem);
   const NHAC = "Điểm chuẩn là của các năm trước, năm nay có thể khác. Bạn đối chiếu với đề án của trường trước khi quyết định.";
 
+  // Hồ sơ cá nhân hóa
+  const ten = s.hoSo.hoTen?.trim();
+  const lop = s.hoSo.khoi ? `Lớp ${s.hoSo.khoi}` : "";
+  const tinh = s.hoSo.tinh || "";
+  const loiChao = ten ? `Chào ${ten}${lop ? ` (${lop}${tinh ? ` · ${tinh}` : ""})` : ""}! ` : "Chào bạn! ";
+  const ielts = s.hoSo.chungChiNgoaiNgu?.diem ? `${s.hoSo.chungChiNgoaiNgu.loai} ${s.hoSo.chungChiNgoaiNgu.diem}` : null;
+  const dgnl = s.hoSo.diemDgnl?.hcm ? `ĐHQG-HCM ${s.hoSo.diemDgnl.hcm}/1200` : s.hoSo.diemDgnl?.hn ? `HSA ${s.hoSo.diemDgnl.hn}/150` : null;
+
+  // Lợi thế cạnh tranh cá thể hóa
+  const phanTichLoiThe = (): string => {
+    const y: string[] = [];
+    if (ielts) y.push(`• Chứng chỉ **${ielts}**: Đủ điều kiện quy đổi thành điểm 10 môn Tiếng Anh hoặc cộng điểm ưu tiên xét tuyển kết hợp tại các trường hàng đầu (như UIT, NEU, FTU, Sư phạm Kỹ thuật...).`);
+    if (dgnl) y.push(`• Điểm thi **${dgnl}**: Mức điểm rất cạnh tranh, giúp bạn nắm chắc cơ hội trúng tuyển sớm ngay từ đợt 1 mà không cần chờ điểm thi tốt nghiệp THPT.`);
+    return y.length ? `\n\n⭐ **Lợi thế cạnh tranh cá nhân hóa của bạn:**\n${y.join("\n")}` : "";
+  };
+
   // 1) Hỏi về một ngành/trường cụ thể
   let khop = timNganhKhop(cauHoi, 5);
   const huongDan = /bat dau|tu dau|chon nganh|nen hoc|hop voi|nganh nao/.test(q);
@@ -195,55 +211,82 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     const chot = khop.length <= 2
       ? "\n💡 Gợi ý chiến lược: Hãy cân nhắc đặt ngành này ở NV1–NV2 nếu thuộc nhóm Thử sức, hoặc NV3–NV5 nếu thuộc nhóm Vừa sức/An toàn để đảm bảo cơ hội trúng tuyển cao nhất."
       : "";
-    return { traLoi: `Mình tìm thấy ${khop.length} ngành khớp với câu hỏi của bạn:\n${sk.map((d) => dongNganh(d, hocPhi)).join("\n")}${chot}\n${NHAC}`, nguon: khop.map((l) => l.id) };
+    const hanhDong = `\n\n📋 **Gợi ý hành động tiếp theo:**\n1. Bấm **+ Thêm vào nguyện vọng** ở các ngành trên để đưa vào danh sách của bạn.\n2. Vào mục **Kế hoạch** để xem môn cần kéo điểm giúp thu hẹp khoảng cách.`;
+    return {
+      traLoi: `Mình tìm thấy ${khop.length} ngành khớp với câu hỏi của bạn:\n${sk.map((d) => dongNganh(d, hocPhi)).join("\n")}${chot}${phanTichLoiThe()}${hanhDong}\n\n${NHAC}`,
+      nguon: khop.map((l) => l.id),
+    };
   }
 
   const hoiPhuongPhap = /tang diem|keo diem|on thi|phuong phap|cach hoc|lam sao de tang|on tap/.test(q);
   if (hoiPhuongPhap) {
     const mt = s.mucTieu;
-    const mtStr = mt ? `Mục tiêu hiện tại của bạn là tổ hợp ${mt.maToHop} (${so1(mt.diemMucTieu)} điểm).` : "Bạn có thể chọn một ngành mục tiêu ở mục Kế hoạch để nhận lộ trình cụ thể.";
+    const lcMt = mt ? LUA_CHON_MAU.find((l) => l.id === mt.luaChonId) : undefined;
+    const mtStr = mt && lcMt ? `Mục tiêu hiện tại của bạn là ngành **${lcMt.nganh} - ${lcMt.truong}** (tổ hợp **${mt.maToHop}**, điểm mục tiêu **${so1(mt.diemMucTieu)}**).` : (mt ? `Mục tiêu hiện tại của bạn là tổ hợp **${mt.maToHop}** (${so1(mt.diemMucTieu)} điểm).` : "Bạn có thể chọn một ngành mục tiêu ở mục Kế hoạch để nhận lộ trình cụ thể.");
     return {
-      traLoi: `Để tăng điểm hiệu quả và bứt phá điểm số:\n1. **Chiến lược phân bổ công sức**: Tập trung vào môn có điểm thi thử đang ở mức 6.5–7.5, vì dư địa tăng 1 điểm ở nhóm này dễ hơn nhiều so với môn đã đạt 8.5+.\n2. **Phương pháp 60-35-5**: Mỗi buổi tự học 90 phút nên chia thành 60% bấm giờ làm đề, 35% chữa chi tiết câu sai và xem lại công thức, 5% đúc rút lỗi hay gặp.\n3. **Cá nhân hóa lộ trình**: ${mtStr} Bạn vào mục **Kế hoạch học tập** để hệ thống tự động sinh việc học tuần và xếp lịch tối ưu nhé.`,
+      traLoi: `${loiChao}Để bứt phá điểm số một cách thông minh và bền bỉ:\n1. **Chiến lược phân bổ công sức (Môn kéo điểm)**: Tập trung vào môn có điểm thi thử đang ở mức 6.5–7.5, vì dư địa tăng 1 điểm ở nhóm này dễ và tốn ít thời gian hơn nhiều so với môn đã đạt 8.5+.\n2. **Phương pháp 60-35-5**: Mỗi buổi tự học 90 phút nên chia thành:\n   • 60% thời gian bấm giờ làm đề thi thử chuẩn cấu trúc mới.\n   • 35% chữa chi tiết từng câu sai, ghi lại công thức và bẫy đề thi.\n   • 5% đúc rút quy luật và lỗi hay gặp vào sổ tay.\n3. **Cá nhân hóa lộ trình**: ${mtStr} Bạn vào mục **Kế hoạch** để hệ thống tự động sinh việc học tuần và xếp lịch tối ưu nhé.`,
       nguon: [],
     };
   }
+
   const hoiXetTuyenSom = /ielts|ngoai ngu|chung chi|dgnl|danh gia nang luc|hoc ba|xet tuyen som/.test(q);
   if (hoiXetTuyenSom) {
-    const yNgoaiNgu = s.hoSo.chungChiNgoaiNgu?.diem ? `Bạn có chứng chỉ ${s.hoSo.chungChiNgoaiNgu.loai} ${s.hoSo.chungChiNgoaiNgu.diem}: có thể quy đổi điểm 10 tiếng Anh hoặc xét tuyển kết hợp vào nhiều trường.` : "Bạn có thể nhập chứng chỉ ngoại ngữ (IELTS, VSTEP...) ở Hồ sơ để tính phương thức xét tuyển kết hợp.";
-    const yDgnl = s.hoSo.diemDgnl?.hcm ? `Điểm ĐGNL ĐHQG-HCM của bạn là ${s.hoSo.diemDgnl.hcm}/1200 điểm.` : s.hoSo.diemDgnl?.hn ? `Điểm ĐGNL HSA của bạn là ${s.hoSo.diemDgnl.hn}/150 điểm.` : "Nếu bạn có điểm ĐGNL ĐHQG-HCM hoặc HSA, hãy nhập ở Hồ sơ để tính phương thức xét tuyển sớm.";
+    const yNgoaiNgu = s.hoSo.chungChiNgoaiNgu?.diem ? `Bạn có chứng chỉ **${s.hoSo.chungChiNgoaiNgu.loai} ${s.hoSo.chungChiNgoaiNgu.diem}**: Đây là lợi thế cực lớn, có thể quy đổi thành điểm 10 môn Tiếng Anh hoặc xét tuyển kết hợp vào nhiều trường đại học lớn.` : "Bạn có thể nhập chứng chỉ ngoại ngữ (IELTS, VSTEP...) ở mục Hồ sơ để tính phương thức xét tuyển kết hợp.";
+    const yDgnl = s.hoSo.diemDgnl?.hcm ? `Điểm ĐGNL ĐHQG-HCM của bạn là **${s.hoSo.diemDgnl.hcm}/1200 điểm**, nằm trong mức rất cạnh tranh.` : s.hoSo.diemDgnl?.hn ? `Điểm ĐGNL HSA của bạn là **${s.hoSo.diemDgnl.hn}/150 điểm**.` : "Nếu bạn có điểm ĐGNL ĐHQG-HCM hoặc HSA, hãy nhập ở Hồ sơ để tính phương thức xét tuyển sớm.";
     return {
-      traLoi: `${yNgoaiNgu} ${yDgnl} Phương thức xét tuyển sớm (học bạ, ĐGNL, chứng chỉ) thường nhận hồ sơ từ tháng 3 đến tháng 5, bạn nên chuẩn bị hồ sơ sớm.`,
+      traLoi: `${loiChao}${yNgoaiNgu}\n${yDgnl}\n\n📌 **Lưu ý quan trọng về xét tuyển sớm:**\n• Các phương thức xét tuyển sớm (học bạ, ĐGNL, chứng chỉ quốc tế) thường mở cổng nhận hồ sơ từ tháng 3 đến tháng 5 hàng năm.\n• Dù trúng tuyển sớm có điều kiện, bạn vẫn cần đăng ký nguyện vọng lên cổng tuyển sinh chung của Bộ GD&ĐT vào tháng 7 để được công nhận chính thức.`,
       nguon: [],
     };
   }
+
   if (thieu) {
-    if (coHoi) return { traLoi: `Hiện bạn đã đủ điểm 3 môn ở tổ hợp ${coHoi.toHop} (${so1(coHoi.tong)} điểm), nên mình so được ${coHoi.soNganh} ngành. Bạn nhập thêm điểm Sử, Địa, Tin hoặc các môn còn lại ở Hồ sơ để mình so thêm các ngành xét tổ hợp khác.`, nguon: [] };
+    if (coHoi) return { traLoi: `${loiChao}Hiện bạn đã đủ điểm 3 môn ở tổ hợp ${coHoi.toHop} (${so1(coHoi.tong)} điểm), nên mình so được ${coHoi.soNganh} ngành. Bạn nhập thêm điểm Sử, Địa, Tin hoặc các môn còn lại ở Hồ sơ để mình so thêm các ngành xét tổ hợp khác.`, nguon: [] };
     return { traLoi: "Bạn chưa nhập đủ điểm 3 môn của bất kỳ tổ hợp nào (ví dụ Toán, Lý, Anh). Có điểm 3 môn, mình sẽ so được với điểm chuẩn của từng ngành. Bạn vào Hồ sơ, bước Điểm các môn để nhập nhé.", nguon: [] };
   }
+
   if (canBang) {
     const ds = s.nguyenVong.map((id) => LUA_CHON_MAU.find((l) => l.id === id)).filter((l): l is LuaChon => !!l);
     if (ds.length === 0) {
       const g = coHoi ? goiYDanhSach(diem, s.hoSo, [], undefined, moNeoNV1(s)).slice(0, 8) : [];
-      return { traLoi: g.length ? `Bạn chưa có nguyện vọng nào. Một danh sách cân bằng thường có 1–2 ngành Thử sức, 2–3 Vừa sức, 2 An toàn và 1 Dự phòng. Mình có thể gợi ý sẵn ${g.length} ngành theo điểm, nhóm ngành, khu vực và ngân sách của bạn: bạn vào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn”.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: [] };
+      return { traLoi: g.length ? `${loiChao}Bạn chưa có nguyện vọng nào. Một danh sách cân bằng theo chiến lược 3 tầng thường có 1–2 ngành Thử sức (vươn tới ước mơ), 2–3 ngành Vừa sức (chắc chắn), 1–2 ngành An toàn và 1 Dự phòng.\n\nDựa trên hồ sơ của bạn (tổ hợp ${coHoi?.toHop} được ${so1(coHoi?.tong ?? 0)} điểm${s.hoSo.nganhQuanTam.length ? `, quan tâm ${s.hoSo.nganhQuanTam.join(", ")}` : ""}), mình gợi ý sẵn ${g.length} ngành phù hợp:\n${g.map((x) => `• ${x.lc.nganh}, ${x.lc.truong} (${x.nhan}): điểm chuẩn ${x.lc.diemMin}`).join("\n")}\n\nBạn vào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn” để xem chi tiết nhé.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: [] };
     }
     const sk = ds.map((l) => dungSuKien(l, diem, nguon));
     const dem: Record<string, number> = {};
     sk.forEach((x) => { if (x.nhanCuaEm) dem[x.nhanCuaEm] = (dem[x.nhanCuaEm] ?? 0) + 1; });
     const lietKe = ["Thử sức", "Vừa sức", "An toàn", "Dự phòng"].map((n) => `${dem[n] ?? 0} ${n}`).join(", ");
     const chacChan = (dem["An toàn"] ?? 0) + (dem["Dự phòng"] ?? 0);
-    const loi = chacChan === 0 ? "Danh sách chưa có ngành An toàn hay Dự phòng: bạn có thể thêm 1–2 ngành có điểm chuẩn thấp hơn điểm của bạn." : (dem["Thử sức"] ?? 0) > sk.length / 2 ? "Hơn một nửa là Thử sức, bạn cân nhắc thêm ngành Vừa sức." : (dem["Thử sức"] ?? 0) === 0 && sk.length >= 3 ? "Danh sách khá an toàn, bạn có thể thêm một ngành Thử sức." : "Danh sách có cả Thử sức lẫn An toàn hoặc Dự phòng, khá cân bằng.";
+    const loi = chacChan === 0
+      ? "Danh sách chưa có ngành An toàn hay Dự phòng: bạn nên bổ sung thêm 1–2 ngành có điểm chuẩn thấp hơn điểm của bạn từ 1.5–2.5 điểm để đảm bảo 100% không bị trượt đại học."
+      : (dem["Thử sức"] ?? 0) > sk.length / 2
+        ? "Hơn một nửa danh sách là Thử sức, bạn cân nhắc bổ sung thêm ngành Vừa sức để tăng cơ hội trúng tuyển."
+        : (dem["Thử sức"] ?? 0) === 0 && sk.length >= 3
+          ? "Danh sách khá an toàn, bạn có thể tự tin thêm 1 ngành Thử sức ở NV1 để không bỏ lỡ ước mơ."
+          : "Danh sách của bạn có cơ cấu 3 tầng khá cân bằng giữa Thử sức, Vừa sức và An toàn.";
+
     // Lấy NV1 làm gốc: còn cách bao xa, và các NV sau đỡ cho NV1 thế nào.
     const mn = phanTichMoNeo(s);
     const gocNV1 = mn
       ? ` Mình lấy NV1 ${mn.lc.truong} · ${mn.lc.nganh} làm gốc: ${cauKhoangCachNV1(mn) ?? (mn.monChuaCoDiem.length ? "bạn nhập đủ điểm các môn của tổ hợp để mình tính khoảng cách." : "điểm hiện tại của bạn đã chạm mốc điểm chuẩn.")}${mn.luoiDo.length ? ` Các nguyện vọng sau là lưới đỡ: ${mn.luoiDo.slice(0, 4).map((d) => `NV${d.thuTu} ${d.lc.truong} (${d.nhan})`).join(", ")}.` : ""}`
       : "";
-    return { traLoi: `Danh sách của bạn có ${sk.length} nguyện vọng: ${lietKe}.${gocNV1} ${loi}\n${sk.map((d) => dongNganh(d)).join("\n")}\n${NHAC}`, nguon: ds.map((l) => l.id) };
+
+    return {
+      traLoi: `${loiChao}Danh sách của bạn có ${sk.length} nguyện vọng: ${lietKe}.${gocNV1}\n\n💡 **Đánh giá chiến lược:** ${loi}\n\nChi tiết các nguyện vọng hiện tại:\n${sk.map((d) => dongNganh(d)).join("\n")}${phanTichLoiThe()}\n\n${NHAC}`,
+      nguon: ds.map((l) => l.id),
+    };
   }
+
   if (huongDan) {
     if (!coHoi) return { traLoi: "Để gợi ý ngành, mình cần điểm 3 môn của một tổ hợp. Bạn nhập điểm ở Hồ sơ, rồi vào Khám phá: mình sẽ cho bạn biết điểm của bạn đủ cho bao nhiêu ngành, nhiều nhất ở nhóm nào.", nguon: [] };
     const top = coHoi.theoNhom.slice(0, 3).map((g) => `${g.nhom} (${g.duDiem} ngành đủ điểm)`).join(", ");
     const sq = s.hoSo.nganhQuanTam.length ? ` Bạn đang quan tâm ${s.hoSo.nganhQuanTam.join(", ")}: bạn vào Khám phá, chọn nhóm đó để xem các ngành sát điểm của bạn nhất.` : " Bạn chọn một nhóm ngành mình quan tâm ở Khám phá để xem các ngành sát điểm của bạn nhất.";
-    return { traLoi: `Với tổ hợp ${coHoi.toHop} (${so1(coHoi.tong)} điểm), bạn đủ điểm chuẩn năm gần nhất của ${coHoi.soDuDiem} ngành và có thể thử sức thêm ${coHoi.soThuSuc} ngành. Nhiều nhất ở: ${top}.${sq} ${NHAC}`, nguon: [] };
+    return {
+      traLoi: `${loiChao}Với tổ hợp ${coHoi.toHop} (${so1(coHoi.tong)} điểm), bạn đủ điểm chuẩn năm gần nhất của ${coHoi.soDuDiem} ngành đủ điểm và có thể thử sức thêm ${coHoi.soThuSuc} ngành. Nhiều nhất ở: ${top}.${sq}${phanTichLoiThe()}\n\n${NHAC}`,
+      nguon: [],
+    };
   }
-  return { traLoi: "Mình chưa hiểu rõ câu hỏi. Bạn thử hỏi tên một ngành hoặc trường (ví dụ “điểm chuẩn Khoa học máy tính UIT”), hoặc hỏi “danh sách nguyện vọng của bạn có cân bằng không?”.", nguon: [] };
+
+  return {
+    traLoi: `${loiChao}Mình chưa hiểu rõ câu hỏi. Bạn thử hỏi tên một ngành hoặc trường (ví dụ “điểm chuẩn Khoa học máy tính UIT”), hoặc hỏi “danh sách nguyện vọng của bạn có cân bằng không?”, “điểm của mình đã đủ cho ngành CNTT chưa?”.`,
+    nguon: [],
+  };
 }

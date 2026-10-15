@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, RotateCcw, Send, Sparkles } from "lucide-react";
+import { Check, RotateCcw, Send, Sparkles } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
@@ -48,7 +48,6 @@ async function hoiAI(y: YeuCauTuVan): Promise<{ kq: TraLoiTuVan | null; viecTiep
 const ganDay = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200;
 
 export default function TuVan() {
-  const nav = useNavigate();
   const location = useLocation();
   const { s, themNguyenVong } = useApp();
   const manHinh = (location.state as { nguCanh?: string } | null)?.nguCanh ?? "Tư vấn chung";
@@ -121,7 +120,7 @@ export default function TuVan() {
   return (
     <>
       <DauTrangCoQuayLai tieuDe="Tư vấn cùng AI" phai={<span className="sr-only">{manHinh}</span>} />
-      <NoiDung className="pb-4">
+      <NoiDung className="pb-36">
         <div className="flex items-center justify-between rounded-xl bg-xanh-nhat px-3.5 py-2.5 border border-xanh/20">
           <div className="flex items-center gap-2 min-w-0">
             <span className="size-7 rounded-lg bg-trang text-xanh grid place-items-center shrink-0 shadow-xs">
@@ -230,8 +229,8 @@ export default function TuVan() {
           <div ref={cuoi} className="scroll-mb-44" />
         </section>
 
-        {/* Ô nhập dính phía trên thanh điều hướng dưới (cao 64px + vùng an toàn) nên nút Gửi không bị che. */}
-        <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-30 -mx-4 border-t border-vien bg-nen px-4 pb-2 pt-2">
+        {/* Thanh nhập câu hỏi cố định chắc chắn ở đáy màn hình (ngay trên thanh 5 tab) giống như ChatGPT/Gemini */}
+        <div className="fixed bottom-16 inset-x-0 mx-auto max-w-[430px] z-30 bg-trang/95 backdrop-blur-md border-t border-vien px-3.5 py-2.5 shadow-sm">
           <label htmlFor="tu-van-cau-hoi" className="sr-only">Câu hỏi của bạn</label>
           <div className="flex items-center gap-2">
             <input
@@ -248,12 +247,12 @@ export default function TuVan() {
               readOnly={dang}
               maxLength={1000}
               placeholder={tin.length ? "Hỏi tiếp, ví dụ: Còn ngành kia thì sao?" : "Ví dụ: Điểm chuẩn Khoa học máy tính UIT?"}
-              className="h-12 min-w-0 flex-1 rounded-xl border border-vien bg-trang px-3.5 text-[15px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none"
+              className="h-12 min-w-0 flex-1 rounded-xl border border-vien bg-trang px-3.5 text-[15px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none transition-colors"
             />
             <Nut
               rong={false}
               bieuTuong={Send}
-              className="!h-12 !min-h-12 shrink-0 px-4 !rounded-xl"
+              className="!h-12 !min-h-12 shrink-0 px-4 !rounded-xl cursor-pointer"
               disabled={dang || cauHoi.trim().length < 3}
               onClick={() => gui(cauHoi)}
             >
@@ -261,8 +260,6 @@ export default function TuVan() {
             </Nut>
           </div>
         </div>
-
-        <button type="button" onClick={() => nav(DUONG_DAN.khamPha())} className="w-full min-h-11 inline-flex items-center justify-center gap-2 text-[14px] font-bold text-xanh"><ArrowLeft size={17} />Tiếp tục khám phá</button>
       </NoiDung>
     </>
   );
