@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Hợp đồng phản hồi có cấu trúc của Tư vấn AI: kiểm schema, id bịa, hành động đề xuất, số bịa, khóa cache. Chạy: npx tsx tests/tu-van-phan-hoi.test.ts
 import assert from "node:assert/strict";
 import { xuLy, type Env } from "../functions/api/tu-van";

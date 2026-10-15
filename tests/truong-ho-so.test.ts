@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Dựng hồ sơ trường (src/features/truong/ho-so.ts). Chạy: npx tsx tests/truong-ho-so.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON } from "../src/data/lua-chon-that";
