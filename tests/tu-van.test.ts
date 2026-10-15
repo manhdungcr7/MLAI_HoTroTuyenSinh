@@ -3,6 +3,14 @@ import assert from "node:assert/strict";
 import { xuLy } from "../functions/api/tu-van";
 import { GIOI_HAN, NHAC_HE_THONG, choPhepTanSuat, dungNoiDung, kiemTraYeuCau, lamSachHoSo, locNguon, type KhoKV } from "../src/engine/tu-van";
 import { maTuVietTat } from "../src/engine/truong";
+import assertNguon from "node:assert/strict";
+// Gỡ thẻ nguồn không được để lại dòng "Nguồn:" trống (thấy trên bản online 15/10).
+{
+  const r = locNguon("Kết luận ngắn.\n\n*Nguồn:*\n[nguồn: a-1, b-2]\n\nLưu ý: điểm chuẩn năm trước.", ["a-1"]);
+  assertNguon.ok(!/ngu[oồ]n\s*:?\s*\*?\s*$/im.test(r.traLoi), r.traLoi);
+  assertNguon.deepEqual(r.nguon, ["a-1"]);
+  assertNguon.ok(r.traLoi.includes("Lưu ý: điểm chuẩn năm trước."));
+}
 import { chonDuLieuKemTheo, timNganhKhop, traLoiTuDong } from "../src/features/tu-van/lay-du-lieu";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
 import { taoHoSoMau, TRANG_THAI_BAN_DAU } from "../src/state/mau";

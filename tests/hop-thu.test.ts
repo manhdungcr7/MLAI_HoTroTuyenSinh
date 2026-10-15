@@ -9,6 +9,7 @@ import { kiemTraDangKyTinhNguyen, xuLyTinhNguyen } from "../functions/api/tinh-n
 import { xuLy as hopThu } from "../cms/functions/api/hop-thu";
 import { xuLy as phanCong } from "../cms/functions/api/phan-cong";
 import { xuLy as nguoi } from "../cms/functions/api/nguoi";
+import { xacMinhMatKhau } from "../cms/functions/_thu-vien/mat-khau";
 import type { BoiCanh, Env, KhoD1, KhoD1Cau } from "../cms/functions/_thu-vien/kieu";
 
 const db = new DatabaseSync(":memory:");
@@ -115,6 +116,9 @@ assert.equal((await goi(hopThu, "POST", "/api/hop-thu", "ctv1@test.local", { act
 assert.equal((await goi(hopThu, "POST", "/api/hop-thu", q, { action: "CAP_QUYEN", id: coSdt.id })).status, 400, "chỉ có số điện thoại thì chưa cấp được");
 const cap = await goi(hopThu, "POST", "/api/hop-thu", q, { action: "CAP_QUYEN", id: coEmail.id });
 assert.equal(cap.status, 201); assert.equal(cap.json.email, "an.nguyen@example.com"); assert.equal(cap.json.vaiTro, "ctv");
+const taiKhoanMoi = db.prepare("SELECT mat_khau, phai_doi_mat_khau FROM quan_tri WHERE email = 'an.nguyen@example.com'").get() as { mat_khau: string; phai_doi_mat_khau: number };
+assert.equal(taiKhoanMoi.phai_doi_mat_khau, 1);
+assert.ok(await xacMinhMatKhau(cap.json.matKhauTam, taiKhoanMoi.mat_khau));
 assert.equal((db.prepare("SELECT vai_tro FROM quan_tri WHERE email = 'an.nguyen@example.com'").get() as { vai_tro: string }).vai_tro, "ctv");
 assert.ok(db.prepare("SELECT 1 FROM phan_cong WHERE email = 'an.nguyen@example.com' AND ma_truong = 'BKA'").get(), "được giao đúng trường đã đăng ký");
 assert.equal((await goi(hopThu, "POST", "/api/hop-thu", q, { action: "CAP_QUYEN", id: coEmail.id })).status, 409, "cấp hai lần");
@@ -123,6 +127,7 @@ await gui(xuLyTinhNguyen, { ...dk, lienHe: q, maTruong: "QSC", hoTen: "Quản tr
 const idQtv = ((await goi(hopThu, "GET", "/api/hop-thu?loai=tinh-nguyen&trangThai=moi", q)).json.dangKy as { id: string; lienHe: string }[]).find((x) => x.lienHe === q)!.id;
 const capQtv = await goi(hopThu, "POST", "/api/hop-thu", q, { action: "CAP_QUYEN", id: idQtv });
 assert.equal(capQtv.status, 201); assert.equal(capQtv.json.vaiTro, "sa");
+assert.equal(capQtv.json.matKhauTam, undefined, "Existing account keeps its password");
 assert.equal((db.prepare("SELECT vai_tro FROM quan_tri WHERE email = ?").get(q) as { vai_tro: string }).vai_tro, "sa");
 // đổi trạng thái thường
 assert.equal((await goi(hopThu, "PATCH", "/api/hop-thu", q, { loai: "tinh-nguyen", id: coSdt.id, trangThai: "da_lien_he" })).status, 200);
@@ -130,4 +135,8 @@ assert.equal((await goi(hopThu, "PATCH", "/api/hop-thu", q, { loai: "tinh-nguyen
 // nhật ký có ghi
 assert.ok((db.prepare("SELECT COUNT(*) c FROM nhat_ky WHERE hanh_dong LIKE 'tinh-nguyen.%' OR hanh_dong LIKE 'bao-sai.%'").get() as { c: number }).c >= 3);
 
+db.prepare("INSERT INTO dang_ky_truy_cap_som (id, ho_ten, lop, nhu_cau, lien_he, tao_luc) VALUES ('early-test', 'Test', '12', 'nganh', 'test@example.com', '2026-10-15')").run();
+assert.equal((await goi(hopThu, "GET", "/api/hop-thu?loai=truy-cap-som", "ctv1@test.local")).status, 403);
+const som = await goi(hopThu, "GET", "/api/hop-thu?loai=truy-cap-som", q);
+assert.equal(som.status, 200); assert.equal(som.json.dangKySom[0].id, "early-test");
 console.log("hop-thu: tất cả kiểm tra đều qua");

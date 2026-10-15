@@ -33,9 +33,8 @@ for (const [ma, ten] of Object.entries(truongHopLe)) {
 
 // 2. Học phí: đúng số trong đề án, mucCao = mucThap (không suy diễn khoảng)
 const chuongTrinhTheoId = new Map(chuongTrinh.map((c) => [c.id, c]));
-const hocPhi = rawHocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string; phamVi?: string }>;
+const hocPhi = rawHocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string }>;
 for (const [key, hp] of Object.entries(hocPhi)) {
-  if (hp.phamVi === "truong") continue; // học phí cấp trường gán chung: không nạp như học phí ngành
   const ct = chuongTrinhTheoId.get(key);
   const ma = key.split("-")[0].toUpperCase();
   if (!hp.url.startsWith("http") || !truongHopLe[ma]) continue;

@@ -1,5 +1,7 @@
 // Endpoint tiếp nhận đăng ký trải nghiệm sớm từ học sinh và phụ huynh
 // Cloudflare Pages Function kết nối D1 Database
+import { docChuGioiHan, ThanQuaLon } from "../_thu-vien/doc-body";
+import { vuotGioiHan, type KhoKvGhi } from "../_thu-vien/gioi-han";
 
 export type LopHoc = "11" | "12" | "khac";
 export type NhuCau = "nganh" | "truong" | "nguyen_vong" | "ke_hoach";
@@ -27,6 +29,7 @@ export interface D1DatabaseLike {
 }
 
 export interface EnvDangKySom {
+  KV_CONG_DONG?: KhoKvGhi;
   D1_CONG_DONG?: D1DatabaseLike;
   /** Tên binding trong wrangler.jsonc; nhận cả hai tên. */
   DB?: D1DatabaseLike;
@@ -119,9 +122,10 @@ export async function xuLyDangKySom(request: Request, env: EnvDangKySom): Promis
 
   let duLieuGoc: unknown;
   try {
-    const chuoiVanBan = await request.text();
+    const chuoiVanBan = await docChuGioiHan(request, 8 * 1024);
     duLieuGoc = JSON.parse(chuoiVanBan);
-  } catch {
+  } catch (e) {
+    if (e instanceof ThanQuaLon) return taoPhanHoiJson({ thanhCong: false, loi: "Nội dung quá lớn" }, 413);
     return taoPhanHoiJson({ thanhCong: false, loi: "Nội dung yêu cầu không hợp lệ" }, 400);
   }
 
@@ -129,6 +133,7 @@ export async function xuLyDangKySom(request: Request, env: EnvDangKySom): Promis
   if (!ketQua.hopLe || !ketQua.duLieu) {
     return taoPhanHoiJson({ thanhCong: false, loi: ketQua.loi ?? "Thông tin chưa hợp lệ" }, 400);
   }
+  if (await vuotGioiHan(env.KV_CONG_DONG, "dang-ky-som", request, 5, 3600)) return taoPhanHoiJson({ thanhCong: false, loi: "Em đã gửi vài lần rồi, vui lòng thử lại sau." }, 429);
 
   const id = crypto.randomUUID();
   const taoLuc = new Date().toISOString();

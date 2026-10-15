@@ -1,9 +1,9 @@
-// Chế độ "Chiến lược & Lộ trình": Chẩn đoán năng lực theo dải điểm, 3 mốc tuyển sinh 2026 và Bảng check-in tiến độ chuyên đề.
+// Chế độ "Chiến lược & Lộ trình": Chẩn đoán năng lực theo dải điểm, 3 mốc của mùa tuyển sinh (năm theo ngày thi của mục tiêu) và Bảng check-in tiến độ chuyên đề.
 import { useState } from "react";
 import { BookOpen, CheckCircle, Clock, Compass, Flame, HelpCircle, Zap } from "lucide-react";
 import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { useApp } from "@/state/store";
-import { mucTieuDayDu, khoangCachCuaToi } from "@/state/chon";
+import { mucTieuDayDu, khoangCachCuaToi, ngayThiDuKien } from "@/state/chon";
 import { TEN_MON, TEN_MON_NGAN, type MonId, type ToneTen } from "@/state/types";
 import { NOI_DUNG_ON } from "@/engine/tao-viec";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -18,6 +18,8 @@ const TRANG_THAI_CHUYEN_DE = [
 export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => void }) {
   const { s, capNhatHoSo } = useApp();
   const m = mucTieuDayDu(s);
+  // Năm của mùa tuyển sinh lấy theo ngày thi của mục tiêu (học sinh lớp 12 năm học 2026–2027 thi năm 2027).
+  const namThi = (s.mucTieu?.ngayThi ?? ngayThiDuKien()).slice(0, 4);
   const kc = khoangCachCuaToi(s);
   const toHop = m?.toHop ?? ["toan", "nguVan", "tiengAnh"];
   const [monChon, setMonChon] = useState<MonId>(toHop[0]);
@@ -100,7 +102,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
       <section className="rounded-the border border-vien bg-trang p-4 shadow-the">
         <h3 className="flex items-center gap-2 text-[15px] font-extrabold text-muc mb-3">
           <Compass size={18} className="text-xanh" />
-          Lộ trình 3 mốc tuyển sinh 2026
+          Lộ trình 3 mốc tuyển sinh {namThi}
         </h3>
 
         <div className="space-y-3">
@@ -225,9 +227,6 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
             );
           })}
         </div>
-        <p className="mt-2 text-[12px] text-chu-phu">
-          Mục chọn "Cần ôn gấp" sẽ tự động được ưu tiên đưa vào việc cần học trong tuần.
-        </p>
       </section>
     </div>
   );

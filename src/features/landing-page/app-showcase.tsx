@@ -132,14 +132,14 @@ export function HeroAppMockup() {
 
               <div className="space-y-1">
                 {[
-                  { nv: "NV1", nganh: "KH Máy tính", truong: "ĐH Bách Khoa HN", nhan: "Thử sức", mau: "bg-rose-50 text-rose-700 border-rose-200" },
-                  { nv: "NV2", nganh: "CN Thông tin", truong: "ĐH Công nghệ QGHN", nhan: "Vừa sức", mau: "bg-blue-50 text-blue-700 border-blue-200" },
-                  { nv: "NV3", nganh: "CN Thông tin", truong: "Học viện CNBCVT", nhan: "Vừa sức", mau: "bg-blue-50 text-blue-700 border-blue-200" },
-                  { nv: "NV4", nganh: "HT Thông tin", truong: "ĐH Kinh tế Quốc dân", nhan: "An toàn", mau: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                  { nv: "Nguyện Vọng 1", nganh: "KH Máy tính", truong: "ĐH Bách Khoa HN", nhan: "Thử sức", mau: "bg-rose-50 text-rose-700 border-rose-200" },
+                  { nv: "Nguyện Vọng 2", nganh: "CN Thông tin", truong: "ĐH Công nghệ QGHN", nhan: "Vừa sức", mau: "bg-blue-50 text-blue-700 border-blue-200" },
+                  { nv: "Nguyện Vọng 3", nganh: "CN Thông tin", truong: "Học viện CNBCVT", nhan: "Vừa sức", mau: "bg-blue-50 text-blue-700 border-blue-200" },
+                  { nv: "Nguyện Vọng 4", nganh: "HT Thông tin", truong: "ĐH Kinh tế Quốc dân", nhan: "An toàn", mau: "bg-emerald-50 text-emerald-700 border-emerald-200" },
                 ].map((row) => (
                   <div key={row.nv} className="flex items-center justify-between p-1 rounded-lg bg-slate-50 border border-slate-100 text-[10px]">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="font-extrabold text-blue-600 text-[9px]">{row.nv}</span>
+                      <span className="font-extrabold text-blue-600 text-[8.5px] whitespace-nowrap">{row.nv}</span>
                       <div className="truncate">
                         <b className="text-slate-800 block leading-none truncate">{row.nganh}</b>
                         <span className="text-[8px] text-slate-400 block truncate">{row.truong}</span>

@@ -1,7 +1,7 @@
 // Tìm kiếm ngành/trường: có dấu hay không dấu, viết tắt, biệt danh, khớp theo từng từ. Chạy: npx tsx tests/tim-kiem.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
-import { hangTimKiem, khongDau, locTimKiem, tuCuaTruyVan, xepHangTimKiem } from "../src/engine/tim-kiem";
+import { TRUONG_CHUA_CO, hangTimKiem, khongDau, locTimKiem, truongChuaCoDuLieu, tuCuaTruyVan, xepHangTimKiem } from "../src/engine/tim-kiem";
 
 const truongCua = (q: string) => new Set(locTimKiem(LUA_CHON_MAU, q).map((l) => l.maTruong));
 const ids = (q: string) => locTimKiem(LUA_CHON_MAU, q).map((l) => l.id).sort().join(",");
@@ -84,3 +84,13 @@ assert.ok(locTimKiem(LUA_CHON_MAU, "dai hoc ngoai thuong").some((l) => l.maTruon
 }
 
 console.log("tim-kiem: tất cả kiểm tra đều qua");
+
+// Trường lớn chưa có dữ liệu: nhận ra để báo thẳng; và không được trùng với trường đã có (nếu đã thêm thì xóa khỏi danh sách).
+{
+  assert.equal(truongChuaCoDuLieu("bach khoa tphcm"), "ĐH Bách khoa – ĐHQG TP.HCM");
+  assert.equal(truongChuaCoDuLieu("Bách khoa TP.HCM"), "ĐH Bách khoa – ĐHQG TP.HCM");
+  assert.equal(truongChuaCoDuLieu("ueh marketing"), "ĐH Kinh tế TP.HCM (UEH)");
+  assert.equal(truongChuaCoDuLieu("bach khoa ha noi"), null);
+  assert.equal(truongChuaCoDuLieu("uit"), null);
+  for (const t of TRUONG_CHUA_CO) assert.ok(!LUA_CHON_MAU.some((l) => l.tenTruong.includes(t.ten.split(" (")[0])), `đã có dữ liệu, xóa khỏi TRUONG_CHUA_CO: ${t.ten}`);
+}

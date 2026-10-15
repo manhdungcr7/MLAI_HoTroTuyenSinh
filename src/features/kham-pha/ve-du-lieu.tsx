@@ -24,7 +24,8 @@ export default function VeDuLieu() {
       tong: LUA_CHON_MAU.length, truong: truong.size, chinhThuc: chinhThuc.length,
       truongChinhThuc: new Set(chinhThuc.map((l) => l.maTruong)).size,
       nhieuNam: LUA_CHON_MAU.filter((l) => Object.keys(l.diemTheoNam ?? {}).length >= 2).length,
-      hocPhi: LUA_CHON_MAU.filter(coHocPhi).length,
+      hocPhi: LUA_CHON_MAU.filter((l) => coHocPhi(l) && !l.hocPhiUocTinh).length,
+      hocPhiUocTinh: LUA_CHON_MAU.filter((l) => coHocPhi(l) && l.hocPhiUocTinh).length,
       viecLam: LUA_CHON_MAU.filter((l) => l.tiLeViecLam !== undefined).length,
       coToHop: LUA_CHON_MAU.filter((l) => (l.toHopXet?.length ?? 0) > 0).length,
     };
@@ -50,7 +51,7 @@ export default function VeDuLieu() {
       <NoiDung className="pb-8">
         <section className="rounded-lon nen-xanh p-4">
           <h2 className="text-[19px] font-extrabold text-muc leading-snug">Mỗi con số đều có nguồn để bạn tự kiểm tra</h2>
-          <p className="mt-1 text-[14px] text-chu">Điểm chuẩn, tổ hợp, học phí, việc làm trong app lấy từ đề án tuyển sinh của chính các trường. Chỗ nào chưa có, mình ghi chưa có dữ liệu chứ không đoán.</p>
+          <p className="mt-1 text-[14px] text-chu">Điểm chuẩn, tổ hợp, học phí, việc làm lấy từ đề án tuyển sinh của chính các trường. Số nào là ước tính thì ghi "≈ … (ước tính)" và không gắn link nguồn.</p>
         </section>
 
         <section aria-label="Số liệu tổng quan" className="grid grid-cols-2 gap-2.5">
@@ -85,12 +86,10 @@ export default function VeDuLieu() {
         <DongThongBao tone="cam" icon={ShieldAlert} tieuDe="Những điều mình chưa có"
           moTa={<>
             <span className="block">- Điểm chuẩn năm nay chưa công bố: app dùng các năm trước và luôn ghi rõ năm.</span>
-            <span className="block">- Học phí theo năm chỉ có ở {so(tk.hocPhi)} ngành, tỷ lệ có việc làm ở {so(tk.viecLam)} ngành. Các ngành còn lại, bạn xem trang học phí trong đề án.</span>
+            <span className="block">- Học phí có văn bản của trường ở {so(tk.hocPhi)} ngành. {so(tk.hocPhiUocTinh)} ngành khác chỉ có học phí ước tính theo trường và khối ngành (ghi "≈"), để lọc theo ngân sách; bạn xem đề án trước khi quyết định.</span>
+            <span className="block">- Tỷ lệ có việc làm mới có ở {so(tk.viecLam)} ngành; ngành khác ghi chưa có dữ liệu.</span>
             <span className="block">- {so(tk.tong - tk.chinhThuc)} ngành lấy điểm từ trang tổng hợp, chưa đối chiếu được với đề án; trang chi tiết có ghi chưa kiểm chứng.</span>
-            <span className="block">- Khung chương trình học chi tiết chưa có; mình dẫn tới trang ngành của trường khi tìm được.</span>
           </>} />
-
-        <p className="text-[12px] text-chu-phu">Nhãn Thử sức, Vừa sức, An toàn, Dự phòng là gợi ý theo điểm chuẩn các năm trước, không phải xác suất trúng tuyển.</p>
 
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Báo sai lệch">
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-do-nhat text-do"><AlertCircle size={20} /></span>

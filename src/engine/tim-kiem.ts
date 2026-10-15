@@ -120,3 +120,22 @@ export function locTimKiem<T extends LuaChon>(ds: T[], q: string): T[] {
   }
   return xepHangTimKiem(kq, q);
 }
+
+/**
+ * Trường lớn học sinh hay tìm nhưng CHƯA có trong dữ liệu (kiểm 15/10/2026). Khi tìm ra 0 ngành mà câu khớp một tên ở đây,
+ * app nói thẳng "chưa có dữ liệu" thay vì "không tìm thấy". Thêm trường vào dữ liệu thì xóa dòng tương ứng.
+ */
+export const TRUONG_CHUA_CO: { ten: string; goi: string[] }[] = [
+  { ten: "ĐH Bách khoa – ĐHQG TP.HCM", goi: ["hcmut", "bkhcm", "bk tphcm", "bach khoa tphcm", "bach khoa hcm", "bach khoa sai gon", "bach khoa ho chi minh"] },
+  { ten: "ĐH Kinh tế TP.HCM (UEH)", goi: ["ueh", "kinh te tphcm", "kinh te hcm", "kinh te ho chi minh"] },
+  { ten: "ĐH Kinh tế – Luật – ĐHQG TP.HCM (UEL)", goi: ["uel", "kinh te luat"] },
+  { ten: "ĐH Tôn Đức Thắng", goi: ["tdtu", "ton duc thang"] },
+  { ten: "Học viện Bưu chính Viễn thông cơ sở TP.HCM", goi: ["ptit hcm", "ptithcm", "buu chinh tphcm", "buu chinh hcm"] },
+  { ten: "ĐH Kiến trúc Hà Nội", goi: ["kien truc ha noi"] },
+];
+
+/** Tên trường chưa có dữ liệu mà câu tìm đang nhắc tới, hoặc null. */
+export function truongChuaCoDuLieu(q: string): string | null {
+  const chu = ` ${khongDau(q).replace(/[^a-z0-9]+/g, " ").replace(/\btp hcm\b|\bho chi minh\b/g, "tphcm").trim()} `;
+  return TRUONG_CHUA_CO.find((t) => t.goi.some((g) => chu.includes(` ${g} `)))?.ten ?? null;
+}

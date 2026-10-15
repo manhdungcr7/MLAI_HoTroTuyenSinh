@@ -14,7 +14,6 @@ import { TEN_MON, TO_HOP, type MaToHop, type MucTieuChinh } from "@/state/types"
 import { docMucTieu, type DuLieuMucTieu } from "./du-lieu";
 import { SuaMucTieu } from "./sua-muc-tieu";
 import { diem1, ngayVN, nhanDinhMucTieu, tenToHop } from "./tinh-toan";
-import { NutTuVan } from "@/features/tu-van/tu-van";
 
 type PhuongThuc = MucTieuChinh["phuongThuc"];
 // Ẩn DGNL và hocBa vì chưa phát triển (chỉ giữ code, không hiển thị)
@@ -41,7 +40,6 @@ export default function MucTieu() {
         <DauTrangChinh tieuDe="Mục tiêu chính" />
         <ThanhPhuKeHoach />
         <NoiDung>
-          <NutTuVan nguCanh="Mục tiêu học tập" />
           <TrangThaiTrong bieuTuong={<Target size={28} />}
             tieuDe={mucTieuCu ? "Không tìm thấy mục tiêu cũ" : "Bạn chưa chọn mục tiêu chính"}
             moTa={mucTieuCu ? "Ngành bạn chọn trước đây không còn trong danh sách. Bạn chọn lại một mục tiêu nhé." : "Chọn ngành, trường bạn hướng tới để tính khoảng cách điểm và gợi ý môn cần tập trung."}>
@@ -66,7 +64,6 @@ export default function MucTieu() {
       <DauTrangChinh tieuDe="Mục tiêu chính" />
       <ThanhPhuKeHoach />
       <NoiDung>
-        <NutTuVan nguCanh="Mục tiêu học tập" />
         <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(d.lc.id))}
           className="w-full text-left rounded-the bg-trang border border-vien shadow-the p-3.5 flex items-center gap-3 active:bg-xanh-nhat">
           <HuyHieuTruong ten={d.lc.truong} tone={d.lc.tone} kichThuoc={56} />
@@ -120,9 +117,6 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
   const nd = duDiem ? nhanDinhMucTieu(d.khoangCach, d.conThieu, d.hienTai, d.mucTieu, d.goc.maToHop) : null;
   const daQua = d.goc.ngayThi < homNay();
   const phanTram = d.mucTieu > 0 ? (d.hienTai / d.mucTieu) * 100 : 0;
-  const ghiChuNguon = d.nguon.loai === "thiThu" && d.nguon.ngayGanNhat
-    ? `Dự kiến từ lần thi thử gần nhất (${ngayVN(d.nguon.ngayGanNhat)})`
-    : d.nguon.loai === "tronLan" ? "Dự kiến từ điểm thi thử và điểm bạn nhập" : "Dự kiến từ điểm bạn nhập ở hồ sơ";
 
   return (
     <>
@@ -164,11 +158,11 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
         {duDiem && (
           <div className="mt-3">
             <ThanhTienDo phanTram={phanTram} tone={d.conThieu > 0 ? "xanh" : "luc"} cao="h-2.5" />
-            <p className="text-[13px] text-chu-phu mt-1.5">Đạt <b className="text-chu">{Math.min(100, Math.floor(phanTram))}%</b> điểm mục tiêu · {ghiChuNguon}</p>
+            <p className="text-[13px] text-chu-phu mt-1.5">Đạt <b className="text-chu">{Math.min(100, Math.floor(phanTram))}%</b> điểm mục tiêu</p>
           </div>
         )}
         <p className="text-[12px] text-chu-phu mt-2 pt-2 border-t border-vien">
-          Điểm chuẩn năm {d.lc.namDiem} của ngành: {diem1(d.lc.diemMin)} điểm (số của năm trước, năm nay có thể khác).
+          Điểm chuẩn tham khảo ({d.lc.namDiem}): {diem1(d.lc.diemMin)} điểm.
         </p>
       </div>
 

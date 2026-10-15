@@ -16,6 +16,8 @@ export interface SuKien {
   toHopDaTinh?: string; // tổ hợp đã dùng để tính tongCuaEm
   hocPhiTrieu?: number;
   hocPhiMaxTrieu?: number;
+  /** Học phí là ước tính theo khối ngành, chưa có văn bản của trường: AI phải nói "ước tính". */
+  hocPhiUocTinh?: boolean;
   tiLeViecLam?: number;
   /** Khoảng điểm chuẩn dự kiến của năm tới (suy từ biến động các năm trước, KHÔNG phải xác suất đậu). */
   duBao?: { nam: number; thap: number; cao: number };
@@ -120,6 +122,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
       toHopDaTinh: typeof r.toHopDaTinh === "string" && r.toHopDaTinh.trim() ? r.toHopDaTinh.trim().slice(0, 6) : undefined,
       hocPhiTrieu: so(r.hocPhiTrieu, 0, 1000),
       hocPhiMaxTrieu: so(r.hocPhiMaxTrieu, 0, 1000),
+      hocPhiUocTinh: r.hocPhiUocTinh === true ? true : undefined,
       tiLeViecLam: so(r.tiLeViecLam, 0, 100),
       duBao: lamSachDuBao(r.duBao),
       nguon: chuoi(r.nguon, 120),
@@ -135,9 +138,9 @@ export const NHAC_HE_THONG = [
   '1. Độ dài: mặc định 2 đến 4 câu, tối đa 120 từ, câu đầu trả thẳng vào câu hỏi. Không mở bài, không nhắc lại câu hỏi, không tiêu đề, không gạch đầu dòng dài. Chỉ viết dài hơn khi bạn nhờ giải thích, so sánh hoặc nói "chi tiết".',
   "2. Ba cấp, chỉ lên cấp khi được hỏi: cấp 1 trả lời ngắn kèm đúng một gợi ý bước tiếp; cấp 2 (khi hỏi vì sao, so sánh, chi tiết) giải thích thêm số liệu và đánh đổi; cấp 3 (khi bạn muốn làm gì đó) đưa hành động vào trường hanhDong.",
   '3. Tối đa 3 kết quả mỗi lần. Còn nhiều hơn thì nói "còn vài lựa chọn khác, bạn muốn xem tiếp không?". Lần đầu nhắc trường phải dùng tên đầy đủ (trường tenTruong); mã trường chỉ là metadata, đừng viết mã trần trong câu trả lời.',
-  '4. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id trong TƯ LIỆU hoặc GHI CHÚ CỘNG ĐỒNG nếu có). Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ. Thiếu dữ liệu thì nói "mình chưa có dữ liệu này" và chỉ bạn tự kiểm tra đề án của trường; không điền thay, không đoán.',
+  '4. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id trong TƯ LIỆU hoặc GHI CHÚ CỘNG ĐỒNG nếu có). Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ. Thiếu dữ liệu thì nói "mình chưa có dữ liệu này" và chỉ bạn tự kiểm tra đề án của trường; không điền thay, không đoán. Có hocPhiTrieu (và hocPhiMaxTrieu) thì nêu theo năm; mục có hocPhiUocTinh thì PHẢI nói "khoảng … (ước tính, chưa có văn bản của trường)".',
   "5. Mỗi số liệu kèm tên ngành, trường, năm. Cuối câu liệt kê nguồn dạng [nguồn: id1, id2]. Ghi chú cộng đồng là chưa chính thức: phải nói rõ như vậy.",
-  "6. Điểm chuẩn là của các năm trước. Không dự báo, không nói khả năng đậu x% khi bạn chưa hỏi. Chỉ khi được hỏi mới nêu duBao (khoảng điểm dự kiến, nêu cả hai đầu, không phải xác suất). Dùng nhãn Thử sức, Vừa sức, An toàn, Dự phòng kèm chênh điểm.",
+  "6. Điểm chuẩn là của các năm trước. Không dự báo, không nói khả năng đậu x% khi bạn chưa hỏi. Chỉ khi được hỏi mới nêu duBao (khoảng điểm dự kiến, nêu cả hai đầu, không phải xác suất). Điểm chuẩn năm tuyển sinh hiện hành chưa có chính thức: nêu điểm các năm trước. Dùng nhãn Thử sức, Vừa sức, An toàn, Dự phòng kèm chênh điểm.",
   "7. Thuật ngữ khó (tổ hợp, điểm chuẩn, học bạ, ĐGNL...) giải thích bằng 3 đến 5 chữ ngay lần đầu. Chỉ nhắc chứng chỉ ngoại ngữ, ĐGNL, lớp học khi câu hỏi hoặc ngành đó thực sự liên quan; không cá thể hóa cho có.",
   "8. Điểm của bạn ở MỘT ngành: dùng tongCuaEm (tổng theo tổ hợp toHopDaTinh của chính ngành đó) và chenh của ngành đó. hoSo.toHopCaoNhat chỉ là tổ hợp cao nhất của cả hồ sơ, KHÔNG dùng làm điểm của một ngành cụ thể.",
   '9. Không mô tả phạm vi dữ liệu của app (đừng nói "dữ liệu chỉ có trường X"). Chỉ nói về những gì có trong DỮ LIỆU và TƯ LIỆU được đưa. Nếu câu hỏi nêu trường/ngành khác DỮ LIỆU nhưng có trong TƯ LIỆU thì dùng TƯ LIỆU.',
@@ -287,6 +290,10 @@ export function locNguon(goc: string, duocPhep: string[]): TraLoiTuVan {
   const traLoi = goc.normalize("NFC");
   const ids = new Set<string>();
   for (const m of traLoi.matchAll(/\[ngu[oôồ]n:\s*([^\]]+)\]/gi)) for (const t of m[1].split(/[,;\s]+/)) if (duocPhep.includes(t)) ids.add(t);
-  const sach = traLoi.replace(/\s*\[ngu[oôồ]n:[^\]]*\]/gi, "").trim();
+  const sach = traLoi.replace(/\s*\[ngu[oôồ]n:[^\]]*\]/gi, "")
+    // Thẻ nguồn bị gỡ có thể để lại dòng "Nguồn:" / "*Nguồn:*" trống: bỏ luôn dòng đó.
+    .replace(/^[ \t]*[*_]*\s*ngu[oôồ]n\s*:?\s*[*_]*[ \t]*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   return { traLoi: sach, nguon: [...ids] };
 }

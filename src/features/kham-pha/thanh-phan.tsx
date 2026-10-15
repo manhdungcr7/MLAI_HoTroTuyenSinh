@@ -72,7 +72,7 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
             <span className="block text-[13px] text-chu-phu leading-snug truncate"><b className="font-semibold text-chu">{l.truong}</b> · {l.tenTruong}</span>
             <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
               <NhanPhuHop kq={kq} />
-              {viTriNV >= 0 && <Nhan tone="luc">Đã thêm · NV{viTriNV + 1}</Nhan>}
+              {viTriNV >= 0 && <Nhan tone="luc">Đã thêm · Nguyện Vọng {viTriNV + 1}</Nhan>}
               <span className="text-[12px] text-chu-phu leading-snug">{kq.tomTat}</span>
             </span>
           </span>

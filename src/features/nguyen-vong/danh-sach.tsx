@@ -19,8 +19,8 @@ import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
 import { CHU_O, CanhBaoThuTuThe, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
-import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
+import { HopTruot } from "@/components/ui/hien-thi";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
 
 const CAC_LOAI_NHAN: { nhan: NhanNguyenVong; moTa: string }[] = [
@@ -73,7 +73,7 @@ export default function DanhSachNguyenVong() {
   const diemMon = diemDayDu(s);
   const tongTot = toHopTotNhat(diemMon);
   const tong = tongTot.tong;
-  const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ds = dungDanhSach(s.nguyenVong, diemMon, tim);
   const dsYeuThich = useMemo(() => s.yeuThich.map(tim).filter((l): l is NonNullable<typeof l> => !!l), [s.yeuThich]);
   const coCau = xetCoCau(demNhan(ds), ds.length);
   const kl = ketLuan(coCau);
@@ -81,13 +81,14 @@ export default function DanhSachNguyenVong() {
   const { tin, bao, an } = useHoanTac();
   const [moTim, setMoTim] = useState(false);
   const [moGoiY, setMoGoiY] = useState(false);
+  const [hoiXoa, setHoiXoa] = useState<string | null>(null);
 
   /** Chuyển một nguyện vọng tới vị trí mới, báo kèm nút hoàn tác. */
   const chuyen = useCallback((tu: number, den: number) => {
     if (den < 0 || den >= s.nguyenVong.length || tu === den) return;
     const d = ds[tu];
     doiViTri(tu, den);
-    bao(`Đã chuyển ${d?.lc?.truong ?? "nguyện vọng"} sang NV${den + 1}`, () => doiViTri(den, tu));
+    bao(`Đã chuyển ${d?.lc?.truong ?? "nguyện vọng"} sang Nguyện Vọng ${den + 1}`, () => doiViTri(den, tu));
   }, [ds, doiViTri, bao, s.nguyenVong.length]);
 
   const { keo, tayNam, kieuHang, ganHang } = useKeoTha(ds.length, chuyen);
@@ -98,7 +99,7 @@ export default function DanhSachNguyenVong() {
     const snapshotCu = [...s.nguyenVong];
     xoaNguyenVong(id);
     // Hoàn tác: khôi phục chính xác danh sách cũ bằng snapshot
-    bao(`Đã xóa NV${viTri + 1} · ${d?.lc?.truong ?? "nguyện vọng"}`, () => datNguyenVong(snapshotCu));
+    bao(`Đã xóa Nguyện Vọng ${viTri + 1} · ${d?.lc?.truong ?? "nguyện vọng"}`, () => datNguyenVong(snapshotCu));
   };
 
   const themTatCaYeuThich = useCallback(() => {
@@ -117,7 +118,6 @@ export default function DanhSachNguyenVong() {
     <>
       <DauTrangChinh tieuDe="Danh sách nguyện vọng" />
       <NoiDung>
-        <NutTuVan nguCanh="Danh sách nguyện vọng" />
         {ds.length === 0 ? (
           <>
             {dsYeuThich.length > 0 ? (
@@ -137,10 +137,42 @@ export default function DanhSachNguyenVong() {
         ) : (
           <>
             <ThanhChiSo tong={ds.length} dem={coCau.dem} />
-            <button type="button" onClick={() => nav(DUONG_DAN.nguyenVongAnToan())}
-              className="w-full min-h-11 flex items-center gap-2 rounded-the bg-trang border border-vien px-3.5 text-left active:bg-xanh-nhat">
-              <ShieldCheck size={20} className="text-xanh shrink-0" />
-              <b className="flex-1 min-w-0 text-[14px] text-muc leading-snug">{tong === null ? "Nhập đủ điểm 3 môn để xếp nhãn" : kl.tieuDe}</b>
+            <button
+              type="button"
+              onClick={() => nav(DUONG_DAN.nguyenVongAnToan())}
+              className={gop(
+                "w-full rounded-2xl border p-3.5 text-left transition-colors flex items-center gap-3 shadow-xs",
+                kl.tone === "do" ? "bg-do-nhat/40 border-do/30 active:bg-do-nhat/70" :
+                kl.tone === "cam" ? "bg-cam-nhat/40 border-cam/30 active:bg-cam-nhat/70" :
+                "bg-trang border-vien active:bg-xanh-nhat"
+              )}
+            >
+              <div
+                className={gop(
+                  "size-9 rounded-xl grid place-items-center shrink-0",
+                  kl.tone === "do" ? "bg-do/15 text-do" :
+                  kl.tone === "cam" ? "bg-cam/15 text-cam-chu" :
+                  "bg-xanh-nhat text-xanh"
+                )}
+              >
+                <ShieldCheck size={20} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[14px] font-bold text-muc leading-snug">
+                  {tong === null
+                    ? "Nhập đủ điểm 3 môn để xếp nhãn"
+                    : kl.tieuDe === "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm của bạn"
+                    ? "Chưa có nguyện vọng an toàn"
+                    : kl.tieuDe}
+                </p>
+                <p className="text-[12px] text-chu-phu leading-normal mt-0.5">
+                  {tong === null
+                    ? "Hệ thống cần điểm tổ hợp để phân tích 3 tầng"
+                    : kl.tieuDe === "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm của bạn"
+                    ? "Cần thêm trường điểm chuẩn thấp hơn để dự phòng"
+                    : kl.nenLam ?? "Bấm để xem chi tiết cơ cấu danh sách"}
+                </p>
+              </div>
               <ChevronRight size={18} className="text-chu-phu shrink-0" />
             </button>
 
@@ -184,7 +216,7 @@ export default function DanhSachNguyenVong() {
                 <li key={d.id} ref={ganHang(i)} style={kieuHang(i)} className={gop("bg-trang", keo?.tu === i && "ring-2 ring-inset ring-xanh")}>
                   <HangNguyenVong d={d} soHang={ds.length} chuaDuDiem={tong === null} dangKeo={keo?.tu === i}
                     tayNam={tayNam(i)} onLen={() => chuyen(i, i - 1)} onXuong={() => chuyen(i, i + 1)}
-                    onMo={() => d.lc && nav(DUONG_DAN.chiTiet(d.id))} onXoa={() => xoa(d.id)} />
+                    onMo={() => d.lc && nav(DUONG_DAN.chiTiet(d.id))} onXoa={() => setHoiXoa(d.id)} />
                 </li>
               ))}
             </ol>
@@ -205,6 +237,13 @@ export default function DanhSachNguyenVong() {
         onChon={(l) => { setMoTim(false); themNganhYeuThich(l.id, l.nganh, l.truong); }} />
       <GoiYSheet mo={moGoiY} dong={() => setMoGoiY(false)} />
       <ThanhHoanTac tin={tin} an={an} />
+      <HopTruot mo={hoiXoa !== null} dong={() => setHoiXoa(null)} tieuDe="Xóa nguyện vọng này?">
+        <p className="text-[14px] text-chu mb-4">Em có thể thêm lại ngành trong Khám phá hoặc hoàn tác sau khi xóa.</p>
+        <div className="grid grid-cols-2 gap-2">
+          <Nut kieu="vien" onClick={() => setHoiXoa(null)}>Giữ lại</Nut>
+          <Nut kieu="nguyHiem" onClick={() => { if (hoiXoa) xoa(hoiXoa); setHoiXoa(null); }}>Xóa</Nut>
+        </div>
+      </HopTruot>
     </>
   );
 }
@@ -237,7 +276,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
   tayNam: ReturnType<ReturnType<typeof useKeoTha>["tayNam"]>;
   onLen: () => void; onXuong: () => void; onMo: () => void; onXoa: () => void;
 }) {
-  const nv = `NV${d.viTri + 1}`;
+  const nv = `Nguyện Vọng ${d.viTri + 1}`;
   const lc = d.lc;
   const coChuan = !!lc && lc.diemMin > 0;
   const link = lc && (lc.linkNguon || (/^https?:/.test(lc.nguon) ? lc.nguon : ""));
@@ -338,8 +377,8 @@ function TheDanhSachYeuThich({
               {yeuThichChuaThem.length > 0
                 ? (soDaThem > 0
                     ? `Đã thêm ${soDaThem}/${dsYeuThich.length} · Còn ${yeuThichChuaThem.length} ngành`
-                    : "Chọn nhanh để đưa vào danh sách NV")
-                : `Đã đưa tất cả ${dsYeuThich.length} ngành vào NV`}
+                    : "Chọn nhanh để đưa vào danh sách Nguyện Vọng")
+                : `Đã đưa tất cả ${dsYeuThich.length} ngành vào Nguyện Vọng`}
             </p>
           </div>
         </div>
@@ -390,10 +429,10 @@ function TheDanhSachYeuThich({
                   </button>
                   {daThem ? (
                     <span
-                      title={`Đã ở vị trí NV${viTriNV + 1} trong danh sách`}
+                      title={`Đã ở vị trí Nguyện Vọng ${viTriNV + 1} trong danh sách`}
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-luc-nhat text-luc-chu text-[12px] font-bold shrink-0 border border-luc/30"
                     >
-                      <Check size={13} className="stroke-[2.5]" /> NV{viTriNV + 1}
+                      <Check size={13} className="stroke-[2.5]" /> Nguyện Vọng {viTriNV + 1}
                     </span>
                   ) : (
                     <button
@@ -401,7 +440,7 @@ function TheDanhSachYeuThich({
                       onClick={() => onThemMot(l.id, l.nganh, l.truong)}
                       className="min-h-9 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[12px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
                     >
-                      + Thêm vào NV
+                      + Thêm vào Nguyện Vọng
                     </button>
                   )}
                 </li>

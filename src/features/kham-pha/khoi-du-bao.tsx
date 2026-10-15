@@ -38,10 +38,6 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
       </div>
 
       {viTri && <p className="text-[14px] text-chu leading-snug rounded-xl bg-nen p-3">{MO_TA_VI_TRI[viTri]}</p>}
-
-      <p className="text-[12px] text-chu-phu leading-snug">
-        Suy từ biến động điểm chuẩn các năm trước, không phải xác suất đậu. Đổi chỉ tiêu hoặc đề thi thì có thể ra ngoài khoảng.{d.luuY.length > 0 && ` ${d.luuY[0]}`}
-      </p>
     </section>
   );
 }

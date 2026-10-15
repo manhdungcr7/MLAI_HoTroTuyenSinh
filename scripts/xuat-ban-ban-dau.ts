@@ -33,7 +33,7 @@ const KV_THAT = "b6281182b7ff42bc8a23deb93ffdef94";
 
 // ---------- 1. Dựng bản ghi từ dữ liệu gốc ----------
 interface Dong { id: string; ma: string; truong: string; nganh: string; tinh: string; diem: Record<string, number> }
-interface HocPhi { trieuNam: number; nam: string; trang: number; url: string; phamVi?: "nganh" | "truong" }
+interface HocPhi { trieuNam: number; nam: string; trang: number; url: string }
 interface DeAn { docs: { nam: string; url: string }[] }
 
 const doc = <T>(p: string): T => JSON.parse(readFileSync(join(GOC, p), "utf8")) as T;
@@ -54,7 +54,6 @@ export function dungBanGhi(): { ds: BanGhiCms[]; tomTat: Record<string, number>;
 
   // Học phí: mỗi chương trình có học phí đã đối chiếu, link nguồn là PDF đề án + số trang.
   for (const [id, hp] of Object.entries(hocPhi)) {
-    if (hp.phamVi === "truong") continue; // học phí cấp trường gán chung: không nạp như học phí ngành
     const d = theoId.get(id);
     if (!d) { canhBao.push(`học phí mồ côi, bỏ: ${id}`); continue; }
     if (!(hp.trieuNam >= 5 && hp.trieuNam <= 400) || !/^https?:\/\/\S+$/.test(hp.url) || !hp.nam) { canhBao.push(`học phí không hợp lệ hoặc thiếu nguồn, bỏ: ${id}`); continue; }

@@ -61,7 +61,7 @@ const MK_SA = "Mat-khau-sa-1";
 // 0. Hàm thuần và script
 {
   const h = await bamMatKhau("abcdefgh");
-  assert.match(h, /^sha256\$[\w-]+\$[\w-]+$/);
+  assert.match(h, /^pbkdf2_sha256\$100000\$[\w-]+\$[\w-]+$/);
   assert.notEqual(h, await bamMatKhau("abcdefgh"), "muối ngẫu nhiên");
   assert.ok(await xacMinhMatKhau("abcdefgh", h));
   assert.ok(!(await xacMinhMatKhau("abcdefgH", h)));

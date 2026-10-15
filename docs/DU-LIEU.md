@@ -10,7 +10,7 @@ Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.652
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
 | `nguon-nam-thu-cap.json`, `de-an-truong-thu-cap.json` | Như hai tệp trên nhưng cho các trường chỉ có điểm từ trang tổng hợp: toàn văn đề án của trường, và những điểm tìm thấy đúng số trong đề án | `scripts/doi-chieu-thu-cap.py` |
-| `hoc-phi.json` | Học phí theo năm của 721 chương trình (kèm `phamVi`, `trangThai`), trích từ trang học phí của đề án (tên ngành đứng ngay trước số tiền theo năm; không đổi từ tín chỉ/tháng) | `scripts/trich-hoc-phi.py` |
+| `hoc-phi.json` | Học phí theo năm của vài chục ngành, trích từ trang học phí của đề án (tên ngành đứng ngay trước số tiền theo năm; không đổi từ tín chỉ/tháng) | `scripts/trich-hoc-phi.py` |
 | `viec-lam.json` | Tỷ lệ có việc làm bổ sung (hàng có đúng một số %), chỉ dùng cho ngành chưa có số liệu cũ | `scripts/trich-viec-lam.py` |
 | `trang-nganh-truong.json` | Trang danh sách ngành/chương trình đào tạo của từng trường (đã mở thử), dùng khi chưa có trang riêng của ngành | `scripts/trang-nganh-truong.py` (danh sách ứng viên tìm bằng tìm kiếm giới hạn tên miền trường) |
 | `to-hop-chinh-thuc.ts` | 73 tổ hợp xét tuyển chính thức (ba môn mỗi tổ hợp) từ `legacy/common/data/shared_rules.json` | tạo từ tệp trên |
@@ -32,22 +32,18 @@ npm test
 ```
 
 ## Quy tắc đã áp dụng
-- **Không bịa số.** Học phí, việc làm, môi trường học chỉ hiện khi dữ liệu có. Thiếu thì ghi "Chưa có dữ liệu" (`coHocPhi()` ở `data/lua-chon-phu.ts`). Chỉ 721 chương trình (20 trường) có học phí kèm link và số trang; trong đó 75 dòng của DCN, HQT, QHE là mức chung cả trường (`phamVi: "truong"`). Còn lại app dẫn tới **trang học phí trong đề án** thay vì tự điền số.
+- **Không bịa số.** Học phí, việc làm, môi trường học chỉ hiện khi dữ liệu có. Thiếu thì ghi "Chưa có dữ liệu" (`coHocPhi()` ở `data/lua-chon-phu.ts`). Chỉ 6 chương trình có học phí riêng; còn lại app dẫn tới **trang học phí trong đề án** thay vì tự điền số.
 - **Điểm chuẩn tính theo đúng tổ hợp của ngành** (`features/kham-pha/to-hop.ts`). Đề án chưa ghi tổ hợp (khoảng một nửa số ngành) thì lấy tổ hợp cao nhất của em và báo rõ. Ngành chỉ xét tổ hợp có Sử, Địa, Tin... thì ghi "chưa so được" vì hồ sơ chỉ có 6 môn.
 - **Link nguồn chỉ nhận khi có bằng chứng**: PDF phải có đúng tên ngành và điểm ở trang được ghi; trang ngành của trường phải mở được và tiêu đề trùng tên ngành (`scripts/gop-chuong-trinh.py` lọc chặt, bỏ bài tin tức, quyết định, trang điểm chuẩn).
 - Điểm của phương thức khác thi THPT (học bạ, ĐGNL, kết hợp) xếp sau điểm thi THPT, và có ghi chú.
 
 ## Giới hạn đã biết
-- 2.101 chương trình chỉ có nguồn thứ cấp (trang tổng hợp `tuyensinh247`), chưa có PDF chính thức. 1.680 chương trình có điểm 2026, tất cả thuộc nhóm này (`loaiDiemMoiNhat: "thu-cap"`).
-- 1.173 chương trình có trường `nguon` rỗng: 1.117 có link PDF đề án theo năm trong `nguon-nam*.json`, 56 chỉ có đề án cấp trường.
-- 3 khóa (trường, ngành, phương thức) trùng: TSN "Kỹ thuật cơ khí động lực", TSN "Kỹ thuật xây dựng", YDS "Y học cổ truyền" (YDS là hai bản ghi cùng điểm từ hai nguồn). Chưa gộp vì cần đối chiếu đề án; test giữ nguyên 3 ca, có ca mới thì báo lỗi.
-- Mã trường C19, C23, C25 (cao đẳng sư phạm) và SP2 (ĐH Sư phạm Hà Nội 2) là mã thật, không phải lỗi.
+- 962 chương trình chỉ có nguồn thứ cấp (trang tổng hợp `tuyensinh247`), chưa có PDF chính thức.
 - Link trang riêng của ngành trên website trường: khoảng một phần tư số chương trình; thêm 26 trường có trang danh sách ngành chung (`trang-nganh-truong.json`). Còn lại do website trường không quét được hoặc tên ngành trên web khác đề án.
 - Khung chương trình học chi tiết (môn từng học kỳ) **chưa có dữ liệu**; trang chi tiết dẫn tới trang ngành của trường nếu có, không thì nói thẳng và cho đường tìm kiếm.
 - Hồ sơ có 6 môn chính + 5 môn thêm không bắt buộc (Sử, Địa, GDKT&PL, Tin, Công nghệ; `HoSo.diemThem`). Tổ hợp có môn năng khiếu / vẽ (V00, T00, M01...) và ngoại ngữ khác (D02-D06...) không tính được từ điểm hồ sơ nên app ghi 'chưa so được'.
-- Học phí: 721 chương trình có số theo năm (xem trên); các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
-- Điểm 2026 có cho 1.680 chương trình nhưng chỉ từ trang tổng hợp, chưa đối chiếu đề án; app dùng năm gần nhất và ghi rõ năm. Trường `dk`/`diemDuKien` chỉ là bản sao điểm năm mới nhất (3.652/3.652 bằng nhau), không phải dự báo.
-- **Đã gỡ 15/10/2026**: 2.931 dòng học phí và 3.531 dòng việc làm do `hoan-thien-du-lieu-quoc-gia.py` (đã xóa) tính bằng bảng giá theo khối ngành và mã băm, kèm link/số trang tự gán, để "phủ 100%". Đó là số bịa, không có nguồn. Kiểm định: `python -I scripts/kiem-dinh-du-lieu.py` (thêm `--ghi` để gắn `phamVi`/`trangThai`, `--mang N` để thử HEAD N link); test `tests/du-lieu-trung-thuc.test.ts` chặn việc phủ quá nửa danh mục.
+- Học phí: chỉ khoảng 30 ngành có số theo năm; các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
+- Điểm chuẩn năm nay chưa có; app dùng năm gần nhất và luôn ghi "điểm chuẩn các năm trước".
 
 ## Lớp dữ liệu từ CMS (bản xuất bản)
 - Ứng dụng nạp nền `/api/manifest` (nếu chưa có bản xuất bản thì dùng `/data/manifest.json` đi kèm bản dựng), tải đúng bộ dữ liệu đổi hash, kiểm tra SHA-256, lưu IndexedDB, rồi hợp nhất lên dữ liệu gốc bằng `src/engine/du-lieu-tuyen-sinh/hop-nhat.ts`. Chưa có bản nào thì app chạy bằng dữ liệu gốc.
@@ -65,7 +61,7 @@ npm test
 - Học phí riêng của ngành: 721 chương trình ở 20 trường (KHA/NEU, PKA, QSX, BKA, DCN, GHA, XDA, HTC, NTH, YDS, NHH, YHB, QHT, QHI, QSC, HQT, DDY, LPH, QHE, QSY). Quy tắc: chỉ giữ học phí đã đối chiếu được với văn bản đúng trường; 12/10 đã gỡ 337 dòng của 11 trường vì link 404 hoặc PDF là của trường khác — xem `scripts/lam-day-hoc-phi.py` (BO_QUA). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
 
 ## Dự báo điểm chuẩn năm tới
-`src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 1.330 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 92% (2023), 93% (2024), 68% (2025); sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).
+`src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, hơn 1.300 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 89% (2023), 95% (2024), 64% (2025) — đo 15/10/2026; sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).
 
 ## Điểm ưu tiên khu vực và đối tượng
 `src/engine/diem-uu-tien.ts`. KV1 +0,75; KV2-NT +0,5; KV2 +0,25; KV3 0; UT1 +2; UT2 +1; từ 22,5 điểm giảm dần theo [(30 − tổng)/7,5] × mức. Học sinh khai ở Bước 2; `diemDayDu(s).uuTien` mang mức vào `tongChoLuaChon`, tính riêng cho từng tổ hợp. Mục tiêu hiển thị vẫn là điểm chuẩn của ngành; phần còn thiếu đã trừ ưu tiên (`mucTieuTho`). Mức cộng có thể đổi theo quy chế từng năm: cần đối chiếu mỗi mùa tuyển sinh.

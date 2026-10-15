@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from "react";
-import { AlertTriangle, X } from "lucide-react";
+import { type ReactNode } from "react";
+import { AlertTriangle } from "lucide-react";
 import type { ToneTen } from "@/state/types";
 import { Nut, TONE_GD, gop } from "./nut-the";
 
@@ -66,27 +66,7 @@ export function KhungLoi({ tieuDe = "Chưa tải được", moTa, thuLai }: { ti
 }
 
 /** Hộp trượt từ dưới lên, thuận tay cầm điện thoại. */
-export function HopTruot({ mo, dong, tieuDe, children }: { mo: boolean; dong: () => void; tieuDe: string; children: ReactNode }) {
-  useEffect(() => {
-    if (!mo) return;
-    const f = (e: KeyboardEvent) => e.key === "Escape" && dong();
-    window.addEventListener("keydown", f);
-    return () => window.removeEventListener("keydown", f);
-  }, [mo, dong]);
-  if (!mo) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-muc/45" onClick={dong}>
-      <div role="dialog" aria-modal="true" aria-label={tieuDe} onClick={(e) => e.stopPropagation()}
-        className="hien-len w-full max-w-[430px] max-h-[88dvh] overflow-y-auto bg-trang rounded-t-lon p-5 vung-an-toan-duoi">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-[18px] font-extrabold text-muc">{tieuDe}</h3>
-          <button type="button" onClick={dong} aria-label="Đóng" className="size-11 grid place-items-center rounded-full bg-nen"><X size={20} /></button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
+export { HopTruot } from "@/components/ui/hien-thi";
 
 /** Con số lớn kèm nhãn nhỏ, dùng cho điểm hiện tại / mục tiêu / còn thiếu. */
 export function SoLon({ nhan, so, don, tone = "muc" }: { nhan: string; so: string; don?: string; tone?: ToneTen }) {

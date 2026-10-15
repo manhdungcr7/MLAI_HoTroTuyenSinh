@@ -31,7 +31,7 @@ Hướng chọn: **số 6, "Chọn trường hoặc chương trình học"**, ng
 |---|---|
 | (5đ) Chiến lược dữ liệu hợp lý | Ba tầng, mỗi tầng có nhãn tin cậy: (1) đề án tuyển sinh chính thức (kiểm chứng được tới trang PDF); (2) trang tổng hợp có đối chiếu với đề án; (3) thông tin cộng đồng do tình nguyện viên nhập, bắt buộc có nguồn và qua duyệt, hiển thị kèm nhãn "chưa phải số liệu chính thức". Quy trình cập nhật theo năm: `docs/QUAN-TRI.md`. |
 | (5đ) Khai thác dữ liệu người dùng, thời gian, cộng đồng | Dữ liệu người dùng: điểm từng môn, thi thử theo thời gian (xu hướng tăng giảm), thời khóa biểu, ngân sách. Thời gian: dự báo điểm chuẩn năm tới; kế hoạch tuần thay đổi theo ngày còn lại tới kỳ thi và giờ trống. Cộng đồng: tình nguyện viên, báo số liệu sai từ học sinh, lời nhắn của phụ huynh/thầy cô. |
-| (10đ) AI phù hợp, có giải thích và giới hạn | **Dự báo**: khoảng điểm chuẩn năm tới từ biến động thật của các cặp năm (`engine/du-bao-diem-chuan.ts`), hệ số chọn bằng kiểm định bỏ-một-năm: khoảng 80% phủ 92% (2023), 93% (2024) và 68% (2025, năm biến động bất thường); đo thực bằng `tests/du-bao-diem-chuan.test.ts`. **Phân tích**: nhãn nguyện vọng, hạng mục "điểm phù hợp" có công thức công khai. **Tối ưu**: xếp lịch tự học ràng buộc theo thời khóa biểu (`engine/xep-lich.ts`), sinh việc theo môn thiếu. **Đề xuất**: gợi ý danh sách nguyện vọng cân bằng. **Giải thích**: mỗi nhãn nói điểm của em hơn hay kém điểm chuẩn bao nhiêu và theo tổ hợp nào; mỗi số có nguồn; mọi màn nói "không phải xác suất đậu". **Giới hạn**: trang "Số liệu từ đâu ra" và khối giới hạn ở từng kết quả. |
+| (10đ) AI phù hợp, có giải thích và giới hạn | **Dự báo**: khoảng điểm chuẩn năm tới từ biến động thật của các cặp năm (`engine/du-bao-diem-chuan.ts`), hệ số chọn bằng kiểm định bỏ-một-năm: khoảng 80% phủ 89% (2023), 95% (2024) và 64% (2025, năm biến động bất thường) — đo 15/10; đo thực bằng `tests/du-bao-diem-chuan.test.ts`. **Phân tích**: nhãn nguyện vọng, hạng mục "điểm phù hợp" có công thức công khai. **Tối ưu**: xếp lịch tự học ràng buộc theo thời khóa biểu (`engine/xep-lich.ts`), sinh việc theo môn thiếu. **Đề xuất**: gợi ý danh sách nguyện vọng cân bằng. **Giải thích**: mỗi nhãn nói điểm của em hơn hay kém điểm chuẩn bao nhiêu và theo tổ hợp nào; mỗi số có nguồn; mọi màn nói "không phải xác suất đậu". **Giới hạn**: trang "Số liệu từ đâu ra" và khối giới hạn ở từng kết quả. |
 
 ## 5. Tính khả thi và sản phẩm thử nghiệm (15 điểm)
 
@@ -50,7 +50,7 @@ Hướng chọn: **số 6, "Chọn trường hoặc chương trình học"**, ng
 ## Việc còn thiếu (nói thẳng)
 
 - Điểm chuẩn **năm 2026** mới có cho 1.716 chương trình, chủ yếu từ trang tổng hợp; phần lớn dữ liệu là 2023–2025. Mùa tuyển sinh tới, tình nguyện viên nhập từng trường qua CMS.
-- Học phí riêng theo ngành có cho 721 chương trình ở 20 trường, chỉ giữ dòng đối chiếu được với văn bản đúng trường (đã gỡ 337 dòng không kiểm chứng được); việc làm và khung chương trình học chưa đủ (đã nói rõ trên app).
+- Học phí có văn bản của trường ở 602 chương trình; các chương trình khác chỉ có ước tính theo khối ngành, ghi rõ "≈ ước tính", không gắn link; việc làm và khung chương trình học chưa đủ (đã nói rõ trên app).
 - Hạ tầng thật (D1, Cloudflare Access cho CMS) cần chủ tài khoản thao tác (xem `docs/QUAN-TRI.md`); tài khoản hiện chạm giới hạn số D1.
 - Trắc nghiệm hướng nghiệp (Holland) là công cụ gợi ý, chưa kiểm định tâm lý.
 - Dự báo điểm chuẩn **không** bù được cho thay đổi quy chế, đề thi, chỉ tiêu; năm 2025 khoảng chỉ phủ 68%.

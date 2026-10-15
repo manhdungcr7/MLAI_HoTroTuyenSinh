@@ -18,6 +18,8 @@ export interface DauVaoViecTuan {
   diem: Record<MonId, number | null>;
   diemMucTieu: number;
   canCaiThien: string[];
+  mucTieuTruong?: string;
+  mucTieuNganh?: string;
   /** Độ dốc điểm thi thử gần đây của từng môn (điểm mỗi lần thi); thiếu thì bỏ qua. */
   doDoc?: Partial<Record<MonId, number | null>>;
   tuan: string; // thứ 2 của tuần, yyyy-mm-dd
@@ -95,7 +97,7 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
       const chuDe = (!deTinhGio && chuDeCanOn)
         ? chuDeCanOn
         : NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
-      const tieuDe = deTinhGio ? `${TEN_MON[k.mon]} – ${tenPhanDe(lam15(phut * 0.6))}, chữa câu sai` : `${TEN_MON[k.mon]} – ${chuDe[0].toLowerCase()}${chuDe.slice(1)}`;
+      const tieuDe = deTinhGio ? `${TEN_MON[k.mon]} – ${tenPhanDe(lam15(phut * 0.6))}` : `${TEN_MON[k.mon]} – ${chuDe[0].toLowerCase()}${chuDe.slice(1)}`;
       const pLam = deTinhGio ? lam15(phut * 0.6) : lam15(phut * 0.55), pChua = deTinhGio ? lam15(phut * 0.35) : lam15(phut * 0.35);
       const pCuoi = Math.max(5, phut - pLam - pChua);
       const lyDo = x.chuaCoDiem
@@ -103,8 +105,8 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
         : dv.nhe
           ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm. Bạn chưa chọn mục tiêu nên mình chỉ gợi ý ôn nhẹ để giữ nhịp, chưa tính phần còn thiếu.`
         : k.thieu > 0
-          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm, cần khoảng ${so(k.mucTieu)} để tổ hợp đạt ${so(dv.diemMucTieu)} điểm (còn thiếu ${so(k.thieu)}).${x.dangXuong ? " Điểm thi thử gần đây của môn này đang giảm, nên cần ôn đều hơn." : ""}${dv.ngayConDenThi !== undefined && dv.ngayConDenThi > 0 ? ` Còn ${dv.ngayConDenThi} ngày đến kỳ thi.` : ""}`
-          : `${TEN_MON[k.mon]} đã đủ mức cần cho mục tiêu (${so(k.hienTai)} điểm). Giữ nhịp để điểm không tụt.`;
+          ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm, cần khoảng ${so(k.mucTieu)} để tổ hợp đạt ${so(dv.diemMucTieu)} điểm${dv.mucTieuNganh && dv.mucTieuTruong ? ` (xét ${dv.mucTieuNganh} – ${dv.mucTieuTruong})` : ""} (còn thiếu ${so(k.thieu)}).${x.dangXuong ? " Điểm thi thử gần đây của môn này đang giảm, nên cần ôn đều hơn." : ""}${dv.ngayConDenThi !== undefined && dv.ngayConDenThi > 0 ? ` Còn ${dv.ngayConDenThi} ngày đến kỳ thi.` : ""}`
+          : `${TEN_MON[k.mon]} đã đủ mức cần cho mục tiêu (${so(k.hienTai)} điểm)${dv.mucTieuNganh && dv.mucTieuTruong ? ` (xét ${dv.mucTieuNganh} – ${dv.mucTieuTruong})` : ""}. Giữ nhịp để điểm không tụt.`;
       ra.push({
         id: `v-${dv.tuan}-${k.mon}-${i}`, tuan: dv.tuan, mon: k.mon, tieuDe,
         chiTiet: deTinhGio ? `${pLam}' làm đề + ${pChua}' chữa câu sai.` : `${chuDe} · ${pLam}' ôn và làm bài + ${pChua}' chữa lỗi.`,

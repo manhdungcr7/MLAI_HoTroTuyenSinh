@@ -73,14 +73,9 @@ export function ThieuDiem({ maToHop, thieu }: { maToHop: MaToHop; thieu: MonId[]
   );
 }
 
-/** Ghi chú cố định về điểm phù hợp và dữ liệu mẫu. */
-export function GhiChuDuLieu({ children }: { children?: ReactNode }) {
-  return (
-    <p className="text-[12px] leading-relaxed text-chu-phu flex gap-1.5">
-      <Info size={14} className="shrink-0 mt-0.5" />
-      <span>{children ?? "Điểm phù hợp là điểm gợi ý trên thang 100, KHÔNG phải xác suất đậu."} Điểm chuẩn là số các năm trước, bạn đối chiếu với đề án của trường.</span>
-    </p>
-  );
+/** Ghi chú dữ liệu (đã ẩn để tinh gọn giao diện). */
+export function GhiChuDuLieu(_props: { children?: ReactNode }) {
+  return null;
 }
 
 const vi = (gia: number, min: number, max: number) => (gia - min) / (max - min);

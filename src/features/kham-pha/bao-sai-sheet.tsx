@@ -44,7 +44,7 @@ export function NutBaoSai({ maChuongTrinh, tenNganh }: { maChuongTrinh: string; 
 
   return (
     <>
-      <button type="button" onClick={() => setMo(true)} className="inline-flex items-center gap-1 min-h-11 text-[12px] font-bold text-do-chu mt-1">
+      <button type="button" onClick={() => setMo(true)} className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-do-chu hover:underline cursor-pointer">
         <AlertCircle size={13} />Báo số liệu sai
       </button>
       <HopTruot mo={mo} dong={dong} tieuDe="Báo số liệu sai">

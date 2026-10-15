@@ -159,3 +159,15 @@ assert.equal(traLoiTuDong("Có khó không?", s, null, []).nguon.length, 0, "ch�
   assert.equal(luu[KHOA_CHAT], undefined); assert.equal(luu["khac:giu"], "1");
 }
 console.log("OK lay-du-lieu", dem);
+
+// Câu hỏi có trần học phí: không gửi cho AI ngành biết là đắt hơn (thấy trên bản online 15/10: hỏi dưới 40 triệu vẫn ra chương trình liên kết).
+{
+  const { taoHoSoMau: mauNS } = await import("../src/state/mau");
+  const { chonDuLieuKemTheo: chonNS } = await import("../src/features/tu-van/lay-du-lieu");
+  const { LUA_CHON_MAU: dsNS } = await import("../src/data/lua-chon-mau");
+  const kq = chonNS("tài chính ngân hàng hà nội dưới 30 triệu", mauNS(), null);
+  for (const d of kq) {
+    const l = dsNS.find((x) => x.id === d.id);
+    if (l?.hocPhiMin !== undefined) assert.ok(l.hocPhiMin <= 30, `gửi AI ngành vượt 30 triệu: ${d.id} ${l.hocPhiMin}`);
+  }
+}

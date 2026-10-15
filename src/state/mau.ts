@@ -1,4 +1,4 @@
-import { CAU_HINH_MAC_DINH, congNgay, isoNgay, thuHaiCuaTuan, xepLichTuan } from "@/engine/xep-lich";
+import { CAU_HINH_MAC_DINH, isoNgay, thuHaiCuaTuan, xepLichTuan } from "@/engine/xep-lich";
 import { LICH_CO_DINH_MAU } from "@/data/lich-mau";
 import { viecChoTuan } from "@/features/ke-hoach/tao-viec-tuan";
 import type { AppState } from "./store";
@@ -95,7 +95,7 @@ export function taoHoSoMau(kieu: KieuMau = "minhAnh"): AppState {
     ...TRANG_THAI_BAN_DAU,
     hoSo: hoSoMau,
     // Điểm mục tiêu đúng bằng điểm chuẩn của ngành mục tiêu (NV1); ngành mục tiêu thiếu khoảng 1–2,5 điểm (Gia Bảo: 0,3–0,8 điểm, ca "cố thêm chút nữa là chạm tới"), không vượt ngân sách.
-    mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop, toHop: TO_HOP[maToHop], diemMucTieu: timLuaChon(ids[0])?.diemMin ?? 26, ngayThi: congNgay(isoNgay(hom), 266) },
+    mucTieu: { luaChonId: ids[0], phuongThuc: "THPT", maToHop, toHop: TO_HOP[maToHop], diemMucTieu: timLuaChon(ids[0])?.diemMin ?? 26, ngayThi: isoNgay(new Date(hom.getFullYear() + (hom.getMonth() > 5 ? 1 : 0), 5, 26)) /* như ngayThiDuKien("nuocRut") ở state/chon.ts; không import để tránh vòng store → mau → chon */ },
     nguyenVong: ids.slice(0, 5),
     yeuThich: ids.slice(0, 1), soSanh: ids.slice(0, 2),
     diemThi,

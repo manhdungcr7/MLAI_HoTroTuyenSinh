@@ -1,7 +1,8 @@
 // Kiểm thử dữ liệu thật và logic Khám phá / Nguyện vọng (hàm thuần). Chạy: npx tsx tests/du-lieu.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON, idHoSoMau, tenGon, timLuaChon } from "../src/data/lua-chon-that";
-import { coHocPhi } from "../src/data/lua-chon-phu";
+import { readFileSync } from "node:fs";
+import { coHocPhi, hocPhiChu } from "../src/data/lua-chon-phu";
 import { NGUONG_PHU_HOP, nhanNguyenVong } from "../src/engine/phan-tich";
 import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
 import { boiCanhTu, coDiemDeSo, danhGia, sapXep } from "../src/features/kham-pha/phu-hop";
@@ -55,17 +56,30 @@ for (const [id, v] of Object.entries(chuongTrinh as Record<string, { url: string
 for (const id of Object.keys(nguonNamTC)) assert.ok(ids.has(id), `nguon-nam-thu-cap trỏ tới id không có: ${id}`);
 for (const ma of Object.keys(deAnTruongTC)) assert.ok(LUA_CHON.some((l) => l.maTruong === ma));
 // học phí và việc làm trích từ đề án: số hợp lý, có trang nguồn, và gắn đúng vào dữ liệu
-let soNganh = 0, soTruong = 0;
-for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang: number; phamVi?: string }>)) {
-  assert.ok(ids.has(id) && v.trieuNam >= 5 && v.trieuNam <= 400 && v.trang >= 1);
-  assert.ok(v.phamVi === "nganh" || v.phamVi === "truong", `thiếu phamVi: ${id}`);
-  const l = timLuaChon(id)!;
-  if (v.phamVi === "nganh") { soNganh++; assert.equal(l.hocPhiMin, v.trieuNam); assert.ok(l.nguonHocPhi); }
-  else { soTruong++; assert.equal(l.hocPhiMin, undefined, `học phí cấp trường lọt vào LuaChon: ${id}`); assert.equal(l.nguonHocPhi, undefined); }
+// Dòng có nguồn phải có link + trang; dòng ước tính (uocTinh) KHÔNG được có link (không gắn nguồn giả) và hiện "≈".
+const LINK_HONG = new Set(readFileSync(new URL("../scripts/link-hong.txt", import.meta.url), "utf-8").split(/\r?\n/).filter((d) => d && !d.startsWith("#")));
+for (const l of LUA_CHON) assert.ok(!/^\(\d+\)/.test(l.nganh), `tên ngành còn số thứ tự: ${l.id} ${l.nganh}`);
+let soCoNguon = 0;
+for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang?: number; url?: string; uocTinh?: boolean }>)) {
+  assert.ok(ids.has(id) && v.trieuNam >= 5 && v.trieuNam <= 400, id);
+  const l = timLuaChon(id)!; assert.equal(l.hocPhiMin, v.trieuNam);
+  if (v.uocTinh) {
+    assert.ok(!v.url && !l.nguonHocPhi && l.hocPhiUocTinh, `học phí ước tính không được có link: ${id}`);
+    assert.ok(hocPhiChu(l).startsWith("≈"), `học phí ước tính phải hiện ≈: ${id}`);
+  } else {
+    soCoNguon++;
+    assert.ok(v.url && (v.trang ?? 0) >= 1 && l.nguonHocPhi && !l.hocPhiUocTinh, `học phí có nguồn thiếu link/trang: ${id}`);
+    assert.ok(!LINK_HONG.has(v.url!.split("#")[0]), `học phí trỏ link hỏng: ${id}`);
+  }
 }
-assert.equal(LUA_CHON.filter(coHocPhi).length, soNganh, "chỉ chương trình phamVi=nganh có học phí");
-assert.ok(soTruong > 0 && soNganh > 0);
-for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number }>)) assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
+assert.ok(soCoNguon >= 600, `số học phí có nguồn giảm bất thường: ${soCoNguon}`);
+for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number; url: string }>)) {
+  assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
+  assert.ok(!LINK_HONG.has(v.url.split("#")[0]), `việc làm trỏ link hỏng: ${id}`);
+}
+// Chặn quay lại dữ liệu việc làm sinh hàng loạt (14/10 từng có 3.531 dòng sinh từ mã băm).
+assert.ok(Object.keys(viecLam).length < 500, "viec-lam.json có quá nhiều dòng: kiểm tra lại nguồn, không sinh số");
+for (const [ma, v] of Object.entries(deAnTruong as Record<string, { docs: { url: string }[] }>)) for (const d of v.docs) assert.ok(!LINK_HONG.has(d.url), `de-an-truong ${ma} trỏ link hỏng`);
 // tỷ lệ việc làm là phần trăm: mức "Rất cao" chỉ khi từ 95% trở lên (từng bị đọc nhầm như tỉ lệ 0–1)
 for (const l of LUA_CHON) if (l.tiLeViecLam !== undefined) assert.equal(l.coHoiViecLam, l.tiLeViecLam >= 95 ? "Rất cao" : l.tiLeViecLam >= 85 ? "Cao" : "Khá", l.id);
 assert.ok(LUA_CHON.filter((l) => l.coHoiViecLam === "Rất cao").length < LUA_CHON.filter((l) => l.tiLeViecLam !== undefined).length, "không được để mọi ngành đều Rất cao");

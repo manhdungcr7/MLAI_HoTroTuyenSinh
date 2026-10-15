@@ -18,7 +18,6 @@ import { changCuaEm } from "@/state/chang";
 import type { LuaChon, ToneTen } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
-import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
 import { NutBaoSai } from "./bao-sai-sheet";
@@ -279,8 +278,8 @@ export default function ChiTiet() {
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
-            <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? <>{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Miễn 100% học phí theo NĐ 116 · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr · `}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
+            <DongThongTin icon={Wallet} tone="cam" nhan={lc.hocPhiUocTinh ? "Học phí / năm (ước tính)" : "Học phí / năm (dự kiến)"} giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
+              phu={coHocPhi(lc) ? <>{lc.hocPhiUocTinh && <span className="block">Ước tính theo trường và khối ngành, chưa có văn bản của trường để đối chiếu. Xem đề án trước khi quyết định.</span>}{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Sư phạm được hỗ trợ học phí theo NĐ 116 nếu cam kết làm trong ngành · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr${lc.nguonHocPhi ? " · " : ""}`}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
               <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <LinkNguon url={lc.nguonViecLam.url} trang={lc.nguonViecLam.trang} /></>}</>} />
@@ -305,33 +304,33 @@ export default function ChiTiet() {
         {/* Nguồn dữ liệu: không bịa đường link */}
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-xanh-nhat text-xanh"><FileText size={20} /></span>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center justify-between gap-2">
               <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
               {lc.daKiemChung ? <Nhan tone="luc">Đã kiểm chứng</Nhan> : <Nhan tone="cam">Chưa kiểm chứng</Nhan>}
             </div>
-            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
-              {lc.daKiemChung ? "Đối chiếu với đề án của trường." : "Chưa đối chiếu với trường, xem lại trang tuyển sinh chính thức."}
-            </p>
-            <details className="mt-1 group">
-              <summary className="min-h-11 flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none">Xem chi tiết nguồn</summary>
-              <p className="text-[12px] text-chu-phu leading-snug">{lc.nguon}.</p>
-              <p className="mt-1 text-[12px] text-chu-phu">
-                {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}
-              </p>
-              {lc.linkNguon && (
-                <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
-                  {lc.nguonCap === "aggregator_verified" ? "Bảng điểm chuẩn (trang tổng hợp)" : "Trang tuyển sinh chính thức"}
-                </a>
-              )}
-              <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+            <details className="group">
+              <summary className="flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none hover:underline py-0.5">Xem chi tiết nguồn</summary>
+              <div className="pt-2 pb-1 space-y-1 text-[12px] text-chu-phu border-t border-vien/50 mt-1.5">
+                <p className="leading-snug">{lc.nguon}.</p>
+                <p>
+                  {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}
+                </p>
+                {lc.linkNguon && (
+                  <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-bold text-xanh hover:underline pt-0.5">
+                    {lc.nguonCap === "aggregator_verified" ? "Bảng điểm chuẩn (trang tổng hợp)" : "Trang tuyển sinh chính thức"}
+                  </a>
+                )}
+                <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+              </div>
             </details>
-            <NutBaoSai maChuongTrinh={lc.id} tenNganh={`${lc.nganh} · ${lc.truong}`} />
+            <div className="pt-0.5">
+              <NutBaoSai maChuongTrinh={lc.id} tenNganh={`${lc.nganh} · ${lc.truong}`} />
+            </div>
           </div>
         </section>
 
-        <div className="space-y-2 pt-1">
-          <NutTuVan nguCanh={`Chi tiết ngành ${lc.nganh}`} />
+        <div className="pt-1">
           <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh ngành này</Nut>
         </div>
       </NoiDung>
@@ -339,7 +338,7 @@ export default function ChiTiet() {
       {/* Thanh dính dưới với 2 nút chính */}
       <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 pb-1.5">
         <div className="grid grid-cols-[1fr_1.5fr] gap-2.5">
-          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã trong NV" : "Thêm NV"}</Nut>
+          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã trong Nguyện Vọng" : "+ Thêm Nguyện Vọng"}</Nut>
           {!laMucTieu && dat.ok && <Nut bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu" : "Đặt mục tiêu"}</Nut>}
         </div>
       </div>
@@ -350,13 +349,15 @@ export default function ChiTiet() {
           <div className="min-w-0">
             <b className="block text-[15px] text-muc">{lc.nganh} – {lc.truong}</b>
             <span className="text-[13px] text-chu">
-              {hoiTiep === "daCo" ? "Đã có trong danh sách nguyện vọng." : `Đang là NV${s.nguyenVong.indexOf(lc.id) + 1}.`}
+              {hoiTiep === "daCo" ? "Đã có trong danh sách nguyện vọng." : `Đang là Nguyện Vọng ${s.nguyenVong.indexOf(lc.id) + 1}.`}
             </span>
           </div>
         </div>
-        <p className="text-[14px] text-chu my-3">Xem danh sách đã cân đối chưa?</p>
+        {/* Chưa có mục tiêu: mời đặt luôn ngành vừa thêm, để Hôm nay và Kế hoạch có việc ngay (không phải tự tìm nút). */}
+        <p className="text-[14px] text-chu my-3">{!s.mucTieu && dat.ok ? "Bạn chưa có mục tiêu. Đặt ngành này làm mục tiêu để biết còn thiếu bao nhiêu điểm?" : "Xem danh sách đã cân đối chưa?"}</p>
         <div className="space-y-2">
-          <Nut bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
+          {!s.mucTieu && dat.ok && <Nut bieuTuong={Target} onClick={() => { setHoiTiep(null); datLamMucTieu(); }}>Đặt làm mục tiêu</Nut>}
+          <Nut kieu={!s.mucTieu && dat.ok ? "vien" : "chinh"} bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
           <Nut kieu="nhe" onClick={() => setHoiTiep(null)}>Ở lại xem</Nut>
         </div>
       </HopTruot>

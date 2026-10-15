@@ -15,15 +15,18 @@
 
 ---
 
-## Bộ dữ liệu tuyển sinh (số đo thực)
+## 📊 Bộ dữ liệu tuyển sinh (số thật, nói rõ chỗ còn thiếu)
 
-Hệ thống sở hữu cơ sở dữ liệu đối soát thực tế từ Đề án tuyển sinh chính thức của Bộ Giáo dục & Đào tạo và các cơ sở giáo dục đại học trên cả nước:
+Số liệu lấy từ đề án tuyển sinh của các trường và bảng điểm chuẩn công bố. Không có số nào được sinh ra để "lấp chỗ trống": chỗ nào là ước tính thì app ghi rõ.
 
-- **3.652 chương trình đào tạo** thuộc **118 trường đại học** lớn trên toàn quốc (Hà Nội, TP.HCM, Miền Trung, Tây Nguyên, Đồng bằng Sông Cửu Long).
-- **Điểm chuẩn nhiều năm** kèm tổ hợp xét tuyển khi đề án có ghi (A00, A01, B00, C00, D01, D07...). 1.551 chương trình lấy từ đề án PDF, 2.101 từ trang tổng hợp (nguồn thứ cấp).
-- **Học phí theo năm: 721 chương trình ở 20 trường**, mỗi dòng kèm link đề án và số trang; 75 dòng là mức chung cả trường. Chương trình còn lại ghi "chưa có".
-- **Tỷ lệ có việc làm: 121 chương trình**, trích từ đề án; còn lại ghi "chưa có".
-- **Nguồn**: mọi con số hiển thị đều kèm link; thiếu thì nói thiếu, không điền thay. Kiểm đếm: `python -I scripts/kiem-dinh-du-lieu.py`.
+- **3.652 chương trình** của **118 trường** (đếm lại 15/10/2026).
+- **Điểm chuẩn:** mọi chương trình có ít nhất một năm điểm thật; **1.292** chương trình có từ 2 năm trở lên. **1.551** lấy từ đề án PDF của trường, phần còn lại từ trang tổng hợp và được ghi "chưa kiểm chứng".
+- **Tổ hợp xét tuyển:** **2.994** chương trình ghi rõ tổ hợp; còn lại app tự suy ra và ghi "suy ra".
+- **Học phí:** **602** chương trình có học phí trong văn bản của trường (có link + số trang). Các chương trình khác có **học phí ước tính** theo trường và khối ngành, hiện dạng "≈ … (ước tính)", **không gắn link**, chỉ để lọc theo ngân sách.
+- **Tỷ lệ có việc làm:** **121** chương trình có số từ đề án; còn lại ghi "chưa có dữ liệu".
+- **Ngành Sư phạm:** được hỗ trợ học phí và sinh hoạt phí theo Nghị định 116/2020/NĐ-CP nếu cam kết làm việc trong ngành (không thực hiện thì phải bồi hoàn).
+- **Dự báo khoảng điểm chuẩn năm tới:** kiểm định bỏ-một-năm trên dữ liệu thật (xem `tests/du-bao-diem-chuan.test.ts`; số liệu in ra khi chạy `npm test`).
+- **Quy tắc:** không chạy script sinh số. Mọi bổ sung đi qua CMS (bắt buộc link nguồn) hoặc script trích từ PDF. Link hỏng ghi ở `scripts/link-hong.txt`; `scripts/danh-dau-uoc-tinh.py` tách số có nguồn khỏi số ước tính.
 
 ---
 
@@ -154,4 +157,4 @@ npx wrangler pages deploy cms/dist --project-name=nguyenvongai-cms
 
 - **Giao diện thân thiện, hiện đại:** Sử dụng đại từ xưng hô chuẩn mực **"bạn"** xuyên suốt toàn bộ ứng dụng.
 - **Tối ưu trải nghiệm (Declutter):** Loại bỏ các dòng mô tả xám rườm rà, tập trung trực tiếp vào số liệu thực tế và hành động cốt lõi.
-- **Nguồn sự thật dữ liệu:** điểm chuẩn, học phí, việc làm chỉ hiển thị khi có nguồn; chi tiết và giới hạn ở `docs/DU-LIEU.md`.
+- **Nguồn sự thật dữ liệu:** điểm chuẩn từ đề án/bảng điểm công bố (có link); học phí có link ở 602 chương trình, còn lại là ước tính có nhãn; tỷ lệ việc làm chỉ hiện khi có trong đề án.

@@ -1,5 +1,6 @@
 // Giới hạn tần suất cho các endpoint công khai (báo sai, đăng ký tình nguyện viên). Đếm bằng KV theo địa chỉ IP băm, không lưu IP thô.
 // KV không nguyên tử nên đếm có sai số nhỏ; mục tiêu là chặn người dùng bấm liên tục và máy gửi hàng loạt, không phải đo chính xác.
+import { docChuGioiHan } from "./doc-body";
 export interface KhoKvGhi {
   get: (khoa: string) => Promise<string | null>;
   put: (khoa: string, giaTri: string, tuyChon?: { expirationTtl?: number }) => Promise<void>;
@@ -28,9 +29,8 @@ export const traLoiJson = (v: unknown, status = 200) =>
 
 /** Đọc thân JSON tối đa 8KB. Trả null nếu quá lớn hoặc không phải đối tượng JSON. */
 export async function docThanNho(request: Request): Promise<Record<string, unknown> | null> {
-  const chu = await request.text();
-  if (new TextEncoder().encode(chu).length > 8 * 1024) return null;
   try {
+    const chu = await docChuGioiHan(request, 8 * 1024);
     const v: unknown = JSON.parse(chu);
     return typeof v === "object" && v !== null && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
   } catch { return null; }

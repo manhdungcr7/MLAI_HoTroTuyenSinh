@@ -755,6 +755,10 @@
       {
         "nam": "2025",
         "url": "https://images.tuyensinh247.com/user_data/2025/0601/Thong_tin_tuyen_sinh_2025_-_Dai_hoc_Luat_DHQGHN.pdf"
+      },
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0504/thong-tin-tuyen-sinh-truong-dai-hoc-luat-ha-noi-2026.pdf"
       }
     ]
   },
@@ -834,6 +838,10 @@
       {
         "nam": "2024",
         "url": "https://images.tuyensinh247.com/picture/2024/0420/tuyen-sinh-dh-y-duoc.pdf"
+      },
+      {
+        "nam": "2025",
+        "url": "https://images.tuyensinh247.com/picture/2025/0612/thong-tin-tuyen-sinh-2025-truong-dh-y-ha-noi.pdf"
       }
     ]
   },
@@ -1196,5 +1204,149 @@
       "url": "https://images.tuyensinh247.com/picture/2025/0612/thong-tin-tuyen-sinh-2025-truong-dh-y-ha-noi.pdf",
       "trang": 12
     }
+  },
+  "NTS": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0711/ftu-thong-tin-tuyen-sinh-dhcq-2026-8426.pdf"
+      }
+    ]
+  },
+  "LPS": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0514/thong-tin-tuyen-sinh-truong-dai-hoc-luat-tphcm-2026.pdf"
+      }
+    ]
+  },
+  "SPK": {
+    "docs": [
+      {
+        "nam": "2024",
+        "url": "https://images.tuyensinh247.com/picture/2024/0513/dai-hoc-su-pham-ky-thuat-tphcm.pdf"
+      }
+    ]
+  },
+  "DSG": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0728/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-sai-gon.pdf"
+      }
+    ]
+  },
+  "DKC": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0527/thong-tin-tuyen-sinh-dh-cong-nghe-tphcm-2026.pdf"
+      }
+    ]
+  },
+  "SGD": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0604/thong-tin-tuyen-sinh-dai-hoc-sai-gon.pdf"
+      }
+    ]
+  },
+  "NLS": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0513/thong-tin-tuyen-sinh-dai-hoc-nong-lam.pdf"
+      }
+    ]
+  },
+  "KTS": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0615/617-qd-vv-ban-hanh-thong-tin-tuyen-sinh-trinh-do-dai-hoc-hinh-thuc-dao-tao-chinh-quy-nam-2026-0001pdf.pdf"
+      }
+    ]
+  },
+  "DNT": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0508/thong-tin-tuyen-sinh-truong-dai-hoc-ngoai-ngu-tin-hoc-tphcm-2026.pdf"
+      }
+    ]
+  },
+  "MBS": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0616/qd-1482-20260529-thong-tin-tuyen-sinh-dhcq-2026.pdf"
+      }
+    ]
+  },
+  "VGU": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0505/thong-tin-tuyen-sinh-dai-hoc-viet-duc.pdf"
+      }
+    ]
+  },
+  "DDT": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0416/thong-tin-tuyen-sinh-dai-hoc-duy-tan-2026.pdf"
+      }
+    ]
+  },
+  "DHS": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0626/thong-tin-tuyen-sinh-dai-hoc-su-pham-hue.pdf"
+      }
+    ]
+  },
+  "FPT": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0618/thong-tin-tuyen-sinh-truong-dai-hoc-fpt-nam-2026.pdf"
+      }
+    ]
+  },
+  "NTT": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0618/thong-tin-tuyen-sinh-truong-dai-hoc-nguyen-tat-thanh-nam-2026.pdf"
+      }
+    ]
+  },
+  "THP": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://images.tuyensinh247.com/picture/2026/0424/thong-tin-tuyen-sinh-dai-hoc-hai-phong.pdf"
+      }
+    ]
+  },
+  "DDN": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0618/thong-tin-tuyen-sinh-truong-dai-hoc-dai-nam-nam-2026.pdf"
+      }
+    ]
+  },
+  "QHF": {
+    "docs": [
+      {
+        "nam": "2026",
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0623/595-tnn-thong-tin-tuyen-sinh-2026.pdf"
+      }
+    ]
   }
 }

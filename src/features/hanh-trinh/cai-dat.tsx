@@ -21,8 +21,9 @@ export default function CaiDat() {
   const nav = useNavigate();
   const [kemChat, setKemChat] = useState(false); // mặc định tắt: lịch sử chat chỉ vào tệp khi bạn tự bật
   const [hoi, setHoi] = useState<HoiLai>(null);
+  const [choKhoiPhuc, setChoKhoiPhuc] = useState<Extract<ReturnType<typeof docBanSaoLuu>, { ok: true }> | null>(null);
   const dong = () => setHoi(null);
-  const coDuLieu = !!s.hoSo.hoTen.trim() || s.hoSo.hoanTat || s.mucTieu !== null || s.nguyenVong.length > 0;
+  const coDuLieu = !!s.hoSo.hoTen.trim() || s.hoSo.hoanTat || s.mucTieu !== null || s.nguyenVong.length > 0 || s.yeuThich.length > 0;
   const soTiet = s.coDinh.length;
   const c = s.cauHinh;
 
@@ -42,9 +43,7 @@ export default function CaiDat() {
   const nhap = async (f: File | undefined) => {
     if (!f) return;
     const kq = f.size > 5_000_000 ? { ok: false as const, lyDo: "Tệp quá lớn so với một bản sao lưu." } : docBanSaoLuu(await f.text());
-    if (kq.ok) { khoiPhuc(kq.s); // xóa lịch sử cũ; nếu tệp có kèm lịch sử trò chuyện thì nạp lại
-      const coChat = !!kq.lichSu?.length && ghiLichSu(localStorage, kq.lichSu);
-      setTin({ ok: true, chu: coChat ? "Đã khôi phục dữ liệu và lịch sử trò chuyện từ tệp sao lưu." : "Đã khôi phục dữ liệu từ tệp sao lưu." }); }
+    if (kq.ok) setChoKhoiPhuc(kq);
     else setTin({ ok: false, chu: kq.lyDo });
     if (oTep.current) oTep.current.value = "";
   };
@@ -109,6 +108,13 @@ export default function CaiDat() {
         <div className="space-y-2">
           <Nut onClick={dungMau}>Dùng hồ sơ mẫu</Nut>
           <Nut kieu="vien" onClick={dong}>Giữ hồ sơ của bạn</Nut>
+        </div>
+      </HopTruot>
+      <HopTruot mo={choKhoiPhuc !== null} dong={() => setChoKhoiPhuc(null)} tieuDe="Khôi phục bản sao lưu?">
+        <p className="text-[14px] text-chu mb-4">Dữ liệu trong tệp sẽ thay toàn bộ hồ sơ, nguyện vọng, kế hoạch và lịch sử trò chuyện hiện tại. Em nên xuất bản sao lưu trước khi tiếp tục.</p>
+        <div className="space-y-2">
+          <Nut onClick={() => { if (!choKhoiPhuc) return; khoiPhuc(choKhoiPhuc.s); const coChat = !!choKhoiPhuc.lichSu?.length && ghiLichSu(localStorage, choKhoiPhuc.lichSu); setTin({ ok: true, chu: coChat ? "Đã khôi phục dữ liệu và lịch sử trò chuyện từ tệp sao lưu." : "Đã khôi phục dữ liệu từ tệp sao lưu." }); setChoKhoiPhuc(null); }}>Khôi phục</Nut>
+          <Nut kieu="vien" onClick={() => setChoKhoiPhuc(null)}>Giữ dữ liệu hiện tại</Nut>
         </div>
       </HopTruot>
 

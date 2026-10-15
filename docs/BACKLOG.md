@@ -179,3 +179,11 @@
 | 22 | [Audit P0] Xóa `alert()` và lỗi chữ Hán trên Landing Page | Tuấn / Landing | P0 | Thay alert bằng inline message; sửa `đề案` thành `đề án` |
 | 23 | [Audit P1] Sửa các lỗi tính toán, fallback dinhDang, timeout hook và hoàn tác | Cả nhóm | P1 | Tinh chỉnh dinhDang phòng thủ, snapshot hoàn tác NV, fix ngưỡng nhãn 0.25đ |
 
+
+## Audit bàn giao hệ thống — 2026-10-15
+
+- **Đã xử lý trong nhánh audit:** lỗi cấu hình Pages/local API, hardening xác thực CMS và rate limit, giới hạn request body, luồng hộp thư đăng ký sớm/cấp CTV, modal truy cập bàn phím và xác nhận thao tác ghi đè/xóa.
+- **Đã xác minh:** build app/CMS; tích hợp 30 request qua Pages local + D1/KV; luồng browser chính và responsive 360/390/1440; production GET-only cho app, CMS, manifest và xác thực CMS.
+- **Cần làm trước khi tuyên bố production-ready:** chạy lại `npm test` + `npm run kiem-tra` trên máy/CI ổn định (lượt xác nhận cuối bị Node 24 dừng trước test với `uv_os_get_passwd ENOMEM`); kiểm tra secrets/bindings/migrations/email/AI trên Cloudflare; thử tải, backup/restore và thiết bị thật.
+- **Theo dõi:** tách chunk `chuan-hoa` (1.55 MB), xác nhận nguồn và độ mới dữ liệu tuyển sinh, thay email cá nhân bằng email chung nhóm.
+- Chi tiết: `docs/BAO-CAO-KIEM-THU-BAN-GIAO-2026-10-15.md`.

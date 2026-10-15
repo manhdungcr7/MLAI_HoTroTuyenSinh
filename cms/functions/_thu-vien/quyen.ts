@@ -49,7 +49,7 @@ export const tamLuc = (o: TuyChon) => o.bayGio ?? new Date();
 /** Ai đang gọi: giả danh dev (chỉ localhost + GIA_DANH_DEV=1) hoặc cookie phiên. Cookie còn hạn nhưng người đã bị xóa, hoặc mật khẩu đổi sau khi cấp cookie thì 401. */
 async function nguoiGoi(request: Request, env: Env, d1: KhoD1, bayGio: Date) {
   const url = new URL(request.url);
-  if (env.GIA_DANH_DEV === "1" && laMayCucBo(url)) {
+  if (env.GIA_DANH_DEV === "1" && laMayCucBo(url) && request.headers.has("x-gia-danh")) {
     const e = request.headers.get("x-gia-danh") ?? "";
     if (!laEmail(e)) throw chuaDangNhap("Thiếu hoặc sai header X-Gia-Danh (chế độ giả danh dev)");
     const email = chuanHoaEmail(e);
@@ -57,13 +57,14 @@ async function nguoiGoi(request: Request, env: Env, d1: KhoD1, bayGio: Date) {
     if (!hs) throw cam("Email này chưa được cấp quyền vào trang quản trị. Hãy nhờ quản trị viên thêm email của bạn.");
     return { email, hs: { ...hs, phaiDoiMatKhau: false } }; // giả danh dev không bị buộc đổi mật khẩu
   }
+  const ck = layCookie(request);
+  if (!ck) throw chuaDangNhap();
   baoMat(env);
   kiemOrigin(request);
-  const ck = layCookie(request);
   const ph = ck ? await docPhien(env, ck, bayGio) : null;
   if (!ph) throw chuaDangNhap();
   const hs = await hoSoQuanTri(d1, ph.email);
-  if (!hs || (hs.matKhauLuc && ph.capLuc < Math.floor(Date.parse(hs.matKhauLuc) / 1000))) throw chuaDangNhap();
+  if (!hs || (hs.matKhauLuc && ph.capLuc < Date.parse(hs.matKhauLuc))) throw chuaDangNhap();
   return { email: ph.email, hs };
 }
 

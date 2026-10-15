@@ -40,7 +40,7 @@ export default function HomNay() {
           <>
             <TheMucTieu m={m} thieuMon={thieuMon} ngayThi={s.mucTieu?.ngayThi} onClick={() => nav(DUONG_DAN.mucTieu())} />
             {nv.ok && s.mucTieu && nv.lc.id !== s.mucTieu.luaChonId && (
-              <DongThongBao tone="cam" icon={Target} tieuDe="NV1 đã khác mục tiêu" moTa={`NV1 hiện là ${nv.lc.nganh} (${nv.lc.truong}). Bấm để đặt làm mục tiêu và tính lại khoảng cách.`} onClick={() => datMucTieu(nv.mucTieu)} />
+              <DongThongBao tone="cam" icon={Target} tieuDe="Nguyện Vọng 1 đã khác mục tiêu" moTa={`Nguyện Vọng 1 hiện là ${nv.lc.nganh} (${nv.lc.truong}). Bấm để đặt làm mục tiêu và tính lại khoảng cách.`} onClick={() => datMucTieu(nv.mucTieu)} />
             )}
             {thieuMon.length > 0 && (
               <button type="button" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} className="w-full min-h-12 rounded-xl bg-cam-nhat px-3 text-left text-[13px] text-chu active:brightness-95">
@@ -135,7 +135,7 @@ function ChuaCoMucTieu({ chang, onClick, soNguyenVong, nganhNV, lyDo, onNguyenVo
       <div className="mt-4 space-y-2">
         <Nut muiTen onClick={onClick}>Khám phá ngành học</Nut>
         {Boolean(soNguyenVong && soNguyenVong > 0 && onNguyenVong) && (
-          <Nut kieu="vien" onClick={onNguyenVong}>{nganhNV ? (nganhNV.length > 25 ? "Đặt NV1 làm mục tiêu chính" : `Chọn ${nganhNV} làm mục tiêu`) : `Xem ${soNguyenVong} nguyện vọng đã lưu`}</Nut>
+          <Nut kieu="vien" onClick={onNguyenVong}>{nganhNV ? (nganhNV.length > 25 ? "Đặt Nguyện Vọng 1 làm mục tiêu chính" : `Chọn ${nganhNV} làm mục tiêu`) : `Xem ${soNguyenVong} nguyện vọng đã lưu`}</Nut>
         )}
         {lyDo && <span className="block text-[13px] text-chu-phu">Chưa đặt được từ nguyện vọng: {lyDo}</span>}
       </div>

@@ -123,9 +123,9 @@ export function ketLuan(c: CoCau): KetLuan {
   if (c.chacChan === 0)
     return { tone: "do", onDinh: false, tieuDe: "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm của bạn", hienTrang, nenLam: "Thêm 1 nguyện vọng thấp hơn điểm của bạn từ 1,5", lyDo: "phòng khi điểm thi thấp hơn dự kiến." };
   if (c.thuSucNhieu)
-    return { tone: "cam", onDinh: false, tieuDe: "Thử sức đang hơi nhiều", hienTrang, nenLam: "Đổi 1 NV thử sức sang vừa sức", lyDo: "để cân giữa ước mơ và sức hiện tại." };
+    return { tone: "cam", onDinh: false, tieuDe: "Thử sức đang hơi nhiều", hienTrang, nenLam: "Đổi 1 Nguyện Vọng thử sức sang vừa sức", lyDo: "để cân giữa ước mơ và sức hiện tại." };
   if (c.canThemAnToan)
-    return { tone: "cam", onDinh: false, tieuDe: "Mới có 1 nguyện vọng điểm chuẩn thấp hơn điểm của bạn", hienTrang, nenLam: "Thêm 1 NV An toàn hoặc Dự phòng", lyDo: "để có thêm chỗ lùi." };
+    return { tone: "cam", onDinh: false, tieuDe: "Mới có 1 nguyện vọng điểm chuẩn thấp hơn điểm của bạn", hienTrang, nenLam: "Thêm 1 Nguyện Vọng An toàn hoặc Dự phòng", lyDo: "để có thêm chỗ lùi." };
   if (c.thieuVuaSuc)
     return { tone: "cam", onDinh: false, tieuDe: "Chưa có nguyện vọng vừa sức", hienTrang, nenLam: "Thêm 1 trường điểm chuẩn sát điểm của bạn", lyDo: "đây là nhóm dễ trúng nhất với sức hiện tại." };
   return { tone: "luc", onDinh: true, tieuDe: "Cơ cấu danh sách đủ các nhóm", hienTrang, nenLam: null, lyDo: "Có cả chỗ thử sức lẫn chỗ an toàn. Nhãn dựa trên điểm chuẩn năm trước." };
@@ -278,7 +278,7 @@ export function canhBaoThuTu(ds: DongNV[]): CanhBaoThuTu[] {
     if (!laCaoHon(sau)) continue;
     const truoc = ds.find((d) => d.viTri < sau.viTri && laChacChan(d));
     if (!truoc) continue;
-    ra.push({ truoc, sau, cau: `NV${truoc.viTri + 1} (${truoc.nhan}) đứng trước NV${sau.viTri + 1} (${sau.nhan}). Nếu bạn đủ điểm NV${truoc.viTri + 1} thì sẽ không xét NV${sau.viTri + 1}.` });
+    ra.push({ truoc, sau, cau: `Nguyện Vọng ${truoc.viTri + 1} (${truoc.nhan}) đứng trước Nguyện Vọng ${sau.viTri + 1} (${sau.nhan}). Nếu bạn đủ điểm Nguyện Vọng ${truoc.viTri + 1} thì sẽ không xét Nguyện Vọng ${sau.viTri + 1}.` });
   }
   return ra;
 }

@@ -102,7 +102,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
     if (hoSo.nganhQuanTam.includes(x.lc.nhomNganh)) lyDo.push(`Đúng nhóm ngành bạn quan tâm (${x.lc.nhomNganh})`);
     if (tinh && cungNoi(x.lc.khuVuc, tinh)) lyDo.push(`Ở ${x.lc.khuVuc}, gần nơi bạn sống`);
     else if (dungKhuVuc(x.lc, hoSo.khuVuc) === true) lyDo.push(`Ở ${x.lc.khuVuc}, đúng khu vực bạn ưu tiên`);
-    if (coHocPhi(x.lc)) lyDo.push(`Học phí khoảng ${dinhDang(x.lc.hocPhiMin as number, 1)} triệu/năm, trong ngân sách`);
+    if (coHocPhi(x.lc)) lyDo.push(`Học phí khoảng ${dinhDang(x.lc.hocPhiMin as number, 1)} triệu/năm${x.lc.hocPhiUocTinh ? " (ước tính)" : ""}, trong ngân sách`);
     return lyDo;
   };
   const them = (x: UngVien, tang: TangGoiY, lyDoDau: string[] = []) => {
@@ -125,7 +125,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
     const chenh = lamTron1(neo.tong - neo.lc.diemMin);
     if (!neoDaCo) {
       dauTien = { lc: neo.lc, nhan: neo.nhan, tong: neo.tong, toHop: neo.toHop, tang: "muc-tieu", lyDo: [
-        "Đây là ngành bạn đặt làm mục tiêu (NV1)",
+        "Đây là ngành bạn đặt làm mục tiêu (Nguyện Vọng 1)",
         chenh >= 0 ? `Điểm của bạn cao hơn điểm chuẩn ${neo.lc.namDiem} ${dinhDang(chenh, 1)} điểm` : `Điểm của bạn thấp hơn điểm chuẩn ${neo.lc.namDiem} ${dinhDang(-chenh, 1)} điểm`,
         ...(chenh < -THIEU_XA_CANH_BAO ? [`Khoảng cách khá xa (thiếu ${dinhDang(-chenh, 1)} điểm): giữ làm mơ ước được, nhưng các nguyện vọng còn lại nên sát điểm hiện tại của bạn`] : []),
       ] };
@@ -155,7 +155,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
           .sort((a, b) => a.lc.diemMin - b.lc.diemMin || gan(a.lc) - gan(b.lc))[0];
         if (memNhat) {
           const mem = lamTron1(neo.lc.diemMin - memNhat.lc.diemMin);
-          them(memNhat, "cung-truong", [`Ngành có điểm chuẩn mềm nhất tại ${tenTr(neo.lc)} (thấp hơn NV1 ${dinhDang(mem, 1)} điểm) để tăng cơ hội đỗ đúng trường mơ ước`]);
+          them(memNhat, "cung-truong", [`Ngành có điểm chuẩn mềm nhất tại ${tenTr(neo.lc)} (thấp hơn Nguyện Vọng 1 ${dinhDang(mem, 1)} điểm) để tăng cơ hội đỗ đúng trường mơ ước`]);
         }
       }
     });
@@ -168,12 +168,12 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
           && (cungTruong(u.lc, neo.lc) || nganh(u.lc) === 0) && conCho(u, cungTruong(u.lc, neo.lc) ? TOI_DA_TRUONG_MO_NEO : TOI_DA_MOT_TRUONG))
         .sort((a, b) => Number(!cungTruong(a.lc, neo.lc)) - Number(!cungTruong(b.lc, neo.lc)) || gan(a.lc) - gan(b.lc) || nhieuNam(a.lc) - nhieuNam(b.lc)
           || Math.abs(chenhCua(a) + 0.5) - Math.abs(chenhCua(b) + 0.5))[0];
-      if (x) them(x, "nang-tam", [cungTruong(x.lc, neo.lc) ? `Nâng tầm: ngành cao hơn trong cùng ${tenTr(neo.lc)}, nếu năm nay điểm chuẩn thấp hơn bạn sẽ có thêm cơ hội` : `Nâng tầm: một bậc trên NV1 cùng hướng ngành, nên thử khi bạn còn đủ chỗ`]);
+      if (x) them(x, "nang-tam", [cungTruong(x.lc, neo.lc) ? `Nâng tầm: ngành cao hơn trong cùng ${tenTr(neo.lc)}, nếu năm nay điểm chuẩn thấp hơn bạn sẽ có thêm cơ hội` : `Nâng tầm: một bậc trên Nguyện Vọng 1 cùng hướng ngành, nên thử khi bạn còn đủ chỗ`]);
     });
 
     // Lớp 2: đúng ngành ở trường khác, đi từ Vừa sức xuống An toàn.
     choTang("cung-nganh", () => {
-      const giuNganh = `Giữ đúng ngành ${neo.lc.nganh} bạn thích, giảm rủi ro trượt NV1`;
+      const giuNganh = `Giữ đúng ngành ${neo.lc.nganh} bạn thích, giảm rủi ro trượt Nguyện Vọng 1`;
       for (const nhan of ["Vừa sức", "An toàn"] as const) {
         if (chon.length >= choToiDaChon) break;
         const x = ungVien

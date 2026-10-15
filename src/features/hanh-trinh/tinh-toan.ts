@@ -130,11 +130,11 @@ export function goiYChoEm(s: AppState, chang: Chang = changCuaEm(s)): GoiY {
     if (!m) return ra("So điểm năm trước với điểm chuẩn, rồi chọn mục tiêu.", DUONG_DAN.nguyenVong());
   } else if (!m) {
     if (s.yeuThich.length > 0 && s.nguyenVong.length === 0) return ra(`Bạn đã lưu ${s.yeuThich.length} ngành yêu thích: xem và đưa vào danh sách nguyện vọng nhé.`, DUONG_DAN.nguyenVong());
-    if (s.nguyenVong.length) return ra("Chọn NV1 làm mục tiêu để tính điểm còn thiếu.", DUONG_DAN.nguyenVong());
+    if (s.nguyenVong.length) return ra("Chọn Nguyện Vọng 1 làm mục tiêu để tính điểm còn thiếu.", DUONG_DAN.nguyenVong());
     return ra("Chọn một ngành làm mục tiêu để tính điểm còn thiếu.", DUONG_DAN.khamPha());
   }
   if (!m) return ra("Bạn chọn một ngành làm mục tiêu để bắt đầu.", DUONG_DAN.khamPha());
-  if (thieuChoAnToan(s)) return ra("Danh sách chưa có NV An toàn hay Dự phòng. Thêm một chỗ nhé.", DUONG_DAN.nguyenVongAnToan());
+  if (thieuChoAnToan(s)) return ra("Danh sách chưa có Nguyện Vọng An toàn hay Dự phòng. Thêm một chỗ nhé.", DUONG_DAN.nguyenVongAnToan());
   const chuaCo = monThieuDiem(s, m.toHop);
   if (chuaCo.length) {
     return ra(`Nhập điểm ${noi(chuaCo.map((x) => TEN_MON[x]))} để tính đúng điểm còn thiếu.`, DUONG_DAN.batDau(2));

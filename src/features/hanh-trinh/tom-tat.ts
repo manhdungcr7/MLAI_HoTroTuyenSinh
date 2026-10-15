@@ -142,9 +142,9 @@ export function tomTatChiaSe(s: AppState, bayGio: Date, kemTen: boolean = false)
 
   const ds = dungDanhSach(s.nguyenVong, diem, tim);
   muc.push({ tieuDe: `Danh sách nguyện vọng (${s.nguyenVong.length})`, dong: ds.length ? ds.map((d) => {
-    if (!d.lc) return `NV${d.viTri + 1}: lựa chọn không còn trong dữ liệu`;
+    if (!d.lc) return `Nguyện Vọng ${d.viTri + 1}: lựa chọn không còn trong dữ liệu`;
     const nhan: NhanNguyenVong | string = d.nhan ?? `chưa so được: ${d.lyDoKhongNhan ?? "thiếu điểm"}`;
-    return `NV${d.viTri + 1}: ${d.lc.truong} – ${d.lc.nganh} (${nhan}${d.suyRa ? " (suy ra)" : ""}; điểm chuẩn ${so(d.lc.diemMin)} năm ${d.lc.namDiem})`;
+    return `Nguyện Vọng ${d.viTri + 1}: ${d.lc.truong} – ${d.lc.nganh} (${nhan}${d.suyRa ? " (suy ra)" : ""}; điểm chuẩn ${so(d.lc.diemMin)} năm ${d.lc.namDiem})`;
   }) : ["Chưa lưu nguyện vọng nào."] });
 
   const cs = chiSoTheoDoi(s);
