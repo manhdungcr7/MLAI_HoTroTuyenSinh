@@ -75,9 +75,9 @@ export function HopTruot({ mo, dong, tieuDe, children }: { mo: boolean; dong: ()
   }, [mo, dong]);
   if (!mo) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-muc/50 backdrop-blur-sm" onClick={dong}>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-muc/50 backdrop-blur-sm sm:p-4" onClick={dong}>
       <div role="dialog" aria-modal="true" aria-label={tieuDe} onClick={(e) => e.stopPropagation()}
-        className="hien-len w-full max-w-[430px] max-h-[88dvh] overflow-y-auto bg-trang rounded-t-lon p-5 vung-an-toan-duoi shadow-lon">
+        className="hien-len w-full max-w-[430px] sm:max-w-[480px] max-h-[88dvh] overflow-y-auto bg-trang rounded-t-lon sm:rounded-2xl p-5 vung-an-toan-duoi shadow-lon">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-[18px] font-extrabold text-muc">{tieuDe}</h3>
           <button type="button" onClick={dong} aria-label="Đóng" className="size-11 grid place-items-center rounded-full bg-nen cursor-pointer active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh"><X size={20} /></button>

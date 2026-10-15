@@ -43,8 +43,8 @@ export function sinhLichHocAI(s: AppState, _tuan?: string): KetQuaKeHoachAI {
   const promptGoiY = `Lập lịch học chi tiết tuần này cho em (${ten}) theo mục tiêu ngành ${m?.lc.nganh ?? "Công nghệ thông tin"} (${m?.lc.truong ?? "Đại học"}), khối ${maToHop}, mục tiêu ${dinhDang(m?.mucTieuTho ?? 26, 1)} điểm. Hiện tại môn ${TEN_MON[monTrongTam]} đang còn thiếu ${thieuDiem} điểm. Hãy phân bổ lịch học các buổi tối trong tuần theo phương pháp 60-35-5 và ưu tiên môn kéo điểm.`;
 
   const phanTichCaNhan = monThieu.length > 0
-    ? `Dựa trên khoảng cách điểm số, trọng tâm tuần này của ${ten} là bứt phá môn **${TEN_MON[monTrongTam]}** (cần bù thêm **${thieuDiem} điểm**).${ielts ? ` Với lợi thế có **${ielts}**, bạn được giải phóng giờ tự học môn Ngoại ngữ để tập trung 85% thời gian cho 2 môn còn lại.` : ""}`
-    : `Điểm số hiện tại của bạn đã tiệm cận mốc điểm chuẩn. Lịch học tuần này tập trung vào làm đề bấm giờ và rèn tâm lý thi đấu thực chiến.`;
+    ? `Trọng tâm bứt phá: môn **${TEN_MON[monTrongTam]}** (còn thiếu **${thieuDiem} điểm**).${ielts ? ` Có lợi thế **${ielts}** giúp tập trung tối đa cho 2 môn còn lại.` : ""}`
+    : `Điểm số đã tiệm cận mốc điểm chuẩn. Lịch tuần tập trung luyện đề thực chiến.`;
 
   const lamSachTenChuyenDe = (tenCd: string) => tenCd.replace(/^(Ôn|Luyện)\s*(chuyên đề)?\s*/i, "");
   const chuyenDeMon1 = NOI_DUNG_ON[monTrongTam]?.[0] ?? "Phương trình và bất phương trình";
