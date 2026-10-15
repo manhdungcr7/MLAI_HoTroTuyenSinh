@@ -1,4 +1,4 @@
-import { LoiApi, SO_MOI_TRANG, type NguoiCms, type NguoiMoiCms, type NhatKyCms, type PhanCongCms, type Toi, type Trang, type VaiTro } from "./kieu";
+import { LoiApi, SO_MOI_TRANG, type CaiDatHeThong, type NguoiCms, type NguoiMoiCms, type NhatKyCms, type PhanCongCms, type PhanHoiCaiDatHeThong, type Toi, type Trang, type VaiTro } from "./kieu";
 export * from "./kieu";
 
 type Query = Record<string, string | number | undefined>;
@@ -89,3 +89,9 @@ export async function layTrangNhatKy(trang: number): Promise<Trang<NhatKyCms>> {
   const r = await goi<{ nhatKy: NhatKyCms[]; tong: number }>("GET", "/nhat-ky", { query: { trang, moi: SO_MOI_TRANG } });
   return { muc: r.nhatKy, tong: r.tong };
 }
+
+// ---------- Cài đặt hệ thống & nội dung công khai ----------
+export const layCaiDat = () => goi<PhanHoiCaiDatHeThong>("GET", "/cai-dat");
+export const luuCaiDat = (caiDat: CaiDatHeThong) => goi<PhanHoiCaiDatHeThong>("PUT", "/cai-dat", { body: { caiDat } });
+export const khoiPhucCaiDatMacDinh = () => goi<PhanHoiCaiDatHeThong>("PUT", "/cai-dat", { body: { khoiPhucMacDinh: true } });
+

@@ -21,7 +21,7 @@ export function OSoThuTu({ viTri, nhan }: { viTri: number; nhan: NhanNguyenVong 
   );
 }
 const VIEN_O: Record<ToneTen, string> = { xanh: "border-xanh", luc: "border-luc", cam: "border-cam", tim: "border-tim", do: "border-do", muc: "border-muc" };
-const CHU_O: Record<ToneTen, string> = { xanh: "text-xanh", luc: "text-luc-chu", cam: "text-cam-chu", tim: "text-tim-chu", do: "text-do-chu", muc: "text-muc" };
+export const CHU_O: Record<ToneTen, string> = { xanh: "text-xanh", luc: "text-luc-chu", cam: "text-cam-chu", tim: "text-tim-chu", do: "text-do-chu", muc: "text-muc" };
 
 /** Thanh cơ cấu thu nhỏ: một dải màu + chú thích 4 nhãn kèm số lượng. */
 export function CoCauMini({ dem }: { dem: Record<NhanNguyenVong, number> }) {

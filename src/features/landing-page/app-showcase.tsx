@@ -24,7 +24,7 @@ export function HeroAppMockup() {
       <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-indigo-500/15 to-purple-500/10 rounded-full blur-3xl -z-10 pointer-events-none scale-90" />
 
       {/* Floating badge 1 (Góc trên bên phải) */}
-      <div className="hidden sm:flex absolute -top-1 -right-4 lg:-right-6 bg-white/95 backdrop-blur-md border border-blue-200/80 shadow-xl rounded-2xl p-2.5 items-center gap-2.5 z-20 hover:scale-105 transition-transform duration-200">
+      <div className="hidden sm:flex absolute -top-1 -right-4 lg:-right-6 bg-white border border-blue-200 shadow-xl rounded-2xl p-2.5 items-center gap-2.5 z-20 hover:scale-105 transition-transform duration-200">
         <div className="w-8 h-8 rounded-xl bg-blue-600 text-white grid place-items-center font-extrabold text-[11px] shadow-sm">
           100%
         </div>
@@ -110,11 +110,11 @@ export function HeroAppMockup() {
                 <span>Đề xuất bù 2,0đ tối ưu công sức</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <div className="flex-1 rounded-lg bg-white/90 border border-blue-200 px-1.5 py-0.5 text-center">
+                <div className="flex-1 rounded-lg bg-white border border-blue-200 px-1.5 py-0.5 text-center">
                   <span className="text-[9px] text-slate-500 block font-medium">Toán</span>
                   <b className="text-[12px] text-blue-700">+1,0 đ</b>
                 </div>
-                <div className="flex-1 rounded-lg bg-white/90 border border-blue-200 px-1.5 py-0.5 text-center">
+                <div className="flex-1 rounded-lg bg-white border border-blue-200 px-1.5 py-0.5 text-center">
                   <span className="text-[9px] text-slate-500 block font-medium">Tiếng Anh</span>
                   <b className="text-[12px] text-indigo-700">+1,0 đ</b>
                 </div>
@@ -181,7 +181,7 @@ export function HeroAppMockup() {
       </div>
 
       {/* Floating badge 2 (Góc dưới bên trái) */}
-      <div className="hidden sm:flex absolute -bottom-2 -left-4 lg:-left-6 bg-white/95 backdrop-blur-md border border-emerald-200/80 shadow-xl rounded-2xl p-2.5 items-center gap-2.5 z-20 hover:scale-105 transition-transform duration-200">
+      <div className="hidden sm:flex absolute -bottom-2 -left-4 lg:-left-6 bg-white border border-emerald-200 shadow-xl rounded-2xl p-2.5 items-center gap-2.5 z-20 hover:scale-105 transition-transform duration-200">
         <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white grid place-items-center font-bold text-xs shadow-sm">
           <Clock size={16} />
         </div>
@@ -199,23 +199,23 @@ export function HeroAppMockup() {
  */
 export function ProfileAppMockup() {
   return (
-    <div className="w-full max-w-[620px] mx-auto rounded-3xl bg-white border border-slate-200 p-5 shadow-xl text-left select-none">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <div className="size-8 rounded-xl bg-blue-100 text-blue-700 grid place-items-center font-bold">
-            <User size={18} />
+    <div className="w-full max-w-[660px] mx-auto rounded-3xl bg-white border border-slate-200 p-6 shadow-xl text-left select-none">
+      <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+        <div className="flex items-center gap-2.5">
+          <div className="size-9 rounded-xl bg-blue-100 text-blue-700 grid place-items-center font-bold">
+            <User size={19} />
           </div>
           <div>
-            <h4 className="font-extrabold text-sm text-slate-900">Hồ sơ tuyển sinh toàn diện</h4>
+            <h4 className="font-extrabold text-[15px] text-slate-900">Hồ sơ tuyển sinh toàn diện</h4>
             <span className="text-xs text-slate-500">Tích hợp đa nguồn dữ liệu của bạn</span>
           </div>
         </div>
-        <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+        <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
           Đầy đủ 100%
         </span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 text-center">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 text-center">
         <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
           <span className="text-[11px] text-slate-500 block">Tổ hợp mạnh</span>
           <b className="text-base text-blue-600 font-extrabold">A00 & A01</b>
@@ -234,11 +234,11 @@ export function ProfileAppMockup() {
         </div>
       </div>
 
-      <div className="mt-4 p-3 rounded-2xl bg-blue-50/60 border border-blue-100 text-xs text-slate-700 space-y-1">
+      <div className="mt-4 p-3.5 rounded-2xl bg-blue-50 border border-blue-100 text-[13px] text-slate-700 space-y-1">
         <div className="font-bold text-blue-900 flex items-center gap-1.5">
-          <Sparkles size={14} className="text-blue-600" /> Điểm mạnh & Định hướng RIASEC
+          <Sparkles size={15} className="text-blue-600" /> Điểm mạnh & Định hướng RIASEC
         </div>
-        <p className="text-slate-600">
+        <p className="text-slate-600 leading-relaxed">
           Nhóm nổi bật: <b>Nghiên cứu (Investigative)</b> & <b>Kỹ thuật (Realistic)</b> — rất phù hợp với các ngành Công nghệ thông tin, Khoa học máy tính, Kỹ thuật phần mềm và Vi mạch bán dẫn.
         </p>
       </div>
@@ -251,40 +251,40 @@ export function ProfileAppMockup() {
  */
 export function PlanAppMockup() {
   return (
-    <div className="w-full max-w-[620px] mx-auto rounded-3xl bg-white border border-slate-200 p-5 shadow-xl text-left select-none">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <div className="size-8 rounded-xl bg-indigo-100 text-indigo-700 grid place-items-center font-bold">
-            <CalendarDays size={18} />
+    <div className="w-full max-w-[660px] mx-auto rounded-3xl bg-white border border-slate-200 p-6 shadow-xl text-left select-none">
+      <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+        <div className="flex items-center gap-2.5">
+          <div className="size-9 rounded-xl bg-indigo-100 text-indigo-700 grid place-items-center font-bold">
+            <CalendarDays size={19} />
           </div>
           <div>
-            <h4 className="font-extrabold text-sm text-slate-900">Kế hoạch tuần tự động</h4>
+            <h4 className="font-extrabold text-[15px] text-slate-900">Kế hoạch tuần tự động</h4>
             <span className="text-xs text-slate-500">Xếp việc theo khung giờ tự học còn trống</span>
           </div>
         </div>
-        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
           Tuần 12
         </span>
       </div>
 
-      <div className="mt-3 space-y-2">
+      <div className="mt-3.5 space-y-2.5">
         {[
           { thu: "Thứ 2", gio: "19:30 – 20:15", mon: "Toán", bai: "Luyện đề đạo hàm và tích phân", phut: "45p", xong: true },
           { thu: "Thứ 4", gio: "20:00 – 20:45", mon: "Tiếng Anh", bai: "Hoàn thiện 25 câu trắc nghiệm từ vựng", phut: "45p", xong: true },
           { thu: "Thứ 6", gio: "19:30 – 20:15", mon: "Toán", bai: "Ôn tập chuyên đề hình học không gian", phut: "45p", xong: false },
           { thu: "Chủ nhật", gio: "14:30 – 16:00", mon: "Thi thử", bai: "Thi thử đề chuẩn cấu trúc Bộ GD&ĐT", phut: "90p", xong: false },
         ].map((v, i) => (
-          <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-            <div className="flex items-center gap-2.5">
-              <span className={`w-5 h-5 rounded-full grid place-items-center text-white text-[10px] ${v.xong ? "bg-emerald-500" : "bg-slate-300"}`}>
+          <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 text-[13px]">
+            <div className="flex items-center gap-3">
+              <span className={`w-6 h-6 rounded-full grid place-items-center text-white text-[11px] font-bold ${v.xong ? "bg-emerald-500" : "bg-slate-300"}`}>
                 {v.xong ? "✓" : i + 1}
               </span>
               <div>
-                <b className="text-slate-900 block leading-tight">{v.mon}: {v.bai}</b>
-                <span className="text-[11px] text-slate-500">{v.thu} · {v.gio} ({v.phut})</span>
+                <b className="text-slate-900 block leading-snug">{v.mon}: {v.bai}</b>
+                <span className="text-xs text-slate-500">{v.thu} · {v.gio} ({v.phut})</span>
               </div>
             </div>
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${v.xong ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
+            <span className={`px-2.5 py-1 rounded-lg text-[11px] font-bold shrink-0 ${v.xong ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
               {v.xong ? "Đã học" : "Chờ học"}
             </span>
           </div>
@@ -299,57 +299,57 @@ export function PlanAppMockup() {
  */
 export function DailyAppMockup() {
   return (
-    <div className="w-full max-w-[620px] mx-auto rounded-3xl bg-white border border-slate-200 p-5 shadow-xl text-left select-none">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <div className="size-8 rounded-xl bg-amber-100 text-amber-700 grid place-items-center font-bold">
-            <Flame size={18} />
+    <div className="w-full max-w-[660px] mx-auto rounded-3xl bg-white border border-slate-200 p-6 shadow-xl text-left select-none">
+      <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+        <div className="flex items-center gap-2.5">
+          <div className="size-9 rounded-xl bg-amber-100 text-amber-700 grid place-items-center font-bold">
+            <Flame size={19} />
           </div>
           <div>
-            <h4 className="font-extrabold text-sm text-slate-900">Tiến độ hôm nay & Chuỗi giữ nhịp</h4>
+            <h4 className="font-extrabold text-[15px] text-slate-900">Tiến độ hôm nay & Chuỗi giữ nhịp</h4>
             <span className="text-xs text-slate-500">Đồng hành mỗi ngày cùng kỳ thi tốt nghiệp THPT</span>
           </div>
         </div>
-        <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200 flex items-center gap-1">
+        <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200 flex items-center gap-1">
           <Flame size={13} className="fill-amber-500 text-amber-500" /> Chuỗi 6 ngày
         </span>
       </div>
 
       {/* Thẻ thống kê nhịp học */}
-      <div className="grid grid-cols-3 gap-2 mt-3 text-center">
-        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <span className="text-[10px] text-slate-500 block">Tuần này</span>
-          <b className="text-[13px] text-slate-800">18 giờ tự học</b>
+      <div className="grid grid-cols-3 gap-2.5 mt-3.5 text-center">
+        <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <span className="text-[11px] text-slate-500 block">Tuần này</span>
+          <b className="text-sm text-slate-800">18 giờ tự học</b>
         </div>
-        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <span className="text-[10px] text-slate-500 block">Số phiên xong</span>
-          <b className="text-[13px] text-blue-600">8/12 phiên</b>
+        <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <span className="text-[11px] text-slate-500 block">Số phiên xong</span>
+          <b className="text-sm text-blue-600">8/12 phiên</b>
         </div>
-        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-          <span className="text-[10px] text-slate-500 block">Điểm kéo dự kiến</span>
-          <b className="text-[13px] text-emerald-600">+1,5 điểm</b>
+        <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+          <span className="text-[11px] text-slate-500 block">Điểm kéo dự kiến</span>
+          <b className="text-sm text-emerald-600">+1,5 điểm</b>
         </div>
       </div>
 
       {/* Thông báo nhắc việc thông minh */}
-      <div className="mt-3 p-3 rounded-2xl bg-blue-50/70 border border-blue-200/70">
+      <div className="mt-3.5 p-3.5 rounded-2xl bg-blue-50 border border-blue-200/70">
         <div className="flex items-center justify-between text-xs mb-1.5">
           <span className="font-bold text-blue-900 flex items-center gap-1.5">
-            <Bell size={13} className="text-blue-600" /> Nhắc nhở buổi học tối nay
+            <Bell size={14} className="text-blue-600" /> Nhắc nhở buổi học tối nay
           </span>
-          <span className="text-[10px] text-blue-700 font-semibold">19:30 – 20:15</span>
+          <span className="text-[11px] text-blue-700 font-semibold">19:30 – 20:15</span>
         </div>
-        <p className="text-xs text-slate-700">
+        <p className="text-[13px] text-slate-700 leading-relaxed">
           <b>Toán:</b> Chuyên đề Hàm số bậc 3 & Cực trị. Chuẩn bị sẵn phiếu bài tập trước 10 phút để vào guồng học tập hiệu quả.
         </p>
       </div>
 
       {/* Cập nhật tuyển sinh chính thức mới nhất */}
-      <div className="mt-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/70 text-xs">
+      <div className="mt-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 text-[13px]">
         <div className="flex items-center gap-1.5 text-slate-900 font-bold mb-1">
-          <ShieldCheck size={14} className="text-emerald-600" /> Cập nhật Đề án tuyển sinh mới nhất
+          <ShieldCheck size={15} className="text-emerald-600" /> Cập nhật Đề án tuyển sinh mới nhất
         </div>
-        <p className="text-slate-600 text-[11px] leading-relaxed">
+        <p className="text-slate-600 text-xs leading-relaxed">
           ĐH Bách Khoa Hà Nội & ĐH Quốc gia Hà Nội đã công bố phân bổ chỉ tiêu 2025. Hệ thống đã tự động đối chiếu và cập nhật ngưỡng điểm tham chiếu trong hồ sơ của bạn.
         </p>
       </div>

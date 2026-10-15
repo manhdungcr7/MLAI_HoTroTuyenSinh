@@ -112,6 +112,6 @@ assert.ok(dl.length > 0 && !JSON.stringify(dl).includes(mau.hoSo.hoTen));
   assert.ok(r.ok && r.v.nguCanh === undefined);
   const n = kiemTraYeuCau({ cauHoi: "Câu hỏi bình thường", nguCanh: 5, duLieu: [] });
   assert.ok(n.ok && n.v.nguCanh === undefined);
-  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 9, "giữ nguyên 9 quy tắc");
+  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 10, "đủ 10 quy tắc (quy tắc 10: lấy NV1 làm gốc)");
 }
 console.log("tu-van: tất cả kiểm tra đều qua");

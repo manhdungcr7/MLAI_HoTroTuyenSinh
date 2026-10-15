@@ -8,6 +8,23 @@ import { OInput, Truong } from "@cms/thanh-phan/ui/nhap-lieu";
 import { Nut } from "@cms/thanh-phan/ui/nut-the";
 import { entityIdDiemChuan, kiemTraHangLoat, taiChuongTrinh, type ChuongTrinhTruong } from "./chuong-trinh";
 import { THONG_BAO_LUU, type MucTieuLuu } from "./luu-ban-ghi";
+import { khoaNhap } from "@cms/trang-thai/ban-nhap";
+import { useBanNhap } from "@cms/trang-thai/dung-ban-nhap";
+import { ThanhBanNhap } from "@cms/trang-thai/thanh-ban-nhap";
+import { usePhien } from "@cms/trang-thai/phien";
+
+/** Phần nhập được lưu nháp (không gồm ô tìm ngành). */
+interface NhapCaTruong { nam: string; diem: Record<string, string>; nguon: { link: string; tieuDe: string; donVi: string }; ghiChu: string }
+
+function laNhapCaTruong(v: unknown): v is NhapCaTruong {
+  if (typeof v !== "object" || v === null) return false;
+  const r = v as Record<string, unknown>;
+  const n = r.nguon as Record<string, unknown> | undefined;
+  const d = r.diem as Record<string, unknown> | undefined;
+  return typeof r.nam === "string" && typeof r.ghiChu === "string"
+    && typeof n === "object" && n !== null && typeof n.link === "string" && typeof n.tieuDe === "string" && typeof n.donVi === "string"
+    && typeof d === "object" && d !== null && Object.values(d).every((x) => typeof x === "string");
+}
 
 const dinhDang = (n: number | null) => (n === null ? "chưa có" : String(n).replace(".", ","));
 
@@ -23,6 +40,8 @@ export function HopFormDiemChuanCaTruong({ maTruong, tenTruong, laQtv, dong, onX
   const [loiChung, setLoiChung] = useState<string | null>(null);
   const [dang, setDang] = useState(false);
   const [tim, setTim] = useState("");
+  const { toi } = usePhien();
+  const banNhap = useBanNhap<NhapCaTruong>(khoaNhap("diem-chuan-ca-truong", maTruong), toi.email, laNhapCaTruong, { nam, diem, nguon, ghiChu });
 
   useEffect(() => { void taiChuongTrinh(maTruong).then(setDs).catch(() => setDs([])); }, [maTruong]);
   const hien = useMemo(() => (ds ?? []).filter((c) => !tim.trim() || c.nganh.toLowerCase().includes(tim.trim().toLowerCase())), [ds, tim]);
@@ -67,6 +86,7 @@ export function HopFormDiemChuanCaTruong({ maTruong, tenTruong, laQtv, dong, onX
       }
     } finally { setDang(false); }
     if (loiDong.length) { setLoiChung(`Đã lưu ${xong} ngành. Còn ${loiDong.length} ngành lỗi: ${loiDong.slice(0, 2).join("; ")}${boQua ? `. ${boQua} ngành đã có sẵn nên bỏ qua.` : ""}`); return; }
+    banNhap.xong();
     onXong(`${THONG_BAO_LUU[muc]} (${xong} ngành${boQua ? `, bỏ qua ${boQua} ngành đã có điểm chuẩn năm ${namSo}` : ""}).`);
   };
 
@@ -74,6 +94,17 @@ export function HopFormDiemChuanCaTruong({ maTruong, tenTruong, laQtv, dong, onX
     <HopTruot mo dong={dong} tieuDe="Nhập điểm chuẩn cả trường">
       <div className="space-y-3.5 pb-2">
         <p className="text-[13px] text-chu-phu leading-snug">Điền điểm chuẩn THPT (thang 30) của các ngành trường đã công bố, để trống ngành chưa có. Một nguồn chung cho cả bảng; mỗi ngành thành một mục riêng để người duyệt đối chiếu.</p>
+        {banNhap.cho && (
+          <ThanhBanNhap
+            luuLuc={banNhap.cho.luuLuc}
+            khoiPhuc={() => {
+              const du = banNhap.khoiPhuc();
+              if (!du) return;
+              setNam(du.nam); setDiem(du.diem); setNguon(du.nguon); setGhiChu(du.ghiChu);
+            }}
+            bo={banNhap.bo}
+          />
+        )}
         <div className="grid grid-cols-2 gap-2.5">
           <Truong nhan="Năm tuyển sinh" batBuoc htmlFor="ct-nam" loi={loi.nam}><OInput id="ct-nam" inputMode="numeric" value={nam} onChange={(e) => setNam(e.target.value)} /></Truong>
           <Truong nhan="Tìm ngành" htmlFor="ct-tim"><OInput id="ct-tim" value={tim} onChange={(e) => setTim(e.target.value)} placeholder="Tên ngành" /></Truong>

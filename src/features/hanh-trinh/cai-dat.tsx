@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Bell, BookOpenCheck, CalendarDays, Database, Download, HeartHandshake, Info, Upload, RotateCcw, ShieldCheck, Sparkles } from "lucide-react";
+import { Bell, BookOpenCheck, CalendarDays, Download, GraduationCap, HeartHandshake, Upload, RotateCcw, Sparkles, UserPen } from "lucide-react";
 import { DauTrangCoQuayLai, Logo, NoiDung } from "@/components/layout/khung";
 import { HangBam, Nhan, Nut, The } from "@/components/ui/nut-the";
 import { HopTruot, TieuDeMuc } from "@/components/ui/hien-thi";
-import { DongThongBao } from "@/components/ui/thong-bao";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { docLichSu, ghiLichSu } from "@/features/tu-van/hoi-thoai";
 import { docBanSaoLuu, taoBanSaoLuu } from "@/state/sao-luu";
 
 // Giữ khớp với "version" trong package.json.
@@ -19,6 +19,7 @@ export default function CaiDat() {
   const oTep = useRef<HTMLInputElement>(null);
   const [tin, setTin] = useState<{ ok: boolean; chu: string } | null>(null);
   const nav = useNavigate();
+  const [kemChat, setKemChat] = useState(false); // mặc định tắt: lịch sử chat chỉ vào tệp khi bạn tự bật
   const [hoi, setHoi] = useState<HoiLai>(null);
   const dong = () => setHoi(null);
   const coDuLieu = !!s.hoSo.hoTen.trim() || s.hoSo.hoanTat || s.mucTieu !== null || s.nguyenVong.length > 0;
@@ -32,16 +33,18 @@ export default function CaiDat() {
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const year = now.getFullYear();
     const dateStr = `${year}-${month}-${day}`;
-    const url = URL.createObjectURL(new Blob([taoBanSaoLuu(s)], { type: "application/json" }));
+    const url = URL.createObjectURL(new Blob([taoBanSaoLuu(s, now, kemChat ? docLichSu(localStorage) : [])], { type: "application/json" }));
     const a = document.createElement("a");
     a.href = url; a.download = `nguyen-vong-ai-${dateStr}.json`;
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    setTin({ ok: true, chu: "Đã tải tệp sao lưu về máy. Em giữ tệp này ở nơi an toàn." });
+    setTin({ ok: true, chu: "Đã tải tệp sao lưu về máy. Bạn giữ tệp này ở nơi an toàn." });
   };
   const nhap = async (f: File | undefined) => {
     if (!f) return;
     const kq = f.size > 5_000_000 ? { ok: false as const, lyDo: "Tệp quá lớn so với một bản sao lưu." } : docBanSaoLuu(await f.text());
-    if (kq.ok) { khoiPhuc(kq.s); setTin({ ok: true, chu: "Đã khôi phục dữ liệu từ tệp sao lưu." }); }
+    if (kq.ok) { khoiPhuc(kq.s); // xóa lịch sử cũ; nếu tệp có kèm lịch sử trò chuyện thì nạp lại
+      const coChat = !!kq.lichSu?.length && ghiLichSu(localStorage, kq.lichSu);
+      setTin({ ok: true, chu: coChat ? "Đã khôi phục dữ liệu và lịch sử trò chuyện từ tệp sao lưu." : "Đã khôi phục dữ liệu từ tệp sao lưu." }); }
     else setTin({ ok: false, chu: kq.lyDo });
     if (oTep.current) oTep.current.value = "";
   };
@@ -51,6 +54,14 @@ export default function CaiDat() {
     <>
       <DauTrangCoQuayLai tieuDe="Cài đặt" quayLai={DUONG_DAN.hoSo()} />
       <NoiDung className="space-y-5">
+        <section>
+          <TieuDeMuc>Hồ sơ</TieuDeMuc>
+          <div className="grid grid-cols-2 gap-2">
+            <HangBam bieuTuong={UserPen} tone="xanh" tieuDe="Sửa hồ sơ" onClick={() => nav(DUONG_DAN.batDau(1))} />
+            <HangBam bieuTuong={GraduationCap} tone="tim" tieuDe="Sửa điểm" onClick={() => nav(DUONG_DAN.batDau(2))} />
+          </div>
+        </section>
+
         <section>
           <TieuDeMuc>Học tập</TieuDeMuc>
           <div className="space-y-2">
@@ -65,35 +76,31 @@ export default function CaiDat() {
         </section>
 
         <section>
-          <TieuDeMuc>Dữ liệu của bạn</TieuDeMuc>
+          <TieuDeMuc>Dữ liệu trên máy này</TieuDeMuc>
           <The className="space-y-3">
-            <p className="flex gap-2.5 text-[14px] text-chu leading-snug">
-              <ShieldCheck size={22} className="text-luc shrink-0" />
-              <span>Mọi thông tin bạn nhập được lưu an toàn trên thiết bị này. Bạn có thể xuất bản sao lưu bất cứ lúc nào.</span>
-            </p>
-            <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu</Nut>
-            <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục sao lưu</Nut>
+            <label className="flex items-start gap-3 min-h-11">
+              <input type="checkbox" checked={kemChat} onChange={(e) => setKemChat(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--color-xanh)]" />
+              <span className="text-[14px] text-chu">Kèm lịch sử trò chuyện trong tệp sao lưu <span className="text-chu-phu">(câu bạn đã hỏi AI cũng nằm trong tệp)</span></span>
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Xuất JSON</Nut>
+              <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Nhập JSON</Nut>
+            </div>
             <input ref={oTep} type="file" accept="application/json,.json" className="hidden" aria-hidden="true" tabIndex={-1} onChange={(e) => void nhap(e.target.files?.[0])} />
             <p role="status" className={tin ? (tin.ok ? "text-[13px] text-luc-chu" : "text-[13px] text-do-chu") : "sr-only"}>{tin?.chu}</p>
-            <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Dùng hồ sơ mẫu</Nut>
-            <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết dữ liệu</Nut>
+            <div className="grid grid-cols-2 gap-2">
+              <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Hồ sơ mẫu</Nut>
+              <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết</Nut>
+            </div>
           </The>
-        </section>
-
-        <section>
-          <TieuDeMuc>Về dữ liệu</TieuDeMuc>
-          <div className="space-y-2">
-            <HangBam bieuTuong={HeartHandshake} tone="luc" tieuDe="Cùng cập nhật dữ liệu trường" onClick={() => nav(DUONG_DAN.dongGop())} phu="Dành cho sinh viên, thầy cô, cán bộ tuyển sinh" />
-            <DongThongBao tone="cam" icon={Database} tieuDe="Điểm chuẩn là số của các năm trước"
-              moTa="Điểm chuẩn lấy từ đề án tuyển sinh của trường hoặc trang tổng hợp, mỗi ngành đều ghi nguồn. Học phí và việc làm nhiều ngành chưa có. Bạn luôn đối chiếu với đề án chính thức của trường trước khi quyết định." />
-            <DongThongBao tone="xanh" icon={Info} tieuDe="Điểm phù hợp không phải khả năng đậu"
-              moTa="Điểm phù hợp là điểm gợi ý trên 100, tính từ điểm, học phí, khu vực và cơ hội việc làm, hỗ trợ bạn so sánh và cân nhắc." />
-          </div>
         </section>
 
         <div className="flex flex-col items-center gap-1 pt-2 pb-2">
           <Logo nho />
           <p className="text-[13px] text-chu-phu">Phiên bản {PHIEN_BAN} · bản thử nghiệm</p>
+          <button type="button" onClick={() => nav(DUONG_DAN.dongGop())} className="inline-flex items-center gap-1.5 min-h-11 px-3 text-[13px] font-semibold text-xanh cursor-pointer">
+            <HeartHandshake size={16} className="shrink-0" />Cùng cập nhật dữ liệu trường
+          </button>
         </div>
       </NoiDung>
 

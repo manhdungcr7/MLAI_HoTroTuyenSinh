@@ -1,6 +1,6 @@
 // Trạng thái toàn ứng dụng, lưu trên máy (localStorage). Chưa có máy chủ: hồ sơ không rời khỏi điện thoại.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau } from "./mau";
+import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau, type KieuMau } from "./mau";
 import { chuanHoa } from "./chuan-hoa";
 import { xepLaiTuan } from "./xep-lai";
 import { isoNgay } from "@/engine/xep-lich";
@@ -84,6 +84,8 @@ interface Ctx {
   luuTinhHuong: (t: Omit<TinhHuongDaLuu, "id" | "luc">) => void;
   xoaTinhHuong: (id: string) => void;
   dungHoSoMau: () => void;
+  /** Nạp một trong các hồ sơ mẫu (xem DANH_SACH_MAU). */
+  dungHoSoMauKieu: (kieu: KieuMau) => void;
   lamLai: () => void;
   themLoiNhan: (l: LoiNhan) => void;
   xoaLoiNhan: (id: string) => void;
@@ -162,6 +164,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     luuTinhHuong: (th) => cap((x) => ({ ...x, tinhHuong: [...x.tinhHuong, { ...th, id: idMoi("th"), luc: new Date().toISOString() }].slice(-6) })),
     xoaTinhHuong: (id) => cap((x) => ({ ...x, tinhHuong: x.tinhHuong.filter((t) => t.id !== id) })),
     dungHoSoMau: () => { xoaDuLieuPhu(); dat(taoHoSoMau()); },
+    dungHoSoMauKieu: (kieu) => { xoaDuLieuPhu(); dat(taoHoSoMau(kieu)); },
     lamLai: () => { xoaDuLieuPhu(); dat({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
     themLoiNhan: (l) => cap((x) => (x.loiNhan.some((k) => k.id === l.id) ? x : { ...x, loiNhan: [l, ...x.loiNhan].slice(0, 30) })),
     xoaLoiNhan: (id) => cap((x) => ({ ...x, loiNhan: x.loiNhan.filter((k) => k.id !== id) })),

@@ -143,7 +143,7 @@ export default function Buoc1({ h, sua, loi }: P) {
             type="search"
             value={tuKhoa}
             onChange={(e) => setTuKhoa(e.target.value)}
-            placeholder="Tìm nhanh ngành (CNTT, Kinh tế, Y Dược, Luật...)"
+            placeholder="Tìm ngành, ví dụ Kinh tế"
             aria-label="Tìm nhanh nhóm ngành"
             className="w-full min-h-11 rounded-xl border border-vien bg-trang pl-9 pr-9 text-[14px] focus:border-xanh outline-none"
           />
@@ -169,7 +169,7 @@ export default function Buoc1({ h, sua, loi }: P) {
                   type="button"
                   onClick={() => setTabNhom(tab)}
                   className={gop(
-                    "min-h-8 px-3 rounded-lg text-[12.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
+                    "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
                     chon ? "bg-xanh text-white shadow-sm" : "bg-nen text-chu hover:bg-vien/40"
                   )}
                 >
@@ -181,7 +181,7 @@ export default function Buoc1({ h, sua, loi }: P) {
         )}
 
         {/* Lưới các thẻ ngành cân đối và đồng đều kích thước */}
-        <div className="grid grid-cols-2 gap-2 max-h-72 overflow-y-auto an-thanh-cuon pr-0.5">
+        <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto an-thanh-cuon pr-0.5">
           {danhSachHien.map((item) => {
             const daChon = h.nganhQuanTam.includes(item.gia);
             const ten = TEN_HIEN_THI_NGANH[item.gia] || item.nhan.split("/")[0].trim();

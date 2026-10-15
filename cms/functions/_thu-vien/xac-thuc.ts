@@ -71,26 +71,59 @@ export function kiemOrigin(request: Request): void {
   if (!host || host !== new URL(request.url).host) throw new LoiHttp(403, "khong-co-quyen", "Yêu cầu không đến từ trang quản trị");
 }
 
-// ---- Giới hạn đăng nhập sai: 5 lần/15 phút theo (IP + email), đếm bằng KV ----
+// ---- Giới hạn đăng nhập sai và quên mật khẩu: 5 lần/15 phút theo (IP + email), đếm bằng KV + bộ nhớ dự phòng ----
 const kvCua = (env: Env): KhoKV | undefined => env.KV_CONG_DONG ?? env.RATE_KV;
-const khoaSai = (request: Request, email: string) => `dn:${request.headers.get("cf-connecting-ip") ?? "?"}:${email.slice(0, 200)}`;
+const khoaSai = (request: Request, email: string, tienTo = "dn") => `${tienTo}:${request.headers.get("cf-connecting-ip") ?? "?"}:${email.slice(0, 200)}`;
+const boNhoSai = new Map<string, { dem: number; hetHanMs: number }>();
+const TRAN_BO_NHO_SAI = 5000;
 
-/** Ném 429 nếu đã sai quá nhiều. KV lỗi thì không chặn, chỉ cảnh báo. */
-export async function kiemSoLanSai(env: Env, request: Request, email: string): Promise<void> {
-  const kv = kvCua(env);
-  if (!kv) return;
-  let dem = 0;
-  try { dem = Number((await kv.get(khoaSai(request, email))) ?? 0); } catch { console.warn("cms-dang-nhap: KV lỗi, bỏ qua giới hạn"); return; }
-  if (dem >= TOI_DA_SAI) throw new LoiHttp(429, "qua-nhanh", "Bạn nhập sai nhiều lần. Đợi 15 phút rồi thử lại.");
+export function xoaBoNhoGioiHan(): void {
+  boNhoSai.clear();
 }
-export async function ghiLanSai(env: Env, request: Request, email: string): Promise<void> {
+
+/** Ném 429 nếu đã sai hoặc gửi yêu cầu quá nhiều lần trong cửa sổ 15 phút. */
+export async function kiemSoLanSai(env: Env, request: Request, email: string, tienTo = "dn", bayGio = new Date()): Promise<void> {
+  const k = khoaSai(request, email, tienTo);
+  const kv = kvCua(env);
+  let dem = 0;
+  if (kv) {
+    try { dem = Number((await kv.get(k)) ?? 0); } catch { console.warn("cms-dang-nhap: KV lỗi, dùng bộ nhớ tạm"); }
+  }
+  const muc = boNhoSai.get(k);
+  if (muc) {
+    if (muc.hetHanMs <= bayGio.getTime()) boNhoSai.delete(k);
+    else if (muc.dem > dem) dem = muc.dem;
+  }
+  if (dem >= TOI_DA_SAI) {
+    const thongBao = tienTo.startsWith("qmk")
+      ? "Bạn đã gửi quá nhiều yêu cầu đặt lại mật khẩu. Đợi 15 phút rồi thử lại."
+      : "Bạn nhập sai nhiều lần. Đợi 15 phút rồi thử lại.";
+    throw new LoiHttp(429, "qua-nhanh", thongBao);
+  }
+}
+
+export async function ghiLanSai(env: Env, request: Request, email: string, tienTo = "dn", bayGio = new Date()): Promise<void> {
+  const k = khoaSai(request, email, tienTo);
+  const hienTai = boNhoSai.get(k);
+  const conHan = hienTai && hienTai.hetHanMs > bayGio.getTime();
+  const demMoi = (conHan ? hienTai.dem : 0) + 1;
+  if (boNhoSai.size >= TRAN_BO_NHO_SAI) {
+    for (const [khoa, m] of boNhoSai) if (m.hetHanMs <= bayGio.getTime()) boNhoSai.delete(khoa);
+    // Vẫn đầy (tấn công dồn trong 15 phút): bỏ mục cũ nhất để bộ nhớ không phình vô hạn.
+    if (boNhoSai.size >= TRAN_BO_NHO_SAI) boNhoSai.delete(boNhoSai.keys().next().value as string);
+  }
+  boNhoSai.set(k, { dem: demMoi, hetHanMs: bayGio.getTime() + CUA_SO_SAI_GIAY * 1000 });
   const kv = kvCua(env);
   if (!kv) return;
   try {
-    const k = khoaSai(request, email);
-    await kv.put(k, String(Number((await kv.get(k)) ?? 0) + 1), { expirationTtl: CUA_SO_SAI_GIAY });
+    const demKv = Number((await kv.get(k)) ?? 0) + 1;
+    await kv.put(k, String(Math.max(demMoi, demKv)), { expirationTtl: CUA_SO_SAI_GIAY });
   } catch { console.warn("cms-dang-nhap: KV lỗi, không ghi được lần sai"); }
 }
-export async function xoaLanSai(env: Env, request: Request, email: string): Promise<void> {
-  try { await kvCua(env)?.put(khoaSai(request, email), "0", { expirationTtl: 60 }); } catch { /* bỏ qua */ }
+
+export async function xoaLanSai(env: Env, request: Request, email: string, tienTo = "dn"): Promise<void> {
+  const k = khoaSai(request, email, tienTo);
+  boNhoSai.delete(k);
+  try { await kvCua(env)?.put(k, "0", { expirationTtl: 60 }); } catch { /* bỏ qua */ }
 }
+

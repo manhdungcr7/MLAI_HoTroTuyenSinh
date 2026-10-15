@@ -6,7 +6,9 @@ import { danhGia, boiCanhTu } from "../src/features/kham-pha/phu-hop";
 import { tongChoLuaChon, diemDayDu } from "../src/features/kham-pha/to-hop";
 import { GIOI_HAN } from "../src/engine/tu-van";
 import { catLichSu, docLichSu, ghiLichSu, goiYBanDau, KHOA_CHAT, lamSachLichSu, nganhLuotTruoc, taoNguCanh, TOI_DA_TIN, type TinNhan } from "../src/features/tu-van/hoi-thoai";
-import { chonDuLieuKemTheo, coDaiTu, dungSuKien, timNganhKhop, tomTatHoSo, traLoiTuDong } from "../src/features/tu-van/lay-du-lieu";
+import { cauDangCho, guiNen, huyCho } from "../src/features/tu-van/dang-cho";
+import { docBanSaoLuu, taoBanSaoLuu } from "../src/state/sao-luu";
+import { cauNganHoiTiep, chonDuLieuKemTheo, coDaiTu, dungSuKien, timNganhKhop, tomTatHoSo, traLoiTuDong } from "../src/features/tu-van/lay-du-lieu";
 import { xoaTatCaDuLieu } from "../src/state/store";
 import { taoHoSoMau } from "../src/state/mau";
 
@@ -92,6 +94,55 @@ ghiLichSu(k1, []); assert.equal(k1.m.has(KHOA_CHAT), false, "rỗng thì xóa kh
 assert.equal(goiYBanDau({ soNguyenVong: 0, nganhQuanTam: [] }).length, 3);
 const gy = goiYBanDau({ soNguyenVong: 2, nganhQuanTam: ["Công nghệ thông tin"] });
 assert.equal(gy.length, 4); assert.ok(gy[0].includes("nguyện vọng") && gy[1].includes("Công nghệ thông tin"));
+
+// ---------- Nhận câu nối tiếp (có dấu và không dấu) ----------
+for (const c of ["Vậy còn trường kia?", "vay con truong kia thi sao", "Thế còn Marketing thì sao?", "So với nó thì sao?", "so voi no thi nao", "Cái đó có khó không?", "cai do hoc phi bao nhieu", "Khoa này lấy bao nhiêu điểm?", "chương trình đó có tốt không", "Điểm của nó cao hơn không?"])
+  assert.ok(coDaiTu(c), `phải nhận là nối tiếp: ${c}`);
+for (const c of ["Điểm chuẩn Khoa học máy tính UIT?", "Marketing ở NEU học phí bao nhiêu?", "Em nên bắt đầu tìm ngành từ đâu?", "Danh sách nguyện vọng của em có cân bằng không?", "Ngành nào hợp với em?"])
+  assert.ok(!coDaiTu(c) && !cauNganHoiTiep(c), `không được bắt nhầm: ${c}`);
+for (const c of ["Có khó không?", "co kho khong", "Bao nhiêu?", "Thế nào?", "Nên không?", "Học phí bao nhiêu"]) assert.ok(cauNganHoiTiep(c) || /hoc phi/.test(c.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")), `câu ngắn: ${c}`);
+assert.ok(!cauNganHoiTiep("Điểm chuẩn Marketing NEU là bao nhiêu vậy bạn ơi"), "câu dài nêu ngành không phải câu ngắn");
+const ngan = traLoiTuDong("Có khó không?", s, null, uit);
+assert.ok(ngan.nguon.includes(uit[0]), "câu rất ngắn giữ ngành lượt trước");
+assert.equal(traLoiTuDong("Có khó không?", s, null, []).nguon.length, 0, "chưa có lượt trước thì không bịa ngành");
+
+// ---------- Yêu cầu chờ không mất khi rời màn, không ghi trùng ----------
+{
+  const k = kho();
+  const dapAi: TinNhan = { vai: "mayChu", chu: "đáp", cheDo: "ai" };
+  let xong!: () => void;
+  const cho = new Promise<void>((r) => { xong = r; });
+  const p = guiNen(k, "hỏi A", [], async () => { await cho; return dapAi; });
+  assert.equal(cauDangCho(), "hỏi A");
+  assert.deepEqual(docLichSu(k).map((x) => x.chu), ["hỏi A"], "câu hỏi vào lịch sử ngay");
+  xong(); await p;
+  assert.equal(cauDangCho(), null);
+  assert.deepEqual(docLichSu(k).map((x) => x.chu), ["hỏi A", "đáp"], "đáp ghi đúng một lần dù không còn màn nào nghe");
+  // lịch sử đã đổi giữa chừng (hỏi lại): bỏ đáp cũ
+  const k2 = kho(); let x2!: () => void; const c2 = new Promise<void>((r) => { x2 = r; });
+  const p2 = guiNen(k2, "hỏi B", [], async () => { await c2; return dapAi; });
+  ghiLichSu(k2, []); x2(); await p2;
+  assert.deepEqual(docLichSu(k2), [], "lịch sử đã bị xóa thì không ghi đáp");
+  // xóa hết (nvai-lam-lai) giữa chừng: bỏ đáp
+  const k3 = kho(); let x3!: () => void; const c3 = new Promise<void>((r) => { x3 = r; });
+  const p3 = guiNen(k3, "hỏi C", [], async () => { await c3; return dapAi; });
+  huyCho(); x3(); await p3;
+  assert.deepEqual(docLichSu(k3).map((x) => x.chu), ["hỏi C"], "sau huyCho không ghi đáp của đời cũ");
+  assert.equal(cauDangCho(), null);
+}
+
+// ---------- Sao lưu kèm lịch sử trò chuyện (tùy chọn) ----------
+{
+  const chat: TinNhan[] = [{ vai: "em", chu: "hỏi" }, { vai: "mayChu", chu: "đáp", nguon: ["a"], cheDo: "ai" }];
+  assert.ok(!taoBanSaoLuu(s).includes("lichSuChat"), "mặc định không kèm lịch sử");
+  assert.ok(!("lichSu" in (docBanSaoLuu(taoBanSaoLuu(s)) as object)), "không kèm thì không có lịch sử khi khôi phục");
+  const kem = docBanSaoLuu(taoBanSaoLuu(s, new Date(), chat));
+  assert.ok(kem.ok && kem.lichSu?.length === 2 && kem.lichSu[1].chu === "đáp");
+  const hong = JSON.parse(taoBanSaoLuu(s, new Date(), chat)); hong.lichSuChat = [{ vai: "x", chu: "y" }, { vai: "em", chu: "ok", nguon: ["bay"] }, null];
+  const r = docBanSaoLuu(JSON.stringify(hong));
+  assert.ok(r.ok && r.lichSu?.length === 1 && !("nguon" in r.lichSu[0]), "tin sai hình dạng bị loại");
+  hong.lichSuChat = "x"; assert.equal(docBanSaoLuu(JSON.stringify(hong)).ok, false, "lichSuChat sai kiểu thì từ chối");
+}
 
 // "Xóa hết" xóa khóa chat (và chỉ các khóa nvai:*)
 {

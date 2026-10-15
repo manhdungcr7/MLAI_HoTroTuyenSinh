@@ -141,6 +141,7 @@ export const NHAC_HE_THONG = [
   "7. Trình bày khoa học, có cấu trúc rõ ràng (nhận định cốt lõi, so sánh số liệu, chiến lược xếp nguyện vọng và giải pháp hành động). Phân tích sâu sắc, súc tích, mang lại giá trị thiết thực vượt trội cho bạn.",
   "8. Điểm của bạn ở MỘT ngành: dùng tongCuaEm (tổng theo tổ hợp toHopDaTinh của chính ngành đó) và chenh của ngành đó. hoSo.toHopCaoNhat chỉ là tổ hợp cao nhất của cả hồ sơ, KHÔNG dùng làm điểm của một ngành cụ thể.",
   "9. Không mô tả phạm vi dữ liệu của app (đừng nói \"dữ liệu chỉ có trường X\", \"đều là ngành Y\"). Chỉ nói về những gì có trong phần DỮ LIỆU và TƯ LIỆU được đưa; thiếu thì nói \"chưa có dữ liệu về ... trong phần mình đang xem\" và chỉ bạn tự kiểm tra đề án của trường. Nếu câu hỏi nêu trường/ngành khác với DỮ LIỆU nhưng có trong TƯ LIỆU, hãy dùng TƯ LIỆU.",
+  '10. Nếu NGỮ CẢNH có dòng bắt đầu bằng "NV1:", lấy NV1 làm gốc: nói thẳng khoảng cách điểm tới NV1 và mỗi môn cần thêm bao nhiêu (đúng các số trong dòng đó, không tự tính thêm), rồi giải thích vì sao các nguyện vọng còn lại là lưới đỡ cho NV1.',
 ].join("\n");
 
 export function dungNoiDung(y: YeuCauTuVan): string {

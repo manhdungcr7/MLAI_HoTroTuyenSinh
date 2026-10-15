@@ -8,12 +8,12 @@ const NHAN_THU = ["", "T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 export function DaiNgay({ cacNgay, chon, onChon, soViec }: { cacNgay: string[]; chon: string; onChon: (n: string) => void; soViec?: Record<string, number> }) {
   const homNay = isoNgay(new Date());
   return (
-    <div role="tablist" aria-label="Chọn ngày" className="grid grid-cols-7 gap-1">
+    <div role="tablist" aria-label="Chọn ngày" className="grid grid-cols-7 gap-1 items-stretch">
       {cacNgay.map((n) => {
         const thu = thuCuaNgay(n), dang = n === chon, la = n === homNay;
         return (
           <button key={n} type="button" role="tab" aria-selected={dang} onClick={() => onChon(n)}
-            className={gop("min-h-14 rounded-xl flex flex-col items-center justify-center text-[12px] font-bold transition-colors",
+            className={gop("min-h-14 min-w-0 py-1 rounded-xl flex flex-col items-center justify-center text-[12px] font-bold transition-colors",
               dang ? "gd-xanh text-white shadow-nut" : "bg-trang border border-vien text-chu", la && !dang && "border-xanh text-xanh")}>
             <span className={gop(thu === 7 && !dang && "text-do-chu")}>{NHAN_THU[thu]}</span>
             <span className="text-[15px] font-extrabold leading-tight">{taoNgay(n).getDate()}</span>

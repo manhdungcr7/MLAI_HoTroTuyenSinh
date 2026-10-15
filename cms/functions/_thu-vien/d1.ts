@@ -45,3 +45,30 @@ export async function docHetTheoKhoa<T>(d1: KhoD1, sql: string, khoaCot: keyof T
     sau = String(r.results[r.results.length - 1][khoaCot]);
   }
 }
+
+export interface DongDatLaiMatKhau {
+  id: string;
+  email: string;
+  token_hash: string;
+  het_han: string;
+  da_dung: number;
+  tao_luc: string;
+}
+
+/** Đảm bảo bảng dat_lai_mat_khau tồn tại trong D1 (chạy an toàn nhiều lần, lưu chỉ bản băm SHA-256 của mã đặt lại). */
+export async function damBaoBang(d1: KhoD1): Promise<void> {
+  await d1.batch([
+    d1.prepare(
+      `CREATE TABLE IF NOT EXISTS dat_lai_mat_khau (
+        id TEXT PRIMARY KEY,
+        email TEXT NOT NULL,
+        token_hash TEXT NOT NULL UNIQUE,
+        het_han TEXT NOT NULL,
+        da_dung INTEGER NOT NULL DEFAULT 0,
+        tao_luc TEXT NOT NULL
+      )`
+    ),
+    d1.prepare("CREATE INDEX IF NOT EXISTS idx_dat_lai_mk_email ON dat_lai_mat_khau (email, tao_luc)"),
+  ]);
+}
+

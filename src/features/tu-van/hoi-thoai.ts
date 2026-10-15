@@ -1,7 +1,8 @@
 // Cuộc trò chuyện ở màn Tư vấn: lưu cục bộ, dựng ngữ cảnh nối tiếp gửi kèm. TypeScript thuần, không React.
-// Lịch sử chat KHÔNG nằm trong tệp sao lưu (src/state/sao-luu.ts): đó là hội thoại tạm, dễ tạo lại, và có thể chứa
-// câu em tự gõ; sao lưu chỉ giữ hồ sơ và kế hoạch. Khóa `nvai:*` nên "Xóa hết", "Hồ sơ mẫu", "Khôi phục" đều xóa nó,
-// vì vậy hội thoại của hồ sơ mẫu không lẫn sang hồ sơ thật.
+// Mặc định lịch sử chat KHÔNG nằm trong tệp sao lưu (src/state/sao-luu.ts): đó là hội thoại tạm, dễ tạo lại, và có thể
+// chứa câu bạn tự gõ. Chỉ khi bạn tự bật "Kèm lịch sử trò chuyện" ở Cài đặt thì tệp mới mang theo (`lichSuChat`, được
+// lamSachLichSu kiểm khi khôi phục). Khóa `nvai:*` nên "Xóa hết", "Hồ sơ mẫu", "Khôi phục" đều xóa nó rồi (nếu tệp có)
+// nạp lại lịch sử từ tệp, vì vậy hội thoại của hồ sơ mẫu không lẫn sang hồ sơ thật.
 import { GIOI_HAN } from "@/engine/tu-van";
 
 export const KHOA_CHAT = "nvai:tu-van-chat";
@@ -49,14 +50,14 @@ export function lamSachLichSu(x: unknown): TinNhan[] {
 
 export const catLichSu = (t: TinNhan[]): TinNhan[] => t.slice(-TOI_DA_TIN);
 
-interface Kho { getItem(k: string): string | null; setItem(k: string, v: string): void; removeItem(k: string): void }
+export interface KhoChat { getItem(k: string): string | null; setItem(k: string, v: string): void; removeItem(k: string): void }
 
-export function docLichSu(kho: Kho): TinNhan[] {
+export function docLichSu(kho: KhoChat): TinNhan[] {
   try { const t = kho.getItem(KHOA_CHAT); return t ? lamSachLichSu(JSON.parse(t)) : []; } catch { return []; }
 }
 
 /** Ghi lịch sử; rỗng thì xóa khóa. Trả false khi không ghi được (đầy bộ nhớ, chế độ riêng tư). */
-export function ghiLichSu(kho: Kho, t: TinNhan[]): boolean {
+export function ghiLichSu(kho: KhoChat, t: TinNhan[]): boolean {
   try {
     if (t.length === 0) kho.removeItem(KHOA_CHAT); else kho.setItem(KHOA_CHAT, JSON.stringify(catLichSu(t)));
     return true;
@@ -94,11 +95,13 @@ export function nganhLuotTruoc(tin: TinNhan[], toiDa = 8): string[] {
   return [];
 }
 
-/** Câu hỏi mẫu ở trạng thái trống, sinh từ hồ sơ (nguyện vọng, ngành quan tâm), luôn đủ 4 câu. */
+/** Câu hỏi mẫu ở trạng thái trống, sinh từ hồ sơ (nguyện vọng, ngành quan tâm), không viết cứng tên trường. */
 export function goiYBanDau(h: { soNguyenVong: number; nganhQuanTam: string[] }): string[] {
   const r: string[] = [];
   if (h.soNguyenVong > 0) r.push("Danh sách nguyện vọng của mình có cân bằng không?");
   if (h.nganhQuanTam[0]) r.push(`Điểm của mình đã đủ cho ngành ${h.nganhQuanTam[0]} chưa?`);
-  r.push("Nên bắt đầu tìm ngành từ đâu?", "Điểm số của mình đang thiếu gì để so sánh?", "Làm sao cân bằng danh sách nguyện vọng?");
+  r.push("Với điểm hiện tại nên xếp NV1 trường nào?");
+  if (h.nganhQuanTam.length >= 2) r.push("So sánh hai ngành đang quan tâm");
+  r.push("Nên bắt đầu tìm ngành từ đâu?", "Điểm số của mình đang thiếu gì để so sánh?");
   return [...new Set(r)].slice(0, 4);
 }

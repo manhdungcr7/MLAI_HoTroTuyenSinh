@@ -19,7 +19,7 @@ export function KhungCoThanhDuoi() {
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
-      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang/95 backdrop-blur border-t border-vien vung-an-toan-duoi">
+      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang border-t border-vien vung-an-toan-duoi">
         <ul className="grid grid-cols-5">
           {CAC_TAB.map((t) => {
             const dang = t.khop(pathname);

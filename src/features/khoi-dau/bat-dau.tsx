@@ -36,7 +36,7 @@ export default function BatDau() {
   const so = Number(buoc) as BuocBatDau;
   const hopLe = so === 1 || so === 2 || so === 3;
 
-  const [daThuBuoc1, setDaThuBuoc1] = useState(false); // chỉ báo thiếu sau khi em bấm Tiếp tục
+  const [daThuBuoc1, setDaThuBuoc1] = useState(false); // chỉ báo thiếu sau khi bạn bấm Tiếp tục
   // Chữ điểm đang gõ. Giữ riêng để "7," gõ dở không bị mất; số hợp lệ được ghi ngay vào hồ sơ.
   const [chuDiem, setChuDiem] = useState<Record<MonId, string>>(() =>
     Object.fromEntries(CAC_MON.map((m) => [m, vietDiem(h.diem[m])])) as Record<MonId, string>);

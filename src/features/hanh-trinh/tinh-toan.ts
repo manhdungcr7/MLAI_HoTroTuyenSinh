@@ -1,3 +1,4 @@
+import { cauKhoangCachNV1, phanTichMoNeo } from "@/features/nguyen-vong/mo-neo";
 import { dinhDang } from "@/engine/dinh-dang";
 // Tính toán thuần (không React) cho Hôm nay và Hồ sơ. Đầu vào là AppState, đầu ra là dữ liệu để vẽ.
 import { khongRoNet, moTaTop } from "@/features/huong-nghiep/cau-hoi";
@@ -138,6 +139,9 @@ export function goiYChoEm(s: AppState, chang: Chang = changCuaEm(s)): GoiY {
   if (chuaCo.length) {
     return ra(`Nhập điểm ${noi(chuaCo.map((x) => TEN_MON[x]))} để tính đúng điểm còn thiếu.`, DUONG_DAN.batDau(2));
   }
+  // Có NV1 (hoặc mục tiêu): lấy NV1 làm gốc, nói thẳng mỗi môn cần thêm bao nhiêu.
+  const khoangNV1 = cauKhoangCachNV1(phanTichMoNeo(s));
+  if (khoangNV1) return ra(khoangNV1, DUONG_DAN.monKeoDiem());
   const mon = [...khoangCachCuaToi(s)].sort((a, b) => b.thieu - a.thieu)[0];
   if (mon && mon.thieu > 0) {
     return ra(`${mon.ten} thiếu khoảng ${lam1(mon.thieu)} điểm: ôn môn này trước.`, DUONG_DAN.monKeoDiem());

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Pencil, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
+import { ChevronDown, Sparkles, ThumbsUp, TrendingUp } from "lucide-react";
 import { Nhan, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { CAC_MON, TEN_MON_NGAN, TO_HOP, type HoSo, type MonId } from "@/state/types";
 import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP } from "./lua-chon";
@@ -16,7 +16,7 @@ const TO_HOP_APP: string[] = Object.keys(TO_HOP);
 type P = {
   h: HoSo;
   sua: (p: Partial<HoSo>) => void;
-  chuDiem: Record<MonId, string>; // chữ em đang gõ, giữ cả "7," khi gõ dở
+  chuDiem: Record<MonId, string>; // chữ bạn đang gõ, giữ cả "7," khi gõ dở
   goDiem: (m: MonId, chu: string) => void;
 };
 
@@ -34,8 +34,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
 
   return (
     <>
-      <TieuDeBuoc tieuDe="Điểm các môn"
-        phai={<span className="mt-1.5 shrink-0 inline-flex items-center gap-1 rounded-lg bg-xanh-nhat px-2 py-1 text-[12px] font-bold text-xanh"><Pencil size={13} />Sửa sau được</span>} />
+      <TieuDeBuoc tieuDe="Điểm các môn" />
 
       <fieldset className="min-w-0">
         <legend className="sr-only">Điểm các môn</legend>
@@ -93,7 +92,6 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
       <section aria-labelledby="tieu-de-to-hop">
         <div className="flex items-center justify-between gap-2 mb-2">
           <h3 id="tieu-de-to-hop" className="flex items-center gap-1.5 text-[15px] font-bold text-chu"><Sparkles size={18} className="text-xanh" />Tổ hợp xét tuyển tự tính</h3>
-          <Nhan tone="xanh">Theo điểm của bạn</Nhan>
         </div>
         <ul className="grid grid-cols-2 gap-2" aria-live="polite">
           {toHop.map((t) => {

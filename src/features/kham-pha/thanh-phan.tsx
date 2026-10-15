@@ -1,4 +1,5 @@
 // Thành phần riêng của slice Khám phá: thẻ lựa chọn có nút tim, nhãn phù hợp tính từ hồ sơ, hộp chọn trường.
+import { locTimKiem } from "@/engine/tim-kiem";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { BarChart3, ChevronRight, GraduationCap, Heart, MapPin, Search, Wallet } from "lucide-react";
@@ -14,7 +15,6 @@ import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
 import { dinhDang } from "@/engine/dinh-dang";
-import { khopTuKhoa, diemLienQuan } from "./tim-kiem";
 
 /**
  * Chữ trên huy hiệu. HuyHieuTruong lấy 4 chữ cái đầu nên HCMUTE, HCMUE, HCMUS, HCMUT đều thành "HCMU";
@@ -60,6 +60,8 @@ export function NutTim({ id, ten, className }: { id: string; ten: string; classN
 
 /** Thẻ một lựa chọn ở màn Khám phá: bấm thẻ mở chi tiết, bấm tim để lưu. */
 export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; onClick: () => void }) {
+  const { s } = useApp();
+  const viTriNV = s.nguyenVong.indexOf(l.id);
   return (
     <article className="relative rounded-the bg-trang border border-vien shadow-the">
       <button type="button" onClick={onClick} className="w-full text-left block p-3.5 rounded-the active:bg-xanh-nhat">
@@ -70,6 +72,7 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
             <span className="block text-[13px] text-chu-phu leading-snug truncate"><b className="font-semibold text-chu">{l.truong}</b> · {l.tenTruong}</span>
             <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
               <NhanPhuHop kq={kq} />
+              {viTriNV >= 0 && <Nhan tone="luc">Đã thêm · NV{viTriNV + 1}</Nhan>}
               <span className="text-[12px] text-chu-phu leading-snug">{kq.tomTat}</span>
             </span>
           </span>
@@ -106,18 +109,10 @@ export function HopChonLuaChon({ mo, dong, tieuDe, boQua = [], onChon }: {
   const { s } = useApp();
   const [tuKhoa, setTuKhoa] = useState("");
   const ds = useMemo(() => {
-    const k = tuKhoa.trim();
     // Ưu tiên những trường bạn đã thích hoặc đã thêm vào nguyện vọng.
     const quen = (l: LuaChon) => (s.yeuThich.includes(l.id) || s.nguyenVong.includes(l.id) ? 0 : 1);
-    return LUA_CHON_MAU
-      .filter((l) => !boQua.includes(l.id) && (!k || khopTuKhoa(l, k)))
-      .sort((a, b) => {
-        if (k) {
-          const dlq = diemLienQuan(b, k) - diemLienQuan(a, k);
-          if (dlq !== 0) return dlq;
-        }
-        return quen(a) - quen(b);
-      })
+    return locTimKiem(LUA_CHON_MAU.filter((l) => !boQua.includes(l.id)), tuKhoa)
+      .sort((a, b) => quen(a) - quen(b))
       .slice(0, 40); // danh mục có hàng nghìn ngành, chỉ hiện 40 mục đầu; bạn gõ tên để tìm chính xác
   }, [tuKhoa, boQua, s.yeuThich, s.nguyenVong]);
   return (

@@ -7,6 +7,7 @@ import { HopTruot } from "@/components/ui/hien-thi";
 import { Nut, The, gop } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { DANH_SACH_MAU, type KieuMau } from "@/state/mau";
 import type { ToneTen } from "@/state/types";
 
 const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string }[] = [
@@ -44,17 +45,17 @@ function MinhHoa() {
 
 export default function ChaoMung() {
   const nav = useNavigate();
-  const { s, dungHoSoMau, lamLai } = useApp();
-  const [hoiThay, setHoiThay] = useState(false);
+  const { s, dungHoSoMauKieu, lamLai } = useApp();
+  const [hoiThay, setHoiThay] = useState<KieuMau | null>(null);
   const [hoiLamLai, setHoiLamLai] = useState(false);
   const h = s.hoSo;
   const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
   // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải hồ sơ mẫu) và chưa bấm hoàn tất
   const dangDienDo = daCoThongTin && !h.hoanTat && !h.laMau;
 
-  const xemMau = () => { dungHoSoMau(); nav(DUONG_DAN.homNay()); };
-  // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu bạn đã nhập gì đó.
-  const bamXemMau = () => (daCoThongTin ? setHoiThay(true) : xemMau());
+  const xemMau = (k: KieuMau) => { dungHoSoMauKieu(k); setHoiThay(null); nav(DUONG_DAN.homNay()); };
+  // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu bạn đã nhập gì đó (trừ khi đang là hồ sơ mẫu).
+  const bamXemMau = (k: KieuMau) => (daCoThongTin && !h.laMau ? setHoiThay(k) : xemMau(k));
 
   const thucLamLai = () => {
     lamLai();
@@ -73,14 +74,32 @@ export default function ChaoMung() {
 
   return (
     <div className="min-h-dvh pb-6">
+      <section aria-labelledby="tieu-de-mau" className="px-4 pt-3 pb-1">
+        <h2 id="tieu-de-mau" className="flex items-center gap-1.5 text-[14px] font-bold text-chu"><Sparkles size={16} className="text-xanh" />Dùng thử hồ sơ mẫu</h2>
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          {DANH_SACH_MAU.map((m) => (
+            <button key={m.kieu} type="button" onClick={() => bamXemMau(m.kieu)}
+              className="min-h-14 rounded-xl border border-vien bg-trang px-3 py-2 text-left cursor-pointer active:bg-xanh-nhat hover:border-xanh/40">
+              <b className="block text-[14px] text-muc leading-tight">{m.ten} · {m.khoi}</b>
+              <span className="block text-[12.5px] text-chu-phu leading-tight mt-0.5 truncate">Mục tiêu {m.mucTieu}</span>
+            </button>
+          ))}
+        </div>
+      </section>
       <NenHero tone="xanh" className="!rounded-t-none px-4 pt-4 pb-6">
         <div className="flex items-center justify-between gap-2">
-          <Logo />
+          {/* Logo dùng chung giữ nguyên; khung bọc cao 44px (kéo giãn link) nhưng chiếm 32px trong hàng */}
+          <span className="inline-flex items-center h-11 -my-1.5 [&>a]:self-stretch">
+            <Logo />
+          </span>
+          {/* Vùng bấm 44px cao; pill hiển thị vẫn ~27px như cũ */}
           <Link
             to={DUONG_DAN.gioiThieu()}
-            className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-xanh text-[12.5px] font-bold shadow-sm transition-all"
+            className="inline-flex items-center min-h-11 px-1 -my-2.5 text-xanh"
           >
-            Giới thiệu
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-trang border border-vien text-[12.5px] font-bold shadow-sm transition-all">
+              Giới thiệu
+            </span>
           </Link>
         </div>
         <MinhHoa />
@@ -107,7 +126,6 @@ export default function ChaoMung() {
 
       <div className="px-4 mt-3 space-y-2.5">
         <Nut muiTen onClick={batDauMoi}>{dangDienDo ? "Điền tiếp hồ sơ" : "Bắt đầu ngay"}</Nut>
-        <Nut kieu="vien" bieuTuong={Sparkles} onClick={bamXemMau}>Xem hồ sơ mẫu</Nut>
         {h.hoanTat && (
           <button type="button" onClick={() => nav(DUONG_DAN.homNay())} className="w-full min-h-12 text-[14px] font-bold text-xanh">Vào trang Hôm nay</button>
         )}
@@ -117,11 +135,11 @@ export default function ChaoMung() {
         <ShieldCheck size={16} className="text-luc shrink-0 mt-px" />Không cần tài khoản. Thông tin chỉ lưu trên thiết bị này.
       </p>
 
-      <HopTruot mo={hoiThay} dong={() => setHoiThay(false)} tieuDe="Dùng hồ sơ mẫu?">
-        <p className="text-[14px] text-chu">Hồ sơ mẫu "Minh Anh" sẽ <b>thay toàn bộ</b> thông tin bạn đã nhập trên máy này (hồ sơ, nguyện vọng, kế hoạch).</p>
+      <HopTruot mo={hoiThay !== null} dong={() => setHoiThay(null)} tieuDe="Dùng hồ sơ mẫu?">
+        <p className="text-[14px] text-chu">Hồ sơ mẫu sẽ <b>thay toàn bộ</b> thông tin bạn đã nhập trên máy này (hồ sơ, nguyện vọng, kế hoạch).</p>
         <div className="mt-4 space-y-2.5">
-          <Nut kieu="nguyHiem" onClick={xemMau}>Dùng hồ sơ mẫu</Nut>
-          <Nut kieu="vien" onClick={() => setHoiThay(false)}>Giữ hồ sơ cũ</Nut>
+          <Nut kieu="nguyHiem" onClick={() => hoiThay && xemMau(hoiThay)}>Dùng hồ sơ mẫu</Nut>
+          <Nut kieu="vien" onClick={() => setHoiThay(null)}>Giữ hồ sơ cũ</Nut>
         </div>
       </HopTruot>
 

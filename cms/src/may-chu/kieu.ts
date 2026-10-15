@@ -12,6 +12,52 @@ export interface PhanCongCms { email: string; maTruong: string }
 export interface NhatKyCms { id: number | string; ai: string; hanhDong: string; doiTuong: string; luc: string }
 export interface Trang<T> { muc: T[]; tong: number }
 
+export type MucDoThongBaoChung = "thongTin" | "canhBao" | "baoTri";
+
+export interface ThongBaoChungHeThong {
+  bat: boolean;
+  noiDung: string;
+  mucDo: MucDoThongBaoChung;
+}
+
+export interface LienHeHeThong {
+  emailHoTro: string;
+  dienThoai: string;
+  donVi: string;
+}
+
+export interface CauHinhNghiepVuHeThong {
+  namTuyenSinh: number;
+  soNguyenVongToiDaGoiY: number;
+  choPhepDangKySom: boolean;
+  choPhepBaoSai: boolean;
+}
+
+export interface EmailGuiDiHeThong {
+  tenHienThi: string;
+  diaChiPhanHoi: string;
+}
+
+export interface CauHoiThuongGapMuc {
+  cauHoi: string;
+  traLoi: string;
+}
+
+export interface CaiDatHeThong {
+  tenHeThong: string;
+  thongBaoChung: ThongBaoChungHeThong;
+  lienHe: LienHeHeThong;
+  cauHinhNghiepVu: CauHinhNghiepVuHeThong;
+  emailGuiDi: EmailGuiDiHeThong;
+  cauHoiThuongGap: CauHoiThuongGapMuc[];
+}
+
+export interface PhanHoiCaiDatHeThong {
+  caiDat: CaiDatHeThong;
+  capNhatBoi: string | null;
+  capNhatLuc: string | null;
+}
+
 /** Lỗi gọi API. `status` 0 = không tới được máy chủ. `chiTiet` là lỗi từng ô, khóa dạng `duLieu.mucThap`. */
 export class LoiApi extends Error {
   constructor(public status: number, thongBao: string, public chiTiet?: Record<string, string>) {
@@ -22,3 +68,4 @@ export class LoiApi extends Error {
 }
 
 export const SO_MOI_TRANG = 50;
+

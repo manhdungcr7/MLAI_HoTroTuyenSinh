@@ -16,14 +16,14 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
     const b = await docThan(request);
     const email = typeof b.email === "string" ? chuanHoaEmail(b.email) : "";
     const matKhau = typeof b.matKhau === "string" ? b.matKhau : "";
-    await kiemSoLanSai(env, request, email);
+    const bayGio = tamLuc(o);
+    await kiemSoLanSai(env, request, email, "dn", bayGio);
     const hs = laEmail(email) && matKhau && matKhau.length <= 200 ? await hoSoQuanTri(d1, email) : null;
     if (!hs || !(await xacMinhMatKhau(matKhau, hs.matKhau))) {
-      await ghiLanSai(env, request, email);
+      await ghiLanSai(env, request, email, "dn", bayGio);
       throw chuaDangNhap("Email hoặc mật khẩu không đúng");
     }
-    await xoaLanSai(env, request, email);
-    const bayGio = tamLuc(o);
+    await xoaLanSai(env, request, email, "dn");
     await cauNhatKy(d1, email, "quan-tri.dang-nhap", `quan_tri:${email}`, bayGio.toISOString()).run();
     return json({ email, vaiTro: hs.vaiTro, phaiDoiMatKhau: hs.phaiDoiMatKhau }, 200, { "set-cookie": datCookie(new URL(request.url), await kyPhien(env, email, bayGio)) });
   });

@@ -63,3 +63,16 @@ export function sinhMatKhauTam(): string {
   }
   return ra;
 }
+
+/** Sinh mã khôi phục mật khẩu ngẫu nhiên 32 byte (64 ký tự hex) an toàn mật mã. */
+export function taoTokenNgauNhien(): string {
+  const b = crypto.getRandomValues(new Uint8Array(32));
+  return Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+}
+
+/** Băm SHA-256 dạng hex cho mã khôi phục để không bao giờ lưu mã gốc vào cơ sở dữ liệu. */
+export async function bamToken(token: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token.trim()));
+  return Array.from(new Uint8Array(digest), (x) => x.toString(16).padStart(2, "0")).join("");
+}
+

@@ -7,6 +7,10 @@ import { OChon, OInput, Truong } from "@cms/thanh-phan/ui/nhap-lieu";
 import { Nut } from "@cms/thanh-phan/ui/nut-the";
 import { luuVaChuyen, THONG_BAO_LUU, type MucTieuLuu } from "./luu-ban-ghi";
 import { entityIdDiemChuan, taiChuongTrinh, type ChuongTrinhTruong } from "./chuong-trinh";
+import { khoaNhap, laDoiTuongChuoi } from "@cms/trang-thai/ban-nhap";
+import { useBanNhap } from "@cms/trang-thai/dung-ban-nhap";
+import { ThanhBanNhap } from "@cms/trang-thai/thanh-ban-nhap";
+import { usePhien } from "@cms/trang-thai/phien";
 
 interface F { chuongTrinhId: string; maNganh: string; nam: string; phuongThuc: string; toHop: string; diemChuan: string; tieuChiPhu: string; linkNguon: string; tieuDeNguon: string; donViCongBo: string; ghiChuThayDoi: string }
 
@@ -16,6 +20,8 @@ const PHUONG_THUC = [
   { gia: "HOC_BA", nhan: "Xét học bạ" },
   { gia: "KHAC", nhan: "Phương thức khác" },
 ];
+
+const CAC_KHOA_F: readonly string[] = ["chuongTrinhId", "maNganh", "nam", "phuongThuc", "toHop", "diemChuan", "tieuChiPhu", "linkNguon", "tieuDeNguon", "donViCongBo", "ghiChuThayDoi"];
 
 const so = (s: string): number => Number(s.trim().replace(",", "."));
 
@@ -53,6 +59,8 @@ export function HopFormDiemChuan({ maTruong, tenTruong, ban, laQtv, dong, onXong
   const [loiMay, setLoiMay] = useState<string | null>(null);
   const [dang, setDang] = useState(false);
   const [daLuu, setDaLuu] = useState<BanGhiCms | null>(null);
+  const { toi } = usePhien();
+  const banNhap = useBanNhap<F>(khoaNhap("diem-chuan", `${maTruong}:${ban?.id ?? "moi"}`), toi.email, laDoiTuongChuoi<F>(CAC_KHOA_F), f);
   const [dsCt, setDsCt] = useState<ChuongTrinhTruong[] | null>(null);
   useEffect(() => { void taiChuongTrinh(maTruong).then(setDsCt).catch(() => setDsCt([])); }, [maTruong]);
   const dat = (k: keyof F) => (e: { target: { value: string } }) => setF((c) => ({ ...c, [k]: e.target.value }));
@@ -77,6 +85,7 @@ export function HopFormDiemChuan({ maTruong, tenTruong, ban, laQtv, dong, onXong
         nguon: { url: f.linkNguon.trim(), tieuDe: f.tieuDeNguon.trim(), donViCongBo: f.donViCongBo.trim() },
         ghiChu: f.ghiChuThayDoi.trim(), muc, onBuoc: setDaLuu,
       });
+      banNhap.xong();
       onXong(THONG_BAO_LUU[muc]);
     } catch (e) {
       if (e instanceof LoiApi && e.chiTiet) setLoi(Object.fromEntries(Object.entries(e.chiTiet).map(([k, v]) => [KHOA_MAY_CHU[k] ?? k, v])));
@@ -90,6 +99,9 @@ export function HopFormDiemChuan({ maTruong, tenTruong, ban, laQtv, dong, onXong
   return (
     <HopTruot mo dong={dong} tieuDe={`${ban ? "Sửa" : "Thêm"} điểm chuẩn`}>
       <div className="space-y-3.5 pb-2">
+        {banNhap.cho && (
+          <ThanhBanNhap luuLuc={banNhap.cho.luuLuc} khoiPhuc={() => { const du = banNhap.khoiPhuc(); if (du) setF(du); }} bo={banNhap.bo} />
+        )}
         {ban?.status === "PUBLISHED" && <p className="rounded-xl bg-cam-nhat p-3 text-[13px] text-cam-chu font-semibold">Mục này đang chạy trên web. Sửa xong sẽ tạo bản mới, phải được duyệt rồi xuất bản thì web mới đổi.</p>}
         {ban?.status === "REJECTED" && ban.rejectionReason && <p className="rounded-xl bg-do-nhat p-3 text-[13px] text-do-chu"><b>Lý do bị trả lại:</b> {ban.rejectionReason}</p>}
         <div className="grid grid-cols-2 gap-2.5">

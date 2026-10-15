@@ -9,7 +9,7 @@ import { kyHieu } from "@/features/kham-pha/thanh-phan";
 import { coDiemDeSo, boiCanhTu } from "@/features/kham-pha/phu-hop";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
-import { goiYDanhSach } from "./goi-y-danh-sach";
+import { goiYDanhSach, moNeoNV1 } from "./goi-y-danh-sach";
 import { dinhDang } from "@/engine/dinh-dang";
 
 export function NutGoiYDanhSach({ onMo, kieu = "mac-dinh" }: { onMo: () => void; kieu?: "mac-dinh" | "vien" }) {
@@ -24,7 +24,7 @@ export function NutGoiYDanhSach({ onMo, kieu = "mac-dinh" }: { onMo: () => void;
 
 export function GoiYSheet({ mo, dong }: { mo: boolean; dong: () => void }) {
   const { s, themNguyenVong } = useApp();
-  const ds = useMemo(() => (mo ? goiYDanhSach(diemDayDu(s), s.hoSo, s.nguyenVong) : []), [mo, s]);
+  const ds = useMemo(() => (mo ? goiYDanhSach(diemDayDu(s), s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)) : []), [mo, s]);
   const themTatCa = () => { ds.forEach((d) => themNguyenVong(d.lc.id)); dong(); };
   return (
     <HopTruot mo={mo} dong={dong} tieuDe="Gợi ý danh sách phù hợp">

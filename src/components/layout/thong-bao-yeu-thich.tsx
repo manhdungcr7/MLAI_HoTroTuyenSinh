@@ -61,7 +61,7 @@ export function ThongBaoYeuThich() {
     >
       <div
         key={tin.khoa}
-        className="pointer-events-auto flex items-center gap-2.5 rounded-2xl bg-muc/95 text-white p-2.5 shadow-the border border-white/10 backdrop-blur animate-in fade-in slide-in-from-bottom-2 duration-200"
+        className="pointer-events-auto flex items-center gap-2 rounded-2xl bg-muc text-white p-2 shadow-the border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-200"
       >
         <span
           className={`size-9 rounded-xl grid place-items-center shrink-0 ${
@@ -71,7 +71,7 @@ export function ThongBaoYeuThich() {
           <Heart size={18} fill={tin.daThich ? "currentColor" : "none"} />
         </span>
 
-        <div className="flex-1 min-w-0 pr-1">
+        <div className="flex-1 min-w-0 pr-0.5">
           <p className="text-[13px] font-bold leading-tight truncate">
             {tin.daThemNV
               ? "Đã thêm vào danh sách NV"
@@ -84,14 +84,14 @@ export function ThongBaoYeuThich() {
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           {tin.daThich && !daTrongNV && (
             <button
               type="button"
               onClick={themVaoNV}
-              className="inline-flex items-center gap-1 min-h-9 px-2.5 rounded-lg bg-xanh text-[12px] font-bold text-white active:brightness-90 cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-1 min-h-11 px-2.5 rounded-lg bg-xanh text-[12px] font-bold text-white whitespace-nowrap active:brightness-90 cursor-pointer shadow-sm"
             >
-              <ListPlus size={14} />
+              <ListPlus size={14} className="shrink-0" />
               + Thêm vào NV
             </button>
           )}
@@ -103,9 +103,9 @@ export function ThongBaoYeuThich() {
                 setTin(null);
                 nav(DUONG_DAN.nguyenVong());
               }}
-              className="inline-flex items-center gap-1 min-h-9 px-2 rounded-lg bg-luc/25 text-luc text-[12px] font-bold active:bg-luc/35 cursor-pointer"
+              className="inline-flex items-center gap-1 min-h-11 px-2.5 rounded-lg bg-luc/25 text-luc text-[12px] font-bold whitespace-nowrap active:bg-luc/35 cursor-pointer"
             >
-              <Check size={14} />
+              <Check size={14} className="shrink-0" />
               Xem NV
             </button>
           )}
@@ -114,7 +114,7 @@ export function ThongBaoYeuThich() {
             type="button"
             onClick={() => setTin(null)}
             aria-label="Đóng thông báo"
-            className="size-8 grid place-items-center rounded-lg text-white/60 hover:text-white active:bg-white/10 cursor-pointer"
+            className="size-11 grid place-items-center rounded-lg text-white/60 hover:text-white active:bg-white/10 cursor-pointer shrink-0"
           >
             <X size={16} />
           </button>

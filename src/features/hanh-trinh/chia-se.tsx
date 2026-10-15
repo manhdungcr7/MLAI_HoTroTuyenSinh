@@ -1,17 +1,65 @@
 // Bản tóm tắt để em đưa cho phụ huynh, thầy cô, người tư vấn xem. Dữ liệu không rời máy trừ khi em tự bấm chia sẻ.
-import { useState } from "react";
-import { ChevronDown, ChevronUp, Copy, Link2, MessageCircleHeart, Printer, Share2, Trash2, Users } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ChevronDown, ChevronUp, Copy, Link2, MessageCircleHeart, Printer, Share2, Trash2 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { TieuDeMuc } from "@/components/ui/hien-thi";
 import { The, Nut } from "@/components/ui/nut-the";
-import { DongThongBao } from "@/components/ui/thong-bao";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { TEN_VAI, lienKetDayDu, maHoa, taoGoiChiaSe } from "@/features/dong-hanh/goi-tin";
-import { CongTac } from "@/components/ui/nhap-lieu";
+import { CongTacLon } from "@/features/tu-hoc/thanh-phan";
 import { Nhan } from "@/components/ui/nut-the";
 import { chiSoTheoDoi, tomTatChiaSe } from "./tom-tat";
 import { ChiSoTheoDoi } from "./chi-so-theo-doi";
+import { NhanNguyenVongTag } from "@/components/ui/co-cau";
+import { tim } from "@/data/lua-chon-mau";
+import { dinhDang } from "@/engine/dinh-dang";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
+import { demNhan, dungDanhSach } from "@/features/nguyen-vong/tinh-toan";
+import type { AppState } from "@/state/store";
+
+/** Thẻ tóm tắt danh sách nguyện vọng: bố cục đối xứng, gọn để chụp màn hình gửi người đồng hành. */
+function TheTomTatNguyenVong({ s }: { s: AppState }) {
+  const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemDayDu(s), tim), [s]);
+  const dem = demNhan(ds);
+  const o = [
+    { ten: "Tổng", so: ds.length },
+    { ten: "An toàn", so: dem["An toàn"] + dem["Dự phòng"] },
+    { ten: "Vừa sức", so: dem["Vừa sức"] },
+    { ten: "Thử sức", so: dem["Thử sức"] },
+  ];
+  if (ds.length === 0) return null;
+  return (
+    <section aria-label="Tóm tắt danh sách nguyện vọng" className="rounded-the bg-trang border border-vien shadow-the overflow-hidden">
+      <div className="px-4 py-3 border-b border-vien">
+        <h2 className="text-[16px] font-extrabold text-muc leading-snug">Danh sách nguyện vọng{s.hoSo.hoTen.trim() ? ` của ${s.hoSo.hoTen.trim()}` : ""}</h2>
+      </div>
+      <ul className="grid grid-cols-4 divide-x divide-vien border-b border-vien">
+        {o.map((x) => (
+          <li key={x.ten} className="py-3 text-center">
+            <span className="block so-lon text-[26px] font-extrabold leading-none text-muc">{x.so}</span>
+            <span className="block mt-1 text-[12px] text-chu-phu">{x.ten}</span>
+          </li>
+        ))}
+      </ul>
+      <ol className="divide-y divide-vien">
+        {ds.map((d) => (
+          <li key={d.id} className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5">
+            <span className="so-lon text-[14px] font-bold text-chu-phu">NV{d.viTri + 1}</span>
+            <span className="min-w-0">
+              <b className="block text-[14px] text-muc leading-snug">{d.lc ? d.lc.nganh : "Chưa có dữ liệu"}</b>
+              <span className="block text-[12px] text-chu-phu truncate">
+                {d.lc ? `${d.lc.truong} · chuẩn ${d.lc.namDiem}: ${d.lc.diemMin > 0 ? dinhDang(d.lc.diemMin, 1) : "chưa có"}` : "Không còn trong danh mục"}
+              </span>
+            </span>
+            {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <span className="text-[12px] text-chu-phu">Chưa so được</span>}
+          </li>
+        ))}
+      </ol>
+      <p className="px-4 py-2 text-[12px] text-chu-phu border-t border-vien">An toàn gồm cả Dự phòng. Nhãn so với điểm chuẩn năm trước, không phải cam kết trúng tuyển.</p>
+    </section>
+  );
+}
 
 export default function ChiaSe() {
   const { s, xoaLoiNhan } = useApp();
@@ -43,8 +91,7 @@ export default function ChiaSe() {
     <>
       <DauTrangCoQuayLai tieuDe="Chia sẻ với người đồng hành" quayLai={DUONG_DAN.hoSo()} />
       <NoiDung className="space-y-4">
-        <DongThongBao tone="xanh" icon={Users} tieuDe="Để phụ huynh, thầy cô cùng cân nhắc"
-          moTa="Gửi bản tóm tắt cho phụ huynh, thầy cô. Không lưu trên máy chủ." />
+        <TheTomTatNguyenVong s={s} />
 
         <section aria-label="Chỉ số theo dõi">
           <ChiSoTheoDoi s={s} gon />
@@ -61,7 +108,7 @@ export default function ChiaSe() {
             )}
             <div className="flex items-center justify-between gap-3 min-h-11">
               <span className="text-[14px] text-chu leading-snug">Kèm tên của bạn trong liên kết</span>
-              <CongTac dang={kemTen} onChange={(v) => { setKemTen(v); setLienKet(""); }} nhan="Kèm tên của bạn trong liên kết" />
+              <CongTacLon dang={kemTen} onChange={(v) => { setKemTen(v); setLienKet(""); }} nhan="Kèm tên của bạn trong liên kết" />
             </div>
             <Nut bieuTuong={Link2} onClick={taoLienKet}>Tạo liên kết</Nut>
             {lienKet && (

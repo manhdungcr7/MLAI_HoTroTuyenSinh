@@ -1,4 +1,5 @@
-// Xuất và khôi phục dữ liệu của em (một tệp JSON). Dữ liệu chỉ nằm trên máy em, nên đây là cách duy nhất để chuyển sang máy khác hoặc giữ bản dự phòng.
+// Xuất và khôi phục dữ liệu của bạn (một tệp JSON). Dữ liệu chỉ nằm trên máy bạn, nên đây là cách duy nhất để chuyển sang máy khác hoặc giữ bản dự phòng.
+import { lamSachLichSu, type TinNhan } from "@/features/tu-van/hoi-thoai";
 import { chuanHoa } from "./chuan-hoa";
 import type { AppState } from "./store";
 
@@ -6,17 +7,19 @@ const NHAN = "nguyen-vong-ai";
 const PHIEN_BAN = 2;
 const laObj = (v: unknown) => typeof v === "object" && v !== null && !Array.isArray(v);
 
-export function taoBanSaoLuu(s: AppState, luc = new Date()): string {
-  return JSON.stringify({ app: NHAN, phienBan: PHIEN_BAN, luc: luc.toISOString(), duLieu: s }, null, 2);
+/** `lichSuChat`: chỉ truyền khi bạn tự bật "Kèm lịch sử trò chuyện"; rỗng thì không ghi gì. */
+export function taoBanSaoLuu(s: AppState, luc = new Date(), lichSuChat: TinNhan[] = []): string {
+  const chat = lamSachLichSu(lichSuChat);
+  return JSON.stringify({ app: NHAN, phienBan: PHIEN_BAN, luc: luc.toISOString(), duLieu: s, ...(chat.length ? { lichSuChat: chat } : {}) }, null, 2);
 }
 
-export type KetQuaDoc = { ok: true; s: AppState } | { ok: false; lyDo: string };
+export type KetQuaDoc = { ok: true; s: AppState; lichSu?: TinNhan[] } | { ok: false; lyDo: string };
 
 /** Đọc tệp sao lưu. Chỉ nhận tệp do chính app tạo ra; trường thiếu được điền giá trị mặc định để bản cũ vẫn dùng được. */
 export function docBanSaoLuu(text: string): KetQuaDoc {
   let j: unknown;
   try { j = JSON.parse(text); } catch { return { ok: false, lyDo: "Tệp này không đọc được. Bạn chọn đúng tệp sao lưu của Nguyện Vọng AI nhé." }; }
-  const o = j as { app?: unknown; phienBan?: unknown; duLieu?: Partial<AppState> } | null;
+  const o = j as { app?: unknown; phienBan?: unknown; duLieu?: Partial<AppState>; lichSuChat?: unknown } | null;
   if (!o || o.app !== NHAN || typeof o.duLieu !== "object" || o.duLieu === null) return { ok: false, lyDo: "Đây không phải tệp sao lưu của Nguyện Vọng AI." };
   if (typeof o.phienBan !== "number" || o.phienBan > PHIEN_BAN) return { ok: false, lyDo: "Tệp sao lưu này tạo bởi phiên bản mới hơn, bạn cập nhật ứng dụng rồi thử lại." };
   const d = o.duLieu;
@@ -31,5 +34,7 @@ export function docBanSaoLuu(text: string): KetQuaDoc {
     return { ok: false, lyDo: "Tệp sao lưu bị hỏng: phần cài đặt hoặc điểm số sai dạng." };
   const s = chuanHoa(d); // gộp sâu với mặc định, loại giá trị sai kiểu/NaN, cắt độ dài
   if (d.mucTieu !== undefined && d.mucTieu !== null && s.mucTieu === null) return { ok: false, lyDo: "Mục tiêu trong tệp sao lưu bị hỏng (ngày thi hoặc điểm không hợp lệ)." };
-  return { ok: true, s };
+  if (o.lichSuChat !== undefined && !Array.isArray(o.lichSuChat)) return { ok: false, lyDo: "Lịch sử trò chuyện trong tệp sao lưu bị hỏng." };
+  const lichSu = o.lichSuChat === undefined ? [] : lamSachLichSu(o.lichSuChat);
+  return { ok: true, s, ...(lichSu.length ? { lichSu } : {}) };
 }

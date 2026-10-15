@@ -12,6 +12,10 @@ import {
 } from "./bieu-mau";
 import { nhanLoai } from "./dinh-dang";
 import { luuVaChuyen, THONG_BAO_LUU, type MucTieuLuu } from "./luu-ban-ghi";
+import { khoaNhap, laDoiTuongChuoi } from "@cms/trang-thai/ban-nhap";
+import { useBanNhap } from "@cms/trang-thai/dung-ban-nhap";
+import { ThanhBanNhap } from "@cms/trang-thai/thanh-ban-nhap";
+import { usePhien } from "@cms/trang-thai/phien";
 import { THUC_THE_CUA, dataTuForm, entityIdCho, formTuBan, nguonTuForm } from "./mo-hinh";
 
 type FormDayDu = FormThongTin & { tieuDeNguon: string; donViCongBo: string; ghiChuThayDoi: string };
@@ -56,6 +60,9 @@ export function HopFormThongTin({ loai, maTruong, tenTruong, banGhi, laQtv, dong
   const [dangLuu, setDangLuu] = useState(false);
   // Sau khi tạo/sửa thành công mà bước gửi duyệt lỗi, giữ bản ghi để bấm lại không tạo trùng.
   const [daLuu, setDaLuu] = useState<BanGhiCms | null>(null);
+  const { toi } = usePhien();
+  const cacKhoa = [...Object.keys(formTrong(loai)), "tieuDeNguon", "donViCongBo", "ghiChuThayDoi"];
+  const banNhap = useBanNhap<FormDayDu>(khoaNhap("thong-tin", `${maTruong}:${loai}:${banGhi?.id ?? "moi"}`), toi.email, laDoiTuongChuoi<FormDayDu>(cacKhoa), f);
 
   const dat = (k: keyof FormDayDu) => (e: { target: { value: string } }) => setF((c) => ({ ...c, [k]: e.target.value }));
   const o = (ten: string) => `f-${ten}`;
@@ -72,6 +79,7 @@ export function HopFormThongTin({ loai, maTruong, tenTruong, banGhi, laQtv, dong
       const nguon = nguonTuForm(f);
       const ghiChu = f.ghiChuThayDoi.trim();
       await luuVaChuyen({ hien: daLuu ?? banGhi ?? null, entityType: THUC_THE_CUA[loai], entityId, data, nguon, ghiChu, muc, onBuoc: setDaLuu });
+      banNhap.xong();
       onXong(THONG_BAO_LUU[muc]);
     } catch (e) {
       if (e instanceof LoiApi && e.chiTiet) setLoi(doiKhoa(e.chiTiet));
@@ -93,6 +101,9 @@ export function HopFormThongTin({ loai, maTruong, tenTruong, banGhi, laQtv, dong
   return (
     <HopTruot mo dong={dong} tieuDe={`${sua ? "Sửa" : "Thêm"} ${nhanLoai(loai).toLowerCase()}`}>
       <div className="space-y-3.5 pb-2">
+        {banNhap.cho && (
+          <ThanhBanNhap luuLuc={banNhap.cho.luuLuc} khoiPhuc={() => { const du = banNhap.khoiPhuc(); if (du) setF(du); }} bo={banNhap.bo} />
+        )}
         {laBanDangChay && (
           <p className="rounded-xl bg-cam-nhat p-3 text-[13px] text-cam-chu font-semibold">Mục này đang chạy trên web. Sửa xong sẽ tạo bản mới, phải được duyệt rồi xuất bản thì web mới đổi.</p>
         )}

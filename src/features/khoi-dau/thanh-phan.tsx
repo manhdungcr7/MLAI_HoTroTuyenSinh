@@ -108,7 +108,7 @@ export function ChonO<T extends string | number | boolean>({ cacLua, giaTri, onC
   );
 }
 
-/** Dòng nhỏ báo dữ liệu đã được lưu trên máy, để em yên tâm thoát ra rồi quay lại. */
+/** Dòng nhỏ báo dữ liệu đã được lưu trên máy, để bạn yên tâm thoát ra rồi quay lại. */
 export function DaLuuTam({ daSua }: { daSua: boolean }) {
   return (
     <p role="status" aria-live="polite" className="flex items-center justify-center gap-1.5 text-[12px] font-semibold text-chu-phu">
