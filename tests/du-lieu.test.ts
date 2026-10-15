@@ -55,10 +55,16 @@ for (const [id, v] of Object.entries(chuongTrinh as Record<string, { url: string
 for (const id of Object.keys(nguonNamTC)) assert.ok(ids.has(id), `nguon-nam-thu-cap trỏ tới id không có: ${id}`);
 for (const ma of Object.keys(deAnTruongTC)) assert.ok(LUA_CHON.some((l) => l.maTruong === ma));
 // học phí và việc làm trích từ đề án: số hợp lý, có trang nguồn, và gắn đúng vào dữ liệu
-for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang: number }>)) {
+let soNganh = 0, soTruong = 0;
+for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang: number; phamVi?: string }>)) {
   assert.ok(ids.has(id) && v.trieuNam >= 5 && v.trieuNam <= 400 && v.trang >= 1);
-  const l = timLuaChon(id)!; assert.equal(l.hocPhiMin, v.trieuNam); assert.ok(l.nguonHocPhi);
+  assert.ok(v.phamVi === "nganh" || v.phamVi === "truong", `thiếu phamVi: ${id}`);
+  const l = timLuaChon(id)!;
+  if (v.phamVi === "nganh") { soNganh++; assert.equal(l.hocPhiMin, v.trieuNam); assert.ok(l.nguonHocPhi); }
+  else { soTruong++; assert.equal(l.hocPhiMin, undefined, `học phí cấp trường lọt vào LuaChon: ${id}`); assert.equal(l.nguonHocPhi, undefined); }
 }
+assert.equal(LUA_CHON.filter(coHocPhi).length, soNganh, "chỉ chương trình phamVi=nganh có học phí");
+assert.ok(soTruong > 0 && soNganh > 0);
 for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number }>)) assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
 // tỷ lệ việc làm là phần trăm: mức "Rất cao" chỉ khi từ 95% trở lên (từng bị đọc nhầm như tỉ lệ 0–1)
 for (const l of LUA_CHON) if (l.tiLeViecLam !== undefined) assert.equal(l.coHoiViecLam, l.tiLeViecLam >= 95 ? "Rất cao" : l.tiLeViecLam >= 85 ? "Cao" : "Khá", l.id);

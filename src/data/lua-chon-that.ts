@@ -35,12 +35,15 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
-const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string }>;
+// phamVi "truong" = mức cấp trường gán chung cho mọi ngành, giữ trong JSON nhưng KHÔNG vào LuaChon (hiện "chưa có").
+// Chỉ phamVi "nganh" (đã đối chiếu đúng ngành) mới thành học phí của chương trình.
+const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string; phamVi?: "nganh" | "truong" }>;
 
 const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 
 function chuyen(d: Dong): LuaChon {
-  const hp = HOC_PHI[d.id];
+  const hp0 = HOC_PHI[d.id];
+  const hp = hp0?.phamVi === "nganh" ? hp0 : undefined;
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
