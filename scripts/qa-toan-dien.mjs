@@ -91,8 +91,8 @@ async function main() {
     await page.screenshot({ path: join(ARTIFACT_DIR, "qa_test3_nguyen_vong.png") });
 
     // TEST 4: Trang Chi tiết ngành (Kiểm tra hiển thị xác suất & link chính thức)
-    console.log("--- TEST 4: Trang Chi tiết ngành (#/kham-pha/chi-tiet/uit-cntt-thpt-a01) ---");
-    await page.goto("http://localhost:3030/#/kham-pha/chi-tiet/uit-cntt-thpt-a01", { waitUntil: "networkidle0" });
+    console.log("--- TEST 4: Trang Chi tiết ngành (#/kham-pha/qsc-2064f6c3) ---");
+    await page.goto("http://localhost:3030/#/kham-pha/qsc-2064f6c3", { waitUntil: "networkidle0" });
     await wait(1000);
 
     const ctText = await page.evaluate(() => document.body.innerText);
@@ -128,3 +128,4 @@ main().catch((err) => {
   console.error("Lỗi script kiểm thử:", err);
   process.exit(1);
 });
+
