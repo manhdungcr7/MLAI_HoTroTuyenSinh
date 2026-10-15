@@ -35,7 +35,7 @@ export interface DuBaoDiemChuan {
   luuY: string[];
 }
 
-/** Hệ số nở khoảng, chọn bằng kiểm định bỏ-một-năm: phủ trung bình 84% (92% năm 2023, 93% năm 2024, 68% năm 2025 là năm biến động bất thường). */
+/** Hệ số nở khoảng, chọn bằng kiểm định bỏ-một-năm: phủ trung bình ~84% khi chọn (12/10: 92% năm 2023, 93% năm 2024, 68% năm 2025; đo lại 15/10 sau khi sửa dữ liệu: 89%, 95%, 64% là năm biến động bất thường). */
 export const HE_SO_NO_RONG = 1.3;
 /** Chỉ dùng biến động từ năm này trở đi (các năm trước quá ít mẫu: 22 cặp). */
 export const NAM_BIEN_DONG_SOM_NHAT = 2023;
