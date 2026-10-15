@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Check, Heart, ListPlus, X } from "lucide-react";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
@@ -15,8 +15,10 @@ interface TinYeuThich {
 export function ThongBaoYeuThich() {
   const { s, themNguyenVong } = useApp();
   const nav = useNavigate();
+  const location = useLocation();
   const [tin, setTin] = useState<TinYeuThich | null>(null);
   const henRef = useRef<number | undefined>(undefined);
+  useEffect(() => { setTin(null); window.clearTimeout(henRef.current); }, [location.pathname, location.search]);
 
   useEffect(() => {
     const xuLy = (e: Event) => {

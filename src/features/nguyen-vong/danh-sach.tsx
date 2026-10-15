@@ -20,6 +20,7 @@ import { useKeoTha } from "./dung-keo-tha";
 import { CHU_O, CanhBaoThuTuThe, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
+import { HopTruot } from "@/components/ui/hien-thi";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
 
 const CAC_LOAI_NHAN: { nhan: NhanNguyenVong; moTa: string }[] = [
@@ -72,7 +73,7 @@ export default function DanhSachNguyenVong() {
   const diemMon = diemDayDu(s);
   const tongTot = toHopTotNhat(diemMon);
   const tong = tongTot.tong;
-  const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemMon, tim), [s.nguyenVong, s.diemThi, s.hoSo.diem]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ds = dungDanhSach(s.nguyenVong, diemMon, tim);
   const dsYeuThich = useMemo(() => s.yeuThich.map(tim).filter((l): l is NonNullable<typeof l> => !!l), [s.yeuThich]);
   const coCau = xetCoCau(demNhan(ds), ds.length);
   const kl = ketLuan(coCau);
@@ -80,6 +81,7 @@ export default function DanhSachNguyenVong() {
   const { tin, bao, an } = useHoanTac();
   const [moTim, setMoTim] = useState(false);
   const [moGoiY, setMoGoiY] = useState(false);
+  const [hoiXoa, setHoiXoa] = useState<string | null>(null);
 
   /** Chuyển một nguyện vọng tới vị trí mới, báo kèm nút hoàn tác. */
   const chuyen = useCallback((tu: number, den: number) => {
@@ -214,7 +216,7 @@ export default function DanhSachNguyenVong() {
                 <li key={d.id} ref={ganHang(i)} style={kieuHang(i)} className={gop("bg-trang", keo?.tu === i && "ring-2 ring-inset ring-xanh")}>
                   <HangNguyenVong d={d} soHang={ds.length} chuaDuDiem={tong === null} dangKeo={keo?.tu === i}
                     tayNam={tayNam(i)} onLen={() => chuyen(i, i - 1)} onXuong={() => chuyen(i, i + 1)}
-                    onMo={() => d.lc && nav(DUONG_DAN.chiTiet(d.id))} onXoa={() => xoa(d.id)} />
+                    onMo={() => d.lc && nav(DUONG_DAN.chiTiet(d.id))} onXoa={() => setHoiXoa(d.id)} />
                 </li>
               ))}
             </ol>
@@ -235,6 +237,13 @@ export default function DanhSachNguyenVong() {
         onChon={(l) => { setMoTim(false); themNganhYeuThich(l.id, l.nganh, l.truong); }} />
       <GoiYSheet mo={moGoiY} dong={() => setMoGoiY(false)} />
       <ThanhHoanTac tin={tin} an={an} />
+      <HopTruot mo={hoiXoa !== null} dong={() => setHoiXoa(null)} tieuDe="Xóa nguyện vọng này?">
+        <p className="text-[14px] text-chu mb-4">Em có thể thêm lại ngành trong Khám phá hoặc hoàn tác sau khi xóa.</p>
+        <div className="grid grid-cols-2 gap-2">
+          <Nut kieu="vien" onClick={() => setHoiXoa(null)}>Giữ lại</Nut>
+          <Nut kieu="nguyHiem" onClick={() => { if (hoiXoa) xoa(hoiXoa); setHoiXoa(null); }}>Xóa</Nut>
+        </div>
+      </HopTruot>
     </>
   );
 }

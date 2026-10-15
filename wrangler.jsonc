@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nguyen-vong-ai",
+  "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-10-01",
   "d1_databases": [
     {
@@ -33,12 +34,6 @@
       "index_name": "nvai-kb"
     }
   ],
-  "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "not_found_handling": "single-page-application"
-  },
   "vars": {
     "AI_MODEL": "@cf/meta/llama-3.3-70b-instruct"
   }

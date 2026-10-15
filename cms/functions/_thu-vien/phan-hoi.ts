@@ -1,4 +1,5 @@
 // Phản hồi JSON chuẩn, lỗi tiếng Việt, đọc thân yêu cầu có giới hạn, phân trang.
+import { docChuGioiHan, ThanQuaLon } from "../../../functions/_thu-vien/doc-body";
 
 export const GIOI_HAN_THAN = 32 * 1024;
 export const MOI_TOI_DA = 50;
@@ -37,7 +38,9 @@ export const sai = (thongBao: string, truong?: string) => new LoiHttp(400, "du-l
 export async function docThan(request: Request): Promise<Record<string, unknown>> {
   const khai = Number(request.headers.get("content-length"));
   if (Number.isFinite(khai) && khai > GIOI_HAN_THAN) throw new LoiHttp(413, "qua-lon", "Nội dung gửi lên quá lớn (tối đa 32KB)");
-  const chu = await request.text();
+  let chu: string;
+  try { chu = await docChuGioiHan(request, GIOI_HAN_THAN); }
+  catch (e) { if (e instanceof ThanQuaLon) throw new LoiHttp(413, "qua-lon", "Nội dung gửi lên quá lớn (tối đa 32KB)"); throw e; }
   if (new TextEncoder().encode(chu).length > GIOI_HAN_THAN) throw new LoiHttp(413, "qua-lon", "Nội dung gửi lên quá lớn (tối đa 32KB)");
   let v: unknown;
   try { v = JSON.parse(chu); } catch { throw sai("Nội dung gửi lên không phải JSON hợp lệ"); }

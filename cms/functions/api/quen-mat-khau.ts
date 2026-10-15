@@ -104,8 +104,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
         throw sai("Mã khôi phục không hợp lệ hoặc đã hết hạn", "token");
       }
 
-      const giayMoi = Math.floor(bayGio.getTime() / 1000) + 1;
-      const lucMoi = new Date(giayMoi * 1000).toISOString();
+      const lucMoi = bayGio.toISOString();
 
       await d1.batch([
         d1.prepare("UPDATE dat_lai_mat_khau SET da_dung = 1 WHERE id = ? OR (email = ? AND da_dung = 0)").bind(dong.id, dong.email),

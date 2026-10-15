@@ -1,5 +1,4 @@
-// Mật khẩu của CMS: SHA-256(muối + mật khẩu), muối ngẫu nhiên 16 byte, bằng WebCrypto (Workers và Node). Hàm thuần, không đụng D1.
-// Định dạng lưu: sha256$<muối base64url>$<băm base64url>. Lớp bảo vệ chính chống dò mật khẩu là giới hạn 5 lần sai/15 phút.
+// Passwords use PBKDF2-HMAC-SHA256 (100,000 rounds, WebCrypto). Legacy salted SHA-256 is accepted for login migration.
 export const DO_DAI_TOI_THIEU = 8;
 /** Bảng chữ cho mật khẩu tạm: bỏ ký tự dễ nhầm (0/O, 1/l/I). */
 const BANG_CHU = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -31,17 +30,24 @@ async function bam(matKhau: string, muoi: Uint8Array): Promise<Uint8Array> {
   return new Uint8Array(await crypto.subtle.digest("SHA-256", goc));
 }
 
+const SO_VONG = 100_000;
+async function keoKhoa(matKhau: string, muoi: Uint8Array, soVong = SO_VONG): Promise<Uint8Array> {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(matKhau), "PBKDF2", false, ["deriveBits"]);
+  return new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: muoi as BufferSource, iterations: soVong }, key, 256));
+}
+
 export async function bamMatKhau(matKhau: string): Promise<string> {
   const muoi = crypto.getRandomValues(new Uint8Array(16));
-  return `sha256$${maHoaB64Url(muoi)}$${maHoaB64Url(await bam(matKhau, muoi))}`;
+  return `pbkdf2_sha256$${SO_VONG}$${maHoaB64Url(muoi)}$${maHoaB64Url(await keoKhoa(matKhau, muoi))}`;
 }
 
 /** Đúng/sai. Chuỗi lưu hỏng hoặc rỗng thì sai (không ném lỗi). */
 export async function xacMinhMatKhau(matKhau: string, daLuu: string | null | undefined): Promise<boolean> {
   const p = (daLuu ?? "").split("$");
-  if (p.length !== 3 || p[0] !== "sha256") return false;
   try {
-    return bangHangThoiGian(await bam(matKhau, giaiB64Url(p[1])), giaiB64Url(p[2]));
+    if (p.length === 4 && p[0] === "pbkdf2_sha256" && Number(p[1]) === SO_VONG) return bangHangThoiGian(await keoKhoa(matKhau, giaiB64Url(p[2])), giaiB64Url(p[3]));
+    if (p.length === 3 && p[0] === "sha256") return bangHangThoiGian(await bam(matKhau, giaiB64Url(p[1])), giaiB64Url(p[2]));
+    return false;
   } catch { return false; }
 }
 

@@ -49,7 +49,7 @@ export default function ChaoMung() {
   const [hoiThay, setHoiThay] = useState<KieuMau | null>(null);
   const [hoiLamLai, setHoiLamLai] = useState(false);
   const h = s.hoSo;
-  const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
+  const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null) || s.yeuThich.length || s.nguyenVong.length);
   // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải hồ sơ mẫu) và chưa bấm hoàn tất
   const dangDienDo = daCoThongTin && !h.hoanTat && !h.laMau;
 

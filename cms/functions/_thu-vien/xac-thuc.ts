@@ -1,5 +1,5 @@
 // Xác thực của CMS: email + mật khẩu, phiên bằng cookie ký HMAC-SHA256 (WebCrypto). Không dùng Cloudflare Access.
-// Cookie `nv_cms` = base64url(JSON{e: email, h: hết hạn (giây), i: lúc cấp (giây)}) + "." + chữ ký. Mỗi yêu cầu vẫn tra bảng quan_tri.
+// Cookie `nv_cms`: h in seconds, i in milliseconds. Older second timestamps remain readable.
 import { LoiHttp } from "./phan-hoi";
 import { giaiB64Url, maHoaB64Url } from "./mat-khau";
 import type { Env, KhoKV } from "./kieu";
@@ -26,7 +26,7 @@ const khoaKy = (bi: string) => crypto.subtle.importKey("raw", new TextEncoder().
 
 export async function kyPhien(env: Env, email: string, bayGio: Date): Promise<string> {
   const giay = Math.floor(bayGio.getTime() / 1000);
-  const dau = maHoaB64Url(new TextEncoder().encode(JSON.stringify({ e: email, h: giay + SONG_GIAY, i: giay })));
+  const dau = maHoaB64Url(new TextEncoder().encode(JSON.stringify({ e: email, h: giay + SONG_GIAY, i: bayGio.getTime() })));
   const ky = await crypto.subtle.sign("HMAC", await khoaKy(baoMat(env)), new TextEncoder().encode(dau));
   return `${dau}.${maHoaB64Url(new Uint8Array(ky))}`;
 }
@@ -40,7 +40,7 @@ export async function docPhien(env: Env, cookie: string, bayGio: Date): Promise<
     if (!dung) return null;
     const v = JSON.parse(new TextDecoder().decode(giaiB64Url(p[0]))) as { e?: unknown; h?: unknown; i?: unknown };
     if (typeof v.e !== "string" || typeof v.h !== "number" || typeof v.i !== "number" || v.h <= bayGio.getTime() / 1000) return null;
-    return { email: v.e, capLuc: v.i };
+    return { email: v.e, capLuc: v.i < 1e12 ? v.i * 1000 : v.i };
   } catch (e) {
     if (e instanceof LoiHttp) throw e;
     return null;
@@ -66,9 +66,9 @@ export function datCookie(url: URL, giaTri: string): string {
 export function kiemOrigin(request: Request): void {
   if (request.method === "GET" || request.method === "HEAD") return;
   const nguon = request.headers.get("origin") ?? request.headers.get("referer");
-  let host = "";
-  try { host = nguon ? new URL(nguon).host : ""; } catch { /* host rỗng -> từ chối */ }
-  if (!host || host !== new URL(request.url).host) throw new LoiHttp(403, "khong-co-quyen", "Yêu cầu không đến từ trang quản trị");
+  let origin = "";
+  try { origin = nguon ? new URL(nguon).origin : ""; } catch { /* từ chối */ }
+  if (!origin || origin !== new URL(request.url).origin) throw new LoiHttp(403, "khong-co-quyen", "Yêu cầu không đến từ trang quản trị");
 }
 
 // ---- Giới hạn đăng nhập sai và quên mật khẩu: 5 lần/15 phút theo (IP + email), đếm bằng KV + bộ nhớ dự phòng ----
@@ -86,8 +86,9 @@ export async function kiemSoLanSai(env: Env, request: Request, email: string, ti
   const k = khoaSai(request, email, tienTo);
   const kv = kvCua(env);
   let dem = 0;
+  if (!kv) throw new LoiHttp(503, "chua-cau-hinh", "Máy chủ chưa có bộ giới hạn đăng nhập");
   if (kv) {
-    try { dem = Number((await kv.get(k)) ?? 0); } catch { console.warn("cms-dang-nhap: KV lỗi, dùng bộ nhớ tạm"); }
+    try { dem = Number((await kv.get(k)) ?? 0); } catch { throw new LoiHttp(503, "tam-gian-doan", "Đăng nhập đang tạm gián đoạn, bạn thử lại sau"); }
   }
   const muc = boNhoSai.get(k);
   if (muc) {

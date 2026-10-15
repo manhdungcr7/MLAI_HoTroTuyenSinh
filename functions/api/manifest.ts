@@ -22,6 +22,7 @@ export const onRequestGet = async (context: { env: Env }) => {
 
   // 1. Thử lấy từ KV trước (siêu tốc, ~10ms)
   if (env.KV_CONG_DONG) {
+    try {
     const kvManifest = await env.KV_CONG_DONG.get("manifest:active");
     if (kvManifest) {
       return new Response(kvManifest, {
@@ -32,11 +33,13 @@ export const onRequestGet = async (context: { env: Env }) => {
         },
       });
     }
+    } catch { /* D1 remains authoritative if KV is unavailable. */ }
   }
 
   // 2. Thử lấy từ D1
   const csdl = env.D1_CONG_DONG ?? env.DB;
   if (csdl) {
+    try {
     const activeRow = await csdl
       .prepare("SELECT manifest_json FROM snapshot_manifest WHERE is_active = 1 LIMIT 1")
       .bind()
@@ -51,6 +54,7 @@ export const onRequestGet = async (context: { env: Env }) => {
         },
       });
     }
+    } catch { /* Keep the bundled dataset available if remote storage is down. */ }
   }
 
   // 3. Fallback Manifest rỗng an toàn

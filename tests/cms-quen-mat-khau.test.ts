@@ -126,31 +126,33 @@ for (const [email, vaiTro] of [[SA, "sa"], [QTV, "qtv"], [CTV, "ctv"]] as const)
   assert.equal(await bamToken(`  ${t1}  `), h1, "Chuẩn hóa khoảng trắng khi băm");
 }
 
-// 2. Đăng nhập hợp lệ, không hợp lệ và chống dò vét (Brute-force Rate Limit cả khi không có KV)
+// 2. Shared rate limiting: fail closed without KV; block after five failures with KV.
 {
   xoaBoNhoGioiHan();
   kvMap.clear();
   const envKhongKv: Env = { DB: d1, SESSION_SECRET: env.SESSION_SECRET };
+  assert.equal((await goi(dangNhap, "POST", "/api/dang-nhap", { body: { email: QTV, matKhau: MK_BAN_DAU }, env: envKhongKv })).status, 503, "Missing shared rate limiter must fail closed");
+  assert.equal((await goi(dangNhap, "POST", "/api/dang-nhap", { body: { email: QTV, matKhau: MK_BAN_DAU }, env: { ...env, KV_CONG_DONG: { get: async () => { throw new Error("offline"); }, put: async () => {} } } })).status, 503, "Broken shared rate limiter must fail closed");
   for (let i = 0; i < 5; i++) {
     const r = await goi(dangNhap, "POST", "/api/dang-nhap", {
       body: { email: QTV, matKhau: `sai-${i}` },
       ip: "203.0.113.5",
-      env: envKhongKv,
+      env,
     });
     assert.equal(r.status, 401);
   }
   const biChan = await goi(dangNhap, "POST", "/api/dang-nhap", {
     body: { email: QTV, matKhau: MK_BAN_DAU },
     ip: "203.0.113.5",
-    env: envKhongKv,
+    env,
   });
-  assert.equal(biChan.status, 429, "Chặn lần thứ 6 bằng bộ nhớ ngay cả khi thiếu KV");
+  assert.equal(biChan.status, 429, "Sixth attempt is blocked by shared KV and local guard");
 
   // IP khác vẫn đăng nhập bình thường
   const dnOk = await goi(dangNhap, "POST", "/api/dang-nhap", {
     body: { email: QTV, matKhau: MK_BAN_DAU },
     ip: "203.0.113.6",
-    env: envKhongKv,
+    env,
   });
   assert.equal(dnOk.status, 200);
   assert.equal(dnOk.json.email, QTV);

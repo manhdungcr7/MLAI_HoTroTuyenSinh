@@ -4,6 +4,7 @@
 //   POST  { action: "CAP_QUYEN", id }                   (qtv) biến một đăng ký tình nguyện thành cộng tác viên: thêm vào quan_tri, giao đúng trường, đánh dấu đã cấp
 // Báo sai không bao giờ tự sửa số liệu: người của trường kiểm tra nguồn rồi sửa qua quy trình duyệt bình thường.
 import { laEmail, chuanHoaEmail } from "../_thu-vien/xac-thuc";
+import { bamMatKhau, sinhMatKhauTam } from "../_thu-vien/mat-khau";
 import { cauNhatKy } from "../_thu-vien/d1";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, cam, docThan, docTrang, json, khongTimThay, locEnum, sai } from "../_thu-vien/phan-hoi";
@@ -25,6 +26,15 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
 
     if (m === "GET") {
       const loai = c.url.searchParams.get("loai") ?? "bao-sai";
+      if (loai === "truy-cap-som") {
+        c.yeuCauQtv();
+        const t = docTrang(c.url, 20);
+        const [dem, ds] = await c.d1.batch([
+          c.d1.prepare("SELECT COUNT(*) AS c FROM dang_ky_truy_cap_som"),
+          c.d1.prepare("SELECT id, ho_ten, lop, nhu_cau, lien_he, tao_luc FROM dang_ky_truy_cap_som ORDER BY tao_luc DESC, id LIMIT ? OFFSET ?").bind(t.moi, t.offset),
+        ]) as unknown as [{ results: { c: number }[] }, { results: { id: string; ho_ten: string; lop: string; nhu_cau: string; lien_he: string; tao_luc: string }[] }];
+        return json({ tong: dem.results[0]?.c ?? 0, dangKySom: ds.results.map(r => ({ id: r.id, hoTen: r.ho_ten, lop: r.lop, nhuCau: r.nhu_cau, lienHe: r.lien_he, luc: r.tao_luc })) });
+      }
       if (loai !== "bao-sai" && loai !== "tinh-nguyen") throw sai("loai phải là bao-sai hoặc tinh-nguyen", "loai");
       if (loai === "tinh-nguyen") c.yeuCauQtv("Chỉ quản trị viên xem được đăng ký tình nguyện");
       const t = docTrang(c.url, 20);
@@ -100,13 +110,15 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       if (!TAP_TRUONG.has(dk.ma_truong)) throw sai("Mã trường của đăng ký không còn trong danh sách", "maTruong");
       const email = chuanHoaEmail(dk.lien_he);
       const daCo = await c.d1.prepare("SELECT vai_tro FROM quan_tri WHERE email = ? LIMIT 1").bind(email).first<{ vai_tro: string }>();
-      await c.d1.batch([
-        c.d1.prepare("INSERT OR IGNORE INTO quan_tri (email, vai_tro, tao_luc) VALUES (?, 'ctv', ?)").bind(email, c.luc), // người đã là qtv/ctv thì giữ nguyên vai
+      const matKhauTam = sinhMatKhauTam();
+      const ketQua = await c.d1.batch([
+        c.d1.prepare("INSERT OR IGNORE INTO quan_tri (email, vai_tro, tao_luc, mat_khau, phai_doi_mat_khau, mat_khau_luc) VALUES (?, 'ctv', ?, ?, 1, ?)").bind(email, c.luc, await bamMatKhau(matKhauTam), c.luc),
         c.d1.prepare("INSERT OR IGNORE INTO phan_cong (email, ma_truong) VALUES (?, ?)").bind(email, dk.ma_truong),
         c.d1.prepare("UPDATE tinh_nguyen_dang_ky SET trang_thai = 'da_cap_quyen' WHERE id = ?").bind(id),
         cauNhatKy(c.d1, c.email, "tinh-nguyen.cap-quyen", `tinh_nguyen:${id}->${email}:${dk.ma_truong}`, c.luc),
       ]);
-      return json({ id, email, maTruong: dk.ma_truong, vaiTro: daCo?.vai_tro ?? "ctv", daCoTaiKhoan: Boolean(daCo) }, 201);
+      const taoMoi = (ketQua[0].meta?.changes ?? 0) === 1;
+      return json({ id, email, maTruong: dk.ma_truong, vaiTro: daCo?.vai_tro ?? "ctv", daCoTaiKhoan: !taoMoi, ...(taoMoi ? { matKhauTam } : {}) }, 201);
     }
     throw khongHoTro();
   });

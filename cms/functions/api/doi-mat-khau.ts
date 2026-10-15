@@ -24,8 +24,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
     if (moi === cu) throw sai("Mật khẩu mới cần khác mật khẩu hiện tại", "matKhauMoi");
     await xoaLanSai(c.env, c.request, c.email, "dn");
     await damBaoBang(c.d1);
-    const giayMoi = Math.floor(c.bayGio.getTime() / 1000) + 1;
-    const thoiDiemMoi = new Date(giayMoi * 1000);
+    const thoiDiemMoi = c.bayGio;
     const lucMoi = thoiDiemMoi.toISOString();
     await c.d1.batch([
       c.d1.prepare("UPDATE quan_tri SET mat_khau = ?, phai_doi_mat_khau = 0, mat_khau_luc = ? WHERE email = ?").bind(await bamMatKhau(moi), lucMoi, c.email),
