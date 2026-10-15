@@ -2,6 +2,7 @@
 import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { NguonTaiSau } from "@/data/lua-chon-that";
+import { chuanHoa as chuanHoaChung, maTuVietTat } from "@/engine/truong";
 import { NGAN_SACH_TOI_DA, nhanNguyenVong } from "@/engine/phan-tich";
 import type { HoSoTomTat, SuKien } from "@/engine/tu-van";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
@@ -12,19 +13,8 @@ import type { AppState } from "@/state/store";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, LuaChon } from "@/state/types";
 
-const khongDau = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const khongDau = chuanHoaChung;
 const BO_QUA = new Set(["nganh", "truong", "hoc", "dai", "diem", "chuan", "em", "la", "co", "khong", "nao", "gi", "the", "can", "muon", "cua", "va", "voi", "cho", "nen", "o", "tai", "nhu", "bao", "nhieu", "hay", "duoc", "thi", "mot", "cac", "nhung", "minh", "toi", "xin", "hoi", "ve", "tu", "den", "thay", "khac", "tot", "so", "sanh", "dau", "ra", "sao", "lam", "chinh", "quy", "con", "kia", "tren", "vay", "truoc", "tuong", "phi"]);
-
-/** Tên gọi quen thuộc của trường -> mã trường trong dữ liệu (đã đối chiếu với tên trường). */
-export const TEN_GOI_TRUONG: Record<string, string> = {
-  uit: "QSC", hcmus: "QST", hust: "BKA", bka: "BKA", bkhn: "BKA", neu: "KHA", ktqd: "KHA",
-  ftu: "NTH", ptit: "BVH", ussh: "QSX", hcmue: "SPS", hnue: "SPH", utc: "GHA", huce: "XDA", tlu: "TLA",
-  vnua: "HVN", hanu: "NHF", tmu: "TMU", iuh: "IUH", ctu: "TCT", vaa: "HHK", ajc: "HBT", qnu: "DQN",
-  dlu: "TDL", hmu: "YHB", ump: "YDS", vlu: "DVL", tdmu: "TDM", hunre: "DMT", vinhuni: "TDV",
-  uet: "QHI", ueb: "QHE", ulis: "QHF", hus: "QHT", bk: "BKA",
-  aof: "HTC", ba: "NHH", hvnh: "NHH", dav: "HQT", hlu: "LPH", kma: "KMA", hutech: "DKC",
-  hcmute: "SPK", spkt: "SPK", uef: "UEF", phenikaa: "PKA", fpt: "FPT", thanglong: "DTL",
-};
 
 /** Em gõ có dấu thì so khớp có dấu (để "bạn" không khớp "Bản"); gõ không dấu thì so khớp không dấu. */
 const coDauTiengViet = (t: string) => /[^\x00-\x7f]/.test(t);
@@ -32,7 +22,7 @@ const chuanHoa = (t: string, coDau: boolean) => (coDau ? t.toLowerCase().replace
 
 export function tachTuKhoa(cauHoi: string): string[] {
   const coDau = coDauTiengViet(cauHoi);
-  return [...new Set(chuanHoa(cauHoi, coDau).split(" ").filter((t) => (t.length >= 3 && !BO_QUA.has(khongDau(t))) || TEN_GOI_TRUONG[t]))];
+  return [...new Set(chuanHoa(cauHoi, coDau).split(" ").filter((t) => (t.length >= 3 && !BO_QUA.has(khongDau(t))) || maTuVietTat(t).length > 0))];
 }
 
 /** Câu nối tiếp dùng đại từ hoặc "còn … thì sao": ngành/trường phải lấy từ lượt trước. */
@@ -57,7 +47,8 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
     const truong = ` ${chuanHoa(l.tenTruong, coDau)} ${chuanHoa(l.truong, coDau)} `;
     let nganhTrung = 0, truongTrung = 0;
     for (const t of tk) {
-      if (TEN_GOI_TRUONG[t]) { if (l.maTruong === TEN_GOI_TRUONG[t]) truongTrung += 2; continue; }
+      const maVietTat = maTuVietTat(t);
+      if (maVietTat.length > 0) { if (l.maTruong && maVietTat.includes(l.maTruong)) truongTrung += 2; continue; }
       if (nganh.includes(` ${t} `) || (t.length >= 5 && nganh.includes(t))) nganhTrung++;
       else if (truong.includes(` ${t} `) || (t.length >= 5 && truong.includes(t))) truongTrung++;
     }

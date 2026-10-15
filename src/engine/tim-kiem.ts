@@ -2,11 +2,10 @@
 // Gõ có dấu hay không dấu đều khớp; "đại học" ~ "ĐH", "công nghệ thông tin" ~ "CNTT"...; khớp đa trường (tên trường, tên ngành,
 // mã trường, biệt danh như UIT/UET) theo từng từ, không cần liền kề hay đúng thứ tự.
 import type { LuaChon } from "@/state/types";
+import { bietDanhDon, chuanHoa } from "@/engine/truong";
 
-/** Bỏ dấu, đ → d, chữ thường, mọi ký tự không phải chữ/số thành khoảng trắng. */
-export function khongDau(t: string): string {
-  return t.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[đĐ]/g, "d").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-}
+/** Bỏ dấu, đ → d, chữ thường, mọi ký tự không phải chữ/số thành khoảng trắng. Một bản duy nhất ở engine/truong.ts. */
+export const khongDau = chuanHoa;
 
 /** Cụm từ (đã bỏ dấu) → dạng viết tắt chuẩn. Xếp cụm dài trước để không bị cụm ngắn ăn mất. */
 const CUM_VIET_TAT: [string, string][] = ([
@@ -23,23 +22,8 @@ const CUM_VIET_TAT: [string, string][] = ([
 const TU_CHUNG = new Set(["dh", "cd", "hv"]);
 const TU_BO_QUA = new Set(["truong"]);
 
-/** Biệt danh sinh viên hay gọi theo mã trường (chỉ những mã có trong dữ liệu). Mỗi biệt danh là một từ; có thể có nhiều biệt danh. */
-const BIET_DANH: Record<string, string> = {
-  // Hà Nội
-  BKA: "hust bkhn", KHA: "neu ktqd", NTH: "ftu", TMU: "tmu", HTC: "hvtc ufa aof", NHH: "hvnh bav", GHA: "utc", GSA: "utc2 utc", GTA: "utt",
-  XDA: "huce nuce", DCN: "haui", BVH: "ptit hvbcvt", KMA: "actvn kma", HBT: "ajc hvbc", HQT: "dav", HCS: "pbc", HPN: "hvpn",
-  SPH: "hnue", SP2: "hpu2", NHF: "hanu", HNM: "hnmu", TLA: "tlu", LPH: "hlu", YHB: "hmu", DKH: "hup", MTA: "mta", HVN: "vnua",
-  DMT: "hunre", LNH: "vnuf", DQK: "ubt", DTL: "thanglong", PKA: "phenikaa", DBH: "bhiu", DDN: "dainam", DDU: "dongdo", DKK: "uneti",
-  QHI: "uet vnuuet", QHT: "hus", QHX: "ussh hussh", QHE: "ueb", QHF: "ulis", QHL: "ulaw", QHS: "uedvnu", QHY: "vnumed smp", QHQ: "vnusba",
-  // TP.HCM
-  QSC: "uit", QST: "hcmus", QSX: "ussh hcmussh", QSY: "vnuhcmmed", MBS: "ou hcmcou", SPK: "hcmute ute", SPS: "hcmue", DCT: "huit", IUH: "iuh",
-  DKC: "hutech", NLS: "hcmuaf", LPS: "hcmulaw hcmul", KTS: "uah", SGD: "sgu", DSG: "stu", DNT: "huflit", UEF: "uef", DVL: "vlu", HSU: "hsu",
-  SIU: "siu", NTT: "ntt", HIU: "hiu", YDS: "ump", NTS: "ftu2 ftu", TDM: "tdmu", VGU: "vgu", FPT: "fpt", BVU: "bvu",
-  // Miền Trung, Tây Nguyên, Nam
-  DDK: "dut bkdn", DDQ: "due", DDF: "ufl", DDP: "ute", DDS: "ued", DDY: "udmp", DHY: "huemed huemp", DHS: "hued", DDT: "dtu", TDL: "dlu",
-  DQN: "qnu", TSN: "ntu", TDV: "vinh vinhuni", TCT: "ctu", YCT: "ctump", SPD: "dthu", TTN: "tgu", TTU: "tantao", DPQ: "pdu", XDT: "muce",
-  HHK: "vaa", TYS: "huph pntu",
-};
+/** Biệt danh một từ của trường (uit, hust, ute...): lấy từ bảng bí danh dùng chung ở engine/truong.ts. */
+const bietDanh = (ma: string) => bietDanhDon(ma).join(" ");
 
 const tachTu = (s: string) => (s ? s.split(" ") : []);
 
@@ -73,7 +57,7 @@ const kho = new WeakMap<LuaChon, string[]>();
 function khoTuCua(l: LuaChon): string[] {
   let k = kho.get(l);
   if (!k) {
-    const tu = tachTu(khongDau([l.tenTruong, l.truong, l.maTruong ?? "", l.nganh, l.nhomNganh, l.khuVuc, BIET_DANH[l.maTruong ?? l.truong] ?? ""].join(" ")));
+    const tu = tachTu(khongDau([l.tenTruong, l.truong, l.maTruong ?? "", l.nganh, l.nhomNganh, l.khuVuc, bietDanh(l.maTruong ?? l.truong)].join(" ")));
     k = [...tu, ...vietTatTrong(tu)];
     kho.set(l, k);
   }
@@ -89,7 +73,7 @@ function khopTu(l: LuaChon, tu: string[], noiCuoi = false): boolean {
 
 /** Mã trường và biệt danh (đã chuẩn hóa) của chương trình: khớp đúng một trong số này là ưu tiên cao nhất. */
 function dinhDanhCua(l: LuaChon): string[] {
-  return tachTu(khongDau(`${l.maTruong ?? ""} ${BIET_DANH[l.maTruong ?? l.truong] ?? ""}`));
+  return tachTu(khongDau(`${l.maTruong ?? ""} ${bietDanh(l.maTruong ?? l.truong)}`));
 }
 
 /** Cụm từ khóa nằm liền nhau trong văn bản (sau khi gộp viết tắt), từ cuối được gõ dở nếu đủ dài. */

@@ -3,77 +3,15 @@
 // từ khóa tổ hợp (bách khoa cntt), và xếp hạng độ liên quan.
 
 import type { LuaChon } from "@/state/types";
+import { DS_TRUONG, bietDanhCua, boDauGiuKyTu } from "@/engine/truong";
 
-/** Bỏ dấu tiếng Việt, đưa về chữ thường không dấu chuẩn. */
+/** Bỏ dấu tiếng Việt, đưa về chữ thường không dấu (giữ ký tự khác). Logic bỏ dấu ở engine/truong.ts. */
 export function boDau(str: string): string {
-  return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[đĐ]/g, "d")
-    .toLowerCase()
-    .trim();
+  return boDauGiuKyTu(str).trim();
 }
 
-/** Bảng ánh xạ mã trường -> danh sách tên gọi thân thuộc, viết tắt sinh viên hay dùng. */
-export const BIET_DANH_TRUONG: Record<string, string[]> = {
-  QHI: ["uet", "dh cong nghe", "dai hoc cong nghe ha noi", "cong nghe ha noi", "cong nghe dhqghn"],
-  QSC: ["uit", "dh cong nghe thong tin", "dai hoc cong nghe thong tin", "cntt tphcm", "cntt dhqg"],
-  BKA: ["hust", "bkhn", "bach khoa ha noi", "dai hoc bach khoa ha noi", "bk ha noi", "bach khoa"],
-  QSB: ["hcmut", "bk tphcm", "bach khoa tphcm", "dai hoc bach khoa tphcm", "bach khoa sai gon", "bk"],
-  DDK: ["bk da nang", "bach khoa da nang", "dai hoc bach khoa da nang", "bkdn"],
-  KHA: ["neu", "ktqd", "kinh te quoc dan", "dai hoc kinh te quoc dan"],
-  NTH: ["ftu", "ngoai thuong", "ngoai thuong ha noi", "dai hoc ngoai thuong"],
-  NTS: ["ftu2", "ngoai thuong co so 2", "ngoai thuong tphcm", "ftu tphcm"],
-  BVH: ["ptit", "buu chinh vien thong", "hoc vien buu chinh vien thong ha noi", "buu chinh ha noi"],
-  BVT: ["ptit hcm", "buu chinh vien thong tphcm", "ptit tphcm", "buu chinh tphcm"],
-  KSA: ["ueh", "kinh te tphcm", "dai hoc kinh te tphcm"],
-  QSK: ["uel", "kinh te luat", "dai hoc kinh te luat"],
-  DKC: ["hutech", "cong nghe tphcm", "dai hoc cong nghe tphcm"],
-  SPK: ["ute", "hcmute", "spkt tphcm", "su pham ky thuat tphcm", "su pham ky thuat"],
-  SPH: ["hnue", "su pham ha noi", "dai hoc su pham ha noi"],
-  SPS: ["hcmue", "su pham tphcm", "dai hoc su pham tphcm"],
-  YHB: ["hmu", "y ha noi", "dai hoc y ha noi"],
-  YDS: ["ump", "y duoc tphcm", "dai hoc y duoc tphcm"],
-  TYS: ["pntu", "pham ngoc thach", "y khoa pham ngoc thach"],
-  QHT: ["hus", "khtn ha noi", "khoa hoc tu nhien ha noi"],
-  QST: ["hcmus", "khtn tphcm", "khoa hoc tu nhien tphcm"],
-  QSX: ["ussh hcm", "nhan van tphcm", "khoa hoc xa hoi va nhan van tphcm"],
-  QHX: ["ussh hn", "nhan van ha noi", "khoa hoc xa hoi va nhan van ha noi"],
-  GHA: ["utc", "giao thong van tai ha noi", "giao thong van tai"],
-  GSA: ["utc2", "giao thong van tai tphcm"],
-  XDA: ["huce", "nuce", "xay dung ha noi", "dai hoc xay dung"],
-  KTA: ["hau", "kien truc ha noi", "dai hoc kien truc ha noi"],
-  KTS: ["uah", "kien truc tphcm", "dai hoc kien truc tphcm"],
-  TMU: ["tmu", "thuong mai", "dai hoc thuong mai"],
-  NHH: ["bav", "ba", "hvnh", "ngan hang", "hoc vien ngan hang"],
-  HQT: ["dav", "ngoai giao", "hoc vien ngoai giao"],
-  LPH: ["hlu", "luat ha noi", "dai hoc luat ha noi"],
-  FPT: ["fpt", "dai hoc fpt"],
-  PKA: ["phenikaa", "dai hoc phenikaa"],
-  IUH: ["iuh", "cong nghiep tphcm", "dai hoc cong nghiep tphcm"],
-  DCN: ["haui", "cong nghiep ha noi", "dai hoc cong nghiep ha noi"],
-  TLA: ["tlu", "thuy loi", "dai hoc thuy loi"],
-  HVN: ["vnua", "nong nghiep", "hoc vien nong nghiep viet nam"],
-  NHF: ["hanu", "ha noi", "dai hoc ha noi"],
-  QHF: ["ulis", "ngoai ngu ha noi", "dai hoc ngoai ngu dhqghn"],
-  HBT: ["ajc", "bao chi", "hoc vien bao chi va tuyen truyen"],
-  DQN: ["qnu", "quy nhon", "dai hoc quy nhon"],
-  TDL: ["dlu", "da lat", "dai hoc da lat"],
-  DVL: ["vlu", "van lang", "dai hoc van lang"],
-  TDM: ["tdmu", "thu dau mot", "dai hoc thu dau mot"],
-  DMT: ["hunre", "tai nguyen moi truong"],
-  TDV: ["vinhuni", "vinh", "dai hoc vinh"],
-  QHE: ["ueb", "kinh te vnu", "dai hoc kinh te dhqghn"],
-  HTC: ["aof", "tai chinh", "hoc vien tai chinh"],
-  KMA: ["kma", "mat ma", "hoc vien ky thuat mat ma"],
-  UEF: ["uef", "kinh te tai chinh tphcm"],
-  DTL: ["thang long", "dai hoc thang long"],
-  DTT: ["tdtu", "ton duc thang", "dai hoc ton duc thang"],
-  DBS: ["ou", "mo tphcm", "dai hoc mo tphcm"],
-  SGD: ["sgu", "sai gon", "dai hoc sai gon"],
-  DSG: ["stu", "cong nghe sai gon", "dai hoc cong nghe sai gon"],
-  DVX: ["van xuan", "dai hoc van xuan", "cong nghe van xuan"],
-};
+/** Mã trường -> các tên gọi thân thuộc, sinh từ bảng bí danh dùng chung (engine/truong.ts). */
+export const BIET_DANH_TRUONG: Record<string, string[]> = Object.fromEntries(DS_TRUONG.map((t) => [t.ma, bietDanhCua(t.ma)]));
 
 /** Chuẩn hóa từ khóa viết tắt hoặc viết dài phổ biến trong tuyển sinh. */
 export function chuanHoaTuKhoa(text: string): string {

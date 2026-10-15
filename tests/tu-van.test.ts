@@ -2,7 +2,8 @@
 import assert from "node:assert/strict";
 import { xuLy } from "../functions/api/tu-van";
 import { GIOI_HAN, NHAC_HE_THONG, choPhepTanSuat, dungNoiDung, kiemTraYeuCau, lamSachHoSo, locNguon, type KhoKV } from "../src/engine/tu-van";
-import { TEN_GOI_TRUONG, chonDuLieuKemTheo, timNganhKhop, traLoiTuDong } from "../src/features/tu-van/lay-du-lieu";
+import { maTuVietTat } from "../src/engine/truong";
+import { chonDuLieuKemTheo, timNganhKhop, traLoiTuDong } from "../src/features/tu-van/lay-du-lieu";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
 import { taoHoSoMau, TRANG_THAI_BAN_DAU } from "../src/state/mau";
 
@@ -70,7 +71,7 @@ assert.ok(khop.length > 0 && khop.some((x) => /khoa học máy tính/i.test(x.ng
 assert.deepEqual(timNganhKhop("em muốn hỏi"), [], "câu không có tên ngành thì không khớp bừa");
 assert.ok(timNganhKhop("y khoa").every((x) => /y khoa|khoa y|y hoc/i.test(x.nganh) || true));
 
-for (const [ten, ma] of Object.entries(TEN_GOI_TRUONG)) assert.ok(LUA_CHON_MAU.some((x) => x.maTruong === ma), `tên gọi ${ten} trỏ tới mã trường không có: ${ma}`);
+for (const ten of ["uit", "hust", "neu", "ftu", "ptit", "hcmus", "thanglong"]) for (const ma of maTuVietTat(ten)) assert.ok(LUA_CHON_MAU.some((x) => x.maTruong === ma), `tên gọi ${ten} trỏ tới mã trường không có: ${ma}`);
 const uit = timNganhKhop("điểm chuẩn Khoa học máy tính UIT", 5);
 assert.ok(uit.length > 0 && uit.every((x) => x.maTruong === "QSC" || x.nganh.toLowerCase().includes("máy tính")), "UIT phải trỏ đúng trường");
 assert.ok(uit[0].maTruong === "QSC", "ngành của UIT lên đầu");
