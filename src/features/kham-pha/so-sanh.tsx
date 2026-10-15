@@ -152,10 +152,10 @@ export default function SoSanh() {
               {(a!.moiTruongHoc || b!.moiTruongHoc) && (
                 <Hang icon={Users} nhan="Môi trường học" tot={null} a={<span className="text-[13px] text-chu">{a!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} b={<span className="text-[13px] text-chu">{b!.moiTruongHoc ?? "Chưa có dữ liệu"}</span>} />
               )}
-              <Hang icon={CheckCircle2} nhan="Mức phù hợp với em" tot={ss.tot.phuHop} a={<NhanPhuHop kq={ss.kqA} xuongDong />} b={<NhanPhuHop kq={ss.kqB} xuongDong />} />
+              <Hang icon={CheckCircle2} nhan="Mức phù hợp với bạn" tot={ss.tot.phuHop} a={<NhanPhuHop kq={ss.kqA} xuongDong />} b={<NhanPhuHop kq={ss.kqB} xuongDong />} />
               <Hang icon={ShieldCheck} nhan="So với điểm chuẩn" tot={ss.tot.chacChan} a={<ChacChan kq={ss.kqA} />} b={<ChacChan kq={ss.kqB} />} />
               {!coHocPhi(a!) && !coHocPhi(b!) && !a!.coHoiViecLam && !b!.coHoiViecLam && (
-                <p className="text-[12px] text-chu-phu py-1.5 border-t border-vien mt-1">Học phí và việc làm của hai ngành này chưa có trong dữ liệu. Em xem trên trang của trường.</p>
+                <p className="text-[12px] text-chu-phu py-1.5 border-t border-vien mt-1">Học phí và việc làm của hai ngành này chưa có trong dữ liệu. Bạn xem trên trang của trường.</p>
               )}
               <p className="flex items-start gap-1.5 text-[12px] text-chu-phu pt-1.5 pb-1 border-t border-vien mt-1">
                 <span className="mt-0.5 size-3 rounded bg-luc-nhat ring-1 ring-luc/30 shrink-0" aria-hidden />

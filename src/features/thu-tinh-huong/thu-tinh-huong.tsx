@@ -84,7 +84,7 @@ export default function ThuTinhHuong() {
             <The>
               {diemMon === null ? (
                 <div className="text-center py-2">
-                  <p className="font-extrabold text-muc">Em chưa có điểm {TEN_MON[mon]}</p>
+                  <p className="font-extrabold text-muc">Bạn chưa có điểm {TEN_MON[mon]}</p>
                   <p className="text-[13px] text-chu-phu mt-1 mb-3">Nhập điểm môn này trước, rồi quay lại thử tăng điểm.</p>
                   <Nut kieu="nhe" muiTen onClick={() => nav(DUONG_DAN.diemThiThu())}>Nhập điểm thi thử</Nut>
                 </div>

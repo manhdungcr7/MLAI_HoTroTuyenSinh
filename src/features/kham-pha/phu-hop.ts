@@ -241,11 +241,11 @@ export function ketLuanNhanh(a: LuaChon, b: LuaChon, kqA: KetQuaPhuHop, kqB: Ket
     }
   } else ra.push("Chưa so được học phí vì đề án chưa công bố học phí theo ngành.");
 
-  // Ý thứ ba: hợp với em hơn (nếu có điểm), nếu không thì việc làm / môi trường học.
+  // Ý thứ ba: hợp với bạn hơn (nếu có điểm), nếu không thì việc làm / môi trường học.
   if (kqA.muc && kqB.muc && kqA.chenh !== null && kqB.chenh !== null && kqA.muc !== kqB.muc) {
     const hop = THU_TU_MUC[kqA.muc] < THU_TU_MUC[kqB.muc] ? a : b;
     const k = hop === a ? kqA : kqB;
-    ra.push(`Với điểm hiện tại, ${ten(hop)} hợp với em hơn (${k.muc!.toLowerCase()}).`);
+    ra.push(`Với điểm hiện tại, ${ten(hop)} hợp với bạn hơn (${k.muc!.toLowerCase()}).`);
   } else if (a.coHoiViecLam && b.coHoiViecLam && a.coHoiViecLam !== b.coHoiViecLam) {
     const hon2 = (hangViec(a) as number) > (hangViec(b) as number) ? a : b;
     ra.push(`${ten(hon2)} có cơ hội việc làm ${(hon2.coHoiViecLam as string).toLowerCase()}.`);

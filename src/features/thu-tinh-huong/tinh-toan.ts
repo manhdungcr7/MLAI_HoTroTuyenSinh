@@ -359,7 +359,7 @@ function dongChuyenNhom(a: AnhTruocSau, ten: string): DongTomTat {
   const xuong = a.dong.filter((d) => HANG_NHAN[d.nhanSau] < HANG_NHAN[d.nhanTruoc]);
   if (len.length) {
     const [k, n] = phoBien(len);
-    return { loai: "len", tieuDe: `${len.length} ${ten} lên nhóm có điểm chuẩn thấp hơn điểm em`, moTa: n === len.length ? `chuyển từ ${k}` : `nhiều nhất là ${k} (${n})` };
+    return { loai: "len", tieuDe: `${len.length} ${ten} lên nhóm có điểm chuẩn thấp hơn điểm của bạn`, moTa: n === len.length ? `chuyển từ ${k}` : `nhiều nhất là ${k} (${n})` };
   }
   if (xuong.length) return { loai: "xuong", tieuDe: `${xuong.length} ${ten} xuống nhóm khó hơn`, moTa: `chuyển từ ${phoBien(xuong)[0]}` };
   return { loai: "giu", tieuDe: `Chưa có ${ten} nào đổi nhóm`, moTa: "nhãn của danh sách vẫn như trước" };

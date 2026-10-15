@@ -250,12 +250,12 @@ export default function ChiTiet() {
           </div>
         </section>
 
-        {/* Mức độ phù hợp với em */}
-        <section className={gop("rounded-the p-4", TONE_NEN[tone])} aria-label="Mức độ phù hợp với em">
+        {/* Mức độ phù hợp với bạn */}
+        <section className={gop("rounded-the p-4", TONE_NEN[tone])} aria-label="Mức độ phù hợp với bạn">
           <div className="flex items-start gap-3">
             <BieuTuongTron icon={kq.muc ? CheckCircle2 : PencilLine} tone={tone} kichThuoc={48} />
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] text-chu-phu">Mức độ phù hợp với em</p>
+              <p className="text-[13px] text-chu-phu">Mức độ phù hợp với bạn</p>
               {kq.muc ? <p className={gop("text-[20px] font-extrabold leading-tight", TONE_CHU[tone])}>{kq.muc}</p> : <div className="mt-0.5"><NhanPhuHop kq={kq} /></div>}
               <p className="text-[14px] text-chu mt-1 leading-snug">{kq.giaiThich}</p>
             </div>

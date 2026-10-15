@@ -125,7 +125,7 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
     ra.push({
       id: `tangDiem:${tang.map((t) => t.mon).join("-")}`, tone: "luc",
       tieuDe: tang.length === 1 ? `Điểm ${TEN_MON[t0.mon]} tăng 3 lần liền` : `Điểm ${danhSach} đều tăng 3 lần liền`,
-      moTa: `${TEN_MON[t0.mon]}: ${t0.ba.map((d) => dinhDang(d, 1)).join(" → ")}. Em đang đi đúng hướng, giữ nhịp này nhé!`,
+      moTa: `${TEN_MON[t0.mon]}: ${t0.ba.map((d) => dinhDang(d, 1)).join(" → ")}. Bạn đang đi đúng hướng, giữ nhịp này nhé!`,
     });
   }
 

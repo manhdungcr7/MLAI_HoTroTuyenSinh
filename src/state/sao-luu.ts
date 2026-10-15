@@ -15,10 +15,10 @@ export type KetQuaDoc = { ok: true; s: AppState } | { ok: false; lyDo: string };
 /** Đọc tệp sao lưu. Chỉ nhận tệp do chính app tạo ra; trường thiếu được điền giá trị mặc định để bản cũ vẫn dùng được. */
 export function docBanSaoLuu(text: string): KetQuaDoc {
   let j: unknown;
-  try { j = JSON.parse(text); } catch { return { ok: false, lyDo: "Tệp này không đọc được. Em chọn đúng tệp sao lưu của Nguyện Vọng AI nhé." }; }
+  try { j = JSON.parse(text); } catch { return { ok: false, lyDo: "Tệp này không đọc được. Bạn chọn đúng tệp sao lưu của Nguyện Vọng AI nhé." }; }
   const o = j as { app?: unknown; phienBan?: unknown; duLieu?: Partial<AppState> } | null;
   if (!o || o.app !== NHAN || typeof o.duLieu !== "object" || o.duLieu === null) return { ok: false, lyDo: "Đây không phải tệp sao lưu của Nguyện Vọng AI." };
-  if (typeof o.phienBan !== "number" || o.phienBan > PHIEN_BAN) return { ok: false, lyDo: "Tệp sao lưu này tạo bởi phiên bản mới hơn, em cập nhật ứng dụng rồi thử lại." };
+  if (typeof o.phienBan !== "number" || o.phienBan > PHIEN_BAN) return { ok: false, lyDo: "Tệp sao lưu này tạo bởi phiên bản mới hơn, bạn cập nhật ứng dụng rồi thử lại." };
   const d = o.duLieu;
   const dangMang = (k: keyof AppState) => d[k] === undefined || Array.isArray(d[k]);
   if (!(["nguyenVong", "yeuThich", "soSanh", "diemThi", "tinhHuong", "coDinh", "viec", "khoiHoc", "lichSu", "loiNhan"] as const).every(dangMang) || typeof d.hoSo !== "object" || d.hoSo === null)

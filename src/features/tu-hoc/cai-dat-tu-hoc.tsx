@@ -91,7 +91,7 @@ export default function CaiDatTuHoc() {
           <p className="text-[12px] text-chu-phu mt-1.5 text-center">Từ 1 đến 6 giờ, mỗi lần đổi nửa giờ.</p>
         </TheCaiDat>
 
-        <TheCaiDat icon={Sun} tone="cam" tieuDe="Em học tốt nhất vào" moTa="Việc quan trọng sẽ được xếp gần khoảng này.">
+        <TheCaiDat icon={Sun} tone="cam" tieuDe="Bạn học tốt nhất vào" moTa="Việc quan trọng sẽ được xếp gần khoảng này.">
           <NhomChon nhan="Thời điểm học tốt nhất" cot={3} giaTri={cfg.thoiDiemTot} onChange={(v) => doi({ thoiDiemTot: v })}
             cacLua={[{ gia: "sang", nhan: "Sáng", icon: Sun }, { gia: "chieu", nhan: "Chiều", icon: Sunset }, { gia: "toi", nhan: "Tối", icon: Moon }]} />
         </TheCaiDat>

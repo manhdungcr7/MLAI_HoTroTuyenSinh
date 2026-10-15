@@ -216,10 +216,10 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
         <div className="rounded-the bg-trang border border-cam/40 p-4">
           <p className="flex items-start gap-2.5">
             <Lightbulb size={22} className="text-cam shrink-0 mt-0.5" />
-            <b className="text-[16px] leading-snug text-cam-chu">Nếu chỉ học dàn trải, em sẽ khó bù đủ {diem1(d.conThieu)} điểm.</b>
+            <b className="text-[16px] leading-snug text-cam-chu">Nếu chỉ học dàn trải, bạn sẽ khó bù đủ {diem1(d.conThieu)} điểm.</b>
           </p>
           <p className="text-[14px] text-chu mt-2 pl-[34px]">
-            {daQua || d.anDemNguoc ? "" : `Còn ${d.soNgayCon} ngày. `}Chia đều sức cho mọi môn thì môn nào cũng tăng chậm. Em nên dồn sức vào môn có thể tăng điểm với công sức hợp lý.
+            {daQua || d.anDemNguoc ? "" : `Còn ${d.soNgayCon} ngày. `}Chia đều sức cho mọi môn thì môn nào cũng tăng chậm. Bạn nên dồn sức vào môn có thể tăng điểm với công sức hợp lý.
           </p>
         </div>
       )}

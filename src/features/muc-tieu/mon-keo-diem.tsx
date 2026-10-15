@@ -186,7 +186,7 @@ function GiaiThichMon({ m }: { m: MonKeoDiem }) {
         </div>
       )}
       <p className="text-[13px] text-chu-phu">Dưới 0.5 là Thấp, từ 0.5 đến dưới 0.9 là Vừa, từ 0.9 là Cao. Nếu phải tăng sát 10 điểm thì luôn tính là Cao.</p>
-      <p className="text-[13px] font-semibold text-cam-chu">Đây là ước tính từ số liệu em đã nhập, không phải cam kết.</p>
+      <p className="text-[13px] font-semibold text-cam-chu">Đây là ước tính từ số liệu bạn đã nhập, không phải cam kết.</p>
     </div>
   );
 }
@@ -194,7 +194,7 @@ function GiaiThichMon({ m }: { m: MonKeoDiem }) {
 function GiaiThichChung() {
   return (
     <div className="space-y-3 text-[14px] text-chu">
-      <p><b>Còn thiếu mỗi môn:</b> chia khoảng cách tổng cho 3 môn. Môn còn nhiều dư địa (xa điểm 10) và môn em ghi là cần cải thiện nhận phần lớn hơn.</p>
+      <p><b>Còn thiếu mỗi môn:</b> chia khoảng cách tổng cho 3 môn. Môn còn nhiều dư địa (xa điểm 10) và môn bạn ghi là cần cải thiện nhận phần lớn hơn.</p>
       <p><b>Công sức:</b> điểm còn thiếu × độ khó (điểm hiện tại càng cao càng khó tăng) × xu hướng các lần thi thử gần nhất (đang tăng thì nhẹ hơn, đang giảm thì nặng hơn). Chia 3 nấc Thấp · Vừa · Cao.</p>
       <div className="space-y-1.5">
         <p><Nhan tone="do">Nên ưu tiên</Nhan> môn còn thiếu nhiều nhất, hoặc môn cần nhiều công sức.</p>

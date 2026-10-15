@@ -63,8 +63,8 @@ export function BaoNho({ bao }: { bao: { tone: "luc" | "cam"; chu: string } | nu
 export function ThieuDiem({ maToHop, thieu }: { maToHop: MaToHop; thieu: MonId[] }) {
   const nav = useNavigate();
   return (
-    <TrangThaiTrong bieuTuong={<ClipboardList size={26} />} tieuDe={`Em chưa có đủ điểm tổ hợp ${maToHop}`}
-      moTa={`Còn thiếu điểm ${thieu.map((m) => TEN_MON[m]).join(", ")}. Có đủ 3 môn, em mới thử tăng điểm được.`}>
+    <TrangThaiTrong bieuTuong={<ClipboardList size={26} />} tieuDe={`Bạn chưa có đủ điểm tổ hợp ${maToHop}`}
+      moTa={`Còn thiếu điểm ${thieu.map((m) => TEN_MON[m]).join(", ")}. Có đủ 3 môn, bạn mới thử tăng điểm được.`}>
       <div className="space-y-2">
         <Nut muiTen onClick={() => nav(DUONG_DAN.batDau(2))}>Nhập điểm các môn</Nut>
         <Nut kieu="vien" onClick={() => nav(DUONG_DAN.diemThiThu())}>Nhập điểm thi thử</Nut>
@@ -78,7 +78,7 @@ export function GhiChuDuLieu({ children }: { children?: ReactNode }) {
   return (
     <p className="text-[12px] leading-relaxed text-chu-phu flex gap-1.5">
       <Info size={14} className="shrink-0 mt-0.5" />
-      <span>{children ?? "Điểm phù hợp là điểm gợi ý trên thang 100, KHÔNG phải xác suất đậu."} Điểm chuẩn là số các năm trước, em đối chiếu với đề án của trường.</span>
+      <span>{children ?? "Điểm phù hợp là điểm gợi ý trên thang 100, KHÔNG phải xác suất đậu."} Điểm chuẩn là số các năm trước, bạn đối chiếu với đề án của trường.</span>
     </p>
   );
 }

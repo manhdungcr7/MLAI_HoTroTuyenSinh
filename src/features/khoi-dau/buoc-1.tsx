@@ -7,6 +7,7 @@ import { GIAI_DOAN_DA_TOT_NGHIEP, changCuaEm, type Chang } from "@/state/chang";
 import { PHAN_NHOM_NGANH, TAT_CA_NGANH, THANH_PHO, TINH } from "./lua-chon";
 import { CauHoi, ChonO, TieuDeBuoc } from "./thanh-phan";
 import type { TruongBatBuoc } from "./tinh-toan";
+import { boDau } from "@/features/kham-pha/tim-kiem";
 
 /** id ô đầu tiên của từng trường bắt buộc, để đưa con trỏ tới khi còn thiếu. */
 export const ID_TRUONG: Record<TruongBatBuoc, string> = { khoi: "bd-khoi", tinh: "bd-tinh", nganhQuanTam: "bd-nganh" };
@@ -65,9 +66,23 @@ export default function Buoc1({ h, sua, loi }: P) {
   const danhSachHien = useMemo(() => {
     const k = tuKhoa.trim().toLowerCase();
     if (k) {
-      return TAT_CA_NGANH.filter((item) =>
-        item.gia.toLowerCase().includes(k) || item.nhan.toLowerCase().includes(k)
-      );
+      const kKd = boDau(k);
+      return TAT_CA_NGANH.filter((item) => {
+        const giaKd = boDau(item.gia);
+        const nhanKd = boDau(item.nhan);
+        const tenHienThi = TEN_HIEN_THI_NGANH[item.gia] || "";
+        const tenKd = boDau(tenHienThi);
+        return (
+          item.gia.toLowerCase().includes(k) ||
+          item.nhan.toLowerCase().includes(k) ||
+          tenHienThi.toLowerCase().includes(k) ||
+          giaKd.includes(kKd) ||
+          nhanKd.includes(kKd) ||
+          tenKd.includes(kKd) ||
+          (kKd === "it" && item.gia === "CNTT") ||
+          (kKd === "cntt" && item.gia === "CNTT")
+        );
+      });
     }
     if (tabNhom === "Tất cả") {
       return TAT_CA_NGANH;

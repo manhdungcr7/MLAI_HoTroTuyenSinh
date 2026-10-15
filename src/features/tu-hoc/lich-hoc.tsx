@@ -98,7 +98,7 @@ export default function LichHoc() {
             {trung.size > 0 && (
               <div role="alert" className="rounded-the bg-do-nhat p-3.5 flex gap-3">
                 <AlertTriangle size={22} className="text-do-chu shrink-0 mt-0.5" />
-                <p className="text-[13px] text-chu"><b className="block text-[15px] text-do-chu">Có tiết bị trùng giờ</b>Các tiết có nhãn “Trùng giờ” đang chồng lên nhau. Em xóa bớt hoặc nhập lại giờ cho đúng nhé.</p>
+                <p className="text-[13px] text-chu"><b className="block text-[15px] text-do-chu">Có tiết bị trùng giờ</b>Các tiết có nhãn “Trùng giờ” đang chồng lên nhau. Bạn xóa bớt hoặc nhập lại giờ cho đúng nhé.</p>
               </div>
             )}
 
@@ -140,7 +140,7 @@ export default function LichHoc() {
               <Nut bieuTuong={Plus} onClick={() => setMoThem(0)}>Thêm tiết</Nut>
               <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => setHoiMau(true)}>Lịch mẫu</Nut>
             </div>
-            <p className="text-[12px] text-chu-phu px-1">Giờ tự học luôn tránh các tiết này và chừa 10 phút trước, sau mỗi tiết để em di chuyển, chuẩn bị.</p>
+            <p className="text-[12px] text-chu-phu px-1">Giờ tự học luôn tránh các tiết này và chừa 10 phút trước, sau mỗi tiết để bạn di chuyển, chuẩn bị.</p>
           </>
         )}
       </NoiDung>
@@ -198,9 +198,9 @@ function HopThemTiet({ thuSan, dong, xong }: { thuSan: number; dong: () => void;
   const tenCuoi = ten.trim() || tenTuDong;
   const gioHopLe = !!batDau && !!ketThuc && phutTuGio(ketThuc) > phutTuGio(batDau);
   const loi = {
-    ten: !tenCuoi ? "Em đặt tên cho tiết này, hoặc chọn môn để mình tự đặt tên." : "",
+    ten: !tenCuoi ? "Bạn đặt tên cho tiết này, hoặc chọn môn để mình tự đặt tên." : "",
     thu: !thu.length ? "Chọn ít nhất một thứ trong tuần." : "",
-    gio: !gioHopLe ? "Giờ kết thúc phải sau giờ bắt đầu." : phutTuGio(ketThuc) - phutTuGio(batDau) > 6 * 60 ? "Một tiết dài hơn 6 giờ, em kiểm tra lại giờ nhé." : "",
+    gio: !gioHopLe ? "Giờ kết thúc phải sau giờ bắt đầu." : phutTuGio(ketThuc) - phutTuGio(batDau) > 6 * 60 ? "Một tiết dài hơn 6 giờ, bạn kiểm tra lại giờ nhé." : "",
   };
   const coLoi = !!(loi.ten || loi.thu || (loi.gio && !gioHopLe));
   // Trùng giờ với tiết đã có: chỉ cảnh báo, em vẫn có thể lưu (ví dụ lịch học xen kẽ tuần chẵn/lẻ).
@@ -258,7 +258,7 @@ function HopThemTiet({ thuSan, dong, xong }: { thuSan: number; dong: () => void;
             <AlertTriangle size={20} className="text-cam-chu shrink-0 mt-0.5" />
             <p className="text-[13px] text-chu"><b className="block text-cam-chu text-[14px]">Trùng giờ với tiết đã có</b>
               {cacTrung.slice(0, 3).map((c) => `${NHAN_THU[c.thu]}: ${c.voi.ten} (${c.voi.batDau} – ${c.voi.ketThuc})`).join(" · ")}
-              {cacTrung.length > 3 && ` và ${cacTrung.length - 3} chỗ khác`}. Em vẫn có thể lưu nếu đúng là vậy.</p>
+              {cacTrung.length > 3 && ` và ${cacTrung.length - 3} chỗ khác`}. Bạn vẫn có thể lưu nếu đúng là vậy.</p>
           </div>
         )}
         <Nut bieuTuong={CalendarPlus} onClick={luu}>

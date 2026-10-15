@@ -14,6 +14,7 @@ import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
 import { dinhDang } from "@/engine/dinh-dang";
+import { khopTuKhoa, diemLienQuan } from "./tim-kiem";
 
 /**
  * Chữ trên huy hiệu. HuyHieuTruong lấy 4 chữ cái đầu nên HCMUTE, HCMUE, HCMUS, HCMUT đều thành "HCMU";
@@ -105,13 +106,19 @@ export function HopChonLuaChon({ mo, dong, tieuDe, boQua = [], onChon }: {
   const { s } = useApp();
   const [tuKhoa, setTuKhoa] = useState("");
   const ds = useMemo(() => {
-    const k = tuKhoa.trim().toLowerCase();
-    // Ưu tiên những trường em đã thích hoặc đã thêm vào nguyện vọng.
+    const k = tuKhoa.trim();
+    // Ưu tiên những trường bạn đã thích hoặc đã thêm vào nguyện vọng.
     const quen = (l: LuaChon) => (s.yeuThich.includes(l.id) || s.nguyenVong.includes(l.id) ? 0 : 1);
     return LUA_CHON_MAU
-      .filter((l) => !boQua.includes(l.id) && (!k || `${l.truong} ${l.tenTruong} ${l.nganh}`.toLowerCase().includes(k)))
-      .sort((a, b) => quen(a) - quen(b))
-      .slice(0, 40); // danh mục có hàng nghìn ngành, chỉ hiện 40 mục đầu; em gõ tên để tìm chính xác
+      .filter((l) => !boQua.includes(l.id) && (!k || khopTuKhoa(l, k)))
+      .sort((a, b) => {
+        if (k) {
+          const dlq = diemLienQuan(b, k) - diemLienQuan(a, k);
+          if (dlq !== 0) return dlq;
+        }
+        return quen(a) - quen(b);
+      })
+      .slice(0, 40); // danh mục có hàng nghìn ngành, chỉ hiện 40 mục đầu; bạn gõ tên để tìm chính xác
   }, [tuKhoa, boQua, s.yeuThich, s.nguyenVong]);
   return (
     <HopTruot mo={mo} dong={dong} tieuDe={tieuDe}>
@@ -128,7 +135,7 @@ export function HopChonLuaChon({ mo, dong, tieuDe, boQua = [], onChon }: {
                   <b className="block text-[14px] text-muc leading-snug">{l.nganh}</b>
                   <span className="block text-[13px] text-chu-phu truncate">{l.truong} · {l.khuVuc}</span>
                 </span>
-                {quen && <Heart size={16} className="text-do shrink-0" fill="currentColor" aria-label="Em đã lưu" />}
+                {quen && <Heart size={16} className="text-do shrink-0" fill="currentColor" aria-label="Bạn đã lưu" />}
               </button>
             </li>
           );

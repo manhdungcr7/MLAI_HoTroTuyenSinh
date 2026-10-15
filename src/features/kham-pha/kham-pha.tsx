@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpDown, ChevronDown, Heart, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Heart, MapPin, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
+import { DongThongBao } from "@/components/ui/thong-bao";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
@@ -14,8 +15,9 @@ import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapX
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
+import { khopTuKhoa, diemLienQuan } from "./tim-kiem";
 
-/** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để em mở ra thấy trống. */
+/** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để bạn mở ra thấy trống. */
 function boLocBanDau(khuVuc: string | undefined, nganh: string[]): [string | undefined, string | undefined] {
   const kv = khuVuc && CAC_KHU_VUC.includes(khuVuc) ? khuVuc : undefined;
   const nhom = nganh.length === 1 && CAC_NHOM.includes(nganh[0]) ? nganh[0] : undefined;
@@ -35,12 +37,38 @@ export default function KhamPha() {
   const [chiHienYeuThich, setChiHienYeuThich] = useState(false);
   const bc = useMemo(() => boiCanhTu(s), [s]);
 
-  const ds = useMemo(() => {
-    const k = tuKhoa.trim().toLowerCase();
+  const { ds, moRongToanQuoc } = useMemo(() => {
+    const k = tuKhoa.trim();
+    if (!k) {
+      const daLoc = loc(LUA_CHON_MAU, b, bc.tinh || undefined)
+        .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)));
+      return { ds: sapXep(daLoc, kieu, bc), moRongToanQuoc: false };
+    }
+
+    // 1. Tìm trong bộ lọc hiện tại
     const daLoc = loc(LUA_CHON_MAU, b, bc.tinh || undefined)
       .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)))
-      .filter((l) => !k || `${l.truong} ${l.tenTruong} ${l.nganh} ${l.nhomNganh}`.toLowerCase().includes(k));
-    return sapXep(daLoc, kieu, bc);
+      .filter((l) => khopTuKhoa(l, k));
+
+    if (daLoc.length > 0) {
+      const sx = sapXep(daLoc, kieu, bc);
+      sx.sort((a, b) => diemLienQuan(b, k) - diemLienQuan(a, k));
+      return { ds: sx, moRongToanQuoc: false };
+    }
+
+    // 2. Nếu bộ lọc khu vực / điểm / học phí làm mất kết quả:
+    // Tự động tìm kiếm trên toàn quốc để không bị 0 ngành gây cụt đường
+    const toanQuoc = LUA_CHON_MAU
+      .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)))
+      .filter((l) => khopTuKhoa(l, k));
+
+    if (toanQuoc.length > 0) {
+      const sx = sapXep(toanQuoc, kieu, bc);
+      sx.sort((a, b) => diemLienQuan(b, k) - diemLienQuan(a, k));
+      return { ds: sx, moRongToanQuoc: true };
+    }
+
+    return { ds: [], moRongToanQuoc: false };
   }, [b, tuKhoa, kieu, bc, chiHienYeuThich, s.yeuThich]);
   const coHoi = useMemo(() => tinhCoHoi(bc.diem), [bc.diem]);
   const hien = useMemo(() => ds.slice(0, soHien).map((l) => ({ l, kq: danhGia(l, bc) })), [ds, soHien, bc]);
@@ -149,6 +177,17 @@ export default function KhamPha() {
             <ChevronDown size={15} className="absolute right-1 pointer-events-none" aria-hidden />
           </label>
         </div>
+
+        {moRongToanQuoc && (
+          <DongThongBao
+            tone="xanh"
+            icon={MapPin}
+            tieuDe={`Đã mở rộng tìm kiếm toàn quốc (${ds.length} ngành)`}
+            moTa={`Không có ngành nào khớp “${tuKhoa.trim()}” tại ${b.khuVuc || "khu vực đang chọn"}. Hệ thống đã tự động tìm trên toàn quốc.`}
+            hanhDong="Xem bộ lọc"
+            onClick={() => nav(DUONG_DAN.boLoc())}
+          />
+        )}
 
         {ds.length === 0 ? (
           <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Chưa có trường nào khớp"
