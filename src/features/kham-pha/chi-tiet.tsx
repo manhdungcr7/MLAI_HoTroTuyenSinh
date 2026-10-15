@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import {
   AlertTriangle, BarChart3, Briefcase, CheckCircle2, CircleDot, FileText, GitCompareArrows, GraduationCap, ListChecks, MapPin, PencilLine, Plus, SearchX, Sparkles, Target, ThumbsUp, Users, Wallet,
@@ -244,7 +244,9 @@ export default function ChiTiet() {
               </span>
             </div>
             <h2 className="mt-2 text-[22px] font-extrabold text-muc leading-tight">{lc.nganh}</h2>
-            <p className="text-[14px] text-chu mt-0.5"><b>{lc.truong}</b> · {lc.tenTruong}</p>
+            <p className="text-[14px] text-chu mt-0.5">
+              {lc.maTruong ? <Link to={DUONG_DAN.truong(lc.maTruong)} className="inline-block py-3 -my-3 font-bold text-xanh underline">{lc.truong} · {lc.tenTruong}</Link> : <><b>{lc.truong}</b> · {lc.tenTruong}</>}
+            </p>
             <p className="text-[13px] text-chu-phu mt-1 line-clamp-2">{lc.moTa}</p>
           </div>
         </section>
