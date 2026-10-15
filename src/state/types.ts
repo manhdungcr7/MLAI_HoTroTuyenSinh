@@ -138,6 +138,8 @@ export interface LuaChon {
   tiLeViecLam?: number; // phần trăm sinh viên có việc làm theo khảo sát trong đề án của trường
   nguonViecLam?: { nam: string; url: string; trang: number }; // trang đề án nêu tỷ lệ có việc làm (nếu trích được)
   nguonHocPhi?: { nam: string; url: string; trang: number }; // trang đề án nêu học phí của ngành này
+  /** Học phí là ước tính theo trường/khối ngành, chưa có văn bản của trường để đối chiếu: hiện "≈ … (ước tính)", không có link nguồn. */
+  hocPhiUocTinh?: boolean;
   nguonTheoNam?: NguonNam[]; // liên kết tới tài liệu gốc của từng năm (đề án PDF, có số trang nếu tìm được)
 }
 

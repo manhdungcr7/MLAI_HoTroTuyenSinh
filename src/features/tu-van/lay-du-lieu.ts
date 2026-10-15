@@ -87,6 +87,7 @@ export function dungSuKien(l: LuaChon, diem: DiemDayDu, nguon: NguonTaiSau | nul
     ...(t.tong !== null ? { nhanCuaEm: nhanNguyenVong(l, t.tong), chenh, tongCuaEm: t.tong, ...(t.toHop ? { toHopDaTinh: t.toHop } : {}) } : {}),
     ...(l.hocPhiMin !== undefined ? {
       hocPhiTrieu: l.hocPhiMin,
+      ...(l.hocPhiUocTinh ? { hocPhiUocTinh: true } : {}),
       ...(l.hocPhiMax !== undefined && l.hocPhiMax !== l.hocPhiMin ? { hocPhiMaxTrieu: l.hocPhiMax } : {})
     } : {}),
     ...(l.tiLeViecLam !== undefined ? { tiLeViecLam: l.tiLeViecLam } : {}),
@@ -133,7 +134,7 @@ const dongNganh = (d: SuKien, hocPhi = false): string => {
   const diemGanNhat = nam.length ? `điểm chuẩn ${nam[0]} là ${so1(d.diem[nam[0]])}` : "chưa có điểm chuẩn";
   const nhan = d.nhanCuaEm ? `, với điểm của bạn: ${d.nhanCuaEm}${d.chenh !== undefined ? ` (${d.chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(d.chenh))} điểm)` : ""}` : "";
   const mucHp = d.hocPhiTrieu !== undefined
-    ? `học phí khoảng ${so1(d.hocPhiTrieu)}${d.hocPhiMaxTrieu && d.hocPhiMaxTrieu !== d.hocPhiTrieu ? `–${so1(d.hocPhiMaxTrieu)}` : ""} triệu/năm`
+    ? `học phí khoảng ${so1(d.hocPhiTrieu)}${d.hocPhiMaxTrieu && d.hocPhiMaxTrieu !== d.hocPhiTrieu ? `–${so1(d.hocPhiMaxTrieu)}` : ""} triệu/năm${d.hocPhiUocTinh ? " (ước tính)" : ""}`
     : "chưa có học phí theo ngành này";
   const hp = hocPhi ? `; ${mucHp}` : "";
   const duBaoStr = d.duBao ? `; dự báo ${d.duBao.nam}: ${so1(d.duBao.thap)}–${so1(d.duBao.cao)}` : "";
@@ -201,7 +202,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
         const d25 = d.diem["2025"] ? so1(d.diem["2025"]) : (d.diem["2024"] ? so1(d.diem["2024"]) : "—");
         const d26 = d.diem["2026"] ? so1(d.diem["2026"]) : (d.duBao ? `${so1(d.duBao.thap)}–${so1(d.duBao.cao)}` : "—");
         const nhan = d.nhanCuaEm || "Tham khảo";
-        const hp = d.hocPhiTrieu !== undefined ? `${so1(d.hocPhiTrieu)} tr` : "—";
+        const hp = d.hocPhiTrieu !== undefined ? `${d.hocPhiUocTinh ? "≈ " : ""}${so1(d.hocPhiTrieu)} tr` : "—";
         return `| ${d.nganh} | ${d.truong} | ${d23} | ${d24} | ${d25} | ${d26} | ${nhan} | ${hp} |`;
       }),
     ].join("\n");

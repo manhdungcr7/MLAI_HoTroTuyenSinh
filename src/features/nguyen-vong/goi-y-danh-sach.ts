@@ -102,7 +102,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
     if (hoSo.nganhQuanTam.includes(x.lc.nhomNganh)) lyDo.push(`Đúng nhóm ngành bạn quan tâm (${x.lc.nhomNganh})`);
     if (tinh && cungNoi(x.lc.khuVuc, tinh)) lyDo.push(`Ở ${x.lc.khuVuc}, gần nơi bạn sống`);
     else if (dungKhuVuc(x.lc, hoSo.khuVuc) === true) lyDo.push(`Ở ${x.lc.khuVuc}, đúng khu vực bạn ưu tiên`);
-    if (coHocPhi(x.lc)) lyDo.push(`Học phí khoảng ${dinhDang(x.lc.hocPhiMin as number, 1)} triệu/năm, trong ngân sách`);
+    if (coHocPhi(x.lc)) lyDo.push(`Học phí khoảng ${dinhDang(x.lc.hocPhiMin as number, 1)} triệu/năm${x.lc.hocPhiUocTinh ? " (ước tính)" : ""}, trong ngân sách`);
     return lyDo;
   };
   const them = (x: UngVien, tang: TangGoiY, lyDoDau: string[] = []) => {

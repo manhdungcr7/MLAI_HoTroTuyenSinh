@@ -16,6 +16,8 @@ export interface SuKien {
   toHopDaTinh?: string; // tổ hợp đã dùng để tính tongCuaEm
   hocPhiTrieu?: number;
   hocPhiMaxTrieu?: number;
+  /** Học phí là ước tính theo khối ngành, chưa có văn bản của trường: AI phải nói "ước tính". */
+  hocPhiUocTinh?: boolean;
   tiLeViecLam?: number;
   /** Khoảng điểm chuẩn dự kiến của năm tới (suy từ biến động các năm trước, KHÔNG phải xác suất đậu). */
   duBao?: { nam: number; thap: number; cao: number };
@@ -120,6 +122,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
       toHopDaTinh: typeof r.toHopDaTinh === "string" && r.toHopDaTinh.trim() ? r.toHopDaTinh.trim().slice(0, 6) : undefined,
       hocPhiTrieu: typeof r.hocPhiTrieu === "number" ? r.hocPhiTrieu : undefined,
       hocPhiMaxTrieu: typeof r.hocPhiMaxTrieu === "number" ? r.hocPhiMaxTrieu : undefined,
+      hocPhiUocTinh: r.hocPhiUocTinh === true ? true : undefined,
       tiLeViecLam: typeof r.tiLeViecLam === "number" ? r.tiLeViecLam : undefined,
       duBao: lamSachDuBao(r.duBao),
       nguon: chuoi(r.nguon, 120),
@@ -132,7 +135,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
 export const NHAC_HE_THONG = [
   'Bạn là chuyên gia tư vấn chiến lược tuyển sinh và hướng nghiệp đại học trong ứng dụng "Nguyện Vọng AI". Xưng "mình", gọi người dùng là "bạn", giọng văn gần gũi, chuyên nghiệp, sắc sảo và mang lại giá trị định hướng vượt trội.',
   "QUY TẮC BẮT BUỘC:",
-  "1. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id nếu có). Có hocPhiTrieu (và hocPhiMaxTrieu) thì nêu khoảng học phí theo năm. Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\" và chỉ bạn tự kiểm tra đề án của trường.",
+  "1. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id nếu có). Có hocPhiTrieu (và hocPhiMaxTrieu) thì nêu khoảng học phí theo năm; nếu mục đó có hocPhiUocTinh thì PHẢI nói \"khoảng … (ước tính, chưa có văn bản của trường)\". Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\" và chỉ bạn tự kiểm tra đề án của trường.",
   "2. Mỗi số liệu kèm tên ngành, trường, năm. Cuối câu liệt kê nguồn dạng [nguồn: id1, id2]. Ghi chú cộng đồng là chưa chính thức: phải nói rõ như vậy.",
   '3. Không nói "khả năng đậu x%". Dùng nhãn Thử sức, Vừa sức, An toàn, Dự phòng và giải thích bằng chênh điểm.',
   "4. Điểm chuẩn là của các năm trước, năm nay có thể khác. Trường duBao là KHOẢNG điểm dự kiến năm tới: nêu cả hai đầu, không phải xác suất đậu.",

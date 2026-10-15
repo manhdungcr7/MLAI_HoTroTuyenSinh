@@ -35,7 +35,8 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
-const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string }>;
+// Dòng có `uocTinh` là ước tính theo trường/khối ngành (không có văn bản đối chiếu): giữ số để lọc theo ngân sách, nhưng không gắn link.
+const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang?: number; url?: string; uocTinh?: boolean }>;
 
 const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 
@@ -73,7 +74,9 @@ function chuyen(d: Dong): LuaChon {
     nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: d.tier === "official_pdf",
     linkNguon: d.nguon ?? undefined,
-    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang } } : {}),
+    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam } : {}),
+    ...(hp && !hp.uocTinh && hp.url ? { nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
+    ...(hp?.uocTinh ? { hocPhiUocTinh: true } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,
