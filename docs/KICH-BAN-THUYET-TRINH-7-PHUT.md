@@ -56,7 +56,7 @@
 > Nếu các cổng tra cứu truyền thống chỉ trả lời những con số quá khứ chết, và chatbot AI thông thường chỉ nói văn xuôi chung chung, dễ sinh ảo giác (hallucination) và bịa ra xác suất đỗ, thì **Nguyện Vọng AI là một Lớp Quyết Định (Decision Layer)**:  
 > - Đầu vào là hồ sơ đa chiều có cấu trúc: điểm từng môn, tổ hợp, ngân sách, giờ trống.  
 > - Đầu ra là một chiến lược nguyện vọng 4 giỏ cân bằng, giải thích rõ ràng sự đánh đổi.  
-> - 100% dữ liệu có nguồn dẫn chứng tới từng trang PDF của trường.  
+> - Điểm chuẩn nào cũng kèm nguồn, phần lớn dẫn tới đúng trang PDF đề án của trường; học phí chỗ nào chỉ là ước tính thì app ghi rõ "≈ ước tính".  
 > Và triết lý của chúng em: **AI không quyết định thay con người. AI phân tích đánh đổi, minh bạch giả định và giữ quyền làm chủ tuyệt đối cho học sinh.**"*
 
 ---
@@ -67,10 +67,10 @@
 > 1. **Tạo hồ sơ trong 60 giây**: Học sinh chọn tổ hợp, nhập điểm kiểm tra và khu vực ưu tiên.  
 > 2. **Khám phá đa chiều**: Hệ thống quét qua 3.652 chương trình của 118 trường đại học.  
 > 3. **Cơ cấu danh sách 4 tầng thông minh**:  
->    - **Thử sức**: Trường cao hơn 0.5–2 điểm để vươn tới ước mơ.  
->    - **Vừa sức**: Trường chênh lệch $\pm 0.5$ điểm làm mục tiêu chính.  
->    - **An toàn**: Thấp hơn 0.5–1.5 điểm để yên tâm.  
->    - **Dự phòng**: Thấp hơn trên 1.5 điểm để triệt tiêu 100% nguy cơ trượt trắng.  
+>    - **Thử sức**: điểm chuẩn năm gần nhất **cao hơn** điểm của em — để vươn tới ước mơ.  
+>    - **Vừa sức**: điểm của em cao hơn điểm chuẩn **chưa tới 1,5 điểm**.  
+>    - **An toàn**: cao hơn **từ 1,5 đến dưới 4 điểm**.  
+>    - **Dự phòng**: cao hơn **từ 4 điểm trở lên** — để giảm nguy cơ trượt hết nguyện vọng (không có mức nào là "chắc chắn đậu").  
 > 4. **Mô phỏng tình huống What-If**: Học sinh có thể kéo thanh trượt 'Nếu điểm thi thật tăng/giảm 1 điểm' thì danh sách phản ứng ra sao.  
 > 5. **Hành động**: Động cơ xếp lịch tự động đưa môn hổng kiến thức vào giờ tự học mỗi tối."*
 
@@ -80,18 +80,18 @@
 > *"Một hệ thống AI hỗ trợ quyết định chỉ có giá trị khi dữ liệu thực sự đáng tin. Nhóm áp dụng chiến lược dữ liệu 3 tầng:  
 > - **Tầng 1 (Đề án gốc)**: 3.652 chương trình từ 118 trường, kèm đường link dẫn thẳng tới trang tài liệu PDF của Hội đồng tuyển sinh.  
 > - **Tầng 2 (Điểm chuẩn đối chiếu)**: Chuỗi dữ liệu lịch sử 2023–2025 được đối chiếu chéo.  
-> - **Tầng 3 (Dữ liệu cộng đồng)**: Học phí chi tiết 721 chương trình, chi phí KTX, đời sống — tất cả đều phải qua duyệt CMS trước khi xuất bản.  
+> - **Tầng 3 (Dữ liệu cộng đồng)**: Học phí có văn bản của trường ở 602 chương trình (các chương trình khác chỉ có ước tính, ghi rõ "≈ ước tính"), chi phí KTX, đời sống — dữ liệu cộng đồng đều phải qua duyệt CMS, bắt buộc có link nguồn.  
 > Đặc biệt, hệ thống bản địa hóa triệt để: Tích hợp công thức điểm ưu tiên mới nhất của Bộ GD&ĐT, 73 tổ hợp môn chính thức, và tính năng chia sẻ danh sách nguyện vọng cho cha mẹ qua đường dẫn Zalo/Facebook mà phụ huynh không cần tạo tài khoản rườm rà."*
 
 ---
 
 ### 🎙️ [04:30 - 05:30] SLIDE 7: ĐỔI MỚI AI & KIỂM ĐỊNH DỰ BÁO NGƯỢC (BACKTESTING)
 > *"Tại Nguyện Vọng AI, chúng em định nghĩa AI theo nghĩa rộng của Decision Intelligence với 4 vai trò cụ thể:  
-> 1. **Mô hình Dự báo Khoảng điểm chuẩn**: Thay vì đưa ra 1 con số duy nhất gây ngộ nhận, chúng em dự báo một khoảng tin cậy dựa trên phân vị $P_{10}$ và $P_{90}$ từ 1.330 cặp năm biến động thực tế.  
+> 1. **Mô hình Dự báo Khoảng điểm chuẩn**: Thay vì đưa ra 1 con số duy nhất gây ngộ nhận, chúng em dự báo một khoảng tin cậy dựa trên phân vị $P_{10}$ và $P_{90}$ từ hơn 1.300 cặp năm biến động thực tế.  
 > 2. **Kiểm định Backtesting Bỏ-một-năm (Leave-one-year-out)**: Chúng em tự viết unit test chạy thực tế:  
->    - Năm 2023: Khoảng dự báo phủ đúng **92%** điểm chuẩn thật (sai số 1.0 điểm).  
->    - Năm 2024: Phủ đúng **93%** điểm chuẩn thật (sai số 1.25 điểm).  
->    - Năm 2025: Kỳ thi có biến động đề thi bất thường, độ phủ giảm xuống 68%. Lúc này, hệ thống minh bạch nói thẳng với học sinh: 'Khoảng điểm năm nay có độ biến động cao, đây không phải xác suất đỗ'.  
+>    - Năm 2023: Khoảng dự báo phủ đúng **89%** điểm chuẩn thật (sai số trung bình 1,0 điểm).  
+>    - Năm 2024: Phủ đúng **95%** điểm chuẩn thật (sai số 1,2 điểm).  
+>    - Năm 2025: Kỳ thi có biến động đề thi bất thường, độ phủ giảm xuống **64%** (sai số 1,9 điểm). *(Số đo ngày 15/10 trên dữ liệu hiện tại; chạy lại `npx tsx tests/du-bao-diem-chuan.test.ts` trước buổi thuyết trình.)* Lúc này, hệ thống minh bạch nói thẳng với học sinh: 'Khoảng điểm năm nay có độ biến động cao, đây không phải xác suất đỗ'.  
 > 3. **Động cơ Tối ưu Ràng buộc (Constraint Engine)**: Xếp lịch tự học vào đúng khoảng thời gian trống theo thời khóa biểu thực.  
 > 4. **Tư vấn Căn cứ (Grounded LLM)**: Sử dụng RAG chặt chẽ, loại bỏ hoàn toàn việc bịa số liệu."*
 

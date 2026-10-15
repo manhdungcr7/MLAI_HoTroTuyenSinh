@@ -1,5 +1,7 @@
-import { useState, useMemo } from "react";
-import { Sparkles, CheckCircle2, Clock, CalendarCheck, RotateCcw, Flame } from "lucide-react";
+// Hộp "Gợi ý lịch học chi tiết": lịch 6 buổi sinh TẠI MÁY theo quy tắc (môn còn thiếu nhiều điểm được nhiều buổi hơn).
+// Không gọi mô hình ngôn ngữ, nên không gắn chữ "AI" (15/10: đổi tên từ "Lập lịch học chi tiết cùng AI").
+import { Fragment, useState, useMemo } from "react";
+import { CheckCircle2, Clock, CalendarCheck, Flame, ListChecks } from "lucide-react";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { Nut, The } from "@/components/ui/nut-the";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
@@ -18,19 +20,8 @@ export function HopLapLichAI({ mo, dong, tuan, onThanhCong }: Props) {
   const { s, xepLai } = useApp();
   const khoiDau = useMemo(() => sinhLichHocAI(s, tuan), [s, tuan]);
 
-  const [dangTao, setDangTao] = useState(false);
-  const [buoiHocs, setBuoiHocs] = useState<KeHoachAIBuoi[]>(khoiDau.danhSachBuoi);
+  const buoiHocs: KeHoachAIBuoi[] = khoiDau.danhSachBuoi;
   const [daApDung, setDaApDung] = useState(false);
-
-  const xuLyTaoLai = () => {
-    setDangTao(true);
-    setDaApDung(false);
-    setTimeout(() => {
-      const moi = sinhLichHocAI(s, tuan);
-      setBuoiHocs(moi.danhSachBuoi);
-      setDangTao(false);
-    }, 400);
-  };
 
   const xuLyApDung = () => {
     const viecAI = chuyenDoiThanhViecHeThong(buoiHocs, tuan);
@@ -40,7 +31,7 @@ export function HopLapLichAI({ mo, dong, tuan, onThanhCong }: Props) {
     xepLai(tuan, undefined, danhSachMoi);
     setDaApDung(true);
     if (onThanhCong) {
-      onThanhCong(`Đã áp dụng ${buoiHocs.length} buổi học cá thể hóa từ AI vào kế hoạch tuần!`);
+      onThanhCong(`Đã áp dụng ${buoiHocs.length} buổi học vào kế hoạch tuần`);
     }
     setTimeout(() => {
       dong();
@@ -48,29 +39,12 @@ export function HopLapLichAI({ mo, dong, tuan, onThanhCong }: Props) {
   };
 
   return (
-    <HopTruot mo={mo} dong={dong} tieuDe="Lập lịch học chi tiết cùng AI">
+    <HopTruot mo={mo} dong={dong} tieuDe="Gợi ý lịch học chi tiết">
       <div className="space-y-3 pb-1">
         {/* Hộp nhận định trọng tâm cá nhân hóa */}
-        <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-xanh-nhat to-trang border border-xanh/30 px-3.5 py-2.5">
-          <div className="flex items-center gap-2 min-w-0">
-            <Sparkles size={16} className="text-xanh shrink-0" />
-            <span
-              className="text-[13px] text-chu font-medium leading-snug"
-              dangerouslySetInnerHTML={{
-                __html: khoiDau.phanTichCaNhan
-                  .replace(/\*\*(.*?)\*\*/g, "<strong class='text-muc font-bold'>$1</strong>"),
-              }}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={xuLyTaoLai}
-            disabled={dangTao}
-            title="Đổi phương án khác"
-            className="shrink-0 ml-2 size-8 grid place-items-center rounded-lg hover:bg-nen/80 text-chu-phu hover:text-xanh cursor-pointer transition-colors disabled:opacity-50"
-          >
-            <RotateCcw size={14} className={dangTao ? "animate-spin" : ""} />
-          </button>
+        <div className="flex items-start gap-2 rounded-xl bg-xanh-nhat border border-xanh/30 px-3.5 py-2.5">
+          <ListChecks size={16} className="text-xanh shrink-0 mt-0.5" />
+          <span className="text-[13px] text-chu font-medium leading-snug"><ChuDam chu={khoiDau.phanTichCaNhan} /></span>
         </div>
 
         {/* Danh sách các buổi học đề xuất */}
@@ -116,13 +90,17 @@ export function HopLapLichAI({ mo, dong, tuan, onThanhCong }: Props) {
           <Nut
             bieuTuong={daApDung ? CheckCircle2 : CalendarCheck}
             onClick={xuLyApDung}
-            disabled={dangTao}
-            className="w-full min-h-12 text-[14px] font-bold shadow-sm"
+            className="w-full min-h-12 text-[14px] font-bold"
           >
-            {daApDung ? "Đã áp dụng vào lịch học!" : "Áp dụng vào Kế hoạch tuần của tôi"}
+            {daApDung ? "Đã áp dụng vào lịch học" : "Áp dụng vào kế hoạch tuần"}
           </Nut>
         </div>
       </div>
     </HopTruot>
   );
+}
+
+/** Hiện đoạn chữ có **đậm** mà không dùng HTML (chữ có thể chứa dữ liệu người dùng nhập). */
+function ChuDam({ chu }: { chu: string }) {
+  return <>{chu.split("**").map((doan, i) => (i % 2 ? <strong key={i} className="text-muc font-bold">{doan}</strong> : <Fragment key={i}>{doan}</Fragment>))}</>;
 }

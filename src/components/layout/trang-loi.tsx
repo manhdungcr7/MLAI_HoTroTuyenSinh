@@ -9,7 +9,15 @@ export function TrangLoi() {
   const loi = useRouteError();
   const nav = useNavigate();
   useEffect(() => { document.title = "Chưa tải được trang · Nguyện Vọng AI"; }, []);
-  const doTai = /dynamically imported|Loading chunk|Failed to fetch|Importing a module script/i.test(String((loi as Error)?.message ?? loi));
+  const doTai = /dynamically imported|Loading chunk|Failed to fetch|Importing a module script|MIME type/i.test(String((loi as Error)?.message ?? loi));
+  // Ứng dụng vừa có bản mới (tệp cũ không còn): tự tải lại MỘT lần trong 30 giây, tránh vòng lặp nếu lỗi là do mất mạng.
+  useEffect(() => {
+    if (!doTai) return;
+    try {
+      const truoc = Number(sessionStorage.getItem("nvai:tu-tai-lai") ?? 0);
+      if (Date.now() - truoc > 30_000) { sessionStorage.setItem("nvai:tu-tai-lai", String(Date.now())); window.location.reload(); }
+    } catch { /* trình duyệt chặn bộ nhớ phiên: để người dùng tự bấm Thử lại */ }
+  }, [doTai]);
   return (
     <div className="khung-ung-dung p-4 pt-10 space-y-3">
       <KhungLoi

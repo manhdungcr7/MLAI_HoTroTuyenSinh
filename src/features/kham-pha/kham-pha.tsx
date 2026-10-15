@@ -15,7 +15,7 @@ import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapX
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
-import { locTimKiem, xepHangTimKiem } from "@/engine/tim-kiem";
+import { locTimKiem, truongChuaCoDuLieu, xepHangTimKiem } from "@/engine/tim-kiem";
 import { hieuCauTim, locTheoY, xepTheoY } from "@/engine/hieu-cau-tim";
 
 /** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để bạn mở ra thấy trống. */
@@ -190,10 +190,21 @@ export default function KhamPha() {
               </div>
             </TrangThaiTrong>
           ) : dangTim ? (
-            <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Không tìm thấy"
-              moTa={`Không tìm thấy ngành/trường khớp với «${tuKhoa.trim()}». Thử tên khác, viết tắt (ví dụ UIT, CNTT) hoặc gõ không dấu.`}>
-              <Nut kieu="vien" onClick={() => setTuKhoa("")}>Xóa tìm kiếm</Nut>
-            </TrangThaiTrong>
+            truongChuaCoDuLieu(tuKhoa) ? (
+              // Trường lớn nhưng chưa có trong dữ liệu: nói thẳng, mời đóng góp, không để học sinh nghĩ mình gõ sai.
+              <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Trường này chưa có dữ liệu"
+                moTa={`${truongChuaCoDuLieu(tuKhoa)} chưa có trong dữ liệu của app. Bạn xem đề án trên trang tuyển sinh của trường, hoặc giúp bổ sung nếu bạn là sinh viên, thầy cô của trường.`}>
+                <div className="space-y-2">
+                  <Nut kieu="vien" onClick={() => nav(DUONG_DAN.dongGop())}>Giúp bổ sung dữ liệu trường</Nut>
+                  <Nut kieu="nhe" onClick={() => setTuKhoa("")}>Xóa tìm kiếm</Nut>
+                </div>
+              </TrangThaiTrong>
+            ) : (
+              <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Không tìm thấy"
+                moTa={`Không tìm thấy ngành/trường khớp với «${tuKhoa.trim()}». Thử tên khác, viết tắt (ví dụ UIT, CNTT) hoặc gõ không dấu.`}>
+                <Nut kieu="vien" onClick={() => setTuKhoa("")}>Xóa tìm kiếm</Nut>
+              </TrangThaiTrong>
+            )
           ) : (
             <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Chưa có trường nào khớp" moTa="Thử nới bớt các tiêu chí lọc nhé.">
               <div className="space-y-2">

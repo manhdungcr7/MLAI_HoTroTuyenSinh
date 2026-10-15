@@ -56,48 +56,22 @@ export function DinhDangMarkdown({ noiDung, className }: DinhDangMarkdownProps) 
         const bodyStart = hasDivider ? 2 : 1;
         const bodyRows = tableLines.slice(bodyStart).map((r) => r.split("|").slice(1, -1).map((c) => c.trim()));
 
+        // App rộng tối đa 430px: bảng nhiều cột bị đẩy ra ngoài màn (chỉ thấy cột đầu). Hiện mỗi hàng thành một thẻ:
+        // cột đầu làm tiêu đề, các cột sau thành "Tên cột: giá trị". Màu nhãn theo đúng màu nhãn nguyện vọng của app.
         blocks.push(
-          <div key={keyIdx++} className="my-2.5 overflow-x-auto rounded-xl border border-vien bg-trang shadow-xs [scrollbar-width:thin]">
-            <table className="w-full text-left border-collapse text-[13px]">
-              <thead>
-                <tr className="bg-xanh-nhat/80 border-b border-vien text-muc font-bold">
-                  {headerCols.map((col, cIdx) => (
-                    <th key={cIdx} className="px-3 py-2 whitespace-nowrap">
-                      {parseInline(col)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-vien/60 text-chu">
-                {bodyRows.map((row, rIdx) => (
-                  <tr key={rIdx} className={gop("hover:bg-slate-50 transition-colors", rIdx % 2 === 1 ? "bg-slate-50/50" : "bg-white")}>
-                    {row.map((cell, cIdx) => {
-                      const isNhan = /thử sức|vừa sức|an toàn|dự phòng/i.test(cell);
-                      const nhanTone = /thử sức/i.test(cell)
-                        ? "bg-cam-nhat text-cam-chu border-cam/30"
-                        : /vừa sức/i.test(cell)
-                        ? "bg-xanh-nhat text-xanh border-xanh/30"
-                        : /an toàn/i.test(cell)
-                        ? "bg-luc-nhat text-luc-chu border-luc/30"
-                        : "bg-slate-100 text-chu border-slate-200";
-
-                      return (
-                        <td key={cIdx} className="px-3 py-2 whitespace-nowrap">
-                          {isNhan ? (
-                            <span className={gop("inline-block px-2 py-0.5 rounded-full text-[11px] font-bold border", nhanTone)}>
-                              {cell}
-                            </span>
-                          ) : (
-                            parseInline(cell)
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
+          <ul key={keyIdx++} className="my-2.5 space-y-1.5" aria-label={headerCols.join(", ")}>
+            {bodyRows.map((row, rIdx) => (
+              <li key={rIdx} className="rounded-xl border border-vien bg-trang px-3 py-2 text-[13px] text-chu">
+                <b className="block text-muc leading-snug">{parseInline(row[0] ?? "")}</b>
+                {row.slice(1).map((cell, cIdx) => cell && (
+                  <span key={cIdx} className="block leading-snug mt-0.5">
+                    <span className="text-chu-phu">{headerCols[cIdx + 1] ? `${headerCols[cIdx + 1]}: ` : ""}</span>
+                    {NHAN_BANG.test(cell) ? <span className={gop("inline-block px-1.5 py-px rounded-md text-[12px] font-bold", toneNhanBang(cell))}>{cell}</span> : parseInline(cell)}
+                  </span>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </li>
+            ))}
+          </ul>
         );
         continue;
       }
@@ -243,3 +217,8 @@ function parseInline(text: string): React.ReactNode {
   });
 }
 
+const NHAN_BANG = /^(thử sức|vừa sức|an toàn|dự phòng)$/i;
+/** Cùng màu với nhãn nguyện vọng ở mọi màn khác (TONE_NHAN: Thử sức tím, Vừa sức cam, An toàn lục, Dự phòng xanh). */
+function toneNhanBang(c: string): string {
+  return /thử sức/i.test(c) ? "bg-tim-nhat text-tim-chu" : /vừa sức/i.test(c) ? "bg-cam-nhat text-cam-chu" : /an toàn/i.test(c) ? "bg-luc-nhat text-luc-chu" : "bg-xanh-nhat text-xanh";
+}

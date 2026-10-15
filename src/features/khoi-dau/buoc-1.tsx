@@ -197,7 +197,8 @@ export default function Buoc1({ h, sua, loi }: P) {
                     : "bg-trang border-vien text-chu hover:border-xanh/40 font-semibold"
                 )}
               >
-                <span className="text-[13px] leading-snug truncate pr-2">
+                {/* Tên nhóm dài (Tài chính - Ngân hàng, Marketing & Truyền thông) xuống 2 dòng thay vì bị cắt. */}
+                <span className="text-[13px] leading-snug line-clamp-2 pr-2 min-w-0">
                   {ten}
                 </span>
                 {daChon ? (

@@ -5,8 +5,15 @@ export const CHUA_CO_HOC_PHI = "Chưa có dữ liệu học phí";
 
 export const coHocPhi = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax">): boolean => typeof l.hocPhiMin === "number" && typeof l.hocPhiMax === "number";
 
-/** "35 – 45" (triệu đồng/năm) hoặc "chưa có" khi đề án chưa công bố học phí theo ngành. */
-export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax">): string => (coHocPhi(l) ? (l.hocPhiMin === l.hocPhiMax ? `${l.hocPhiMin}` : `${l.hocPhiMin} – ${l.hocPhiMax}`) : "chưa có");
+/** "35 – 45" (triệu đồng/năm), "≈ 28,5" khi là ước tính chưa có nguồn, hoặc "chưa có" khi chưa có số nào. */
+export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax"> & { hocPhiUocTinh?: boolean }): string => {
+  if (!coHocPhi(l)) return "chưa có";
+  const so = l.hocPhiMin === l.hocPhiMax ? `${l.hocPhiMin}` : `${l.hocPhiMin} – ${l.hocPhiMax}`;
+  return l.hocPhiUocTinh ? `≈ ${so}` : so;
+};
+
+/** Thêm " (ước tính)" sau câu có nhắc học phí khi số đó chưa có nguồn. */
+export const ghiUocTinh = (l: { hocPhiUocTinh?: boolean }): string => (l.hocPhiUocTinh ? " (ước tính)" : "");
 
 /** Học phí có vượt ngân sách không; chưa biết học phí thì không coi là vượt. */
 export const vuotNganSach = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax">, nganSach: number): boolean => coHocPhi(l) && (l.hocPhiMin as number) > nganSach;

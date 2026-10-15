@@ -91,7 +91,7 @@ export function ChonO<T extends string | number | boolean>({ cacLua, giaTri, onC
             className={gop(
               "relative rounded-xl border font-semibold transition-all cursor-pointer",
               kieu === "o" ? "min-h-[72px] px-2 py-2 flex flex-col items-center justify-center gap-1 text-center text-[13px] leading-tight"
-                : "min-h-12 px-3 inline-flex items-center justify-center gap-1.5 text-[14px]",
+                : gop("min-h-12 px-3 inline-flex items-center justify-center gap-1.5 text-[14px]", chon && "pr-8"), // chừa chỗ cho dấu ✓ để không đè chữ
               chon ? "bg-xanh-nhat border-xanh text-xanh border-[1.5px] shadow-sm font-bold" : gop("bg-trang text-chu active:bg-xanh-nhat hover:border-xanh/40", coLoi ? "border-do/60" : "border-vien"),
             )}>
             {Icon && <Icon size={kieu === "o" ? 20 : 17} className={chon ? "text-xanh" : "text-chu-phu"} />}

@@ -193,9 +193,9 @@ export default function TuVan() {
                                   disabled={daCo}
                                   onClick={() => { if (!daCo) themNguyenVong(id); }}
                                   aria-label={daCo ? `Đã có ${l.nganh} trong nguyện vọng` : `Thêm ${l.nganh} vào nguyện vọng`}
-                                  className={gop("min-h-11 shrink-0 px-3 rounded-lg text-[13px] font-bold whitespace-nowrap inline-flex items-center justify-center gap-1 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-xanh text-white active:brightness-90 cursor-pointer")}
+                                  className={gop("min-h-11 shrink-0 px-3 rounded-lg text-[13px] font-bold whitespace-nowrap inline-flex items-center justify-center gap-1 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-trang text-xanh border border-xanh/40 active:bg-xanh-nhat cursor-pointer")}
                                 >
-                                  {daCo ? <><Check size={15} />Đã thêm</> : "+ Thêm vào nguyện vọng"}
+                                  {daCo ? <><Check size={15} />Đã thêm</> : "+ Thêm NV"}
                                 </button>
                               </li>
                             );
@@ -204,9 +204,9 @@ export default function TuVan() {
                       </div>
                     )}
                     {/kế hoạch học tập|lịch học|ôn thi tuần/i.test(t.chu) && (
-                      <div className="mt-2.5 p-3 rounded-xl bg-gradient-to-r from-xanh-nhat to-white border border-xanh/30 flex items-center justify-between gap-2">
+                      <div className="mt-2.5 p-3 rounded-xl bg-xanh-nhat border border-xanh/30 flex items-center justify-between gap-2">
                         <div className="min-w-0">
-                          <b className="block text-[13px] text-muc leading-tight">Lịch học tuần đề xuất từ AI</b>
+                          <b className="block text-[13px] text-muc leading-tight">Gợi ý lịch học tuần</b>
                           <span className="block text-[12px] text-chu-phu leading-tight mt-0.5">Xem chi tiết và áp dụng vào Kế hoạch tuần</span>
                         </div>
                         <Link

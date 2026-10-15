@@ -61,7 +61,7 @@ function Hero() {
             <Button secondary to={DUONG_DAN.batDau()}>Bắt đầu tạo hồ sơ</Button>
           </div>
           <div className="lp-trust">
-            <span><ShieldCheck/>100% dữ liệu Đề án PDF</span>
+            <span><ShieldCheck/>Dữ liệu có nguồn đề án</span>
             <span><Users/>Có Người đồng hành</span>
             <span><BarChart3/>Kế hoạch tuần thực tế</span>
           </div>

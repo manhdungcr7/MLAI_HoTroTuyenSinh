@@ -2,7 +2,7 @@
 // Mức phù hợp và điểm gợi ý /100 chỉ để em sắp xếp, so sánh. KHÔNG phải xác suất đậu.
 import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongA01 } from "@/state/chon";
-import { coHocPhi } from "@/data/lua-chon-phu";
+import { coHocPhi, ghiUocTinh } from "@/data/lua-chon-phu";
 import { diemDayDu, tongChoLuaChon } from "./to-hop";
 import type { AppState } from "@/state/store";
 import { TEN_MON, TEN_MON_NGAN, TEN_MON_THEM, TEN_MON_THEM_NGAN, type DiemDayDu, type LuaChon, type MonId, type MonThem, type MucPhuHop, type ToneTen } from "@/state/types";
@@ -90,9 +90,9 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   let vuotNganSach = false;
   if (bc.nganSach !== null) {
     if (!coHocPhi(lc)) luuY.push("Chưa có học phí riêng của ngành, chưa so được ngân sách.");
-    else if ((lc.hocPhiMin as number) > bc.nganSach) { vuotNganSach = true; luuY.push(`Học phí từ ${lc.hocPhiMin} tr/năm, vượt ngân sách ${bc.nganSach} tr.`); }
-    else if ((lc.hocPhiMax as number) > bc.nganSach) luuY.push(`Học phí có thể tới ${lc.hocPhiMax} tr/năm, trên ngân sách ${bc.nganSach} tr.`);
-    else tot.push(`Học phí trong ngân sách ${bc.nganSach} tr/năm.`);
+    else if ((lc.hocPhiMin as number) > bc.nganSach) { vuotNganSach = true; luuY.push(`Học phí từ ${lc.hocPhiMin} tr/năm${ghiUocTinh(lc)}, vượt ngân sách ${bc.nganSach} tr.`); }
+    else if ((lc.hocPhiMax as number) > bc.nganSach) luuY.push(`Học phí có thể tới ${lc.hocPhiMax} tr/năm${ghiUocTinh(lc)}, trên ngân sách ${bc.nganSach} tr.`);
+    else tot.push(`Học phí trong ngân sách ${bc.nganSach} tr/năm${ghiUocTinh(lc)}.`);
   }
 
   // 3) Khu vực

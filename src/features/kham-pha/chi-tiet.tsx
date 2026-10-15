@@ -279,8 +279,8 @@ export default function ChiTiet() {
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
-            <DongThongTin icon={Wallet} tone="cam" nhan="Học phí / năm (dự kiến)" giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? <>{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Miễn 100% học phí theo NĐ 116 · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr · `}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
+            <DongThongTin icon={Wallet} tone="cam" nhan={lc.hocPhiUocTinh ? "Học phí / năm (ước tính)" : "Học phí / năm (dự kiến)"} giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
+              phu={coHocPhi(lc) ? <>{lc.hocPhiUocTinh && <span className="block">Ước tính theo trường và khối ngành, chưa có văn bản của trường để đối chiếu. Xem đề án trước khi quyết định.</span>}{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Sư phạm được hỗ trợ học phí theo NĐ 116 nếu cam kết làm trong ngành · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr${lc.nguonHocPhi ? " · " : ""}`}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
               <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <LinkNguon url={lc.nguonViecLam.url} trang={lc.nguonViecLam.trang} /></>}</>} />
@@ -351,9 +351,11 @@ export default function ChiTiet() {
             </span>
           </div>
         </div>
-        <p className="text-[14px] text-chu my-3">Xem danh sách đã cân đối chưa?</p>
+        {/* Chưa có mục tiêu: mời đặt luôn ngành vừa thêm, để Hôm nay và Kế hoạch có việc ngay (không phải tự tìm nút). */}
+        <p className="text-[14px] text-chu my-3">{!s.mucTieu && dat.ok ? "Bạn chưa có mục tiêu. Đặt ngành này làm mục tiêu để biết còn thiếu bao nhiêu điểm?" : "Xem danh sách đã cân đối chưa?"}</p>
         <div className="space-y-2">
-          <Nut bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
+          {!s.mucTieu && dat.ok && <Nut bieuTuong={Target} onClick={() => { setHoiTiep(null); datLamMucTieu(); }}>Đặt làm mục tiêu</Nut>}
+          <Nut kieu={!s.mucTieu && dat.ok ? "vien" : "chinh"} bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
           <Nut kieu="nhe" onClick={() => setHoiTiep(null)}>Ở lại xem</Nut>
         </div>
       </HopTruot>

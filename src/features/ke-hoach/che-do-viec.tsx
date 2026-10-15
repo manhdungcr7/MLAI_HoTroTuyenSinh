@@ -1,7 +1,7 @@
 // Chế độ "Việc cần làm": mục tiêu hôm nay, tiến độ trong ngày, việc chia theo Nên làm trước / Tiếp theo / Trong tuần.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, CalendarDays, CalendarPlus, CheckCircle2, ChevronRight, Clock, Flame, ListPlus, Sparkles, Target, type LucideIcon } from "lucide-react";
+import { BarChart3, CalendarDays, CalendarPlus, CheckCircle2, ChevronRight, Clock, Flame, Lightbulb, ListChecks, ListPlus, Sparkles, Target, type LucideIcon } from "lucide-react";
 import { HopTruot, ThanhTienDo, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -137,7 +137,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
   );
 }
 
-/** Thẻ tư vấn & cá thể hóa lộ trình học tập cùng AI */
+/** Thẻ lộ trình học cá nhân: mục tiêu, môn trọng tâm, nút mở gợi ý lịch học chi tiết. */
 function TheCaNhanHoaAI({ tuan, hienThongBao }: { tuan: string; hienThongBao: (c: string) => void }) {
   const { s } = useApp();
   const nav = useNavigate();
@@ -184,7 +184,7 @@ function TheCaNhanHoaAI({ tuan, hienThongBao }: { tuan: string; hienThongBao: (c
           <p className="font-medium">
             Mục tiêu: <b className="text-muc">{m.lc.nganh} · {m.lc.truong}</b> (tổ hợp <b>{maToHop}</b>, cần <b>{dinhDang(m.mucTieuTho, 1)}đ</b>).
           </p>
-          <p className="text-chu-phu">💡 {loiKhuyen} {loiThe}</p>
+          <p className="text-chu-phu flex items-start gap-1.5"><Lightbulb size={14} className="shrink-0 mt-0.5 text-cam" /><span>{loiKhuyen} {loiThe}</span></p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
@@ -193,8 +193,8 @@ function TheCaNhanHoaAI({ tuan, hienThongBao }: { tuan: string; hienThongBao: (c
             onClick={() => setMoLapLich(true)}
             className="w-full min-h-[44px] py-2.5 px-3 rounded-xl bg-xanh text-white font-bold text-[13px] inline-flex items-center justify-center gap-1.5 shadow-xs active:brightness-95 hover:bg-xanh/90 cursor-pointer transition-all"
           >
-            <Sparkles size={16} className="shrink-0" />
-            <span>Hỏi AI lập lịch chi tiết</span>
+            <ListChecks size={16} className="shrink-0" />
+            <span>Gợi ý lịch học chi tiết</span>
           </button>
           <button
             type="button"

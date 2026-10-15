@@ -24,7 +24,9 @@ const TIEN_TO_CHUNG = /^(CT chuẩn|Chuẩn QT|Đại học chính quy|Khoa họ
 
 /** Tên ngành gọn cho người đọc; phần bỏ đi (nếu có) trả ở `them`. Không đổi nghĩa: chỉ bỏ chữ lặp và nhãn loại chương trình. */
 export function tenGon(goc: string): { ten: string; them?: string } {
-  let t = goc.replace(/^Chương trình đào tạo (ngành )?/i, "").trim();
+  let t = goc.replace(/^Chương trình đào tạo (ngành )?/i, "")
+    .replace(/^\(\d+\)\s+/, "") // "(1) Tài chính": số thứ tự còn sót khi trích PDF của NEU
+    .trim();
   const cat: number[] = [];
   for (let i = t.indexOf(" - "); i >= 0; i = t.indexOf(" - ", i + 1)) cat.push(i);
   for (const i of cat) {
@@ -35,7 +37,8 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
-const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string }>;
+// Dòng có `uocTinh` là ước tính theo trường/khối ngành (không có văn bản đối chiếu): giữ số để lọc theo ngân sách, nhưng không gắn link.
+const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang?: number; url?: string; uocTinh?: boolean }>;
 
 const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 
@@ -73,7 +76,9 @@ function chuyen(d: Dong): LuaChon {
     nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: d.tier === "official_pdf",
     linkNguon: d.nguon ?? undefined,
-    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang } } : {}),
+    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam } : {}),
+    ...(hp && !hp.uocTinh && hp.url ? { nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
+    ...(hp?.uocTinh ? { hocPhiUocTinh: true } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,

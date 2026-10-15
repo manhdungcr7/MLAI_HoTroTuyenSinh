@@ -28,7 +28,7 @@ Dữ liệu người dùng: điểm từng môn, thi thử theo thời gian, th�
 
 ## 5. AI và dự báo (tiêu chí 4, ý 3, trọng tâm 10 điểm)
 Bốn vai trò của AI, chỉ một là mô hình ngôn ngữ:
-- **Dự báo:** khoảng điểm chuẩn năm tới. Cách làm: điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau, từ 1.330 cặp năm thật, nhân hệ số 1,3.
+- **Dự báo:** khoảng điểm chuẩn năm tới. Cách làm: điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau, từ hơn 1.300 cặp năm thật, nhân hệ số 1,3.
 - **Phân tích:** nhãn nguyện vọng và nhận xét danh sách (công thức công khai).
 - **Tối ưu:** xếp lịch tự học theo ràng buộc, sinh việc theo môn còn thiếu.
 - **Hỏi đáp có căn cứ:** chỉ dùng số liệu có nguồn gửi kèm, lọc mã nguồn bịa, không nói "khả năng đậu x%".
@@ -37,9 +37,9 @@ Bốn vai trò của AI, chỉ một là mô hình ngôn ngữ:
 
 | Năm kiểm | Số chương trình | Khoảng "80%" phủ điểm thật | Sai số trung bình |
 |---|---|---|---|
-| 2023 | 380 | 92% | 1,0 điểm |
-| 2024 | 537 | 93% | 1,25 điểm |
-| 2025 | 413 | 68% | 1,9 điểm |
+| 2023 | 397 | 89% | 1,0 điểm |
+| 2024 | 603 | 95% | 1,2 điểm |
+| 2025 | 413 | 64% | 1,9 điểm |
 
 Điểm nhấn kể chuyện: bản đầu (cộng trung vị, tách theo nhóm ngành) chỉ phủ 55%, kiểm định cho thấy nó kém nên đã bỏ. Năm 2025 biến động mạnh bất thường (độ lệch chuẩn 2,6 so với 1,8) nên khoảng phủ thấp hơn; app nói thẳng "không phải xác suất đậu".
 **Giới hạn nêu ra:** không bù được thay đổi quy chế, đề thi, chỉ tiêu; điểm do học sinh tự nhập; trắc nghiệm hướng nghiệp (Holland, 12 tình huống) chỉ là gợi ý.
@@ -71,6 +71,6 @@ Sơ đồ một dòng cho slide:
 | Quy chế thay đổi hằng năm | Mức ưu tiên và công thức nằm một chỗ, đối chiếu mỗi mùa; ghi rõ trong tài liệu vận hành |
 
 ## 9. Điều nói thẳng (slide "Giới hạn và bước tiếp")
-- Học phí riêng theo ngành có cho 721 chương trình ở 20 trường, mỗi dòng đối chiếu được với văn bản của đúng trường; điểm 2026 chủ yếu từ trang tổng hợp; chưa có khung chương trình học.
+- Học phí có văn bản của trường (link + trang) ở 602 chương trình; các chương trình khác chỉ có học phí ước tính theo khối ngành, app ghi "≈ ước tính" và không gắn link; tỷ lệ việc làm có ở 121 chương trình; điểm 2026 chủ yếu từ trang tổng hợp; chưa có khung chương trình học.
 - Hạ tầng thật của CMS (D1, Access) cần dựng; chạy thử đầy đủ ở máy.
 - Bước tiếp: tuyển tình nguyện viên từ các trường đối tác, nhập điểm chuẩn mùa 2027, tài khoản cho phụ huynh và thầy cô, đo tác động bằng người dùng thật.

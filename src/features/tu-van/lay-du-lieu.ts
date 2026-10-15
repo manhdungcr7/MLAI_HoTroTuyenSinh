@@ -3,6 +3,7 @@ import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { NguonTaiSau } from "@/data/lua-chon-that";
 import { NGAN_SACH_TOI_DA, nhanNguyenVong, khoangCachTheoMon } from "@/engine/phan-tich";
+import { hieuCauTim } from "@/engine/hieu-cau-tim";
 import type { HoSoTomTat, SuKien } from "@/engine/tu-van";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -87,6 +88,7 @@ export function dungSuKien(l: LuaChon, diem: DiemDayDu, nguon: NguonTaiSau | nul
     ...(t.tong !== null ? { nhanCuaEm: nhanNguyenVong(l, t.tong), chenh, tongCuaEm: t.tong, ...(t.toHop ? { toHopDaTinh: t.toHop } : {}) } : {}),
     ...(l.hocPhiMin !== undefined ? {
       hocPhiTrieu: l.hocPhiMin,
+      ...(l.hocPhiUocTinh ? { hocPhiUocTinh: true } : {}),
       ...(l.hocPhiMax !== undefined && l.hocPhiMax !== l.hocPhiMin ? { hocPhiMaxTrieu: l.hocPhiMax } : {})
     } : {}),
     ...(l.tiLeViecLam !== undefined ? { tiLeViecLam: l.tiLeViecLam } : {}),
@@ -115,14 +117,17 @@ export function chonDuLieuKemTheo(cauHoi: string, s: AppState, nguon: NguonTaiSa
   const hoiDanhSach = /nguyen vong|danh sach|can bang|an toan|thu suc/.test(khongDau(cauHoi));
   const chon: LuaChon[] = [];
   const them = (l?: LuaChon) => { if (l && !chon.some((c) => c.id === l.id) && chon.length < toiDa) chon.push(l); };
-  const khop = timNganhKhop(cauHoi, toiDa);
+  // Câu hỏi nêu mức học phí ("dưới 40 triệu"): không gửi ngành có học phí (kể cả ước tính) cao hơn mức đó cho AI.
+  const tran = hieuCauTim(cauHoi, LUA_CHON_MAU).hocPhiToiDa;
+  const trongTran = (l: LuaChon) => tran === undefined || l.hocPhiMin === undefined || l.hocPhiMin <= tran;
+  const khop = timNganhKhop(cauHoi, toiDa * 3).filter(trongTran).slice(0, toiDa);
   // Câu nối tiếp ("ngành đó", "còn trường kia thì sao", hoặc không nêu ngành nào): giữ các ngành đã nói ở lượt trước.
   // Nếu câu còn nêu ngành mới thì chỉ giữ tối đa 4 để ngành mới vẫn có chỗ.
   const noiTiep = giuId.length > 0 && !hoiDanhSach && (coDaiTu(cauHoi) || khop.length === 0);
   if (noiTiep) giuId.slice(0, khop.length ? 4 : toiDa).forEach((id) => them(LUA_CHON_MAU.find((l) => l.id === id)));
   if (hoiDanhSach) s.nguyenVong.forEach((id) => them(LUA_CHON_MAU.find((l) => l.id === id)));
   khop.forEach(them);
-  if (chon.length === 0) goiYDanhSach(diem, s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)).slice(0, 5).forEach((d) => them(d.lc));
+  if (chon.length === 0) goiYDanhSach(diem, s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)).filter((d) => trongTran(d.lc)).slice(0, 5).forEach((d) => them(d.lc));
   return chon.map((l) => dungSuKien(l, diem, nguon));
 }
 
@@ -133,7 +138,7 @@ const dongNganh = (d: SuKien, hocPhi = false): string => {
   const diemGanNhat = nam.length ? `điểm chuẩn ${nam[0]} là ${so1(d.diem[nam[0]])}` : "chưa có điểm chuẩn";
   const nhan = d.nhanCuaEm ? `, với điểm của bạn: ${d.nhanCuaEm}${d.chenh !== undefined ? ` (${d.chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(d.chenh))} điểm)` : ""}` : "";
   const mucHp = d.hocPhiTrieu !== undefined
-    ? `học phí khoảng ${so1(d.hocPhiTrieu)}${d.hocPhiMaxTrieu && d.hocPhiMaxTrieu !== d.hocPhiTrieu ? `–${so1(d.hocPhiMaxTrieu)}` : ""} triệu/năm`
+    ? `học phí khoảng ${so1(d.hocPhiTrieu)}${d.hocPhiMaxTrieu && d.hocPhiMaxTrieu !== d.hocPhiTrieu ? `–${so1(d.hocPhiMaxTrieu)}` : ""} triệu/năm${d.hocPhiUocTinh ? " (ước tính)" : ""}`
     : "chưa có học phí theo ngành này";
   const hp = hocPhi ? `; ${mucHp}` : "";
   const duBaoStr = d.duBao ? `; dự báo ${d.duBao.nam}: ${so1(d.duBao.thap)}–${so1(d.duBao.cao)}` : "";
@@ -193,21 +198,20 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
   if (soSanh) {
     const sk = khop.slice(0, 4).map((l) => dungSuKien(l, diem, nguon));
     const bang3Nam = [
-      "| Ngành | Trường | Điểm 2023 | Điểm 2024 | Điểm 2025 | Dự kiến 2026 | Nhãn | Học phí/năm |",
+      // Mỗi cột năm chỉ ghi điểm thật của đúng năm đó ("—" nếu chưa có). Khoảng dự báo ở cột riêng, ghi rõ năm dự báo.
+      "| Ngành | Trường | Điểm 2024 | Điểm 2025 | Điểm 2026 | Dự kiến năm tới | Nhãn | Học phí/năm |",
       "|---|---|---|---|---|---|---|---|",
       ...sk.map((d) => {
-        const d23 = d.diem["2023"] ? so1(d.diem["2023"]) : "—";
-        const d24 = d.diem["2024"] ? so1(d.diem["2024"]) : "—";
-        const d25 = d.diem["2025"] ? so1(d.diem["2025"]) : (d.diem["2024"] ? so1(d.diem["2024"]) : "—");
-        const d26 = d.diem["2026"] ? so1(d.diem["2026"]) : (d.duBao ? `${so1(d.duBao.thap)}–${so1(d.duBao.cao)}` : "—");
+        const nam = (y: string) => (d.diem[y] ? so1(d.diem[y]) : "—");
+        const duKien = d.duBao ? `${so1(d.duBao.thap)}–${so1(d.duBao.cao)} (${d.duBao.nam})` : "—";
         const nhan = d.nhanCuaEm || "Tham khảo";
-        const hp = d.hocPhiTrieu !== undefined ? `${so1(d.hocPhiTrieu)} tr` : "—";
-        return `| ${d.nganh} | ${d.truong} | ${d23} | ${d24} | ${d25} | ${d26} | ${nhan} | ${hp} |`;
+        const hp = d.hocPhiTrieu !== undefined ? `${d.hocPhiUocTinh ? "≈ " : ""}${so1(d.hocPhiTrieu)} tr` : "—";
+        return `| ${d.nganh} | ${d.truong} | ${nam("2024")} | ${nam("2025")} | ${nam("2026")} | ${duKien} | ${nhan} | ${hp} |`;
       }),
     ].join("\n");
 
     return {
-      traLoi: `Dưới đây là bảng so sánh điểm chuẩn các năm gần đây (2023, 2024, 2025 và dự kiến 2026) cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
+      traLoi: `Dưới đây là điểm chuẩn các năm gần đây (năm nào chưa có ghi "—") và khoảng dự kiến năm tới, cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
       nguon: sk.map((l) => l.id),
     };
   }
