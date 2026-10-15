@@ -18,6 +18,7 @@ export const MAU = {
   boLoc: "/kham-pha/bo-loc",
   veDuLieu: "/kham-pha/ve-du-lieu",
   chiTiet: "/kham-pha/:id",
+  truong: "/truong/:ma",
   soSanh: "/so-sanh",
   nguyenVong: "/nguyen-vong",
   nguyenVongAnToan: "/nguyen-vong/an-toan",
@@ -59,6 +60,7 @@ export const DUONG_DAN = {
   boLoc: () => "/kham-pha/bo-loc",
   veDuLieu: () => "/kham-pha/ve-du-lieu",
   chiTiet: (id: string) => `/kham-pha/${id}`,
+  truong: (ma: string) => `/truong/${encodeURIComponent(ma)}`,
   /** So sánh 2 lựa chọn; bỏ trống thì dùng cặp em đã chọn gần nhất. */
   soSanh: (a?: string, b?: string) => (a && b ? `/so-sanh?a=${a}&b=${b}` : "/so-sanh"),
   nguyenVong: () => "/nguyen-vong",
