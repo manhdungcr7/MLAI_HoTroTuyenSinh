@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử engine xếp lịch ở các tình huống biên: Chủ nhật nghỉ, lịch rỗng, học thêm sát giờ ăn, xếp lại tuần,
 // lớp 11, ôn nhẹ, tiêu đề đề tính giờ, gom buổi trong ngày. Không phụ thuộc đồng hồ máy: dùng NGAY_CO_DINH.
 // Chạy: npx tsx tests/xep-lai.test.ts

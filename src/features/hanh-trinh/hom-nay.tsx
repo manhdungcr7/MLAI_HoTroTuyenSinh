@@ -8,6 +8,7 @@ import { HangBam, Nut, The, gop } from "@/components/ui/nut-the";
 import { ThanhTienDo } from "@/components/ui/hien-thi";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { boCongDuLieu } from "@/components/layout/cong-du-lieu";
 import { chonNguyenVongLamMucTieu, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
@@ -17,7 +18,7 @@ import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 
 const SO_DONG_GON = 3;
 
-export default function HomNay() {
+function HomNayDayDu() {
   const { s, datMucTieu } = useApp();
   const nav = useNavigate();
   const nv = chonNguyenVongLamMucTieu(s);
@@ -285,4 +286,14 @@ function LichVaTienDo() {
       </button>
     </div>
   );
+}
+
+const HomNayCoDanhMuc = boCongDuLieu(HomNayDayDu);
+
+/** Lần đầu mở app (chưa có hồ sơ): chuyển sang Chào mừng ngay, không chờ danh mục. Có hồ sơ thì chờ danh mục rồi mới dựng. */
+export default function HomNay() {
+  const { s } = useApp();
+  const daCoDuLieu = Boolean(s.hoSo.hoanTat || s.hoSo.hoTen.trim() || s.hoSo.khoi || s.hoSo.tinh || s.hoSo.nganhQuanTam.length || Object.values(s.hoSo.diem).some((d) => d !== null));
+  if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
+  return <HomNayCoDanhMuc />;
 }

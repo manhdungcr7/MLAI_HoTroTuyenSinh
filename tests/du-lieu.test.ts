@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử dữ liệu thật và logic Khám phá / Nguyện vọng (hàm thuần). Chạy: npx tsx tests/du-lieu.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON, idHoSoMau, tenGon, timLuaChon } from "../src/data/lua-chon-that";

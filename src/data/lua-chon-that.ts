@@ -1,8 +1,8 @@
 // Danh mục lựa chọn thật, sinh từ du-lieu-that.json (xuất bằng scripts/xuat-du-lieu-that.py từ pipeline trong legacy/).
 // Chỉ có số liệu đo được từ đề án: điểm chuẩn từng năm, tổ hợp, tỉnh, nguồn. Học phí, địa chỉ, môi trường học không có thì để trống.
-import raw from "./du-lieu-that.json";
-import viecLamMoi from "./viec-lam.json"; // tỷ lệ có việc làm trích thêm từ đề án (scripts/trich-viec-lam.py), chỉ bổ sung ngành chưa có
-import hocPhi from "./hoc-phi.json"; // học phí theo năm trích từ đề án (scripts/trich-hoc-phi.py), chỉ vài chục ngành
+// Ba tệp JSON (~2,7 MB) KHÔNG import tĩnh: chúng nạp lười qua `napLuaChon()` để màn đầu (chào, bắt đầu, giới thiệu) mở ngay.
+// du-lieu-that.json: danh mục; viec-lam.json: tỷ lệ có việc làm trích thêm từ đề án (scripts/trich-viec-lam.py), chỉ bổ sung ngành chưa có;
+// hoc-phi.json: học phí theo năm trích từ đề án (scripts/trich-hoc-phi.py), chỉ vài chục ngành.
 import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
 import { TEN_PHUONG_THUC as TEN_PT, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -38,9 +38,10 @@ export function tenGon(goc: string): { ten: string; them?: string } {
 }
 
 // Dòng có `uocTinh` là ước tính theo trường/khối ngành (không có văn bản đối chiếu): giữ số để lọc theo ngân sách, nhưng không gắn link.
-const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang?: number; url?: string; uocTinh?: boolean }>;
-
-const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
+type HocPhiTep = Record<string, { trieuNam: number; nam: string; trang?: number; url?: string; uocTinh?: boolean }>;
+type ViecMoiTep = Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
+let HOC_PHI: HocPhiTep = {};
+let VIEC_MOI: ViecMoiTep = {};
 
 function chuyen(d: Dong): LuaChon {
   const hp = HOC_PHI[d.id];
@@ -88,8 +89,25 @@ function chuyen(d: Dong): LuaChon {
   };
 }
 
-export const LUA_CHON: LuaChon[] = (raw as unknown as Dong[]).map(chuyen);
-const THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
+/**
+ * Danh mục gốc. RỖNG cho đến khi `napLuaChon()` xong; được điền TẠI CHỖ (cùng một mảng) nên các tham chiếu giữ trước đó vẫn đúng.
+ * Màn cần dữ liệu phải chờ `napLuaChon()` / `daNapLuaChon()` (xem `useDuLieuSan`, `trang()` ở routes-type); test thì `await napLuaChon()`.
+ */
+export const LUA_CHON: LuaChon[] = [];
+let THEO_ID = new Map<string, LuaChon>();
+let dangNap: Promise<void> | null = null;
+export const daNapLuaChon = (): boolean => LUA_CHON.length > 0;
+/** Nạp danh mục gốc một lần (gọi nhiều lần vẫn một lần tải). Lỗi mạng thì lần gọi sau thử lại. */
+export function napLuaChon(): Promise<void> {
+  dangNap ??= (async () => {
+    const [raw, viec, hp] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json")]);
+    VIEC_MOI = viec.default as unknown as ViecMoiTep;
+    HOC_PHI = hp.default as unknown as HocPhiTep;
+    LUA_CHON.splice(0, LUA_CHON.length, ...(raw.default as unknown as Dong[]).map(chuyen));
+    THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
+  })().catch((e) => { dangNap = null; throw e; });
+  return dangNap;
+}
 /** Liên kết tới đề án từng năm (file lớn, chỉ tải khi mở trang chi tiết). */
 export interface DeAnTruong { docs: { nam: string; url: string }[]; hocPhi?: { nam: string; url: string; trang: number } }
 export interface TrangNganh { url: string; tieuDe: string }

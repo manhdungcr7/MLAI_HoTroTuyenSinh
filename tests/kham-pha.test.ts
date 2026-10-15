@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử hàm thuần của slice Khám phá (phù hợp, bộ lọc, khu vực).
 // Chạy: npx tsx tests/kham-pha.test.ts
 import assert from "node:assert/strict";

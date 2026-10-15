@@ -8,7 +8,7 @@ import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { tongChoLuaChon } from "./to-hop";
-import { BO_LOC_MAC_DINH, CAC_KHU_VUC, CAC_MUC_HOC_PHI, CAC_NHOM, loc, type BoLoc } from "./bo-loc";
+import { BO_LOC_MAC_DINH, cacKhuVuc, CAC_MUC_HOC_PHI, cacNhom, loc, type BoLoc } from "./bo-loc";
 import { useBoLoc } from "./dung-bo-loc";
 import { boiCanhTu } from "./phu-hop";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -29,7 +29,7 @@ export default function ManBoLoc() {
   const { s } = useApp();
   const bc = useMemo(() => boiCanhTu(s), [s]);
   const tongEm = tongChoLuaChon({ toHopXet: [] }, bc.diem).tong; // tổ hợp cao nhất của em
-  const [b, sua, datLai] = useBoLoc(CAC_KHU_VUC.includes(s.hoSo.khuVuc[0]) ? s.hoSo.khuVuc[0] : undefined);
+  const [b, sua, datLai] = useBoLoc(cacKhuVuc().includes(s.hoSo.khuVuc[0]) ? s.hoSo.khuVuc[0] : undefined);
   const soKq = loc(LUA_CHON_MAU, b, bc.tinh || undefined).length;
   const macDinh = JSON.stringify(b) === JSON.stringify(BO_LOC_MAC_DINH);
 
@@ -45,7 +45,7 @@ export default function ManBoLoc() {
       <NoiDung className="space-y-3 pb-24">
 
         <Muc tieuDe="Ngành quan tâm" phu={bc.nganhQuanTam.length ? `(hồ sơ: ${bc.nganhQuanTam.join(", ")})` : undefined}>
-          <ChonNhanh cacLua={[{ gia: "", nhan: "Tất cả" }, ...CAC_NHOM.map((n) => ({ gia: n, nhan: n }))]} giaTri={b.nhom} onChange={(v: string) => sua({ nhom: v })} />
+          <ChonNhanh cacLua={[{ gia: "", nhan: "Tất cả" }, ...cacNhom().map((n) => ({ gia: n, nhan: n }))]} giaTri={b.nhom} onChange={(v: string) => sua({ nhom: v })} />
         </Muc>
 
         <Muc tieuDe="Khoảng điểm tổ hợp" phu="(thang 30)">
@@ -77,7 +77,7 @@ export default function ManBoLoc() {
         </Muc>
 
         <Muc tieuDe="Khu vực">
-          <ChonNhanh cacLua={[{ gia: "", nhan: "Tất cả" }, ...CAC_KHU_VUC.map((k) => ({ gia: k, nhan: k }))]} giaTri={b.khuVuc} onChange={(v: string) => sua({ khuVuc: v })} />
+          <ChonNhanh cacLua={[{ gia: "", nhan: "Tất cả" }, ...cacKhuVuc().map((k) => ({ gia: k, nhan: k }))]} giaTri={b.khuVuc} onChange={(v: string) => sua({ khuVuc: v })} />
         </Muc>
 
         <Muc tieuDe="Loại hình">

@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử đầu-cuối (E2E) các hành trình người dùng cốt lõi và kịch bản chịu lỗi / bảo mật.
 // Chạy: npx tsx tests/e2e-journeys.test.ts
 import assert from "node:assert/strict";

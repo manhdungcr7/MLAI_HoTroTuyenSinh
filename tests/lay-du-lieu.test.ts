@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Số gửi cho Tư vấn AI phải khớp số hiển thị ở màn chi tiết/danh sách. Chạy: npx tsx tests/lay-du-lieu.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";

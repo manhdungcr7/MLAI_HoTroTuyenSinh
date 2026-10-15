@@ -8,7 +8,7 @@ import { LUA_CHON } from "@/data/lua-chon-that";
 import { dinhDang } from "@/engine/dinh-dang";
 import type { KetQuaBanDau } from "./tinh-toan";
 
-const SO_TRUONG = new Set(LUA_CHON.map((l) => l.maTruong ?? l.truong)).size;
+const demTruong = () => new Set(LUA_CHON.map((l) => l.maTruong ?? l.truong)).size; // tính khi gọi: danh mục nạp lười
 const so = (n: number) => n.toLocaleString("vi-VN");
 
 export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
@@ -26,7 +26,7 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
             <BieuTuongTron icon={CheckCircle2} tone="luc" kichThuoc={48} />
             <span className="min-w-0">
               <b className="block text-[20px] leading-tight text-muc">Hồ sơ của bạn đã sẵn sàng</b>
-              <span className="block text-[13px] text-chu-phu mt-0.5">Mình đã so với {so(LUA_CHON.length)} chương trình của {SO_TRUONG} trường.</span>
+              <span className="block text-[13px] text-chu-phu mt-0.5">Mình đã so với {so(LUA_CHON.length)} chương trình của {demTruong()} trường.</span>
             </span>
           </span>
         </NenHero>

@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử logic cơ cấu, nhãn và lời nhận xét nguyện vọng.
 // Chạy: npx tsx tests/nguyen-vong.test.ts
 import assert from "node:assert/strict";

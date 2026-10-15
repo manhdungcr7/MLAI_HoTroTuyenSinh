@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Mỗi hồ sơ mẫu phải hợp lệ qua chuanHoa, có đủ 5 nguyện vọng thật, mục tiêu tính được và việc tuần được sinh. Chạy: npx tsx tests/ho-so-mau.test.ts
 import assert from "node:assert/strict";
 import { chuanHoa } from "../src/state/chuan-hoa";

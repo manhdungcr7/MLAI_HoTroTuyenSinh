@@ -17,7 +17,7 @@ import { dinhDangDiem } from "@/engine/dinh-dang";
 
 // Thứ tự nút môn theo ref: các môn hay thi trước.
 const THU_TU_MON: MonId[] = ["toan", "nguVan", "tiengAnh", "vatLy", "hoaHoc", "sinh"];
-const KHU_VUC = [...new Set(LUA_CHON_MAU.map((l) => l.khuVuc))];
+const cacKhuVucDanhMuc = () => [...new Set(LUA_CHON_MAU.map((l) => l.khuVuc))]; // tính khi gọi: danh mục nạp lười
 const VACH_CONG = [-4, -2, -1, 0, 1, 2, 4].map((g) => ({ gia: g, chu: g > 0 ? `+${g}` : g < 0 ? `−${-g}` : "0" }));
 
 export default function ThuTinhHuong() {
@@ -180,7 +180,7 @@ export default function ThuTinhHuong() {
                   </div>
                   <div>
                     <p className="text-[14px] font-bold text-chu mb-1.5">Khu vực ưu tiên học tập</p>
-                    <ChonNhanh cacLua={[{ gia: "", nhan: "Mọi nơi" }, ...KHU_VUC.map((k) => ({ gia: k, nhan: k }))]} giaTri={kq.dkMoi.khuVuc}
+                    <ChonNhanh cacLua={[{ gia: "", nhan: "Mọi nơi" }, ...cacKhuVucDanhMuc().map((k) => ({ gia: k, nhan: k }))]} giaTri={kq.dkMoi.khuVuc}
                       onChange={(v: string) => datDangThu((c) => ({ ...c, khuVuc: v }))} />
                   </div>
                   <div>

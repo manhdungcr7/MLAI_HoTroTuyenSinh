@@ -23,3 +23,21 @@ export function useBanDuLieu(): number {
   }, []);
   return ban;
 }
+
+/**
+ * Danh mục chương trình (nạp lười, ~1,8 MB) đã sẵn sàng chưa. Màn nào đọc `LUA_CHON_MAU`/`tim` phải chờ cờ này,
+ * không được hiện danh mục rỗng như thể "không có kết quả". `loi` có giá trị khi tải thất bại; `thuLai` tải lại.
+ */
+export function useDuLieuSan(): { san: boolean; loi: boolean; thuLai: () => void } {
+  const [lan, datLan] = useState(0); // đổi giá trị = dựng lại + thử lại
+  const [loi, datLoi] = useState(false);
+  const san = khoDuLieu.daSanSang();
+  useEffect(() => {
+    if (khoDuLieu.daSanSang()) return;
+    let con = true;
+    datLoi(false);
+    khoDuLieu.sanSang().then(() => { if (con) datLan((n) => n + 1); }, () => { if (con) datLoi(true); });
+    return () => { con = false; };
+  }, [lan]);
+  return { san, loi, thuLai: () => datLan((n) => n + 1) };
+}

@@ -1,5 +1,5 @@
 import { LUA_CHON as CORE_LUA_CHON } from "@/data/lua-chon-that";
-import { datDanhMuc } from "@/data/lua-chon-mau";
+import { datDanhMuc, napDanhMuc } from "@/data/lua-chon-mau";
 import type { LuaChon } from "@/state/types";
 import { boDongBoDuLieu, SU_KIEN_CAP_NHAT_DU_LIEU } from "./bo-dong-bo";
 import { hopNhatLuaChonVaCms, layChiTietTruongHopNhat, type DuLieuTruongHopNhat, type TapDuLieuCmsSnapshot } from "./hop-nhat";
@@ -21,6 +21,7 @@ export class KhoDuLieuTuyenSinh {
   private danhSachHopNhat: LuaChon[] = CORE_LUA_CHON;
   private mapHopNhatTheoId: Map<string, LuaChon> = new Map();
   private daKhoiTao = false;
+  private dangKhoiTao: Promise<void> | null = null;
 
   private constructor() {
     this.capNhatMap();
@@ -47,8 +48,23 @@ export class KhoDuLieuTuyenSinh {
   /**
    * Khởi động nạp dữ liệu từ Cache (IndexedDB) tức thì, sau đó chạy background sync
    */
-  async khoiTao(): Promise<void> {
+  khoiTao(): Promise<void> {
+    this.dangKhoiTao ??= this.khoiTaoThat().catch((e) => { this.dangKhoiTao = null; throw e; });
+    return this.dangKhoiTao;
+  }
+
+  daSanSang(): boolean {
+    return this.daKhoiTao;
+  }
+
+  /** Dữ liệu gốc (nạp lười) và bản hợp nhất với cache CMS đã sẵn sàng: màn cần danh mục chờ promise này. */
+  sanSang(): Promise<void> {
+    return this.khoiTao();
+  }
+
+  private async khoiTaoThat(): Promise<void> {
     if (this.daKhoiTao) return;
+    await napDanhMuc(); // dữ liệu gốc nạp lười; phải xong trước khi hợp nhất với bản CMS
     await this.napTuCacheIndexedDB();
     this.daKhoiTao = true;
 
@@ -59,6 +75,7 @@ export class KhoDuLieuTuyenSinh {
   }
 
   private async napTuCacheIndexedDB(): Promise<void> {
+    await napDanhMuc();
     try {
       const [schools, tuition, scholarships, admissions, announcements, cutoffScores, community] = await Promise.all([
         khoIndexedDB.docDataset<SnapshotTruong[]>("schools"),

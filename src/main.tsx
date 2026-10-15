@@ -3,11 +3,9 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import { AppProvider } from "@/state/store";
 import { LoiUngDung } from "@/components/layout/loi-ung-dung";
-import { khoDuLieu } from "@/engine/du-lieu-tuyen-sinh/kho-du-lieu";
 import "./styles/index.css";
 
-// Nạp bộ đệm dữ liệu tuyển sinh ngầm không chặn UI
-void khoDuLieu.khoiTao();
+// Danh mục chương trình (~1,8 MB) KHÔNG nạp ở đây: màn đầu (chào, bắt đầu, giới thiệu) mở ngay; trang cần danh mục tự nạp khi mở (xem routes-type.ts, useDuLieuSan).
 
 // Service worker chỉ để hiện thông báo nhắc học (không lưu bộ nhớ đệm).
 if (import.meta.env.PROD && "serviceWorker" in navigator) {
