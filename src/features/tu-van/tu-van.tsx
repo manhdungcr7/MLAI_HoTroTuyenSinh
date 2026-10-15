@@ -204,9 +204,9 @@ export default function TuVan() {
                       </div>
                     )}
                     {/kế hoạch học tập|lịch học|ôn thi tuần/i.test(t.chu) && (
-                      <div className="mt-2.5 p-3 rounded-xl bg-gradient-to-r from-xanh-nhat to-white border border-xanh/30 flex items-center justify-between gap-2">
+                      <div className="mt-2.5 p-3 rounded-xl bg-xanh-nhat border border-xanh/30 flex items-center justify-between gap-2">
                         <div className="min-w-0">
-                          <b className="block text-[13px] text-muc leading-tight">Lịch học tuần đề xuất từ AI</b>
+                          <b className="block text-[13px] text-muc leading-tight">Gợi ý lịch học tuần</b>
                           <span className="block text-[12px] text-chu-phu leading-tight mt-0.5">Xem chi tiết và áp dụng vào Kế hoạch tuần</span>
                         </div>
                         <Link

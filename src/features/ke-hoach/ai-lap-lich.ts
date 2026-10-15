@@ -1,4 +1,4 @@
-// Engine sinh lịch học cá thể hóa cùng AI (LLM Planner)
+// Sinh lịch học 6 buổi theo quy tắc từ mục tiêu và môn còn thiếu điểm (chạy tại máy, không gọi mô hình ngôn ngữ).
 import type { AppState } from "@/state/store";
 import type { ViecCanHoc, MonId } from "@/state/types";
 import { mucTieuDayDu, khoangCachCuaToi } from "@/state/chon";
@@ -26,7 +26,7 @@ export interface KetQuaKeHoachAI {
   danhSachBuoi: KeHoachAIBuoi[];
 }
 
-/** Sinh prompt gợi ý và lịch học chi tiết từ AI dựa trên hồ sơ thực tế của học sinh */
+/** Sinh lịch học chi tiết theo quy tắc từ hồ sơ thực tế của học sinh (không gọi AI) */
 export function sinhLichHocAI(s: AppState, _tuan?: string): KetQuaKeHoachAI {
   const m = mucTieuDayDu(s);
   const ten = s.hoSo.hoTen?.trim() || "học sinh";
@@ -40,7 +40,7 @@ export function sinhLichHocAI(s: AppState, _tuan?: string): KetQuaKeHoachAI {
   const ielts = s.hoSo.chungChiNgoaiNgu?.diem ? `${s.hoSo.chungChiNgoaiNgu.loai} ${s.hoSo.chungChiNgoaiNgu.diem}` : null;
   const thieuDiem = monThieu[0] ? dinhDang(monThieu[0].thieu, 1) : "0,5";
 
-  const promptGoiY = `Lập lịch học chi tiết tuần này cho em (${ten}) theo mục tiêu ngành ${m?.lc.nganh ?? "Công nghệ thông tin"} (${m?.lc.truong ?? "Đại học"}), khối ${maToHop}, mục tiêu ${dinhDang(m?.mucTieuTho ?? 26, 1)} điểm. Hiện tại môn ${TEN_MON[monTrongTam]} đang còn thiếu ${thieuDiem} điểm. Hãy phân bổ lịch học các buổi tối trong tuần theo phương pháp 60-35-5 và ưu tiên môn kéo điểm.`;
+  const promptGoiY = `Lập lịch học chi tiết tuần này cho bạn (${ten}) theo mục tiêu ngành ${m?.lc.nganh ?? "Công nghệ thông tin"} (${m?.lc.truong ?? "Đại học"}), khối ${maToHop}, mục tiêu ${dinhDang(m?.mucTieuTho ?? 26, 1)} điểm. Hiện tại môn ${TEN_MON[monTrongTam]} đang còn thiếu ${thieuDiem} điểm. Hãy phân bổ lịch học các buổi tối trong tuần theo phương pháp 60-35-5 và ưu tiên môn kéo điểm.`;
 
   const phanTichCaNhan = monThieu.length > 0
     ? `Trọng tâm bứt phá: môn **${TEN_MON[monTrongTam]}** (còn thiếu **${thieuDiem} điểm**).${ielts ? ` Có lợi thế **${ielts}** giúp tập trung tối đa cho 2 môn còn lại.` : ""}`
