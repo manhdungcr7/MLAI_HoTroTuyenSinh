@@ -2,7 +2,7 @@
 import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { NguonTaiSau } from "@/data/lua-chon-that";
-import { NGAN_SACH_TOI_DA, nhanNguyenVong } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, nhanNguyenVong, khoangCachTheoMon } from "@/engine/phan-tich";
 import type { HoSoTomTat, SuKien } from "@/engine/tu-van";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -218,13 +218,20 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     };
   }
 
-  const hoiPhuongPhap = /tang diem|keo diem|on thi|phuong phap|cach hoc|lam sao de tang|on tap/.test(q);
+  const hoiPhuongPhap = /tang diem|keo diem|on thi|phuong phap|cach hoc|lam sao de tang|on tap|ke hoach|lich hoc|de xuat viec|viec can hoc|xep lich/.test(q);
   if (hoiPhuongPhap) {
     const mt = s.mucTieu;
     const lcMt = mt ? LUA_CHON_MAU.find((l) => l.id === mt.luaChonId) : undefined;
     const mtStr = mt && lcMt ? `Mục tiêu hiện tại của bạn là ngành **${lcMt.nganh} - ${lcMt.truong}** (tổ hợp **${mt.maToHop}**, điểm mục tiêu **${so1(mt.diemMucTieu)}**).` : (mt ? `Mục tiêu hiện tại của bạn là tổ hợp **${mt.maToHop}** (${so1(mt.diemMucTieu)} điểm).` : "Bạn có thể chọn một ngành mục tiêu ở mục Kế hoạch để nhận lộ trình cụ thể.");
+
+    const kc = mt ? khoangCachTheoMon(diem, mt.toHop, mt.diemMucTieu, s.hoSo.canCaiThien) : [];
+    const thieuMon = kc.filter((x) => x.thieu > 0).sort((a, b) => b.thieu - a.thieu);
+    const phanTichMon = thieuMon.length > 0
+      ? `\n\n🎯 **Phân tích môn kéo điểm dành riêng cho bạn:**\n` + thieuMon.map((m) => `• Môn **${m.mon.toUpperCase()}**: Điểm hiện tại ${so1(m.hienTai)}, cần bứt phá lên ${so1(m.mucTieu)} (còn thiếu **${so1(m.thieu)} điểm**). Đây là môn trọng tâm cần phân bổ nhiều giờ tự học nhất trong tuần.`).join("\n")
+      : (mt ? "\n\n🎯 **Phân tích điểm:** Điểm hiện tại của bạn đã tiệm cận mốc điểm chuẩn mục tiêu, chiến lược tuần này là tập trung làm đề bấm giờ để duy trì phong độ và rèn tâm lý thi đấu." : "");
+
     return {
-      traLoi: `${loiChao}Để bứt phá điểm số một cách thông minh và bền bỉ:\n1. **Chiến lược phân bổ công sức (Môn kéo điểm)**: Tập trung vào môn có điểm thi thử đang ở mức 6.5–7.5, vì dư địa tăng 1 điểm ở nhóm này dễ và tốn ít thời gian hơn nhiều so với môn đã đạt 8.5+.\n2. **Phương pháp 60-35-5**: Mỗi buổi tự học 90 phút nên chia thành:\n   • 60% thời gian bấm giờ làm đề thi thử chuẩn cấu trúc mới.\n   • 35% chữa chi tiết từng câu sai, ghi lại công thức và bẫy đề thi.\n   • 5% đúc rút quy luật và lỗi hay gặp vào sổ tay.\n3. **Cá nhân hóa lộ trình**: ${mtStr} Bạn vào mục **Kế hoạch** để hệ thống tự động sinh việc học tuần và xếp lịch tối ưu nhé.`,
+      traLoi: `${loiChao}Dưới đây là kế hoạch học tập và chiến lược bứt phá điểm số được cá thể hóa cho bạn:\n\n1. **Định vị mục tiêu & Lộ trình**: ${mtStr}${phanTichMon}\n\n2. **Khung lịch học tuần đề xuất (Phương pháp 60-35-5)**:\n   • **Thứ 2 & Thứ 4 (19:30–21:00)**: Tập trung vào môn còn thiếu nhiều nhất (60% làm bài, 35% chữa chi tiết câu sai, 5% đúc kết quy luật).\n   • **Thứ 3 & Thứ 5 (19:30–21:00)**: Luyện đề tính giờ môn thứ hai của tổ hợp để rèn phản xạ tốc độ.\n   • **Cuối tuần (Sáng Thứ 7 / CN)**: Bấm giờ làm 1 đề thi thử trọn vẹn theo ma trận đề mới.${phanTichLoiThe()}\n\n3. **Hành động ngay**: Vào mục **Kế hoạch** > bấm **Tạo việc và xếp lịch** để hệ thống tự động đưa các việc này vào lịch tự học tuần của bạn.`,
       nguon: [],
     };
   }
@@ -290,3 +297,4 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     nguon: [],
   };
 }
+

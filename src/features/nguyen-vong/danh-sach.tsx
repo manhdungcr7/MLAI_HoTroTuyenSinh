@@ -137,10 +137,42 @@ export default function DanhSachNguyenVong() {
         ) : (
           <>
             <ThanhChiSo tong={ds.length} dem={coCau.dem} />
-            <button type="button" onClick={() => nav(DUONG_DAN.nguyenVongAnToan())}
-              className="w-full min-h-11 flex items-center gap-2 rounded-the bg-trang border border-vien px-3.5 text-left active:bg-xanh-nhat">
-              <ShieldCheck size={20} className="text-xanh shrink-0" />
-              <b className="flex-1 min-w-0 text-[14px] text-muc leading-snug">{tong === null ? "Nhập đủ điểm 3 môn để xếp nhãn" : kl.tieuDe}</b>
+            <button
+              type="button"
+              onClick={() => nav(DUONG_DAN.nguyenVongAnToan())}
+              className={gop(
+                "w-full rounded-2xl border p-3.5 text-left transition-colors flex items-center gap-3 shadow-xs",
+                kl.tone === "do" ? "bg-do-nhat/40 border-do/30 active:bg-do-nhat/70" :
+                kl.tone === "cam" ? "bg-cam-nhat/40 border-cam/30 active:bg-cam-nhat/70" :
+                "bg-trang border-vien active:bg-xanh-nhat"
+              )}
+            >
+              <div
+                className={gop(
+                  "size-9 rounded-xl grid place-items-center shrink-0",
+                  kl.tone === "do" ? "bg-do/15 text-do" :
+                  kl.tone === "cam" ? "bg-cam/15 text-cam-chu" :
+                  "bg-xanh-nhat text-xanh"
+                )}
+              >
+                <ShieldCheck size={20} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[14px] font-bold text-muc leading-snug">
+                  {tong === null
+                    ? "Nhập đủ điểm 3 môn để xếp nhãn"
+                    : kl.tieuDe === "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm của bạn"
+                    ? "Chưa có nguyện vọng an toàn"
+                    : kl.tieuDe}
+                </p>
+                <p className="text-[12px] text-chu-phu leading-normal mt-0.5">
+                  {tong === null
+                    ? "Hệ thống cần điểm tổ hợp để phân tích 3 tầng"
+                    : kl.tieuDe === "Chưa có nguyện vọng điểm chuẩn thấp hơn điểm của bạn"
+                    ? "Cần thêm trường điểm chuẩn thấp hơn để dự phòng"
+                    : kl.nenLam ?? "Bấm để xem chi tiết cơ cấu danh sách"}
+                </p>
+              </div>
               <ChevronRight size={18} className="text-chu-phu shrink-0" />
             </button>
 

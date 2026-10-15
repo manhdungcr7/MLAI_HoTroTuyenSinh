@@ -225,9 +225,6 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
             );
           })}
         </div>
-        <p className="mt-2 text-[12px] text-chu-phu">
-          Mục chọn "Cần ôn gấp" sẽ tự động được ưu tiên đưa vào việc cần học trong tuần.
-        </p>
       </section>
     </div>
   );

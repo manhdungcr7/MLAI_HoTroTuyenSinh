@@ -28,6 +28,8 @@ export function dauVaoViecTuan(s: AppState, tuan: string, tuNgay?: string): DauV
     tuan, chiSoTuan: chiSoTuanCua(tuan), phutTuHoc: gio.tongPhut, tamTrang: tamTrangVanHieuLuc(s),
     ngayConDenThi: m.soNgayCon > 0 ? m.soNgayCon : undefined, lop: lopCuaEm(s),
     tienDoKienThuc: s.hoSo.tienDoKienThuc,
+    mucTieuTruong: m.lc.truong,
+    mucTieuNganh: m.lc.nganh,
   };
 }
 

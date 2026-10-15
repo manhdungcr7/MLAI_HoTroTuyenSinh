@@ -220,7 +220,6 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
         </span>
         <div className="flex-1 min-w-0">
           <p className={gop("font-extrabold text-[15px] leading-snug", TONE_CHU[k.tone])}>{g.tieuDe}</p>
-          <p className="mt-0.5 text-[13px] text-chu leading-snug">{g.moTa}</p>
         </div>
       </div>
 
