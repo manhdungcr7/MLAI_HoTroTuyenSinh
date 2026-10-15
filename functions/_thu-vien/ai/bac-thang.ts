@@ -1,6 +1,6 @@
 // Bậc thang tư vấn, rẻ -> đắt: cache KV -> Clef (chọn sự kiện) -> RAG cộng đồng (Vectorize) -> LLM.
 // Mỗi bậc thiếu binding hoặc lỗi thì bị bỏ qua, bậc sau vẫn chạy; chỉ bậc LLM mới có thể làm cả lượt thất bại.
-import { dungNoiDung, locNguon, type KhoKV, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
+import { docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
 import { docCache, ghiCache, khoaCache } from "./cache";
 import { HANH_DONG, quyetDinhNguyenVong, type HanhDong, type NhanEn, type UngVienEn } from "./clef";
 import { truyVanNhieuBoLoc, type BoLoc, type MangChiMuc } from "./chi-muc";
@@ -9,8 +9,8 @@ import type { EnvAI } from "./kieu";
 import { coKhoaLLM, goiMoHinh, type EnvLLM } from "./sinh-van-ban";
 
 export interface EnvBacThang extends EnvLLM, EnvAI { RATE_KV?: KhoKV; DATA_VERSION?: string }
-export interface KetQuaBacThang { traLoi: string; nguon: string[]; tang: "cache" | "llm"; congDong?: string[]; viecTiep?: string }
-export type KhoiBacThang = { ok: true; kq: KetQuaBacThang } | { ok: false; loi: "chua-cau-hinh"; goiY?: { nextAction: HanhDong; viecTiep: string } };
+export interface KetQuaBacThang extends PhanHoiCauTruc { traLoi: string; nguon: string[]; tang: "cache" | "llm"; congDong?: string[]; viecTiep?: string }
+export type KhoiBacThang = { ok: true; kq: KetQuaBacThang } | { ok: false; loi: "chua-cau-hinh" | "so-lieu-khong-khop"; goiY?: { nextAction: HanhDong; viecTiep: string } };
 
 const NHAN_EN: Record<string, NhanEn> = { "Thử sức": "trial", "Vừa sức": "match", "An toàn": "safe", "Dự phòng": "backup" };
 const VIEC_TIEP: Record<HanhDong, string> = {
@@ -133,12 +133,19 @@ export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof
   const msLLM = Date.now() - t1;
   if (!tho) throw new Error("rong");
   const cho = [...y2.duLieu.map((d) => d.id), ...manh.map((m) => m.id)];
-  const { traLoi, nguon } = locNguon(tho, cho);
+  const { traLoi, nguon, ...cauTruc } = docPhanHoiLLM(tho, y2, cho);
+  if (!traLoi) throw new Error("rong");
+  // Hậu kiểm: số điểm/học phí không có trong dữ liệu gửi kèm thì bỏ câu trả lời (client tự trả lời từ số liệu có sẵn), không cache.
+  const lech = soLieuLech(traLoi, y2, manh.map((m) => m.noiDung).join("\n"));
+  if (lech.length) {
+    console.log(JSON.stringify({ tang: "llm", chan: "so-lieu-khong-khop", lech: lech.slice(0, 5) }));
+    return { ok: false, loi: "so-lieu-khong-khop" };
+  }
   const congDong = nguon.filter((id) => manh.some((m) => m.id === id && !m.chinhThuc));
-  const kq: KetQuaBacThang = { traLoi, nguon, tang: "llm", ...(congDong.length ? { congDong } : {}), ...(viec ? { viecTiep: VIEC_TIEP[viec] } : {}) };
+  const kq: KetQuaBacThang = { traLoi, nguon, ...cauTruc, tang: "llm", ...(congDong.length ? { congDong } : {}), ...(viec ? { viecTiep: VIEC_TIEP[viec] } : {}) };
   // Không cache khi kho vector có mà RAG trả rỗng: có thể do chưa lập chỉ mục xong hoặc lỗi tạm, cache sẽ giữ câu "chưa có dữ liệu" sai trong 6 giờ.
   const phuThuocRag = !!(env.AI && env.VECTORIZE);
-  if (khoa && (!phuThuocRag || nguon.length > 0 || manh.length > 0)) await ghiCache(kv, khoa, { traLoi, nguon, congDong: kq.congDong, viecTiep: kq.viecTiep });
+  if (khoa && (!phuThuocRag || nguon.length > 0 || manh.length > 0)) await ghiCache(kv, khoa, { traLoi, nguon, ...cauTruc, congDong: kq.congDong, viecTiep: kq.viecTiep });
   console.log(JSON.stringify({ tang: "llm", ai: !!env.AI, vec: !!env.VECTORIZE, uv: ungVien.length, clef: !!qd, nCm: manh.length, msClef, msRag, msLLM, msTong: Date.now() - t0, dRag: diemToanKho, soSuKien: y2.duLieu.length, tokenVaoUocTinh: Math.ceil(noiDung.length / 3) }));
   return { ok: true, kq };
 }

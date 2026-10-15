@@ -1,12 +1,13 @@
 // Bậc 1: cache câu trả lời tư vấn trong KV. Lỗi KV không bao giờ làm vỡ tư vấn (đọc lỗi = miss, ghi lỗi = bỏ qua).
+import { NHAC_HE_THONG, type PhanHoiCauTruc } from "../../../src/engine/tu-van";
 import type { KhoKVAI } from "./kieu";
 
 export const TTL_CACHE_GIAY = 6 * 60 * 60;
 // Tăng số này mỗi khi đổi prompt/logic bậc thang hoặc dữ liệu gửi AI: câu trả lời cũ (có thể sai) không được phát lại tới 6 giờ.
-const PHIEN_BAN_LOGIC = "3";
+const PHIEN_BAN_LOGIC = "4";
 const TIEN_TO = `tvc${PHIEN_BAN_LOGIC}:`;
 
-export interface BanGhiCache { traLoi: string; nguon: string[]; congDong?: string[]; viecTiep?: string }
+export interface BanGhiCache extends PhanHoiCauTruc { traLoi: string; nguon: string[]; congDong?: string[]; viecTiep?: string }
 
 /** Bỏ dấu, viết thường, gộp khoảng trắng: "Điểm chuẩn UIT?" và "diem chuan uit" cùng một khóa. */
 export const chuanHoaCauHoi = (s: string) =>
@@ -18,9 +19,9 @@ async function bam(s: string): Promise<string> {
 }
 
 /** Khóa = câu hỏi chuẩn hóa + id dữ liệu (sắp xếp) + nhãn từng ngành + hồ sơ tóm tắt + phiên bản dữ liệu + ngữ cảnh (các lượt trước: cùng câu "còn ngành kia thì sao?" ở hai cuộc trò chuyện khác nhau phải ra hai khóa khác nhau). */
-export async function khoaCache(cauHoi: string, duLieu: { id: string; nhanCuaEm?: string }[], hoSo: unknown, phienBan = "", nguCanh = ""): Promise<string> {
+export async function khoaCache(cauHoi: string, duLieu: { id: string; nhanCuaEm?: string }[], hoSo: unknown, phienBan = "", nguCanh = "", nhac = NHAC_HE_THONG): Promise<string> {
   const ds = duLieu.map((d) => `${d.id}=${d.nhanCuaEm ?? ""}`).sort();
-  return TIEN_TO + await bam(JSON.stringify([chuanHoaCauHoi(cauHoi), ds, hoSo ?? null, phienBan, chuanHoaCauHoi(nguCanh)]));
+  return TIEN_TO + await bam(JSON.stringify([chuanHoaCauHoi(cauHoi), ds, hoSo ?? null, phienBan, chuanHoaCauHoi(nguCanh), nhac]));
 }
 
 export async function docCache(kv: KhoKVAI | undefined, khoa: string): Promise<BanGhiCache | null> {

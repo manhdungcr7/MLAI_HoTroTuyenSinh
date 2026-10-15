@@ -35,13 +35,15 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
+// phamVi "truong" = mức cấp trường gán chung cho mọi ngành: giữ trong JSON nhưng KHÔNG vào LuaChon (hiện "chưa có").
+// Dòng chưa xác minh nguồn cũng không hiện như số thật.
 const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string; phamVi?: "truong" | "nganh"; trangThai?: string }>;
 
 const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 
 function chuyen(d: Dong): LuaChon {
   const hpGoc = HOC_PHI[d.id];
-  const hp = hpGoc && hpGoc.trangThai !== "chua-xac-minh" ? hpGoc : undefined; // dòng chưa xác minh được nguồn thì không hiện như số thật
+  const hp = hpGoc && hpGoc.phamVi !== "truong" && hpGoc.trangThai !== "chua-xac-minh" ? hpGoc : undefined;
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
