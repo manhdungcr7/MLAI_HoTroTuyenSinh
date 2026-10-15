@@ -6,8 +6,7 @@ import {
 } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NhanNguyenVongTag } from "@/components/ui/co-cau";
-import { TrangThaiTrong } from "@/components/ui/hien-thi";
-import { HuyHieuTruong } from "@/components/ui/hinh-nen";
+import { BieuTuongTron, HuyHieuTruong, NenHero } from "@/components/ui/hinh-nen";
 import { HangBam, Nhan, Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { TONE_NHAN } from "@/components/ui/co-cau";
@@ -23,6 +22,48 @@ import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
+
+const CAC_LOAI_NHAN: { nhan: NhanNguyenVong; moTa: string }[] = [
+  { nhan: "Thử sức", moTa: "Điểm chuẩn cao hơn điểm bạn một chút, đáng thử một hai ngành" },
+  { nhan: "Vừa sức", moTa: "Điểm bạn sát điểm chuẩn, cơ hội ngang ngửa" },
+  { nhan: "An toàn", moTa: "Điểm bạn cao hơn điểm chuẩn rõ, khả năng đỗ cao" },
+  { nhan: "Dự phòng", moTa: "Giữ chỗ học cho bạn nếu các ngành trên không đạt" },
+];
+
+/** Danh sách chưa có ngành nào: một thẻ hành động chính, rồi cách xếp danh sách để bạn biết mình sẽ nhận được gì. */
+function TrangNguyenVongTrong({ coDiem, onGoiY, onNhapDiem, onKhamPha }: { coDiem: boolean; onGoiY: () => void; onNhapDiem: () => void; onKhamPha: () => void }) {
+  return (
+    <>
+      <NenHero tone="xanh" className="p-5">
+        <span className="flex items-start gap-3">
+          <BieuTuongTron icon={Heart} tone="xanh" kichThuoc={48} />
+          <span className="min-w-0">
+            <b className="block text-[18px] leading-snug text-muc">Bắt đầu lập danh sách</b>
+            <span className="block text-[14px] text-chu mt-1">
+              {coDiem ? "Mình xếp sẵn 6 ngành hợp điểm và sở thích của bạn, bạn bớt hoặc đổi sau." : "Nhập điểm các môn để mình gợi ý ngành vừa sức với bạn."}
+            </span>
+          </span>
+        </span>
+        <div className="mt-4 space-y-2">
+          <Nut muiTen bieuTuong={Sparkles} onClick={coDiem ? onGoiY : onNhapDiem}>{coDiem ? "Gợi ý danh sách" : "Nhập điểm"}</Nut>
+          <Nut kieu="vien" bieuTuong={Plus} onClick={onKhamPha}>Tự chọn trong Khám phá</Nut>
+        </div>
+      </NenHero>
+      <div className="rounded-the bg-trang border border-vien p-4">
+        <b className="block text-[15px] text-muc">Danh sách cân bằng có 4 loại</b>
+        <ul className="mt-3 space-y-2.5">
+          {CAC_LOAI_NHAN.map((x) => (
+            <li key={x.nhan} className="flex items-start gap-3">
+              <span className="w-[72px] shrink-0 pt-0.5"><NhanNguyenVongTag nhan={x.nhan} /></span>
+              <span className="text-[14px] text-chu leading-snug">{x.moTa}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-[13px] text-chu-phu">Nên giữ 5–6 nguyện vọng, xếp từ mong muốn nhất xuống an toàn nhất.</p>
+      </div>
+    </>
+  );
+}
 
 const tenNgan = (d: DongNV) => (d.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "lựa chọn này");
 
@@ -90,11 +131,7 @@ export default function DanhSachNguyenVong() {
                 onMoGoiY={() => setMoGoiY(true)}
               />
             ) : (
-              <TrangThaiTrong bieuTuong={<Heart size={26} />} tieuDe="Bạn chưa có nguyện vọng nào"
-                moTa="Vào Khám phá, mở một trường bạn quan tâm rồi bấm “Thêm vào nguyện vọng” hoặc thả tim để lưu.">
-                <NutGoiYDanhSach onMo={() => setMoGoiY(true)} />
-                <Nut kieu="vien" bieuTuong={Plus} onClick={() => nav(DUONG_DAN.khamPha())}>Tự chọn trong Khám phá</Nut>
-              </TrangThaiTrong>
+              <TrangNguyenVongTrong coDiem={tong !== null} onGoiY={() => setMoGoiY(true)} onNhapDiem={() => nav(DUONG_DAN.batDau(2))} onKhamPha={() => nav(DUONG_DAN.khamPha())} />
             )}
           </>
         ) : (
