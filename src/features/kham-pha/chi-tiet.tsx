@@ -24,6 +24,8 @@ import { NutBaoSai } from "./bao-sai-sheet";
 import { KhoiDuBao } from "./khoi-du-bao";
 import { tongChoLuaChon } from "./to-hop";
 import { ThongTinTruong } from "./thong-tin-truong";
+import { giaiQuyetLink } from "@/engine/link-chinh-thuc";
+import { tinhXacSuatTrungTuyen } from "@/engine/xac-suat-trung-tuyen";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
   "Rất cao": "Khảo sát trong đề án.",
@@ -31,11 +33,12 @@ const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
   Khá: "Khảo sát trong đề án. Nên thực tập sớm.",
 };
 
-/** Liên kết nguồn ngắn ("Nguồn · tr. 12"): đủ để bấm kiểm, không chiếm cả dòng chữ. */
-function LinkNguon({ url, trang, nhan = "Nguồn" }: { url: string; trang?: number; nhan?: string }) {
+/** Liên kết nguồn thông minh: chống 404, tự động fallback sang cổng tuyển sinh chính thức của trường */
+function LinkNguon({ url, trang, nhan = "Nguồn", maTruong }: { url: string; trang?: number; nhan?: string; maTruong?: string }) {
+  const gq = giaiQuyetLink(maTruong, url, trang);
   return (
-    <a href={trang && trang > 0 ? `${url}#page=${trang}` : url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">
-      {nhan}{trang && trang > 0 ? ` · tr. ${trang}` : ""}
+    <a href={gq.url} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 font-bold text-xanh hover:underline">
+      {gq.laCongChinhThuc ? gq.nhanHienThi : `${nhan}${trang && trang > 0 ? ` · tr. ${trang}` : ""}`}
     </a>
   );
 }
@@ -100,7 +103,7 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
             <li key={n} className="flex items-center justify-between gap-3 py-2">
               <span className="text-[14px] text-chu">Năm {n}</span>
               <span className="flex items-center gap-3">
-                {link && <span className="text-[13px]"><LinkNguon url={link.url} trang={link.trang} /></span>}
+                {link && <span className="text-[13px]"><LinkNguon url={link.url} trang={link.trang} maTruong={lc.maTruong} /></span>}
                 <b className="text-[16px] text-muc tabular-nums">{dinhDangDiem(d)}</b>
               </span>
             </li>
@@ -108,6 +111,34 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
         })}
       </ul>
       {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của bạn: <b className="text-chu">{dinhDangDiem(diemEm)}</b>{uuTienCong ? ` (gồm +${dinhDangDiem(uuTienCong)} ưu tiên)` : ""}</p>}
+    </section>
+  );
+}
+
+function KhoiXacSuatDecisionIntelligence({ lc, diemThiRaw, uuTien }: { lc: LuaChon; diemThiRaw: number | null; uuTien?: any }) {
+  if (diemThiRaw === null) return null;
+  const xs = tinhXacSuatTrungTuyen(diemThiRaw, lc, uuTien);
+  if (!xs) return null;
+
+  return (
+    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-2.5" aria-label="Xác suất trúng tuyển (Decision Intelligence)">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <span className="text-[12px] font-bold text-xanh uppercase tracking-wider block">Decision Intelligence Model</span>
+          <b className="text-[16px] text-muc font-extrabold">Xác suất trúng tuyển dự kiến</b>
+        </div>
+        <div className="text-right">
+          <span className={gop("text-[26px] font-black leading-none", xs.xacSuat >= 0.8 ? "text-luc-chu" : xs.xacSuat >= 0.45 ? "text-xanh" : "text-cam-chu")}>
+            {xs.phanTram}%
+          </span>
+          <span className="block text-[11px] text-chu-phu mt-0.5">Khoảng tin cậy: {xs.khoangTinCay[0]}% – {xs.khoangTinCay[1]}%</span>
+        </div>
+      </div>
+      <div className="rounded-xl bg-nen p-2.5 space-y-1 text-[13px] text-chu leading-snug">
+        <p>• <b>Định vị:</b> <span className="font-bold">{xs.nhanRuiRo}</span> (Chênh lệch {xs.chenhDiem >= 0 ? `+${xs.chenhDiem}` : xs.chenhDiem} điểm so với điểm kỳ vọng {xs.diemKyVong}).</p>
+        <p>• <b>Khuyến nghị:</b> {xs.khuyenNghi}</p>
+        <p className="text-[11px] text-chu-phu pt-0.5">Mô hình chuẩn hoá độ biến động lịch sử (τ = {xs.doBienDongTau}) dựa trên {xs.soNamLichSu} năm dữ liệu đề án chính thức.</p>
+      </div>
     </section>
   );
 }
@@ -293,6 +324,8 @@ export default function ChiTiet() {
         </section>
 
         <BangDiemChuan lc={lc} diemEm={kq.tong} uuTienCong={tongChoLuaChon(lc, bc.diem).uuTienCong} />
+
+        <KhoiXacSuatDecisionIntelligence lc={lc} diemThiRaw={kq.tong} uuTien={s.hoSo.uuTienTuyenSinh} />
 
         <KhoiDuBao lc={lc} diemEm={kq.tong} />
 

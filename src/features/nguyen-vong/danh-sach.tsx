@@ -22,6 +22,8 @@ import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat
 import { dinhDang } from "@/engine/dinh-dang";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
+import { ChanDoanDanhMucCard } from "./chan-doan-danh-muc";
+import { tinhXacSuatTrungTuyen } from "@/engine/xac-suat-trung-tuyen";
 
 const CAC_LOAI_NHAN: { nhan: NhanNguyenVong; moTa: string }[] = [
   { nhan: "Thử sức", moTa: "Điểm chuẩn cao hơn điểm bạn một chút, đáng thử một hai ngành" },
@@ -136,6 +138,24 @@ export default function DanhSachNguyenVong() {
           </>
         ) : (
           <>
+            {tong !== null && (
+              <ChanDoanDanhMucCard
+                danhSachIds={s.nguyenVong}
+                diemMon={diemMon}
+                hoSo={{ nganSach: s.hoSo.nganSach, khuVuc: s.hoSo.khuVuc, nganhQuanTam: s.hoSo.nganhQuanTam, uuTienTuyenSinh: s.hoSo.uuTienTuyenSinh }}
+                onApDungThuTuMoi={(idsMoi, thongBao) => {
+                  const cu = [...s.nguyenVong];
+                  datNguyenVong(idsMoi);
+                  bao(thongBao, () => datNguyenVong(cu));
+                }}
+                onThayDoiDanhSach={(idsMoi, thongBao) => {
+                  const cu = [...s.nguyenVong];
+                  datNguyenVong(idsMoi);
+                  bao(thongBao, () => datNguyenVong(cu));
+                }}
+                onXemChiTietAnToan={() => nav(DUONG_DAN.nguyenVongAnToan())}
+              />
+            )}
             <ThanhChiSo tong={ds.length} dem={coCau.dem} />
             <button
               type="button"
@@ -280,6 +300,11 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
   const lc = d.lc;
   const coChuan = !!lc && lc.diemMin > 0;
   const link = lc && (lc.linkNguon || (/^https?:/.test(lc.nguon) ? lc.nguon : ""));
+  const xs = useMemo(() => {
+    if (!lc || chuaDuDiem || d.chenh === null) return null;
+    return tinhXacSuatTrungTuyen(lc.diemMin + d.chenh, lc);
+  }, [lc, chuaDuDiem, d.chenh]);
+
   return (
     <div className="flex">
       <button type="button" {...tayNam} aria-label={`Kéo để đổi thứ tự ${nv}`} aria-roledescription="tay nắm kéo thả"
@@ -299,6 +324,21 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
                 <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
                   {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <Nhan tone="muc">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa so được"}</Nhan>}
                   <span className="text-[12px] text-chu-phu">{lc.maTruong ?? lc.truong}{d.toHop ? ` · ${d.toHop}${d.suyRa ? " (suy ra)" : ""}` : ""}</span>
+                  {xs && (
+                    <span
+                      className={gop(
+                        "text-[11px] font-bold px-1.5 py-0.5 rounded-md border",
+                        xs.xacSuat >= 0.8
+                          ? "bg-luc/10 text-luc-chu border-luc/30"
+                          : xs.xacSuat >= 0.45
+                          ? "bg-xanh/10 text-xanh border-xanh/30"
+                          : "bg-cam/10 text-cam-chu border-cam/30"
+                      )}
+                      title={`Độ biến động τ = ${xs.doBienDongTau}. Khoảng tin cậy: ${xs.khoangTinCay[0]}% – ${xs.khoangTinCay[1]}%`}
+                    >
+                      Xác suất đỗ ~{xs.phanTram}%
+                    </span>
+                  )}
                 </span>
               </>
             ) : (
