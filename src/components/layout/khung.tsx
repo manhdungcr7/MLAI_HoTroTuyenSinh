@@ -6,6 +6,7 @@ import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
 import { gop } from "@/components/ui/nut-the";
 import { BannerKhongLuu } from "./banner-khong-luu";
 import { ThongBaoYeuThich } from "./thong-bao-yeu-thich";
+import { NutTroLyAI } from "@/features/tu-van/tro-ly-noi-bot";
 
 const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
   homNay: Home, khamPha: Search, nguyenVong: Heart, keHoach: CalendarDays, hoSo: UserRound,
@@ -19,6 +20,7 @@ export function KhungCoThanhDuoi() {
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
+      <NutTroLyAI />
       <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang border-t border-vien vung-an-toan-duoi">
         <ul className="grid grid-cols-5">
           {CAC_TAB.map((t) => {
@@ -48,6 +50,7 @@ export function KhungKhongThanh() {
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
+      <NutTroLyAI khongThanh />
     </div>
   );
 }

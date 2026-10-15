@@ -18,7 +18,6 @@ import { changCuaEm } from "@/state/chang";
 import type { LuaChon, ToneTen } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
 import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
-import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
 import { NutBaoSai } from "./bao-sai-sheet";
@@ -305,30 +304,33 @@ export default function ChiTiet() {
         {/* Nguồn dữ liệu: không bịa đường link */}
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-xanh-nhat text-xanh"><FileText size={20} /></span>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center justify-between gap-2">
               <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
               {lc.daKiemChung ? <Nhan tone="luc">Đã kiểm chứng</Nhan> : <Nhan tone="cam">Chưa kiểm chứng</Nhan>}
             </div>
-            <details className="mt-1 group">
-              <summary className="min-h-11 flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none">Xem chi tiết nguồn</summary>
-              <p className="text-[12px] text-chu-phu leading-snug">{lc.nguon}.</p>
-              <p className="mt-1 text-[12px] text-chu-phu">
-                {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}
-              </p>
-              {lc.linkNguon && (
-                <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 min-h-11 text-[13px] font-bold text-xanh hover:underline">
-                  {lc.nguonCap === "aggregator_verified" ? "Bảng điểm chuẩn (trang tổng hợp)" : "Trang tuyển sinh chính thức"}
-                </a>
-              )}
-              <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+            <details className="group">
+              <summary className="flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none hover:underline py-0.5">Xem chi tiết nguồn</summary>
+              <div className="pt-2 pb-1 space-y-1 text-[12px] text-chu-phu border-t border-vien/50 mt-1.5">
+                <p className="leading-snug">{lc.nguon}.</p>
+                <p>
+                  {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}
+                </p>
+                {lc.linkNguon && (
+                  <a href={lc.linkNguon} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-bold text-xanh hover:underline pt-0.5">
+                    {lc.nguonCap === "aggregator_verified" ? "Bảng điểm chuẩn (trang tổng hợp)" : "Trang tuyển sinh chính thức"}
+                  </a>
+                )}
+                <NguonTungNam lc={lc} docs={nguon?.truong[lc.maTruong ?? ""]?.docs} />
+              </div>
             </details>
-            <NutBaoSai maChuongTrinh={lc.id} tenNganh={`${lc.nganh} · ${lc.truong}`} />
+            <div className="pt-0.5">
+              <NutBaoSai maChuongTrinh={lc.id} tenNganh={`${lc.nganh} · ${lc.truong}`} />
+            </div>
           </div>
         </section>
 
-        <div className="space-y-2 pt-1">
-          <NutTuVan nguCanh={`Chi tiết ngành ${lc.nganh}`} />
+        <div className="pt-1">
           <Nut kieu="vien" bieuTuong={GitCompareArrows} onClick={soSanh}>So sánh ngành này</Nut>
         </div>
       </NoiDung>
@@ -336,7 +338,7 @@ export default function ChiTiet() {
       {/* Thanh dính dưới với 2 nút chính */}
       <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 pt-2.5 pb-1.5">
         <div className="grid grid-cols-[1fr_1.5fr] gap-2.5">
-          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã trong NV" : "Thêm NV"}</Nut>
+          <Nut kieu="vien" bieuTuong={Plus} onClick={themVao}>{trongDs ? "Đã trong Nguyện Vọng" : "+ Thêm Nguyện Vọng"}</Nut>
           {!laMucTieu && dat.ok && <Nut bieuTuong={Target} onClick={datLamMucTieu}>{s.mucTieu ? "Đổi mục tiêu" : "Đặt mục tiêu"}</Nut>}
         </div>
       </div>
@@ -347,7 +349,7 @@ export default function ChiTiet() {
           <div className="min-w-0">
             <b className="block text-[15px] text-muc">{lc.nganh} – {lc.truong}</b>
             <span className="text-[13px] text-chu">
-              {hoiTiep === "daCo" ? "Đã có trong danh sách nguyện vọng." : `Đang là NV${s.nguyenVong.indexOf(lc.id) + 1}.`}
+              {hoiTiep === "daCo" ? "Đã có trong danh sách nguyện vọng." : `Đang là Nguyện Vọng ${s.nguyenVong.indexOf(lc.id) + 1}.`}
             </span>
           </div>
         </div>

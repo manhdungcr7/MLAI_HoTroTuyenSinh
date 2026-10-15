@@ -100,7 +100,7 @@ export function goiYBanDau(h: { soNguyenVong: number; nganhQuanTam: string[] }):
   const r: string[] = [];
   if (h.soNguyenVong > 0) r.push("Danh sách nguyện vọng của mình có cân bằng không?");
   if (h.nganhQuanTam[0]) r.push(`Điểm của mình đã đủ cho ngành ${h.nganhQuanTam[0]} chưa?`);
-  r.push("Với điểm hiện tại nên xếp NV1 trường nào?");
+  r.push("Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?");
   if (h.nganhQuanTam.length >= 2) r.push("So sánh hai ngành đang quan tâm");
   r.push("Nên bắt đầu tìm ngành từ đâu?", "Điểm số của mình đang thiếu gì để so sánh?");
   return [...new Set(r)].slice(0, 4);

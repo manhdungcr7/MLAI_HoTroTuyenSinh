@@ -19,7 +19,6 @@ import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
 import { CHU_O, CanhBaoThuTuThe, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
-import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
 
@@ -117,7 +116,6 @@ export default function DanhSachNguyenVong() {
     <>
       <DauTrangChinh tieuDe="Danh sách nguyện vọng" />
       <NoiDung>
-        <NutTuVan nguCanh="Danh sách nguyện vọng" />
         {ds.length === 0 ? (
           <>
             {dsYeuThich.length > 0 ? (

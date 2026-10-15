@@ -74,7 +74,7 @@ export function ThongBaoYeuThich() {
         <div className="flex-1 min-w-0 pr-0.5">
           <p className="text-[13px] font-bold leading-tight truncate">
             {tin.daThemNV
-              ? "Đã thêm vào danh sách NV"
+              ? "Đã thêm vào danh sách Nguyện Vọng"
               : tin.daThich
                 ? "Đã lưu yêu thích"
                 : "Đã bỏ lưu"}

@@ -211,7 +211,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     ].join("\n");
 
     return {
-      traLoi: `Dưới đây là điểm chuẩn các năm gần đây (năm nào chưa có ghi "—") và khoảng dự kiến năm tới, cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
+      traLoi: `Dưới đây là điểm chuẩn các năm gần đây (năm nào chưa có ghi "—") và khoảng dự kiến năm tới, cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở Nguyện Vọng 1–Nguyện Vọng 2 để vươn tới đam mê, ngành **Vừa sức** ở Nguyện Vọng 3–Nguyện Vọng 4 làm trọng tâm, và ngành **An toàn** ở Nguyện Vọng 5–Nguyện Vọng 6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
       nguon: sk.map((l) => l.id),
     };
   }
@@ -228,7 +228,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
   if (khop.length > 0 && !canBang && !thieu && (!huongDan || noiTiep)) {
     const sk = khop.map((l) => dungSuKien(l, diem, nguon));
     const chot = khop.length <= 2
-      ? "\n💡 Gợi ý chiến lược: Hãy cân nhắc đặt ngành này ở NV1–NV2 nếu thuộc nhóm Thử sức, hoặc NV3–NV5 nếu thuộc nhóm Vừa sức/An toàn để đảm bảo cơ hội trúng tuyển cao nhất."
+      ? "\n💡 Gợi ý chiến lược: Hãy cân nhắc đặt ngành này ở Nguyện Vọng 1–Nguyện Vọng 2 nếu thuộc nhóm Thử sức, hoặc Nguyện Vọng 3–Nguyện Vọng 5 nếu thuộc nhóm Vừa sức/An toàn để đảm bảo cơ hội trúng tuyển cao nhất."
       : "";
     const hanhDong = `\n\n📋 **Gợi ý hành động tiếp theo:**\n1. Bấm **+ Thêm vào nguyện vọng** ở các ngành trên để đưa vào danh sách của bạn.\n2. Vào mục **Kế hoạch** để xem môn cần kéo điểm giúp thu hẹp khoảng cách.`;
     return {
@@ -286,13 +286,13 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
       : (dem["Thử sức"] ?? 0) > sk.length / 2
         ? "Hơn một nửa danh sách là Thử sức, bạn cân nhắc bổ sung thêm ngành Vừa sức để tăng cơ hội trúng tuyển."
         : (dem["Thử sức"] ?? 0) === 0 && sk.length >= 3
-          ? "Danh sách khá an toàn, bạn có thể tự tin thêm 1 ngành Thử sức ở NV1 để không bỏ lỡ ước mơ."
+          ? "Danh sách khá an toàn, bạn có thể tự tin thêm 1 ngành Thử sức ở Nguyện Vọng 1 để không bỏ lỡ ước mơ."
           : "Danh sách của bạn có cơ cấu 3 tầng khá cân bằng giữa Thử sức, Vừa sức và An toàn.";
 
-    // Lấy NV1 làm gốc: còn cách bao xa, và các NV sau đỡ cho NV1 thế nào.
+    // Lấy Nguyện Vọng 1 làm gốc: còn cách bao xa, và các Nguyện Vọng sau đỡ cho Nguyện Vọng 1 thế nào.
     const mn = phanTichMoNeo(s);
     const gocNV1 = mn
-      ? ` Mình lấy NV1 ${mn.lc.truong} · ${mn.lc.nganh} làm gốc: ${cauKhoangCachNV1(mn) ?? (mn.monChuaCoDiem.length ? "bạn nhập đủ điểm các môn của tổ hợp để mình tính khoảng cách." : "điểm hiện tại của bạn đã chạm mốc điểm chuẩn.")}${mn.luoiDo.length ? ` Các nguyện vọng sau là lưới đỡ: ${mn.luoiDo.slice(0, 4).map((d) => `NV${d.thuTu} ${d.lc.truong} (${d.nhan})`).join(", ")}.` : ""}`
+      ? ` Mình lấy Nguyện Vọng 1 ${mn.lc.truong} · ${mn.lc.nganh} làm gốc: ${cauKhoangCachNV1(mn) ?? (mn.monChuaCoDiem.length ? "bạn nhập đủ điểm các môn của tổ hợp để mình tính khoảng cách." : "điểm hiện tại của bạn đã chạm mốc điểm chuẩn.")}${mn.luoiDo.length ? ` Các nguyện vọng sau là lưới đỡ: ${mn.luoiDo.slice(0, 4).map((d) => `Nguyện Vọng ${d.thuTu} ${d.lc.truong} (${d.nhan})`).join(", ")}.` : ""}`
       : "";
 
     return {

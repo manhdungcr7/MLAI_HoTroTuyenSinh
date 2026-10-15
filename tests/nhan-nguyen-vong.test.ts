@@ -89,7 +89,7 @@ const hang = (id: string, viTri: number, nhan: DongNV["nhan"]): DongNV => ({ id,
 const dsThuTu = [hang("a", 0, "Thử sức"), hang("b", 1, "Dự phòng"), hang("c", 2, "Thử sức"), hang("d", 3, "Vừa sức"), hang("e", 4, "An toàn")];
 const cb = canhBaoThuTu(dsThuTu);
 assert.deepEqual(cb.map((c) => [c.truoc.id, c.sau.id]), [["b", "c"], ["b", "d"]], "Thử sức đứng đầu không bị cảnh báo; mỗi NV cao hơn bị chặn có một cảnh báo");
-assert.ok(cb[0].cau.includes("NV2") && cb[0].cau.includes("NV3") && cb[0].cau.includes("sẽ không xét"));
+assert.ok(cb[0].cau.includes("Nguyện Vọng 2") && cb[0].cau.includes("Nguyện Vọng 3") && cb[0].cau.includes("sẽ không xét"));
 assert.deepEqual(canhBaoThuTu([hang("a", 0, "Thử sức"), hang("b", 1, "Vừa sức"), hang("c", 2, "An toàn")]), [], "thứ tự mong muốn không bị cảnh báo");
 assert.deepEqual(canhBaoThuTu([hang("a", 0, null), hang("b", 1, "Thử sức")]), [], "hàng không nhãn không gây cảnh báo");
 assert.deepEqual(duaLenTruoc(["a", "b", "c", "d"], "c", "b"), ["a", "c", "b", "d"]);

@@ -31,8 +31,8 @@ function MinhHoa() {
       <ul className="space-y-1.5">
         {PHIEU.map((x, i) => (
           <li key={x.nganh} className="flex items-center gap-2.5">
-            <span className={gop("size-9 rounded-lg border-2 bg-trang flex flex-col items-center justify-center leading-none shrink-0", x.vien, x.chu)}>
-              <span className="text-[8px] font-bold">NV</span><span className="so-lon text-[15px] font-bold">{i + 1}</span>
+            <span className={gop("min-w-10 px-1 h-9 rounded-lg border-2 bg-trang flex flex-col items-center justify-center leading-none shrink-0", x.vien, x.chu)}>
+              <span className="text-[7.5px] font-bold tracking-tight">Nguyện Vọng</span><span className="so-lon text-[14px] font-bold">{i + 1}</span>
             </span>
             <span className="flex-1 min-w-0 text-[14px] font-semibold text-chu truncate">{x.nganh}</span>
             <span className={gop("text-[12px] font-bold", x.chu)}>{x.nhan}</span>

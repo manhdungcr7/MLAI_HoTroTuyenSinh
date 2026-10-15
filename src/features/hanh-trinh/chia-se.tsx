@@ -44,8 +44,8 @@ function TheTomTatNguyenVong({ s }: { s: AppState }) {
       </ul>
       <ol className="divide-y divide-vien">
         {ds.map((d) => (
-          <li key={d.id} className="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5">
-            <span className="so-lon text-[14px] font-bold text-chu-phu">NV{d.viTri + 1}</span>
+          <li key={d.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5">
+            <span className="so-lon text-[13px] font-bold text-chu-phu whitespace-nowrap">Nguyện Vọng {d.viTri + 1}</span>
             <span className="min-w-0">
               <b className="block text-[14px] text-muc leading-snug">{d.lc ? d.lc.nganh : "Chưa có dữ liệu"}</b>
               <span className="block text-[12px] text-chu-phu truncate">

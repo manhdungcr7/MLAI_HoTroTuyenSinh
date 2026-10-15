@@ -13,7 +13,6 @@ import { tinhCoHoi } from "./co-hoi";
 import { useBoLoc } from "./dung-bo-loc";
 import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
-import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
 import { locTimKiem, truongChuaCoDuLieu, xepHangTimKiem } from "@/engine/tim-kiem";
 import { hieuCauTim, locTheoY, xepTheoY } from "@/engine/hieu-cau-tim";
@@ -66,7 +65,6 @@ export default function KhamPha() {
     <>
       <DauTrangChinh tieuDe="Khám phá" />
       <NoiDung>
-        <NutTuVan nguCanh="Khám phá ngành học" />
         <div className="flex gap-2 items-center">
           <div className="relative flex-1">
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-chu-phu pointer-events-none" />
