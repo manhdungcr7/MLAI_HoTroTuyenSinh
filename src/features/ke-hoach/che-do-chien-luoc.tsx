@@ -1,6 +1,6 @@
 // Chế độ "Chiến lược & Lộ trình": Chẩn đoán năng lực học tập theo hàm độ khó cận biên, phân bổ giờ tự học thông minh và lộ trình tuyển sinh đa phương thức cá nhân hóa.
 import { useState } from "react";
-import { BookOpen, CheckCircle, Clock, Compass, Flame, HelpCircle, TrendingUp, WandSparkles, Zap } from "lucide-react";
+import { BookOpen, CheckCircle, Clock, Compass, Flame, HelpCircle, WandSparkles, Zap } from "lucide-react";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { useApp } from "@/state/store";
 import { mucTieuDayDu, khoangCachCuaToi, tuanHienTai } from "@/state/chon";
@@ -84,7 +84,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
           chiTiet: pb.trongTamOnTap,
           phut: phut1,
           mucUuTien: pb.diemCanTang >= 1.0 ? "cao" : "vua",
-          lyDo: `Đòn bẩy điểm số (cần tăng +${pb.diemCanTang} điểm)`,
+          lyDo: `Kế hoạch tăng +${pb.diemCanTang} điểm`,
           tieuChi: ["Nắm vững dạng bài thường gặp", "Không để sai sót phần nhận biết & thông hiểu"],
           taiLieu: [{ ten: `Đề cương chuyên đề ${pb.tenMon}` }],
         },
@@ -151,47 +151,41 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
         <div className="flex items-center justify-between gap-2">
           <span className="flex items-center gap-2 text-[15px] font-extrabold text-muc">
             <Zap size={18} className="text-xanh" />
-            Chẩn đoán năng lực & Phân bổ tự học
+            Mục tiêu điểm & Phân bổ tự học
           </span>
           <Nhan tone={tangNangLuc.tone}>{tangNangLuc.nhan}</Nhan>
         </div>
 
-        <div className="rounded-xl bg-nen p-3 space-y-1.5">
-          <div className="flex items-center justify-between text-[13px]">
-            <span className="text-chu font-semibold">Trọng tâm: <b className="text-muc">{tangNangLuc.mucTieuNhan}</b></span>
-            <span className="text-chu-phu text-[12px]">Điểm TB: {dinhDang(diemTb, 1)}</span>
-          </div>
-          <p className="text-[13px] text-chu leading-snug">{tangNangLuc.loiKhuyen}</p>
-          {monDonBay && phanBo.khoangCachGap > 0 && (
-            <div className="flex items-start gap-1.5 pt-1 text-[12.5px] text-cam-chu font-semibold">
-              <TrendingUp size={15} className="shrink-0 mt-0.5" />
-              <span>
-                <b>Môn đòn bẩy:</b> {monDonBay.tenMon} (cần kéo thêm +{monDonBay.diemCanTang} điểm để chạm tới mốc {phanBo.diemMucTieuTong} của Nguyện Vọng 1).
+        <div className="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-nen text-[13px]">
+          <span className="text-chu font-semibold">
+            Điểm TB: <b className="text-muc">{dinhDang(diemTb, 1)}</b>
+            {phanBo.khoangCachGap > 0 && (
+              <span className="text-cam-chu ml-2 font-bold">
+                (Thiếu {dinhDang(phanBo.khoangCachGap, 1)} điểm so với NV1)
               </span>
-            </div>
+            )}
+          </span>
+          {monDonBay && phanBo.khoangCachGap > 0 && (
+            <span className="text-[12px] font-bold text-xanh bg-trang px-2 py-0.5 rounded-md border border-vien shrink-0">
+              Trọng tâm: {monDonBay.tenMon} (+{monDonBay.diemCanTang})
+            </span>
           )}
         </div>
 
         {/* Bảng phân bổ quỹ giờ tự học hàng tuần theo bài toán Knapsack */}
-        <div>
-          <div className="flex items-center justify-between text-[12.5px] text-chu-phu mb-1.5">
-            <span className="font-bold text-muc">Phân bổ 16 giờ tự học tuần theo độ dốc điểm số:</span>
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            {phanBo.phanBoTungMon.map((pb) => (
-              <div key={pb.mon} className="rounded-xl border border-vien p-2.5 text-center bg-trang space-y-1">
-                <span className="block text-[12px] font-bold text-chu truncate">{TEN_MON_NGAN[pb.mon]}</span>
-                <b className="block text-[17px] font-black text-muc leading-none">{dinhDang(pb.diemHienTai, 1)}</b>
-                <span className={gop("block text-[11px] font-bold", pb.diemCanTang > 0 ? "text-cam-chu" : "text-luc-chu")}>
-                  {pb.diemCanTang > 0 ? `+${dinhDang(pb.diemCanTang, 1)} điểm` : "Đã đạt mốc"}
-                </span>
-                <div className="pt-1 border-t border-vien/70 text-[11px] text-chu-phu">
-                  <span className="block font-bold text-xanh">{pb.soGioMoiTuan}h/tuần</span>
-                  <span className="block text-[10px] opacity-75">{pb.tiLePhanBo}% quỹ giờ</span>
-                </div>
+        <div className="grid grid-cols-3 gap-2">
+          {phanBo.phanBoTungMon.map((pb) => (
+            <div key={pb.mon} className="rounded-xl border border-vien p-2.5 text-center bg-trang space-y-1">
+              <span className="block text-[12px] font-bold text-chu truncate">{TEN_MON_NGAN[pb.mon]}</span>
+              <b className="block text-[17px] font-black text-muc leading-none">{dinhDang(pb.diemHienTai, 1)}</b>
+              <span className={gop("block text-[11px] font-bold", pb.diemCanTang > 0 ? "text-cam-chu" : "text-luc-chu")}>
+                {pb.diemCanTang > 0 ? `+${dinhDang(pb.diemCanTang, 1)}` : "Đã đạt"}
+              </span>
+              <div className="pt-1 border-t border-vien/70 text-[11px] text-chu-phu">
+                <span className="block font-bold text-xanh">{pb.soGioMoiTuan}h/tuần</span>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         {/* Nút hành động áp dụng phân bổ vào lịch học thật */}
@@ -211,47 +205,37 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
         <div className="flex items-center justify-between gap-2">
           <h3 className="flex items-center gap-2 text-[15px] font-extrabold text-muc">
             <Compass size={18} className="text-xanh" />
-            Lộ trình tuyển sinh đa phương thức {namThi}
+            Lộ trình tuyển sinh {namThi}
           </h3>
           <span className="text-[12px] text-chu-phu font-bold">Lớp {khoiLop}</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {/* Mốc 1: Xét tuyển sớm & ĐGNL */}
-          <div className="rounded-xl border border-xanh/30 bg-xanh-nhat/20 p-3 space-y-1.5">
-            <div className="flex items-center justify-between gap-2">
-              <b className="text-[14px] text-muc">Mốc 1 · Kỳ thi ĐGNL & Xét tuyển sớm</b>
-              <Nhan tone="xanh" className="text-[11px] py-0 px-1.5">Tháng 1 – Tháng 4</Nhan>
+          <div className="rounded-xl border border-xanh/30 bg-xanh-nhat/20 p-2.5 flex items-center justify-between gap-3 text-[13px]">
+            <div>
+              <b className="block text-[13.5px] text-muc">ĐGNL & Xét tuyển sớm</b>
+              <span className="text-[12px] text-chu-phu">{coDgnl ? "Đã có điểm ĐGNL, dùng nộp sớm các trường lớn." : "Đăng ký đợt 1 ĐGNL / HSA / TSA để mở thêm chỉ tiêu."}</span>
             </div>
-            <p className="text-[12.5px] text-chu leading-snug">
-              {coDgnl
-                ? `Hồ sơ của bạn đã có điểm ĐGNL. Đây là lợi thế lớn: hãy dùng điểm này để nộp xét tuyển sớm vào các trường lớn nhằm cầm chắc một bến đỗ vững vàng.`
-                : "Đăng ký thi ĐGNL ĐHQG-HCM đợt 1 hoặc HSA Hà Nội / TSA Bách Khoa. Kỳ thi này mở rộng thêm 40–60% chỉ tiêu cho các khối ngành kỹ thuật, kinh tế."}
-            </p>
+            <Nhan tone="xanh" className="text-[11px] py-0 px-2 shrink-0">T1 – T4</Nhan>
           </div>
 
           {/* Mốc 2: Chứng chỉ ngoại ngữ & Học bạ */}
-          <div className="rounded-xl border border-cam/30 bg-cam-nhat/20 p-3 space-y-1.5">
-            <div className="flex items-center justify-between gap-2">
-              <b className="text-[14px] text-muc">Mốc 2 · Ngoại ngữ & Học bạ kết hợp</b>
-              <Nhan tone="cam" className="text-[11px] py-0 px-1.5">Tháng 4 – Tháng 5</Nhan>
+          <div className="rounded-xl border border-cam/30 bg-cam-nhat/20 p-2.5 flex items-center justify-between gap-3 text-[13px]">
+            <div>
+              <b className="block text-[13.5px] text-muc">Ngoại ngữ & Học bạ kết hợp</b>
+              <span className="text-[12px] text-chu-phu">{coChungChi ? "Đã có chứng chỉ, đủ điều kiện quy đổi điểm 10 kết hợp." : "Tập trung kéo điểm tiếng Anh THPT để tối đa tổng 3 môn."}</span>
             </div>
-            <p className="text-[12.5px] text-chu leading-snug">
-              {coChungChi
-                ? `Bạn đã có ${s.hoSo.chungChiNgoaiNgu?.loai} ${s.hoSo.chungChiNgoaiNgu?.diem}: Bạn đủ điều kiện quy đổi điểm 10 Ngoại ngữ hoặc cộng 1–2 điểm kết hợp ở hầu hết các trường Top đầu.`
-                : "Nếu chưa có chứng chỉ quốc tế, hãy tập trung tối đa kéo điểm môn tiếng Anh trong tổ hợp thi tốt nghiệp THPT để tối đa hóa tổng điểm 3 môn."}
-            </p>
+            <Nhan tone="cam" className="text-[11px] py-0 px-2 shrink-0">T4 – T5</Nhan>
           </div>
 
           {/* Mốc 3: Nước rút Tốt nghiệp THPT */}
-          <div className="rounded-xl border border-luc/30 bg-luc-nhat/20 p-3 space-y-1.5">
-            <div className="flex items-center justify-between gap-2">
-              <b className="text-[14px] text-muc">Mốc 3 · Nước rút Tốt nghiệp THPT</b>
-              <Nhan tone="luc" className="text-[11px] py-0 px-1.5">Tháng 5 – Tháng 6</Nhan>
+          <div className="rounded-xl border border-luc/30 bg-luc-nhat/20 p-2.5 flex items-center justify-between gap-3 text-[13px]">
+            <div>
+              <b className="block text-[13.5px] text-muc">Nước rút Tốt nghiệp THPT</b>
+              <span className="text-[12px] text-chu-phu">Luyện đề bấm giờ 50 phút, dồn sức cho {monDonBay?.tenMon ?? "môn chính"}.</span>
             </div>
-            <p className="text-[12.5px] text-chu leading-snug">
-              Bấm giờ luyện đề chuẩn 50 phút các đề thi thử mới nhất. Tập trung cao độ cho môn đòn bẩy ({monDonBay?.tenMon ?? "môn chính"}) để san bằng phần điểm còn thiếu.
-            </p>
+            <Nhan tone="luc" className="text-[11px] py-0 px-2 shrink-0">T5 – T6</Nhan>
           </div>
         </div>
       </section>

@@ -190,7 +190,7 @@ export function toiUuPhanBoLichHoc(
     loiKhuyenChienLuoc.push("Điểm hiện tại của bạn đã đạt mốc điểm chuẩn kỳ vọng. Trọng tâm lúc này là duy trì sự ổn định tâm lý và tốc độ làm bài.");
   } else {
     const monKeoDiem = [...phanBoTungMon].sort((a, b) => b.diemCanTang - a.diemCanTang)[0];
-    loiKhuyenChienLuoc.push(`Để san bằng khoảng cách ${gap} điểm tới NV1, môn "${monKeoDiem.tenMon}" là đòn bẩy lớn nhất (mục tiêu tăng +${monKeoDiem.diemCanTang} điểm).`);
+    loiKhuyenChienLuoc.push(`Để san bằng khoảng cách ${gap} điểm tới NV1, môn "${monKeoDiem.tenMon}" là trọng tâm cần bứt phá (mục tiêu tăng +${monKeoDiem.diemCanTang} điểm).`);
     loiKhuyenChienLuoc.push(`Quỹ thời gian ${quyGioTuan} giờ/tuần đã được tối ưu hóa toán học theo hàm biên, tập trung vào môn có khả năng bứt phá nhanh nhất.`);
   }
 
