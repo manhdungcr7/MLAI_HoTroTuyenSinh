@@ -16,6 +16,8 @@ import { viecChoTuan } from "./tao-viec-tuan";
 import { dinhDang } from "@/engine/dinh-dang";
 import { ngayBatDauXep } from "./lich-tuan";
 import { HopNhapLichNhanh } from "./nhap-lich-nhanh";
+import { HopLapLichAI } from "./hop-lap-lich-ai";
+
 
 const DANG_NHOM: Record<IdNhom, { icon: LucideIcon; tone: ToneTen }> = {
   cao: { icon: Flame, tone: "do" },
@@ -93,7 +95,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
       {ngays.includes(hom) && (
         <div className="space-y-3">
           <MucTieuHomNay />
-          <TheCaNhanHoaAI />
+          <TheCaNhanHoaAI tuan={tuan} hienThongBao={hienThongBao} />
         </div>
       )}
 
@@ -136,7 +138,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
 }
 
 /** Thẻ tư vấn & cá thể hóa lộ trình học tập cùng AI */
-function TheCaNhanHoaAI() {
+function TheCaNhanHoaAI({ tuan, hienThongBao }: { tuan: string; hienThongBao: (c: string) => void }) {
   const { s } = useApp();
   const nav = useNavigate();
   const m = mucTieuDayDu(s);
@@ -145,6 +147,7 @@ function TheCaNhanHoaAI() {
   const monThieu = kc.filter((x) => x.thieu > 0).sort((a, b) => b.thieu - a.thieu);
   const ielts = s.hoSo.chungChiNgoaiNgu?.diem ? `${s.hoSo.chungChiNgoaiNgu.loai} ${s.hoSo.chungChiNgoaiNgu.diem}` : null;
   const dgnl = s.hoSo.diemDgnl?.hcm ? `ĐGNL ${s.hoSo.diemDgnl.hcm}/1200` : s.hoSo.diemDgnl?.hn ? `HSA ${s.hoSo.diemDgnl.hn}/150` : null;
+  const [moLapLich, setMoLapLich] = useState(false);
 
   if (!m) return null;
 
@@ -160,48 +163,56 @@ function TheCaNhanHoaAI() {
     ? `Có ${dgnl}: Cơ hội xét tuyển sớm rất cao, giảm bớt áp lực thi THPT.`
     : null;
 
-  const cauHoiAI = `Lập kế hoạch học tập và xếp lịch ôn thi tuần này cá thể hóa cho tôi dựa trên mục tiêu ${m.lc.nganh} (${m.lc.truong}), tổ hợp ${maToHop}, mục tiêu ${m.mucTieuTho} điểm và điểm các môn hiện tại.`;
-
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-xanh-nhat/80 via-trang to-xanh-nhat/40 border border-xanh/30 p-3.5 shadow-xs space-y-2.5">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="size-7 rounded-lg bg-xanh text-white grid place-items-center shrink-0 shadow-xs">
-            <Sparkles size={16} />
-          </span>
-          <span className="text-[13.5px] font-bold text-muc truncate">
-            {tenGoi ? `Lộ trình riêng cho ${tenGoi}` : "Lộ trình học tập cá nhân"}
+    <>
+      <div className="rounded-2xl bg-gradient-to-br from-xanh-nhat/80 via-trang to-xanh-nhat/40 border border-xanh/30 p-3.5 shadow-xs space-y-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="size-7 rounded-lg bg-xanh text-white grid place-items-center shrink-0 shadow-xs">
+              <Sparkles size={16} />
+            </span>
+            <span className="text-[13.5px] font-bold text-muc truncate">
+              {tenGoi ? `Lộ trình riêng cho ${tenGoi}` : "Lộ trình học tập cá nhân"}
+            </span>
+          </div>
+          <span className="text-[11px] font-semibold text-xanh bg-white px-2 py-0.5 rounded-full border border-xanh/20 shrink-0">
+            Cá nhân hóa
           </span>
         </div>
-        <span className="text-[11px] font-semibold text-xanh bg-white px-2 py-0.5 rounded-full border border-xanh/20 shrink-0">
-          Cá nhân hóa
-        </span>
+
+        <div className="text-[13px] text-chu leading-snug space-y-1">
+          <p className="font-medium">
+            Mục tiêu: <b className="text-muc">{m.lc.nganh} · {m.lc.truong}</b> (tổ hợp <b>{maToHop}</b>, cần <b>{dinhDang(m.mucTieuTho, 1)}đ</b>).
+          </p>
+          <p className="text-chu-phu">💡 {loiKhuyen} {loiThe}</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
+          <button
+            type="button"
+            onClick={() => setMoLapLich(true)}
+            className="w-full min-h-[44px] py-2.5 px-3 rounded-xl bg-xanh text-white font-bold text-[13px] inline-flex items-center justify-center gap-1.5 shadow-xs active:brightness-95 hover:bg-xanh/90 cursor-pointer transition-all"
+          >
+            <Sparkles size={16} className="shrink-0" />
+            <span>Hỏi AI lập lịch chi tiết</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => nav(DUONG_DAN.monKeoDiem())}
+            className="w-full min-h-[44px] py-2.5 px-3 rounded-xl border border-vien bg-white text-chu font-semibold text-[13px] inline-flex items-center justify-center gap-1.5 hover:border-xanh/40 active:bg-gray-50 cursor-pointer transition-all"
+          >
+            <span>Môn kéo điểm</span>
+          </button>
+        </div>
       </div>
 
-      <div className="text-[13px] text-chu leading-snug space-y-1">
-        <p className="font-medium">
-          Mục tiêu: <b className="text-muc">{m.lc.nganh} · {m.lc.truong}</b> (tổ hợp <b>{maToHop}</b>, cần <b>{dinhDang(m.mucTieuTho, 1)}đ</b>).
-        </p>
-        <p className="text-chu-phu">💡 {loiKhuyen} {loiThe}</p>
-      </div>
-
-      <div className="flex flex-wrap gap-2 pt-0.5">
-        <button
-          type="button"
-          onClick={() => nav(DUONG_DAN.tuVan(), { state: { nguCanh: `Kế hoạch học tập tuần: ${cauHoiAI}` } })}
-          className="flex-1 min-w-[200px] min-h-10 px-3 rounded-xl bg-xanh text-white font-bold text-[13px] inline-flex items-center justify-center gap-1.5 shadow-xs active:brightness-95 hover:bg-xanh/90 cursor-pointer transition-colors"
-        >
-          <Sparkles size={15} /> Hỏi AI lập lịch học chi tiết cho bạn
-        </button>
-        <button
-          type="button"
-          onClick={() => nav(DUONG_DAN.monKeoDiem())}
-          className="min-h-10 px-3 rounded-xl border border-vien bg-white text-chu font-semibold text-[13px] inline-flex items-center justify-center gap-1 hover:border-xanh/40 cursor-pointer transition-colors"
-        >
-          Môn kéo điểm
-        </button>
-      </div>
-    </div>
+      <HopLapLichAI
+        mo={moLapLich}
+        dong={() => setMoLapLich(false)}
+        tuan={tuan}
+        onThanhCong={hienThongBao}
+      />
+    </>
   );
 }
 
@@ -222,8 +233,8 @@ function MucTieuHomNay() {
           <span className="text-[13px] font-bold text-xanh whitespace-nowrap">Xem chi tiết</span>
         </span>
         <b className="block text-[18px] text-muc leading-tight mt-0.5">Bù +{dinhDang(mon.thieu, 1)} điểm cho {mon.ten}</b>
-        <span className="block text-[13px] text-chu-phu leading-snug mt-0.5 truncate">
-          {viecMon ? `Làm trước: ${viecMon.tieuDe}` : `Môn thiếu nhiều nhất so với ${m.lc.truong}`}
+        <span className="block text-[13px] text-chu-phu leading-snug mt-0.5 line-clamp-2">
+          {viecMon ? `Ưu tiên: ${viecMon.tieuDe}` : `Môn thiếu nhiều nhất so với ${m.lc.truong}`}
         </span>
       </span>
     </button>
@@ -246,7 +257,7 @@ function DongViec({ v, ngays, ngayChon, quaKhu }: { v: ViecCanHoc; ngays: string
       <button type="button" onClick={() => nav(DUONG_DAN.viec(v.id))} className="flex-1 min-w-0 flex items-center gap-1 py-2.5 text-left">
         <span className="flex-1 min-w-0">
           <span className="flex items-start justify-between gap-2">
-            <b className={gop("text-[15px] text-muc leading-snug line-clamp-1", xong && "line-through")}>{v.tieuDe}</b>
+            <b className={gop("text-[14.5px] text-muc leading-snug line-clamp-2", xong && "line-through")}>{v.tieuDe}</b>
             {/* Mức ưu tiên đã là tên nhóm phía trên, không lặp nhãn ở từng dòng. */}
             {tt === "boQua" ? <Nhan tone="muc">Đã bỏ qua</Nhan> : xong ? <Nhan tone="luc">Xong</Nhan> : null}
           </span>

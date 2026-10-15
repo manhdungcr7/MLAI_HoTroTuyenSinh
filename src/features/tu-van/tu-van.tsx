@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Check, RotateCcw, Send, Sparkles } from "lucide-react";
+import { CalendarCheck, Check, RotateCcw, Send, Sparkles } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
@@ -118,6 +118,13 @@ export default function TuVan() {
   const goiY = goiYBanDau({ soNguyenVong: s.nguyenVong.length, nganhQuanTam: s.hoSo.nganhQuanTam });
   const viTriCuoi = tin.length - 1;
 
+  useEffect(() => {
+    const st = location.state as { cauHoiTuDong?: string } | null;
+    if (st?.cauHoiTuDong && !dangRef.current && tin.length === 0) {
+      gui(st.cauHoiTuDong);
+    }
+  }, []);
+
   return (
     <>
       <DauTrangCoQuayLai tieuDe="Tư vấn cùng AI" phai={<span className="sr-only">{manHinh}</span>} />
@@ -194,6 +201,20 @@ export default function TuVan() {
                             );
                           })}
                         </ul>
+                      </div>
+                    )}
+                    {/kế hoạch học tập|lịch học|ôn thi tuần/i.test(t.chu) && (
+                      <div className="mt-2.5 p-3 rounded-xl bg-gradient-to-r from-xanh-nhat to-white border border-xanh/30 flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <b className="block text-[13px] text-muc leading-tight">Lịch học tuần đề xuất từ AI</b>
+                          <span className="block text-[12px] text-chu-phu leading-tight mt-0.5">Xem chi tiết và áp dụng vào Kế hoạch tuần</span>
+                        </div>
+                        <Link
+                          to={DUONG_DAN.tuan()}
+                          className="shrink-0 min-h-9 px-3 rounded-lg bg-xanh text-white text-[12.5px] font-bold inline-flex items-center gap-1 shadow-xs hover:bg-xanh/90 transition-colors"
+                        >
+                          <CalendarCheck size={14} /> Vào Kế hoạch tuần
+                        </Link>
                       </div>
                     )}
                     {t.congDong && t.congDong.length > 0 && <p className="mt-1.5 text-[12px] text-chu-phu">Có dùng ghi chú của cộng đồng, chưa phải thông tin chính thức.</p>}

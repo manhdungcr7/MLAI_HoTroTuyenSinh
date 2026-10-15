@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  BookMarked, CalendarClock, CalendarDays, Check, CheckCircle2, Clock, ExternalLink, Lightbulb, ListChecks, ListOrdered, RotateCcw, SearchX, SkipForward, Target,
+  BookMarked, CalendarClock, CalendarDays, Check, CheckCircle2, Clock, ExternalLink, Lightbulb, ListChecks, ListOrdered, Pencil, RotateCcw, SearchX, SkipForward, Target,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -47,13 +47,19 @@ function TieuDeKhoi({ icon: Icon, children, phai }: { icon: typeof Target; child
 }
 
 function NoiDungViec({ v }: { v: ViecCanHoc }) {
-  const { s, datTrangThaiViec, ghimKhoi } = useApp();
+  const { s, datTrangThaiViec, ghimKhoi, datViec } = useApp();
   const nav = useNavigate();
   const doiKhoi = useDoiKhoi();
   const hom = homNay();
   const [daTich, setDaTich] = useLuuCucBo<Record<string, number[]>>("ke-hoach-tieu-chi", {});
   const [moDoi, setMoDoi] = useState(false);
   const [moBoQua, setMoBoQua] = useState(false);
+  const [moSua, setMoSua] = useState(false);
+  const [tieuDeSua, setTieuDeSua] = useState(v.tieuDe);
+  const [phutSua, setPhutSua] = useState(v.phut);
+  const [mucTieuSua, setMucTieuSua] = useState(v.mucTieuBuoi ?? "");
+  const [chiTietSua, setChiTietSua] = useState(v.chiTiet);
+
   const tt = s.trangThaiViec[v.id] ?? "chua";
   const mon = MON_HIEN_THI[v.mon];
   const khois = khoiCuaViec(s.khoiHoc, v.id);
@@ -73,7 +79,17 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
         <div className="flex items-start gap-3">
           <BieuTuongTron icon={mon.icon} tone={mon.tone} kichThuoc={52} />
           <div className="flex-1 min-w-0">
-            <h2 className="text-[18px] font-extrabold text-muc leading-snug">{v.tieuDe}</h2>
+            <div className="flex items-start justify-between gap-2">
+              <h2 className="text-[18px] font-extrabold text-muc leading-snug">{v.tieuDe}</h2>
+              <button
+                type="button"
+                onClick={() => setMoSua(true)}
+                className="size-8 rounded-lg border border-vien bg-white text-chu-phu hover:text-xanh hover:border-xanh/40 grid place-items-center shrink-0 cursor-pointer transition-colors"
+                title="Chỉnh sửa buổi học"
+              >
+                <Pencil size={15} />
+              </button>
+            </div>
             <div className="mt-1"><NhanUuTien muc={v.mucUuTien} /></div>
           </div>
         </div>
@@ -206,6 +222,71 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
         <div className="grid grid-cols-2 gap-2">
           <Nut kieu="vien" onClick={() => setMoBoQua(false)}>Giữ lại</Nut>
           <Nut kieu="nguyHiem" bieuTuong={SkipForward} onClick={() => { datTrangThaiViec(v, "boQua"); veTuan("Đã bỏ qua việc này"); }}>Bỏ qua</Nut>
+        </div>
+      </HopTruot>
+
+      <HopTruot mo={moSua} dong={() => setMoSua(false)} tieuDe="Chỉnh sửa buổi học">
+        <div className="space-y-3.5 pb-2">
+          <div>
+            <label className="block text-[13px] font-bold text-chu-phu mb-1">Tiêu đề buổi học</label>
+            <input
+              type="text"
+              value={tieuDeSua}
+              onChange={(e) => setTieuDeSua(e.target.value)}
+              className="w-full h-11 px-3 text-[14px] rounded-xl border border-vien bg-white focus:border-xanh focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-[13px] font-bold text-chu-phu mb-1">Thời lượng (phút)</label>
+            <div className="grid grid-cols-4 gap-2">
+              {[45, 60, 75, 90].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPhutSua(p)}
+                  className={gop(
+                    "h-10 rounded-xl border font-bold text-[13px] transition-colors cursor-pointer",
+                    phutSua === p ? "border-xanh bg-xanh text-white" : "border-vien bg-white text-chu hover:bg-nen"
+                  )}
+                >
+                  {p}'
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="block text-[13px] font-bold text-chu-phu mb-1">Mục tiêu buổi học</label>
+            <textarea
+              value={mucTieuSua}
+              onChange={(e) => setMucTieuSua(e.target.value)}
+              rows={2}
+              className="w-full p-2.5 text-[13px] rounded-xl border border-vien bg-white focus:border-xanh focus:outline-none leading-relaxed"
+            />
+          </div>
+          <div>
+            <label className="block text-[13px] font-bold text-chu-phu mb-1">Chi tiết / Ghi chú</label>
+            <textarea
+              value={chiTietSua}
+              onChange={(e) => setChiTietSua(e.target.value)}
+              rows={2}
+              className="w-full p-2.5 text-[13px] rounded-xl border border-vien bg-white focus:border-xanh focus:outline-none leading-relaxed"
+            />
+          </div>
+          <Nut
+            onClick={() => {
+              const danhSachMoi = s.viec.map((item) =>
+                item.id === v.id
+                  ? { ...item, tieuDe: tieuDeSua.trim() || item.tieuDe, phut: phutSua, mucTieuBuoi: mucTieuSua.trim(), chiTiet: chiTietSua.trim() || item.chiTiet }
+                  : item
+              );
+              datViec(danhSachMoi);
+              setMoSua(false);
+              veTuan("Đã cập nhật chi tiết buổi học thành công!");
+            }}
+            className="w-full min-h-12 text-[14px] font-bold"
+          >
+            Lưu thay đổi
+          </Nut>
         </div>
       </HopTruot>
     </>

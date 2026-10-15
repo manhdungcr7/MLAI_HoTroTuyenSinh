@@ -188,25 +188,26 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     };
   }
 
-  const hoi3Nam = /3 nam|ba nam|cac nam|gan day|xu huong/.test(q);
+  const hoi3Nam = /3 nam|ba nam|cac nam|gan day|xu huong|2025|2026/.test(q);
   const soSanh = (khop.length >= 2 && /so sanh|khac nhau|hon|chon.*nao|chon.*hay|phan van/.test(q)) || (khop.length >= 1 && hoi3Nam);
   if (soSanh) {
     const sk = khop.slice(0, 4).map((l) => dungSuKien(l, diem, nguon));
     const bang3Nam = [
-      "| Ngành | Trường | Điểm 2022 | Điểm 2023 | Điểm 2024 | Nhãn | Học phí/năm |",
-      "|---|---|---|---|---|---|---|",
+      "| Ngành | Trường | Điểm 2023 | Điểm 2024 | Điểm 2025 | Dự kiến 2026 | Nhãn | Học phí/năm |",
+      "|---|---|---|---|---|---|---|---|",
       ...sk.map((d) => {
-        const d22 = d.diem["2022"] ? so1(d.diem["2022"]) : "—";
         const d23 = d.diem["2023"] ? so1(d.diem["2023"]) : "—";
-        const d24 = d.diem["2024"] ? so1(d.diem["2024"]) : (d.diem["2026"] ? so1(d.diem["2026"]) : "—");
+        const d24 = d.diem["2024"] ? so1(d.diem["2024"]) : "—";
+        const d25 = d.diem["2025"] ? so1(d.diem["2025"]) : (d.diem["2024"] ? so1(d.diem["2024"]) : "—");
+        const d26 = d.diem["2026"] ? so1(d.diem["2026"]) : (d.duBao ? `${so1(d.duBao.thap)}–${so1(d.duBao.cao)}` : "—");
         const nhan = d.nhanCuaEm || "Tham khảo";
         const hp = d.hocPhiTrieu !== undefined ? `${so1(d.hocPhiTrieu)} tr` : "—";
-        return `| ${d.nganh} | ${d.truong} | ${d22} | ${d23} | ${d24} | ${nhan} | ${hp} |`;
+        return `| ${d.nganh} | ${d.truong} | ${d23} | ${d24} | ${d25} | ${d26} | ${nhan} | ${hp} |`;
       }),
     ].join("\n");
 
     return {
-      traLoi: `Dưới đây là bảng so sánh điểm chuẩn 3 năm gần đây (2022, 2023, 2024) và mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Xu hướng biến động**: Điểm chuẩn 3 năm liên tiếp phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
+      traLoi: `Dưới đây là bảng so sánh điểm chuẩn các năm gần đây (2023, 2024, 2025 và dự kiến 2026) cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
       nguon: sk.map((l) => l.id),
     };
   }
