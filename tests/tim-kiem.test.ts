@@ -1,51 +1,86 @@
+// Tìm kiếm ngành/trường: có dấu hay không dấu, viết tắt, biệt danh, khớp theo từng từ. Chạy: npx tsx tests/tim-kiem.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
-import { khopTuKhoa, boDau, chuanHoaTuKhoa } from "../src/features/kham-pha/tim-kiem";
+import { hangTimKiem, khongDau, locTimKiem, tuCuaTruyVan, xepHangTimKiem } from "../src/engine/tim-kiem";
 
-console.log("--- Bắt đầu kiểm thử Tìm kiếm thông minh (tim-kiem) ---");
+const truongCua = (q: string) => new Set(locTimKiem(LUA_CHON_MAU, q).map((l) => l.maTruong));
+const ids = (q: string) => locTimKiem(LUA_CHON_MAU, q).map((l) => l.id).sort().join(",");
 
-// Test 1: Bỏ dấu tiếng Việt
-assert.equal(boDau("Đại Học Công Nghệ"), "dai hoc cong nghe");
-assert.equal(boDau("Bách Khoa"), "bach khoa");
-assert.equal(boDau("Sư phạm Kỹ thuật"), "su pham ky thuat");
-console.log("✓ Test 1: boDau hoạt động chính xác");
+assert.equal(khongDau("Đại học Công nghệ - ĐHQG TP.HCM"), "dai hoc cong nghe dhqg tp hcm");
+assert.deepEqual(tuCuaTruyVan("Trường Đại học Kinh tế"), ["dh", "kt"]);
+assert.equal(locTimKiem(LUA_CHON_MAU, "   ").length, LUA_CHON_MAU.length, "ô trống thì không lọc");
 
-// Test 2: Chuẩn hóa từ khóa
-assert.equal(chuanHoaTuKhoa("đại học bách khoa"), "đh bách khoa");
-assert.equal(chuanHoaTuKhoa("học viện bưu chính"), "hv bưu chính");
-assert.equal(chuanHoaTuKhoa("công nghệ thông tin"), "cntt");
-console.log("✓ Test 2: chuanHoaTuKhoa hoạt động chính xác");
+// 1) "đại học công nghệ" phải ra ĐH Công nghệ (UET), ĐH Công nghệ Thông tin (UIT), ĐH Công nghệ TP.HCM (HUTECH)
+{
+  const t = truongCua("đại học công nghệ");
+  for (const ma of ["QHI", "QSC", "DKC"]) assert.ok(t.has(ma), `đại học công nghệ phải có ${ma}`);
+  assert.ok(t.size >= 3);
+  assert.equal(ids("đại học công nghệ"), ids("dai hoc cong nghe"), "có dấu và không dấu như nhau");
+  assert.equal(ids("trường ĐH công nghệ"), ids("đại học công nghệ"), "trường ĐH ~ đại học");
+}
 
-// Test 3: Tìm kiếm "đại học công nghệ"
-const kqDaiHocCongNghe = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "đại học công nghệ"));
-assert.ok(kqDaiHocCongNghe.length > 50, `Phải tìm thấy nhiều hơn 50 ngành, thực tế: ${kqDaiHocCongNghe.length}`);
-// Phải chứa QSC (ĐH Công nghệ Thông tin) và QHI (ĐH Công nghệ - ĐHQGHN)
-assert.ok(kqDaiHocCongNghe.some((l) => l.truong === "QSC"), "Phải có trường ĐH Công nghệ Thông tin (QSC)");
-assert.ok(kqDaiHocCongNghe.some((l) => l.truong === "QHI"), "Phải có trường ĐH Công nghệ ĐHQGHN (QHI)");
-console.log(`✓ Test 3: "đại học công nghệ" tìm thấy ${kqDaiHocCongNghe.length} ngành (gồm cả QSC, QHI)`);
+// 2) Không dấu = có dấu
+{
+  assert.ok(locTimKiem(LUA_CHON_MAU, "dai hoc kinh te").length > 0);
+  assert.equal(ids("dai hoc kinh te"), ids("đại học kinh tế"));
+  assert.equal(ids("dh kt"), ids("đại học kinh tế"), "viết tắt dh kt");
+  assert.ok(truongCua("dai hoc kinh te").has("QHE"), "ĐH Kinh tế - ĐHQGHN");
+}
 
-// Test 4: Tìm kiếm không dấu "dai hoc cong nghe"
-const kqKhongDau = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "dai hoc cong nghe"));
-assert.ok(kqKhongDau.length > 50, `Tìm kiếm không dấu phải tương đương có dấu: ${kqKhongDau.length}`);
-console.log(`✓ Test 4: "dai hoc cong nghe" (không dấu) tìm thấy ${kqKhongDau.length} ngành`);
+// 3) Biệt danh và mã trường
+// "uit" chỉ ra UIT (QSC); chương trình liên kết có chữ "UITM" (GTA) chỉ ra khi gõ "uitm".
+{
+  const uit = locTimKiem(LUA_CHON_MAU, "uit");
+  assert.deepEqual([...truongCua("uit")], ["QSC"], "uit không dính uitm");
+  assert.equal(uit.length, LUA_CHON_MAU.filter((l) => l.maTruong === "QSC").length);
+  assert.ok(locTimKiem(LUA_CHON_MAU, "uitm").every((l) => /uitm/i.test(l.nganh)) && locTimKiem(LUA_CHON_MAU, "uitm").length > 0);
+  // từ ngắn phải trùng nguyên từ: "an" không dính "anh", "quản"...
+  assert.ok(locTimKiem(LUA_CHON_MAU, "kt").every((l) => /kinh t|KT/i.test(`${l.tenTruong} ${l.nganh} ${l.nhomNganh}`)));
+}
+assert.deepEqual([...truongCua("UET")], ["QHI"]);
+assert.deepEqual([...truongCua("qsc")], ["QSC"]);
+assert.ok(truongCua("hust").has("BKA"));
+assert.ok(truongCua("ftu").has("NTH"));
+assert.ok(truongCua("neu").has("KHA"));
 
-// Test 5: Tìm theo biệt danh / tên viết tắt trường (UET, UIT, HUST, NEU, FTU...)
-const kqUET = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "uet"));
-assert.ok(kqUET.length > 0 && kqUET.every((l) => l.truong === "QHI"), "UET phải ra toàn bộ ngành của ĐH Công nghệ - ĐHQGHN");
+// 4) Khớp theo từng từ, từ nằm ở trường khác nhau của bản ghi
+{
+  const bk = locTimKiem(LUA_CHON_MAU, "bách khoa cntt");
+  assert.ok(bk.length > 0, "bách khoa cntt");
+  assert.ok(bk.every((l) => /bách khoa/i.test(l.tenTruong) && /thông tin|CNTT/i.test(`${l.nganh} ${l.nhomNganh}`)), "đúng trường Bách Khoa và ngành CNTT");
+  assert.ok(locTimKiem(LUA_CHON_MAU, "cntt qsc").every((l) => l.maTruong === "QSC"));
+  assert.ok(locTimKiem(LUA_CHON_MAU, "cong ngh").length > 0, "đang gõ dở vẫn ra");
+  assert.ok(locTimKiem(LUA_CHON_MAU, "học viện công nghệ").some((l) => l.maTruong === "BVH"));
+}
 
-const kqUIT = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "uit"));
-assert.ok(kqUIT.filter((l) => l.truong === "QSC").length >= 13, "UIT phải ra toàn bộ ngành của ĐH Công nghệ Thông tin (QSC)");
+// 5) TP.HCM viết kiểu nào cũng ra
+{
+  const a = ids("tp.hcm"), b = ids("tphcm"), c = ids("thành phố hồ chí minh"), d = ids("hcm");
+  assert.ok(a.length > 0 && a === b && b === c && c === d, "tp.hcm = tphcm = thành phố hồ chí minh = hcm");
+}
 
-const kqHUST = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "hust"));
-assert.ok(kqHUST.length > 0 && kqHUST.some((l) => l.truong === "BKA"), "HUST phải ra toàn bộ ngành của ĐH Bách Khoa Hà Nội");
+// 6) Không có gì thì 0, và nới từ chung chỉ khi cần
+assert.equal(locTimKiem(LUA_CHON_MAU, "xyzzyk").length, 0);
+assert.ok(locTimKiem(LUA_CHON_MAU, "đại học sư phạm").length > 0);
+assert.ok(locTimKiem(LUA_CHON_MAU, "dai hoc ngoai thuong").some((l) => l.maTruong === "NTH"));
 
-const kqNEU = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "neu"));
-assert.ok(kqNEU.length > 0 && kqNEU.some((l) => l.truong === "KHA"), "NEU phải ra toàn bộ ngành của ĐH Kinh tế Quốc dân");
-console.log("✓ Test 5: Tìm kiếm theo tên viết tắt (UET, UIT, HUST, NEU) thành công 100%");
+// 7) Biệt danh phổ biến của các trường có trong dữ liệu
+{
+  const aliasChuan: Record<string, string> = { ussh: "QHX", hcmus: "QST", hcmute: "SPK", hcmue: "SPS", ptit: "BVH", haui: "DCN", ctu: "TCT", hnue: "SPH", ump: "YDS", hutech: "DKC", sgu: "SGD", iuh: "IUH", vlu: "DVL", uef: "UEF", tdmu: "TDM", dut: "DDK", hanu: "NHF", hmu: "YHB", tlu: "TLA", vnua: "HVN" };
+  for (const [q, ma] of Object.entries(aliasChuan)) assert.ok(truongCua(q).has(ma), `${q} phải ra ${ma}`);
+}
 
-// Test 6: Tìm kiếm đa từ (bách khoa cntt)
-const kqBkhnCntt = LUA_CHON_MAU.filter((l) => khopTuKhoa(l, "bách khoa cntt"));
-assert.ok(kqBkhnCntt.length > 0, "Phải tìm thấy ngành CNTT tại các trường Bách Khoa");
-console.log(`✓ Test 6: Tìm kiếm tổ hợp "bách khoa cntt" tìm thấy ${kqBkhnCntt.length} ngành`);
+// 8) Xếp hạng: mã/biệt danh hoặc cụm liền nhau trong tên lên trước, rồi mới tới khớp rời; cùng mức giữ thứ tự đầu vào
+{
+  const kq = locTimKiem(LUA_CHON_MAU, "kinh te qhe");
+  assert.ok(kq.length > 0 && kq[0].maTruong === "QHE");
+  const ds = locTimKiem(LUA_CHON_MAU, "cong nghe thong tin");
+  const hang = ds.map((l) => hangTimKiem(l, "cong nghe thong tin"));
+  assert.ok(hang.every((h, i) => i === 0 || hang[i - 1] >= h), "hạng giảm dần");
+  const dao = [...LUA_CHON_MAU].reverse();
+  const a = xepHangTimKiem(LUA_CHON_MAU.filter((l) => l.maTruong === "QSC"), "qsc").map((l) => l.id);
+  assert.deepEqual(a, LUA_CHON_MAU.filter((l) => l.maTruong === "QSC").map((l) => l.id), "cùng hạng thì giữ thứ tự");
+  assert.ok(dao.length === LUA_CHON_MAU.length);
+}
 
-console.log("🎉 TẤT CẢ KIỂM THỬ TÌM KIẾM THÔNG MINH ĐỀU ĐẠT 100%!");
+console.log("tim-kiem: tất cả kiểm tra đều qua");

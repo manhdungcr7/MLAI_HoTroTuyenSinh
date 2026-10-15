@@ -6,7 +6,7 @@ import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { tim } from "@/data/lua-chon-mau";
-import { goiYDanhSach } from "@/features/nguyen-vong/goi-y-danh-sach";
+import { goiYDanhSach, moNeoNV1 } from "@/features/nguyen-vong/goi-y-danh-sach";
 import { DUONG_DAN } from "@/duong-dan";
 import { homNay } from "@/state/chon";
 import { useLuuCucBo } from "@/state/luu-cuc-bo";
@@ -55,7 +55,7 @@ export default function DiemThiThu() {
     if (!doi.length) return setBao({ tone: "cam", chu: "Điểm chưa thay đổi so với lần trước, nên chưa có gì để cập nhật." });
     const coNv = s.nguyenVong.length > 0;
     // Chưa có nguyện vọng thì so trên 8 ngành mình gợi ý theo điểm mới (không phải cả danh mục, để kết quả gọn và đọc được).
-    const lcs = coNv ? s.nguyenVong.map(tim).filter((l): l is LuaChon => !!l) : goiYDanhSach({ ...diemSau, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...s.hoSo.diemThem }, s.hoSo).map((d) => d.lc);
+    const lcs = coNv ? s.nguyenVong.map(tim).filter((l): l is LuaChon => !!l) : goiYDanhSach({ ...diemSau, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...s.hoSo.diemThem }, s.hoSo, [], undefined, moNeoNV1(s)).map((d) => d.lc);
     datAnh(chupTruocSau({
       lcs, nguon: coNv ? "nguyenVong" : "goiY", diemTruoc, diemSau, maToHop: maMucTieu, toHop: toHopMucTieu,
       dk: dieuKienTuHoSo(s.hoSo), luc: new Date().toISOString(), them: s.hoSo.diemThem,
@@ -81,7 +81,7 @@ export default function DiemThiThu() {
               const loi = doc[mon].loi, gia = doc[mon].gia, truoc = diemTruoc[mon];
               const doi = !loi && gia !== null && gia !== truoc;
               return (
-                <div key={mon} className={gop("rounded-the bg-trang border p-3 shadow-the", loi ? "border-do" : doi ? "border-luc/50" : "border-vien")}>
+                <div key={mon} className={gop("rounded-the bg-trang border p-3 shadow-the", loi ? "border-do" : doi ? "border-luc" : "border-vien")}>
                   <label htmlFor={`dtt-${mon}`} className="flex items-center gap-2 mb-2">
                     <BieuTuongTron icon={icon} tone={tone} kichThuoc={32} />
                     <span className="text-[14px] font-bold text-chu leading-tight">{TEN_MON[mon]}{neuCo && <span className="block text-[12px] font-semibold text-chu-phu">nếu có</span>}</span>
@@ -145,11 +145,11 @@ export default function DiemThiThu() {
                   </span>
                   {xoaDang === i ? (
                     <span className="flex items-center gap-1.5">
-                      <button type="button" onClick={() => { xoaDiemThi(i); setXoaDang(null); }} className="min-h-10 rounded-lg bg-do-nhat px-3 text-[13px] font-bold text-do-chu active:brightness-95">Xóa lần này</button>
-                      <button type="button" onClick={() => setXoaDang(null)} className="min-h-10 rounded-lg border border-vien px-3 text-[13px] font-semibold text-chu">Giữ lại</button>
+                      <button type="button" onClick={() => { xoaDiemThi(i); setXoaDang(null); }} className="min-h-11 rounded-lg bg-do-nhat px-3 text-[13px] font-bold text-do-chu active:brightness-95">Xóa lần này</button>
+                      <button type="button" onClick={() => setXoaDang(null)} className="min-h-11 rounded-lg border border-vien px-3 text-[13px] font-semibold text-chu">Giữ lại</button>
                     </span>
                   ) : (
-                    <button type="button" onClick={() => setXoaDang(i)} aria-label={`Xóa lần thi thử ${TEN_MON[d.mon]} ngày ${ngayVN(d.ngay)}`} className="min-h-10 rounded-lg border border-vien px-3 text-[13px] font-semibold text-do-chu active:bg-do-nhat">Xóa</button>
+                    <button type="button" onClick={() => setXoaDang(i)} aria-label={`Xóa lần thi thử ${TEN_MON[d.mon]} ngày ${ngayVN(d.ngay)}`} className="min-h-11 min-w-11 rounded-lg border border-vien px-3 text-[13px] font-semibold text-do-chu active:bg-do-nhat">Xóa</button>
                   )}
                 </li>
               ))}

@@ -39,6 +39,9 @@ export default function HomNay() {
         {m ? (
           <>
             <TheMucTieu m={m} thieuMon={thieuMon} ngayThi={s.mucTieu?.ngayThi} onClick={() => nav(DUONG_DAN.mucTieu())} />
+            {nv.ok && s.mucTieu && nv.lc.id !== s.mucTieu.luaChonId && (
+              <DongThongBao tone="cam" icon={Target} tieuDe="NV1 đã khác mục tiêu" moTa={`NV1 hiện là ${nv.lc.nganh} (${nv.lc.truong}). Bấm để đặt làm mục tiêu và tính lại khoảng cách.`} onClick={() => datMucTieu(nv.mucTieu)} />
+            )}
             {thieuMon.length > 0 && (
               <button type="button" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} className="w-full min-h-12 rounded-xl bg-cam-nhat px-3 text-left text-[13px] text-chu active:brightness-95">
                 Thiếu điểm <b>{thieuMon.join(", ")}</b> · <b className="text-xanh">Nhập điểm</b>

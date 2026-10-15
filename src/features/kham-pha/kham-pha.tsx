@@ -15,7 +15,8 @@ import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapX
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
 import { NutTuVan } from "@/features/tu-van/tu-van";
 import { dinhDang } from "@/engine/dinh-dang";
-import { khopTuKhoa, diemLienQuan } from "./tim-kiem";
+import { locTimKiem, xepHangTimKiem } from "@/engine/tim-kiem";
+import { hieuCauTim, locTheoY, xepTheoY } from "@/engine/hieu-cau-tim";
 
 /** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để bạn mở ra thấy trống. */
 function boLocBanDau(khuVuc: string | undefined, nganh: string[]): [string | undefined, string | undefined] {
@@ -37,39 +38,23 @@ export default function KhamPha() {
   const [chiHienYeuThich, setChiHienYeuThich] = useState(false);
   const bc = useMemo(() => boiCanhTu(s), [s]);
 
+  const y = useMemo(() => hieuCauTim(tuKhoa, LUA_CHON_MAU), [tuKhoa]); // câu dài kiểu "ngân hàng sài gòn dưới 30 triệu" → bộ lọc + từ khóa còn lại
   const { ds, moRongToanQuoc } = useMemo(() => {
-    const k = tuKhoa.trim();
-    if (!k) {
-      const daLoc = loc(LUA_CHON_MAU, b, bc.tinh || undefined)
-        .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)));
-      return { ds: sapXep(daLoc, kieu, bc), moRongToanQuoc: false };
+    const tim = (nguon: typeof LUA_CHON_MAU) => {
+      const daLoc = locTimKiem(locTheoY(nguon.filter((l) => !chiHienYeuThich || s.yeuThich.includes(l.id)), y), y.tuKhoaConLai);
+      // khớp mã/biệt danh/tên lên trước, cùng mức thì theo kiểu sắp xếp đã chọn; phần "đã hiểu" (nghề, mốc điểm) xếp trên cùng
+      return xepTheoY(xepHangTimKiem(sapXep(daLoc, kieu, bc), y.tuKhoaConLai), y);
+    };
+    const trongLoc = tim(loc(LUA_CHON_MAU, b, bc.tinh || undefined));
+    // Bộ lọc khu vực/điểm/học phí làm mất kết quả của từ khóa: tìm toàn quốc để không bị cụt đường
+    if (trongLoc.length === 0 && tuKhoa.trim()) {
+      const toanQuoc = tim(LUA_CHON_MAU);
+      if (toanQuoc.length > 0) return { ds: toanQuoc, moRongToanQuoc: true };
     }
-
-    // 1. Tìm trong bộ lọc hiện tại
-    const daLoc = loc(LUA_CHON_MAU, b, bc.tinh || undefined)
-      .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)))
-      .filter((l) => khopTuKhoa(l, k));
-
-    if (daLoc.length > 0) {
-      const sx = sapXep(daLoc, kieu, bc);
-      sx.sort((a, b) => diemLienQuan(b, k) - diemLienQuan(a, k));
-      return { ds: sx, moRongToanQuoc: false };
-    }
-
-    // 2. Nếu bộ lọc khu vực / điểm / học phí làm mất kết quả:
-    // Tự động tìm kiếm trên toàn quốc để không bị 0 ngành gây cụt đường
-    const toanQuoc = LUA_CHON_MAU
-      .filter((l) => (!chiHienYeuThich || s.yeuThich.includes(l.id)))
-      .filter((l) => khopTuKhoa(l, k));
-
-    if (toanQuoc.length > 0) {
-      const sx = sapXep(toanQuoc, kieu, bc);
-      sx.sort((a, b) => diemLienQuan(b, k) - diemLienQuan(a, k));
-      return { ds: sx, moRongToanQuoc: true };
-    }
-
-    return { ds: [], moRongToanQuoc: false };
-  }, [b, tuKhoa, kieu, bc, chiHienYeuThich, s.yeuThich]);
+    return { ds: trongLoc, moRongToanQuoc: false };
+  }, [b, y, tuKhoa, kieu, bc, chiHienYeuThich, s.yeuThich]);
+  const dangTim = tuKhoa.trim().length > 0;
+  const soNeuTatLoc = 0; // đã tự mở rộng toàn quốc khi bộ lọc che hết kết quả
   const coHoi = useMemo(() => tinhCoHoi(bc.diem), [bc.diem]);
   const hien = useMemo(() => ds.slice(0, soHien).map((l) => ({ l, kq: danhGia(l, bc) })), [ds, soHien, bc]);
 
@@ -99,6 +84,12 @@ export default function KhamPha() {
             {soLoc > 0 && <span className="min-w-5 h-5 px-1 rounded-full gd-xanh text-white text-[11px] grid place-items-center">{soLoc}<span className="sr-only"> bộ lọc đang bật</span></span>}
           </button>
         </div>
+
+        {y.chip.length > 0 && (
+          <p className="-mt-1 text-[13px] text-chu-phu" role="status">
+            <span className="text-xanh font-semibold">✨ Đã hiểu:</span> {y.chip.join(" · ")}{y.tuKhoaConLai && <> · Từ khóa «{y.tuKhoaConLai}»</>}
+          </p>
+        )}
 
         <div className="overflow-x-auto an-thanh-cuon -mx-4 px-4 py-0.5" role="group" aria-label="Nhóm ngành">
           <div className="flex gap-2 w-max">
@@ -131,7 +122,7 @@ export default function KhamPha() {
           </div>
         </div>
 
-        {coHoi && (
+        {coHoi && !dangTim && (
           <section aria-label="Cơ hội của bạn" className="rounded-the nen-xanh p-3.5">
             <p className="text-[13px] font-bold text-xanh">Với điểm của bạn</p>
             <p className="mt-0.5 text-[15px] text-chu leading-snug">
@@ -149,7 +140,7 @@ export default function KhamPha() {
           </section>
         )}
 
-        {(!coDiemDeSo(bc) || !s.hoSo.soThich) && (
+        {!dangTim && (!coDiemDeSo(bc) || !s.hoSo.soThich) && (
           <div className="-mx-4 px-4 overflow-x-auto an-thanh-cuon">
             <div className="flex gap-2 w-max pb-1">
               {!coDiemDeSo(bc) && (
@@ -190,13 +181,27 @@ export default function KhamPha() {
         )}
 
         {ds.length === 0 ? (
-          <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Chưa có trường nào khớp"
-            moTa={tuKhoa ? `Không tìm thấy “${tuKhoa.trim()}” trong các tiêu chí đang chọn. Thử từ khác hoặc nới bộ lọc nhé.` : "Thử nới bớt các tiêu chí lọc nhé."}>
-            <div className="space-y-2">
-              <Nut kieu="nhe" onClick={() => { datLai(); setTuKhoa(""); }}>Xóa bộ lọc và từ khóa</Nut>
-              <Nut kieu="vien" onClick={() => nav(DUONG_DAN.boLoc())}>Chỉnh bộ lọc</Nut>
-            </div>
-          </TrangThaiTrong>
+          dangTim && soNeuTatLoc > 0 && soLoc > 0 ? (
+            <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Bộ lọc đang che kết quả"
+              moTa={`Không có ngành nào khớp đồng thời từ khóa «${tuKhoa.trim()}» và bộ lọc đang bật (còn ${soNeuTatLoc} ngành nếu tắt bộ lọc).`}>
+              <div className="space-y-2">
+                <Nut onClick={() => datLai()}>Xóa bộ lọc để xem {soNeuTatLoc} ngành</Nut>
+                <Nut kieu="vien" onClick={() => nav(DUONG_DAN.boLoc())}>Chỉnh bộ lọc</Nut>
+              </div>
+            </TrangThaiTrong>
+          ) : dangTim ? (
+            <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Không tìm thấy"
+              moTa={`Không tìm thấy ngành/trường khớp với «${tuKhoa.trim()}». Thử tên khác, viết tắt (ví dụ UIT, CNTT) hoặc gõ không dấu.`}>
+              <Nut kieu="vien" onClick={() => setTuKhoa("")}>Xóa tìm kiếm</Nut>
+            </TrangThaiTrong>
+          ) : (
+            <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Chưa có trường nào khớp" moTa="Thử nới bớt các tiêu chí lọc nhé.">
+              <div className="space-y-2">
+                <Nut kieu="nhe" onClick={() => datLai()}>Xóa bộ lọc</Nut>
+                <Nut kieu="vien" onClick={() => nav(DUONG_DAN.boLoc())}>Chỉnh bộ lọc</Nut>
+              </div>
+            </TrangThaiTrong>
+          )
         ) : (
           <>
             <ul className="space-y-3">
