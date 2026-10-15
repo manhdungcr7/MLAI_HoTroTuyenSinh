@@ -3,10 +3,17 @@
 // chứa câu bạn tự gõ. Chỉ khi bạn tự bật "Kèm lịch sử trò chuyện" ở Cài đặt thì tệp mới mang theo (`lichSuChat`, được
 // lamSachLichSu kiểm khi khôi phục). Khóa `nvai:*` nên "Xóa hết", "Hồ sơ mẫu", "Khôi phục" đều xóa nó rồi (nếu tệp có)
 // nạp lại lịch sử từ tệp, vì vậy hội thoại của hồ sơ mẫu không lẫn sang hồ sơ thật.
-import { GIOI_HAN } from "@/engine/tu-van";
+import { GIOI_HAN, LOAI_HANH_DONG, TRANG_THAI_DU_LIEU, type HanhDongDeXuat, type TrangThaiDuLieu } from "@/engine/tu-van";
 
 export const KHOA_CHAT = "nvai:tu-van-chat";
 export const TOI_DA_TIN = 30;
+
+/** Trường đề xuất trong câu trả lời, vẽ thành thẻ. `id` là chương trình liên quan (nếu có), `muc` cho biết đúng ngành hay chỉ gần nghĩa. */
+export interface TheTruong { ma: string; id?: string; muc?: "chinh-xac" | "lien-quan" }
+/** Nút trả lời nhanh: bấm là gửi `cau` như bạn gõ. */
+export interface LuaChonNhanh { nhan: string; cau: string }
+/** Câu bot vừa hỏi lại và đang chờ: để câu trả lời ngắn của bạn ("23") được hiểu đúng. */
+export interface ChoTraLoi { y: "co-hoi-diem"; id: string }
 
 export interface TinNhan {
   vai: "em" | "mayChu";
@@ -18,12 +25,38 @@ export interface TinNhan {
   viecTiep?: string;
   /** Mã các ngành đã gửi kèm ở lượt này (ghi trên tin của máy), để câu nối tiếp giữ đúng ngành. */
   idDuLieu?: string[];
+  /** Trường đề xuất (thẻ), tối đa 12; hiện 3 thẻ đầu, còn lại sau nút "Xem thêm". */
+  the?: TheTruong[];
+  /** Hành động đã xác thực từ máy chủ hoặc từ bộ trả lời tự động (chỉ chứa mã có thật). */
+  hanhDong?: HanhDongDeXuat[];
+  /** Một câu hỏi lại ngắn khi thiếu thông tin. */
+  hoiLai?: string;
+  luaChon?: LuaChonNhanh[];
+  trangThaiDuLieu?: TrangThaiDuLieu;
+  cho?: ChoTraLoi;
   /** Tin tự động do lỗi mạng/hết giờ (không phải do chưa bật AI): cho phép "Thử lại". */
   thuLai?: boolean;
 }
 
 const ds = (x: unknown, n: number, dai: number): string[] | undefined =>
   Array.isArray(x) ? x.filter((t): t is string => typeof t === "string").slice(0, n).map((t) => t.slice(0, dai)) : undefined;
+
+const mangDoiTuong = (x: unknown): Record<string, unknown>[] => (Array.isArray(x) ? x.filter((e): e is Record<string, unknown> => !!e && typeof e === "object") : []);
+export const lamSachThe = (x: unknown): TheTruong[] => mangDoiTuong(x).slice(0, 12).flatMap((e) => (typeof e.ma === "string" && e.ma ? [{
+  ma: e.ma.slice(0, 12), ...(typeof e.id === "string" ? { id: e.id.slice(0, 40) } : {}), ...(e.muc === "chinh-xac" || e.muc === "lien-quan" ? { muc: e.muc } : {}),
+}] : []));
+const lamSachLuaChon = (x: unknown): LuaChonNhanh[] => mangDoiTuong(x).slice(0, 6).flatMap((e) => (typeof e.nhan === "string" && typeof e.cau === "string" && e.nhan && e.cau ? [{ nhan: e.nhan.slice(0, 60), cau: e.cau.slice(0, 200) }] : []));
+export const lamSachHanhDong = (x: unknown): HanhDongDeXuat[] => mangDoiTuong(x).slice(0, 3).flatMap((e) => {
+  if (!(LOAI_HANH_DONG as readonly unknown[]).includes(e.loai) || typeof e.nhan !== "string" || !e.nhan) return [];
+  const ids = Array.isArray(e.ids) ? e.ids.filter((i): i is string => typeof i === "string").slice(0, 3).map((i) => i.slice(0, 40)) : undefined;
+  return [{
+    loai: e.loai as HanhDongDeXuat["loai"], nhan: e.nhan.slice(0, 40),
+    ...(typeof e.maTruong === "string" ? { maTruong: e.maTruong.slice(0, 12) } : {}),
+    ...(typeof e.idChuongTrinh === "string" ? { idChuongTrinh: e.idChuongTrinh.slice(0, 40) } : {}),
+    ...(ids?.length ? { ids } : {}),
+    ...(e.canXacNhan === true ? { canXacNhan: true } : {}),
+  }];
+});
 
 /** Đọc lịch sử từ dữ liệu thô; bỏ mọi tin sai hình dạng, chỉ giữ TOI_DA_TIN tin gần nhất. */
 export function lamSachLichSu(x: unknown): TinNhan[] {
@@ -42,6 +75,13 @@ export function lamSachLichSu(x: unknown): TinNhan[] {
       if (typeof o.viecTiep === "string") t.viecTiep = o.viecTiep.slice(0, 300);
       const id = ds(o.idDuLieu, 12, 40); if (id) t.idDuLieu = id;
       if (o.thuLai === true) t.thuLai = true;
+      const the = lamSachThe(o.the); if (the.length) t.the = the;
+      const hd = lamSachHanhDong(o.hanhDong); if (hd.length) t.hanhDong = hd;
+      if (typeof o.hoiLai === "string" && o.hoiLai.trim()) t.hoiLai = o.hoiLai.trim().slice(0, 200);
+      const lc = lamSachLuaChon(o.luaChon); if (lc.length) t.luaChon = lc;
+      if ((TRANG_THAI_DU_LIEU as readonly unknown[]).includes(o.trangThaiDuLieu)) t.trangThaiDuLieu = o.trangThaiDuLieu as TrangThaiDuLieu;
+      const ch = o.cho as Record<string, unknown> | undefined;
+      if (ch && ch.y === "co-hoi-diem" && typeof ch.id === "string") t.cho = { y: "co-hoi-diem", id: ch.id.slice(0, 40) };
     }
     r.push(t);
   }

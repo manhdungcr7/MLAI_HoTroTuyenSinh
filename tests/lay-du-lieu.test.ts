@@ -172,3 +172,6 @@ console.log("OK lay-du-lieu", dem);
     if (l?.hocPhiMin !== undefined) assert.ok(l.hocPhiMin <= 30, `gửi AI ngành vượt 30 triệu: ${d.id} ${l.hocPhiMin}`);
   }
 }
+
+// Phần hiểu ý định của chat (tỉnh, tên trường, điểm, hành động) nằm ở file riêng, nạp luôn ở đây.
+await import("./tu-van-chat.test");

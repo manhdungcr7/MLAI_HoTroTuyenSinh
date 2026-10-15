@@ -124,4 +124,12 @@ assert.ok(dl.length > 0 && !JSON.stringify(dl).includes(mau.hoSo.hoTen));
   assert.ok(n.ok && n.v.nguCanh === undefined);
   assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 11, "đủ 11 quy tắc (10: NV1 làm gốc, 11: hỏi lại đúng một câu)");
 }
+// 6) Trả lời tự động hiểu địa danh và tên trường (chi tiết ở tests/tu-van-chat.test.ts)
+{
+  const vl = traLoiTuDong("Ở Vĩnh Long có trường nào dạy CNTT?", mau, null);
+  assert.ok(vl.the?.length && vl.the.every((x) => ["DTV", "DCL"].includes(x.ma)), "Vĩnh Long gồm Trà Vinh, không khớp mờ sang Long An hay Vĩnh Phúc");
+  assert.ok(traLoiTuDong("DTL là trường gì?", mau, null).traLoi.includes("Thăng Long"));
+  assert.ok(traLoiTuDong("bk là trường gì?", mau, null).hoiLai, "mã mơ hồ thì hỏi lại");
+  assert.ok(traLoiTuDong("Em có cơ hội đỗ không?", mau, null).hoiLai, "thiếu trường và ngành thì hỏi một câu");
+}
 console.log("tu-van: tất cả kiểm tra đều qua");

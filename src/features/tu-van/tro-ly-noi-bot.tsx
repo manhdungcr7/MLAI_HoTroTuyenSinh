@@ -1,50 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  Bot, CalendarCheck, Check, Maximize2, RotateCcw, Send, X,
-} from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Bot, Maximize2, RotateCcw, Send, X } from "lucide-react";
 import { gop } from "@/components/ui/nut-the";
-import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { DUONG_DAN } from "@/duong-dan";
-import type { TraLoiTuVan, YeuCauTuVan } from "@/engine/tu-van";
-import { GIOI_HAN } from "@/engine/tu-van";
-import { phanTichMoNeo, tomTatMoNeoChoAI } from "@/features/nguyen-vong/mo-neo";
-import { useApp, type AppState } from "@/state/store";
+import { useApp } from "@/state/store";
+import { layTinTraLoi } from "./cau-tra-loi";
 import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
-import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, nganhLuotTruoc, taoNguCanh, type TinNhan } from "./hoi-thoai";
-import { chonDuLieuKemTheo, tomTatHoSo, traLoiTuDong } from "./lay-du-lieu";
+import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, type TinNhan } from "./hoi-thoai";
+import { TinMayChu } from "./thanh-phan/tin-may-chu";
 import { DinhDangMarkdown } from "@/components/ui/dinh-dang-markdown";
 
-function nguCanhVoiNV1(manHinh: string, truoc: TinNhan[], s: AppState): string {
-  const nv1 = tomTatMoNeoChoAI(phanTichMoNeo(s));
-  if (!nv1) return taoNguCanh(manHinh, truoc);
-  return `${nv1}\n${taoNguCanh(manHinh, truoc, Math.max(60, GIOI_HAN.nguCanh - nv1.length - 1))}`.slice(0, GIOI_HAN.nguCanh);
-}
-
-const CHO_TOI_DA_MS = 25_000;
-type LoiAI = "chua-cau-hinh" | "mang";
-
-async function hoiAI(y: YeuCauTuVan): Promise<{ kq: TraLoiTuVan | null; viecTiep?: string; loi?: LoiAI }> {
-  try {
-    const r = await fetch("/api/tu-van", {
-      method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify(y), signal: AbortSignal.timeout(CHO_TOI_DA_MS),
-    });
-    const d = (await r.json().catch(() => ({}))) as Partial<TraLoiTuVan> & { goiY?: { viecTiep?: string } };
-    if (!r.ok) return { kq: null, viecTiep: typeof d.goiY?.viecTiep === "string" ? d.goiY.viecTiep : undefined, loi: r.status === 503 ? "chua-cau-hinh" : "mang" };
-    const ds = (x: unknown) => (Array.isArray(x) ? x.filter((t): t is string => typeof t === "string") : []);
-    return typeof d.traLoi === "string" && d.traLoi
-      ? { kq: { traLoi: d.traLoi, nguon: ds(d.nguon), tang: d.tang, congDong: ds(d.congDong), viecTiep: typeof d.viecTiep === "string" ? d.viecTiep : undefined } }
-      : { kq: null, loi: "mang" };
-  } catch { return { kq: null, loi: "mang" }; }
-}
-
-/** Khung chat mini nổi ở góc màn hình giống phong cách các website thương mại */
+/** Khung chat mini nổi ở góc màn hình giống phong cách các website thương mại. Dùng chung logic trả lời với màn Tư vấn (cau-tra-loi.ts). */
 function KhungChatMini({ dong }: { dong: () => void }) {
   const { pathname } = useLocation();
   const nav = useNavigate();
-  const { s, themNguyenVong } = useApp();
+  const { s } = useApp();
 
   const manHinh = pathname.startsWith("/kham-pha/")
     ? "Chi tiết ngành học"
@@ -116,13 +87,6 @@ function KhungChatMini({ dong }: { dong: () => void }) {
     return () => clearTimeout(h);
   }, [dang]);
 
-  const dungYeuCau = (q: string, truoc: TinNhan[]): YeuCauTuVan => ({
-    cauHoi: q,
-    nguCanh: nguCanhVoiNV1(manHinh, truoc, s),
-    hoSo: dungHoSo ? tomTatHoSo(s) : null,
-    duLieu: chonDuLieuKemTheo(q, s, nguon, 8, nganhLuotTruoc(truoc)),
-  });
-
   const gui = async (q: string, thay?: number) => {
     const cau = q.trim();
     if (cau.length < 3 || dangRef.current) return;
@@ -130,15 +94,7 @@ function KhungChatMini({ dong }: { dong: () => void }) {
     setDang(true);
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
-    const y = dungYeuCau(cau, truoc);
-    const idDuLieu = y.duLieu.map((d) => d.id);
-
-    await guiNen(localStorage, cau, truoc, async () => {
-      const { kq: ai, viecTiep, loi } = await hoiAI(y);
-      if (ai) return { vai: "mayChu", chu: ai.traLoi, nguon: ai.nguon, cheDo: "ai", tang: ai.tang, congDong: ai.congDong, viecTiep: ai.viecTiep, idDuLieu };
-      const td = traLoiTuDong(cau, s, nguon, nganhLuotTruoc(truoc));
-      return { vai: "mayChu", chu: td.traLoi, nguon: td.nguon, cheDo: "tuDong", viecTiep, idDuLieu, ...(loi === "mang" ? { thuLai: true } : {}) };
-    });
+    await guiNen(localStorage, cau, truoc, () => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh }));
   };
 
   const goiY = goiYBanDau({ soNguyenVong: s.nguyenVong.length, nganhQuanTam: s.hoSo.nganhQuanTam });
@@ -242,58 +198,8 @@ function KhungChatMini({ dong }: { dong: () => void }) {
                   <DinhDangMarkdown noiDung={t.chu} />
                 )}
                 {t.vai === "mayChu" && (
-                  <>
-                    {t.nguon && t.nguon.length > 0 && (
-                      <div className="mt-2.5 space-y-1.5 border-t border-vien/60 pt-2" role="group" aria-label="Nguồn số liệu và hành động">
-                        <p className="text-[11.5px] font-bold text-chu-phu">Các ngành liên quan:</p>
-                        <ul className="space-y-1.5">
-                          {t.nguon.map((id) => {
-                            const l = LUA_CHON_MAU.find((x) => x.id === id);
-                            if (!l) return null;
-                            const daCo = s.nguyenVong.includes(id);
-                            return (
-                              <li key={id} className="rounded-xl bg-slate-50 border border-vien p-2 flex flex-col gap-1 min-[340px]:flex-row min-[340px]:items-center justify-between">
-                                <Link
-                                  to={DUONG_DAN.chiTiet(id)}
-                                  onClick={dong}
-                                  className="min-w-0 flex-1 text-[12px] font-bold text-xanh leading-tight hover:underline truncate"
-                                >
-                                  {l.truong} · {l.nganh}
-                                </Link>
-                                <button
-                                  type="button"
-                                  disabled={daCo}
-                                  onClick={() => { if (!daCo) themNguyenVong(id); }}
-                                  className={gop("h-7 shrink-0 px-2.5 rounded-lg text-[11px] font-bold inline-flex items-center justify-center gap-1 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-xanh text-white active:brightness-90 cursor-pointer")}
-                                >
-                                  {daCo ? <><Check size={12} />Đã thêm</> : "+ Thêm vào Nguyện Vọng"}
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    )}
-                    {/kế hoạch học tập|lịch học|ôn thi tuần/i.test(t.chu) && (
-                      <div className="mt-2 p-2 rounded-xl bg-gradient-to-r from-xanh-nhat to-white border border-xanh/30 flex items-center justify-between gap-1.5">
-                        <span className="text-[11.5px] font-bold text-muc">Lịch học tuần AI</span>
-                        <Link
-                          to={DUONG_DAN.tuan()}
-                          onClick={dong}
-                          className="shrink-0 h-6.5 px-2.5 rounded-md bg-xanh text-white text-[11px] font-bold inline-flex items-center gap-1 hover:bg-xanh/90 transition-colors"
-                        >
-                          <CalendarCheck size={12} /> Vào xem
-                        </Link>
-                      </div>
-                    )}
-                    {t.viecTiep && <p className="mt-1 text-[11.5px] text-muc">Gợi ý: <span className="text-chu">{t.viecTiep}</span></p>}
-                    {t.thuLai && i === viTriCuoi && !dang && tin[i - 1]?.vai === "em" && (
-                      <div className="mt-1.5 flex items-center gap-1.5">
-                        <span className="text-[11px] text-chu-phu">Chưa gửi được.</span>
-                        <button type="button" onClick={() => gui(tin[i - 1].chu, i - 1)} className="inline-flex items-center gap-0.5 text-[11.5px] font-bold text-xanh"><RotateCcw size={11} />Thử lại</button>
-                      </div>
-                    )}
-                  </>
+                  <TinMayChu t={t} laCuoi={i === viTriCuoi} dang={dang} cauTruoc={tin[i - 1]?.vai === "em" ? tin[i - 1].chu : undefined}
+                    onGui={(c) => gui(c)} onThuLai={() => gui(tin[i - 1].chu, i - 1)} onDi={dong} />
                 )}
               </div>
             </div>
