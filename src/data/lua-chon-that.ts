@@ -35,12 +35,13 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
-const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string }>;
+const HOC_PHI = hocPhi as Record<string, { trieuNam: number; nam: string; trang: number; url: string; phamVi?: "truong" | "nganh"; trangThai?: string }>;
 
 const VIEC_MOI = viecLamMoi as Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 
 function chuyen(d: Dong): LuaChon {
-  const hp = HOC_PHI[d.id];
+  const hpGoc = HOC_PHI[d.id];
+  const hp = hpGoc && hpGoc.trangThai !== "chua-xac-minh" ? hpGoc : undefined; // dòng chưa xác minh được nguồn thì không hiện như số thật
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
@@ -73,7 +74,8 @@ function chuyen(d: Dong): LuaChon {
     nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: d.tier === "official_pdf",
     linkNguon: d.nguon ?? undefined,
-    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang } } : {}),
+    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang }, phamViHocPhi: hp.phamVi ?? "nganh" } : {}),
+    loaiDiemMoiNhat: d.tier === "official_pdf" ? "chinh-thuc" : "thu-cap",
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,
