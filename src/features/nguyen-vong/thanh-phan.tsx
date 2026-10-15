@@ -14,9 +14,9 @@ const NEN_DAM: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: 
 export function OSoThuTu({ viTri, nhan }: { viTri: number; nhan: NhanNguyenVong | null }) {
   const tone = nhan ? TONE_NHAN[nhan] : "muc";
   return (
-    <span aria-hidden className={gop("size-11 rounded-[10px] border-2 bg-trang flex flex-col items-center justify-center leading-none shrink-0", VIEN_O[tone], CHU_O[tone])}>
-      <span className="text-[9px] font-bold tracking-wide">NV</span>
-      <span className="so-lon text-[19px] font-bold">{viTri + 1}</span>
+    <span aria-hidden className={gop("min-w-12 h-11 px-1 rounded-[10px] border-2 bg-trang flex flex-col items-center justify-center leading-none shrink-0", VIEN_O[tone], CHU_O[tone])}>
+      <span className="text-[7.5px] font-extrabold tracking-tight uppercase leading-none">Nguyện Vọng</span>
+      <span className="so-lon text-[18px] font-bold mt-0.5">{viTri + 1}</span>
     </span>
   );
 }
@@ -101,7 +101,7 @@ export function CanhBaoThuTuThe({ ds, onDua }: { ds: CanhBaoThuTu[]; onDua: (c: 
         {ds.map((c) => (
           <li key={c.sau.id}>
             <p className="text-[13px] text-chu leading-snug">{c.cau}</p>
-            <Nut kieu="vien" className="mt-1.5" onClick={() => onDua(c)}>{`Đưa NV${c.sau.viTri + 1} lên trước`}</Nut>
+            <Nut kieu="vien" className="mt-1.5" onClick={() => onDua(c)}>{`Đưa Nguyện Vọng ${c.sau.viTri + 1} lên trước`}</Nut>
           </li>
         ))}
       </ul>
