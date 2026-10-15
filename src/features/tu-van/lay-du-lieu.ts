@@ -27,6 +27,31 @@ export const TEN_GOI_TRUONG: Record<string, string> = {
   hcmute: "SPK", spkt: "SPK", uef: "UEF", phenikaa: "PKA", fpt: "FPT", thanglong: "DTL",
 };
 
+/** Các cụm từ quen thuộc chỉ trường (đối chiếu tên tiếng Việt). */
+export const CUM_TU_TRUONG: { regex: RegExp; ma: string }[] = [
+  { regex: /\b(bach khoa ha noi|dh bach khoa ha noi|bkhn|hust)\b/i, ma: "BKA" },
+  { regex: /\b(bach khoa (?:tp\.?hcm|hcm|sai gon)|qsb)\b/i, ma: "QSB" },
+  { regex: /\b(bach khoa da nang|ddk)\b/i, ma: "DDK" },
+  { regex: /\b(bach khoa|dai hoc bach khoa)\b/i, ma: "BKA" },
+  { regex: /\b(kinh te quoc dan|ktqd|neu)\b/i, ma: "KHA" },
+  { regex: /\b(ngoai thuong|ftu)\b/i, ma: "NTH" },
+  { regex: /\b(cong nghe thong tin|dh cntt|uit)\b/i, ma: "QSC" },
+  { regex: /\b(khoa hoc tu nhien (?:tp\.?hcm|hcm)|hcmus)\b/i, ma: "QST" },
+  { regex: /\b(khoa hoc tu nhien (?:ha noi|hn)|hus)\b/i, ma: "QHT" },
+  { regex: /\b(buu chinh vien thong|ptit)\b/i, ma: "BVH" },
+  { regex: /\b(su pham ky thuat|hcmute|spkt)\b/i, ma: "SPK" },
+  { regex: /\b(dai hoc cong nghe|dh cong nghe|uet)\b/i, ma: "QHI" },
+  { regex: /\b(dai hoc kinh te|ueb)\b/i, ma: "QHE" },
+  { regex: /\b(hoc vien ngan hang|hvnh)\b/i, ma: "NHH" },
+  { regex: /\b(hoc vien tai chinh|aof)\b/i, ma: "HTC" },
+  { regex: /\b(y ha noi|hmu)\b/i, ma: "YHB" },
+  { regex: /\b(y duoc (?:tp\.?hcm|hcm)|ump|yds)\b/i, ma: "YDS" },
+  { regex: /\b(thuong mai|tmu)\b/i, ma: "TMU" },
+  { regex: /\b(giao thong van tai|utc)\b/i, ma: "GHA" },
+  { regex: /\b(xay dung|huce)\b/i, ma: "XDA" },
+  { regex: /\b(thuy loi|tlu)\b/i, ma: "TLA" },
+];
+
 /** Em gõ có dấu thì so khớp có dấu (để "bạn" không khớp "Bản"); gõ không dấu thì so khớp không dấu. */
 const coDauTiengViet = (t: string) => /[^\x00-\x7f]/.test(t);
 const chuanHoa = (t: string, coDau: boolean) => (coDau ? t.toLowerCase().replace(/đ/g, "d").replace(/[^\p{L}\p{N}]+/gu, " ").trim() : khongDau(t));
@@ -53,10 +78,19 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
   const tk = tachTuKhoa(cauHoi);
   if (tk.length === 0) return [];
   const coDau = coDauTiengViet(cauHoi);
+  const qKhongDau = khongDau(cauHoi);
+  const maTruongUuTien = new Set<string>();
+  for (const c of CUM_TU_TRUONG) {
+    if (c.regex.test(qKhongDau)) maTruongUuTien.add(c.ma);
+  }
+
   const diem = (l: LuaChon) => {
     const nganh = ` ${chuanHoa(l.nganh, coDau)} `;
     const truong = ` ${chuanHoa(l.tenTruong, coDau)} ${chuanHoa(l.truong, coDau)} `;
     let nganhTrung = 0, truongTrung = 0;
+    if (maTruongUuTien.size > 0 && l.maTruong && maTruongUuTien.has(l.maTruong)) {
+      truongTrung += 6;
+    }
     for (const t of tk) {
       if (TEN_GOI_TRUONG[t]) { if (l.maTruong === TEN_GOI_TRUONG[t]) truongTrung += 2; continue; }
       if (nganh.includes(` ${t} `) || (t.length >= 5 && nganh.includes(t))) nganhTrung++;
@@ -68,6 +102,7 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
     .sort((a, b) => b.d - a.d || (Object.keys(b.l.diemTheoNam ?? {}).length - Object.keys(a.l.diemTheoNam ?? {}).length) || b.l.diemMin - a.l.diemMin)
     .slice(0, toiDa).map((x) => x.l);
 }
+
 
 export const moTaNguon = (l: LuaChon, nguon: NguonTaiSau | null): string => {
   const x = nguon?.nam[l.id]?.find((n) => n.nam === String(l.namDiem)) ?? nguon?.nam[l.id]?.[0];
@@ -146,6 +181,60 @@ const dongNganh = (d: SuKien, hocPhi = false): string => {
   return `• ${d.nganh}, ${d.truong} (${d.tinh}): ${diemGanNhat}${nhan}${duBaoStr}${hp}${viecLamStr}. Nguồn: ${d.nguon}.`;
 };
 
+/** Tri thức so sánh bản chất chuyên môn giữa các cặp ngành quen thuộc */
+export const SO_SANH_NGANH_KIENTHUC: {
+  regex: RegExp;
+  tieuDe: string;
+  phanTich: string;
+}[] = [
+  {
+    regex: /(khoa hoc may tinh|cs).*(ky thuat phan mem|se)|(ky thuat phan mem|se).*(khoa hoc may tinh|cs)/i,
+    tieuDe: "Phân biệt Khoa học máy tính (CS) và Kỹ thuật phần mềm (SE)",
+    phanTich: `• **Khoa học máy tính (Computer Science - CS)**:
+  - *Trọng tâm*: Nền tảng lý thuyết tính toán, cấu trúc dữ liệu và giải thuật nâng cao, trí tuệ nhân tạo (AI/ML), tối ưu hóa thuật toán và mật mã học.
+  - *Tố chất phù hợp*: Đam mê toán học, tư duy logic sâu sắc, thích giải bài toán hóc búa và đào sâu cơ chế hoạt động của hệ thống.
+  - *Vị trí nghề nghiệp*: Kỹ sư AI/Machine Learning, Data Scientist, Kỹ sư thuật toán, Chuyên viên nghiên cứu & phát triển (R&D).
+
+• **Kỹ thuật phần mềm (Software Engineering - SE)**:
+  - *Trọng tâm*: Quy trình phát triển phần mềm chuẩn công nghiệp (Agile/Scrum), thiết kế kiến trúc hệ thống lớn, kiểm thử chất lượng phần mềm (QA), triển khai đám mây và bảo trì ứng dụng.
+  - *Tố chất phù hợp*: Thích xây dựng sản phẩm thực tế, tư duy hệ thống thực hành, kỹ năng làm việc nhóm và giao tiếp dự án.
+  - *Vị trí nghề nghiệp*: Kỹ sư phát triển phần mềm (Fullstack/Backend/Frontend), Kỹ sư QA/QC/Kiểm thử, Kỹ sư DevOps, Quản trị dự án kỹ thuật (Scrum Master).`
+  },
+  {
+    regex: /(tri tue nhan tao|ai).*(khoa hoc du lieu|data science)|(khoa hoc du lieu|data science).*(tri tue nhan tao|ai)/i,
+    tieuDe: "Phân biệt Trí tuệ nhân tạo (AI) và Khoa học dữ liệu (Data Science)",
+    phanTich: `• **Trí tuệ nhân tạo (AI)**:
+  - *Trọng tâm*: Xây dựng các mô hình học máy (Machine Learning), học sâu (Deep Learning), mạng nơ-ron để hệ thống có khả năng tự nhận thức, tự suy luận, thị giác máy tính và xử lý ngôn ngữ.
+  - *Vị trí nghề nghiệp*: AI Engineer, Machine Learning Engineer, Computer Vision Engineer.
+
+• **Khoa học dữ liệu (Data Science)**:
+  - *Trọng tâm*: Kết hợp xác suất thống kê, toán giải tích và lập trình để thu thập, làm sạch và khai phá dữ liệu lớn (Big Data), tìm kiếm quy luật và dự báo xu hướng hỗ trợ ra quyết định.
+  - *Vị trí nghề nghiệp*: Data Scientist, Data Analyst, Data Engineer, BI Specialist.`
+  },
+  {
+    regex: /(logistics).*(chuoi cung ung|supply chain)|(chuoi cung ung|supply chain).*(logistics)/i,
+    tieuDe: "Phân biệt Logistics và Quản lý chuỗi cung ứng (Supply Chain Management)",
+    phanTich: `• **Logistics**:
+  - *Trọng tâm*: Khâu giao nhận, kho vận, vận chuyển hàng hóa, thủ tục hải quan và quản lý đội tàu xe nhằm đưa hàng hóa từ nơi gửi đến nơi nhận đúng hẹn với chi phí hợp lý.
+  - *Vị trí nghề nghiệp*: Chuyên viên giao nhận vận tải quốc tế (Freight Forwarder), Quản lý kho hàng, Điều độ logistics.
+
+• **Quản lý chuỗi cung ứng (Supply Chain Management)**:
+  - *Trọng tâm*: Bao quát bức tranh toàn cảnh từ thu mua nguyên vật liệu thô, hoạch định sản xuất, kết nối nhà cung cấp, kiểm soát logistics cho đến mạng lưới phân phối và trải nghiệm khách hàng.
+  - *Vị trí nghề nghiệp*: Chuyên viên thu mua (Procurement), Hoạch định nhu cầu (Demand Planner), Quản trị chuỗi cung ứng tổng thể.`
+  },
+  {
+    regex: /(cong nghe thong tin|cntt).*(an toan thong tin|attt|cybersecurity)|(an toan thong tin|attt|cybersecurity).*(cong nghe thong tin|cntt)/i,
+    tieuDe: "Phân biệt Công nghệ thông tin (IT) và An toàn thông tin (Cybersecurity)",
+    phanTich: `• **Công nghệ thông tin (IT rộng)**:
+  - *Trọng tâm*: Ngành rộng nền tảng, đào tạo tổng quan về quản trị hạ tầng máy chủ, hệ thống mạng, cơ sở dữ liệu và triển khai ứng dụng cho doanh nghiệp.
+  - *Vị trí nghề nghiệp*: Quản trị hệ thống, Quản trị mạng, Chuyên viên IT doanh nghiệp.
+
+• **An toàn thông tin (Cybersecurity)**:
+  - *Trọng tâm*: Đào tạo chuyên sâu về bảo vệ hệ thống trước các cuộc tấn công mạng, kiểm thử xâm nhập (Pentest), điều tra số và ứng cứu sự cố bảo mật.
+  - *Vị trí nghề nghiệp*: Chuyên viên kiểm thử bảo mật (Pentester), SOC Analyst, Kỹ sư bảo mật mạng.`
+  }
+];
+
 export interface KetQuaTuDong { traLoi: string; nguon: string[] }
 
 export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | null, giuId: string[] = []): KetQuaTuDong {
@@ -170,6 +259,15 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     return y.length ? `\n\n⭐ **Lợi thế cạnh tranh cá nhân hóa của bạn:**\n${y.join("\n")}` : "";
   };
 
+  // Hỏi nguyên lý / giải thích chiến lược 3 tầng
+  const hoiNguyenLy3Tang = /3 tang la gi|nguyen ly 3 tang|nguyen tac 3 tang|chien luoc 3 tang|cach xep nguyen vong|nguyen tac xep nguyen vong|huong dan xep nguyen vong/.test(q);
+  if (hoiNguyenLy3Tang) {
+    return {
+      traLoi: `🎯 **Chiến lược xếp nguyện vọng 3 tầng là gì?**\n\nĐây là phương pháp phân bổ nguyện vọng khoa học giúp bạn vừa có cơ hội vươn tới ước mơ, vừa giữ được mục tiêu trọng tâm và có lưới đỡ kiên cố:\n\n1. **Tầng 1 - Thử sức (Nguyện Vọng 1–2)**:\n   • Dành cho ngành/trường bạn yêu thích và khao khát nhất.\n   • Điểm chuẩn các năm trước có thể cao hơn điểm hiện tại của bạn từ **0,5 đến 1,5 điểm**.\n   • Quy chế tuyển sinh cho phép xét tuyển bình đẳng: trượt NV1 bạn vẫn được xét tiếp các nguyện vọng sau như mọi thí sinh khác.\n\n2. **Tầng 2 - Vừa sức (Nguyện Vọng 3–4)**:\n   • Đây là **trọng tâm bảo vệ** của bạn.\n   • Điểm chuẩn các năm trước tương đương hoặc chênh lệch trong khoảng **±0,5 điểm** so với điểm của bạn.\n   • Đây là vùng có xác suất phù hợp thực tế cao nhất.\n\n3. **Tầng 3 - An toàn & Dự phòng (Nguyện Vọng 5 trở đi)**:\n   • Dành cho các ngành/trường bạn sẵn sàng theo học nếu kết quả thi không như ý.\n   • Điểm chuẩn các năm trước thấp hơn điểm của bạn từ **1,5 đến 3,0 điểm** (hoặc ngành đã có kết quả trúng tuyển sớm có điều kiện).\n   • Đóng vai trò là **lưới đỡ kiên cố**, đảm bảo bạn luôn có bến đỗ đại học phù hợp.\n\n${s.nguyenVong.length > 0 ? `\n📋 **Đối chiếu với danh sách hiện tại của bạn:** Bạn đang có ${s.nguyenVong.length} nguyện vọng. Bạn có thể hỏi "Danh sách nguyện vọng của mình đã cân bằng chưa?" để mình đánh giá chi tiết theo từng tầng.` : "\n💡 Bạn vào mục **Nguyện vọng** để thêm các ngành yêu thích, hệ thống sẽ tự động gán nhãn Thử sức, Vừa sức, An toàn theo đúng chiến lược này."}`,
+      nguon: [],
+    };
+  }
+
   // 1) Hỏi về một ngành/trường cụ thể
   let khop = timNganhKhop(cauHoi, 5);
   const huongDan = /bat dau|tu dau|chon nganh|nen hoc|hop voi|nganh nao/.test(q);
@@ -193,8 +291,34 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     };
   }
 
+  const soSanhChuyenMon = SO_SANH_NGANH_KIENTHUC.find((x) => x.regex.test(q) || x.regex.test(cauHoi));
   const hoi3Nam = /3 nam|ba nam|cac nam|gan day|xu huong|2025|2026/.test(q);
-  const soSanh = (khop.length >= 2 && /so sanh|khac nhau|hon|chon.*nao|chon.*hay|phan van/.test(q)) || (khop.length >= 1 && hoi3Nam);
+  const hoiNamMoi = /2026|2027/.test(q);
+
+  // Học sinh nêu điểm trực tiếp trong câu hỏi (ví dụ "Em được 24.5 điểm khối A00 thì vào được ngành CNTT ở trường nào?")
+  const diemKhop = cauHoi.match(/\b([12]\d(?:\.\d{1,2}|,\d{1,2})?|30(?:\.0)?)\s*(?:điểm|diem|đ)\b/i);
+  const toHopKhop = cauHoi.match(/\b(A00|A01|B00|C00|D01|D07)\b/i);
+  const diemHoi = diemKhop ? parseFloat(diemKhop[1].replace(",", ".")) : null;
+  const toHopHoi = toHopKhop ? toHopKhop[1].toUpperCase() : null;
+
+  if (diemHoi !== null && diemHoi >= 10 && diemHoi <= 30 && khop.length > 0 && !soSanhChuyenMon && !noiO) {
+    const thuSuc = khop.filter((l) => l.diemMin - diemHoi >= 0.5 && l.diemMin - diemHoi <= 2.5);
+    const vuaSuc = khop.filter((l) => Math.abs(l.diemMin - diemHoi) < 0.5);
+    const anToan = khop.filter((l) => diemHoi - l.diemMin >= 0.5 && diemHoi - l.diemMin <= 4.0);
+
+    const dsThuSuc = thuSuc.length ? thuSuc.map((l) => `• ${l.nganh}, ${l.truong}: điểm chuẩn gần nhất ${so1(l.diemMin)} (hơn điểm của bạn ${so1(l.diemMin - diemHoi)} điểm)`).join("\n") : "• Chưa có ngành phù hợp khoảng này trong dữ liệu";
+    const dsVuaSuc = vuaSuc.length ? vuaSuc.map((l) => `• ${l.nganh}, ${l.truong}: điểm chuẩn gần nhất ${so1(l.diemMin)} (sát mức điểm của bạn)`).join("\n") : "• Chưa có ngành phù hợp khoảng này trong dữ liệu";
+    const dsAnToan = anToan.length ? anToan.map((l) => `• ${l.nganh}, ${l.truong}: điểm chuẩn gần nhất ${so1(l.diemMin)} (thấp hơn điểm của bạn ${so1(diemHoi - l.diemMin)} điểm)`).join("\n") : "• Chưa có ngành phù hợp khoảng này trong dữ liệu";
+
+    const tongChon = [...thuSuc, ...vuaSuc, ...anToan].slice(0, 6);
+    return {
+      traLoi: `${loiChao}Với mức điểm **${so1(diemHoi)} điểm**${toHopHoi ? ` (tổ hợp **${toHopHoi}**)` : ""}, mình phân bổ các trường đào tạo ngành bạn quan tâm theo chiến lược 3 tầng như sau:\n\n🔥 **Nhóm 1: Thử sức (Nguyện Vọng 1–2, vươn tới đam mê):**\n${dsThuSuc}\n\n🎯 **Nhóm 2: Vừa sức (Nguyện Vọng 3–4, trọng tâm mục tiêu):**\n${dsVuaSuc}\n\n🛡️ **Nhóm 3: An toàn (Nguyện Vọng 5 trở đi, lưới đỡ kiên cố):**\n${dsAnToan}\n\n📋 **Gợi ý hành động tiếp theo:**\n1. Bạn bấm **+ Thêm vào Nguyện Vọng** ở các ngành trên để đưa vào danh sách dự kiến.\n2. Vào mục **Kế hoạch** để xem gợi ý lộ trình ôn thi phù hợp.\n\n${NHAC}`,
+      nguon: tongChon.length ? tongChon.map((l) => l.id) : khop.slice(0, 4).map((l) => l.id),
+    };
+  }
+
+  const soSanh = Boolean(soSanhChuyenMon) || (khop.length >= 2 && /so sanh|khac nhau|hon|chon.*nao|chon.*hay|phan van/.test(q)) || (khop.length >= 1 && hoi3Nam);
+
   if (soSanh) {
     const sk = khop.slice(0, 4).map((l) => dungSuKien(l, diem, nguon));
     const bang3Nam = [
@@ -210,11 +334,19 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
       }),
     ].join("\n");
 
+    const phanTichChuyenMonStr = soSanhChuyenMon
+      ? `### 🧭 ${soSanhChuyenMon.tieuDe}\n\n${soSanhChuyenMon.phanTich}\n\n---\n\n`
+      : "";
+    const ghiChuNamMoi = hoiNamMoi
+      ? "📌 **Lưu ý về điểm chuẩn 2026/2027:** Năm tuyển sinh hiện tại chưa diễn ra kỳ thi và xét tuyển chính thức nên chưa có điểm chuẩn thực tế. Số liệu dưới đây là điểm chuẩn các năm gần nhất (2024, 2025) cùng khoảng điểm dự kiến theo xu hướng để bạn tham khảo định hướng.\n\n"
+      : "";
+
     return {
-      traLoi: `Dưới đây là điểm chuẩn các năm gần đây (năm nào chưa có ghi "—") và khoảng dự kiến năm tới, cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở Nguyện Vọng 1–Nguyện Vọng 2 để vươn tới đam mê, ngành **Vừa sức** ở Nguyện Vọng 3–Nguyện Vọng 4 làm trọng tâm, và ngành **An toàn** ở Nguyện Vọng 5–Nguyện Vọng 6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
+      traLoi: `${phanTichChuyenMonStr}${ghiChuNamMoi}Dưới đây là điểm chuẩn các năm gần đây (năm nào chưa có ghi "—") và khoảng dự kiến năm tới, cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở Nguyện Vọng 1–Nguyện Vọng 2 để vươn tới đam mê, ngành **Vừa sức** ở Nguyện Vọng 3–Nguyện Vọng 4 làm trọng tâm, và ngành **An toàn** ở Nguyện Vọng 5–Nguyện Vọng 6 làm lưới đỡ vững vàng.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
       nguon: sk.map((l) => l.id),
     };
   }
+
 
   const hoiViecLam = /viec lam|co hoi viec lam|ra truong|de xin viec|nghe nghiep|muc luong/.test(q);
   if (hoiViecLam && khop.length > 0) {
@@ -274,15 +406,15 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     const ds = s.nguyenVong.map((id) => LUA_CHON_MAU.find((l) => l.id === id)).filter((l): l is LuaChon => !!l);
     if (ds.length === 0) {
       const g = coHoi ? goiYDanhSach(diem, s.hoSo, [], undefined, moNeoNV1(s)).slice(0, 8) : [];
-      return { traLoi: g.length ? `${loiChao}Bạn chưa có nguyện vọng nào. Một danh sách cân bằng theo chiến lược 3 tầng thường có 1–2 ngành Thử sức (vươn tới ước mơ), 2–3 ngành Vừa sức (chắc chắn), 1–2 ngành An toàn và 1 Dự phòng.\n\nDựa trên hồ sơ của bạn (tổ hợp ${coHoi?.toHop} được ${so1(coHoi?.tong ?? 0)} điểm${s.hoSo.nganhQuanTam.length ? `, quan tâm ${s.hoSo.nganhQuanTam.join(", ")}` : ""}), mình gợi ý sẵn ${g.length} ngành phù hợp:\n${g.map((x) => `• ${x.lc.nganh}, ${x.lc.truong} (${x.nhan}): điểm chuẩn ${x.lc.diemMin}`).join("\n")}\n\nBạn vào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn” để xem chi tiết nhé.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: [] };
+      return { traLoi: g.length ? `${loiChao}Bạn chưa có nguyện vọng nào. Một danh sách cân bằng theo chiến lược 3 tầng thường có 1–2 ngành Thử sức (vươn tới ước mơ), 2–3 ngành Vừa sức (vững vàng), 1–2 ngành An toàn và 1 Dự phòng.\n\nDựa trên hồ sơ của bạn (tổ hợp ${coHoi?.toHop} được ${so1(coHoi?.tong ?? 0)} điểm${s.hoSo.nganhQuanTam.length ? `, quan tâm ${s.hoSo.nganhQuanTam.join(", ")}` : ""}), mình gợi ý sẵn ${g.length} ngành phù hợp:\n${g.map((x) => `• ${x.lc.nganh}, ${x.lc.truong} (${x.nhan}): điểm chuẩn ${x.lc.diemMin}`).join("\n")}\n\nBạn vào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn” để xem chi tiết nhé.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: [] };
     }
     const sk = ds.map((l) => dungSuKien(l, diem, nguon));
     const dem: Record<string, number> = {};
     sk.forEach((x) => { if (x.nhanCuaEm) dem[x.nhanCuaEm] = (dem[x.nhanCuaEm] ?? 0) + 1; });
     const lietKe = ["Thử sức", "Vừa sức", "An toàn", "Dự phòng"].map((n) => `${dem[n] ?? 0} ${n}`).join(", ");
-    const chacChan = (dem["An toàn"] ?? 0) + (dem["Dự phòng"] ?? 0);
-    const loi = chacChan === 0
-      ? "Danh sách chưa có ngành An toàn hay Dự phòng: bạn nên bổ sung thêm 1–2 ngành có điểm chuẩn thấp hơn điểm của bạn từ 1.5–2.5 điểm để đảm bảo 100% không bị trượt đại học."
+    const coLuoiDo = (dem["An toàn"] ?? 0) + (dem["Dự phòng"] ?? 0);
+    const loi = coLuoiDo === 0
+      ? "Danh sách chưa có ngành An toàn hay Dự phòng: bạn nên bổ sung thêm 1–2 ngành có điểm chuẩn thấp hơn điểm của bạn từ 1.5–2.5 điểm để đảm bảo bạn luôn có bến đỗ an toàn."
       : (dem["Thử sức"] ?? 0) > sk.length / 2
         ? "Hơn một nửa danh sách là Thử sức, bạn cân nhắc bổ sung thêm ngành Vừa sức để tăng cơ hội trúng tuyển."
         : (dem["Thử sức"] ?? 0) === 0 && sk.length >= 3
