@@ -121,10 +121,9 @@ function KhoiXacSuatDecisionIntelligence({ lc, diemThiRaw, uuTien }: { lc: LuaCh
   if (!xs) return null;
 
   return (
-    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-2.5" aria-label="Xác suất trúng tuyển (Decision Intelligence)">
+    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-2.5" aria-label="Xác suất trúng tuyển dự kiến">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <span className="text-[12px] font-bold text-xanh uppercase tracking-wider block">Decision Intelligence Model</span>
           <b className="text-[16px] text-muc font-extrabold">Xác suất trúng tuyển dự kiến</b>
         </div>
         <div className="text-right">
@@ -137,7 +136,6 @@ function KhoiXacSuatDecisionIntelligence({ lc, diemThiRaw, uuTien }: { lc: LuaCh
       <div className="rounded-xl bg-nen p-2.5 space-y-1 text-[13px] text-chu leading-snug">
         <p>• <b>Định vị:</b> <span className="font-bold">{xs.nhanRuiRo}</span> (Chênh lệch {xs.chenhDiem >= 0 ? `+${xs.chenhDiem}` : xs.chenhDiem} điểm so với điểm kỳ vọng {xs.diemKyVong}).</p>
         <p>• <b>Khuyến nghị:</b> {xs.khuyenNghi}</p>
-        <p className="text-[11px] text-chu-phu pt-0.5">Mô hình chuẩn hoá độ biến động lịch sử (τ = {xs.doBienDongTau}) dựa trên {xs.soNamLichSu} năm dữ liệu đề án chính thức.</p>
       </div>
     </section>
   );

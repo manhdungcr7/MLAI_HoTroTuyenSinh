@@ -17,7 +17,7 @@ import { useApp } from "@/state/store";
 import type { NhanNguyenVong, ToneTen } from "@/state/types";
 import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
-import { CHU_O, CanhBaoThuTuThe, GhiChuDuLieu, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
+import { CHU_O, CanhBaoThuTuThe, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
 import { HopTruot } from "@/components/ui/hien-thi";
@@ -247,8 +247,6 @@ export default function DanhSachNguyenVong() {
               <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Thử tăng điểm" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
               <HangBam bieuTuong={ClipboardPen} tone="cam" tieuDe="Nhập thi thử" onClick={() => nav(DUONG_DAN.diemThiThu())} />
             </div>
-
-            <GhiChuDuLieu />
           </>
         )}
       </NoiDung>

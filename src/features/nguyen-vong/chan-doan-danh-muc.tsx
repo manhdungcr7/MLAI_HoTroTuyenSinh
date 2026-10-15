@@ -121,9 +121,6 @@ export function ChanDoanDanhMucCard({
                   {chanDoan.danhGiaRuiRo}
                 </span>
               </div>
-              <p className="text-[12px] text-chu-phu mt-0.5">
-                Mô hình Decision Intelligence tính toán xác suất tích lũy
-              </p>
             </div>
           </div>
 

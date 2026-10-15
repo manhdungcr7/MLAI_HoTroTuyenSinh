@@ -19,7 +19,7 @@ import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import type { ToneTen } from "@/state/types";
 import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
-import { CanhBaoThuTuThe, GhiChuDuLieu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
+import { CanhBaoThuTuThe, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import {
   canhBaoThuTu, chamDiem, toHopTotNhat, deXuatThuTu, demNhan, dungDanhSach, duaLenTruoc, giongNhau, goiYHanhDong, ketLuan, xetCoCau, type DiemDanhGia, type GoiY,
 } from "./tinh-toan";
@@ -138,7 +138,6 @@ export default function DanhSachAnToan() {
         <HangBam bieuTuong={TrendingUp} tone="tim" tieuDe="Thử nếu tăng điểm" onClick={() => nav(DUONG_DAN.thuTinhHuong())} />
 
         <Nut bieuTuong={SlidersHorizontal} muiTen className="!mt-4" onClick={() => nav(DUONG_DAN.nguyenVong())}>Điều chỉnh danh sách</Nut>
-        <GhiChuDuLieu />
       </NoiDung>
 
       <HopGiaiThich giaiThich={giaiThich} dong={() => setGiaiThich(null)} ds={ds} />
