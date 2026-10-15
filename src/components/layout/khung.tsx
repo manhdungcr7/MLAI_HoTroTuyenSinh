@@ -1,5 +1,5 @@
 // BỘ KHUNG DUY NHẤT. Slice không tự vẽ thanh dưới hay đầu trang, chỉ dùng các thành phần ở đây.
-import { type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Bell, CalendarDays, GraduationCap, Heart, Home, Search, UserRound, type LucideIcon } from "lucide-react";
 import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
@@ -15,7 +15,7 @@ const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
 export function KhungCoThanhDuoi() {
   const { pathname } = useLocation();
   return (
-    <div className="khung-ung-dung pb-24">
+    <div className="khung-ung-dung pb-[calc(var(--cao-nav)+1rem)]" style={{ "--cao-nav": "calc(4.5rem + env(safe-area-inset-bottom))" } as CSSProperties}>
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
@@ -27,7 +27,7 @@ export function KhungCoThanhDuoi() {
             return (
               <li key={t.id}>
                 <Link to={t.den} aria-current={dang ? "page" : undefined}
-                  className={gop("relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold transition-colors cursor-pointer", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
+                  className={gop("relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
                   {/* Tab đang mở: một nét mực ngắn ở mép trên, như gạch chân bằng bút. */}
                   {dang && <span aria-hidden className="absolute top-0 inset-x-5 h-[3px] rounded-b-full bg-xanh" />}
                   <Icon size={22} strokeWidth={dang ? 2.4 : 1.8} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />
@@ -54,7 +54,7 @@ export function KhungKhongThanh() {
 
 export function Logo({ nho }: { nho?: boolean }) {
   return (
-    <Link to={DUONG_DAN.gioiThieu()} className="inline-flex items-center gap-1.5 font-extrabold text-muc hover:opacity-90 transition-opacity">
+    <Link to={DUONG_DAN.gioiThieu()} className="inline-flex items-center gap-1.5 min-h-11 font-extrabold text-muc hover:opacity-90 transition-opacity">
       <span className="size-8 rounded-lg gd-xanh text-white grid place-items-center"><GraduationCap size={18} /></span>
       <span className={gop("so-lon", nho ? "text-[14px]" : "text-[15px]")}>Nguyện Vọng AI</span>
     </Link>

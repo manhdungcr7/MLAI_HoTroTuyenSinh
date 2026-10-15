@@ -99,7 +99,7 @@ export default function KhamPha() {
                 aria-pressed={chiHienYeuThich}
                 onClick={() => setChiHienYeuThich(!chiHienYeuThich)}
                 className={gop(
-                  "min-h-10 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer",
+                  "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer",
                   chiHienYeuThich
                     ? "bg-do text-white border-transparent shadow-nut"
                     : "bg-trang border-vien text-chu active:bg-xanh-nhat"
@@ -113,7 +113,7 @@ export default function KhamPha() {
               const chon = !chiHienYeuThich && b.nhom === c.gia;
               return (
                 <button key={c.gia || "tat-ca"} type="button" aria-pressed={chon} onClick={() => { setChiHienYeuThich(false); sua({ nhom: c.gia }); }}
-                  className={gop("min-h-10 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
+                  className={gop("min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors cursor-pointer",
                     chon ? "gd-xanh text-white border-transparent shadow-nut" : "bg-trang border-vien text-chu active:bg-xanh-nhat")}>
                   {c.nhan}
                 </button>

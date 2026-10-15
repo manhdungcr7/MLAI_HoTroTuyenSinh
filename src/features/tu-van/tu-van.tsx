@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Check, RotateCcw, Send, Sparkles } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
@@ -13,6 +13,25 @@ import { useApp, type AppState } from "@/state/store";
 import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
 import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, nganhLuotTruoc, taoNguCanh, type TinNhan } from "./hoi-thoai";
 import { chonDuLieuKemTheo, tomTatHoSo, traLoiTuDong } from "./lay-du-lieu";
+
+const MAT_NA_CUON = "[mask-image:linear-gradient(to_right,#000_calc(100%-28px),transparent)]";
+
+/** Hàng chip cuộn ngang; chỉ làm mờ mép phải khi còn nội dung chưa cuộn tới. */
+function HangCuon({ className, children, ...rest }: { className: string; children: ReactNode; role?: string; "aria-label"?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [conCuon, setConCuon] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const dem = () => setConCuon(el.scrollWidth - el.clientWidth - el.scrollLeft > 2);
+    dem();
+    el.addEventListener("scroll", dem, { passive: true });
+    const ro = new ResizeObserver(dem);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", dem); ro.disconnect(); };
+  });
+  return <div ref={ref} className={gop(className, conCuon && MAT_NA_CUON)} {...rest}>{children}</div>;
+}
 
 /** Dòng NV1 (nếu có) đứng đầu ngữ cảnh để AI lấy NV1 làm gốc; phần lượt trước bị cắt bớt cho vừa giới hạn. */
 function nguCanhVoiNV1(manHinh: string, truoc: TinNhan[], s: AppState): string {
@@ -120,7 +139,7 @@ export default function TuVan() {
   return (
     <>
       <DauTrangCoQuayLai tieuDe="Tư vấn cùng AI" phai={<span className="sr-only">{manHinh}</span>} />
-      <NoiDung className="pb-36">
+      <NoiDung className="pb-[calc(var(--cao-nav)+6rem)]">
         <div className="flex items-center justify-between rounded-xl bg-xanh-nhat px-3.5 py-2.5 border border-xanh/20">
           <div className="flex items-center gap-2 min-w-0">
             <span className="size-7 rounded-lg bg-trang text-xanh grid place-items-center shrink-0 shadow-xs">
@@ -131,7 +150,7 @@ export default function TuVan() {
             </div>
           </div>
           <label className="flex items-center gap-1.5 min-h-11 text-[12.5px] font-semibold text-chu cursor-pointer shrink-0 ml-2">
-            <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="size-4 accent-[var(--color-xanh)]" />
+            <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="size-5 accent-[var(--color-xanh)]" />
             <span>Kèm hồ sơ của bạn</span>
           </label>
         </div>
@@ -139,14 +158,14 @@ export default function TuVan() {
         {tin.length === 0 && (
           <section aria-label="Câu hỏi gợi ý" className="space-y-2 pt-1">
             <p className="text-[13px] font-bold text-chu-phu px-1">Hỏi nhanh</p>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 snap-x [scrollbar-width:none]">
+            <HangCuon className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 snap-x [scrollbar-width:none]">
               {goiY.map((x) => (
                 <button key={x} type="button" disabled={dang} onClick={() => gui(x)}
-                  className="snap-start shrink-0 min-h-11 rounded-full border border-vien bg-trang px-3.5 text-[13.5px] font-medium text-chu whitespace-nowrap active:bg-xanh-nhat disabled:opacity-50 hover:border-xanh/40 cursor-pointer">
+                  className="snap-start shrink-0 max-w-[78%] min-h-11 rounded-full border border-vien bg-trang px-3.5 py-1.5 text-left text-[13.5px] font-medium text-chu active:bg-xanh-nhat disabled:opacity-50 hover:border-xanh/40 cursor-pointer">
                   {x}
                 </button>
               ))}
-            </div>
+            </HangCuon>
           </section>
         )}
 
@@ -207,7 +226,7 @@ export default function TuVan() {
           ))}
 
           {!dang && viTriCuoi >= 0 && tin[viTriCuoi].vai === "mayChu" && (
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" role="group" aria-label="Gợi ý hỏi tiếp">
+            <HangCuon className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" role="group" aria-label="Gợi ý hỏi tiếp">
               {tin[viTriCuoi].viecTiep && <button type="button" onClick={() => gui(`Giải thích giúp mình: ${tin[viTriCuoi].viecTiep}`)} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-[13px] text-xanh whitespace-nowrap shrink-0 active:bg-xanh-nhat">Hỏi thêm về việc này</button>}
               {(tin[viTriCuoi].nguon?.length ?? 0) > 0 && (
                 <>
@@ -215,7 +234,7 @@ export default function TuVan() {
                   <button type="button" onClick={() => gui("Còn ngành nào tương tự thì sao?")} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-[13px] text-xanh whitespace-nowrap shrink-0 active:bg-xanh-nhat">Ngành tương tự?</button>
                 </>
               )}
-            </div>
+            </HangCuon>
           )}
 
           {dang && (
@@ -226,11 +245,11 @@ export default function TuVan() {
               </div>
             </div>
           )}
-          <div ref={cuoi} className="scroll-mb-44" />
+          <div ref={cuoi} className="scroll-mb-[calc(var(--cao-nav)+8rem)]" />
         </section>
 
         {/* Thanh nhập câu hỏi cố định chắc chắn ở đáy màn hình (ngay trên thanh 5 tab) giống như ChatGPT/Gemini */}
-        <div className="fixed bottom-16 inset-x-0 mx-auto max-w-[430px] z-30 bg-trang/95 backdrop-blur-md border-t border-vien px-3.5 py-2.5 shadow-sm">
+        <div className="fixed bottom-[var(--cao-nav)] inset-x-0 mx-auto max-w-[430px] z-30 bg-trang/95 backdrop-blur-md border-t border-vien px-3.5 py-2.5 shadow-sm">
           <label htmlFor="tu-van-cau-hoi" className="sr-only">Câu hỏi của bạn</label>
           <div className="flex items-center gap-2">
             <input
