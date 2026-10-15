@@ -108,9 +108,9 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
                   </span>
                 </div>
                 {t.tong !== null ? (
-                  <p className="mt-2 flex items-end justify-between gap-1">
-                    <span><b className="text-[24px] font-extrabold text-muc leading-none">{dinhDang(t.tong, 1).replace(".", ",")}</b><span className="text-[13px] text-chu-phu"> / 30</span></span>
-                    {nhat && <Nhan tone="xanh" className="!bg-trang !px-1.5">Cao nhất</Nhan>}
+                  <p className="mt-2 flex flex-wrap items-end justify-between gap-1">
+                    <span className="whitespace-nowrap"><b className="text-[24px] font-extrabold text-muc leading-none">{dinhDang(t.tong, 1).replace(".", ",")}</b><span className="text-[13px] text-chu-phu"> / 30</span></span>
+                    {nhat && <Nhan tone="xanh" className="!bg-trang !px-1.5 shrink-0">Cao nhất</Nhan>}
                   </p>
                 ) : (
                   <p className="mt-2 text-[13px] leading-snug">

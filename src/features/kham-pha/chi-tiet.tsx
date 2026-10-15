@@ -354,9 +354,11 @@ export default function ChiTiet() {
             </span>
           </div>
         </div>
-        <p className="text-[14px] text-chu my-3">Xem danh sách đã cân đối chưa?</p>
+        {/* Chưa có mục tiêu: mời đặt luôn ngành vừa thêm, để Hôm nay và Kế hoạch có việc ngay (không phải tự tìm nút). */}
+        <p className="text-[14px] text-chu my-3">{!s.mucTieu && dat.ok ? "Bạn chưa có mục tiêu. Đặt ngành này làm mục tiêu để biết còn thiếu bao nhiêu điểm?" : "Xem danh sách đã cân đối chưa?"}</p>
         <div className="space-y-2">
-          <Nut bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
+          {!s.mucTieu && dat.ok && <Nut bieuTuong={Target} onClick={() => { setHoiTiep(null); datLamMucTieu(); }}>Đặt làm mục tiêu</Nut>}
+          <Nut kieu={!s.mucTieu && dat.ok ? "vien" : "chinh"} bieuTuong={ListChecks} muiTen onClick={() => nav(DUONG_DAN.nguyenVong())}>Xem nguyện vọng</Nut>
           <Nut kieu="nhe" onClick={() => setHoiTiep(null)}>Ở lại xem</Nut>
         </div>
       </HopTruot>
