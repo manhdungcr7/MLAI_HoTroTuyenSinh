@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử trắc nghiệm hướng nghiệp và gói chia sẻ/lời nhắn của người đồng hành. Chạy: npx tsx tests/dong-hanh.test.ts
 import assert from "node:assert/strict";
 import { CAC_CAU_HOI, CAC_LOAI, khongRoNet, moTaTop, nhomNganhGoiY, tinhKetQua } from "../src/features/huong-nghiep/cau-hoi";

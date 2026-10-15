@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử dự báo khoảng điểm chuẩn, kèm KIỂM ĐỊNH BỎ-MỘT-NĂM trên dữ liệu thật: bỏ hết biến động của năm T, dùng phần còn lại
 // để đoán điểm năm T từ điểm năm T-1, rồi so với điểm thật năm T. Chạy: npx tsx tests/du-bao-diem-chuan.test.ts
 import assert from "node:assert/strict";

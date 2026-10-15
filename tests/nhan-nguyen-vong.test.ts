@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử biên của nhãn nguyện vọng, tổng điểm theo tổ hợp và mục tiêu khi thiếu môn. Chạy: npx tsx tests/nhan-nguyen-vong.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON } from "../src/data/lua-chon-that";

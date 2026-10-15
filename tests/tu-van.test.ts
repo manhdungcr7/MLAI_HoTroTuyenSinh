@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử Tư vấn AI: kiểm tra yêu cầu, lọc nguồn, máy chủ (giả lập mạng), tìm ngành và trả lời tự động. Chạy: npx tsx tests/tu-van.test.ts
 import assert from "node:assert/strict";
 import { xuLy } from "../functions/api/tu-van";

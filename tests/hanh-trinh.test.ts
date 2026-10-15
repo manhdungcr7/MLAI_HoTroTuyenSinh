@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử hàm thuần của Hôm nay và Hồ sơ. Chạy: npx tsx tests/hanh-trinh.test.ts
 import assert from "node:assert/strict";
 import { DUONG_DAN } from "../src/duong-dan";

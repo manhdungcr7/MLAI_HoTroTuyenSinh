@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Tìm kiếm ngành/trường: có dấu hay không dấu, viết tắt, biệt danh, khớp theo từng từ. Chạy: npx tsx tests/tim-kiem.test.ts
 import assert from "node:assert/strict";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";

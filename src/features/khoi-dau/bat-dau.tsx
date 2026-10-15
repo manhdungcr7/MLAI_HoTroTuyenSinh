@@ -5,6 +5,8 @@ import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { Nut } from "@/components/ui/nut-the";
 import { DUONG_DAN, type BuocBatDau } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { useDuLieuSan } from "@/state/dung-kho-du-lieu";
+import { ChoDuLieu } from "@/components/layout/cong-du-lieu";
 import { changCuaEm } from "@/state/chang";
 import { CAC_MON, type HoSo, type MonId } from "@/state/types";
 import Buoc1, { ID_TRUONG } from "./buoc-1";
@@ -41,6 +43,7 @@ export default function BatDau() {
   const [chuDiem, setChuDiem] = useState<Record<MonId, string>>(() =>
     Object.fromEntries(CAC_MON.map((m) => [m, vietDiem(h.diem[m])])) as Record<MonId, string>);
   const [dangPhanTich, setDangPhanTich] = useState(false);
+  const { san } = useDuLieuSan(); // bắt đầu nạp danh mục ngay khi mở các bước nhập, để màn kết quả khỏi chờ
 
   useEffect(() => { window.scrollTo(0, 0); }, [so]);
 
@@ -91,6 +94,7 @@ export default function BatDau() {
   };
 
   if (dangPhanTich) {
+    if (!san) return <ChoDuLieu />; // danh mục nạp lười: chờ xong mới so điểm
     // Nước rút và thi lại đã có điểm: lối chính là danh sách nguyện vọng; còn lại là Khám phá.
     const kq = ketQuaBanDau(tinhCoHoi(diemDayDu(s)), h.nganhQuanTam);
     const denNguyenVong = changCuaEm({ hoSo: h }) !== "dinhHuong" && kq.coDiem;

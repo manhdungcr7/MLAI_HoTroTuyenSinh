@@ -8,7 +8,7 @@ import { DongThongBao } from "@/components/ui/thong-bao";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
-import { BO_LOC_MAC_DINH, CAC_KHU_VUC, CAC_NHOM, dem, loc } from "./bo-loc";
+import { BO_LOC_MAC_DINH, cacKhuVuc, cacNhom, dem, loc } from "./bo-loc";
 import { tinhCoHoi } from "./co-hoi";
 import { useBoLoc } from "./dung-bo-loc";
 import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
@@ -19,8 +19,8 @@ import { hieuCauTim, locTheoY, xepTheoY } from "@/engine/hieu-cau-tim";
 
 /** Bộ lọc gợi ý ban đầu theo hồ sơ. Nếu kết hợp "khu vực + nhóm ngành" không còn ngành nào thì bỏ bớt, không để bạn mở ra thấy trống. */
 function boLocBanDau(khuVuc: string | undefined, nganh: string[]): [string | undefined, string | undefined] {
-  const kv = khuVuc && CAC_KHU_VUC.includes(khuVuc) ? khuVuc : undefined;
-  const nhom = nganh.length === 1 && CAC_NHOM.includes(nganh[0]) ? nganh[0] : undefined;
+  const kv = khuVuc && cacKhuVuc().includes(khuVuc) ? khuVuc : undefined;
+  const nhom = nganh.length === 1 && cacNhom().includes(nganh[0]) ? nganh[0] : undefined;
   const co = (k?: string, n?: string) => loc(LUA_CHON_MAU, { ...BO_LOC_MAC_DINH, khuVuc: k ?? "", nhom: n ?? "" }).length > 0;
   if (co(kv, nhom)) return [kv, nhom];
   if (co(undefined, nhom)) return [undefined, nhom];
@@ -59,7 +59,7 @@ export default function KhamPha() {
 
 
   const soLoc = dem(b);
-  const nhomChip = [{ gia: "", nhan: "Tất cả" }, ...CAC_NHOM.map((n) => ({ gia: n, nhan: n }))];
+  const nhomChip = [{ gia: "", nhan: "Tất cả" }, ...cacNhom().map((n) => ({ gia: n, nhan: n }))];
 
   return (
     <>

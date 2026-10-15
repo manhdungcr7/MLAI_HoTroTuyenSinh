@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử độ bền dữ liệu: chuẩn hóa state đọc từ máy, đọc sao lưu hỏng, xếp lại lịch hai lần liền. Chạy: npx tsx tests/do-ben-du-lieu.test.ts
 import assert from "node:assert/strict";
 import { chuanHoa } from "../src/state/chuan-hoa";

@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Chạy mọi chương trình qua các hàm hiển thị với nhiều kiểu học sinh: không được ra NaN, undefined, số vô lý hay câu rỗng.
 // Lỗi ở đây hiện thẳng ra trước mắt học sinh, nên kiểm toàn bộ dữ liệu thay vì vài ví dụ. Chạy: npx tsx tests/toan-bo-chuong-trinh.test.ts
 import assert from "node:assert/strict";

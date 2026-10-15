@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử việc cần học sinh từ mục tiêu thật và lịch tuần. Chạy: npx tsx tests/ke-hoach.test.ts
 import assert from "node:assert/strict";
 import { nganSachPhut, taoViecTuan, type DauVaoViecTuan } from "../src/engine/tao-viec";

@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử hàm thuần của slice Mục tiêu. Chạy: npx tsx tests/muc-tieu.test.ts
 import assert from "node:assert/strict";
 import { khoangCachTheoMon } from "../src/engine/phan-tich";

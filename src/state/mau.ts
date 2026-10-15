@@ -2,7 +2,7 @@ import { CAU_HINH_MAC_DINH, isoNgay, thuHaiCuaTuan, xepLichTuan } from "@/engine
 import { LICH_CO_DINH_MAU } from "@/data/lich-mau";
 import { viecChoTuan } from "@/features/ke-hoach/tao-viec-tuan";
 import type { AppState } from "./store";
-import { LUA_CHON, idHoSoMau, THIEU_MUC_TIEU_MAU, timLuaChon } from "@/data/lua-chon-that";
+import { LUA_CHON, daNapLuaChon, idHoSoMau, THIEU_MUC_TIEU_MAU, timLuaChon } from "@/data/lua-chon-that";
 import { nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { TO_HOP, type DiemThi, type HoSo, type MaToHop, type MonId } from "./types";
@@ -59,6 +59,7 @@ function chonNguyenVongMau(nhom: string, maToHop: MaToHop, diem: Record<MonId, n
 
 /** Hồ sơ mẫu để thử giao diện và cho nhóm dev đi nhanh. Số liệu là mẫu, không phải người thật. Mặc định "Minh Anh". */
 export function taoHoSoMau(kieu: KieuMau = "minhAnh"): AppState {
+  if (!daNapLuaChon()) throw new Error("taoHoSoMau cần danh mục chương trình: gọi await khoDuLieu.sanSang() (hoặc napDanhMuc) trước.");
   const hom = new Date();
   const ngay = (lui: number) => isoNgay(new Date(hom.getFullYear(), hom.getMonth(), hom.getDate() - lui));
   const giaBao = kieu === "giaBao";

@@ -2,10 +2,11 @@ import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { LuaChon } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
 
-export const CAC_NHOM = [...new Set(LUA_CHON_MAU.map((l) => l.nhomNganh))];
+// Tính khi gọi (không ở mức module): danh mục nạp lười và có thể được thay bằng bản CMS.
+export const cacNhom = (): string[] => [...new Set(LUA_CHON_MAU.map((l) => l.nhomNganh))];
 // Nơi có nhiều ngành đứng trước, để các thành phố lớn nằm đầu danh sách thay vì theo thứ tự trong file dữ liệu.
-const DEM_KHU_VUC = LUA_CHON_MAU.reduce((m, l) => m.set(l.khuVuc, (m.get(l.khuVuc) ?? 0) + 1), new Map<string, number>());
-export const CAC_KHU_VUC = [...DEM_KHU_VUC.keys()].filter(Boolean).sort((a, b) => (DEM_KHU_VUC.get(b) ?? 0) - (DEM_KHU_VUC.get(a) ?? 0) || a.localeCompare(b, "vi"));
+const demKhuVuc = () => LUA_CHON_MAU.reduce((m, l) => m.set(l.khuVuc, (m.get(l.khuVuc) ?? 0) + 1), new Map<string, number>());
+export const cacKhuVuc = (): string[] => { const dem = demKhuVuc(); return [...dem.keys()].filter(Boolean).sort((a, b) => (dem.get(b) ?? 0) - (dem.get(a) ?? 0) || a.localeCompare(b, "vi")); };
 
 export interface BoLoc {
   diemTu: number;

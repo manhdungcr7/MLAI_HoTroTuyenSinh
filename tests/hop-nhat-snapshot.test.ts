@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Bản CMS xuất bản được hợp nhất vào dữ liệu thật: thiếu nguồn thì bỏ, không ghi đè số đã có bằng số suy ra.
 import assert from "node:assert/strict";
 import { hopNhatLuaChonVaCms, layChiTietTruongHopNhat } from "../src/engine/du-lieu-tuyen-sinh/hop-nhat";

@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử chỉ số theo dõi, bản tóm tắt chia sẻ và sao lưu/khôi phục. Chạy: npx tsx tests/chia-se.test.ts
 import assert from "node:assert/strict";
 import { chiSoTheoDoi, cauHoiTraoDoi, tomTatChiaSe } from "../src/features/hanh-trinh/tom-tat";

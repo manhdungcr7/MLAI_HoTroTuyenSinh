@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // University Entity System (src/engine/truong.ts). Chạy: npx tsx tests/truong.test.ts
 import assert from "node:assert/strict";
 import dulieu from "../src/data/du-lieu-that.json";

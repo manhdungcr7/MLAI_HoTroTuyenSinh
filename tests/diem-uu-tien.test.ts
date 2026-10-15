@@ -1,3 +1,4 @@
+import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử điểm ưu tiên khu vực/đối tượng và việc nó đi vào tổng điểm so với điểm chuẩn. Chạy: npx tsx tests/diem-uu-tien.test.ts
 import assert from "node:assert/strict";
 import { diemUuTien, mucUuTien, tongCanDatDeDen, tongCoUuTien } from "../src/engine/diem-uu-tien";
