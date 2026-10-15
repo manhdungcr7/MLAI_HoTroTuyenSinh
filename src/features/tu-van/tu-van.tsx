@@ -13,6 +13,7 @@ import { useApp, type AppState } from "@/state/store";
 import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
 import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, nganhLuotTruoc, taoNguCanh, type TinNhan } from "./hoi-thoai";
 import { chonDuLieuKemTheo, tomTatHoSo, traLoiTuDong } from "./lay-du-lieu";
+import { DinhDangMarkdown } from "@/components/ui/dinh-dang-markdown";
 
 /** Dòng NV1 (nếu có) đứng đầu ngữ cảnh để AI lấy NV1 làm gốc; phần lượt trước bị cắt bớt cho vừa giới hạn. */
 function nguCanhVoiNV1(manHinh: string, truoc: TinNhan[], s: AppState): string {
@@ -120,7 +121,7 @@ export default function TuVan() {
   return (
     <>
       <DauTrangCoQuayLai tieuDe="Tư vấn cùng AI" phai={<span className="sr-only">{manHinh}</span>} />
-      <NoiDung className="pb-36">
+      <NoiDung className="pb-52">
         <div className="flex items-center justify-between rounded-xl bg-xanh-nhat px-3.5 py-2.5 border border-xanh/20">
           <div className="flex items-center gap-2 min-w-0">
             <span className="size-7 rounded-lg bg-trang text-xanh grid place-items-center shrink-0 shadow-xs">
@@ -137,17 +138,17 @@ export default function TuVan() {
         </div>
 
         {tin.length === 0 && (
-          <section aria-label="Câu hỏi gợi ý" className="space-y-2 pt-1">
-            <p className="text-[13px] font-bold text-chu-phu px-1">Hỏi nhanh</p>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 snap-x [scrollbar-width:none]">
-              {goiY.map((x) => (
-                <button key={x} type="button" disabled={dang} onClick={() => gui(x)}
-                  className="snap-start shrink-0 min-h-11 rounded-full border border-vien bg-trang px-3.5 text-[13.5px] font-medium text-chu whitespace-nowrap active:bg-xanh-nhat disabled:opacity-50 hover:border-xanh/40 cursor-pointer">
-                  {x}
-                </button>
-              ))}
+          <div className="my-6 rounded-2xl bg-white border border-vien p-4 shadow-xs text-center space-y-3">
+            <div className="size-12 rounded-2xl bg-gradient-to-br from-xanh-nhat to-xanh/20 text-xanh mx-auto grid place-items-center shadow-xs">
+              <Sparkles size={24} />
             </div>
-          </section>
+            <div>
+              <h3 className="text-[16px] font-bold text-muc">Trợ lý Tuyển sinh AI</h3>
+              <p className="text-[13px] text-chu-phu mt-1 leading-relaxed">
+                Tra cứu điểm chuẩn các năm gần đây, phân tích cơ cấu nguyện vọng an toàn, gợi ý ngành vừa sức và lập lịch ôn thi cá thể hóa.
+              </p>
+            </div>
+          </div>
         )}
 
         {tin.length > 0 && (
@@ -156,11 +157,15 @@ export default function TuVan() {
           </div>
         )}
 
-        <section aria-label="Cuộc trò chuyện" aria-live="polite" className="space-y-3">
+        <section aria-label="Cuộc trò chuyện" aria-live="polite" className="space-y-3.5">
           {tin.map((t, i) => (
             <div key={i} className={gop("flex", t.vai === "em" ? "justify-end" : "justify-start")}>
-              <div className={gop("max-w-[92%] rounded-2xl px-3.5 py-2.5 text-[14px] leading-snug break-words", t.vai === "em" ? "gd-xanh text-white" : "bg-trang border border-vien text-chu")}>
-                <p className="whitespace-pre-line">{t.chu}</p>
+              <div className={gop("rounded-2xl px-3.5 py-2.5 text-[14px] leading-snug break-words shadow-xs", t.vai === "em" ? "max-w-[88%] gd-xanh text-white font-medium" : "max-w-[96%] bg-trang border border-vien text-chu")}>
+                {t.vai === "em" ? (
+                  <p className="whitespace-pre-line">{t.chu}</p>
+                ) : (
+                  <DinhDangMarkdown noiDung={t.chu} />
+                )}
                 {t.vai === "mayChu" && (
                   <>
                     {t.nguon && t.nguon.length > 0 && (
@@ -206,18 +211,6 @@ export default function TuVan() {
             </div>
           ))}
 
-          {!dang && viTriCuoi >= 0 && tin[viTriCuoi].vai === "mayChu" && (
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none]" role="group" aria-label="Gợi ý hỏi tiếp">
-              {tin[viTriCuoi].viecTiep && <button type="button" onClick={() => gui(`Giải thích giúp mình: ${tin[viTriCuoi].viecTiep}`)} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-[13px] text-xanh whitespace-nowrap shrink-0 active:bg-xanh-nhat">Hỏi thêm về việc này</button>}
-              {(tin[viTriCuoi].nguon?.length ?? 0) > 0 && (
-                <>
-                  <button type="button" onClick={() => gui("Học phí của ngành này thế nào?")} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-[13px] text-xanh whitespace-nowrap shrink-0 active:bg-xanh-nhat">Học phí thế nào?</button>
-                  <button type="button" onClick={() => gui("Còn ngành nào tương tự thì sao?")} className="min-h-11 rounded-xl border border-xanh/40 bg-trang px-3 py-1.5 text-[13px] text-xanh whitespace-nowrap shrink-0 active:bg-xanh-nhat">Ngành tương tự?</button>
-                </>
-              )}
-            </div>
-          )}
-
           {dang && (
             <div className="flex justify-start" role="status">
               <div className="rounded-2xl border border-vien bg-trang px-3.5 py-2.5 text-[13px] text-chu-phu">
@@ -226,11 +219,74 @@ export default function TuVan() {
               </div>
             </div>
           )}
-          <div ref={cuoi} className="scroll-mb-44" />
+          <div ref={cuoi} className="scroll-mb-48" />
         </section>
 
-        {/* Thanh nhập câu hỏi cố định chắc chắn ở đáy màn hình (ngay trên thanh 5 tab) giống như ChatGPT/Gemini */}
-        <div className="fixed bottom-16 inset-x-0 mx-auto max-w-[430px] z-30 bg-trang/95 backdrop-blur-md border-t border-vien px-3.5 py-2.5 shadow-sm">
+        {/* Thanh nhập câu hỏi và câu hỏi gợi ý: Cố định ngay trên thanh 5 tab điều hướng với khoảng cách thoáng */}
+        <div className="fixed bottom-[65px] inset-x-0 mx-auto max-w-[430px] z-30 bg-trang/95 backdrop-blur-md border-t border-vien px-3 py-2 shadow-sm">
+          {/* Câu hỏi đề xuất hỏi nhanh đặt ngay trên thanh nhập */}
+          {tin.length === 0 && (
+            <div className="mb-2">
+              <div className="flex items-center justify-between px-1 mb-1.5">
+                <span className="text-[12px] font-bold text-chu-phu flex items-center gap-1">
+                  <Sparkles size={13} className="text-xanh" /> Gợi ý hỏi nhanh:
+                </span>
+              </div>
+              <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 snap-x [scrollbar-width:none]">
+                {goiY.map((x) => (
+                  <button
+                    key={x}
+                    type="button"
+                    disabled={dang}
+                    onClick={() => gui(x)}
+                    className="snap-start shrink-0 min-h-9 rounded-full border border-vien bg-white px-3 text-[12.5px] font-medium text-chu whitespace-nowrap active:bg-xanh-nhat disabled:opacity-50 hover:border-xanh/40 cursor-pointer shadow-2xs"
+                  >
+                    {x}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!dang && viTriCuoi >= 0 && tin[viTriCuoi].vai === "mayChu" && (
+            <div className="-mx-1 mb-2 flex gap-1.5 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none]" role="group" aria-label="Gợi ý hỏi tiếp">
+              {tin[viTriCuoi].viecTiep && (
+                <button
+                  type="button"
+                  onClick={() => gui(`Giải thích giúp mình: ${tin[viTriCuoi].viecTiep}`)}
+                  className="min-h-9 rounded-full border border-xanh/40 bg-xanh-nhat/50 px-3 text-[12px] font-semibold text-xanh whitespace-nowrap shrink-0 active:bg-xanh-nhat shadow-2xs cursor-pointer"
+                >
+                  Hỏi thêm về việc này
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => gui("So sánh điểm chuẩn 3 năm gần đây của các trường này")}
+                className="min-h-9 rounded-full border border-vien bg-white px-3 text-[12px] font-medium text-chu whitespace-nowrap shrink-0 active:bg-xanh-nhat shadow-2xs cursor-pointer"
+              >
+                So sánh 3 năm gần đây
+              </button>
+              {(tin[viTriCuoi].nguon?.length ?? 0) > 0 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => gui("Học phí của ngành này thế nào?")}
+                    className="min-h-9 rounded-full border border-vien bg-white px-3 text-[12px] font-medium text-chu whitespace-nowrap shrink-0 active:bg-xanh-nhat shadow-2xs cursor-pointer"
+                  >
+                    Học phí thế nào?
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => gui("Còn ngành nào tương tự thì sao?")}
+                    className="min-h-9 rounded-full border border-vien bg-white px-3 text-[12px] font-medium text-chu whitespace-nowrap shrink-0 active:bg-xanh-nhat shadow-2xs cursor-pointer"
+                  >
+                    Ngành tương tự?
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+
           <label htmlFor="tu-van-cau-hoi" className="sr-only">Câu hỏi của bạn</label>
           <div className="flex items-center gap-2">
             <input
@@ -246,13 +302,13 @@ export default function TuVan() {
               }}
               readOnly={dang}
               maxLength={1000}
-              placeholder={tin.length ? "Hỏi tiếp, ví dụ: Còn ngành kia thì sao?" : "Ví dụ: Điểm chuẩn Khoa học máy tính UIT?"}
-              className="h-12 min-w-0 flex-1 rounded-xl border border-vien bg-trang px-3.5 text-[15px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none transition-colors"
+              placeholder={tin.length ? "Hỏi tiếp (ví dụ: Còn ngành kia thì sao?)" : "Ví dụ: Điểm chuẩn các năm của Khoa học máy tính?"}
+              className="h-11 min-w-0 flex-1 rounded-xl border border-vien bg-trang px-3.5 text-[14.5px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none transition-colors"
             />
             <Nut
               rong={false}
               bieuTuong={Send}
-              className="!h-12 !min-h-12 shrink-0 px-4 !rounded-xl cursor-pointer"
+              className="!h-11 !min-h-11 shrink-0 px-4 !rounded-xl cursor-pointer"
               disabled={dang || cauHoi.trim().length < 3}
               onClick={() => gui(cauHoi)}
             >
