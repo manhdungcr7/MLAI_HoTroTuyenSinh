@@ -9,7 +9,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..800&display=swap" rel="stylesheet" /></noscript>
     <meta name="description" content="Giúp học sinh lớp 10–12 chọn ngành và trường: so điểm của em với điểm chuẩn các năm trước, lập danh sách nguyện vọng và kế hoạch ôn thi. Dữ liệu chỉ lưu trên máy của em." />
     <link rel="canonical" href="https://nguyenvongai.pages.dev/" />
     <meta property="og:url" content="https://nguyenvongai.pages.dev/" />
@@ -32,7 +33,14 @@
     <title>Nguyện Vọng AI</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Màn chờ tĩnh: hiện ngay khi mạng chậm, React thay thế khi chạy. -->
+      <div role="status" aria-live="polite" style="min-height:100dvh;display:grid;place-content:center;gap:14px;justify-items:center;background:#f5f7fa;color:#131c3f;font-family:system-ui,sans-serif">
+        <div style="width:36px;height:36px;border-radius:50%;border:3px solid #d5dcf3;border-top-color:#2448c4;animation:nvai-quay .9s linear infinite"></div>
+        <div style="font-size:15px">Đang tải Nguyện Vọng AI…</div>
+      </div>
+      <style>@keyframes nvai-quay{to{transform:rotate(360deg)}}</style>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
