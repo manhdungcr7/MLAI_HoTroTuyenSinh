@@ -87,7 +87,7 @@ export default function DanhSachNguyenVong() {
     if (den < 0 || den >= s.nguyenVong.length || tu === den) return;
     const d = ds[tu];
     doiViTri(tu, den);
-    bao(`Đã chuyển ${d?.lc?.truong ?? "nguyện vọng"} sang NV${den + 1}`, () => doiViTri(den, tu));
+    bao(`Đã chuyển ${d?.lc?.truong ?? "nguyện vọng"} sang Nguyện Vọng ${den + 1}`, () => doiViTri(den, tu));
   }, [ds, doiViTri, bao, s.nguyenVong.length]);
 
   const { keo, tayNam, kieuHang, ganHang } = useKeoTha(ds.length, chuyen);
@@ -98,7 +98,7 @@ export default function DanhSachNguyenVong() {
     const snapshotCu = [...s.nguyenVong];
     xoaNguyenVong(id);
     // Hoàn tác: khôi phục chính xác danh sách cũ bằng snapshot
-    bao(`Đã xóa NV${viTri + 1} · ${d?.lc?.truong ?? "nguyện vọng"}`, () => datNguyenVong(snapshotCu));
+    bao(`Đã xóa Nguyện Vọng ${viTri + 1} · ${d?.lc?.truong ?? "nguyện vọng"}`, () => datNguyenVong(snapshotCu));
   };
 
   const themTatCaYeuThich = useCallback(() => {
@@ -269,7 +269,7 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
   tayNam: ReturnType<ReturnType<typeof useKeoTha>["tayNam"]>;
   onLen: () => void; onXuong: () => void; onMo: () => void; onXoa: () => void;
 }) {
-  const nv = `NV${d.viTri + 1}`;
+  const nv = `Nguyện Vọng ${d.viTri + 1}`;
   const lc = d.lc;
   const coChuan = !!lc && lc.diemMin > 0;
   const link = lc && (lc.linkNguon || (/^https?:/.test(lc.nguon) ? lc.nguon : ""));
@@ -370,8 +370,8 @@ function TheDanhSachYeuThich({
               {yeuThichChuaThem.length > 0
                 ? (soDaThem > 0
                     ? `Đã thêm ${soDaThem}/${dsYeuThich.length} · Còn ${yeuThichChuaThem.length} ngành`
-                    : "Chọn nhanh để đưa vào danh sách NV")
-                : `Đã đưa tất cả ${dsYeuThich.length} ngành vào NV`}
+                    : "Chọn nhanh để đưa vào danh sách Nguyện Vọng")
+                : `Đã đưa tất cả ${dsYeuThich.length} ngành vào Nguyện Vọng`}
             </p>
           </div>
         </div>
@@ -422,10 +422,10 @@ function TheDanhSachYeuThich({
                   </button>
                   {daThem ? (
                     <span
-                      title={`Đã ở vị trí NV${viTriNV + 1} trong danh sách`}
+                      title={`Đã ở vị trí Nguyện Vọng ${viTriNV + 1} trong danh sách`}
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-luc-nhat text-luc-chu text-[12px] font-bold shrink-0 border border-luc/30"
                     >
-                      <Check size={13} className="stroke-[2.5]" /> NV{viTriNV + 1}
+                      <Check size={13} className="stroke-[2.5]" /> Nguyện Vọng {viTriNV + 1}
                     </span>
                   ) : (
                     <button
@@ -433,7 +433,7 @@ function TheDanhSachYeuThich({
                       onClick={() => onThemMot(l.id, l.nganh, l.truong)}
                       className="min-h-9 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[12px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
                     >
-                      + Thêm vào NV
+                      + Thêm vào Nguyện Vọng
                     </button>
                   )}
                 </li>

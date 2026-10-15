@@ -54,7 +54,7 @@ export default function DanhSachAnToan() {
   };
 
   const duaLen = (c: ReturnType<typeof canhBaoThuTu>[number]) =>
-    datThuTu(duaLenTruoc(s.nguyenVong, c.sau.id, c.truoc.id), `Đã đưa NV${c.sau.viTri + 1} lên trước NV${c.truoc.viTri + 1}`);
+    datThuTu(duaLenTruoc(s.nguyenVong, c.sau.id, c.truoc.id), `Đã đưa Nguyện Vọng ${c.sau.viTri + 1} lên trước Nguyện Vọng ${c.truoc.viTri + 1}`);
 
   const goiYThuTu = () => {
     const moi = deXuatThuTu(ds);
@@ -104,7 +104,7 @@ export default function DanhSachAnToan() {
             <TieuDeMuc>Nguyện vọng chưa xếp được nhãn</TieuDeMuc>
             <ul className="space-y-2 text-[13px] text-chu-phu">
               {ds.filter((d) => d.lyDoKhongNhan).map((d) => (
-                <li key={d.id}><b className="text-chu">NV{d.viTri + 1}{d.lc ? ` · ${d.lc.truong} – ${d.lc.nganh}` : ""}</b>: {d.lyDoKhongNhan}</li>
+                <li key={d.id}><b className="text-chu">Nguyện Vọng {d.viTri + 1}{d.lc ? ` · ${d.lc.truong} – ${d.lc.nganh}` : ""}</b>: {d.lyDoKhongNhan}</li>
               ))}
             </ul>
           </The>
@@ -234,7 +234,7 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
           ))}
           {g.thuSuc.map((d) => d.lc && (
             <li key={d.id}>
-              <DongTruong onClick={() => nav(DUONG_DAN.chiTiet(d.id))} truong={d.lc.truong} tone={d.lc.tone} ten={`NV${d.viTri + 1} · ${d.lc.nganh}`}
+              <DongTruong onClick={() => nav(DUONG_DAN.chiTiet(d.id))} truong={d.lc.truong} tone={d.lc.tone} ten={`Nguyện Vọng ${d.viTri + 1} · ${d.lc.nganh}`}
                 phu={`${d.lc.truong} · ${dinhDang(d.lc.diemMin, 1)} điểm (${d.lc.namDiem})`} nhan={<NhanNguyenVongTag nhan="Thử sức" />} />
             </li>
           ))}
@@ -277,10 +277,10 @@ function HopXemTruoc({ moi, ds, dong, apDung }: { moi: string[] | null; ds: Retu
               const d = ds.find((x) => x.id === id);
               return (
                 <li key={id} className="flex items-center gap-2 text-[13px]">
-                  <b className="w-9 shrink-0 text-muc">NV{i + 1}</b>
+                  <b className="shrink-0 text-muc font-bold">Nguyện Vọng {i + 1}</b>
                   <span className="flex-1 min-w-0 truncate">{d?.lc ? `${d.lc.truong} · ${d.lc.nganh}` : "Lựa chọn không còn trong dữ liệu"}</span>
                   {d?.nhan && <NhanNguyenVongTag nhan={d.nhan} />}
-                  {d && d.viTri !== i && <span className="shrink-0 text-chu-phu">(trước là NV{d.viTri + 1})</span>}
+                  {d && d.viTri !== i && <span className="shrink-0 text-chu-phu">(trước là Nguyện Vọng {d.viTri + 1})</span>}
                 </li>
               );
             })}
@@ -310,7 +310,7 @@ function HopGiaiThich({ giaiThich, dong, ds = [] }: { giaiThich: DiemDanhGia | "
             <div>
               <p className="font-bold text-muc">Tổ hợp dùng để tính</p>
               <ul className="mt-1 space-y-0.5 text-[13px] text-chu-phu">
-                {coToHop.map((d) => <li key={d.id}>NV{d.viTri + 1} · {d.lc!.truong}: {d.toHop}{d.suyRa ? " (suy ra, đề án chưa ghi)" : ""}</li>)}
+                {coToHop.map((d) => <li key={d.id}>Nguyện Vọng {d.viTri + 1} · {d.lc!.truong}: {d.toHop}{d.suyRa ? " (suy ra, đề án chưa ghi)" : ""}</li>)}
               </ul>
             </div>
           )}

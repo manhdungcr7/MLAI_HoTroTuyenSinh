@@ -66,8 +66,6 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
                 </ul>
               </section>
             )}
-
-            <p className="text-[12px] text-chu-phu">Chỉ tính ngành xét điểm thi tốt nghiệp THPT, so với điểm chuẩn các năm trước, đã gồm điểm ưu tiên bạn khai. Không phải xác suất đậu.</p>
           </>
         ) : (
           <The className="flex items-start gap-3">

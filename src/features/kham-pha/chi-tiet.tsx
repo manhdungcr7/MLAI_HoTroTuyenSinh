@@ -310,9 +310,6 @@ export default function ChiTiet() {
               <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
               {lc.daKiemChung ? <Nhan tone="luc">Đã kiểm chứng</Nhan> : <Nhan tone="cam">Chưa kiểm chứng</Nhan>}
             </div>
-            <p className="text-[13px] text-chu-phu leading-snug mt-0.5">
-              {lc.daKiemChung ? "Đối chiếu với đề án của trường." : "Chưa đối chiếu với trường, xem lại trang tuyển sinh chính thức."}
-            </p>
             <details className="mt-1 group">
               <summary className="min-h-11 flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none">Xem chi tiết nguồn</summary>
               <p className="text-[12px] text-chu-phu leading-snug">{lc.nguon}.</p>
