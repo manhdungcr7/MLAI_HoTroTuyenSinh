@@ -159,6 +159,10 @@ export function locNguon(goc: string, duocPhep: string[]): TraLoiTuVan {
   const traLoi = goc.normalize("NFC");
   const ids = new Set<string>();
   for (const m of traLoi.matchAll(/\[ngu[oôồ]n:\s*([^\]]+)\]/gi)) for (const t of m[1].split(/[,;\s]+/)) if (duocPhep.includes(t)) ids.add(t);
-  const sach = traLoi.replace(/\s*\[ngu[oôồ]n:[^\]]*\]/gi, "").trim();
+  const sach = traLoi.replace(/\s*\[ngu[oôồ]n:[^\]]*\]/gi, "")
+    // Thẻ nguồn bị gỡ có thể để lại dòng "Nguồn:" / "*Nguồn:*" trống: bỏ luôn dòng đó.
+    .replace(/^[ \t]*[*_]*\s*ngu[oôồ]n\s*:?\s*[*_]*[ \t]*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   return { traLoi: sach, nguon: [...ids] };
 }

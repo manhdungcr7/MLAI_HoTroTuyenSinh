@@ -193,9 +193,9 @@ export default function TuVan() {
                                   disabled={daCo}
                                   onClick={() => { if (!daCo) themNguyenVong(id); }}
                                   aria-label={daCo ? `Đã có ${l.nganh} trong nguyện vọng` : `Thêm ${l.nganh} vào nguyện vọng`}
-                                  className={gop("min-h-11 shrink-0 px-3 rounded-lg text-[13px] font-bold whitespace-nowrap inline-flex items-center justify-center gap-1 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-xanh text-white active:brightness-90 cursor-pointer")}
+                                  className={gop("min-h-11 shrink-0 px-3 rounded-lg text-[13px] font-bold whitespace-nowrap inline-flex items-center justify-center gap-1 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-trang text-xanh border border-xanh/40 active:bg-xanh-nhat cursor-pointer")}
                                 >
-                                  {daCo ? <><Check size={15} />Đã thêm</> : "+ Thêm vào nguyện vọng"}
+                                  {daCo ? <><Check size={15} />Đã thêm</> : "+ Thêm NV"}
                                 </button>
                               </li>
                             );
