@@ -61,6 +61,9 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 - Học phí (721 chương trình ở 20 trường: KHA/NEU, PKA, QSX, BKA, DCN, GHA, XDA, HTC, NTH, YDS, NHH, YHB, QHT, QHI, QSC, HQT, DDY, LPH, QHE, QSY; chỉ giữ học phí đã đối chiếu được với văn bản đúng trường; 12/10 đã gỡ 337 dòng của 11 trường vì link 404 hoặc PDF là của trường khác — xem `scripts/lam-day-hoc-phi.py` (BO_QUA)) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
 - 73 tổ hợp xét tuyển chính thức: `src/data/to-hop-chinh-thuc.ts`.
 - Script sinh lại dữ liệu cần thư mục anh em `nguyen-vong` (nguồn thô). Hướng dẫn và giới hạn: `docs/DU-LIEU.md`.
+- Số đo thực (chạy `python -I scripts/kiem-dinh-du-lieu.py`, test `tests/du-lieu-trung-thuc.test.ts`): 3.652 chương trình / 118 trường; điểm chuẩn từ đề án PDF 1.551, từ trang tổng hợp tuyensinh247 2.101 (nguồn thứ cấp); 1.680 chương trình có điểm năm 2026, tất cả từ trang tổng hợp, chưa đối chiếu đề án (`loaiDiemMoiNhat = "thu-cap"`); 1.173 chương trình không có link `nguon` chung nhưng 1.117 có link PDF đề án theo năm (`nguon-nam*.json`) và 56 chỉ có đề án cấp trường; tỷ lệ việc làm có số cho 121 chương trình.
+- Học phí: 721 chương trình ở 20 trường, mỗi dòng có link + trang. Có `phamVi`: `truong` (75 dòng của DCN, HQT, QHE: cả trường cùng một mức, là mức chung của trường, UI phải ghi đúng) hoặc `nganh`. 14/10 từng có commit điền "100%" học phí và việc làm bằng công thức/băm; 15/10 đã gỡ toàn bộ (2.931 dòng học phí, 3.531 dòng việc làm, link và số trang đề án do script tự gán) vì không có nguồn thật.
+- `diemDuKien` (`dk`) hiện bằng đúng điểm năm mới nhất của mọi chương trình, không phải dự báo; dự báo thật là `engine/du-bao-diem-chuan.ts`.
 - Dữ liệu nào chưa có thì hiển thị "chưa có", không điền thay.
 
 ### Logic điểm (quan trọng nhất, dễ sai)

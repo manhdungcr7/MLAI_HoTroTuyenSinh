@@ -15,15 +15,15 @@
 
 ---
 
-## 📊 Bộ Dữ Liệu Tuyển Sinh Chuẩn Quốc Gia (100% Toàn Diện)
+## Bộ dữ liệu tuyển sinh (số đo thực)
 
 Hệ thống sở hữu cơ sở dữ liệu đối soát thực tế từ Đề án tuyển sinh chính thức của Bộ Giáo dục & Đào tạo và các cơ sở giáo dục đại học trên cả nước:
 
 - **3.652 chương trình đào tạo** thuộc **118 trường đại học** lớn trên toàn quốc (Hà Nội, TP.HCM, Miền Trung, Tây Nguyên, Đồng bằng Sông Cửu Long).
-- **100% có điểm chuẩn nhiều năm** kèm tổ hợp môn xét tuyển chính thức (A00, A01, B00, C00, D01, D07, X26, X70...).
-- **100% có học phí dự kiến theo năm**: Trích xuất chi tiết theo đề án từng trường và tuân thủ Nghị định 81/2021/NĐ-CP, Nghị định 97/2023/NĐ-CP (chương trình chuẩn, chất lượng cao, liên kết quốc tế, tiên tiến) và Nghị định 116/2020/NĐ-CP (hỗ trợ 100% học phí và sinh hoạt phí cho nhóm ngành Sư phạm).
-- **100% có tỷ lệ sinh viên có việc làm sau tốt nghiệp**: Khảo sát việc làm sau 12 tháng theo công bố chất lượng giáo dục chính thức, phân tầng mức độ cơ hội ("Rất cao", "Cao", "Khá").
-- **100% minh bạch nguồn gốc**: Mỗi con số điểm chuẩn, học phí, việc làm đều kèm liên kết tài liệu Đề án PDF chính thức và số trang cụ thể để học sinh và phụ huynh tự đối chứng.
+- **Điểm chuẩn nhiều năm** kèm tổ hợp xét tuyển khi đề án có ghi (A00, A01, B00, C00, D01, D07...). 1.551 chương trình lấy từ đề án PDF, 2.101 từ trang tổng hợp (nguồn thứ cấp).
+- **Học phí theo năm: 721 chương trình ở 20 trường**, mỗi dòng kèm link đề án và số trang; 75 dòng là mức chung cả trường. Chương trình còn lại ghi "chưa có".
+- **Tỷ lệ có việc làm: 121 chương trình**, trích từ đề án; còn lại ghi "chưa có".
+- **Nguồn**: mọi con số hiển thị đều kèm link; thiếu thì nói thiếu, không điền thay. Kiểm đếm: `python -I scripts/kiem-dinh-du-lieu.py`.
 
 ---
 
@@ -154,4 +154,4 @@ npx wrangler pages deploy cms/dist --project-name=nguyenvongai-cms
 
 - **Giao diện thân thiện, hiện đại:** Sử dụng đại từ xưng hô chuẩn mực **"bạn"** xuyên suốt toàn bộ ứng dụng.
 - **Tối ưu trải nghiệm (Declutter):** Loại bỏ các dòng mô tả xám rườm rà, tập trung trực tiếp vào số liệu thực tế và hành động cốt lõi.
-- **Nguồn sự thật dữ liệu:** 100% dữ liệu điểm chuẩn, học phí và tỷ lệ việc làm đều có nguồn đối chiếu minh bạch từ đề án chính thức của các trường đại học tại Việt Nam.
+- **Nguồn sự thật dữ liệu:** điểm chuẩn, học phí, việc làm chỉ hiển thị khi có nguồn; chi tiết và giới hạn ở `docs/DU-LIEU.md`.
