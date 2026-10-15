@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  CalendarCheck, Check, Maximize2, RotateCcw, Send, Sparkles, X,
+  Bot, CalendarCheck, Check, Maximize2, RotateCcw, Send, X,
 } from "lucide-react";
-import { Nut, gop } from "@/components/ui/nut-the";
+import { gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { DUONG_DAN } from "@/duong-dan";
@@ -40,7 +40,7 @@ async function hoiAI(y: YeuCauTuVan): Promise<{ kq: TraLoiTuVan | null; viecTiep
   } catch { return { kq: null, loi: "mang" }; }
 }
 
-/** Khung chat mini gọn gàng chuẩn giao diện website */
+/** Khung chat mini nổi ở góc màn hình giống phong cách các website thương mại */
 function KhungChatMini({ dong }: { dong: () => void }) {
   const { pathname } = useLocation();
   const nav = useNavigate();
@@ -145,53 +145,72 @@ function KhungChatMini({ dong }: { dong: () => void }) {
   const viTriCuoi = tin.length - 1;
 
   return (
-    <div className="flex flex-col h-full bg-trang text-chu">
-      {/* Tiêu đề thanh trên của hộp trợ lý nhỏ */}
-      <header className="px-3 py-2 border-b border-vien bg-nen flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="size-7 rounded-lg gd-xanh text-white grid place-items-center shrink-0 shadow-xs">
-            <Sparkles size={14} />
+    <div className="flex flex-col h-full bg-white text-chu">
+      {/* Tiêu đề xanh đậm chuẩn phong cách chatbot */}
+      <header className="px-3.5 py-3 gd-xanh text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="size-9 rounded-full bg-white text-xanh grid place-items-center shrink-0 shadow-xs">
+            <Bot size={20} />
           </span>
           <div className="min-w-0">
-            <h3 className="text-[13px] font-bold text-muc leading-tight truncate">Trợ lý Tuyển sinh AI</h3>
-            <span className="text-[10.5px] text-luc font-medium flex items-center gap-1">
-              <span className="size-1.5 rounded-full bg-luc inline-block" /> Sẵn sàng hỗ trợ
+            <h3 className="text-[14px] font-bold text-white leading-tight truncate">Chatbot AI Tuyển sinh</h3>
+            <span className="text-[11px] text-white/90 font-medium flex items-center gap-1.5 mt-0.5">
+              <span className="size-2 rounded-full bg-emerald-400 inline-block animate-pulse" /> Đang hoạt động
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => { dong(); nav(DUONG_DAN.tuVan(), { state: { nguCanh: manHinh } }); }}
             title="Mở toàn trang"
             aria-label="Mở toàn trang"
-            className="size-7 grid place-items-center rounded-md hover:bg-vien/60 text-chu-phu cursor-pointer transition-colors"
+            className="size-8 grid place-items-center rounded-lg hover:bg-white/20 text-white cursor-pointer transition-colors"
           >
-            <Maximize2 size={13} />
+            <Maximize2 size={15} />
           </button>
           <button
             type="button"
             onClick={dong}
-            title="Đóng khung chat"
-            aria-label="Đóng khung chat"
-            className="size-7 grid place-items-center rounded-md hover:bg-vien/60 text-chu cursor-pointer transition-colors"
+            title="Đóng"
+            aria-label="Đóng"
+            className="size-8 grid place-items-center rounded-lg hover:bg-white/20 text-white cursor-pointer transition-colors"
           >
-            <X size={15} />
+            <X size={17} />
           </button>
         </div>
       </header>
 
       {/* Nội dung danh sách tin nhắn */}
-      <div className="flex-1 overflow-y-auto px-3 py-2.5 space-y-2.5 min-h-0 text-[13px]">
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3 min-h-0 bg-slate-50/70 text-[13px]">
         {tin.length === 0 && (
-          <div className="my-3 rounded-xl bg-nen border border-vien p-3 text-center space-y-1.5">
-            <span className="size-8 rounded-lg bg-xanh-nhat text-xanh mx-auto grid place-items-center">
-              <Sparkles size={16} />
-            </span>
-            <p className="text-[12.5px] font-bold text-muc">Bạn cần trợ giúp gì về tuyển sinh?</p>
-            <p className="text-[11.5px] text-chu-phu leading-relaxed">
-              Hỏi điểm chuẩn các năm gần đây, cơ cấu nguyện vọng hoặc ngành vừa sức với điểm của bạn.
-            </p>
+          <div className="space-y-3">
+            <div className="flex items-start gap-2">
+              <span className="size-7 rounded-full gd-xanh text-white grid place-items-center shrink-0 mt-0.5 shadow-2xs">
+                <Bot size={15} />
+              </span>
+              <div className="bg-white border border-vien rounded-2xl rounded-tl-xs p-3 text-[13px] text-chu shadow-2xs leading-relaxed max-w-[88%]">
+                <p>Xin chào! 👋</p>
+                <p className="mt-1">Mình là Chatbot AI tư vấn tuyển sinh. Mình có thể giúp bạn tra cứu điểm chuẩn các năm gần đây, phân tích nguyện vọng và hỗ trợ kế hoạch học tập.</p>
+              </div>
+            </div>
+
+            <div className="pl-9 space-y-1.5">
+              <p className="text-[11px] font-bold text-chu-phu uppercase tracking-wider">Câu hỏi thường gặp:</p>
+              <div className="flex flex-wrap gap-1.5">
+                {goiY.map((x) => (
+                  <button
+                    key={x}
+                    type="button"
+                    disabled={dang}
+                    onClick={() => gui(x)}
+                    className="text-left rounded-xl border border-vien bg-white px-2.5 py-1.5 text-[11.5px] font-medium text-chu hover:border-xanh/50 hover:bg-xanh-nhat/40 active:bg-xanh-nhat transition-colors shadow-2xs cursor-pointer"
+                  >
+                    {x}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
@@ -201,17 +220,22 @@ function KhungChatMini({ dong }: { dong: () => void }) {
               type="button"
               disabled={dang}
               onClick={() => { setTin([]); setCauHoi(""); }}
-              className="inline-flex items-center gap-1 text-[11px] font-bold text-xanh disabled:opacity-50"
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-xanh hover:underline disabled:opacity-50 cursor-pointer"
             >
               <RotateCcw size={11} /> Đoạn chat mới
             </button>
           </div>
         )}
 
-        <section aria-label="Cuộc trò chuyện" aria-live="polite" className="space-y-2.5">
+        <section aria-label="Cuộc trò chuyện" aria-live="polite" className="space-y-3">
           {tin.map((t, i) => (
-            <div key={i} className={gop("flex", t.vai === "em" ? "justify-end" : "justify-start")}>
-              <div className={gop("rounded-2xl px-3 py-2 text-[12.5px] leading-snug break-words shadow-xs", t.vai === "em" ? "max-w-[88%] gd-xanh text-white font-medium" : "max-w-[95%] bg-nen border border-vien text-chu")}>
+            <div key={i} className={gop("flex items-start gap-2", t.vai === "em" ? "justify-end" : "justify-start")}>
+              {t.vai === "mayChu" && (
+                <span className="size-7 rounded-full gd-xanh text-white grid place-items-center shrink-0 mt-0.5 shadow-2xs">
+                  <Bot size={15} />
+                </span>
+              )}
+              <div className={gop("rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed break-words shadow-2xs", t.vai === "em" ? "max-w-[85%] rounded-tr-xs gd-xanh text-white font-medium" : "max-w-[85%] rounded-tl-xs bg-white border border-vien text-chu")}>
                 {t.vai === "em" ? (
                   <p className="whitespace-pre-line">{t.chu}</p>
                 ) : (
@@ -220,19 +244,19 @@ function KhungChatMini({ dong }: { dong: () => void }) {
                 {t.vai === "mayChu" && (
                   <>
                     {t.nguon && t.nguon.length > 0 && (
-                      <div className="mt-2 space-y-1" role="group" aria-label="Nguồn số liệu và hành động">
-                        <p className="text-[11px] font-bold text-chu-phu">Các ngành liên quan:</p>
-                        <ul className="space-y-1">
+                      <div className="mt-2.5 space-y-1.5 border-t border-vien/60 pt-2" role="group" aria-label="Nguồn số liệu và hành động">
+                        <p className="text-[11.5px] font-bold text-chu-phu">Các ngành liên quan:</p>
+                        <ul className="space-y-1.5">
                           {t.nguon.map((id) => {
                             const l = LUA_CHON_MAU.find((x) => x.id === id);
                             if (!l) return null;
                             const daCo = s.nguyenVong.includes(id);
                             return (
-                              <li key={id} className="rounded-lg bg-trang border border-vien p-1.5 flex items-center justify-between gap-1.5">
+                              <li key={id} className="rounded-xl bg-slate-50 border border-vien p-2 flex flex-col gap-1 min-[340px]:flex-row min-[340px]:items-center justify-between">
                                 <Link
                                   to={DUONG_DAN.chiTiet(id)}
                                   onClick={dong}
-                                  className="min-w-0 flex-1 text-[11.5px] font-bold text-xanh leading-tight hover:underline truncate"
+                                  className="min-w-0 flex-1 text-[12px] font-bold text-xanh leading-tight hover:underline truncate"
                                 >
                                   {l.truong} · {l.nganh}
                                 </Link>
@@ -240,9 +264,9 @@ function KhungChatMini({ dong }: { dong: () => void }) {
                                   type="button"
                                   disabled={daCo}
                                   onClick={() => { if (!daCo) themNguyenVong(id); }}
-                                  className={gop("h-6.5 shrink-0 px-2 rounded text-[10.5px] font-bold inline-flex items-center justify-center gap-0.5 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-xanh text-white active:brightness-90 cursor-pointer")}
+                                  className={gop("h-7 shrink-0 px-2.5 rounded-lg text-[11px] font-bold inline-flex items-center justify-center gap-1 transition-colors", daCo ? "bg-luc-nhat text-luc-chu" : "bg-xanh text-white active:brightness-90 cursor-pointer")}
                                 >
-                                  {daCo ? <><Check size={11} />Đã thêm</> : "+ Thêm vào Nguyện Vọng"}
+                                  {daCo ? <><Check size={12} />Đã thêm</> : "+ Thêm vào Nguyện Vọng"}
                                 </button>
                               </li>
                             );
@@ -251,20 +275,20 @@ function KhungChatMini({ dong }: { dong: () => void }) {
                       </div>
                     )}
                     {/kế hoạch học tập|lịch học|ôn thi tuần/i.test(t.chu) && (
-                      <div className="mt-1.5 p-2 rounded-lg bg-gradient-to-r from-xanh-nhat to-white border border-xanh/30 flex items-center justify-between gap-1.5">
+                      <div className="mt-2 p-2 rounded-xl bg-gradient-to-r from-xanh-nhat to-white border border-xanh/30 flex items-center justify-between gap-1.5">
                         <span className="text-[11.5px] font-bold text-muc">Lịch học tuần AI</span>
                         <Link
                           to={DUONG_DAN.tuan()}
                           onClick={dong}
-                          className="shrink-0 h-6 px-2 rounded bg-xanh text-white text-[11px] font-bold inline-flex items-center gap-0.5 hover:bg-xanh/90 transition-colors"
+                          className="shrink-0 h-6.5 px-2.5 rounded-md bg-xanh text-white text-[11px] font-bold inline-flex items-center gap-1 hover:bg-xanh/90 transition-colors"
                         >
-                          <CalendarCheck size={11} /> Vào xem
+                          <CalendarCheck size={12} /> Vào xem
                         </Link>
                       </div>
                     )}
                     {t.viecTiep && <p className="mt-1 text-[11.5px] text-muc">Gợi ý: <span className="text-chu">{t.viecTiep}</span></p>}
                     {t.thuLai && i === viTriCuoi && !dang && tin[i - 1]?.vai === "em" && (
-                      <div className="mt-1 flex items-center gap-1.5">
+                      <div className="mt-1.5 flex items-center gap-1.5">
                         <span className="text-[11px] text-chu-phu">Chưa gửi được.</span>
                         <button type="button" onClick={() => gui(tin[i - 1].chu, i - 1)} className="inline-flex items-center gap-0.5 text-[11.5px] font-bold text-xanh"><RotateCcw size={11} />Thử lại</button>
                       </div>
@@ -276,14 +300,17 @@ function KhungChatMini({ dong }: { dong: () => void }) {
           ))}
 
           {dang && (
-            <div className="flex justify-start" role="status">
-              <div className="rounded-xl border border-vien bg-nen px-2.5 py-1.5 text-[11.5px] text-chu-phu">
-                <span className="mr-1 inline-flex gap-1 align-middle" aria-hidden>
+            <div className="flex items-start gap-2" role="status">
+              <span className="size-7 rounded-full gd-xanh text-white grid place-items-center shrink-0 mt-0.5 shadow-2xs">
+                <Bot size={15} />
+              </span>
+              <div className="rounded-2xl rounded-tl-xs border border-vien bg-white px-3 py-2 text-[12px] text-chu-phu shadow-2xs">
+                <span className="mr-1.5 inline-flex gap-1 align-middle" aria-hidden>
                   <span className="size-1.5 animate-pulse rounded-full bg-xanh" />
                   <span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:200ms]" />
                   <span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:400ms]" />
                 </span>
-                {lau ? "Đang tra số liệu…" : "Đang soạn câu trả lời…"}
+                {lau ? "Đang đối chiếu dữ liệu…" : "Đang soạn câu trả lời…"}
               </div>
             </div>
           )}
@@ -291,25 +318,9 @@ function KhungChatMini({ dong }: { dong: () => void }) {
         </section>
       </div>
 
-      {/* Chân khung chat mini: Gợi ý nhanh + Ô nhập câu hỏi */}
-      <footer className="border-t border-vien bg-trang px-2.5 pt-1.5 pb-2 shrink-0 space-y-1.5">
-        {tin.length === 0 && (
-          <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none]">
-            {goiY.map((x) => (
-              <button
-                key={x}
-                type="button"
-                disabled={dang}
-                onClick={() => gui(x)}
-                className="shrink-0 h-6.5 rounded-full border border-vien bg-nen px-2 text-[11px] font-medium text-chu whitespace-nowrap active:bg-xanh-nhat disabled:opacity-50 hover:border-xanh/40 cursor-pointer"
-              >
-                {x}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div className="flex items-center gap-1.5">
+      {/* Chân khung chat: Ô nhập tin nhắn bo tròn như các chatbot thương mại */}
+      <footer className="border-t border-vien bg-white p-2.5 shrink-0">
+        <div className="flex items-center gap-2">
           <input
             type="text"
             value={cauHoi}
@@ -322,25 +333,25 @@ function KhungChatMini({ dong }: { dong: () => void }) {
             }}
             readOnly={dang}
             maxLength={1000}
-            placeholder="Hỏi trợ lý Tuyển sinh AI..."
-            className="h-9 min-w-0 flex-1 rounded-lg border border-vien bg-nen px-2.5 text-[12.5px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none transition-colors"
+            placeholder="Nhập tin nhắn..."
+            className="h-10 min-w-0 flex-1 rounded-full border border-vien bg-slate-100 px-4 text-[13px] text-chu placeholder:text-chu-phu focus:border-xanh focus:bg-white outline-none transition-all"
           />
-          <Nut
-            rong={false}
-            bieuTuong={Send}
-            className="!h-9 !min-h-9 shrink-0 px-3 !rounded-lg cursor-pointer text-[12px]"
+          <button
+            type="button"
             disabled={dang || cauHoi.trim().length < 3}
             onClick={() => gui(cauHoi)}
+            aria-label="Gửi tin nhắn"
+            className="size-10 rounded-full gd-xanh text-white grid place-items-center shrink-0 hover:brightness-110 active:scale-95 disabled:opacity-40 transition-all cursor-pointer shadow-xs"
           >
-            Gửi
-          </Nut>
+            <Send size={16} />
+          </button>
         </div>
       </footer>
     </div>
   );
 }
 
-/** Nút tròn trợ lý Tuyển sinh AI nổi ở góc màn hình. Bấm vào hiển thị khung chat nhỏ gọn gàng. */
+/** Nút tròn Chatbot AI nổi ở góc màn hình. Bấm vào hiển thị khung chat nhỏ gọn giống các trang web hiện đại. */
 export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
   const { pathname } = useLocation();
   const [mo, setMo] = useState(false);
@@ -374,37 +385,39 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
     <div
       ref={vungRef}
       className={gop(
-        "fixed inset-x-0 mx-auto max-w-[430px] z-40 pointer-events-none px-3 flex flex-col items-end",
-        khongThanh ? "bottom-5" : "bottom-20",
+        "fixed z-50 flex flex-col items-end pointer-events-none",
+        khongThanh ? "bottom-5 right-4 sm:bottom-6 sm:right-6" : "bottom-20 right-4 sm:bottom-6 sm:right-6",
       )}
     >
-      {/* Khung chat nhỏ gọn nổi phía trên nút tròn (giống các chatbot hỗ trợ trên web) */}
+      {/* Khung chat nhỏ gọn nổi phía trên nút tròn */}
       {mo && (
         <div
           role="dialog"
-          aria-label="Trợ lý Tuyển sinh AI"
-          className="pointer-events-auto mb-2.5 w-[calc(100vw-24px)] max-w-[340px] sm:max-w-[360px] h-[450px] max-h-[calc(100dvh-110px)] bg-trang rounded-2xl border border-vien shadow-2xl flex flex-col overflow-hidden hien-len"
+          aria-label="Chatbot AI Tuyển sinh"
+          className="pointer-events-auto mb-3 w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100dvh-120px)] bg-white rounded-2xl shadow-2xl border border-vien overflow-hidden flex flex-col hien-len"
         >
           <KhungChatMini dong={() => setMo(false)} />
         </div>
       )}
 
-      {/* Nút tròn nổi ở góc màn hình */}
+      {/* Nút tròn nổi ở góc màn hình: Icon Bot kèm huy hiệu đỏ báo tin nhắn */}
       <button
         type="button"
         onClick={() => setMo((m) => !m)}
-        aria-label={mo ? "Đóng trợ lý Tuyển sinh AI" : "Mở trợ lý Tuyển sinh AI"}
-        title={mo ? "Đóng trợ lý" : "Trợ lý Tuyển sinh AI"}
-        className="pointer-events-auto size-12 rounded-full gd-xanh text-white shadow-lg shadow-xanh/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer border-2 border-trang relative group"
+        aria-label={mo ? "Đóng Chatbot AI" : "Mở Chatbot AI"}
+        title={mo ? "Đóng chat" : "Chatbot AI Tuyển sinh"}
+        className="pointer-events-auto size-14 rounded-full gd-xanh text-white shadow-xl shadow-xanh/35 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer border-2 border-white relative group"
       >
         {mo ? (
-          <X size={20} className="text-white" />
+          <X size={22} className="text-white" />
         ) : (
           <>
-            <Sparkles size={20} className="text-white" />
-            <span className="absolute -top-0.5 -right-0.5 flex size-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-da-quang opacity-75" />
-              <span className="relative inline-flex rounded-full size-3 bg-da-quang border border-white" />
+            <Bot size={26} className="text-white" />
+            <span className="absolute -top-0.5 -right-0.5 flex size-4">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+              <span className="relative inline-flex rounded-full size-4 bg-red-500 text-[9.5px] font-bold text-white items-center justify-center border border-white">
+                1
+              </span>
             </span>
           </>
         )}
