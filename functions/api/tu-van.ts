@@ -50,7 +50,7 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
   try {
     const r = await traLoiBacThang(env, kt.v, f);
-    if (!r.ok) return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, 503);
+    if (!r.ok) return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, r.loi === "chua-cau-hinh" ? 503 : 422);
     return json(r.kq);
   } catch {
     return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút" }, 502);
