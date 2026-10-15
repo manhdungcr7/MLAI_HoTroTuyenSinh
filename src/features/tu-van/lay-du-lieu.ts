@@ -3,6 +3,7 @@ import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { NguonTaiSau } from "@/data/lua-chon-that";
 import { NGAN_SACH_TOI_DA, nhanNguyenVong, khoangCachTheoMon } from "@/engine/phan-tich";
+import { hieuCauTim } from "@/engine/hieu-cau-tim";
 import type { HoSoTomTat, SuKien } from "@/engine/tu-van";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -116,14 +117,17 @@ export function chonDuLieuKemTheo(cauHoi: string, s: AppState, nguon: NguonTaiSa
   const hoiDanhSach = /nguyen vong|danh sach|can bang|an toan|thu suc/.test(khongDau(cauHoi));
   const chon: LuaChon[] = [];
   const them = (l?: LuaChon) => { if (l && !chon.some((c) => c.id === l.id) && chon.length < toiDa) chon.push(l); };
-  const khop = timNganhKhop(cauHoi, toiDa);
+  // Câu hỏi nêu mức học phí ("dưới 40 triệu"): không gửi ngành có học phí (kể cả ước tính) cao hơn mức đó cho AI.
+  const tran = hieuCauTim(cauHoi, LUA_CHON_MAU).hocPhiToiDa;
+  const trongTran = (l: LuaChon) => tran === undefined || l.hocPhiMin === undefined || l.hocPhiMin <= tran;
+  const khop = timNganhKhop(cauHoi, toiDa * 3).filter(trongTran).slice(0, toiDa);
   // Câu nối tiếp ("ngành đó", "còn trường kia thì sao", hoặc không nêu ngành nào): giữ các ngành đã nói ở lượt trước.
   // Nếu câu còn nêu ngành mới thì chỉ giữ tối đa 4 để ngành mới vẫn có chỗ.
   const noiTiep = giuId.length > 0 && !hoiDanhSach && (coDaiTu(cauHoi) || khop.length === 0);
   if (noiTiep) giuId.slice(0, khop.length ? 4 : toiDa).forEach((id) => them(LUA_CHON_MAU.find((l) => l.id === id)));
   if (hoiDanhSach) s.nguyenVong.forEach((id) => them(LUA_CHON_MAU.find((l) => l.id === id)));
   khop.forEach(them);
-  if (chon.length === 0) goiYDanhSach(diem, s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)).slice(0, 5).forEach((d) => them(d.lc));
+  if (chon.length === 0) goiYDanhSach(diem, s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)).filter((d) => trongTran(d.lc)).slice(0, 5).forEach((d) => them(d.lc));
   return chon.map((l) => dungSuKien(l, diem, nguon));
 }
 
