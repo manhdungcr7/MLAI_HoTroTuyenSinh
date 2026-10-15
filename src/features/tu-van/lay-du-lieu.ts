@@ -198,21 +198,20 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
   if (soSanh) {
     const sk = khop.slice(0, 4).map((l) => dungSuKien(l, diem, nguon));
     const bang3Nam = [
-      "| Ngành | Trường | Điểm 2023 | Điểm 2024 | Điểm 2025 | Dự kiến 2026 | Nhãn | Học phí/năm |",
+      // Mỗi cột năm chỉ ghi điểm thật của đúng năm đó ("—" nếu chưa có). Khoảng dự báo ở cột riêng, ghi rõ năm dự báo.
+      "| Ngành | Trường | Điểm 2024 | Điểm 2025 | Điểm 2026 | Dự kiến năm tới | Nhãn | Học phí/năm |",
       "|---|---|---|---|---|---|---|---|",
       ...sk.map((d) => {
-        const d23 = d.diem["2023"] ? so1(d.diem["2023"]) : "—";
-        const d24 = d.diem["2024"] ? so1(d.diem["2024"]) : "—";
-        const d25 = d.diem["2025"] ? so1(d.diem["2025"]) : (d.diem["2024"] ? so1(d.diem["2024"]) : "—");
-        const d26 = d.diem["2026"] ? so1(d.diem["2026"]) : (d.duBao ? `${so1(d.duBao.thap)}–${so1(d.duBao.cao)}` : "—");
+        const nam = (y: string) => (d.diem[y] ? so1(d.diem[y]) : "—");
+        const duKien = d.duBao ? `${so1(d.duBao.thap)}–${so1(d.duBao.cao)} (${d.duBao.nam})` : "—";
         const nhan = d.nhanCuaEm || "Tham khảo";
         const hp = d.hocPhiTrieu !== undefined ? `${d.hocPhiUocTinh ? "≈ " : ""}${so1(d.hocPhiTrieu)} tr` : "—";
-        return `| ${d.nganh} | ${d.truong} | ${d23} | ${d24} | ${d25} | ${d26} | ${nhan} | ${hp} |`;
+        return `| ${d.nganh} | ${d.truong} | ${nam("2024")} | ${nam("2025")} | ${nam("2026")} | ${duKien} | ${nhan} | ${hp} |`;
       }),
     ].join("\n");
 
     return {
-      traLoi: `Dưới đây là bảng so sánh điểm chuẩn các năm gần đây (2023, 2024, 2025 và dự kiến 2026) cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
+      traLoi: `Dưới đây là điểm chuẩn các năm gần đây (năm nào chưa có ghi "—") và khoảng dự kiến năm tới, cùng mức độ phù hợp cho bạn:\n\n${bang3Nam}\n\n📊 **Phân tích xu hướng & Chiến lược chọn ngành:**\n• **Dữ liệu điểm chuẩn liên tục**: Điểm chuẩn các năm phản ánh chính xác xu thế và độ phân hóa đề thi qua từng năm.\n• **Chiến lược phân tầng**: Đặt ngành **Thử sức** ở NV1–NV2 để vươn tới đam mê, ngành **Vừa sức** ở NV3–NV4 làm trọng tâm, và ngành **An toàn** ở NV5–NV6 làm lưới đỡ chắc chắn.\n• **Học phí & Tài chính**: Cân nhắc mức học phí/năm tương ứng với khả năng tài chính của gia đình.\n\n${NHAC}`,
       nguon: sk.map((l) => l.id),
     };
   }

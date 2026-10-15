@@ -24,7 +24,9 @@ const TIEN_TO_CHUNG = /^(CT chuẩn|Chuẩn QT|Đại học chính quy|Khoa họ
 
 /** Tên ngành gọn cho người đọc; phần bỏ đi (nếu có) trả ở `them`. Không đổi nghĩa: chỉ bỏ chữ lặp và nhãn loại chương trình. */
 export function tenGon(goc: string): { ten: string; them?: string } {
-  let t = goc.replace(/^Chương trình đào tạo (ngành )?/i, "").trim();
+  let t = goc.replace(/^Chương trình đào tạo (ngành )?/i, "")
+    .replace(/^\(\d+\)\s+/, "") // "(1) Tài chính": số thứ tự còn sót khi trích PDF của NEU
+    .trim();
   const cat: number[] = [];
   for (let i = t.indexOf(" - "); i >= 0; i = t.indexOf(" - ", i + 1)) cat.push(i);
   for (const i of cat) {

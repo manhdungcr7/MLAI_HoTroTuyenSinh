@@ -58,6 +58,7 @@ for (const ma of Object.keys(deAnTruongTC)) assert.ok(LUA_CHON.some((l) => l.maT
 // học phí và việc làm trích từ đề án: số hợp lý, có trang nguồn, và gắn đúng vào dữ liệu
 // Dòng có nguồn phải có link + trang; dòng ước tính (uocTinh) KHÔNG được có link (không gắn nguồn giả) và hiện "≈".
 const LINK_HONG = new Set(readFileSync(new URL("../scripts/link-hong.txt", import.meta.url), "utf-8").split(/\r?\n/).filter((d) => d && !d.startsWith("#")));
+for (const l of LUA_CHON) assert.ok(!/^\(\d+\)/.test(l.nganh), `tên ngành còn số thứ tự: ${l.id} ${l.nganh}`);
 let soCoNguon = 0;
 for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang?: number; url?: string; uocTinh?: boolean }>)) {
   assert.ok(ids.has(id) && v.trieuNam >= 5 && v.trieuNam <= 400, id);
