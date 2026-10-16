@@ -18,9 +18,10 @@ Các suite liên quan đến đợt này:
 
 | Suite | Số kiểm tra | Nội dung |
 |---|---|---|
-| `tests/mcp-sdk.test.ts` (mới) | 6 | Client MCP chính thức (`@modelcontextprotocol/sdk` 1.32.1) qua Streamable HTTP thật: initialize và phiên bản, liệt kê và schema công cụ, gọi công cụ đọc, không token → 401, token giả → -32001, đề xuất có quyền ghi |
+| `tests/universities-api.test.ts` (mới) | 5 | Tra cứu danh mục trường qua `/api/v1/universities`: phân trang, tìm kiếm mã/tên, lọc theo tỉnh, CORS OPTIONS và method không hợp lệ |
+| `tests/mcp-sdk.test.ts` (mới) | 7 | Client MCP chính thức (`@modelcontextprotocol/sdk` 1.32.1) qua Streamable HTTP thật: initialize và phiên bản, liệt kê 9 công cụ và schema, gọi công cụ tra cứu công khai (search_universities, get_university_profile), gọi công cụ đọc hồ sơ, không token → 401, token giả → -32001, đề xuất có quyền ghi |
 | `tests/oauth-mcp.test.ts` (mới) | 22 | PKCE RFC 7636, redirect_uri, phạm vi, đăng ký client, trang đồng ý (escape, CSP), mã sai, từ chối, đổi mã một lần, sai verifier, MCP Bearer, phạm vi theo công cụ, token hết hạn, /mcp/{mã} cũ, làm mới và phát hiện tái sử dụng, thu hồi, ngắt kết nối, sẵn sàng, rollout thiếu bảng |
-| `tests/ket-noi-mcp.test.ts` | Đạt | Cập nhật `serverInfo.version` lên 1.1.0 |
+| `tests/ket-noi-mcp.test.ts` | Đạt | 9 công cụ MCP, cập nhật `serverInfo.version` lên 1.1.0 |
 | `tests/tu-van-han-muc.test.ts` | Đạt, thêm 1 nhóm | Trần toàn hệ thống: 5 hồ sơ, trần 3 lượt, 2 lượt bị 429, hồ sơ bị từ chối không mất lượt cá nhân |
 | `tests/dinh-dang.test.ts` | Đạt, thêm 4 ca | `dinhDangSo` |
 
@@ -110,13 +111,13 @@ Deploy: push `main` lúc `dfcecf6` đã lên production (CI deploy, khoảng 80 
 
 | Việc | Kết quả |
 |---|---|
-| `node scripts/verify-runtime/smoke.mjs` | **12/12 đạt** (health, ready, metadata OAuth, MCP không token 401, các kiểm tra cũ) |
+| `node scripts/verify-runtime/smoke.mjs` | **13/13 đạt** (health, ready, universities 118 trường, metadata OAuth, MCP không token 401, các kiểm tra cũ) |
 | `node scripts/verify-runtime/oauth-e2e.mjs` | **6/17 đạt**. Đạt: tạo kết nối thử, metadata, MCP không token 401, token giả 401, tái sử dụng thu hồi họ, ngắt kết nối thử. Đỏ: đăng ký client, trang đồng ý, đổi mã, MCP với Bearer hợp lệ, làm mới, các bước phụ thuộc. Nguyên nhân: bảng OAuth chưa có trên D1 production (503 chung) |
 | Áp migration 0011 trên D1 production | **Chưa thực hiện: không có credential Cloudflare cục bộ** |
 | Kết nối thật với Claude | Chưa kiểm chứng (không có tài khoản) |
 | Kết nối thật với ChatGPT | Chưa kiểm chứng (không có tài khoản) |
 
-Lưu ý về kết quả e2e: các bước đỏ là đúng với trạng thái hiện tại. Chúng không cho thấy lỗi logic OAuth; logic đó đã được kiểm bằng 22 test trên SQLite thật và 6 test bằng client MCP chính thức. Sau khi migration được áp, cần chạy lại e2e và kỳ vọng 17/17.
+Lưu ý về kết quả e2e: các bước đỏ là đúng với trạng thái hiện tại. Chúng không cho thấy lỗi logic OAuth; logic đó đã được kiểm bằng 22 test trên SQLite thật và 7 test bằng client MCP chính thức. Sau khi migration được áp, cần chạy lại e2e và kỳ vọng 17/17.
 
 ## 7. Những điều chưa làm được trong đợt này
 
@@ -125,11 +126,10 @@ Lưu ý về kết quả e2e: các bước đỏ là đúng với trạng thái 
    npx wrangler login
    npx wrangler d1 migrations apply nguyenvongai_db --remote
    ```
+   (Lưu ý: API token trên GitHub Actions hiện chỉ có quyền Pages Deploy nên chưa tự động chạy lệnh D1 migration này).
 2. **Chạy `node scripts/verify-runtime/oauth-e2e.mjs` trên production**, kỳ vọng 17/17 sau bước 1.
 3. **Kết nối Claude và ChatGPT thật**: cần tài khoản và thao tác trên giao diện của hai bên.
-4. **Công cụ tra cứu công khai** (`search_universities`, `get_university_profile`): chưa làm.
-5. **Cảnh báo ngân sách 70%/90%**: chưa làm.
-6. **Kiểm thử bằng MCP Inspector và SDK MCP chính thức**: chưa chạy. Repo đã có `@modelcontextprotocol/sdk` ở npm (1.32.1) nhưng chưa cài vào dự án.
-7. **Chạy wrangler pages dev cục bộ**: không chạy được. Binding AI từ xa đòi API token; thử đặt token giả cũng không đủ; đổi cấu hình tạm không khiến binding biến mất.
-8. **Staging**: không có môi trường staging.
-9. **Ảnh chụp bố cục 320/375/430/1366**: chưa chụp.
+4. **Cảnh báo ngân sách 70%/90%**: chưa làm.
+5. **Chạy wrangler pages dev cục bộ**: không chạy được. Binding AI từ xa đòi API token; thử đặt token giả cũng không đủ; đổi cấu hình tạm không khiến binding biến mất.
+6. **Staging**: không có môi trường staging.
+7. **Ảnh chụp bố cục 320/375/430/1366**: đã chụp 390×844 và 1440×900, các kích thước khác chưa chụp.
