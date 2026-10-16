@@ -73,6 +73,10 @@ async function goi(duong, opt = {}) {
   kiem("metadata tài nguyên /mcp: trỏ tới máy chủ ủy quyền", pr.json?.resource === `${base}/mcp` && pr.json?.authorization_servers?.[0] === base, `status ${pr.status}`);
   const nt = await goi("/mcp", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" }) });
   kiem("mcp không token: 401 kèm WWW-Authenticate", nt.status === 401 && /resource_metadata=/.test(nt.headers?.get?.("www-authenticate") ?? ""), `status ${nt.status}`);
+  const un = await goi("/api/v1/universities?limit=5");
+  if (un.type.includes("application/json")) {
+    kiem("universities: 200 JSON danh mục trường", un.status === 200 && Array.isArray(un.json?.data) && un.json?.tong >= 100, `status ${un.status}, ${un.json?.tong} trường`);
+  }
 }
 
 let loi = 0;

@@ -72,8 +72,33 @@ test("SDK: liệt kê công cụ và đọc được schema", async () => {
   await client.connect(new StreamableHTTPClientTransport(new URL(dia), { requestInit: { headers: { Authorization: `Bearer ${accessToken}` } } }));
   const { tools } = await client.listTools();
   const ten = tools.map((t) => t.name).sort();
-  assert.deepEqual(ten, ["de_xuat_them_nguyen_vong", "diem_chuan", "goi_y_nganh", "ke_hoach_tuan", "lay_ho_so", "lay_nguyen_vong"]);
+  assert.deepEqual(ten, [
+    "de_xuat_them_nguyen_vong",
+    "diem_chuan",
+    "get_app_capabilities",
+    "get_university_profile",
+    "goi_y_nganh",
+    "ke_hoach_tuan",
+    "lay_ho_so",
+    "lay_nguyen_vong",
+    "search_universities",
+  ]);
   assert.ok(tools.every((t) => t.inputSchema?.type === "object"), "mọi công cụ có schema đối tượng");
+  await client.close();
+});
+
+test("SDK: gọi công cụ tra cứu trường công khai (search_universities & get_university_profile)", async () => {
+  const client = new Client({ name: "kiem-thu", version: "1.0.0" });
+  await client.connect(new StreamableHTTPClientTransport(new URL(dia), { requestInit: { headers: { Authorization: `Bearer ${accessToken}` } } }));
+  const r = await client.callTool({ name: "search_universities", arguments: { truyVan: "Bách Khoa" } });
+  assert.ok(!r.isError);
+  const text = (r.content as { type: string; text: string }[])[0].text;
+  assert.ok(text.includes("BKA"));
+
+  const p = await client.callTool({ name: "get_university_profile", arguments: { maTruong: "BKA" } });
+  assert.ok(!p.isError);
+  const pText = (p.content as { type: string; text: string }[])[0].text;
+  assert.ok(pText.includes("ĐH Bách Khoa Hà Nội"));
   await client.close();
 });
 

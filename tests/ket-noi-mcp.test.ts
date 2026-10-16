@@ -161,8 +161,18 @@ async function main() {
   assert.deepEqual(ping.json.result, {});
   const dsCongCu = await mcp(m, ma, { jsonrpc: "2.0", id: 3, method: "tools/list" });
   const tenCongCu = (dsCongCu.json.result.tools as { name: string }[]).map((t) => t.name).sort();
-  assert.deepEqual(tenCongCu, ["de_xuat_them_nguyen_vong", "diem_chuan", "goi_y_nganh", "ke_hoach_tuan", "lay_ho_so", "lay_nguyen_vong"]);
-  assert.equal(CONG_CU.length, 6);
+  assert.deepEqual(tenCongCu, [
+    "de_xuat_them_nguyen_vong",
+    "diem_chuan",
+    "get_app_capabilities",
+    "get_university_profile",
+    "goi_y_nganh",
+    "ke_hoach_tuan",
+    "lay_ho_so",
+    "lay_nguyen_vong",
+    "search_universities",
+  ]);
+  assert.equal(CONG_CU.length, 9);
   const khongCongCu = await mcp(m, ma, { jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "xoa_tat_ca", arguments: {} } });
   assert.equal(khongCongCu.json.error.code, -32602);
   const pheDuoc = await mcp(m, ma, { jsonrpc: "2.0", id: 5, method: "resources/list" });

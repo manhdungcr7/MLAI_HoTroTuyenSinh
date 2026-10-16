@@ -3,6 +3,8 @@
 import { linkGoogleCalendar, taoIcs } from "../../src/engine/lich-ics";
 import type { BanChup } from "../../src/engine/ket-noi-kieu";
 import { TOI_DA_DE_XUAT_CHO, type KhoD1Ket } from "./ket-noi";
+import { DANH_MUC_TRUONG } from "../../src/data/truong-danh-muc";
+import deAnTruong from "../../src/data/de-an-truong.json";
 
 export interface NguCanhCongCu { ban: BanChup; ma: string; maBam: string; origin: string; db: KhoD1Ket }
 export type KetQuaCongCu = { ok: true; data: unknown } | { ok: false; loi: string };
@@ -127,6 +129,74 @@ export const CONG_CU: CongCu[] = [
       return deXuatThemNguyenVong(id, viTri, cc);
     },
   },
+  {
+    ten: "search_universities",
+    mota: "Find universities in Vietnam by name, abbreviation code or province. Returns up to 20 matching institutions with canonical code, official name and provinces.",
+    schema: {
+      type: "object",
+      properties: {
+        truyVan: { type: "string", maxLength: 100, description: "University name or abbreviation code (e.g. 'BKA', 'Bách Khoa', 'Kinh tế')" },
+        tinh: { type: "string", maxLength: 50, description: "Province or city (e.g. 'Hà Nội', 'TP.HCM', 'Đà Nẵng')" },
+      },
+    },
+    chay: async (a) => {
+      const q = khongDau(String(a.truyVan ?? "").trim());
+      const t = khongDau(String(a.tinh ?? "").trim());
+      const tu = q.split(/\s+/).filter(Boolean);
+      const ketQua = DANH_MUC_TRUONG.filter(([ma, ten, dsTinh]) => {
+        if (t && !dsTinh.some((tp) => khongDau(tp).includes(t))) return false;
+        if (!tu.length) return true;
+        const gop = khongDau(`${ma} ${ten}`);
+        return tu.every((word) => gop.includes(word));
+      }).slice(0, 20).map(([maTruong, tenTruong, dsTinh]) => ({ maTruong, tenTruong, tinh: dsTinh }));
+      return { ok: true, data: { tong: ketQua.length, ketQua } };
+    },
+  },
+  {
+    ten: "get_university_profile",
+    mota: "Get verified profile and official admission documents for a university by canonical code (e.g. 'BKA', 'DKC', 'QSB').",
+    schema: {
+      type: "object",
+      properties: {
+        maTruong: { type: "string", maxLength: 12, description: "Canonical university code (e.g. 'BKA', 'DKC', 'QSB')" },
+      },
+      required: ["maTruong"],
+    },
+    chay: async (a) => {
+      const code = String(a.maTruong ?? "").trim().toUpperCase();
+      const truong = DANH_MUC_TRUONG.find(([ma]) => ma === code);
+      if (!truong) return loi(`Không tìm thấy trường với mã '${code}'. Dùng search_universities để tìm mã trường.`);
+      const dean = (deAnTruong as Record<string, { docs?: { nam: string; url: string }[]; hocPhi?: { nam: string; url: string; trang?: number } }>)[code];
+      return {
+        ok: true,
+        data: {
+          maTruong: truong[0],
+          tenTruong: truong[1],
+          tinh: truong[2],
+          deAnTuyenSinh: dean?.docs ?? [],
+          hocPhiChinhThuc: dean?.hocPhi ?? null,
+          nguonXacMinh: dean?.docs?.length ? "official_pdf" : "aggregator_verified",
+        },
+      };
+    },
+  },
+  {
+    ten: "get_app_capabilities",
+    mota: "Get Nguyện Vọng AI system capabilities, verified dataset statistics, supported admission years and API endpoints.",
+    schema: KHONG_THAM_SO,
+    chay: async () => ({
+      ok: true,
+      data: {
+        ten: "Nguyện Vọng AI",
+        phienBan: "1.1.0",
+        tongSoTruong: DANH_MUC_TRUONG.length,
+        tongSoChuongTrinh: 3648,
+        namDuLieuHoTro: ["2023", "2024", "2025", "2026"],
+        phuongThucXacThuc: "OAuth 2.1 (RFC 7636 PKCE S256) hoặc mã kết nối",
+        congCuHoTro: CONG_CU.map((c) => c.ten),
+      },
+    }),
+  },
 ];
 
 /** Phạm vi OAuth cần để gọi từng công cụ. Đăng nhập bằng mã trong đường dẫn (cách cũ) không kiểm phạm vi. */
@@ -137,9 +207,19 @@ export const PHAM_VI_CONG_CU: Record<string, string> = {
   diem_chuan: "admissions:read",
   ke_hoach_tuan: "study:read",
   de_xuat_them_nguyen_vong: "preferences:write",
+  search_universities: "admissions:read",
+  get_university_profile: "admissions:read",
 };
 
-export const tenCongCu = (ten: string): CongCu | undefined => CONG_CU.find((c) => c.ten === ten);
+const BIEN_THE: Record<string, string> = {
+  get_student_profile: "lay_ho_so",
+  get_study_plan: "ke_hoach_tuan",
+};
+
+export const tenCongCu = (ten: string): CongCu | undefined => {
+  const t = BIEN_THE[ten] ?? ten;
+  return CONG_CU.find((c) => c.ten === t);
+};
 
 /** Chạy công cụ theo tên. Tên lạ trả lỗi thường (không ném). */
 export async function chayCongCu(ten: string, args: Record<string, unknown>, cc: NguCanhCongCu): Promise<KetQuaCongCu> {
