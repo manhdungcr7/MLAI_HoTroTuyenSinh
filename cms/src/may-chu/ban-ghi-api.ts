@@ -1,10 +1,22 @@
 // Lời gọi tới /api/ban-ghi (quy trình DRAFT -> SUBMITTED -> APPROVED -> PUBLISHED / REJECTED). Khai báo theo cms/functions/api/ban-ghi.ts.
 // Lỗi luôn được nói thật: mã 400/401/403/404/409/413/429/500 đổi thành câu tiếng Việt; lỗi từng ô (chiTiet[]) được giữ lại.
-import type { BanGhiCms, LoaiThucTheCms, MucDoQuanTrong, NguonKiemChung, TrangThaiCms } from "@/engine/du-lieu-tuyen-sinh/kieu";
+import type { BanGhiCms as BanGhiCmsGoc, LoaiThucTheCms, MucDoQuanTrong, NguonKiemChung, TrangThaiCms } from "@/engine/du-lieu-tuyen-sinh/kieu";
 import { SO_MOI_TRANG } from "./api";
 import { goiJson } from "./goi-chung";
 
-export type { BanGhiCms, LoaiThucTheCms, MucDoQuanTrong, NguonKiemChung, TrangThaiCms };
+/** Dấu "nhập qua AI" (MCP đóng góp, migration 0010). Chỉ có ở bản ghi do cộng tác viên nhập qua AI gửi vào; bản nhập tay không có. */
+export interface NhapQuaAI {
+  nhapQuaAI: true;
+  via: "mcp";
+  khoaId: string;
+  email: string;
+  nguon: { loai: string; url: string; trang: string; trichDan: string };
+  chenhLon: boolean;
+  diemCu?: number;
+}
+
+export type BanGhiCms = BanGhiCmsGoc & { nhapQuaAI?: NhapQuaAI };
+export type { LoaiThucTheCms, MucDoQuanTrong, NguonKiemChung, TrangThaiCms };
 
 export interface NguonGui { url: string; tieuDe: string; donViCongBo: string; ngayCongBo?: string }
 export interface LocBanGhi { entityType?: string; entityId?: string; truong?: string; status?: TrangThaiCms; createdBy?: string }

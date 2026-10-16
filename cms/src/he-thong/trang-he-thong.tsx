@@ -8,13 +8,15 @@ import QuanLyThanhVien from "./quan-ly-thanh-vien";
 import NhatKyHeThong from "./nhat-ky-he-thong";
 import ThongBaoTelegram from "./thong-bao-telegram";
 import HopThu from "./hop-thu";
+import { KhoaKetNoi } from "./khoa-ket-noi";
 import { KhoiCaiDatHeThong } from "./cai-dat-he-thong";
 
-type Tab = "thanh-vien" | "cai-dat" | "hop-thu" | "nhat-ky" | "thong-bao";
+type Tab = "thanh-vien" | "cai-dat" | "hop-thu" | "khoa" | "nhat-ky" | "thong-bao";
 const TAB: { id: Tab; nhan: string; choCtv?: boolean }[] = [
   { id: "thanh-vien", nhan: "Thành viên" },
   { id: "cai-dat", nhan: "Cài đặt", choCtv: true },
   { id: "hop-thu", nhan: "Hộp thư", choCtv: true },
+  { id: "khoa", nhan: "Khóa kết nối", choCtv: true },
   { id: "nhat-ky", nhan: "Nhật ký" },
   { id: "thong-bao", nhan: "Thông báo" },
 ];
@@ -45,6 +47,7 @@ export default function TrangHeThong() {
         {tabChon === "thanh-vien" && (laQtv ? <QuanLyThanhVien /> : <TrangThaiTrong bieuTuong={<ShieldAlert size={26} />} tieuDe="Bạn không có quyền ở mục này" moTa="Cần thêm quyền thì nhờ quản trị viên." />)}
         {tabChon === "cai-dat" && <KhoiCaiDatHeThong />}
         {tabChon === "hop-thu" && <HopThu />}
+        {tabChon === "khoa" && <KhoaKetNoi />}
         {tabChon === "nhat-ky" && (laQtv ? <NhatKyHeThong /> : <TrangThaiTrong bieuTuong={<ShieldAlert size={26} />} tieuDe="Bạn không có quyền ở mục này" moTa="Cần thêm quyền thì nhờ quản trị viên." />)}
         {tabChon === "thong-bao" && (laQtv ? <ThongBaoTelegram /> : <TrangThaiTrong bieuTuong={<ShieldAlert size={26} />} tieuDe="Bạn không có quyền ở mục này" moTa="Cần thêm quyền thì nhờ quản trị viên." />)}
       </NoiDung>

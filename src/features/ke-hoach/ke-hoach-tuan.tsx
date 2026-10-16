@@ -19,6 +19,7 @@ import { ngayBatDauXep } from "./lich-tuan";
 import { HopXepLich, type KetQuaXep } from "./hop-xep-lich";
 import { useThongBaoNgan } from "./thanh-phan";
 import { TheViecDoTuanTruoc, TuanMoiTuTao } from "./tuan-moi";
+import { ThemVaoLich } from "./them-vao-lich";
 import { daKetThuc, soBuoiTuHoc } from "./tinh-toan";
 
 type CheDo = "viec" | "lich" | "chienLuoc";
@@ -137,6 +138,7 @@ export default function KeHoachTuan() {
               </div>
             ) : null}
 
+            {!quaKhu && <ThemVaoLich />}
             {!quaKhu && <TuanMoiTuTao tuan={tuan} hienThongBao={hienThongBao} />}
             {!quaKhu && <TheViecDoTuanTruoc tuan={tuan} hienThongBao={hienThongBao} />}
 

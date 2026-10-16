@@ -12,7 +12,7 @@ import { HopTruot, KhungDangTai, KhungLoi, TrangThaiTrong } from "@cms/thanh-pha
 import { OTextArea, Truong } from "@cms/thanh-phan/ui/nhap-lieu";
 import { Nhan, Nut, The, gop } from "@cms/thanh-phan/ui/nut-the";
 import { DongThongBao } from "@cms/thanh-phan/ui/thong-bao";
-import { dinhDangLuc } from "@cms/du-lieu-truong/dinh-dang";
+import { dinhDangLuc, soViet } from "@cms/du-lieu-truong/dinh-dang";
 import { maTruongCua, NHAN_TT, TONE_TT } from "@cms/du-lieu-truong/mo-hinh";
 import { nhanBan, tomTatBan } from "@cms/du-lieu-truong/tom-tat-ban";
 import { SoSanhBan } from "./so-sanh-ban";
@@ -72,10 +72,38 @@ function KhoiGoiY({ id }: { id: string }) {
   );
 }
 
+/** Dấu "nhập qua AI": chênh so với số đang có, trích dẫn nguyên văn và nút mở nguồn. Người duyệt đối chiếu với tài liệu rồi mới duyệt. */
+function KhoiNhapQuaAI({ ban }: { ban: BanGhiCms }) {
+  const na = ban.nhapQuaAI;
+  if (!na) return null;
+  const diemMoi = (ban.data as { diemChuan?: unknown }).diemChuan;
+  const moi = typeof diemMoi === "number" ? diemMoi : null;
+  const cu = na.diemCu;
+  return (
+    <div className="rounded-xl border border-vien p-2.5 space-y-2 text-[13px] text-chu">
+      <p className={gop("break-words", na.chenhLon && "rounded-lg bg-do-nhat p-2 text-do-chu")}>
+        <b>Chênh so với đang có:</b>{" "}
+        {cu === undefined || moi === null
+          ? "Chưa có điểm chuẩn nào đang công bố cho mục này."
+          : `${soViet(cu)} → ${soViet(moi)}, chênh ${soViet(Math.abs(moi - cu))} điểm.`}
+        {na.chenhLon && " Chênh lớn: đối chiếu kỹ với trích dẫn trước khi duyệt."}
+      </p>
+      <div>
+        <p className="text-[12px] text-chu-phu mb-1">Trích dẫn từ nguồn (trang {na.nguon.trang}, {na.nguon.loai}):</p>
+        <blockquote className="break-words rounded-lg bg-nen p-2.5 border-l-2 border-xanh italic">{na.nguon.trichDan}</blockquote>
+      </div>
+      <a href={na.nguon.url} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 font-bold text-xanh">
+        Mở nguồn <ExternalLink size={12} className="shrink-0" />
+      </a>
+    </div>
+  );
+}
+
 export default function DanhSachDuyet() {
   const { laQtv, toi } = usePhien();
   const [tham, setTham] = useSearchParams();
   const tab: Tab = (["cho", "duyet", "nhap", "hop-thu"] as const).find((t) => t === tham.get("trang-thai")) ?? (laQtv ? "cho" : "nhap");
+  const chiAi = tham.get("nguon") === "ai";
   const bg = useTai(() => layHetBanGhi());
   const tenDs = useTai(() => layDanhSachTenTruong());
 
@@ -93,7 +121,8 @@ export default function DanhSachDuyet() {
     return Object.fromEntries(TAB.map((t) => [t.id, ds.filter((b) => t.gom.includes(b.status))])) as Record<Tab, BanGhiCms[]>;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bg.du, laQtv, toi.email]);
-  const dsHienTai = theoTab[tab] ?? [];
+  const dsTheoTab = theoTab[tab] ?? [];
+  const dsHienTai = chiAi ? dsTheoTab.filter((b) => b.nhapQuaAI) : dsTheoTab;
 
   const chay = async (b: BanGhiCms, dich: "APPROVED" | "REJECTED", thongBao: string, ly?: string) => {
     setDangXuLy(b.id);
@@ -135,8 +164,26 @@ export default function DanhSachDuyet() {
 
         {banTin && <DongThongBao tone={banTin.tone} tieuDe={banTin.noiDung} onClick={() => setBanTin(null)} />}
 
+        {tab !== "hop-thu" && (
+          <div role="group" aria-label="Lọc theo nguồn nhập" className="flex gap-1.5">
+            {[{ ai: false, nhan: "Tất cả" }, { ai: true, nhan: "Nhập qua AI" }].map((o) => (
+              <button
+                key={o.nhan}
+                type="button"
+                aria-pressed={chiAi === o.ai}
+                onClick={() => setTham(o.ai ? { "trang-thai": tab, nguon: "ai" } : { "trang-thai": tab })}
+                className={gop("min-h-11 rounded-xl px-3 text-[13px] font-bold border", chiAi === o.ai ? "bg-xanh text-white border-xanh" : "border-vien text-chu-phu bg-trang")}
+              >
+                {o.nhan}
+              </button>
+            ))}
+          </div>
+        )}
+
         {tab === "hop-thu" ? <HopThu /> : bg.dangTai && !bg.du ? <KhungDangTai soKhung={3} cao="h-36" /> : bg.loi ? (
           <KhungLoi moTa={bg.loi} thuLai={bg.taiLai} />
+        ) : dsHienTai.length === 0 && chiAi && dsTheoTab.length > 0 ? (
+          <TrangThaiTrong bieuTuong={<Inbox size={26} />} tieuDe="Không có mục nào nhập qua AI" moTa="Bỏ bộ lọc Nhập qua AI để xem mọi mục trong mục này." />
         ) : dsHienTai.length === 0 ? (
           <TrangThaiTrong bieuTuong={<Inbox size={26} />}
             tieuDe={tab === "cho" ? "Không có mục nào chờ duyệt" : tab === "duyet" ? "Chưa có mục nào đã duyệt chờ xuất bản" : "Không có mục nào cần sửa"}
@@ -161,12 +208,16 @@ export default function DanhSachDuyet() {
                       <p className="text-[12px] text-chu-phu"><b className="text-muc">{ma}</b> · {tenTheoMa.get(ma) ?? "Chưa rõ tên trường"}</p>
                       <p className="font-bold text-[15px] text-muc leading-snug mt-0.5">{tt.tieuDe}</p>
                     </div>
-                    <Nhan tone={TONE_TT[b.status]}>{NHAN_TT[b.status]}</Nhan>
+                    <div className="flex flex-wrap justify-end gap-1.5">
+                      {b.nhapQuaAI && <Nhan tone="tim">Nhập qua AI</Nhan>}
+                      <Nhan tone={TONE_TT[b.status]}>{NHAN_TT[b.status]}</Nhan>
+                    </div>
                   </div>
                   <div className="flex flex-wrap gap-1.5"><Nhan tone="tim">{nhanBan(b)}</Nhan><Nhan tone="xanh">Bản {b.version}</Nhan></div>
                   <div className="rounded-xl bg-nen p-2.5 text-[13.5px] text-chu space-y-0.5">
                     {tt.dong.map((d, i) => <p key={i} className="break-words">{d}</p>)}
                   </div>
+                  <KhoiNhapQuaAI ban={b} />
                   {b.status === "REJECTED" && b.rejectionReason && (
                     <p className="rounded-xl bg-do-nhat p-2.5 text-[13px] text-do-chu"><b>Lý do trả lại:</b> {b.rejectionReason}</p>
                   )}

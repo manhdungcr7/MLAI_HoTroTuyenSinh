@@ -15,9 +15,22 @@ export interface HangBanGhiD1 {
   created_by: string; created_at: string; updated_by: string; updated_at: string;
   submitted_by: string | null; submitted_at: string | null; reviewed_by: string | null; reviewed_at: string | null;
   published_by: string | null; published_at: string | null;
+  /** Migration 0010: dấu "nhập qua AI" (JSON), chỉ có ở bản ghi do MCP đóng góp gửi vào. */
+  nhap_qua_ai?: string | null;
 }
 
-export function mapTuD1(h: HangBanGhiD1): BanGhiCms {
+/** Dấu nguồn gốc của bản ghi nhập qua AI (MCP). Không đi vào bản chụp công khai: snapshot chỉ đọc data_json. */
+export interface NhapQuaAI {
+  nhapQuaAI: true;
+  via: "mcp";
+  khoaId: string;
+  email: string;
+  nguon: { loai: string; url: string; trang: string; trichDan: string };
+  chenhLon: boolean;
+  diemCu?: number;
+}
+
+export function mapTuD1(h: HangBanGhiD1): BanGhiCms & { nhapQuaAI?: NhapQuaAI } {
   return {
     id: h.id, entityType: h.entity_type, entityId: h.entity_id, version: h.version, status: h.status, data: JSON.parse(h.data_json),
     source: { url: h.source_url, tieuDe: h.source_title, donViCongBo: h.source_publisher, ngayCongBo: h.source_published_at ?? undefined, ngayKiemChung: h.source_verified_at },
@@ -25,6 +38,7 @@ export function mapTuD1(h: HangBanGhiD1): BanGhiCms {
     createdBy: h.created_by, createdAt: h.created_at, updatedBy: h.updated_by, updatedAt: h.updated_at,
     submittedBy: h.submitted_by ?? undefined, submittedAt: h.submitted_at ?? undefined, reviewedBy: h.reviewed_by ?? undefined, reviewedAt: h.reviewed_at ?? undefined,
     publishedBy: h.published_by ?? undefined, publishedAt: h.published_at ?? undefined,
+    ...(h.nhap_qua_ai ? { nhapQuaAI: JSON.parse(h.nhap_qua_ai) as NhapQuaAI } : {}),
   };
 }
 

@@ -10,6 +10,7 @@ import { docLichSu, ghiLichSu } from "@/features/tu-van/hoi-thoai";
 import { LUOT_AI_MOI_NGAY } from "@/features/tu-van/che-do-ai";
 import { useCheDoAI } from "@/features/tu-van/dung-che-do-ai";
 import { docBanSaoLuu, taoBanSaoLuu } from "@/state/sao-luu";
+import { KhoiKetNoi } from "@/features/ket-noi/khoi-ket-noi";
 
 // Giữ khớp với "version" trong package.json.
 const PHIEN_BAN = "0.1.0";
@@ -91,6 +92,8 @@ export default function CaiDat() {
             </p>
           </The>
         </section>
+
+        <KhoiKetNoi />
 
         <section>
           <TieuDeMuc>Dữ liệu trên máy này</TieuDeMuc>
