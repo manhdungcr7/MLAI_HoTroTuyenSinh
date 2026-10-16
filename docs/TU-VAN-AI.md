@@ -34,7 +34,7 @@ Số cạnh "điểm"/"triệu" (kể cả khoảng a–b) trong `traLoi` phải
 
 ## Bật chế độ AI
 Cloudflare Pages > dự án `nguyenvongai` > Settings > Variables and Secrets (môi trường Production), thêm **một** trong các khóa (ưu tiên theo thứ tự):
-- `OPENROUTER_API_KEY` (mặc định `deepseek/deepseek-v4.1-flash`, tắt reasoning)
+- `OPENROUTER_API_KEY` (mặc định `anthropic/claude-haiku-5.5`, tắt reasoning; `AI_MODEL` dạng `@cf/...` bị bỏ qua ở nhánh này)
 - `ANTHROPIC_API_KEY` (mặc định `claude-haiku-4-5-20251001`)
 - `OPENAI_API_KEY` (mặc định `gpt-4o-mini`)
 - hoặc binding Workers AI `AI` với `CF_AI_LLM` (mặc định `@cf/meta/llama-3.3-70b-instruct`)

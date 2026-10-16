@@ -35,6 +35,6 @@
     }
   ],
   "vars": {
-    "AI_MODEL": "@cf/meta/llama-3.3-70b-instruct"
+    "AI_MODEL": "deepseek/deepseek-v4.1-flash"
   }
 }
