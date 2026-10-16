@@ -39,7 +39,7 @@ export function chayPages(cms = false) {
   writeFileSync(join(cwd, "wrangler.jsonc"), JSON.stringify(config));
   rmSync(join(cwd, "wrangler.json"), { force: true });
   let vars = existsSync(join(source, ".dev.vars")) ? readFileSync(join(source, ".dev.vars"), "utf8") : "";
-  if (process.env.NV_AI_REMOTE !== "1") {
+  if (process.env.NV_QA_SNAPSHOT === "1" || process.env.NV_AI_REMOTE === "0") {
     // Local QA must not inherit provider credentials or other developer secrets.
     vars = "";
   }

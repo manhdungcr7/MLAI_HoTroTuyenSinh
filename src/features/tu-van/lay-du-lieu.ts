@@ -2,6 +2,7 @@
 import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { LUA_CHON_MAU, tim as timTheoId } from "@/data/lua-chon-mau";
 import type { NguonTaiSau } from "@/data/lua-chon-that";
+import { CONG_TUYEN_SINH_CHINH_THUC } from "@/engine/link-chinh-thuc";
 import { chuanHoa as chuanHoaChung, locTheoTinh, maTuVietTat, resolveTruong, tenTruong, tinhCuaTruong } from "@/engine/truong";
 import { NGAN_SACH_TOI_DA, nhanNguyenVong, nhanChoLuaChon, khoangCachTheoMon } from "@/engine/phan-tich";
 import { hieuCauTim } from "@/engine/hieu-cau-tim";
@@ -683,6 +684,17 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
 
   const hoiXetTuyenSom = /ielts|ngoai ngu|chung chi|dgnl|danh gia nang luc|hoc ba|xet tuyen som/.test(q);
   if (hoiXetTuyenSom) {
+    const neuTruong = timTruongTrongCau(cauHoi);
+    if (neuTruong.length > 0 && neuTruong[0].kq.ma) {
+      const ma = neuTruong[0].kq.ma;
+      const tenTr = ten(ma);
+      const link = CONG_TUYEN_SINH_CHINH_THUC[ma]?.congTuyenSinh;
+      const linkStr = link ? ` (${link})` : "";
+      return {
+        traLoi: `Trường ${tenTr} có xét tuyển theo các phương thức sớm (như xét học bạ THPT / điểm thi ĐGNL / chứng chỉ kết hợp) theo đề án tuyển sinh hàng năm. Em đối chiếu trang tuyển sinh chính thức của trường${linkStr} để xem chi tiết điều kiện ngưỡng nhận hồ sơ và thời hạn đăng ký nhé.`,
+        nguon: [], the: [{ ma, muc: "chinh-xac" }],
+      };
+    }
     const cc = s.hoSo.chungChiNgoaiNgu?.diem ? `Hồ sơ của bạn có ${s.hoSo.chungChiNgoaiNgu.loai} ${s.hoSo.chungChiNgoaiNgu.diem}.` : "Bạn chưa nhập chứng chỉ ngoại ngữ trong hồ sơ.";
     const dg = s.hoSo.diemDgnl?.hcm ? ` Điểm ĐGNL ĐHQG-HCM: ${s.hoSo.diemDgnl.hcm}/1200.` : s.hoSo.diemDgnl?.hn ? ` Điểm ĐGNL HSA: ${s.hoSo.diemDgnl.hn}/150.` : "";
     return {

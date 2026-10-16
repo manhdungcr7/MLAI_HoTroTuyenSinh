@@ -140,9 +140,10 @@ export interface TruongNeu { chuoi: string; kq: KetQuaTruong }
 /** Chỉ bắt tên trường được nêu rõ, không bắt "trường nào" hay câu khám phá theo tỉnh. */
 export function tenTruongChuaCo(cau: string): string | null {
   const q = chuanHoa(cau);
-  const m = q.match(/\b(?:truong|dai hoc|dh|hoc vien)\s+(.+?)(?=\s+(?:nganh|nam|diem chuan|hoc phi|la gi|la truong gi|bao nhieu|the nao|ra sao)\b|$)/);
+  const m = q.match(/\b(?:truong|dai hoc|dh|hoc vien)\s+(.+?)(?=\s+(?:nganh|nam|diem chuan|hoc phi|la gi|la truong gi|bao nhieu|the nao|ra sao|co|xet|tuyen|thi|hoc ba|phuong thuc|chi tieu|dao tao|k|khong|chua)\b|$)/);
   if (!m || /^(?:nao|gi|co|o|tai|de|do|nay|kia|ay|vua roi|phu hop|tot|re|gan|day|dao tao)\b/.test(m[1])) return null;
-  const name = m[1].split(/\s+(?:va|voi|hay|so voi)\s+/)[0];
+  const name = m[1].split(/\s+(?:va|voi|hay|so voi)\s+/)[0].trim();
+  if (!name) return null;
   return resolveTruong(name).kieu === "khong-thay" ? name : null;
 }
 /** Giữ cụm dài nhất; không hỏi lại cụm con của một tên đã xác định. */
