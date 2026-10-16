@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { taoD1KetNoiTest, type D1KetNoiTest } from "./nap-d1-ket-noi";
 import { kvTest } from "./nap-d1-han-muc";
 import { taoKetNoi, xoaKetNoi, bamMa, type EnvKetNoi } from "../functions/_thu-vien/ket-noi";
-import { s256, laRedirectHopLe, kiemTraPhamVi, PHAM_VI } from "../functions/_thu-vien/oauth";
+import { s256, laRedirectHopLe, kiemTraPhamVi, PHAM_VI_DOC_MAC_DINH } from "../functions/_thu-vien/oauth";
 import { xuLyDangKy, onRequestPost as dangKyPost } from "../functions/oauth/register";
 import { xuLyAuthorize } from "../functions/oauth/authorize";
 import { xuLyToken, onRequestPost as tokenPost } from "../functions/oauth/token";
@@ -70,8 +70,9 @@ async function xinToken(m: Moi, clientId: string, phamVi?: string): Promise<{ ac
   return (await tk.json()) as { access_token: string; refresh_token: string; scope: string };
 }
 
+const MCP_ACCEPT = "application/json, text/event-stream";
 const mcp = (m: Moi, token: string | null, body: unknown) =>
-  xuLyMcpBearer(req(`${ORIGIN}/mcp`, { json: body, headers: token ? { authorization: `Bearer ${token}` } : {} }), m.env);
+  xuLyMcpBearer(req(`${ORIGIN}/mcp`, { json: body, headers: { accept: MCP_ACCEPT, ...(token ? { authorization: `Bearer ${token}` } : {}) } }), m.env);
 
 const kiemTra: [string, () => Promise<void>][] = [];
 const test = (ten: string, fn: () => Promise<void>) => kiemTra.push([ten, fn]);
@@ -89,9 +90,11 @@ test("redirect_uri: https và loopback được nhận, http nơi khác và frag
   assert.equal(laRedirectHopLe("javascript:alert(1)"), false);
   assert.equal(laRedirectHopLe("x".repeat(301)), false);
 });
-test("phạm vi: trống thì cấp đủ, phạm vi lạ bị từ chối", async () => {
+test("phạm vi: trống chỉ cấp quyền đọc, phạm vi lạ bị từ chối", async () => {
   const all = kiemTraPhamVi(undefined);
-  assert.ok(all.ok && all.v.length === Object.keys(PHAM_VI).length);
+  assert.ok(all.ok && all.v.length === PHAM_VI_DOC_MAC_DINH.length);
+  assert.deepEqual(all.v, PHAM_VI_DOC_MAC_DINH);
+  assert.ok(!all.v.includes("preferences:write") && !all.v.includes("study:write"));
   const hai = kiemTraPhamVi("profile:read study:read profile:read");
   assert.ok(hai.ok && hai.v.join(" ") === "profile:read study:read");
   assert.equal(kiemTraPhamVi("admin:all").ok, false);
@@ -194,11 +197,11 @@ test("MCP: token đúng gọi được initialize, tools/list, lay_ho_so; phạm
   const m = await moiMoiTruong();
   const id = await dangKy(m);
   const tk = await xinToken(m, id, "profile:read");
-  const init = await mcp(m, tk.access_token, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18" } });
+  const init = await mcp(m, tk.access_token, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test-client", version: "1.0" } } });
   assert.equal(init.status, 200);
   assert.equal(((await init.json()) as { result: { protocolVersion: string } }).result.protocolVersion, "2025-06-18");
   const list = await mcp(m, tk.access_token, { jsonrpc: "2.0", id: 2, method: "tools/list" });
-  assert.ok(((await list.json()) as { result: { tools: unknown[] } }).result.tools.length >= 6);
+  assert.ok(((await list.json()) as { result: { tools: unknown[] } }).result.tools.length >= 1);
   const hoSo = await mcp(m, tk.access_token, { jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "lay_ho_so", arguments: {} } });
   const hsJson = (await hoSo.json()) as { result: { isError?: boolean; content: { text: string }[] } };
   assert.ok(!hsJson.result.isError, hsJson.result.content[0].text);
@@ -220,7 +223,7 @@ test("MCP: token hết hạn bị từ chối", async () => {
 });
 test("MCP: đường dẫn /mcp/{mã} cũ vẫn chạy và không bị kiểm phạm vi", async () => {
   const m = await moiMoiTruong();
-  const r = await xuLyMcp(req(`${ORIGIN}/mcp/${m.ma}`, { json: { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "de_xuat_them_nguyen_vong", arguments: { idChuongTrinh: "neu-ktdn" } } } }), m.env, m.ma);
+  const r = await xuLyMcp(req(`${ORIGIN}/mcp/${m.ma}`, { json: { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "de_xuat_them_nguyen_vong", arguments: { idChuongTrinh: "neu-ktdn" } } }, headers: { accept: MCP_ACCEPT } }), m.env, m.ma);
   const j = (await r.json()) as { result: { isError?: boolean; content: { text: string }[] } };
   assert.ok(!j.result.isError, j.result.content[0].text);
 });

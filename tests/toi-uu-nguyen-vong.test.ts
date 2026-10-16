@@ -101,7 +101,7 @@ const diemEm: DiemDayDu = {
   congNghe: null,
 };
 
-// 1. Kiểm tra danh mục hợp lý và tính xác suất gộp P(>= 1 NV)
+// 1. Nhóm nhãn khớp với khoảng cách điểm lịch sử, không tạo xác suất.
 {
   // Danh mục thứ tự chuẩn: NV1 UIT (Thử sức), NV2 SPKT (Vừa sức), NV3 HUTECH (An toàn)
   const cd = danhGiaDanhMucToanDien(["uit-cntt", "spkt-cntt", "hutech-cntt"], tim, diemEm, {
@@ -111,7 +111,7 @@ const diemEm: DiemDayDu = {
   });
 
   assert.equal(cd.soLuong, 3);
-  assert.ok(cd.xacSuatDoItNhatMotNV >= 95, `xác suất có chốt an toàn phải >= 95%: ${cd.xacSuatDoItNhatMotNV}`);
+  assert.equal(JSON.stringify(cd).includes("xacSuat"), false);
   assert.equal(cd.canhBaoNghiemTrong.length, 0, "không được có cảnh báo nghịch đảo khi xếp đúng");
   assert.equal(cd.coCau.thuSuc, 1);
   assert.equal(cd.coCau.vuaSuc, 1);
@@ -120,7 +120,7 @@ const diemEm: DiemDayDu = {
 
 // 2. Phát hiện nghịch đảo thứ tự (Inversion Detection)
 {
-  // Xếp ngược: NV1 HUTECH (xác suất ~98%), NV2 UIT (mơ ước)
+  // Xếp ngược theo khoảng cách điểm: NV1 HUTECH (An toàn), NV2 UIT (Thử sức).
   const cdNghichDao = danhGiaDanhMucToanDien(["hutech-cntt", "uit-cntt"], tim, diemEm, {
     nganSach: null,
     khuVuc: ["TP.HCM"],
@@ -130,9 +130,9 @@ const diemEm: DiemDayDu = {
   assert.ok(cdNghichDao.canhBaoNghiemTrong.length > 0, "phải cảnh báo nghịch đảo thứ tự");
   assert.ok(cdNghichDao.cacNguyenVong[0].biNghichDao, "NV1 phải bị đánh dấu nghịch đảo");
 
-  // Kiểm tra hàm tự động sửa thứ tự
-  const thuTuMoi = toiUuThuTuDanhMuc(["hutech-cntt", "uit-cntt"], tim, diemEm, { uuTienTuyenSinh: null });
-  assert.deepEqual(thuTuMoi, ["uit-cntt", "hutech-cntt"], "phải đưa UIT lên trước HUTECH");
+  // Thứ tự nguyện vọng phản ánh sở thích; engine không tự đổi.
+  const thuTuMoi = toiUuThuTuDanhMuc(["hutech-cntt", "uit-cntt"]);
+  assert.deepEqual(thuTuMoi, ["hutech-cntt", "uit-cntt"]);
 }
 
 // 3. Kiểm tra Smart Portfolio Builder

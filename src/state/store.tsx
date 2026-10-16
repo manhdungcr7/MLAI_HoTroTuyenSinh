@@ -32,13 +32,37 @@ export interface AppState {
 }
 
 const KHOA = "nvai:v2";
+const KHOA_FEED_LICH = "nvai:ke-hoach-lich-feed";
+
+/** Thu hồi URL lịch trước khi xóa khóa quản lý khỏi máy; nếu ngoại tuyến, giữ khóa để em thử lại. */
+function thuHoiFeedTruocKhiXoa(): void {
+  try {
+    const raw = localStorage.getItem(KHOA_FEED_LICH);
+    if (!raw) return;
+    const feed = JSON.parse(raw) as { writeKey?: unknown; feedUrl?: unknown; lanDongBo?: unknown };
+    if (typeof feed.writeKey !== "string" || !/^[a-f0-9]{48}$/.test(feed.writeKey)) return;
+    localStorage.setItem(KHOA_FEED_LICH, JSON.stringify({ ...feed, dangThuHoi: true, loi: "Đang thu hồi liên kết lịch…" }));
+    window.dispatchEvent(new Event("nvai-lich-feed-thay-doi"));
+    void fetch("/api/lich/thu-hoi", { method: "DELETE", headers: { authorization: `Bearer ${feed.writeKey}` }, keepalive: true })
+      .then((response) => {
+        if (response.ok || response.status === 404) localStorage.removeItem(KHOA_FEED_LICH);
+        else localStorage.setItem(KHOA_FEED_LICH, JSON.stringify({ ...feed, dangThuHoi: false, loi: "Chưa thu hồi được liên kết lịch. Em thử lại khi có mạng nhé." }));
+        window.dispatchEvent(new Event("nvai-lich-feed-thay-doi"));
+      })
+      .catch(() => {
+        try { localStorage.setItem(KHOA_FEED_LICH, JSON.stringify({ ...feed, dangThuHoi: false, loi: "Chưa thu hồi được liên kết lịch. Em thử lại khi có mạng nhé." })); } catch { /* giữ dữ liệu gốc nếu trình duyệt không cho ghi */ }
+        window.dispatchEvent(new Event("nvai-lich-feed-thay-doi"));
+      });
+  } catch { /* không chặn việc xóa dữ liệu chính nếu localStorage hoặc mạng lỗi */ }
+}
 
 /** Xóa mọi dữ liệu phụ của các màn (tình huống đang thử, bộ lọc, nhắc đã gửi...) để "làm lại" thật sự là làm lại. */
 function xoaDuLieuPhu() {
+  thuHoiFeedTruocKhiXoa();
   for (const kho of [() => localStorage, () => sessionStorage]) {
     try {
       const k = kho();
-      for (const ten of Object.keys(k)) if (ten.startsWith("nvai:") && ten !== KHOA && !(KHOA_AI as readonly string[]).includes(ten)) k.removeItem(ten);
+      for (const ten of Object.keys(k)) if (ten.startsWith("nvai:") && ten !== KHOA && ten !== KHOA_FEED_LICH && !(KHOA_AI as readonly string[]).includes(ten)) k.removeItem(ten);
     } catch { /* trình duyệt chặn lưu: bỏ qua */ }
   }
   window.dispatchEvent(new Event("nvai-lam-lai")); // các màn đang giữ dữ liệu trong bộ nhớ tự đặt lại

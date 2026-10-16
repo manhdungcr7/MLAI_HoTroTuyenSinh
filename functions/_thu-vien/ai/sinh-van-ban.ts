@@ -26,7 +26,8 @@ export const TOKEN_RA = 450;
 export const modelNgoai = (env: EnvLLM): string | undefined => (env.AI_MODEL && !env.AI_MODEL.startsWith("@cf/") ? env.AI_MODEL : undefined);
 
 export async function goiMoHinh(env: EnvLLM, noiDung: string, f: typeof fetch = fetch, hanMs = HAN_GOI_MS): Promise<string> {
-  const han = Math.min(HAN_GOI_MS, hanMs);
+  if (!Number.isFinite(hanMs) || hanMs <= 0) throw new Error("het-thoi-gian");
+  const han = Math.max(1, Math.floor(Math.min(HAN_GOI_MS, hanMs)));
   if (env.OPENROUTER_API_KEY) {
     const r = await f("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -77,29 +78,21 @@ export async function goiMoHinh(env: EnvLLM, noiDung: string, f: typeof fetch = 
     const model = env.AI_MODEL && (env.AI_MODEL.startsWith("@cf/") || env.AI_MODEL.startsWith("@hf/"))
       ? env.AI_MODEL
       : "@cf/meta/llama-3.3-70b-instruct";
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
-      const res = (await env.AI.run(model, {
+      // Binding không nhận AbortSignal trong contract hiện tại. Chặn thời gian chờ,
+      // không gọi thêm model khi lỗi: retry sinh văn bản có thể tính tiền hai lần.
+      const res = (await Promise.race([env.AI.run(model, {
         messages: [
           { role: "system", content: NHAC_HE_THONG },
           { role: "user", content: noiDung },
         ],
         max_tokens: TOKEN_RA,
         temperature: 0.2,
-      })) as { response?: string };
+      }), new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error("cf-ai-timeout")), han); })])) as { response?: string };
       return (res?.response ?? "").trim();
-    } catch {
-      if (model !== "@cf/meta/llama-3.1-8b-instruct") {
-        const res8b = (await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
-          messages: [
-            { role: "system", content: NHAC_HE_THONG },
-            { role: "user", content: noiDung },
-          ],
-          max_tokens: TOKEN_RA,
-          temperature: 0.2,
-        })) as { response?: string };
-        return (res8b?.response ?? "").trim();
-      }
-      throw new Error("cf-ai-error");
+    } finally {
+      if (timer) clearTimeout(timer);
     }
   }
   throw new Error("chua-cau-hinh");

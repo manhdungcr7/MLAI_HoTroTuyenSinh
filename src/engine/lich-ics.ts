@@ -89,7 +89,7 @@ export function taoIcs(suKien: SuKienLich[], tenLich: string = TEN_LICH_MAC_DINH
     if (!RE_GIO.test(e.batDau) || !RE_GIO.test(e.ketThuc) || e.batDau >= e.ketThuc) continue;
     dong.push(
       "BEGIN:VEVENT",
-      `UID:nvai-${bamChuoi(`${e.tieuDe}|${e.batDau}`)}@nguyenvongai`,
+      `UID:nvai-${bamChuoi(e.taskId ? `task:${e.taskId}` : `${e.tieuDe}|${e.batDau}`)}@nguyenvongai`,
       `DTSTAMP:${dauThoiGian}`,
       `DTSTART;TZID=${MUI_GIO}:${gioCucBo(e.batDau)}`,
       `DTEND;TZID=${MUI_GIO}:${gioCucBo(e.ketThuc)}`,
@@ -129,7 +129,7 @@ export function suKienTuanNay(s: AppState, bayGio: Date = new Date()): SuKienLic
     if (!RE_GIO.test(batDau) || !RE_GIO.test(ketThuc) || batDau >= ketThuc) continue;
     const viec = k.viecId ? viecTheoId.get(k.viecId) : undefined;
     const ghiChu = viec?.lyDo || k.ghiChu || undefined;
-    ra.push({ tieuDe: k.ten, batDau, ketThuc, ...(ghiChu ? { ghiChu } : {}) });
+    ra.push({ tieuDe: k.ten, batDau, ketThuc, ...(ghiChu ? { ghiChu } : {}), ...(viec ? { taskId: viec.id, progressStatus: s.trangThaiViec[viec.id] ?? "chua" } : {}) });
   }
   ra.sort((a, b) => a.batDau.localeCompare(b.batDau));
   return ra.slice(0, GIOI_HAN_SU_KIEN_TUAN);

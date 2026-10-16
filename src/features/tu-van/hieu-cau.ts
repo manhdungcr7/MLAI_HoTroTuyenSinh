@@ -137,6 +137,34 @@ export function phanTichCau(cau: string): YDinhCau {
 
 /** Các trường được nêu trong câu (tên, mã, viết tắt). Chỉ nhận khớp chính xác; mơ hồ thì bỏ qua, để lớp trên hỏi lại. `boQuaCum`: cụm đã dùng làm tên tỉnh. */
 export interface TruongNeu { chuoi: string; kq: KetQuaTruong }
+/** Chỉ bắt tên trường được nêu rõ, không bắt "trường nào" hay câu khám phá theo tỉnh. */
+export function tenTruongChuaCo(cau: string): string | null {
+  const q = chuanHoa(cau);
+  const m = q.match(/\b(?:truong|dai hoc|dh|hoc vien)\s+(.+?)(?=\s+(?:nganh|nam|diem chuan|hoc phi|la gi|la truong gi|bao nhieu|the nao|ra sao)\b|$)/);
+  if (!m || /^(?:nao|gi|co|o|tai|de|do|nay|kia|ay|vua roi|phu hop|tot|re|gan|day|dao tao)\b/.test(m[1])) return null;
+  const name = m[1].split(/\s+(?:va|voi|hay|so voi)\s+/)[0];
+  return resolveTruong(name).kieu === "khong-thay" ? name : null;
+}
+/** Giữ cụm dài nhất; không hỏi lại cụm con của một tên đã xác định. */
+export function timTruongMoHo(cau: string): TruongNeu | null {
+  const tu = tachTu(cau);
+  const ro = timTruongTrongCau(cau);
+  for (let n = Math.min(10, tu.length); n >= 1; n--) {
+    for (let i = 0; i + n <= tu.length; i++) {
+      const cum = tu.slice(i, i + n).join(" ");
+      // Không nhận cụm ngành ("Khoa học máy tính") làm tên trường mơ hồ.
+      if (!/^(?:(?:truong|dai hoc|dh|hoc vien) .+|bach khoa(?: .+)?|bk|utc|nong nghiep|su pham ky thuat)$/.test(cum)) continue;
+      // Giữ địa danh của trường chưa có trong kho, không lùi về tên chung.
+      if (cum === "bach khoa" && /^(?:tp |hcm|tphcm|thanh pho|sai gon)/.test(tu.slice(i + n).join(" "))) continue;
+      if (ro.some((t) => ` ${t.chuoi} `.includes(` ${cum} `))) continue;
+      if (n === 1 && (TU_DEM.has(cum) || VIET_TAT_NGANH[cum])) continue;
+      const kq = resolveTruong(cum);
+      // Chỉ tên/bí danh có thật; không sửa một từ thường trong câu thành tên trường.
+      if (kq.kieu === "mo-ho" && !kq.gan_dung && (n > 1 || maTuVietTat(cum).length > 1 || cum === "bk")) return { chuoi: cum, kq };
+    }
+  }
+  return null;
+}
 export function timTruongTrongCau(cau: string, boQuaCum: (string | null)[] = []): TruongNeu[] {
   const tu = tachTu(cau);
   const dung = new Array<boolean>(tu.length).fill(false);

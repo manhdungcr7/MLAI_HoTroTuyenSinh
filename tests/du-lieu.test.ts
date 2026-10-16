@@ -34,7 +34,7 @@ for (const l of LUA_CHON) {
   assert.ok(Object.keys(l.diemTheoNam ?? {}).length >= 1, `không có điểm theo năm: ${l.id}`);
   assert.ok(!/undefined|NaN/.test(l.nganh + l.moTa + l.tenTruong), `chữ lỗi: ${l.id}`);
   assert.ok(l.nguonCap === "official_pdf" || l.nguonCap === "aggregator_verified");
-  assert.equal(l.daKiemChung, l.nguonCap === "official_pdf");
+  assert.equal(l.daKiemChung, false, "nhãn nguồn không chứng minh xác minh độc lập");
 }
 // không bịa học phí: chỉ ngành có số mới có học phí, và học phí hợp lý (triệu đồng/năm)
 for (const l of LUA_CHON.filter(coHocPhi)) assert.ok((l.hocPhiMin as number) > 0 && (l.hocPhiMax as number) < 500, `học phí lạ: ${l.id}`);

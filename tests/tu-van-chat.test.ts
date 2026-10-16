@@ -1,3 +1,4 @@
+import "./nap-du-lieu";
 // Chat tư vấn hiểu đúng ý định: tỉnh, ngành, tên trường, điểm, hành động. Chạy: npx tsx tests/tu-van-chat.test.ts
 // Được nạp luôn từ tests/lay-du-lieu.test.ts. Dùng dữ liệu thật; không gọi mạng (trừ mô phỏng fetch ở mục I).
 import assert from "node:assert/strict";

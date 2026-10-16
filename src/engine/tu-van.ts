@@ -139,13 +139,13 @@ export const NHAC_HE_THONG = [
   "2. Chỉ dùng số liệu trong DỮ LIỆU, HỒ SƠ, TƯ LIỆU. Không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\". hp~ là học phí ước tính, phải nói \"ước tính\". Ghi chú cộng đồng là chưa chính thức.",
   "3. Số kèm ngành, trường, năm; cuối câu ghi [nguồn: id1, id2]. Điểm chuẩn là năm trước, không nói xác suất đậu. Dùng nhãn nhan kèm chenh; điểm của bạn ở một ngành chỉ lấy tongCuaEm của ngành đó. Có dòng NV1 thì nêu khoảng cách tới NV1 đúng số đã cho.",
   "4. Câu mơ hồ: hỏi lại MỘT câu ở hoiLai, không hỏi điều đã có trong HỒ SƠ. Ngoài chọn ngành, trường, ôn thi, kế hoạch thì từ chối nhẹ.",
-  'Chỉ trả JSON: {"intent":"tra-cuu|so-sanh|goi-y|giai-thich|lam-ro|ngoai-pham-vi","traLoi":"...[nguồn: ...]","thucThe":[{"loai":"truong|nganh","maTruong":"","idChuongTrinh":""}],"hanhDong":[{"loai":"xem-truong|xem-nganh|xem-diem-chuan|so-sanh|them-nguyen-vong","maTruong":"","idChuongTrinh":"","ids":[],"nhan":""}],"hoiLai":"","trangThaiDuLieu":"da-xac-minh|lich-su|uoc-tinh|du-bao|chua-co"}. Chỉ traLoi bắt buộc; mã, id lấy từ DỮ LIỆU; hanhDong tối đa 3, nhan 2-4 chữ, them-nguyen-vong chỉ là đề xuất.',
+  'Chỉ trả JSON: {"intent":"tra-cuu|so-sanh|goi-y|giai-thich|lam-ro|ngoai-pham-vi","traLoi":"...[nguồn: ...]","thucThe":[{"loai":"truong|nganh","maTruong":"","idChuongTrinh":""}],"hanhDong":[{"loai":"xem-truong|xem-nganh|xem-diem-chuan|so-sanh|them-nguyen-vong","maTruong":"","idChuongTrinh":"","ids":[],"nhan":""}],"hoiLai":"","trangThaiDuLieu":"da-xac-minh|chua-xac-minh|lich-su|uoc-tinh|du-bao|chua-co"}. Chỉ traLoi bắt buộc; mã, id lấy từ DỮ LIỆU; hanhDong tối đa 3, nhan 2-4 chữ, them-nguyen-vong chỉ là đề xuất.',
 ].join("\n");
 
 /** Phần mới của hợp đồng phản hồi cấu trúc (mọi trường đều tùy chọn để tương thích client cũ). */
 export const Y_DINH = ["tra-cuu", "so-sanh", "goi-y", "giai-thich", "lam-ro", "ngoai-pham-vi"] as const;
 export const LOAI_HANH_DONG = ["xem-truong", "xem-nganh", "xem-diem-chuan", "so-sanh", "them-nguyen-vong"] as const;
-export const TRANG_THAI_DU_LIEU = ["da-xac-minh", "lich-su", "uoc-tinh", "du-bao", "chua-co"] as const;
+export const TRANG_THAI_DU_LIEU = ["da-xac-minh", "chua-xac-minh", "lich-su", "uoc-tinh", "du-bao", "chua-co"] as const;
 export type YDinh = (typeof Y_DINH)[number];
 export type LoaiHanhDong = (typeof LOAI_HANH_DONG)[number];
 export type TrangThaiDuLieu = (typeof TRANG_THAI_DU_LIEU)[number];

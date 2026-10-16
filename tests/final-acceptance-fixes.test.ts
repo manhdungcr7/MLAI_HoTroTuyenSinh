@@ -1,6 +1,6 @@
+import "./nap-du-lieu";
 import assert from "node:assert/strict";
 import { danhGiaDanhMucToanDien, toiUuThuTuDanhMuc, timKiemDanhMucToiUu } from "../src/engine/toi-uu-nguyen-vong";
-import { tinhXacSuatTrungTuyen } from "../src/engine/xac-suat-trung-tuyen";
 import { tongChoLuaChon } from "../src/features/kham-pha/to-hop";
 import { timTruongTrongCau, phanTichCau } from "../src/features/tu-van/hieu-cau";
 import { timNganhKhop } from "../src/features/tu-van/lay-du-lieu";
@@ -88,10 +88,8 @@ const baseDiem = (overrides: Partial<DiemDayDu>): DiemDayDu => ({
     diem,
     { uuTienTuyenSinh: { khuVuc: "KV2-NT", doiTuong: "khong" } },
   );
-  const xsTrucTiep = tinhXacSuatTrungTuyen(tong.tong, lcA00);
-  assert.ok(chanDoan.cacNguyenVong[0].thongSo);
-  assert.equal(chanDoan.cacNguyenVong[0].thongSo.diemXet, 25.33, "Điểm xét không được cộng ưu tiên lần 2");
-  assert.equal(chanDoan.cacNguyenVong[0].thongSo.phanTram, xsTrucTiep?.phanTram);
+  assert.equal(chanDoan.cacNguyenVong[0].diemXet, 25.33, "Điểm xét không được cộng ưu tiên lần 2");
+  assert.equal(chanDoan.cacNguyenVong[0].chenhDiem, Math.round((25.33 - lcA00.diemMin) * 100) / 100);
 }
 
 // 2. Kiểm tra không sinh chuỗi "undefined%" khi có nguyện vọng thiếu điểm môn tổ hợp (P1-01)
@@ -114,8 +112,8 @@ const baseDiem = (overrides: Partial<DiemDayDu>): DiemDayDu => ({
     assert.ok(!cb.includes("undefined"), `Cảnh báo không được chứa undefined: ${cb}`);
   }
   const nvThieu = chanDoan.cacNguyenVong.find((x) => x.id === "test-d07");
-  assert.equal(nvThieu?.thongSo, null);
-  assert.equal(nvThieu?.xacSuatThucTe, 0, "Nguyện vọng chưa đủ điểm tổ hợp phải có xác suất thực tế = 0");
+  assert.equal(nvThieu?.diemXet, null, "Nguyện vọng thiếu môn phải giữ điểm so sánh là null");
+  assert.equal(nvThieu?.nhan, null, "Nguyện vọng thiếu môn không nhận nhãn điểm");
 }
 
 // 3. Kiểm tra phân biệt tên ngành "Công nghệ thông tin" và tên trường ĐH CNTT - QSC (P1-04)
@@ -132,18 +130,18 @@ const baseDiem = (overrides: Partial<DiemDayDu>): DiemDayDu => ({
   assert.equal(truongThucSu[0].kq.ma, "QSC");
 }
 
-// 4. Kiểm tra ưu tiên trường "Bách khoa TP.HCM" không kéo nhầm BKA (P1-04)
+// 4. Trường chưa có dữ liệu không được trả điểm của trường khác (P1-04).
 {
   const kq = timNganhKhop("Điểm chuẩn ngành Khoa học máy tính Bách khoa TP.HCM năm 2025 là bao nhiêu?", 5);
-  assert.ok(kq.length > 0);
-  assert.equal(kq[0].maTruong, "QSB", "Kết quả đầu tiên phải là Bách khoa TP.HCM (QSB)");
+  assert.ok(kq.every((l) => l.maTruong === "QSB"), "Chỉ được trả chương trình QSB nếu danh mục có, không đoán sang BKA/DDK");
 }
 
 // 5. Kiểm tra định dạng dấu phẩy học phí và alias công cụ MCP (P2)
 {
   assert.equal(hocPhiChu({ hocPhiMin: 28.5, hocPhiMax: 28.5, hocPhiUocTinh: true }), "≈ 28,5");
   assert.equal(tenCongCu("get_student_profile")?.ten, "lay_ho_so");
-  assert.equal(tenCongCu("get_study_plan")?.ten, "ke_hoach_tuan");
+  assert.equal(tenCongCu("get_study_plan")?.ten, "get_study_plan");
+  assert.equal(tenCongCu("ke_hoach_tuan")?.ten, "ke_hoach_tuan", "Giữ công cụ lịch cũ để không làm hỏng kết nối trước đây");
 }
 
 // 6. Kiểm tra tối ưu thứ tự và gợi ý danh mục không cộng ưu tiên 2 lần
@@ -156,11 +154,8 @@ const baseDiem = (overrides: Partial<DiemDayDu>): DiemDayDu => ({
     tiengAnh: 8.5,
     uuTien: 0.5,
   });
-  const map: Record<string, LuaChon> = { "test-safe": lcAnToan, "test-a00": lcA00 };
-  const thuTu = toiUuThuTuDanhMuc(["test-safe", "test-a00"], (id) => map[id], diem, {
-    uuTienTuyenSinh: { khuVuc: "KV2-NT", doiTuong: "khong" },
-  });
-  assert.deepEqual(thuTu, ["test-a00", "test-safe"]);
+  const thuTu = toiUuThuTuDanhMuc(["test-safe", "test-a00"]);
+  assert.deepEqual(thuTu, ["test-safe", "test-a00"], "không tự đổi thứ tự theo điểm thay học sinh");
   const goiY = timKiemDanhMucToiUu([lcAnToan, lcA00], diem, {
     uuTienTuyenSinh: { khuVuc: "KV2-NT", doiTuong: "khong" },
   }, 2);

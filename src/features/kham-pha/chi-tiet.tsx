@@ -25,7 +25,6 @@ import { KhoiDuBao } from "./khoi-du-bao";
 import { tongChoLuaChon } from "./to-hop";
 import { ThongTinTruong } from "./thong-tin-truong";
 import { giaiQuyetLink } from "@/engine/link-chinh-thuc";
-import { tinhXacSuatTrungTuyen } from "@/engine/xac-suat-trung-tuyen";
 
 const MO_TA_VIEC_LAM: Record<NonNullable<LuaChon["coHoiViecLam"]>, string> = {
   "Rất cao": "Khảo sát trong đề án.",
@@ -115,33 +114,6 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
   );
 }
 
-function KhoiXacSuatDecisionIntelligence({ lc, diemXet }: { lc: LuaChon; diemXet: number | null }) {
-  if (diemXet === null) return null;
-  const xs = tinhXacSuatTrungTuyen(diemXet, lc);
-  if (!xs) return null;
-
-  return (
-    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-2.5" aria-label="Ước lượng cơ hội trúng tuyển tham khảo">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <b className="text-[16px] text-muc font-extrabold">Ước lượng cơ hội trúng tuyển</b>
-          <span className="block text-[11px] text-chu-phu mt-0.5">Tham khảo từ biến động điểm chuẩn lịch sử (không phải cam kết đậu)</span>
-        </div>
-        <div className="text-right">
-          <span className={gop("text-[26px] font-black leading-none", xs.xacSuat >= 0.8 ? "text-luc-chu" : xs.xacSuat >= 0.45 ? "text-xanh" : "text-cam-chu")}>
-            {xs.phanTram}%
-          </span>
-          <span className="block text-[11px] text-chu-phu mt-0.5">Khoảng tham chiếu: {xs.khoangTinCay[0]}% – {xs.khoangTinCay[1]}%</span>
-        </div>
-      </div>
-      <div className="rounded-xl bg-nen p-2.5 space-y-1 text-[13px] text-chu leading-snug">
-        <p>• <b>Định vị:</b> <span className="font-bold">{xs.nhanRuiRo}</span> (Chênh lệch {xs.chenhDiem >= 0 ? `+${xs.chenhDiem}` : xs.chenhDiem} điểm so với điểm kỳ vọng {xs.diemKyVong}).</p>
-        <p>• <b>Khuyến nghị:</b> {xs.khuyenNghi}</p>
-      </div>
-    </section>
-  );
-}
-
 /** Liên kết tới tài liệu gốc của từng năm (đề án PDF, đúng trang có ngành). */
 function NguonTungNam({ lc, docs }: { lc: LuaChon; docs?: { nam: string; url: string }[] }) {
   const ds = lc.nguonTheoNam ?? [];
@@ -215,9 +187,7 @@ export default function ChiTiet() {
   const lc = useMemo(() => {
     if (!lcGoc) return undefined;
     const theoNam = nguon?.nam[lcGoc.id];
-    // Điểm lấy từ trang tổng hợp nhưng tìm thấy đúng con số đó trong đề án của trường (năm mới nhất): coi là đã đối chiếu.
-    const khop = lcGoc.nguonCap === "aggregator_verified" && !!theoNam?.some((x) => x.nam === String(lcGoc.namDiem));
-    return { ...lcGoc, nguonTheoNam: theoNam, ...(khop ? { daKiemChung: true, nguon: "Điểm lấy từ trang tổng hợp, đã đối chiếu: đúng con số này có trong đề án tuyển sinh của trường (file PDF)" } : {}) };
+    return { ...lcGoc, nguonTheoNam: theoNam };
   }, [lcGoc, nguon]);
   const thongTinTruong = lcGoc ? kho.layChiTietTruong(lcGoc.maTruong ?? lcGoc.truong) : null;
   const bc = useMemo(() => boiCanhTu(s), [s]);
@@ -324,7 +294,6 @@ export default function ChiTiet() {
 
         <BangDiemChuan lc={lc} diemEm={kq.tong} uuTienCong={tongChoLuaChon(lc, bc.diem).uuTienCong} />
 
-        <KhoiXacSuatDecisionIntelligence lc={lc} diemXet={kq.tong} />
 
         <KhoiDuBao lc={lc} diemEm={kq.tong} />
 
@@ -341,7 +310,9 @@ export default function ChiTiet() {
           <div className="flex-1 min-w-0 space-y-2">
             <div className="flex items-center justify-between gap-2">
               <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
-              {lc.daKiemChung ? <Nhan tone="luc">Đã kiểm chứng</Nhan> : <Nhan tone="cam">Chưa kiểm chứng</Nhan>}
+              <Nhan tone={lc.nguonCap === "official_pdf" ? "luc" : "cam"}>
+                {lc.nguonCap === "official_pdf" ? "Có nguồn chính thức" : "Nguồn thứ cấp"} · chưa xác minh độc lập
+              </Nhan>
             </div>
             <details className="group">
               <summary className="flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none hover:underline py-0.5">Xem chi tiết nguồn</summary>

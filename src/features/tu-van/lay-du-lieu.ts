@@ -6,7 +6,7 @@ import { chuanHoa as chuanHoaChung, locTheoTinh, maTuVietTat, resolveTruong, ten
 import { NGAN_SACH_TOI_DA, nhanNguyenVong, nhanChoLuaChon, khoangCachTheoMon } from "@/engine/phan-tich";
 import { hieuCauTim } from "@/engine/hieu-cau-tim";
 import type { HanhDongDeXuat, HoSoTomTat, SuKien, TrangThaiDuLieu } from "@/engine/tu-van";
-import { chuTruongDinhNghia, ghiChuTinhGop, phanTichCau, timTruongTrongCau, type MucTuongDuong, type YDinhCau } from "./hieu-cau";
+import { chuTruongDinhNghia, ghiChuTinhGop, phanTichCau, tenTruongChuaCo, timTruongMoHo, timTruongTrongCau, type MucTuongDuong, type YDinhCau } from "./hieu-cau";
 import type { ChoTraLoi, LuaChonNhanh, TheTruong, TinNhan } from "./hoi-thoai";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -23,9 +23,8 @@ const BO_QUA = new Set(["nganh", "truong", "hoc", "dai", "diem", "chuan", "em", 
 /** Các cụm từ quen thuộc chỉ trường (đối chiếu tên tiếng Việt). */
 export const CUM_TU_TRUONG: { regex: RegExp; ma: string }[] = [
   { regex: /\b(bach khoa ha noi|dh bach khoa ha noi|bkhn|hust)\b/i, ma: "BKA" },
-  { regex: /\b(bach khoa (?:tp\.?\s*hcm|hcm|sai gon)|qsb|hcmut)\b/i, ma: "QSB" },
+  { regex: /\b(bach khoa (?:tp\s*hcm|thanh pho ho chi minh|hcm|sai gon)|qsb|hcmut)\b/i, ma: "QSB" },
   { regex: /\b(bach khoa da nang|ddk)\b/i, ma: "DDK" },
-  { regex: /\b(bach khoa|dai hoc bach khoa)\b/i, ma: "BKA" },
   { regex: /\b(kinh te quoc dan|ktqd|neu)\b/i, ma: "KHA" },
   { regex: /\b(ngoai thuong|ftu)\b/i, ma: "NTH" },
   { regex: /\b((?:truong|dh|dai hoc) cong nghe thong tin|dh cntt|uit)\b/i, ma: "QSC" },
@@ -72,13 +71,12 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
   if (tk.length === 0) return [];
   const coDau = coDauTiengViet(cauHoi);
   const qKhongDau = khongDau(cauHoi);
+  if (timTruongMoHo(cauHoi) || tenTruongChuaCo(cauHoi)) return [];
   const maTruongUuTien = new Set<string>();
   for (const c of CUM_TU_TRUONG) {
-    if (c.ma === "BKA" && c.regex.source === "\\b(bach khoa|dai hoc bach khoa)\\b" && (maTruongUuTien.has("QSB") || maTruongUuTien.has("DDK")) && !/\b(bach khoa ha noi|bkhn|hust)\b/i.test(qKhongDau)) {
-      continue;
-    }
     if (c.regex.test(qKhongDau)) maTruongUuTien.add(c.ma);
   }
+  for (const t of timTruongTrongCau(cauHoi)) if (t.kq.ma) maTruongUuTien.add(t.kq.ma);
 
   const diem = (l: LuaChon) => {
     const nganh = ` ${chuanHoa(l.nganh, coDau)} `;
@@ -95,7 +93,8 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
     }
     return nganhTrung * 2 + truongTrung;
   };
-  return ds.map((l) => ({ l, d: diem(l) })).filter((x) => x.d > 0)
+  return ds.filter((l) => maTruongUuTien.size === 0 || !!l.maTruong && maTruongUuTien.has(l.maTruong))
+    .map((l) => ({ l, d: diem(l) })).filter((x) => x.d > 0)
     .sort((a, b) => b.d - a.d || (Object.keys(b.l.diemTheoNam ?? {}).length - Object.keys(a.l.diemTheoNam ?? {}).length) || b.l.diemMin - a.l.diemMin)
     .slice(0, toiDa).map((x) => x.l);
 }
@@ -301,7 +300,7 @@ const noiTen = (ms: string[], toiDa = TOI_DA_HIEN) => {
 };
 const hanhXemTruong = (ma: string): HanhDongDeXuat => ({ loai: "xem-truong", maTruong: ma, nhan: "Xem trường" });
 const taoThe = (ds: TruongTimThay[]): TheTruong[] => ds.map((x) => ({ ma: x.ma, ...(x.ct ? { id: x.ct.id } : {}), muc: x.muc }));
-const trangThaiTu = (ds: (LuaChon | null)[]): TrangThaiDuLieu => (ds.length && ds.every((l) => l?.nguonCap === "official_pdf") ? "da-xac-minh" : "lich-su");
+const trangThaiTu = (ds: (LuaChon | null)[]): TrangThaiDuLieu => (ds.length && ds.every((l) => l?.nguonCap === "official_pdf") ? "chua-xac-minh" : "lich-su");
 
 /** Phần câu hỏi còn lại sau khi bỏ tên trường và từ đệm: chỉ còn cụm ngành. */
 function cumConLai(y: YDinhCau, truongs: { chuoi: string }[]): string {
@@ -538,7 +537,7 @@ function traLoiXepHangHocPhi(y: YDinhCau): KetQuaTuDong {
   const uoc = top.some((l) => l.hocPhiUocTinh);
   return {
     traLoi: `Học phí ${thap ? "thấp" : "cao"} nhất trong dữ liệu${pham ? ` (${pham})` : ""}:\n${top.map(dong).join("\n")}\n${uoc ? "Mục ghi ước tính là suy theo khối ngành, chưa có văn bản học phí của trường; bạn đối chiếu với đề án trước khi quyết định." : "Học phí lấy từ đề án của trường."}${moiTruong.length > TOI_DA_HIEN ? ` Còn ${moiTruong.length - TOI_DA_HIEN} lựa chọn khác, bạn muốn xem tiếp không?` : ""}`,
-    nguon: top.map((l) => l.id), trangThaiDuLieu: uoc ? "uoc-tinh" : "da-xac-minh",
+      nguon: top.map((l) => l.id), trangThaiDuLieu: uoc ? "uoc-tinh" : trangThaiTu(top),
   };
 }
 
@@ -549,6 +548,22 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
   const NHAC = `${NHAC_NGAN} Bạn đối chiếu với đề án của trường trước khi quyết định.`;
   const y = phanTichCau(cauHoi);
   const ctx = nguCanhLuotTruoc(truoc, giuId);
+  const chuaCo = tenTruongChuaCo(cauHoi);
+  if (chuaCo) return {
+    traLoi: `Mình chưa thấy trường “${chuaCo}” trong danh mục. Em kiểm tra tên đầy đủ hoặc mã trường; mình chưa có dữ liệu để trả lời.`,
+    nguon: [], trangThaiDuLieu: "chua-co",
+  };
+  const moHo = timTruongMoHo(cauHoi);
+  if (moHo) return {
+    traLoi: `Tên “${moHo.chuoi}” có thể chỉ nhiều trường. Em chọn đúng trường để mình tra cứu.`,
+    nguon: [], hoiLai: "Em muốn hỏi trường nào?", trangThaiDuLieu: "chua-co",
+    luaChon: moHo.kq.ung_vien.map((ma) => ({ nhan: ten(ma), cau: q.replace(moHo.chuoi, ma) })),
+  };
+  const truongChiDinh = CUM_TU_TRUONG.filter((t) => t.regex.test(q)).map((t) => t.ma);
+  if (truongChiDinh.length && !LUA_CHON_MAU.some((l) => l.maTruong && truongChiDinh.includes(l.maTruong))) return {
+    traLoi: "Mình chưa có dữ liệu chương trình của trường em hỏi trong danh mục. Em đối chiếu trang tuyển sinh chính thức của trường; mình chưa thể cung cấp điểm chuẩn hay học phí.",
+    nguon: [], trangThaiDuLieu: "chua-co",
+  };
 
   // Nguyên lý nhãn nguyện vọng
   if (/3 tang la gi|nguyen ly 3 tang|nguyen tac 3 tang|chien luoc 3 tang|cach xep nguyen vong|nguyen tac xep nguyen vong|huong dan xep nguyen vong/.test(q)) {
@@ -638,7 +653,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     const sk = khop.slice(0, TOI_DA_HIEN).map((l) => dungSuKien(l, diem, nguon));
     return {
       traLoi: `Tỉ lệ có việc làm theo khảo sát trong đề án của trường:\n${sk.map((d) => dongNganh(d, { hocPhi, viecLam: true })).join("\n")}\nChỉ ngành nào đề án có nêu thì mình mới có số.`,
-      nguon: khop.slice(0, TOI_DA_HIEN).map((l) => l.id), trangThaiDuLieu: "da-xac-minh",
+      nguon: khop.slice(0, TOI_DA_HIEN).map((l) => l.id), trangThaiDuLieu: trangThaiTu(khop.slice(0, TOI_DA_HIEN)),
     };
   }
 
@@ -692,27 +707,25 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     const dem: Record<string, number> = {};
     sk.forEach((x) => { if (x.nhanCuaEm) dem[x.nhanCuaEm] = (dem[x.nhanCuaEm] ?? 0) + 1; });
     const lietKe = ["Thử sức", "Vừa sức", "An toàn", "Dự phòng"].map((n) => `${dem[n] ?? 0} ${n}`).join(", ");
-    const coLuoiDo = (dem["An toàn"] ?? 0) + (dem["Dự phòng"] ?? 0);
+    const coLuoiDo = cd.coCau.anToan;
     const loi = coLuoiDo === 0
-      ? "Danh sách chưa có ngành An toàn hay Dự phòng, bạn nên thêm 1 đến 2 ngành có điểm chuẩn thấp hơn điểm của bạn từ 1,5 điểm trở lên để có chỗ đỡ."
-      : (dem["Thử sức"] ?? 0) > sk.length / 2
+      ? "Chưa có lựa chọn nằm thấp hơn mốc điểm lịch sử theo điểm hiện tại; bạn có thể cân nhắc thêm lựa chọn nếu phù hợp sở thích."
+      : cd.coCau.thuSuc > sk.length / 2
         ? "Hơn một nửa danh sách là Thử sức, bạn cân nhắc thêm ngành Vừa sức."
-        : (dem["Thử sức"] ?? 0) === 0 && sk.length >= 3
-          ? "Danh sách khá an toàn, bạn có thể tự tin thêm 1 ngành Thử sức ở Nguyện Vọng 1 để không bỏ lỡ ước mơ."
-          : "Danh sách của bạn có cơ cấu 3 tầng khá cân bằng giữa Thử sức, Vừa sức và An toàn.";
+        : "Khoảng cách điểm của danh sách có nhiều mức khác nhau. Đây là so sánh với điểm lịch sử, không phải dự báo kết quả.";
 
     const canhBaoNghichDaoStr = cd.canhBaoNghiemTrong.length > 0
-      ? `\n\n⚠️ **CẢNH BÁO NGHỊCH ĐẢO THỨ TỰ (NGUY CƠ CAO):**\n` + cd.canhBaoNghiemTrong.map((cb) => `• ${cb}`).join("\n") + "\n👉 Bạn hãy vào mục **Nguyện vọng** và bấm nút **Tự động chỉnh thứ tự chuẩn** để bảo vệ cơ hội trúng tuyển vào ngành mơ ước!"
+      ? `\n\n⚠️ **Lưu ý thứ tự:**\n` + cd.canhBaoNghiemTrong.map((cb) => `• ${cb}`).join("\n") + "\nThứ tự nguyện vọng là lựa chọn của bạn; hãy tự chỉnh nếu ngành phía trên không phải ưu tiên cao hơn."
       : "";
 
-    const xacSuatStr = `\n\n📈 **Đánh giá cơ hội tham khảo (từ biến động điểm chuẩn lịch sử):**\n• **Ước lượng cơ hội đỗ ít nhất 1 nguyện vọng**: **~${cd.xacSuatDoItNhatMotNV}%**.\n• **Cơ cấu 3 tầng**: ${cd.coCau.thuSuc} Thử sức, ${cd.coCau.vuaSuc} Vừa sức, ${cd.coCau.anToan} An toàn.`;
+    const coCauStr = `\n\n**So sánh với điểm chuẩn lịch sử:** ${cd.coCau.thuSuc} Thử sức, ${cd.coCau.vuaSuc} Vừa sức, ${cd.coCau.anToan} An toàn/Dự phòng. Đây là khoảng cách điểm, không phải xác suất trúng tuyển.`;
 
     const mn = phanTichMoNeo(s);
     const gocNV1 = mn
       ? ` Lấy Nguyện Vọng 1 ${mn.lc.tenTruong}, ${mn.lc.nganh} làm gốc: ${cauKhoangCachNV1(mn) ?? (mn.monChuaCoDiem.length ? "bạn nhập đủ điểm các môn của tổ hợp để mình tính khoảng cách." : "điểm hiện tại của bạn đã chạm mốc điểm chuẩn.")}${mn.luoiDo.length ? ` Các nguyện vọng sau đỡ cho nó: ${mn.luoiDo.slice(0, 3).map((d) => `Nguyện Vọng ${d.thuTu} ${d.lc.truong} (${d.nhan})`).join(", ")}.` : ""}`
       : "";
     return {
-      traLoi: `Danh sách của bạn có ${sk.length} nguyện vọng: ${lietKe}.${gocNV1}${xacSuatStr}${canhBaoNghichDaoStr} ${loi}\n${sk.slice(0, TOI_DA_HIEN).map((d) => dongNganh(d)).join("\n")}${sk.length > TOI_DA_HIEN ? `\nCòn ${sk.length - TOI_DA_HIEN} nguyện vọng khác trong mục Nguyện vọng.` : ""}\n${NHAC}`,
+      traLoi: `Danh sách của bạn có ${sk.length} nguyện vọng: ${lietKe}.${gocNV1}${coCauStr}${canhBaoNghichDaoStr} ${loi}\n${sk.slice(0, TOI_DA_HIEN).map((d) => dongNganh(d)).join("\n")}${sk.length > TOI_DA_HIEN ? `\nCòn ${sk.length - TOI_DA_HIEN} nguyện vọng khác trong mục Nguyện vọng.` : ""}\n${NHAC}`,
       nguon: ds.map((l) => l.id), trangThaiDuLieu: "lich-su",
     };
   }

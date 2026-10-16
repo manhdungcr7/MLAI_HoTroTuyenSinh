@@ -1,22 +1,6 @@
-// Mô hình tối ưu hoá danh mục nguyện vọng (Combinatorial Preference Portfolio Optimization).
-// Decision Intelligence Engine cho Tuyển sinh Đại học Việt Nam.
-//
-// Bài toán thực tế:
-//  Cổng tuyển sinh của Bộ GD&ĐT xét tuyển tuần tự từ NV1 đến NV_k.
-//  Thí sinh chỉ trúng tuyển vào nguyện vọng cao nhất mà mình đủ điều kiện.
-//  Nếu thí sinh đặt một ngành có điểm chuẩn thấp (xác suất đỗ 95%) ở NV1,
-//  thì toàn bộ các NV2, NV3... (dù là ngành mơ ước Bách Khoa, CNTT) sẽ BỊ HỦY NGAY LẬP TỨC
-//  khi thí sinh đủ điểm NV1. Đây là "Nghịch đảo thứ tự nguyện vọng" - lỗi chí mạng của hàng nghìn thí sinh mỗi năm.
-//
-// Mô hình giải quyết:
-//  1. Tính xác suất trúng tuyển độc lập p_i cho từng nguyện vọng.
-//  2. Tính xác suất đỗ ít nhất một nguyện vọng: P(>= 1) = 1 - \prod_{i=1}^k (1 - p_i).
-//  3. Tính xác suất thực tế trúng vào từng nguyện vọng thứ j: P(trúng NV_j) = p_j * \prod_{m=1}^{j-1} (1 - p_m).
-//  4. Phát hiện và cảnh báo nghịch đảo thứ tự (Inversion Detection).
-//  5. Tự động đề xuất cấu trúc danh mục tối ưu đa mục tiêu (Multi-Objective Portfolio) thỏa mãn ngân sách và khu vực.
-
-import type { DiemDayDu, HoSo, LuaChon } from "@/state/types";
-import { tinhXacSuatTrungTuyen, type ThongSoXacSuat } from "@/engine/xac-suat-trung-tuyen";
+// Chẩn đoán khoảng cách điểm lịch sử và tạo danh sách tham khảo.
+// Điểm không phải xác suất; thứ tự nguyện vọng luôn do học sinh quyết định.
+import type { DiemDayDu, HoSo, LuaChon, NhanNguyenVong } from "@/state/types";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
 import { NGAN_SACH_TOI_DA, nhanChoLuaChon } from "@/engine/phan-tich";
@@ -24,12 +8,11 @@ import { mucUuTien } from "@/engine/diem-uu-tien";
 
 export interface PhapNghiemNguyenVong {
   id: string;
-  thuTu: number; // 1-indexed (NV1, NV2, ...)
+  thuTu: number;
   lc: LuaChon;
-  thongSo: ThongSoXacSuat | null;
-  /** Xác suất thực tế được tuyển vào nguyện vọng này sau khi đã trượt các NV trước */
-  xacSuatThucTe: number;
-  /** Vi phạm thứ tự: đứng trước một nguyện vọng có điểm cao hơn / cạnh tranh hơn */
+  diemXet: number | null;
+  chenhDiem: number | null;
+  nhan: NhanNguyenVong | null;
   biNghichDao: boolean;
   canhBaoNghichDao?: string;
   vuotNganSach: boolean;
@@ -38,27 +21,12 @@ export interface PhapNghiemNguyenVong {
 export interface ChanDoanDanhMuc {
   soLuong: number;
   cacNguyenVong: PhapNghiemNguyenVong[];
-  /** Xác suất đỗ ít nhất một nguyện vọng trong danh mục (0 - 100%) */
-  xacSuatDoItNhatMotNV: number;
-  /** Thứ tự nguyện vọng kỳ vọng sẽ trúng tuyển E[NV] */
-  kyVongThuTuTrungTuyen: number | null;
-  /** Đánh giá rủi ro danh mục */
-  danhGiaRuiRo: "Rất nguy hiểm" | "Cần điều chỉnh" | "Hợp lý" | "Tối ưu xuất sắc";
-  /** Danh sách cảnh báo rủi ro nghiêm trọng */
+  danhGiaRuiRo: "Có điểm cần xem lại" | "Cần bổ sung dữ liệu" | "Cân đối theo điểm lịch sử" | "Cần xem ngân sách";
   canhBaoNghiemTrong: string[];
-  /** Danh sách điểm mạnh của danh mục */
   diemManh: string[];
-  /** Đề xuất cải thiện cụ thể */
   deXuatHanhDong: string[];
-  /** Cơ cấu 3 tầng: Thử sức, Vừa sức, An toàn */
-  coCau: {
-    thuSuc: number;
-    vuaSuc: number;
-    anToan: number;
-  };
+  coCau: { thuSuc: number; vuaSuc: number; anToan: number };
 }
-
-const LAM_TRON = (n: number) => Math.round(n * 100) / 100;
 
 export interface HoSoXetTuyenToiUu {
   nganSach?: HoSo["nganSach"];
@@ -67,292 +35,106 @@ export interface HoSoXetTuyenToiUu {
   uuTienTuyenSinh?: HoSo["uuTienTuyenSinh"] | null;
 }
 
-/** Chuẩn hoá bảng điểm có sẵn mức ưu tiên (tránh cộng ưu tiên 2 lần khi tongChoLuaChon đã cộng). */
 function diemCoUuTien(diemThi: DiemDayDu, uuTien?: HoSo["uuTienTuyenSinh"] | null): DiemDayDu {
   if (diemThi.uuTien !== undefined) return diemThi;
   const muc = mucUuTien(uuTien);
   return muc > 0 ? { ...diemThi, uuTien: muc } : diemThi;
 }
 
-/**
- * Đánh giá toàn diện một danh mục nguyện vọng đã chọn của thí sinh
- */
+function tenNhom(nhan: NhanNguyenVong | null): "thuSuc" | "vuaSuc" | "anToan" | null {
+  if (nhan === "Thử sức") return "thuSuc";
+  if (nhan === "Vừa sức") return "vuaSuc";
+  if (nhan === "An toàn" || nhan === "Dự phòng") return "anToan";
+  return null;
+}
+
 export function danhGiaDanhMucToanDien(
   danhSachIds: string[],
   timLuaChon: (id: string) => LuaChon | undefined,
   diemThi: DiemDayDu,
-  hoSo: HoSoXetTuyenToiUu
+  hoSo: HoSoXetTuyenToiUu,
 ): ChanDoanDanhMuc {
   const nganSachToiDa = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : null;
   const diemChuanHoa = diemCoUuTien(diemThi, hoSo.uuTienTuyenSinh);
-
-  const cacNguyenVong: PhapNghiemNguyenVong[] = [];
-  let tichXacSuatTruot = 1.0;
-  let kyVongChiSo = 0;
-  let tongXacSuatThucTe = 0;
-
-  const validEntries = danhSachIds
-    .map((id) => timLuaChon(id))
-    .filter((lc): lc is LuaChon => lc !== undefined);
-
-  // Bước 1: Tính xác suất độc lập cho từng nguyện vọng (tongMon.tong đã bao gồm ưu tiên)
-  for (let i = 0; i < validEntries.length; i++) {
-    const lc = validEntries[i];
-    const tongMon = tongChoLuaChon(lc, diemChuanHoa);
-    const thongSo = tinhXacSuatTrungTuyen(tongMon.tong, lc);
-
-    const vuotNganSach = nganSachToiDa !== null && (lc.hocPhiMin ?? 0) > nganSachToiDa;
-
-    const pDocLap = thongSo ? thongSo.xacSuat : 0; // Chưa đủ điểm tổ hợp của ngành thì không tính xác suất ảo
-    const xacSuatThucTe = LAM_TRON(pDocLap * tichXacSuatTruot);
-    tichXacSuatTruot *= (1 - pDocLap);
-
-    kyVongChiSo += (i + 1) * xacSuatThucTe;
-    tongXacSuatThucTe += xacSuatThucTe;
-
-    cacNguyenVong.push({
-      id: lc.id,
-      thuTu: i + 1,
-      lc,
-      thongSo,
-      xacSuatThucTe: Math.round(xacSuatThucTe * 100),
-      biNghichDao: false,
-      vuotNganSach,
-    });
-  }
-
-  // Bước 2: Phát hiện nghịch đảo thứ tự (Inversion Detection)
-  // Chỉ so sánh các cặp nguyện vọng đã đủ điểm tính xác suất
   const canhBaoNghiemTrong: string[] = [];
-  for (let i = 0; i < cacNguyenVong.length; i++) {
-    for (let j = i + 1; j < cacNguyenVong.length; j++) {
-      const nvTruoc = cacNguyenVong[i];
-      const nvSau = cacNguyenVong[j];
-      if (!nvTruoc.thongSo || !nvSau.thongSo) continue;
-
-      const pTruoc = nvTruoc.thongSo.xacSuat;
-      const pSau = nvSau.thongSo.xacSuat;
-
-      // Nguyện vọng trước rất dễ đỗ (>= 78%) mà nguyện vọng sau lại là ngành cạnh tranh (<= 52%)
-      if (pTruoc >= 0.78 && pSau <= 0.52) {
-        nvTruoc.biNghichDao = true;
-        nvTruoc.canhBaoNghichDao = `NV${nvTruoc.thuTu} (${nvTruoc.lc.nganh} - ${nvTruoc.lc.truong}, cơ hội tham khảo ~${nvTruoc.thongSo.phanTram}%) đang đứng TRƯỚC NV${nvSau.thuTu} (${nvSau.lc.nganh} - ${nvSau.lc.truong}, cơ hội ~${nvSau.thongSo.phanTram}%). Nếu đỗ NV${nvTruoc.thuTu}, hệ thống sẽ không xét NV${nvSau.thuTu} nữa!`;
-        if (!canhBaoNghiemTrong.includes(nvTruoc.canhBaoNghichDao)) {
-          canhBaoNghiemTrong.push(nvTruoc.canhBaoNghichDao);
-        }
-      }
-    }
-  }
-
-  // Bước 3: Phân loại cơ cấu đồng nhất với nhãn 4 tầng chuẩn của ứng dụng (nhanChoLuaChon)
-  let thuSuc = 0;
-  let vuaSuc = 0;
-  let anToan = 0;
-
-  cacNguyenVong.forEach((nv) => {
-    if (!nv.thongSo) return;
-    const nhan = nhanChoLuaChon(nv.lc, nv.thongSo.diemXet);
-    if (nhan === "Thử sức") thuSuc++;
-    else if (nhan === "Vừa sức") vuaSuc++;
-    else if (nhan === "An toàn" || nhan === "Dự phòng") anToan++;
+  const cacNguyenVong: PhapNghiemNguyenVong[] = danhSachIds.flatMap((id, index) => {
+    const lc = timLuaChon(id);
+    if (!lc) return [];
+    const diemXet = tongChoLuaChon(lc, diemChuanHoa).tong;
+    const chenhDiem = diemXet === null ? null : Math.round((diemXet - lc.diemMin) * 100) / 100;
+    return [{ id: lc.id, thuTu: index + 1, lc, diemXet, chenhDiem,
+      nhan: nhanChoLuaChon(lc, diemXet), biNghichDao: false,
+      vuotNganSach: nganSachToiDa !== null && (lc.hocPhiMin ?? 0) > nganSachToiDa }];
   });
 
-  const xacSuatDoItNhatMotNV = Math.round((1 - tichXacSuatTruot) * 100);
-  const kyVongThuTuTrungTuyen = tongXacSuatThucTe > 0 ? LAM_TRON(kyVongChiSo / tongXacSuatThucTe) : null;
-
-  // Điểm mạnh & đề xuất
-  const diemManh: string[] = [];
-  const deXuatHanhDong: string[] = [];
-
-  if (xacSuatDoItNhatMotNV >= 95) {
-    diemManh.push(`Tổng xác suất đỗ ít nhất một nguyện vọng đạt ${xacSuatDoItNhatMotNV}% (Vùng bảo vệ an toàn cao).`);
-  } else if (xacSuatDoItNhatMotNV < 80) {
-    deXuatHanhDong.push(`Tổng xác suất an toàn mới đạt ${xacSuatDoItNhatMotNV}%. Bạn nên bổ sung thêm ít nhất 1-2 nguyện vọng An toàn hoặc Dự phòng (điểm chuẩn thấp hơn điểm bạn từ 1.5 - 2.0 điểm).`);
+  let thuSuc = 0, vuaSuc = 0, anToan = 0;
+  for (const nv of cacNguyenVong) {
+    const group = tenNhom(nv.nhan);
+    if (group === "thuSuc") thuSuc++;
+    else if (group === "vuaSuc") vuaSuc++;
+    else if (group === "anToan") anToan++;
   }
 
-  if (anToan >= 1 && vuaSuc >= 1 && thuSuc >= 1) {
-    diemManh.push("Cơ cấu danh mục phân bổ lý tưởng theo chiến lược 3 tầng: Có Thử sức (ước mơ), Vừa sức (trọng tâm) và An toàn (chốt chặn).");
-  } else {
-    if (anToan === 0) {
-      deXuatHanhDong.push("Danh mục chưa có nguyện vọng An toàn nào! Nguy cơ trượt trắng nếu đề thi biến động hoặc điểm chuẩn tăng đột biến.");
-    }
-    if (vuaSuc === 0) {
-      deXuatHanhDong.push("Thiếu nguyện vọng Vừa sức. Đây là vùng điểm rơi tối ưu nhất đối với năng lực hiện tại của bạn.");
-    }
+  // Gợi ý học sinh xem lại thứ tự; không tự đổi vì thứ tự phải theo sở thích.
+  for (let i = 0; i < cacNguyenVong.length; i++) {
+    const current = cacNguyenVong[i];
+    if (current.nhan !== "An toàn" && current.nhan !== "Dự phòng") continue;
+    const later = cacNguyenVong.slice(i + 1).find((nv) => nv.nhan === "Thử sức");
+    if (!later) continue;
+    current.biNghichDao = true;
+    current.canhBaoNghichDao = `NV${current.thuTu} có nhãn ${current.nhan} theo điểm lịch sử, đứng trước NV${later.thuTu} có nhãn Thử sức. Thứ tự vẫn nên theo sở thích của em.`;
+    canhBaoNghiemTrong.push(current.canhBaoNghichDao);
   }
 
   const vuotPhi = cacNguyenVong.filter((nv) => nv.vuotNganSach);
-  if (vuotPhi.length > 0) {
-    canhBaoNghiemTrong.push(`Có ${vuotPhi.length} nguyện vọng (${vuotPhi.map((v) => `NV${v.thuTu}`).join(", ")}) có học phí vượt ngân sách dự kiến của gia đình.`);
-  }
+  if (vuotPhi.length) canhBaoNghiemTrong.push(`${vuotPhi.length} nguyện vọng có học phí tối thiểu cao hơn ngân sách đã chọn.`);
+  const chuaSoDuoc = cacNguyenVong.filter((nv) => nv.nhan === null).length;
+  const diemManh: string[] = [];
+  const deXuatHanhDong: string[] = [];
+  if (thuSuc && vuaSuc && anToan) diemManh.push("Danh sách có lựa chọn ở cả ba nhóm khoảng cách điểm lịch sử.");
+  if (!anToan && cacNguyenVong.length) deXuatHanhDong.push("Chưa có lựa chọn An toàn hoặc Dự phòng theo điểm chuẩn lịch sử; em có thể xem thêm ngành khác.");
+  if (!vuaSuc && cacNguyenVong.length) deXuatHanhDong.push("Chưa có lựa chọn Vừa sức theo điểm chuẩn lịch sử.");
+  if (chuaSoDuoc) deXuatHanhDong.push(`${chuaSoDuoc} nguyện vọng chưa đủ dữ liệu để so điểm; kiểm tra tổ hợp hoặc phương thức xét tuyển.`);
 
-  let danhGiaRuiRo: ChanDoanDanhMuc["danhGiaRuiRo"] = "Hợp lý";
-  if (canhBaoNghiemTrong.length > 0 && anToan === 0) {
-    danhGiaRuiRo = "Rất nguy hiểm";
-  } else if (canhBaoNghiemTrong.length > 0 || anToan === 0 || xacSuatDoItNhatMotNV < 80) {
-    danhGiaRuiRo = "Cần điều chỉnh";
-  } else if (xacSuatDoItNhatMotNV >= 95 && thuSuc >= 1 && vuaSuc >= 2 && anToan >= 1) {
-    danhGiaRuiRo = "Tối ưu xuất sắc";
-  }
-
-  return {
-    soLuong: cacNguyenVong.length,
-    cacNguyenVong,
-    xacSuatDoItNhatMotNV,
-    kyVongThuTuTrungTuyen,
-    danhGiaRuiRo,
-    canhBaoNghiemTrong,
-    diemManh,
-    deXuatHanhDong,
-    coCau: { thuSuc, vuaSuc, anToan },
-  };
+  const danhGiaRuiRo = chuaSoDuoc ? "Cần bổ sung dữ liệu"
+    : vuotPhi.length ? "Cần xem ngân sách"
+      : canhBaoNghiemTrong.length ? "Có điểm cần xem lại"
+        : "Cân đối theo điểm lịch sử";
+  return { soLuong: cacNguyenVong.length, cacNguyenVong, danhGiaRuiRo, canhBaoNghiemTrong,
+    diemManh, deXuatHanhDong, coCau: { thuSuc, vuaSuc, anToan } };
 }
 
-/**
- * Tự động sắp xếp lại thứ tự danh mục để xoá bỏ hoàn toàn nguy cơ nghịch đảo thứ tự
- * (Nguyện vọng có xác suất đỗ thấp/điểm cao đứng trên, nguyện vọng an toàn đứng dưới).
- */
-export function toiUuThuTuDanhMuc(
-  danhSachIds: string[],
-  timLuaChon: (id: string) => LuaChon | undefined,
-  diemThi: DiemDayDu,
-  hoSo: HoSoXetTuyenToiUu
-): string[] {
-  const diemChuanHoa = diemCoUuTien(diemThi, hoSo.uuTienTuyenSinh);
-  const entries = danhSachIds
-    .map((id) => {
-      const lc = timLuaChon(id);
-      if (!lc) return null;
-      const tongMon = tongChoLuaChon(lc, diemChuanHoa);
-      const thongSo = tinhXacSuatTrungTuyen(tongMon.tong, lc);
-      return {
-        id,
-        lc,
-        prob: thongSo ? thongSo.xacSuat : 0.5,
-        diemChuan: lc.diemMin,
-      };
-    })
-    .filter((x): x is NonNullable<typeof x> => x !== null);
-
-  // Sắp xếp tăng dần theo xác suất đỗ (Xác suất thấp / điểm cao lên trước, xác suất cao xuống sau)
-  entries.sort((a, b) => {
-    // Nếu xác suất chênh lệch rõ (> 8%), ưu tiên xếp xác suất thấp lên trước
-    if (Math.abs(a.prob - b.prob) >= 0.08) {
-      return a.prob - b.prob;
-    }
-    // Nếu xác suất gần nhau, ưu tiên điểm chuẩn cao hơn đứng trước
-    return b.diemChuan - a.diemChuan;
-  });
-
-  return entries.map((e) => e.id);
+/** Không sắp xếp nguyện vọng thay học sinh. Giữ hàm tương thích cho các caller cũ. */
+export function toiUuThuTuDanhMuc(danhSachIds: string[]): string[] {
+  return [...danhSachIds];
 }
 
-/**
- * Thuật toán tối ưu hoá danh mục thông minh (Smart Portfolio Builder)
- * Lựa chọn ra K nguyện vọng tốt nhất từ toàn bộ dữ liệu 3.648 ngành
- * thoả mãn ngân sách, khu vực, ngành quan tâm và cấu trúc rủi ro cân bằng tối ưu.
- */
 export function timKiemDanhMucToiUu(
   tatCa: LuaChon[],
   diemThi: DiemDayDu,
   hoSo: HoSoXetTuyenToiUu,
   soLuong = 5,
-  chienLuoc: "can_bang" | "than_trong" | "but_pha" = "can_bang"
+  chienLuoc: "can_bang" | "than_trong" | "but_pha" = "can_bang",
 ): LuaChon[] {
   const nganSachMax = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : Infinity;
   const khuVucHopLe = Array.isArray(hoSo.khuVuc) ? hoSo.khuVuc : [];
   const nganhQuanTam = Array.isArray(hoSo.nganhQuanTam) ? hoSo.nganhQuanTam : [];
   const diemChuanHoa = diemCoUuTien(diemThi, hoSo.uuTienTuyenSinh);
-
-  // Lọc sơ bộ các ngành khả thi
-  const khaThi = tatCa
-    .filter((lc) => {
-      if ((lc.hocPhiMin ?? 0) > nganSachMax) return false;
-      return true;
-    })
-    .map((lc) => {
-      const tong = tongChoLuaChon(lc, diemChuanHoa).tong;
-      const thongSo = tinhXacSuatTrungTuyen(tong, lc);
-      const hopKhuVuc = dungKhuVuc(lc, khuVucHopLe) === true;
-      const hopNganh = nganhQuanTam.length === 0 || nganhQuanTam.includes(lc.nhomNganh);
-      return { lc, thongSo, hopKhuVuc, hopNganh };
-    })
-    .filter((x): x is typeof x & { thongSo: ThongSoXacSuat } => x.thongSo !== null);
-
-  // Phân nhóm theo 3 tầng
-  const nhomThuSuc = khaThi.filter((x) => x.thongSo.xacSuat < 0.45);
-  const nhomVuaSuc = khaThi.filter((x) => x.thongSo.xacSuat >= 0.45 && x.thongSo.xacSuat < 0.80);
-  const nhomAnToan = khaThi.filter((x) => x.thongSo.xacSuat >= 0.80);
-
-  // Hàm chấm điểm độ ưu tiên cho từng lựa chọn
-  const chamDiemUuTien = (x: typeof khaThi[0]) => {
-    let score = 0;
-    if (x.hopNganh) score += 50;
-    if (x.hopKhuVuc) score += 30;
-    if (x.lc.daKiemChung) score += 10;
-    if (x.lc.tiLeViecLam && x.lc.tiLeViecLam >= 90) score += 10;
-    return score;
-  };
-
-  nhomThuSuc.sort((a, b) => chamDiemUuTien(b) - chamDiemUuTien(a) || b.lc.diemMin - a.lc.diemMin);
-  nhomVuaSuc.sort((a, b) => chamDiemUuTien(b) - chamDiemUuTien(a) || b.lc.diemMin - a.lc.diemMin);
-  nhomAnToan.sort((a, b) => chamDiemUuTien(b) - chamDiemUuTien(a) || b.lc.diemMin - a.lc.diemMin);
-
-  // Phân bổ tỷ lệ theo chiến lược
-  let targetThuSuc = 1;
-  let targetVuaSuc = 2;
-  let targetAnToan = 2;
-
-  if (chienLuoc === "than_trong") {
-    targetThuSuc = 0;
-    targetVuaSuc = 2;
-    targetAnToan = 3;
-  } else if (chienLuoc === "but_pha") {
-    targetThuSuc = 2;
-    targetVuaSuc = 2;
-    targetAnToan = 1;
-  }
-
-  const ketQua: LuaChon[] = [];
-
-  // Lấy nhóm Thử sức
-  for (const item of nhomThuSuc) {
-    if (ketQua.length >= targetThuSuc) break;
-    ketQua.push(item.lc);
-  }
-
-  // Lấy nhóm Vừa sức
-  for (const item of nhomVuaSuc) {
-    if (ketQua.length >= targetThuSuc + targetVuaSuc) break;
-    if (!ketQua.some((k) => k.id === item.lc.id)) {
-      ketQua.push(item.lc);
-    }
-  }
-
-  // Lấy nhóm An toàn
-  for (const item of nhomAnToan) {
-    if (ketQua.length >= targetThuSuc + targetVuaSuc + targetAnToan || ketQua.length >= soLuong) break;
-    if (!ketQua.some((k) => k.id === item.lc.id)) {
-      ketQua.push(item.lc);
-    }
-  }
-
-  // Nếu vẫn chưa đủ K nguyện vọng, lấy thêm từ nhóm Vừa sức hoặc An toàn còn lại
-  if (ketQua.length < soLuong) {
-    for (const item of [...nhomVuaSuc, ...nhomAnToan]) {
-      if (ketQua.length >= soLuong) break;
-      if (!ketQua.some((k) => k.id === item.lc.id)) {
-        ketQua.push(item.lc);
-      }
-    }
-  }
-
-  // Đảm bảo thứ tự xuất ra là tối ưu (xác suất thấp lên trên, an toàn xuống dưới)
-  return ketQua.sort((a, b) => {
-    const tongA = tongChoLuaChon(a, diemChuanHoa).tong ?? a.diemMin;
-    const tongB = tongChoLuaChon(b, diemChuanHoa).tong ?? b.diemMin;
-    const pA = tinhXacSuatTrungTuyen(tongA, a)?.xacSuat ?? 0.5;
-    const pB = tinhXacSuatTrungTuyen(tongB, b)?.xacSuat ?? 0.5;
-    return pA - pB;
+  const candidates = tatCa.flatMap((lc) => {
+    if ((lc.hocPhiMin ?? 0) > nganSachMax) return [];
+    const diem = tongChoLuaChon(lc, diemChuanHoa).tong;
+    const nhan = nhanChoLuaChon(lc, diem);
+    if (nhan === null) return [];
+    const chenh = diem === null ? Infinity : Math.abs(diem - lc.diemMin);
+    const interest = nganhQuanTam.some((n) => n === lc.nhomNganh) ? 0 : 1;
+    const region = khuVucHopLe.length === 0 || dungKhuVuc(lc, khuVucHopLe) === true ? 0 : 1;
+    return [{ lc, nhan, chenh, interest, region }];
   });
+  const order: Record<typeof candidates[number]["nhan"], number> = chienLuoc === "than_trong"
+    ? { "Dự phòng": 0, "An toàn": 1, "Vừa sức": 2, "Thử sức": 3 }
+    : chienLuoc === "but_pha"
+      ? { "Thử sức": 0, "Vừa sức": 1, "An toàn": 2, "Dự phòng": 3 }
+      : { "Vừa sức": 0, "An toàn": 1, "Dự phòng": 2, "Thử sức": 3 };
+  candidates.sort((a, b) => a.interest - b.interest || a.region - b.region || order[a.nhan] - order[b.nhan] || a.chenh - b.chenh || a.lc.id.localeCompare(b.lc.id));
+  return candidates.slice(0, Math.max(0, soLuong)).map((x) => x.lc);
 }

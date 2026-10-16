@@ -21,6 +21,7 @@ import { routes as dongHanh } from "@/features/dong-hanh/routes";
 import { routes as truong } from "@/features/truong/routes";
 import { routes as dongGop } from "@/features/dong-gop/routes";
 import { routes as landingPage } from "@/features/landing-page/routes";
+import { DongBoLichNen } from "@/features/ke-hoach/dong-bo-lich-nen";
 
 // Thêm slice mới: import `routes` của nó rồi thêm vào mảng này. Không sửa gì khác.
 const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan, huongNghiep, dongHanh, truong, dongGop, landingPage];
@@ -57,5 +58,5 @@ const router = createHashRouter([
 
 
 export default function App() {
-  return <><NhacNhoNen /><RouterProvider router={router} /></>;
+  return <><NhacNhoNen /><DongBoLichNen /><RouterProvider router={router} /></>;
 }

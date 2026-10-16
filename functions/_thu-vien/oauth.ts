@@ -10,9 +10,12 @@ export const PHAM_VI = {
   "preferences:read": "Xem danh sách nguyện vọng",
   "preferences:write": "Gửi đề xuất thêm nguyện vọng (em vẫn xác nhận trong app)",
   "study:read": "Xem kế hoạch học tuần",
+  "study:write": "Gửi đề xuất cập nhật tiến độ (em vẫn xác nhận trong app)",
 } as const;
 export type PhamVi = keyof typeof PHAM_VI;
 export const TAT_CA_PHAM_VI = Object.keys(PHAM_VI) as PhamVi[];
+/** Khi client không khai báo scope, chỉ cấp quyền đọc tối thiểu; ghi luôn cần xin rõ ràng. */
+export const PHAM_VI_DOC_MAC_DINH: PhamVi[] = ["profile:read", "admissions:read", "preferences:read", "study:read"];
 export const TUOI_TOKEN_TRUY_CAP_GIAY = 3600;
 export const TUOI_TOKEN_LAM_MOI_NGAY = 30;
 export const TUOI_MA_XAC_NHAN_GIAY = 300;
@@ -44,9 +47,9 @@ export function laRedirectHopLe(uri: unknown): uri is string {
   return u.protocol === "http:" && (u.hostname === "localhost" || u.hostname === "127.0.0.1");
 }
 
-/** Chuỗi phạm vi (cách nhau bằng khoảng trắng). Trống thì cấp đủ. Phạm vi lạ thì từ chối. */
+/** Chuỗi phạm vi (cách nhau bằng khoảng trắng). Trống thì chỉ cấp quyền đọc. Phạm vi lạ thì từ chối. */
 export function kiemTraPhamVi(chuoi: unknown): { ok: true; v: PhamVi[] } | { ok: false; loi: string } {
-  if (chuoi === undefined || chuoi === null || chuoi === "") return { ok: true, v: TAT_CA_PHAM_VI };
+  if (chuoi === undefined || chuoi === null || chuoi === "") return { ok: true, v: [...PHAM_VI_DOC_MAC_DINH] };
   if (typeof chuoi !== "string" || chuoi.length > 300) return { ok: false, loi: "Phạm vi không hợp lệ" };
   const ds = [...new Set(chuoi.split(" ").filter(Boolean))];
   const la = ds.filter((p): p is PhamVi => (TAT_CA_PHAM_VI as string[]).includes(p));

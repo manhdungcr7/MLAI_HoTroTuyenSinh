@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "nguyen-vong-ai": {
+      "type": "streamable-http",
+      "url": "https://nguyenvongai.pages.dev/mcp",
+      "extensions": { "com.openai": { "auth": {
+        "type": "oauth",
+        "client": { "mode": "dcr" },
+        "defaultScopes": ["admissions:read", "profile:read", "preferences:read", "study:read"]
+      } } }
+    }
+  }
+}

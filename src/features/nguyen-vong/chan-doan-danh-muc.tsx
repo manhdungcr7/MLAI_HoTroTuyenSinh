@@ -1,11 +1,8 @@
-// Thẻ chẩn đoán danh mục nguyện vọng thông minh (Decision Intelligence Portfolio Diagnostics).
-// Hiển thị tổng xác suất trúng tuyển, phát hiện nghịch đảo thứ tự và đề xuất tối ưu.
+// Thẻ so sánh nguyện vọng với điểm chuẩn lịch sử và nhắc học sinh tự chọn thứ tự ưu tiên.
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
-  ArrowUpDown,
   CheckCircle2,
-  Gauge,
   Lightbulb,
   ShieldAlert,
   Sparkles,
@@ -15,7 +12,6 @@ import { gop, Nut } from "@/components/ui/nut-the";
 import { HopTruot } from "@/components/ui/hien-thi";
 import {
   danhGiaDanhMucToanDien,
-  toiUuThuTuDanhMuc,
   timKiemDanhMucToiUu,
   type ChanDoanDanhMuc,
   type HoSoXetTuyenToiUu,
@@ -30,7 +26,6 @@ interface Props {
   danhSachIds: string[];
   diemMon: DiemDayDu;
   hoSo: HoSoXetTuyenToiUu;
-  onApDungThuTuMoi: (idsMoi: string[], thongBao: string) => void;
   onThayDoiDanhSach: (idsMoi: string[], thongBao: string) => void;
   onXemChiTietAnToan?: () => void;
 }
@@ -39,7 +34,6 @@ export function ChanDoanDanhMucCard({
   danhSachIds,
   diemMon,
   hoSo,
-  onApDungThuTuMoi,
   onThayDoiDanhSach,
   onXemChiTietAnToan,
 }: Props) {
@@ -53,15 +47,8 @@ export function ChanDoanDanhMucCard({
 
   if (danhSachIds.length === 0) return null;
 
-  const coNghichDao = chanDoan.canhBaoNghiemTrong.length > 0;
-  const tongXacSuat = chanDoan.xacSuatDoItNhatMotNV;
-
-  // Xử lý tự động sắp xếp lại thứ tự chuẩn
-  const xuLyTuDongSapXep = () => {
-    const idsToiUu = toiUuThuTuDanhMuc(danhSachIds, tim, diemMon, hoSo);
-    onApDungThuTuMoi(idsToiUu, "Đã tự động sắp xếp lại thứ tự theo chuẩn cân bằng an toàn.");
-  };
-
+  const coNghichDao = chanDoan.cacNguyenVong.some((nv) => nv.biNghichDao);
+  const coCanhBao = chanDoan.canhBaoNghiemTrong.length > 0;
   // Danh mục thông minh gợi ý
   const danhMucGoiY = useMemo(() => {
     return timKiemDanhMucToiUu(LUA_CHON, diemMon, hoSo, 5, chienLuoc);
@@ -82,13 +69,11 @@ export function ChanDoanDanhMucCard({
           "rounded-the p-4 border transition-all shadow-the space-y-3",
           coNghichDao
             ? "bg-do-nhat/30 border-do/40"
-            : tongXacSuat >= 90
-            ? "bg-luc-nhat/30 border-luc/30"
             : "bg-trang border-vien"
         )}
         aria-label="Chẩn đoán danh mục thông minh"
       >
-        {/* Hàng tiêu đề & Chỉ số xác suất tổng */}
+        {/* Cơ cấu nhãn dựa trên khoảng cách điểm lịch sử */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-start gap-2.5">
             <span
@@ -96,25 +81,21 @@ export function ChanDoanDanhMucCard({
                 "size-10 rounded-xl grid place-items-center shrink-0",
                 coNghichDao
                   ? "bg-do/15 text-do"
-                  : tongXacSuat >= 90
-                  ? "bg-luc/15 text-luc-chu"
                   : "bg-xanh-nhat text-xanh"
               )}
             >
-              {coNghichDao ? <ShieldAlert size={22} /> : <Gauge size={22} />}
+              {coNghichDao ? <ShieldAlert size={22} /> : <Sparkles size={22} />}
             </span>
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <b className="text-[15px] font-extrabold text-muc">
-                  Đánh giá cơ hội trúng tuyển
+                  Cơ cấu theo điểm lịch sử
                 </b>
                 <span
                   className={gop(
                     "text-[11px] font-extrabold px-2 py-0.5 rounded-full border",
                     coNghichDao
                       ? "bg-do text-white border-do"
-                      : tongXacSuat >= 90
-                      ? "bg-luc text-white border-luc"
                       : "bg-cam-nhat text-cam-chu border-cam/30"
                   )}
                 >
@@ -122,35 +103,22 @@ export function ChanDoanDanhMucCard({
                 </span>
               </div>
               <span className="block text-[11px] text-chu-phu mt-0.5">
-                Ước lượng tham khảo từ biến động điểm chuẩn lịch sử
+                  Nhãn là khoảng cách điểm, không phải xác suất trúng tuyển
               </span>
             </div>
           </div>
 
-          {/* Điểm xác suất đỗ >= 1 NV */}
-          <div className="text-right shrink-0">
-            <span
-              className={gop(
-                "text-[26px] font-black leading-none tracking-tight",
-                tongXacSuat >= 90 ? "text-luc-chu" : tongXacSuat >= 75 ? "text-xanh" : "text-do"
-              )}
-            >
-              ~{tongXacSuat}%
-            </span>
-            <span className="block text-[11px] font-semibold text-chu-phu mt-0.5">
-              Cơ hội ≥ 1 NV
-            </span>
-          </div>
+          <div className="text-right text-[11px] font-semibold text-chu-phu shrink-0">{chanDoan.soLuong} nguyện vọng</div>
         </div>
 
         {/* Cảnh báo nghịch đảo nếu có */}
-        {coNghichDao && (
+        {coCanhBao && (
           <div className="rounded-xl bg-do/10 border border-do/30 p-3 space-y-2">
             <div className="flex items-start gap-2 text-do">
               <AlertTriangle size={17} className="shrink-0 mt-0.5" />
               <div className="text-[13px] leading-snug">
                 <b className="font-extrabold block mb-1">
-                  Phát hiện lỗi nghịch đảo thứ tự nguyện vọng!
+                  {coNghichDao ? "Có thứ tự khác nhau theo nhãn điểm" : "Kiểm tra ngân sách hoặc dữ liệu điểm"}
                 </b>
                 {chanDoan.canhBaoNghiemTrong.map((cb, idx) => (
                   <p key={idx} className="mt-1 text-[12px] text-do-chu">
@@ -160,19 +128,13 @@ export function ChanDoanDanhMucCard({
               </div>
             </div>
             <div className="pt-1">
-              <button
-                type="button"
-                onClick={xuLyTuDongSapXep}
-                className="w-full min-h-10 px-3 rounded-lg bg-do text-white font-bold text-[13px] inline-flex items-center justify-center gap-1.5 active:brightness-95 cursor-pointer shadow-sm"
-              >
-                <ArrowUpDown size={16} /> Tự động chỉnh thứ tự chuẩn ngay
-              </button>
+              <p className="text-[12px] text-chu-phu">Thứ tự nguyện vọng theo sở thích của em. Nếu cần, em tự đổi bằng nút lên hoặc xuống.</p>
             </div>
           </div>
         )}
 
         {/* Điểm mạnh & Khuyến nghị */}
-        {!coNghichDao && (
+        {!coCanhBao && (
           <div className="space-y-1.5 text-[12px] text-chu">
             {chanDoan.diemManh.map((dm, idx) => (
               <p key={idx} className="flex items-start gap-1.5 leading-snug">
@@ -218,7 +180,7 @@ export function ChanDoanDanhMucCard({
       >
         <div className="space-y-4">
           <p className="text-[13px] text-chu-phu leading-relaxed">
-            Hệ thống chọn lọc danh mục cân bằng 3 tầng (Thử sức · Vừa sức · An toàn) từ 3.648 chương trình đào tạo theo điểm số, ngân sách và khu vực của em, đồng thời sắp xếp thứ tự không bị nghịch đảo.
+            Gợi ý dựa trên khoảng cách điểm lịch sử, ngành quan tâm, khu vực và ngân sách. Em xem lại điều kiện tuyển sinh rồi tự sắp thứ tự theo sở thích; nhãn không phải xác suất trúng tuyển.
           </p>
 
           {/* Chọn chiến lược lựa chọn */}

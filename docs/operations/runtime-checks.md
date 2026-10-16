@@ -1,64 +1,25 @@
 # Kiểm tra runtime
 
-Chạy sau mỗi lần deploy và trước khi tuyên bố một tính năng hoạt động.
+Tài liệu này chỉ mô tả kiểm tra có trong checkout. Không dùng lệnh production bên dưới nếu chưa có ủy quyền phát hành.
 
-## 1. Kiểm tra chỉ đọc (không ghi dữ liệu, không tốn lượt AI)
+## Kiểm tra cục bộ
 
-```
-node scripts/verify-runtime/smoke.mjs                  # production
-node scripts/verify-runtime/smoke.mjs https://<preview> # URL khác
-```
+- `npm run dev:tools:smoke`: kiểm tra các công cụ phát triển/plugin hiện có; không gọi dịch vụ AI.
+- `npm run test:capabilities`: hợp đồng capability, tính điểm, dữ liệu thiếu và API.
+- `npm run test:mcp`: giao thức MCP SDK, scope OAuth, cô lập snapshot, proposal và kết nối tương thích.
+- `npm run test:browser`: hành trình local và ma trận route/responsive đã cài trong repo. Build trước; dùng `scripts/xuat-ban-ban-dau.ts --local --state=<thư mục QA riêng> --khong-vector` để tạo snapshot local, rồi chạy `app:local` với `NV_TRANG_THAI` cùng đường dẫn và `NV_QA_SNAPSHOT=1`. Script kiểm tra tháng chạy này đạt 4 hành trình + 144 route/viewport checks, không lỗi/tràn/ảnh hỏng; ghi nhận 48 cảnh báo hit target nhỏ. Chat không được gửi câu hỏi; kết quả không xác nhận tài khoản MCP bên ngoài hay production.
+- `npx tsx scripts/xuat-ban-ban-dau.ts --local --state=<thư mục QA riêng> --khong-vector`: nạp snapshot fixture vào D1/KV local để browser QA; chỉ dùng state riêng, tuyệt đối không thay `--local` bằng `--remote` cho kiểm thử này.
+- `npm run data:audit`: kiểm kê nguồn, trường thiếu và bản ghi không được xác minh trong catalog đi kèm.
+- `npm run typecheck`, `npm run kiem-tra`, `npm test`, `npm run build`, `npm run build:functions`: cổng mã nguồn tương ứng.
 
-Bao gồm: manifest, tư vấn chỉ nhận POST, mã sai trả JSON, MCP mã sai trả lỗi JSON-RPC, trang chủ là HTML, health, ready, metadata OAuth, và MCP không token trả 401 kèm `WWW-Authenticate`.
+## Production
 
-Quy tắc: một phản hồi 200 HTML không được tính là API đúng. Script kiểm tra kiểu nội dung và cấu trúc JSON.
+Chỉ chạy smoke test đọc khi có URL được xác định và runtime hiện hành. API `/api/v1/ready` chỉ xác nhận binding D1/KV tại thời điểm gọi; không chứng minh migration, OAuth client bên ngoài, AI, dữ liệu tuyển sinh hay luồng học sinh hoạt động.
 
-## 2. Kiểm tra OAuth và MCP end-to-end (ghi dữ liệu thử nghiệm)
+Không tạo kết nối, OAuth client, token, proposal, yêu cầu AI có tính phí, dữ liệu học sinh hoặc migration từ xa để kiểm tra nếu chưa có ủy quyền phát hành rõ ràng. Các script trong `scripts/verify-runtime/` có thể kiểm tra kết nối bên ngoài hoặc production; chỉ chạy sau khi đọc nội dung và xác nhận đúng môi trường, dữ liệu và quyền ghi.
 
-```
-node scripts/verify-runtime/oauth-e2e.mjs
-```
+## Khi kiểm tra lỗi
 
-Script tạo một kết nối thử (hồ sơ mẫu), đăng ký một client, đi hết luồng đồng ý, đổi token, gọi MCP bằng Bearer, làm mới, phát hiện tái sử dụng, thu hồi, rồi ngắt kết nối thử. Client đăng ký vẫn còn trong `oauth_client` (một dòng, không chứa dữ liệu học sinh).
-
-**Điều kiện**: migration 0011 đã áp dụng trên D1 production. Nếu chưa, các bước OAuth sẽ lỗi và script báo rõ bước nào đỏ.
-
-Áp migration (cần đăng nhập Cloudflare với quyền D1):
-```
-npx wrangler d1 migrations apply nguyenvongai_db --remote
-```
-
-## 3. Kiểm tra sức khỏe
-
-```
-curl https://nguyenvongai.pages.dev/api/v1/health   # 200 {"ok":true,...}
-curl https://nguyenvongai.pages.dev/api/v1/ready    # 200 khi D1 và KV đều ok, 503 khi có thành phần lỗi
-```
-
-`ready` chỉ trả trạng thái từng thành phần (`ok`, `loi`, `chua-cau-hinh`), không trả tên binding hay lỗi SQL.
-
-## 4. Kiểm tra khóa AI
-
-Không có lệnh cố định vì mỗi lần gọi tốn một lượt AI. Cách làm đã dùng ngày 16/10/2026:
-- `POST /api/tu-van` với `hoSoId` và `requestId` là UUID ngẫu nhiên, một câu hỏi, `duLieu: []`.
-- Kết quả đúng: HTTP 200, `tang: "llm"`, `luot.con` giảm một. Nếu thiếu khóa: HTTP 503 `chua-cau-hinh`.
-
-## 5. Trình duyệt thật
-
-Hành trình và ảnh chụp nằm trong `artifacts/browser/`:
-- `artifacts/browser/mobile/`, `artifacts/browser/desktop/`: 22 màn ở 390×844 và 1440×900 (tràn ngang, lỗi JS, lỗi API).
-- `artifacts/browser/hanh-trinh/`: 10 bước người dùng (đăng ký, tìm kiếm, hỏi AI, AI lỗi, lưu yêu thích, cài đặt kết nối, chatbot không che tab).
-
-Chạy lại (Playwright với Chrome đã cài):
-```
-node scripts/verify-runtime/trinh-duyet/quet-man.mjs artifacts/browser
-node scripts/verify-runtime/trinh-duyet/hanh-trinh.mjs artifacts/browser/hanh-trinh
-```
-Script nằm trong `scripts/verify-runtime/trinh-duyet/`. Cần Playwright (không nằm trong dependencies của repo): `npm i -D playwright` rồi `npx playwright install chromium`.
-
-## 6. Quy trình khi kiểm tra thất bại
-
-1. Xem log Pages (Dashboard > Deployments > Functions logs), tìm dòng JSON có `tang`.
-2. Nếu `ready` trả 503: kiểm tra binding D1 và KV trong Settings của Pages project.
-3. Nếu 401 hàng loạt trên `/mcp` có token: kiểm tra token hết hạn (1 giờ) và làm mới.
-4. Nếu một kiểm tra đỏ nhưng ứng dụng vẫn dùng được: ghi rõ trong báo cáo, không đổi kỳ vọng để kiểm tra xanh.
+1. Ghi lại lệnh, kết quả và môi trường (local/preview/production) mà không ghi token, mã kết nối hay dữ liệu cá nhân.
+2. Kiểm tra source và log đã được khử thông tin nhạy cảm trước khi sửa.
+3. Chỉ tuyên bố đúng phạm vi đã kiểm tra. Build pass không xác nhận hành trình hoặc production.

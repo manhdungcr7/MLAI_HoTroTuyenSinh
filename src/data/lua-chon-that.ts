@@ -86,7 +86,7 @@ function chuyen(d: Dong): LuaChon {
     lyDoPhuHop: [],
     canLuuY: luuY,
     nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
-    daKiemChung: d.tier === "official_pdf",
+    daKiemChung: false,
     linkNguon: d.nguon ?? undefined,
     ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam } : {}),
     ...(hp && !hp.uocTinh && hp.url ? { nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),

@@ -3,7 +3,12 @@
 // không nạp bộ 3.652 chương trình. Bản chụp KHÔNG chứa tên, liên hệ, lịch sử chat.
 
 /** Một sự kiện lịch. Giờ luôn có múi +07:00, ví dụ "2026-10-19T19:00:00+07:00". */
-export interface SuKienLich { tieuDe: string; batDau: string; ketThuc: string; ghiChu?: string }
+export interface SuKienLich {
+  tieuDe: string; batDau: string; ketThuc: string; ghiChu?: string;
+  /** Chỉ có khi khối lịch liên kết tới việc thật trong app; không dùng tiêu đề làm định danh. */
+  taskId?: string;
+  progressStatus?: "chua" | "xong" | "doi" | "boQua";
+}
 
 export interface NguyenVongChiTiet {
   thuTu: number; // 1 là nguyện vọng ưu tiên nhất
@@ -31,13 +36,13 @@ export interface BanChup {
 export const GIOI_HAN_BAN_CHUP = { byte: 64_000, nguyenVong: 30, goiY: 20, suKien: 40, diemThi: 20, chuoi: 200 } as const;
 
 /** Loại đề xuất mà Claude/ChatGPT được phép tạo. Chỉ là đề xuất: app hiện thẻ và em bấm Xác nhận mới đổi dữ liệu. */
-export const LOAI_DE_XUAT = ["them-nguyen-vong", "sap-xep-nguyen-vong", "cap-nhat-diem", "dat-muc-tieu"] as const;
+export const LOAI_DE_XUAT = ["them-nguyen-vong", "sap-xep-nguyen-vong", "cap-nhat-diem", "dat-muc-tieu", "cap-nhat-tien-do"] as const;
 export type LoaiDeXuat = (typeof LOAI_DE_XUAT)[number];
 
 export interface DeXuat {
   id: string; loai: LoaiDeXuat;
   tomTat: string; // câu một dòng hiển thị trên thẻ, do máy chủ dựng (không lấy nguyên văn từ AI)
-  duLieu: { idChuongTrinh?: string; viTri?: number; thuTuMoi?: string[]; diem?: { ngay?: string; tong: number; toHop?: string }; mucTieu?: { idChuongTrinh: string } };
+  duLieu: { idChuongTrinh?: string; viTri?: number; thuTuMoi?: string[]; diem?: { ngay?: string; tong: number; toHop?: string }; mucTieu?: { idChuongTrinh: string }; taskId?: string; status?: "xong" | "chua"; snapshotUpdatedAt?: string; expectedStatus?: "chua" | "xong" | "doi" | "boQua" };
   taoLuc: number; // epoch ms
 }
 
@@ -62,7 +67,12 @@ export function lamSachBanChup(x: unknown): BanChup | null {
     return [{ thuTu: so(e.thuTu) ?? i + 1, id: cat(e.id, 40), nganh: cat(e.nganh), truong: cat(e.truong), maTruong: cat(e.maTruong, 12), ...(dc && Object.keys(dc).length ? { diemChuan: dc } : {}), ...(nhan(e.nhan) ? { nhan: nhan(e.nhan) } : {}), ...(so(e.chenh) !== undefined ? { chenh: so(e.chenh) } : {}), ...(so(e.hocPhiTrieu) !== undefined ? { hocPhiTrieu: so(e.hocPhiTrieu) } : {}), ...(e.hocPhiUocTinh === true ? { hocPhiUocTinh: true } : {}), ...(typeof e.nguon === "string" ? { nguon: cat(e.nguon) } : {}) }];
   });
   const gy = mang(o.goiY, GIOI_HAN_BAN_CHUP.goiY).flatMap((e): GoiYNganh[] => (typeof e.id === "string" && e.id ? [{ id: cat(e.id, 40), nganh: cat(e.nganh), truong: cat(e.truong), maTruong: cat(e.maTruong, 12), ...(so(e.diemChuan) !== undefined ? { diemChuan: so(e.diemChuan) } : {}), ...(so(e.namDiem) !== undefined ? { namDiem: so(e.namDiem) } : {}), ...(nhan(e.nhan) ? { nhan: nhan(e.nhan) } : {}), ...(so(e.chenh) !== undefined ? { chenh: so(e.chenh) } : {}) }] : []));
-  const sk = mang(o.keHoachTuan, GIOI_HAN_BAN_CHUP.suKien).flatMap((e): SuKienLich[] => (typeof e.batDau === "string" && typeof e.ketThuc === "string" && RE_GIO.test(e.batDau) && RE_GIO.test(e.ketThuc) && e.batDau < e.ketThuc ? [{ tieuDe: cat(e.tieuDe, 120), batDau: e.batDau, ketThuc: e.ketThuc, ...(typeof e.ghiChu === "string" ? { ghiChu: cat(e.ghiChu, 400) } : {}) }] : []));
+  const sk = mang(o.keHoachTuan, GIOI_HAN_BAN_CHUP.suKien).flatMap((e): SuKienLich[] => {
+    if (typeof e.batDau !== "string" || typeof e.ketThuc !== "string" || !RE_GIO.test(e.batDau) || !RE_GIO.test(e.ketThuc) || e.batDau >= e.ketThuc) return [];
+    const taskId = typeof e.taskId === "string" && e.taskId.length > 0 && e.taskId.length <= 120 ? e.taskId : undefined;
+    const progressStatus = ["chua", "xong", "doi", "boQua"].includes(String(e.progressStatus)) ? e.progressStatus as SuKienLich["progressStatus"] : undefined;
+    return [{ tieuDe: cat(e.tieuDe, 120), batDau: e.batDau, ketThuc: e.ketThuc, ...(typeof e.ghiChu === "string" ? { ghiChu: cat(e.ghiChu, 400) } : {}), ...(taskId ? { taskId, ...(progressStatus ? { progressStatus } : {}) } : {}) }];
+  });
   const dt = mang(o.diemThi, GIOI_HAN_BAN_CHUP.diemThi).map((e) => ({ ngay: cat(e.ngay, 10), ...(so(e.tong) !== undefined ? { tong: so(e.tong) } : {}), ...(typeof e.toHop === "string" ? { toHop: cat(e.toHop, 6) } : {}) }));
   const mt = o.mucTieu && typeof o.mucTieu === "object" ? (o.mucTieu as Record<string, unknown>) : null;
   const r: BanChup = {

@@ -105,13 +105,24 @@ export type KetQuaApDung =
   | { ok: false; chu: string };
 
 /** Loại đề xuất áp được ngay trong app. Các loại khác (điểm, mục tiêu) em tự nhập trong app. */
-export const LOAI_AP_DUNG_DUOC: DeXuat["loai"][] = ["them-nguyen-vong", "sap-xep-nguyen-vong"];
+export const LOAI_AP_DUNG_DUOC: DeXuat["loai"][] = ["them-nguyen-vong", "sap-xep-nguyen-vong", "cap-nhat-tien-do"];
 
 /**
  * Áp một đề xuất vào trạng thái hiện tại (hàm thuần: trả về phần cần cập nhật, không tự ghi).
  * Id lạ bị từ chối; id đã có thì không nhân đôi; `viTri` ngoài danh sách thì đưa về cuối.
  */
 export function apDungDeXuat(s: AppState, d: DeXuat): KetQuaApDung {
+  if (d.loai === "cap-nhat-tien-do") {
+    const { taskId, status, expectedStatus } = d.duLieu;
+    if (!taskId || !s.viec.some((v) => v.id === taskId) || (status !== "xong" && status !== "chua")) {
+      return { ok: false, chu: "Việc học này không còn trong kế hoạch. Em đồng bộ rồi thử lại nhé." };
+    }
+    const current = s.trangThaiViec[taskId] ?? "chua";
+    // Xác nhận lại sau lỗi mạng vẫn an toàn: trạng thái đích đã áp thì không ghi lần hai.
+    if (current === status) return { ok: true, capNhat: {}, chu: "Tiến độ đã được cập nhật." };
+    if (!expectedStatus || current !== expectedStatus) return { ok: false, chu: "Tiến độ đã thay đổi. Em bỏ qua đề xuất cũ và đồng bộ lại nhé." };
+    return { ok: true, capNhat: { trangThaiViec: { ...s.trangThaiViec, [taskId]: status } }, chu: "Đã cập nhật tiến độ học." };
+  }
   if (d.loai === "them-nguyen-vong") {
     const id = d.duLieu.idChuongTrinh;
     if (!id || !tim(id)) return { ok: false, chu: "Chương trình này không còn trong dữ liệu của app." };

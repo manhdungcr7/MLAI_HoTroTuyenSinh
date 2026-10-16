@@ -11,6 +11,7 @@ import { kvTest } from "./nap-d1-han-muc";
 import { taoKetNoi, bamMa, type EnvKetNoi } from "../functions/_thu-vien/ket-noi";
 import { dangKyClient, doiMaLayToken, taoMaXacNhan, s256 } from "../functions/_thu-vien/oauth";
 import { xuLyMcpBearer } from "../functions/mcp/index";
+import { MCP_SERVER_VERSION } from "../functions/mcp/[ma]";
 
 const URI = "https://claude.ai/api/mcp/auth_callback";
 const VERIFIER = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk";
@@ -63,7 +64,7 @@ test("SDK: initialize thành công và đàm phán phiên bản giao thức", as
   const transport = new StreamableHTTPClientTransport(new URL(dia), { requestInit: { headers: { Authorization: `Bearer ${accessToken}` } } });
   await client.connect(transport);
   assert.equal(client.getServerVersion()?.name, "nguyen-vong-ai");
-  assert.equal(client.getServerVersion()?.version, "1.1.0");
+  assert.equal(client.getServerVersion()?.version, MCP_SERVER_VERSION);
   await client.close();
 });
 
@@ -72,7 +73,7 @@ test("SDK: liệt kê công cụ và đọc được schema", async () => {
   await client.connect(new StreamableHTTPClientTransport(new URL(dia), { requestInit: { headers: { Authorization: `Bearer ${accessToken}` } } }));
   const { tools } = await client.listTools();
   const ten = tools.map((t) => t.name).sort();
-  assert.deepEqual(ten, [
+  for (const name of [
     "de_xuat_them_nguyen_vong",
     "diem_chuan",
     "get_app_capabilities",
@@ -82,8 +83,11 @@ test("SDK: liệt kê công cụ và đọc được schema", async () => {
     "lay_ho_so",
     "lay_nguyen_vong",
     "search_universities",
-  ]);
+    "get_university", "search_majors", "get_admission_rules", "calculate_admission_score",
+    "analyze_student_profile", "recommend_preferences", "validate_preference_order", "get_study_plan",
+  ]) assert.ok(ten.includes(name), name);
   assert.ok(tools.every((t) => t.inputSchema?.type === "object"), "mọi công cụ có schema đối tượng");
+  assert.ok(tools.every((t) => t.outputSchema?.type === "object" && t.annotations), "mọi công cụ có outputSchema và annotations");
   await client.close();
 });
 
@@ -109,6 +113,7 @@ test("SDK: gọi công cụ đọc và nhận dữ liệu có cấu trúc", asyn
   const text = (r.content as { type: string; text: string }[])[0].text;
   assert.ok(!r.isError);
   assert.ok(text.includes("TP.HCM"));
+  assert.deepEqual(r.structuredContent, { ok: true, data: JSON.parse(text) });
   await client.close();
 });
 

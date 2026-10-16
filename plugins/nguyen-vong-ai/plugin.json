@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "nguyen-vong-ai",
+  "version": "0.1.0",
+  "description": "Tư vấn tuyển sinh dựa trên nguồn dữ liệu và kết quả tính có thể kiểm tra.",
+  "author": { "name": "Nguyện Vọng AI" },
+  "homepage": "https://nguyenvongai.pages.dev/",
+  "extensions": { "com.openai": { "interface": {
+    "displayName": "Nguyện Vọng AI",
+    "shortDescription": "Tư vấn tuyển sinh có nguồn",
+    "developerName": "Nguyện Vọng AI",
+    "category": "Education",
+    "capabilities": ["Read", "Write"]
+  } } }
+}

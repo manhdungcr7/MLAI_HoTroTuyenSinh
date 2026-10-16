@@ -205,7 +205,7 @@ for (let i = 0; i < dsGoiY.length - 1; i++) {
     assert.equal(cp.length, 1, "tầng 1a lấy đúng 1 ngành");
     assert.ok(cungTr(cp[0].lc, neo1a) && cp[0].nhan === "Thử sức" && neo1a.diemMin - cp[0].lc.diemMin >= 0.25 && cp[0].lc.diemMin - cp[0].tong <= 1.5);
     assert.equal(cp[0].lc.diemMin, Math.min(...dieuKien.map((x) => x.diemMin)), "là ngành mềm nhất đủ điều kiện");
-    assert.ok(cp[0].lyDo[0].startsWith(`Ngành có điểm chuẩn mềm nhất tại ${neo1a.tenTruong} (thấp hơn Nguyện Vọng 1 `) && cp[0].lyDo[0].endsWith("để tăng cơ hội đỗ đúng trường mơ ước"), cp[0].lyDo[0]);
+    assert.ok(cp[0].lyDo[0].startsWith(`Ngành có điểm chuẩn mềm nhất tại ${neo1a.tenTruong} (thấp hơn Nguyện Vọng 1 `) && cp[0].lyDo[0].endsWith("để có thêm lựa chọn cùng trường"), cp[0].lyDo[0]);
     assert.ok(kq1a.some((d) => d.tang === "cung-nganh"), "vẫn có lớp 2 sau tầng 1a");
   }
   // Tầng 1b: cả trường không có cửa phụ nào thì bỏ qua lớp 1, vào thẳng lớp 2 và có chú thích.

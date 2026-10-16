@@ -23,10 +23,10 @@ export class CauKetNoiTest implements CauD1Ket {
 
 export interface D1KetNoiTest extends KhoD1Ket { readonly db: DatabaseSync }
 
-/** Một cơ sở dữ liệu trong bộ nhớ, mỗi lần gọi là một bản mới, có bảng của migration 0009 và 0011. */
+/** Một cơ sở dữ liệu trong bộ nhớ, mỗi lần gọi là một bản mới, có bảng của migration 0009, 0011 và 0012. */
 export function taoD1KetNoiTest(): D1KetNoiTest {
   const db = new DatabaseSync(":memory:");
-  for (const f of ["0009_ket_noi_claude.sql", "0011_oauth_mcp.sql"]) db.exec(fs.readFileSync(path.join("migrations", f), "utf8"));
+  for (const f of ["0009_ket_noi_claude.sql", "0011_oauth_mcp.sql", "0012_lich_feed.sql"]) db.exec(fs.readFileSync(path.join("migrations", f), "utf8"));
   return {
     db,
     prepare: (sql: string) => new CauKetNoiTest(db, sql),

@@ -7,7 +7,7 @@ import { coTruong } from "@/engine/truong";
 import { GIOI_HAN, type TraLoiTuVan, type YeuCauTuVan } from "@/engine/tu-van";
 import { phanTichMoNeo, tomTatMoNeoChoAI } from "@/features/nguyen-vong/mo-neo";
 import type { AppState } from "@/state/store";
-import { phanTichCau } from "./hieu-cau";
+import { phanTichCau, timTruongMoHo } from "./hieu-cau";
 import { lamSachHanhDong, lamSachThe, nganhLuotTruoc, taoNguCanh, type TheTruong, type TinNhan } from "./hoi-thoai";
 import { CHE_DO_MAC_DINH, idHoSoAI, uuidMoi, type Luot, type PhienAI } from "./che-do-ai";
 import { bocLoiChao, nhanYDinhQuyTac, traLoiQuyTac } from "./y-dinh";
@@ -51,6 +51,9 @@ export async function hoiAI(y: YeuCauTuVan, phien: PhienAI): Promise<{ kq: TraLo
 /** Ý định có thể trả lời chắc từ dữ liệu: không cần (và không nên) nhờ mô hình ngôn ngữ đoán. */
 export function traLoiNoiBo(cau: string, truoc: TinNhan[]): boolean {
   if (nguCanhLuotTruoc(truoc).cho) return true;
+  if (timTruongMoHo(cau)) return true;
+  // Tra số liệu phải dùng danh mục, kể cả khi không có kết quả; AI không điền số còn thiếu.
+  if (/\b(diem chuan|hoc phi|to hop|du bao|ke hoach|lich hoc|nguyen vong)\b/.test(phanTichCau(cau).q)) return true;
   const k = phanTichCau(cau).kieu;
   return k !== "khac";
 }

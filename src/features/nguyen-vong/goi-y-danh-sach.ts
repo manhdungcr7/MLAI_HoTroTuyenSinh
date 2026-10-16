@@ -155,7 +155,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
           .sort((a, b) => a.lc.diemMin - b.lc.diemMin || gan(a.lc) - gan(b.lc))[0];
         if (memNhat) {
           const mem = lamTron1(neo.lc.diemMin - memNhat.lc.diemMin);
-          them(memNhat, "cung-truong", [`Ngành có điểm chuẩn mềm nhất tại ${tenTr(neo.lc)} (thấp hơn Nguyện Vọng 1 ${dinhDang(mem, 1)} điểm) để tăng cơ hội đỗ đúng trường mơ ước`]);
+          them(memNhat, "cung-truong", [`Ngành có điểm chuẩn mềm nhất tại ${tenTr(neo.lc)} (thấp hơn Nguyện Vọng 1 ${dinhDang(mem, 1)} điểm) để có thêm lựa chọn cùng trường`]);
         }
       }
     });

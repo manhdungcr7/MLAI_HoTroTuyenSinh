@@ -143,11 +143,6 @@ export default function DanhSachNguyenVong() {
                 danhSachIds={s.nguyenVong}
                 diemMon={diemMon}
                 hoSo={{ nganSach: s.hoSo.nganSach, khuVuc: s.hoSo.khuVuc, nganhQuanTam: s.hoSo.nganhQuanTam, uuTienTuyenSinh: s.hoSo.uuTienTuyenSinh }}
-                onApDungThuTuMoi={(idsMoi, thongBao) => {
-                  const cu = [...s.nguyenVong];
-                  datNguyenVong(idsMoi);
-                  bao(thongBao, () => datNguyenVong(cu));
-                }}
                 onThayDoiDanhSach={(idsMoi, thongBao) => {
                   const cu = [...s.nguyenVong];
                   datNguyenVong(idsMoi);

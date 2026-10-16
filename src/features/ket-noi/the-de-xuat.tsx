@@ -14,7 +14,7 @@ const CHO_DONG_BO_MS = 5_000; // gom các thay đổi liên tiếp trước khi 
  * Không bao giờ đổi dữ liệu nếu em không bấm Xác nhận; áp dụng xong mới báo máy chủ.
  */
 export function KetNoiNen() {
-  const { s, datNguyenVong } = useApp();
+  const { s, datNguyenVong, datTrangThaiViec } = useApp();
   const kn = useKetNoi();
   const ma = kn.ma;
   const [ds, setDs] = useState<DeXuat[]>([]);
@@ -64,6 +64,10 @@ export function KetNoiNen() {
     const kq = apDungDeXuat(sRef.current, d);
     if (!kq.ok) { setLoi(kq.chu); return; }
     if (kq.capNhat.nguyenVong) datNguyenVong(kq.capNhat.nguyenVong);
+    if (kq.capNhat.trangThaiViec && d.duLieu.taskId && d.duLieu.status) {
+      const viec = sRef.current.viec.find((v) => v.id === d.duLieu.taskId);
+      if (viec) datTrangThaiViec(viec, d.duLieu.status);
+    }
     setDangGui(true); setLoi(null);
     const gui = await quyetDinhDeXuat(ma, d.id, "xac-nhan");
     setDangGui(false);

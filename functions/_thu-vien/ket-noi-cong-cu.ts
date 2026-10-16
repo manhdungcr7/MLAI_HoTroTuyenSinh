@@ -1,25 +1,31 @@
 // Công cụ dùng chung cho MCP (/mcp/{mã} hoặc /mcp với Bearer) và GPT Actions (/api/gpt/{mã}/...): một nguồn logic, không nhân đôi.
-// Công cụ chỉ đọc bản chụp hoặc tạo đề xuất chờ xác nhận. Không công cụ nào đổi dữ liệu thật của học sinh.
+// Tra cứu danh mục, đọc bản chụp hoặc tạo đề xuất chờ xác nhận. Không đổi trực tiếp dữ liệu thật của học sinh.
 import { linkGoogleCalendar, taoIcs } from "../../src/engine/lich-ics";
 import type { BanChup } from "../../src/engine/ket-noi-kieu";
 import { TOI_DA_DE_XUAT_CHO, type KhoD1Ket } from "./ket-noi";
 import { DANH_MUC_TRUONG } from "../../src/data/truong-danh-muc";
-import deAnTruong from "../../src/data/de-an-truong.json";
+import { capabilityDefinitions, executeCapability, validateSchema, type JsonSchema } from "../../src/capabilities";
 
 export interface NguCanhCongCu { ban: BanChup; ma: string; maBam: string; origin: string; db: KhoD1Ket }
-export type KetQuaCongCu = { ok: true; data: unknown } | { ok: false; loi: string };
+export type KetQuaCongCu = { ok: true; data: unknown; meta?: unknown } | { ok: false; loi: string; code?: string; details?: unknown };
 
 interface CongCu {
   ten: string;
   mota: string;
-  schema: Record<string, unknown>;
+  schema: JsonSchema;
   chay: (args: Record<string, unknown>, cc: NguCanhCongCu) => Promise<KetQuaCongCu>;
 }
 
-const KHONG_THAM_SO = { type: "object", properties: {} };
+const KHONG_THAM_SO = { type: "object", properties: {}, additionalProperties: false };
 const loi = (thongBao: string): KetQuaCongCu => ({ ok: false, loi: thongBao });
 const khongDau = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
 export const TEN_LICH = "Nguyện Vọng AI";
+
+async function runCapability(name: string, args: Record<string, unknown>, cc: NguCanhCongCu): Promise<KetQuaCongCu> {
+  const result = await executeCapability(name, args, cc.ban);
+  return result.ok ? { ok: true, data: result.data, meta: result.meta }
+    : { ok: false, loi: result.error.message, code: result.error.code, details: result.error.details };
+}
 
 /** Nội dung .ics của kế hoạch tuần. Dùng chung cho công cụ và endpoint lich.ics. */
 export function lichIcsCuaBan(ban: BanChup): string {
@@ -130,68 +136,22 @@ export const CONG_CU: CongCu[] = [
     },
   },
   {
-    ten: "search_universities",
-    mota: "Find universities in Vietnam by name, abbreviation code or province. Returns up to 20 matching institutions with canonical code, official name and provinces.",
-    schema: {
-      type: "object",
-      properties: {
-        truyVan: { type: "string", maxLength: 100, description: "University name or abbreviation code (e.g. 'BKA', 'Bách Khoa', 'Kinh tế')" },
-        tinh: { type: "string", maxLength: 50, description: "Province or city (e.g. 'Hà Nội', 'TP.HCM', 'Đà Nẵng')" },
-      },
-    },
-    chay: async (a) => {
-      const q = khongDau(String(a.truyVan ?? "").trim());
-      const t = khongDau(String(a.tinh ?? "").trim());
-      const tu = q.split(/\s+/).filter(Boolean);
-      const ketQua = DANH_MUC_TRUONG.filter(([ma, ten, dsTinh]) => {
-        if (t && !dsTinh.some((tp) => khongDau(tp).includes(t))) return false;
-        if (!tu.length) return true;
-        const gop = khongDau(`${ma} ${ten}`);
-        return tu.every((word) => gop.includes(word));
-      }).slice(0, 20).map(([maTruong, tenTruong, dsTinh]) => ({ maTruong, tenTruong, tinh: dsTinh }));
-      return { ok: true, data: { tong: ketQua.length, ketQua } };
-    },
-  },
-  {
     ten: "get_university_profile",
-    mota: "Get verified profile and official admission documents for a university by canonical code (e.g. 'BKA', 'DKC', 'QSB').",
-    schema: {
-      type: "object",
-      properties: {
-        maTruong: { type: "string", maxLength: 12, description: "Canonical university code (e.g. 'BKA', 'DKC', 'QSB')" },
-      },
-      required: ["maTruong"],
-    },
-    chay: async (a) => {
-      const code = String(a.maTruong ?? "").trim().toUpperCase();
-      const truong = DANH_MUC_TRUONG.find(([ma]) => ma === code);
-      if (!truong) return loi(`Không tìm thấy trường với mã '${code}'. Dùng search_universities để tìm mã trường.`);
-      const dean = (deAnTruong as Record<string, { docs?: { nam: string; url: string }[]; hocPhi?: { nam: string; url: string; trang?: number } }>)[code];
-      return {
-        ok: true,
-        data: {
-          maTruong: truong[0],
-          tenTruong: truong[1],
-          tinh: truong[2],
-          deAnTuyenSinh: dean?.docs ?? [],
-          hocPhiChinhThuc: dean?.hocPhi ?? null,
-          nguonXacMinh: dean?.docs?.length ? "official_pdf" : "aggregator_verified",
-        },
-      };
-    },
+    mota: "Compatibility alias for get_university. Read source verification metadata before quoting data.",
+    schema: { type: "object", properties: { maTruong: { type: "string", minLength: 1, maxLength: 12 } }, required: ["maTruong"], additionalProperties: false },
+    chay: (args, cc) => runCapability("get_university", args, cc),
   },
   {
     ten: "get_app_capabilities",
-    mota: "Get Nguyện Vọng AI system capabilities, verified dataset statistics, supported admission years and API endpoints.",
+    mota: "Get tool names, authentication methods and bundled dataset limitations; no student data.",
     schema: KHONG_THAM_SO,
     chay: async () => ({
       ok: true,
       data: {
         ten: "Nguyện Vọng AI",
-        phienBan: "1.1.0",
+        phienBan: "2.0.0",
         tongSoTruong: DANH_MUC_TRUONG.length,
-        tongSoChuongTrinh: 3648,
-        namDuLieuHoTro: ["2023", "2024", "2025", "2026"],
+        datasetStatus: "Bundled snapshot; not independently verified; freshness unknown; not live CMS",
         phuongThucXacThuc: "OAuth 2.1 (RFC 7636 PKCE S256) hoặc mã kết nối",
         congCuHoTro: CONG_CU.map((c) => c.ten),
       },
@@ -213,8 +173,81 @@ export const PHAM_VI_CONG_CU: Record<string, string> = {
 
 const BIEN_THE: Record<string, string> = {
   get_student_profile: "lay_ho_so",
-  get_study_plan: "ke_hoach_tuan",
 };
+
+// Canonical tools share the exact deterministic capability implementation used by HTTP adapters.
+for (const definition of capabilityDefinitions) {
+  const existing = CONG_CU.findIndex((c) => c.ten === definition.name);
+  const tool: CongCu = {
+    ten: definition.name,
+    mota: definition.description,
+    schema: definition.inputSchema,
+    chay: (args, cc) => runCapability(definition.name, args, cc),
+  };
+  if (existing >= 0) CONG_CU[existing] = tool;
+  else CONG_CU.push(tool);
+}
+
+// `truyVan` remains accepted for clients connected before the canonical `q` argument.
+const search = CONG_CU.find((c) => c.ten === "search_universities")!;
+search.schema = { ...search.schema, properties: { ...search.schema.properties, truyVan: { type: "string", maxLength: 100 } } };
+const runSearch = search.chay;
+search.chay = (args, cc) => {
+  if (args.q !== undefined && args.truyVan !== undefined) return Promise.resolve({ ok: false, code: "INVALID_ARGUMENT", loi: "Chỉ dùng q hoặc truyVan" });
+  const { truyVan, ...rest } = args;
+  return runSearch(truyVan === undefined ? rest : { ...rest, q: truyVan }, cc);
+};
+
+CONG_CU.push({
+  ten: "get_study_plan", mota: "Read the authenticated student's latest weekly study-plan snapshot. Times include +07:00. This does not regenerate the plan.",
+  schema: KHONG_THAM_SO, chay: async (_args, cc) => ({ ok: true, data: {
+    capNhat: cc.ban.capNhat, snapshotUpdatedAt: cc.ban.capNhat,
+    suKien: cc.ban.keHoachTuan.map((event) => ({ ...event, linkGoogleCalendar: linkGoogleCalendar(event) })),
+  } }),
+}, {
+  ten: "update_study_progress",
+  mota: "Create a pending study-progress proposal. The student must confirm in the app before any progress changes. Use taskId and snapshotUpdatedAt from get_study_plan; never invent IDs.",
+  schema: { type: "object", additionalProperties: false, properties: {
+    taskId: { type: "string", minLength: 1, maxLength: 120 },
+    status: { type: "string", enum: ["xong", "chua"] },
+    snapshotUpdatedAt: { type: "string", minLength: 1, maxLength: 30 },
+  }, required: ["taskId", "status", "snapshotUpdatedAt"] },
+  chay: async (args, cc) => {
+    if (args.snapshotUpdatedAt !== cc.ban.capNhat) return { ok: false, code: "STALE_SNAPSHOT", loi: "Kế hoạch đã thay đổi. Gọi get_study_plan để đọc lại trước khi đề xuất." };
+    if (!cc.ban.keHoachTuan.some((task) => task.taskId === args.taskId)) return { ok: false, code: "TASK_NOT_FOUND", loi: "Không có taskId này trong kế hoạch đã đồng bộ. Mở ứng dụng và đồng bộ lại kế hoạch." };
+    const task = cc.ban.keHoachTuan.find((task) => task.taskId === args.taskId)!;
+    const duLieu = JSON.stringify({ taskId: args.taskId, status: args.status, snapshotUpdatedAt: args.snapshotUpdatedAt, expectedStatus: task.progressStatus ?? "chua" });
+    const id = crypto.randomUUID();
+    const tomTat = `${args.status === "xong" ? "Đánh dấu đã xong" : "Đánh dấu chưa xong"}: ${task.tieuDe}`.slice(0, 200);
+    const result = await cc.db.prepare(
+      "INSERT INTO ket_noi_de_xuat (id, ma_bam, loai, tom_tat, du_lieu, trang_thai, tao_luc) " +
+      "SELECT ?, ?, 'cap-nhat-tien-do', ?, ?, 'cho', ? " +
+      "WHERE NOT EXISTS (SELECT 1 FROM ket_noi_de_xuat WHERE ma_bam = ? AND loai = 'cap-nhat-tien-do' AND trang_thai = 'cho' AND du_lieu = ?) " +
+      "AND (SELECT COUNT(*) FROM ket_noi_de_xuat WHERE ma_bam = ? AND trang_thai = 'cho') < ?",
+    ).bind(id, cc.maBam, tomTat, duLieu, Date.now(), cc.maBam, duLieu, cc.maBam, TOI_DA_DE_XUAT_CHO).run();
+    const existing = (result.meta?.changes ?? 0) > 0 ? { id } : await cc.db.prepare(
+      "SELECT id FROM ket_noi_de_xuat WHERE ma_bam = ? AND loai = 'cap-nhat-tien-do' AND trang_thai = 'cho' AND du_lieu = ? LIMIT 1",
+    ).bind(cc.maBam, duLieu).first<{ id: string }>();
+    if (!existing) return { ok: false, code: "PENDING_LIMIT", loi: "Đã đủ đề xuất đang chờ. Xác nhận hoặc từ chối bớt trong ứng dụng." };
+    return { ok: true, data: { trangThai: "cho", deXuatId: existing.id, taskId: args.taskId, status: args.status, snapshotUpdatedAt: args.snapshotUpdatedAt, loiNhan: "Đang chờ em xác nhận trong ứng dụng; tiến độ chưa thay đổi." } };
+  },
+});
+
+for (const tool of CONG_CU) tool.schema = { ...tool.schema, additionalProperties: false };
+
+Object.assign(PHAM_VI_CONG_CU, {
+  get_app_capabilities: "admissions:read", get_university: "admissions:read", search_majors: "admissions:read",
+  get_admission_rules: "admissions:read", calculate_admission_score: "admissions:read",
+  analyze_student_profile: "profile:read", recommend_preferences: "profile:read", validate_preference_order: "profile:read",
+  get_study_plan: "study:read", update_study_progress: "study:write",
+});
+
+/** Every tool must declare all permissions; missing declarations deny OAuth access. */
+export function phamViCanThiet(ten: string): string[] {
+  if (ten === "recommend_preferences" || ten === "validate_preference_order") return ["profile:read", "preferences:read", "admissions:read"];
+  const scope = PHAM_VI_CONG_CU[ten];
+  return scope ? [scope] : [];
+}
 
 export const tenCongCu = (ten: string): CongCu | undefined => {
   const t = BIEN_THE[ten] ?? ten;
@@ -225,5 +258,7 @@ export const tenCongCu = (ten: string): CongCu | undefined => {
 export async function chayCongCu(ten: string, args: Record<string, unknown>, cc: NguCanhCongCu): Promise<KetQuaCongCu> {
   const c = tenCongCu(ten);
   if (!c) return loi("Không có công cụ này");
+  const errors = validateSchema(args, c.schema);
+  if (errors.length) return { ok: false, code: "INVALID_ARGUMENT", loi: "Tham số không hợp lệ", details: errors };
   return c.chay(args, cc);
 }

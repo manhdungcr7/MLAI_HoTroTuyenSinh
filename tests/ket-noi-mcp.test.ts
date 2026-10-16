@@ -1,6 +1,7 @@
 // Kiểm thử kết nối Claude/ChatGPT: mã ghép nối, bản chụp, MCP (JSON-RPC), công cụ, đề xuất, GPT Actions, giới hạn tần suất.
 // D1 là SQLite thật (migration 0009). Chạy: npx tsx tests/ket-noi-mcp.test.ts
 import assert from "node:assert/strict";
+import { LATEST_PROTOCOL_VERSION } from "@modelcontextprotocol/sdk/types.js";
 import { createHash } from "node:crypto";
 import { taoD1KetNoiTest, type D1KetNoiTest } from "./nap-d1-ket-noi";
 import { kvTest } from "./nap-d1-han-muc";
@@ -63,9 +64,10 @@ async function taoMa(m: Moi, ban: Record<string, unknown> = banMau()): Promise<s
 }
 
 const hdr = (ma: string) => ({ "x-ket-noi": ma });
+const MCP_HEADERS = { accept: "application/json, text/event-stream" };
 
 async function mcp(m: Moi, ma: string, body: unknown, env: EnvKetNoi = m.env): Promise<{ status: number; json: any; headers: Headers }> {
-  const r = await xuLyMcp(req(`${ORIGIN}/mcp/${ma}`, { method: "POST", body }), env, ma);
+  const r = await xuLyMcp(req(`${ORIGIN}/mcp/${ma}`, { method: "POST", headers: MCP_HEADERS, body }), env, ma);
   const text = await r.text();
   return { status: r.status, json: text ? JSON.parse(text) : null, headers: r.headers };
 }
@@ -150,10 +152,10 @@ async function main() {
   m.kv.m.clear();
   const init = await mcp(m, ma, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } } });
   assert.equal(init.json.result.protocolVersion, "2025-06-18");
-  assert.deepEqual(init.json.result.capabilities, { tools: {} });
-  assert.deepEqual(init.json.result.serverInfo, { name: "nguyen-vong-ai", version: "1.1.0" });
-  const initLa = await mcp(m, ma, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "1999-01-01" } });
-  assert.equal(initLa.json.result.protocolVersion, "2025-03-26", "phiên bản lạ thì trả 2025-03-26");
+  assert.deepEqual(init.json.result.capabilities, { tools: {}, resources: {}, prompts: {} });
+  assert.deepEqual(init.json.result.serverInfo, { name: "nguyen-vong-ai", version: "2.0.0" });
+  const initLa = await mcp(m, ma, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "1999-01-01", capabilities: {}, clientInfo: { name: "test-client", version: "1.0" } } });
+  assert.equal(initLa.json.result.protocolVersion, LATEST_PROTOCOL_VERSION, "phiên bản lạ dùng bản mới nhất SDK hỗ trợ");
   const thongBao = await mcp(m, ma, { jsonrpc: "2.0", method: "notifications/initialized" });
   assert.equal(thongBao.status, 202);
   assert.equal(thongBao.json, null, "202 không có nội dung");
@@ -162,26 +164,24 @@ async function main() {
   const dsCongCu = await mcp(m, ma, { jsonrpc: "2.0", id: 3, method: "tools/list" });
   const tenCongCu = (dsCongCu.json.result.tools as { name: string }[]).map((t) => t.name).sort();
   assert.deepEqual(tenCongCu, [
-    "de_xuat_them_nguyen_vong",
-    "diem_chuan",
-    "get_app_capabilities",
-    "get_university_profile",
-    "goi_y_nganh",
-    "ke_hoach_tuan",
-    "lay_ho_so",
-    "lay_nguyen_vong",
-    "search_universities",
-  ]);
-  assert.equal(CONG_CU.length, 9);
+    "analyze_student_profile", "calculate_admission_score", "get_admission_rules", "get_app_capabilities",
+    "get_study_plan", "get_university", "get_university_profile", "goi_y_nganh", "de_xuat_them_nguyen_vong",
+    "diem_chuan", "lay_ho_so", "lay_nguyen_vong", "recommend_preferences", "search_majors",
+    "search_universities", "validate_preference_order", "ke_hoach_tuan",
+  ].sort());
+  assert.equal(tenCongCu.length, CONG_CU.length - 1, "mã kết nối cũ không được khám phá tool ghi mới cần consent OAuth");
   const khongCongCu = await mcp(m, ma, { jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "xoa_tat_ca", arguments: {} } });
   assert.equal(khongCongCu.json.error.code, -32602);
   const pheDuoc = await mcp(m, ma, { jsonrpc: "2.0", id: 5, method: "resources/list" });
-  assert.equal(pheDuoc.json.error.code, -32601);
+  assert.equal(pheDuoc.status, 200);
+  assert.equal(pheDuoc.json.result.resources[0].uri, "nguyenvongai://metadata/capabilities");
+  const prompts = await mcp(m, ma, { jsonrpc: "2.0", id: 6, method: "prompts/list" });
+  assert.deepEqual(prompts.json.result.prompts.map((p: { name: string }) => p.name), ["admission_review"]);
   const gioi = await xuLyMcp(new Request(`${ORIGIN}/mcp/${ma}`, { method: "GET" }), m.env, ma);
   assert.equal(gioi.status, 405);
   const tuyChon = await xuLyMcp(new Request(`${ORIGIN}/mcp/${ma}`, { method: "OPTIONS" }), m.env, ma);
   assert.equal(tuyChon.status, 204);
-  assert.equal(tuyChon.headers.get("access-control-allow-origin"), "*");
+  assert.equal(tuyChon.headers.get("access-control-allow-origin"), null, "không có Origin thì không phản chiếu wildcard");
   assert.match(tuyChon.headers.get("access-control-allow-headers") ?? "", /mcp-protocol-version/);
   const jsonHong = await xuLyMcp(req(`${ORIGIN}/mcp/${ma}`, { method: "POST", body: "{hong" }), m.env, ma);
   assert.equal(jsonHong.status, 400);
@@ -222,7 +222,7 @@ async function main() {
   assert.match(String(laId.data), /goi_y_nganh/);
   const viTriSai = await congCu(m, ma, "de_xuat_them_nguyen_vong", { idChuongTrinh: "g2", viTri: 31 });
   assert.equal(viTriSai.isError, true);
-  const de1 = await congCu(m, ma, "de_xuat_them_nguyen_vong", { idChuongTrinh: "g2", viTri: 2, tomTat: "Lời AI tự viết" });
+  const de1 = await congCu(m, ma, "de_xuat_them_nguyen_vong", { idChuongTrinh: "g2", viTri: 2 });
   assert.equal(de1.isError, false);
   assert.equal(de1.data.trangThai, "cho");
   assert.equal(de1.data.loiNhan, "Đã gửi đề xuất, đang chờ bạn xác nhận trong app");

@@ -10,3 +10,4 @@ export * from "./dai-ngay";
 export * from "./xu-huong";
 export * from "./trang-tam";
 export * from "./landing-patterns";
+export * from "./academic-display";
