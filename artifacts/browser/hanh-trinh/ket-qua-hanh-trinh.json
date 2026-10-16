@@ -1,0 +1,52 @@
+[
+  {
+    "ten": "Đăng ký: thiếu tỉnh thì không đi tiếp và có chỉ dẫn",
+    "ok": true,
+    "ghiChu": "url: /bat-dau/1"
+  },
+  {
+    "ten": "Khám phá tìm \"Bách Khoa\"",
+    "ok": true,
+    "ghiChu": "Có 131 ngành"
+  },
+  {
+    "ten": "Khám phá tìm \"BKA\"",
+    "ok": true,
+    "ghiChu": "Có 69 ngành"
+  },
+  {
+    "ten": "Khám phá tìm \"Ngoại thương\"",
+    "ok": true,
+    "ghiChu": "Có 41 ngành"
+  },
+  {
+    "ten": "Khám phá tìm \"HUTECH\"",
+    "ok": true,
+    "ghiChu": "Có 77 ngành"
+  },
+  {
+    "ten": "Hỏi AI có câu trả lời (không trống, không lỗi)",
+    "ok": true,
+    "ghiChu": ""
+  },
+  {
+    "ten": "AI lỗi mạng: app hiện thông báo, không trắng trang",
+    "ok": true,
+    "ghiChu": ""
+  },
+  {
+    "ten": "Lưu yêu thích rồi tải lại vẫn còn",
+    "ok": true,
+    "ghiChu": "trước: \"Lưu Truyền thông đa phương tiện (dạy bằng TA) – NHF vào yêu thích\", sau: \"Bỏ lưu Truyền thông đa phương tiện (dạy bằng TA) – NHF\""
+  },
+  {
+    "ten": "Cài đặt có mục kết nối Claude và ChatGPT",
+    "ok": true,
+    "ghiChu": ""
+  },
+  {
+    "ten": "Nút chatbot nổi không che tab điều hướng",
+    "ok": true,
+    "ghiChu": "chatbot tại y=708"
+  }
+]

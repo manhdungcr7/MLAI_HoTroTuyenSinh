@@ -1,0 +1,156 @@
+[
+  {
+    "vp": "mobile",
+    "man": "/chao",
+    "tran": false,
+    "tieu": "Xếp nguyện vọng vừa sức, rồi học để đạt",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/kham-pha",
+    "tran": false,
+    "tieu": "Khám phá",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/nguyen-vong",
+    "tran": false,
+    "tieu": "Danh sách nguyện vọng",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/tu-van",
+    "tran": false,
+    "tieu": "Tư vấn cùng AI",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/huong-nghiep",
+    "tran": false,
+    "tieu": "Trắc nghiệm hướng nghiệp",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/ke-hoach/tuan",
+    "tran": false,
+    "tieu": "Kế hoạch tuần",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/ho-so",
+    "tran": false,
+    "tieu": "Hồ sơ của bạn",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/ho-so/cai-dat",
+    "tran": false,
+    "tieu": "Cài đặt",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/ve-du-lieu",
+    "tran": false,
+    "tieu": "",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/kham-pha/bo-loc",
+    "tran": false,
+    "tieu": "Bộ lọc",
+    "loi": []
+  },
+  {
+    "vp": "mobile",
+    "man": "/truong/DKC",
+    "tran": false,
+    "tieu": "Hồ sơ trường",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/chao",
+    "tran": false,
+    "tieu": "Xếp nguyện vọng vừa sức, rồi học để đạt",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/kham-pha",
+    "tran": false,
+    "tieu": "Khám phá",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/nguyen-vong",
+    "tran": false,
+    "tieu": "Danh sách nguyện vọng",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/tu-van",
+    "tran": false,
+    "tieu": "Tư vấn cùng AI",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/huong-nghiep",
+    "tran": false,
+    "tieu": "Trắc nghiệm hướng nghiệp",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/ke-hoach/tuan",
+    "tran": false,
+    "tieu": "Kế hoạch tuần",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/ho-so",
+    "tran": false,
+    "tieu": "Hồ sơ của bạn",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/ho-so/cai-dat",
+    "tran": false,
+    "tieu": "Cài đặt",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/ve-du-lieu",
+    "tran": false,
+    "tieu": "",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/kham-pha/bo-loc",
+    "tran": false,
+    "tieu": "Bộ lọc",
+    "loi": []
+  },
+  {
+    "vp": "desktop",
+    "man": "/truong/DKC",
+    "tran": false,
+    "tieu": "Hồ sơ trường",
+    "loi": []
+  }
+]
