@@ -10,7 +10,7 @@ Quy ước: mỗi kết quả ghi rõ đã chạy ở đâu và số liệu đo 
 |---|---|
 | `npx tsc --noEmit` | Đạt |
 | `npm run kiem-tra` | Đạt: 34 route, 15 slice |
-| `npm test` | Thoát mã 0; 62 file test trong chuỗi, không có kiểm thử đỏ |
+| `npm test` | Thoát mã 0; 63 file test trong chuỗi, không có kiểm thử đỏ |
 | `npm run build` | Đạt |
 | `npm run cms:build` | Đạt |
 
@@ -18,7 +18,8 @@ Các suite liên quan đến đợt này:
 
 | Suite | Số kiểm tra | Nội dung |
 |---|---|---|
-| `tests/oauth-mcp.test.ts` (mới) | 21 | PKCE RFC 7636, redirect_uri, phạm vi, đăng ký client, trang đồng ý (escape, CSP), mã sai, từ chối, đổi mã một lần, sai verifier, MCP Bearer, phạm vi theo công cụ, token hết hạn, /mcp/{mã} cũ, làm mới và phát hiện tái sử dụng, thu hồi, ngắt kết nối, sẵn sàng, rollout thiếu bảng |
+| `tests/mcp-sdk.test.ts` (mới) | 6 | Client MCP chính thức (`@modelcontextprotocol/sdk` 1.32.1) qua Streamable HTTP thật: initialize và phiên bản, liệt kê và schema công cụ, gọi công cụ đọc, không token → 401, token giả → -32001, đề xuất có quyền ghi |
+| `tests/oauth-mcp.test.ts` (mới) | 22 | PKCE RFC 7636, redirect_uri, phạm vi, đăng ký client, trang đồng ý (escape, CSP), mã sai, từ chối, đổi mã một lần, sai verifier, MCP Bearer, phạm vi theo công cụ, token hết hạn, /mcp/{mã} cũ, làm mới và phát hiện tái sử dụng, thu hồi, ngắt kết nối, sẵn sàng, rollout thiếu bảng |
 | `tests/ket-noi-mcp.test.ts` | Đạt | Cập nhật `serverInfo.version` lên 1.1.0 |
 | `tests/tu-van-han-muc.test.ts` | Đạt, thêm 1 nhóm | Trần toàn hệ thống: 5 hồ sơ, trần 3 lượt, 2 lượt bị 429, hồ sơ bị từ chối không mất lượt cá nhân |
 | `tests/dinh-dang.test.ts` | Đạt, thêm 4 ca | `dinhDangSo` |
@@ -34,6 +35,8 @@ Kiểm tra mức nhạy (mutation): tắt kiểm tra phạm vi trong `functions/
 | 3 | `/api/v1/health` trên production hiện tại trả HTML fallback với mã 200 | Một phép kiểm "200 là đúng" sẽ báo sai | Smoke test kiểm tra JSON và trường `ok`; kết quả đỏ đúng như mong đợi trước khi deploy | `node scripts/verify-runtime/smoke.mjs` (7/12 trước deploy) |
 | 4 | "Có 3648 ngành" thiếu dấu phân cách hàng nghìn | Lỗi hiển thị tiếng Việt | `dinhDangSo` trong `src/engine/dinh-dang.ts`, dùng ở Khám phá | Test `dinh-dang` |
 | 5 | Mã kết nối trong đường dẫn, không có kiểm phạm vi | Đã có từ trước; không sửa trong đợt này | Giữ tương thích; OAuth là đường dẫn mới | Xem [../architecture/03-security-model.md](../architecture/03-security-model.md) |
+| 6 | Trên production, khi bảng OAuth chưa có, `/oauth/token` và `/mcp` có Bearer trả 500 kèm lỗi D1 thô | Lộ chi tiết nội bộ, và client không phân biệt được với lỗi token | Endpoint OAuth bắt mọi lỗi và trả 503 chung; tra token lỗi D1 coi như 401 | Test "rollout: thiếu bảng OAuth thì endpoint trả lỗi chung"; đã deploy và kiểm lại trên production |
+| 7 | Script e2e dừng với `TypeError` khi bước đổi token lỗi | Không báo được bước nào đỏ | Dùng optional chaining để các bước sau báo đỏ có kiểm soát | Chạy lại trên production: 6/17 đạt, các bước đỏ đúng với trạng thái migration |
 
 ## 3. Kiểm tra trên production (không ghi dữ liệu)
 
@@ -101,21 +104,28 @@ Lỗi nhỏ phát hiện khi xem ảnh: số ngành ở Khám phá thiếu dấu
 - Hết hạn lượt AI (bước 13 trong prompt): cần 50 lượt; đã có test tự động (`tu-van-han-muc`), chưa chạy trên production.
 - Bố cục 320×720, 375×812, 430×932, 1366×768 (trong prompt): quét hiện tại dùng 390×844 và 1440×900.
 
-## 6. Kiểm tra sau deploy
+## 6. Kiểm tra sau deploy (production, 16/10/2026)
 
-| Việc | Trạng thái |
+Deploy: push `main` lúc `dfcecf6` đã lên production (CI deploy, khoảng 80 giây). Đã xác nhận bằng phản hồi của `/oauth/token` đổi từ 500 sang 503 chung.
+
+| Việc | Kết quả |
 |---|---|
-| Deploy `main` qua CI | Chưa thực hiện (xem mục 7) |
+| `node scripts/verify-runtime/smoke.mjs` | **12/12 đạt** (health, ready, metadata OAuth, MCP không token 401, các kiểm tra cũ) |
+| `node scripts/verify-runtime/oauth-e2e.mjs` | **6/17 đạt**. Đạt: tạo kết nối thử, metadata, MCP không token 401, token giả 401, tái sử dụng thu hồi họ, ngắt kết nối thử. Đỏ: đăng ký client, trang đồng ý, đổi mã, MCP với Bearer hợp lệ, làm mới, các bước phụ thuộc. Nguyên nhân: bảng OAuth chưa có trên D1 production (503 chung) |
 | Áp migration 0011 trên D1 production | **Chưa thực hiện: không có credential Cloudflare cục bộ** |
-| `smoke.mjs` sau deploy | Chưa chạy |
-| `oauth-e2e.mjs` sau migration | Chưa chạy |
 | Kết nối thật với Claude | Chưa kiểm chứng (không có tài khoản) |
 | Kết nối thật với ChatGPT | Chưa kiểm chứng (không có tài khoản) |
 
+Lưu ý về kết quả e2e: các bước đỏ là đúng với trạng thái hiện tại. Chúng không cho thấy lỗi logic OAuth; logic đó đã được kiểm bằng 22 test trên SQLite thật và 6 test bằng client MCP chính thức. Sau khi migration được áp, cần chạy lại e2e và kỳ vọng 17/17.
+
 ## 7. Những điều chưa làm được trong đợt này
 
-1. **Áp migration 0011 lên D1 production**: cần đăng nhập `wrangler` với quyền D1. Đây là bước chặn OAuth.
-2. **Chạy `oauth-e2e.mjs` trên production**: sau bước 1.
+1. **Áp migration 0011 lên D1 production** (bước chặn OAuth). Lệnh:
+   ```
+   npx wrangler login
+   npx wrangler d1 migrations apply nguyenvongai_db --remote
+   ```
+2. **Chạy `node scripts/verify-runtime/oauth-e2e.mjs` trên production**, kỳ vọng 17/17 sau bước 1.
 3. **Kết nối Claude và ChatGPT thật**: cần tài khoản và thao tác trên giao diện của hai bên.
 4. **Công cụ tra cứu công khai** (`search_universities`, `get_university_profile`): chưa làm.
 5. **Cảnh báo ngân sách 70%/90%**: chưa làm.
