@@ -112,6 +112,21 @@ test("SDK: gọi công cụ đọc và nhận dữ liệu có cấu trúc", asyn
   await client.close();
 });
 
+test("SDK: gọi công cụ bằng tên bí danh tiếng Anh (get_student_profile & get_study_plan)", async () => {
+  const client = new Client({ name: "kiem-thu", version: "1.0.0" });
+  await client.connect(new StreamableHTTPClientTransport(new URL(dia), { requestInit: { headers: { Authorization: `Bearer ${accessToken}` } } }));
+  const r1 = await client.callTool({ name: "get_student_profile", arguments: {} });
+  assert.ok(!r1.isError);
+  const text1 = (r1.content as { type: string; text: string }[])[0].text;
+  assert.ok(text1.includes("TP.HCM"));
+
+  const r2 = await client.callTool({ name: "get_study_plan", arguments: {} });
+  assert.ok(!r2.isError);
+  const text2 = (r2.content as { type: string; text: string }[])[0].text;
+  assert.ok(text2.includes("suKien"));
+  await client.close();
+});
+
 test("SDK: không có token thì kết nối bị từ chối với 401", async () => {
   const client = new Client({ name: "kiem-thu", version: "1.0.0" });
   await assert.rejects(client.connect(new StreamableHTTPClientTransport(new URL(dia))), /-32001|401|Cần đăng nhập/);

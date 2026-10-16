@@ -2,7 +2,7 @@
 // và /mcp với Bearer token OAuth (xem mcp/index.ts). Hai đường dùng chung một bộ xử lý giao thức và một bộ công cụ.
 // Mã sai, hết hạn hoặc đã thu hồi đều trả cùng một thông điệp, không tiết lộ mã có tồn tại hay không.
 import { docChuGioiHan, ThanQuaLon } from "../_thu-vien/doc-body";
-import { CONG_CU, PHAM_VI_CONG_CU, chayCongCu } from "../_thu-vien/ket-noi-cong-cu";
+import { CONG_CU, PHAM_VI_CONG_CU, chayCongCu, tenCongCu } from "../_thu-vien/ket-noi-cong-cu";
 import type { BanChup } from "../../src/engine/ket-noi-kieu";
 import { xacThuc, type EnvKetNoi, type HangKetNoi, type KhoD1Ket } from "../_thu-vien/ket-noi";
 import type { PhamVi } from "../_thu-vien/oauth";
@@ -51,8 +51,9 @@ async function xuLyMotYeuCau(msg: Rpc, ctx: NguCanhMcp): Promise<KetQuaRpc> {
       return { result: { tools: CONG_CU.map((c) => ({ name: c.ten, description: c.mota, inputSchema: c.schema })) } };
     case "tools/call": {
       const ten = typeof params.name === "string" ? params.name : "";
-      if (!CONG_CU.some((c) => c.ten === ten)) return { error: { code: -32602, message: "Không có công cụ này" } };
-      const can = PHAM_VI_CONG_CU[ten];
+      const cc = tenCongCu(ten);
+      if (!cc) return { error: { code: -32602, message: "Không có công cụ này" } };
+      const can = PHAM_VI_CONG_CU[cc.ten];
       if (ctx.phamVi && can && !ctx.phamVi.includes(can as PhamVi)) {
         // Thiếu quyền là lỗi của công cụ (isError), không phải lỗi giao thức: client vẫn tiếp tục được.
         return { result: { content: [{ type: "text", text: `Thiếu quyền ${can} để dùng công cụ này. Kết nối lại và cho phép quyền này.` }], isError: true } };
