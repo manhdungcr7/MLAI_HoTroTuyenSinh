@@ -41,14 +41,6 @@ jobs:
       - name: Build CMS quản trị
         run: npm run cms:build
 
-      - name: Áp dụng D1 Migrations
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '5fdd1d1433519df6429d7418d43fff9a' }}
-          command: d1 migrations apply nguyenvongai_db --remote
-
       - name: Deploy lên Cloudflare Pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: cloudflare/wrangler-action@v3
