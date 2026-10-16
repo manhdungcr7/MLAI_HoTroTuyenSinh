@@ -112,6 +112,20 @@ export function danhGiaDanhMucToanDien(
     });
   }
 
+  if (cacNguyenVong.length === 0) {
+    return {
+      soLuong: 0,
+      cacNguyenVong: [],
+      xacSuatDoItNhatMotNV: 0,
+      kyVongThuTuTrungTuyen: null,
+      danhGiaRuiRo: "Cần điều chỉnh",
+      canhBaoNghiemTrong: [],
+      diemManh: [],
+      deXuatHanhDong: ["Bạn chưa chọn nguyện vọng nào. Hãy khám phá và thêm các ngành học mục tiêu vào danh mục để hệ thống phân tích."],
+      coCau: { thuSuc: 0, vuaSuc: 0, anToan: 0 },
+    };
+  }
+
   // Bước 2: Phát hiện nghịch đảo thứ tự (Inversion Detection)
   // Nếu một nguyện vọng đứng trước có điểm chuẩn thấp hơn rõ rệt (> 1.2 điểm) hoặc xác suất đỗ cao hơn (> 35%) so với nguyện vọng đứng sau
   const canhBaoNghiemTrong: string[] = [];

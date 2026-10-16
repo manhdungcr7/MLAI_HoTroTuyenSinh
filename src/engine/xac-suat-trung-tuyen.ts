@@ -133,12 +133,14 @@ export function tinhXacSuatTrungTuyen(
     mucUuTienGoc = (uuTien.khuVuc ? MUC_KV[uuTien.khuVuc] ?? 0 : 0) + (uuTien.doiTuong ? MUC_DT[uuTien.doiTuong] ?? 0 : 0);
   }
 
-  const utThucTe = diemUuTien(diemThiRaw, mucUuTienGoc);
-  const diemXet = LAM_TRON_2(Math.min(30, diemThiRaw + utThucTe));
+  const diemHopLe = Math.max(0, Math.min(30, diemThiRaw));
+  const utThucTe = diemUuTien(diemHopLe, mucUuTienGoc);
+  const diemXet = LAM_TRON_2(Math.min(30, diemHopLe + utThucTe));
   const chenhDiem = LAM_TRON_2(diemXet - kyVong);
 
-  // Tính z-score chuẩn hoá
-  const z = chenhDiem / tau;
+  // Tính z-score chuẩn hoá (đảm bảo tau không bao giờ = 0)
+  const tauAnToan = Math.max(0.5, Number.isFinite(tau) ? tau : DO_BIEN_DONG_MACRO);
+  const z = chenhDiem / tauAnToan;
 
   // Logistic function: P = 1 / (1 + exp(-k * z))
   const rawProb = 1 / (1 + Math.exp(-HE_SO_DOC_LOGISTIC * z));

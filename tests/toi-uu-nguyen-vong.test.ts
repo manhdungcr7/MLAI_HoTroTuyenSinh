@@ -151,4 +151,21 @@ const diemEm: DiemDayDu = {
   }
 }
 
+// 4. Kiểm thử danh mục rỗng hoặc ID không tồn tại
+{
+  const cdRong = danhGiaDanhMucToanDien([], tim, diemEm, {
+    nganSach: null,
+    khuVuc: ["TP.HCM"],
+    uuTienTuyenSinh: null,
+  });
+  assert.equal(cdRong.soLuong, 0);
+  assert.equal(cdRong.xacSuatDoItNhatMotNV, 0);
+  assert.equal(cdRong.cacNguyenVong.length, 0);
+  assert.ok(cdRong.deXuatHanhDong.length > 0);
+
+  // ID không tồn tại
+  const cdIdLa = danhGiaDanhMucToanDien(["id-khong-ton-tai"], tim, diemEm, {});
+  assert.equal(cdIdLa.soLuong, 0);
+}
+
 console.log("toi-uu-nguyen-vong.test.ts: tất cả kiểm tra đều qua");

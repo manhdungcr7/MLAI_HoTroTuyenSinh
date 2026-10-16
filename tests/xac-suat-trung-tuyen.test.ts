@@ -77,5 +77,33 @@ const lcMau: LuaChon = {
   assert.ok(kqCoUT.xacSuat > kqKhongUT.xacSuat, "có ưu tiên xác suất phải tăng");
 }
 
+// Case E: Kiểm thử biên khắt khe (Tester Persona - Boundary Value Analysis)
+{
+  // 1. Điểm vượt trần 30 (ví dụ người dùng nhập 35.0) -> phải được kẹp an toàn về 30
+  const kqQuaTran = tinhXacSuatTrungTuyen(35.0, lcMau, null);
+  assert.ok(kqQuaTran !== null);
+  assert.equal(kqQuaTran.diemXet, 30.0);
+  assert.ok(kqQuaTran.xacSuat >= 0.95);
+
+  // 2. Điểm âm (ví dụ lỗi -5.0) -> phải được kẹp an toàn về 0
+  const kqAm = tinhXacSuatTrungTuyen(-5.0, lcMau, null);
+  assert.ok(kqAm !== null);
+  assert.equal(kqAm.diemXet, 0.0);
+  assert.ok(kqAm.xacSuat <= 0.05);
+
+  // 3. Điểm tuyệt đối 30.0
+  const kq30 = tinhXacSuatTrungTuyen(30.0, lcMau, null);
+  assert.ok(kq30 !== null);
+  assert.equal(kq30.diemXet, 30.0);
+  assert.ok(kq30.xacSuat >= 0.95);
+
+  // 4. Chương trình không có điểm lịch sử
+  const lcRongDiem: LuaChon = { ...lcMau, diemTheoNam: {} };
+  const kqRong = tinhXacSuatTrungTuyen(25.0, lcRongDiem, null);
+  assert.ok(kqRong !== null);
+  assert.ok(kqRong.xacSuat > 0 && kqRong.xacSuat < 1);
+  assert.equal(kqRong.soNamLichSu, 0);
+}
+
 console.log("xac-suat-trung-tuyen.test.ts: tất cả kiểm tra đều qua");
 
