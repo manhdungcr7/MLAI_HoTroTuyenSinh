@@ -239,6 +239,24 @@
   #s14 .meta i { width: 6px; height: 6px; border-radius: 50%; background: var(--sky); display: block; }
   #s14 .three { display: flex; gap: 14px; flex-wrap: wrap; }
 
+  /* S15 kiến trúc hệ thống */
+  #s15 .ar { position: absolute; left: 96px; right: 96px; top: 292px; display: flex; flex-direction: column; gap: 18px; }
+  #s15 .rw { display: grid; grid-template-columns: 150px repeat(4, 1fr); gap: 18px; align-items: stretch; }
+  #s15 .lb { display: flex; flex-direction: column; justify-content: center; font-size: 19px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); line-height: 1.3; }
+  #s15 .lb small { display: block; font-size: 16px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--mute); margin-top: 6px; }
+  #s15 .bx { border-radius: 22px; padding: 20px 22px; border: 1px solid var(--line); background: #fff; box-shadow: 0 16px 34px -26px rgba(16,27,60,.4); min-height: 166px; }
+  #s15 .bx b { display: block; font-size: 26px; font-weight: 800; line-height: 1.2; letter-spacing: -.01em; }
+  #s15 .bx p { font-size: 20px; line-height: 1.38; color: #3b4766; margin-top: 8px; }
+  #s15 .ch .bx { background: var(--bg); }
+  #s15 .sv .bx { background: var(--pri-soft); border-color: #cfdcff; }
+  #s15 .dt .bx { background: var(--navy); border-color: var(--navy); }
+  #s15 .dt .bx b { color: #fff; } #s15 .dt .bx p { color: rgba(255,255,255,.76); }
+  #s15 .dt .bx.out { background: #fff; border: 2px dashed #9db4ee; } #s15 .dt .bx.out b { color: var(--navy); } #s15 .dt .bx.out p { color: #3b4766; }
+  #s15 .fl { display: grid; grid-template-columns: 150px repeat(4, 1fr); gap: 18px; margin: -4px 0; }
+  #s15 .fl span { grid-column: 2 / span 4; text-align: center; font-size: 19px; font-weight: 700; color: var(--pri); letter-spacing: .02em; display: flex; justify-content: center; align-items: center; gap: 14px; }
+  #s15 .fl span::before, #s15 .fl span::after { content: ""; flex: 1; border-top: 2px dashed #b9c6e4; }
+  #s15 .strip { background: var(--navy); }
+
   /* ===== HUD, ghi chú người nói ===== */
   #hud { position: absolute; right: 36px; bottom: 26px; z-index: 50; font-size: 18px; font-weight: 600; color: #94A3B8; letter-spacing: .08em; opacity: .9; }
   #bar { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--grad); z-index: 50; transition: width .4s ease; }
@@ -325,7 +343,7 @@
     <div data-r style="--i:6" class="c"><small>Chatbot chung</small><b>Không có hồ sơ riêng, dễ bịa số, không có nguồn</b></div>
     <div data-r style="--i:7" class="c us"><small>Nguyện Vọng AI</small><b>Hồ sơ riêng → nhãn nguyện vọng có giải thích, có nguồn → việc cần làm mỗi tuần</b></div>
   </div>
-  <aside class="nt" hidden data-t="35">Cổng tra cứu chỉ cho con số của năm trước. Chatbot chung nói trôi chảy nhưng không biết hồ sơ của em, và có thể bịa điểm chuẩn. Chúng em xây phần ở giữa: lấy hồ sơ riêng của từng học sinh, đối chiếu với dữ liệu có nguồn, ra danh sách nguyện vọng có giải thích, rồi biến thành việc làm mỗi tuần.</aside>
+  <aside class="nt" hidden data-t="30">Cổng tra cứu chỉ cho con số của năm trước. Chatbot chung nói trôi chảy nhưng không biết hồ sơ của em, và có thể bịa điểm chuẩn. Chúng em xây phần ở giữa: lấy hồ sơ riêng của từng học sinh, đối chiếu với dữ liệu có nguồn, ra danh sách nguyện vọng có giải thích, rồi biến thành việc làm mỗi tuần.</aside>
 </section>
 
 <!-- 04 BỐN CÂU HỎI · 0:40 -->
@@ -337,7 +355,7 @@
     <div class="card q" data-r style="--i:4"><div class="ico"><svg><use href="#i-layers"/></svg></div><div class="n">Câu hỏi 3</div><h3>Còn cách bao xa?</h3><p>Nhãn Thử sức, Vừa sức, An toàn, Dự phòng và danh sách cân bằng.</p><span class="chip">Nguyện vọng và mục tiêu</span></div>
     <div class="card q" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><div class="n">Câu hỏi 4</div><h3>Hôm nay làm gì?</h3><p>Việc mỗi tuần xếp vào thời khóa biểu, xuất ra Google Calendar.</p><span class="chip">Kế hoạch tuần</span></div>
   </div></div>
-  <aside class="nt" hidden data-t="40">Sản phẩm trả lời bốn câu hỏi của học sinh. Mình đang ở đâu: hồ sơ điểm theo từng tổ hợp. Muốn đi tới đâu: khám phá 3.648 chương trình. Còn cách bao xa: nhãn nguyện vọng và khoảng cách tới mục tiêu. Hôm nay làm gì: việc từng tuần, xếp vào đúng giờ trống của em. Không cần tài khoản: dữ liệu ở lại trên máy học sinh.</aside>
+  <aside class="nt" hidden data-t="35">Sản phẩm trả lời bốn câu hỏi của học sinh. Mình đang ở đâu: hồ sơ điểm theo từng tổ hợp. Muốn đi tới đâu: khám phá 3.648 chương trình. Còn cách bao xa: nhãn nguyện vọng và khoảng cách tới mục tiêu. Hôm nay làm gì: việc từng tuần, xếp vào đúng giờ trống của em. Không cần tài khoản: dữ liệu ở lại trên máy học sinh.</aside>
 </section>
 
 <!-- 05 DEMO · 0:40 -->
@@ -351,7 +369,36 @@
     <div class="fs" data-r style="--i:5"><div class="phone"><img src="assets/nguyen-vong.png" alt="Nguyện vọng"></div><b>3 · Nguyện vọng</b><span>Nhãn, căn cứ, độ cân bằng</span></div>
     <div class="fs" data-r style="--i:6"><div class="phone"><img src="assets/ke-hoach-tuan.png" alt="Kế hoạch tuần"></div><b>4 · Kế hoạch</b><span>Việc tuần này, vào lịch</span></div>
   </div>
-  <aside class="nt" hidden data-t="40">Chuyển sang máy điện thoại: mở hồ sơ mẫu, vào Khám phá, bấm một ngành để xem điểm chuẩn kèm trang PDF nguồn, vào Nguyện vọng xem nhãn và nhận xét cân bằng, cuối cùng vào Kế hoạch tuần, bấm Thêm vào lịch. Nếu mạng lỗi, dùng các ảnh trên slide này. Nhớ mở sẵn demo trước giờ lên sân khấu.</aside>
+  <aside class="nt" hidden data-t="35">Chuyển sang máy điện thoại: mở hồ sơ mẫu, vào Khám phá, bấm một ngành để xem điểm chuẩn kèm trang PDF nguồn, vào Nguyện vọng xem nhãn và nhận xét cân bằng, cuối cùng vào Kế hoạch tuần, bấm Thêm vào lịch. Nếu mạng lỗi, dùng các ảnh trên slide này. Nhớ mở sẵn demo trước giờ lên sân khấu.</aside>
+</section>
+
+<!-- 06 KIẾN TRÚC HỆ THỐNG · 0:45 -->
+<section class="slide white" id="s15">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Kiến trúc hệ thống</div><h2 data-r style="--i:1">Một lớp dữ liệu, bốn kênh, <span class="grad-text">chạy trên biên Cloudflare.</span></h2></div>
+  <div class="ar">
+    <div class="rw ch" data-r style="--i:2"><div class="lb">Kênh<small>người dùng</small></div>
+      <div class="bx"><b>App học sinh</b><p>PWA, local-first. Động cơ TypeScript chạy ngay trên máy, hồ sơ ở localStorage.</p></div>
+      <div class="bx"><b>ChatGPT, Claude</b><p>Kết nối qua MCP hoặc GPT Actions bằng liên kết bí mật. Chỉ đề xuất, không tự ghi.</p></div>
+      <div class="bx"><b>Tình nguyện viên</b><p>CMS có phân quyền. Nhờ AI đọc đề án PDF qua cổng MCP riêng.</p></div>
+      <div class="bx"><b>Phụ huynh, thầy cô</b><p>Liên kết đồng hành hai chiều, không cần tài khoản.</p></div>
+    </div>
+    <div class="fl" data-r style="--i:3"><span>HTTPS · kiểm tra đầu vào · giới hạn tần suất · fail-closed</span></div>
+    <div class="rw sv" data-r style="--i:4"><div class="lb">Dịch vụ<small>Pages Functions</small></div>
+      <div class="bx"><b>Tư vấn AI</b><p>Bậc thang: quy tắc, cache, RAG, rồi mới tới mô hình. Hạn mức 50 lượt mỗi ngày.</p></div>
+      <div class="bx"><b>Kết nối AI</b><p>/mcp, /api/gpt, /api/ket-noi. Bản chụp hồ sơ, đề xuất chờ xác nhận.</p></div>
+      <div class="bx"><b>CMS và đóng góp</b><p>Duyệt, xuất bản, /api/mcp-dong-gop. Quyền tra lại mỗi lần gọi.</p></div>
+      <div class="bx"><b>Phục vụ dữ liệu</b><p>/api/manifest, /snapshots có mã băm, /api/bao-sai.</p></div>
+    </div>
+    <div class="fl" data-r style="--i:5"><span>đọc ghi có điều kiện · không SQL tự do · nhật ký kiểm toán</span></div>
+    <div class="rw dt" data-r style="--i:6"><div class="lb">Dữ liệu<small>một nguồn sự thật</small></div>
+      <div class="bx"><b>D1</b><p>Bản ghi CMS, nhật ký, hộp thư, hạn mức AI, kết nối. Có phiên bản.</p></div>
+      <div class="bx"><b>KV</b><p>Snapshot có mã băm, cache câu trả lời, giới hạn tần suất.</p></div>
+      <div class="bx"><b>Vectorize + Workers AI</b><p>Tìm ghi chú cộng đồng, luôn gắn nhãn chưa chính thức.</p></div>
+      <div class="bx out"><b>OpenRouter</b><p>Mô hình ngôn ngữ để diễn giải. Ngoài hạ tầng, chỉ nhận số liệu app gửi kèm.</p></div>
+    </div>
+  </div>
+  <div class="strip" data-r style="--i:7"><i></i>Ba nguyên tắc thiết kế: local-first (dữ liệu ở máy học sinh), quy tắc trước AI sau, và lỗi thì từ chối chứ không đoán.</div>
+  <aside class="nt" hidden data-t="45">Đây là kiến trúc. Bốn kênh người dùng ở hàng trên: app học sinh chạy local-first, động cơ TypeScript chạy ngay trên máy; ChatGPT và Claude qua MCP; tình nguyện viên qua CMS; phụ huynh qua liên kết. Tất cả đi qua lớp dịch vụ trên Cloudflare Pages Functions: tư vấn AI theo bậc thang, kết nối AI, CMS, và phục vụ dữ liệu. Phía dưới là một nguồn sự thật: D1 giữ bản ghi có phiên bản, KV giữ snapshot có mã băm, Vectorize cho ghi chú cộng đồng. Mô hình ngôn ngữ nằm ngoài, chỉ nhận số liệu app gửi kèm. Ba nguyên tắc: local-first, quy tắc trước AI sau, và lỗi thì từ chối chứ không đoán. Toàn bộ chạy trên biên Cloudflare nên chi phí thấp và mở rộng được.</aside>
 </section>
 
 <!-- 06 LỚP DỮ LIỆU · 0:55 -->
@@ -369,7 +416,7 @@
     <div class="tier" data-r style="--i:8"><span class="chip warn">Tầng 3</span><b>Ghi chú cộng đồng</b><p>Nơi ở, ký túc xá, lưu ý. Luôn ghi "chưa chính thức".</p></div>
   </div>
   <div class="states" data-r style="--i:9"><small>Mỗi câu trả lời mang một trạng thái:</small><span class="chip ok">đã xác minh</span><span class="chip">lịch sử</span><span class="chip warn">ước tính</span><span class="chip sky" style="background:#E3F4FE;color:#0A6FA8">dự báo</span><span class="chip" style="background:#F1F3F8;color:#64748B">chưa có</span></div>
-  <aside class="nt" hidden data-t="55">Đây là lớp dữ liệu, phần quan trọng nhất của hệ thống. Nguồn chia ba tầng tin cậy. Tầng một là đề án chính thức, kiểm chứng được tới trang PDF. Tầng hai là trang tổng hợp. Tầng ba là ghi chú cộng đồng, luôn gắn nhãn chưa chính thức. Dữ liệu qua chuẩn hóa, người duyệt, rồi xuất bản thành snapshot có mã băm. Mọi kênh dùng chung nguồn này. Và mọi câu trả lời mang một trạng thái: đã xác minh, lịch sử, ước tính, dự báo hoặc chưa có. Thiếu dữ liệu thì chúng em nói thiếu, không điền thay.</aside>
+  <aside class="nt" hidden data-t="50">Đây là lớp dữ liệu, phần quan trọng nhất của hệ thống. Nguồn chia ba tầng tin cậy. Tầng một là đề án chính thức, kiểm chứng được tới trang PDF. Tầng hai là trang tổng hợp. Tầng ba là ghi chú cộng đồng, luôn gắn nhãn chưa chính thức. Dữ liệu qua chuẩn hóa, người duyệt, rồi xuất bản thành snapshot có mã băm. Mọi kênh dùng chung nguồn này. Và mọi câu trả lời mang một trạng thái: đã xác minh, lịch sử, ước tính, dự báo hoặc chưa có. Thiếu dữ liệu thì chúng em nói thiếu, không điền thay.</aside>
 </section>
 
 <!-- 07 ENGINE · 0:55 -->
@@ -382,7 +429,7 @@
     <div class="card col4" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><h3>Kế hoạch học tối ưu</h3><p>Chia giờ tự học vào môn có lợi suất điểm cao nhất, xếp vào giờ trống thật của em.</p><span class="chip sky">Knapsack, lợi suất giảm dần</span></div>
   </div></div>
   <div class="strip" data-r style="--i:6"><i></i>Dự báo khoảng điểm chuẩn năm tới, kiểm lại bằng cách bỏ một năm: khoảng phủ 89% (2023) · 95% (2024) · 64% (2025). Năm 2025 yếu hơn, và chúng em nói thẳng.</div>
-  <aside class="nt" hidden data-t="55">Động cơ gồm bốn phần, đều giải thích được. Một, điểm đúng từng tổ hợp và điểm ưu tiên. Hai, nhãn nguyện vọng và xác suất ước lượng từ độ lệch so với điểm chuẩn và biến động lịch sử, luôn kèm bất định, không phải cam kết đỗ. Ba, tối ưu danh mục: chặn lỗi nghịch đảo thứ tự mà em nói ở slide hai. Bốn, kế hoạch học theo lợi suất giảm dần, xếp vào giờ trống thật. Chúng em kiểm chứng bằng bỏ-một-năm: khoảng dự báo phủ 89, 95 và 64 phần trăm trên 2023, 2024, 2025. Năm 2025 yếu vì quy chế đổi, và chúng em nói rõ điều đó.</aside>
+  <aside class="nt" hidden data-t="50">Động cơ gồm bốn phần, đều giải thích được. Một, điểm đúng từng tổ hợp và điểm ưu tiên. Hai, nhãn nguyện vọng và xác suất ước lượng từ độ lệch so với điểm chuẩn và biến động lịch sử, luôn kèm bất định, không phải cam kết đỗ. Ba, tối ưu danh mục: chặn lỗi nghịch đảo thứ tự mà em nói ở slide hai. Bốn, kế hoạch học theo lợi suất giảm dần, xếp vào giờ trống thật. Chúng em kiểm chứng bằng bỏ-một-năm: khoảng dự báo phủ 89, 95 và 64 phần trăm trên 2023, 2024, 2025. Năm 2025 yếu vì quy chế đổi, và chúng em nói rõ điều đó.</aside>
 </section>
 
 <!-- 08 AI Ở ĐÂU · 0:45 -->
@@ -412,8 +459,8 @@
     <div data-r style="--i:8"><b>Đề xuất</b>"Thêm UIT vào nguyện vọng 3": thẻ hiện trong app, bấm Xác nhận mới đổi.</div>
     <div data-r style="--i:9"><b>Lên lịch</b>"Xếp lịch ôn tuần này": sự kiện thật trên Google Calendar.</div>
   </div>
-  <div class="strip" data-r style="--i:10"><i style="background:#fff"></i>Trạng thái: đã có mã nguồn và test tự động; đang kiểm với connector thật. Ghép nối bằng liên kết bí mật, chưa có tài khoản và OAuth.</div>
-  <aside class="nt" hidden data-t="55">Vì sao ChatGPT và Claude? Vì học sinh đã dùng chúng mỗi ngày. Thay vì ép học sinh cài thêm một app, chúng em để họ hỏi ở nơi quen, còn Nguyện Vọng AI làm nguồn sự thật phía sau, qua MCP và GPT Actions. Trợ lý đọc được hồ sơ và nguyện vọng thật, trả lời bằng số có nguồn. Khi muốn đổi nguyện vọng, trợ lý chỉ đề xuất, em bấm Xác nhận trong app mới đổi. Và một câu nói có thể thành lịch ôn cả tuần trên Google Calendar. Nói thật về trạng thái: phần này vừa hoàn thành mã và test tự động, chúng em đang thử với connector thật. Ghép nối bằng liên kết bí mật, chưa có tài khoản. Vai trò của ChatGPT là kênh tiếp cận. Bộ não và sự thật vẫn là lớp dữ liệu.</aside>
+  <div class="strip" data-r style="--i:10"><i style="background:#fff"></i>Trạng thái: đã triển khai và kiểm tra đầu-cuối trên máy chủ thật; chưa thử qua giao diện Claude/ChatGPT thật. Ghép nối bằng liên kết bí mật, chưa có tài khoản và OAuth.</div>
+  <aside class="nt" hidden data-t="50">Vì sao ChatGPT và Claude? Vì học sinh đã dùng chúng mỗi ngày. Thay vì ép học sinh cài thêm một app, chúng em để họ hỏi ở nơi quen, còn Nguyện Vọng AI làm nguồn sự thật phía sau, qua MCP và GPT Actions. Trợ lý đọc được hồ sơ và nguyện vọng thật, trả lời bằng số có nguồn. Khi muốn đổi nguyện vọng, trợ lý chỉ đề xuất, em bấm Xác nhận trong app mới đổi. Và một câu nói có thể thành lịch ôn cả tuần trên Google Calendar. Nói thật về trạng thái: phần này đã triển khai và kiểm tra đầu-cuối trên máy chủ thật, nhưng chúng em chưa thử qua giao diện Claude hay ChatGPT thật. Ghép nối bằng liên kết bí mật, chưa có tài khoản. Vai trò của ChatGPT là kênh tiếp cận. Bộ não và sự thật vẫn là lớp dữ liệu.</aside>
 </section>
 
 <!-- 10 CỘNG ĐỒNG · 0:45 -->
@@ -443,19 +490,19 @@
     <div class="card mo" data-r style="--i:5"><div class="n">04</div><h3>Riêng tư, mọi kênh AI</h3><p>Dữ liệu ở máy học sinh; chỉ chia sẻ khi bật. Một lớp dữ liệu phục vụ ChatGPT, Claude và app.</p><span class="chip ghost">Phân phối</span></div>
   </div></div>
   <div class="strip" data-r style="--i:6"><i></i>Nói thật: chưa có người dùng thật nên lợi thế bền vững là giả thuyết đang kiểm chứng, chưa phải số đã đo.</div>
-  <aside class="nt" hidden data-t="45">Lợi thế của chúng em không nằm ở chatbot, vì chatbot ai cũng làm được. Nó nằm ở bốn thứ. Một, dữ liệu có nguồn, có người duyệt, do cộng đồng trường giữ, nên mỗi mùa tốt hơn. Hai, logic đúng quy chế Việt Nam: điểm ưu tiên, 73 tổ hợp, tỉnh sau sáp nhập. Ba, bộ kiểm chứng tự động nên sai là lộ ra. Bốn, riêng tư và phân phối: dữ liệu ở máy học sinh, một lớp dữ liệu phục vụ mọi kênh AI. Nhưng em nói thẳng: chưa có người dùng thật, nên đây là giả thuyết đang kiểm chứng.</aside>
+  <aside class="nt" hidden data-t="40">Lợi thế của chúng em không nằm ở chatbot, vì chatbot ai cũng làm được. Nó nằm ở bốn thứ. Một, dữ liệu có nguồn, có người duyệt, do cộng đồng trường giữ, nên mỗi mùa tốt hơn. Hai, logic đúng quy chế Việt Nam: điểm ưu tiên, 73 tổ hợp, tỉnh sau sáp nhập. Ba, bộ kiểm chứng tự động nên sai là lộ ra. Bốn, riêng tư và phân phối: dữ liệu ở máy học sinh, một lớp dữ liệu phục vụ mọi kênh AI. Nhưng em nói thẳng: chưa có người dùng thật, nên đây là giả thuyết đang kiểm chứng.</aside>
 </section>
 
 <!-- 12 TRẠNG THÁI · 0:50 -->
 <section class="slide light" id="s12">
   <div class="head2"><div data-r style="--i:0" class="eyebrow">Trạng thái thật</div><h2 data-r style="--i:1">Cái gì xong, cái gì đang thử, <span class="grad-text">cái gì chưa.</span></h2></div>
   <div class="wrap"><div class="g3">
-    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span><h3>Chạy được và có test</h3><ul class="lst"><li>3.648 chương trình, 118 trường, có nguồn</li><li>Nhãn nguyện vọng, điểm ưu tiên, so sánh</li><li>Kế hoạch tuần, chia sẻ cho phụ huynh, thầy cô</li><li>Hỏi đáp có căn cứ, hạn mức 50 lượt, chế độ Tiết kiệm</li><li>CMS online: đăng nhập, duyệt, xuất bản</li></ul></div>
-    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span><h3>Có mã, chưa kiểm ngoài thực tế</h3><ul class="lst"><li>Xuất .ics, Google Calendar; kết nối ChatGPT và Claude (MCP, GPT Actions)</li><li>Cổng đóng góp qua AI cho tình nguyện viên</li><li>Xác suất và tối ưu danh mục: chưa hiệu chỉnh bằng kết quả tuyển sinh nhiều năm</li><li>Trắc nghiệm hướng nghiệp: chưa kiểm định tâm lý</li></ul></div>
+    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span><h3>Chạy được và có test</h3><ul class="lst"><li>3.648 chương trình, 118 trường, có nguồn</li><li>Nhãn nguyện vọng, điểm ưu tiên, so sánh</li><li>Kế hoạch tuần, xuất .ics, Google Calendar</li><li>Kết nối ChatGPT, Claude: MCP, GPT Actions, kiểm đầu-cuối</li><li>Hỏi đáp có căn cứ, hạn mức 50 lượt</li><li>CMS online: đăng nhập, duyệt, xuất bản</li></ul></div>
+    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span><h3>Có mã, chưa kiểm ngoài thực tế</h3><ul class="lst"><li>Chạy qua giao diện Claude, ChatGPT thật: chưa thử</li><li>Cổng đóng góp qua AI: đã chạy, chưa có tình nguyện viên thật</li><li>Xác suất và tối ưu danh mục: chưa hiệu chỉnh bằng kết quả tuyển sinh nhiều năm</li><li>Trắc nghiệm hướng nghiệp: chưa kiểm định tâm lý</li></ul></div>
     <div class="c n" data-r style="--i:4"><span class="chip" style="align-self:flex-start;background:#FDE8DC;color:#C2410C">Chưa làm, đã biết</span><h3>Giới hạn chúng em tự tìm ra</h3><ul class="lst"><li>Audit 16/10 phát hiện: điểm 2026 là điểm dự kiến, cụm điểm đúng bằng 15, thang ĐGNL, học phí mặc định. Đang xử lý</li><li>Tài khoản, đồng bộ nhiều thiết bị</li><li>Chưa đo tác động trên người dùng thật</li><li>Học phí có văn bản mới ở 602 chương trình</li></ul></div>
   </div></div>
   <div class="strip" data-r style="--i:5"><i></i>Chúng em tự kiểm toán dữ liệu và công bố lỗi tìm thấy. Mọi số trên slide này đo được hoặc nói rõ là chưa.</div>
-  <aside class="nt" hidden data-t="50">Em xin nói thẳng trạng thái. Đã hoàn thiện và có test: dữ liệu 3.648 chương trình, nhãn nguyện vọng, kế hoạch tuần, hỏi đáp có căn cứ với hạn mức, CMS chạy online. Đang thử nghiệm: kết nối ChatGPT và Claude, cổng đóng góp cho tình nguyện viên, và mô hình xác suất chưa được hiệu chỉnh bằng nhiều năm kết quả thật. Chưa làm và đã biết: hôm qua chúng em tự kiểm toán dữ liệu và tìm ra bốn vấn đề, như điểm năm 2026 thực chất là điểm dự kiến và nhiều chương trình có điểm đúng bằng 15. Chúng em đã ghi thành issue và đang xử lý. Chúng em chọn công bố điều này thay vì giấu, vì sản phẩm ra quyết định thì phải đáng tin trước.</aside>
+  <aside class="nt" hidden data-t="45">Em xin nói thẳng trạng thái. Đã hoàn thiện và có test: dữ liệu 3.648 chương trình, nhãn nguyện vọng, kế hoạch tuần và lịch, hỏi đáp có căn cứ với hạn mức, CMS chạy online, và kết nối ChatGPT, Claude đã kiểm đầu-cuối trên máy chủ thật. Đang thử nghiệm: chạy qua giao diện Claude, ChatGPT thật, cổng đóng góp chưa có tình nguyện viên thật, và mô hình xác suất chưa được hiệu chỉnh bằng nhiều năm kết quả thật. Chưa làm và đã biết: hôm qua chúng em tự kiểm toán dữ liệu và tìm ra bốn vấn đề, như điểm năm 2026 thực chất là điểm dự kiến và nhiều chương trình có điểm đúng bằng 15. Chúng em đã ghi thành issue và đang xử lý. Chúng em chọn công bố điều này thay vì giấu, vì sản phẩm ra quyết định thì phải đáng tin trước.</aside>
 </section>
 
 <!-- 13 LỘ TRÌNH · 0:40 -->
