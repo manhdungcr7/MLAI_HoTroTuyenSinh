@@ -14,7 +14,7 @@
     "cms:build": "vite build --config cms/vite.config.ts",
     "cms:api": "node cms/chay-api-local.mjs",
     "app:local": "node scripts/chay-app-local.mjs",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=nguyen-vong-ai",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=nguyenvongai",
     "cms:deploy": "npm run cms:build && cd cms && wrangler pages deploy dist --project-name=nguyenvongai-cms"
   },
   "dependencies": {

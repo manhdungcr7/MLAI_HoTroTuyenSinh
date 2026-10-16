@@ -64,4 +64,4 @@ Hai project Pages dùng chung **một** D1 và các KV. App deploy tự động 
 - Giới hạn tần suất bằng KV không nguyên tử, có thể lệch vài yêu cầu khi chạy song song (hạn mức AI và hạn mức đề xuất dùng D1 nên nguyên tử).
 - Hạn mức AI tính theo mã hồ sơ ẩn danh trên thiết bị: xóa dữ liệu trình duyệt thì có lại 50 lượt.
 - Chưa thử qua giao diện Claude/ChatGPT thật; gói ChatGPT nào hỗ trợ MCP tùy chỉnh còn tùy nguồn, cần kiểm trên tài khoản demo.
-- Còn một project Pages thừa `nguyen-vong-ai` (không phải production); production là `nguyenvongai`.
+- Project Pages cũ `nguyen-vong-ai` đã xóa ngày 16/10/2026; production là `nguyenvongai` (app) và `nguyenvongai-cms` (CMS). Mọi lệnh deploy phải dùng đúng hai tên này.

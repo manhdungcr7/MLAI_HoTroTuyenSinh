@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nguyen-vong-ai",
+  "name": "nguyenvongai",
   "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-10-01",
   "d1_databases": [
