@@ -55,7 +55,18 @@ function chuyen(d: Dong): LuaChon {
   const luuY: string[] = [];
   if (nam.length === 1) luuY.push(`Mới có điểm chuẩn của một năm (${moiNhat}), độ tin cậy còn thấp.`);
   if (d.tier === "aggregator_verified") luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường.");
-  if (d.pt !== "THPT") luuY.push(`Điểm chuẩn này thuộc phương thức "${TEN_PT[d.pt] ?? d.pt}", không phải điểm thi tốt nghiệp.`);
+  if (d.pt !== "THPT") {
+    luuY.push(`Điểm chuẩn này thuộc phương thức "${TEN_PT[d.pt] ?? d.pt}", không phải điểm thi tốt nghiệp.`);
+    if (diemMoiNhat <= 30) {
+      luuY.push("Điểm chuẩn hiển thị theo thang 30 (đã quy đổi từ điểm ĐGNL/ĐGTD theo công thức của trường).");
+    }
+  }
+  if (d.pt === "THPT" && diemMoiNhat === 15) {
+    luuY.push("Mức 15,0 điểm là điểm sàn xét tuyển chuẩn của trường đối với phương thức này.");
+  }
+  if (moiNhat === "2026" && d.tier === "aggregator_verified") {
+    luuY.push("Điểm 2026 từ trang tổng hợp mang tính tham chiếu / dự kiến công bố.");
+  }
   return {
     id: d.id,
     truong: d.ma,
