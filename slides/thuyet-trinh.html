@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nguyện Vọng AI — Pitch deck</title>
+<meta name="robots" content="noindex, nofollow">
+<title>Nguyện Vọng AI — Thuyết trình 10 phút</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -62,143 +63,194 @@
   .card { background: #fff; border-radius: 28px; padding: 36px; box-shadow: 0 1px 0 var(--line), 0 24px 50px -30px rgba(16,27,60,.25); border: 1px solid var(--line); }
   .navy .card { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); box-shadow: none; }
 
-  /* ===== S1 hero ===== */
-  #s1 .txt { position: absolute; left: 96px; top: 0; bottom: 0; width: 860px; display: flex; flex-direction: column; justify-content: center; gap: 34px; }
+
+  /* ===== helpers dùng chung cho slide nội dung ===== */
+  .head2 { position: absolute; left: 96px; right: 96px; top: 88px; }
+  .head2 h2 { margin-top: 20px; font-size: 64px; max-width: 1560px; }
+  .wrap { position: absolute; left: 96px; right: 96px; top: 300px; bottom: 96px; }
+  .g2, .g3, .g4 { display: grid; gap: 28px; height: 100%; }
+  .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); }
+  .card h3 { font-size: 36px; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
+  .card p, .card li { font-size: 25px; line-height: 1.42; color: #3b4766; }
+  .navy .card p, .navy .card li, .blue .card p, .blue .card li { color: rgba(255,255,255,.8); }
+  .card ul { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+  .card li { padding-left: 34px; position: relative; }
+  .card li::before { content: ""; position: absolute; left: 0; top: 10px; width: 18px; height: 18px; border-radius: 50%; background: var(--pri-soft); box-shadow: inset 0 0 0 5px var(--pri); }
+  .navy .card li::before, .blue .card li::before { background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 5px var(--sky); }
+  .card .big { font-size: 64px; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: var(--pri); }
+  .navy .card .big, .blue .card .big { color: #fff; }
+  .ico { width: 80px; height: 80px; border-radius: 24px; background: var(--pri-soft); display: grid; place-items: center; margin-bottom: 22px; }
+  .ico svg { width: 42px; height: 42px; stroke: var(--pri); }
+  .navy .ico, .blue .ico { background: rgba(255,255,255,.14); } .navy .ico svg, .blue .ico svg { stroke: #fff; }
+  .col { display: flex; flex-direction: column; }
+  .strip { position: absolute; left: 96px; right: 96px; bottom: 72px; min-height: 84px; border-radius: 24px; display: flex; align-items: center; gap: 20px; padding: 18px 36px; font-size: 27px; font-weight: 600; line-height: 1.35; background: var(--navy); color: #fff; }
+  .strip i { width: 14px; height: 14px; border-radius: 50%; background: var(--sky); display: block; flex: none; }
+  .strip.warn { background: var(--warn-soft); color: #5b3b00; } .strip.warn i { background: #E39A1B; }
+  .light .strip, .white .strip { box-shadow: 0 20px 40px -24px rgba(16,27,60,.5); }
+
+  /* S1 */
+  #s1 .txt { position: absolute; left: 96px; top: 0; bottom: 0; width: 900px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+  #s1 .sub { font-size: 38px; max-width: 800px; }
   #s1 .phones { position: absolute; right: 40px; top: 0; bottom: 0; width: 980px; }
   #s1 .phones .phone { position: absolute; }
   #s1 .foot { position: absolute; left: 96px; bottom: 72px; font-size: 24px; color: var(--mute); font-weight: 500; display: flex; gap: 14px; align-items: center; }
   #s1 .foot i { width: 36px; height: 2px; background: var(--pri); display: block; }
 
-  /* ===== S2 problem ===== */
-  #s2 .head { width: 980px; }
-  #s2 .head h2 { font-size: 100px; margin-top: 26px; }
-  #s2 .rows { position: absolute; right: 96px; top: 190px; width: 700px; display: flex; flex-direction: column; gap: 32px; }
-  #s2 .row { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 24px; padding: 48px 40px; }
-  #s2 .num { font-size: 60px; font-weight: 800; color: var(--sky); letter-spacing: -.03em; }
-  #s2 .row b { font-size: 36px; font-weight: 700; line-height: 1.25; display: block; }
-  #s2 .row span { font-size: 22px; color: rgba(255,255,255,.65); display: block; margin-top: 6px; }
-  #s2 .codes { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-  #s2 .codes span { position: absolute; font-weight: 700; font-size: 26px; color: rgba(255,255,255,.07); border: 2px solid rgba(255,255,255,.07); border-radius: 14px; padding: 8px 18px; }
-  #s2 .stat { position: absolute; left: 96px; bottom: 88px; display: flex; gap: 70px; }
+  /* S2 */
+  #s2 .head2 h2 { font-size: 84px; max-width: 1500px; }
+  #s2 .wrap { top: 400px; bottom: 220px; }
+  #s2 .card { padding: 40px 38px; display: flex; flex-direction: column; gap: 14px; }
+  #s2 .num { font-size: 56px; font-weight: 800; color: var(--sky); letter-spacing: -.03em; }
+  #s2 .card b { font-size: 36px; font-weight: 800; line-height: 1.2; display: block; }
+  #s2 .stat { position: absolute; left: 96px; bottom: 70px; display: flex; gap: 90px; }
   #s2 .stat div { font-size: 22px; color: rgba(255,255,255,.7); }
   #s2 .stat b { display: block; font-size: 72px; font-weight: 800; color: #fff; letter-spacing: -.03em; line-height: 1.05; }
 
-  /* ===== S3 gap ===== */
-  #s3 .gap { position: absolute; left: 96px; right: 96px; top: 320px; display: grid; grid-template-columns: 1fr 380px 1fr; align-items: center; gap: 0; }
-  #s3 .box { background: var(--bg); border: 2px solid var(--line); border-radius: 32px; padding: 40px 48px; height: 290px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 20px; }
-  #s3 .box b { font-size: 50px; font-weight: 800; line-height: 1.15; letter-spacing: -.01em; }
+  /* S3 */
+  #s3 .gap { position: absolute; left: 96px; right: 96px; top: 300px; display: grid; grid-template-columns: 1fr 380px 1fr; align-items: center; }
+  #s3 .box { background: var(--bg); border: 2px solid var(--line); border-radius: 32px; padding: 34px 44px; height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 18px; }
+  #s3 .box b { font-size: 46px; font-weight: 800; line-height: 1.15; }
   #s3 .box.end { background: var(--navy); color: #fff; border-color: var(--navy); }
   #s3 .bridge { text-align: center; position: relative; padding: 0 18px; }
   #s3 .bridge::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 3px dashed #B9C6E4; }
-  #s3 .bridge span { position: relative; display: inline-block; background: #fff; padding: 12px 18px; font-size: 24px; font-weight: 700; color: var(--pri); line-height: 1.3; }
-  #s3 .cmp { position: absolute; left: 96px; right: 96px; bottom: 96px; display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 28px; }
-  #s3 .cmp .c { border-radius: 28px; padding: 44px 42px; background: var(--bg); border: 1px solid var(--line); }
+  #s3 .bridge span { position: relative; display: inline-block; background: #fff; padding: 10px 16px; font-size: 24px; font-weight: 700; color: var(--pri); line-height: 1.3; }
+  #s3 .cmp { position: absolute; left: 96px; right: 96px; bottom: 88px; display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 28px; }
+  #s3 .cmp .c { border-radius: 28px; padding: 38px 40px; background: var(--bg); border: 1px solid var(--line); }
   #s3 .cmp .c small { display: block; font-size: 20px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
-  #s3 .cmp .c b { font-size: 34px; font-weight: 700; line-height: 1.3; display: block; }
+  #s3 .cmp .c b { font-size: 32px; font-weight: 700; line-height: 1.3; display: block; }
   #s3 .cmp .c.us { background: var(--grad); border: 0; color: #fff; box-shadow: 0 24px 50px -22px rgba(37,84,217,.7); }
-  #s3 .cmp .c.us small { color: rgba(255,255,255,.8); }
+  #s3 .cmp .c.us small { color: rgba(255,255,255,.85); }
 
-  /* ===== S4 solution ===== */
-  #s4 h2 { text-align: center; font-size: 66px; width: 1400px; margin: 0 auto; }
-  #s4 .center { position: absolute; left: 50%; top: 270px; transform: translateX(-50%); }
-  #s4 .ben { position: absolute; width: 520px; display: flex; gap: 22px; align-items: center; }
-  #s4 .ben .ic { flex: none; width: 76px; height: 76px; border-radius: 22px; background: rgba(255,255,255,.16); display: grid; place-items: center; border: 1px solid rgba(255,255,255,.3); }
-  #s4 .ben svg { width: 40px; height: 40px; stroke: #fff; }
-  #s4 .ben b { font-size: 38px; font-weight: 700; line-height: 1.2; display: block; }
-  #s4 .ben span { font-size: 22px; color: rgba(255,255,255,.75); display: block; margin-top: 6px; }
-  #s4 .ben.r { flex-direction: row; }
-  #s4 .ben.l { flex-direction: row-reverse; text-align: right; }
+  /* S4 */
+  #s4 .q { display: flex; flex-direction: column; gap: 12px; padding: 36px 34px; }
+  #s4 .q .n { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); }
+  #s4 .q h3 { font-size: 40px; }
+  #s4 .q .chip { align-self: flex-start; margin-top: auto; font-size: 19px; white-space: normal; }
 
-  /* ===== S5 how it works ===== */
-  #s5 .steps { position: absolute; left: 96px; right: 96px; top: 320px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 34px; }
-  #s5 .steps::before { content: ""; position: absolute; left: 60px; right: 60px; top: 31px; height: 4px; background: linear-gradient(90deg, #2554D9, #60C5FA); border-radius: 4px; opacity: .35; }
-  #s5 .st .n { position: relative; width: 66px; height: 66px; border-radius: 50%; background: var(--grad); color: #fff; font-size: 30px; font-weight: 800; display: grid; place-items: center; box-shadow: 0 10px 24px -6px rgba(37,84,217,.6); }
-  #s5 .st .card { margin-top: 36px; padding: 34px 28px 32px; height: 440px; display: flex; flex-direction: column; }
-  #s5 .st .chip { margin-top: auto; align-self: flex-start; font-size: 18px; padding: 8px 14px; white-space: normal; }
-  #s5 .st .ic { width: 84px; height: 84px; border-radius: 24px; background: var(--pri-soft); display: grid; place-items: center; margin-bottom: 28px; }
-  #s5 .st .ic svg { width: 44px; height: 44px; stroke: var(--pri); }
-  #s5 .st b { font-size: 34px; font-weight: 800; line-height: 1.2; display: block; margin-bottom: 14px; letter-spacing: -.01em; }
-  #s5 .st .cap { font-size: 23px; }
-  #s5 .note { position: absolute; left: 96px; bottom: 80px; font-size: 28px; font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 16px; }
-  #s5 .note i { width: 14px; height: 14px; background: var(--sky); border-radius: 50%; display: block; }
+  /* S5 demo */
+  #s5 .cta { position: absolute; right: 96px; top: 76px; }
+  #s5 .flow { position: absolute; left: 96px; right: 96px; top: 270px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 52px; }
+  #s5 .fs { position: relative; text-align: center; }
+  #s5 .fs .phone { --w: 300px; margin: 0 auto; }
+  #s5 .fs b { display: block; margin-top: 24px; font-size: 32px; font-weight: 800; }
+  #s5 .fs span { display: block; margin-top: 6px; font-size: 22px; color: rgba(255,255,255,.72); }
+  #s5 .fs:not(:last-child)::after { content: ""; position: absolute; right: -44px; top: 300px; width: 36px; height: 36px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360C5FA' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"); }
 
-  /* ===== S6 decision intelligence ===== */
-  #s6 h2 { font-size: 68px; width: 1250px; }
-  #s6 .inputs { display: flex; gap: 14px; align-items: center; margin-top: 44px; }
-  #s6 .inputs small { font-size: 22px; color: rgba(255,255,255,.6); margin-right: 8px; font-weight: 600; }
-  #s6 .cols { position: absolute; left: 96px; right: 96px; bottom: 80px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
-  #s6 .col { padding: 36px 32px 40px; min-height: 420px; display: flex; flex-direction: column; gap: 18px; }
-  #s6 .col h3 { font-size: 34px; font-weight: 800; letter-spacing: -.01em; }
-  #s6 .col p { font-size: 25px; line-height: 1.45; color: rgba(255,255,255,.78); }
-  #s6 .col .big { font-size: 56px; font-weight: 800; color: #fff; letter-spacing: -.03em; line-height: 1; }
-  #s6 .why { position: absolute; right: 96px; top: 96px; width: 470px; background: #fff; color: var(--navy); border-radius: 28px; padding: 28px 32px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.5); }
-  #s6 .why small { font-size: 18px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
-  #s6 .why .t { font-size: 30px; font-weight: 800; margin: 8px 0 10px; line-height: 1.2; }
-  #s6 .why .l { font-size: 25px; font-weight: 500; line-height: 1.4; color: #253150; }
-  #s6 .why .l b { font-weight: 800; } #s6 .why .l .m { color: var(--warn); font-weight: 800; }
+  /* S6 data layer */
+  #s6 .pipe { position: absolute; left: 96px; right: 96px; top: 330px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 56px; }
+  #s6 .pipe .st { position: relative; border-radius: 26px; background: var(--bg); border: 2px solid var(--line); padding: 28px 28px 26px; height: 224px; }
+  #s6 .pipe .st:not(:last-child)::after { content: ""; position: absolute; right: -46px; top: 50%; width: 36px; height: 36px; margin-top: -18px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232554D9' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"); }
+  #s6 .pipe .st small { font-size: 18px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); }
+  #s6 .pipe .st b { display: block; font-size: 32px; font-weight: 800; margin: 8px 0 8px; line-height: 1.15; }
+  #s6 .pipe .st p { font-size: 22px; line-height: 1.38; color: #3b4766; }
+  #s6 .tiers { position: absolute; left: 96px; right: 96px; top: 610px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  #s6 .tier { border-radius: 24px; padding: 26px 30px; border: 1px solid var(--line); background: #fff; box-shadow: 0 20px 40px -30px rgba(16,27,60,.35); }
+  #s6 .tier b { font-size: 30px; font-weight: 800; display: block; margin: 10px 0 6px; line-height: 1.2; }
+  #s6 .tier p { font-size: 22px; color: #3b4766; line-height: 1.4; }
+  #s6 .states { position: absolute; left: 96px; right: 96px; top: 872px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  #s6 .states small { font-size: 22px; font-weight: 700; color: var(--mute); margin-right: 8px; }
 
-  /* ===== S7 product ===== */
-  #s7 h2 { font-size: 66px; }
-  #s7 .ph { position: absolute; top: 275px; width: 290px; text-align: center; }
-  #s7 .ph .phone { --w: 290px; margin: 0 auto; }
-  #s7 .ph b { display: block; margin-top: 26px; font-size: 32px; font-weight: 800; letter-spacing: -.01em; }
-  #s7 .ph span { display: block; margin-top: 4px; font-size: 22px; color: var(--mute); }
-  #s7 .tag { position: absolute; right: 96px; top: 96px; }
+  /* S7 engine */
+  #s7 .wrap { bottom: 218px; }
+  #s7 .col4 { padding: 34px 30px; display: flex; flex-direction: column; gap: 14px; }
+  #s7 .col4 h3 { font-size: 32px; }
+  #s7 .col4 p { font-size: 23px; }
+  #s7 .col4 .chip { align-self: flex-start; margin-top: auto; font-size: 18px; white-space: normal; }
 
-  /* ===== S8 personalization ===== */
-  #s8 { padding: 0; background: #fff; }
-  #s8 .half { position: absolute; top: 0; bottom: 0; width: 960px; padding: 0 60px 0 96px; display: flex; align-items: center; gap: 44px; }
-  #s8 .half.a { left: 0; padding-top: 190px; background: #fff; }
-  #s8 .half.b { right: 0; padding-top: 190px; padding-left: 80px; background: linear-gradient(160deg, #EAF1FF, #F5F9FF); }
-  #s8 .top { position: absolute; left: 96px; top: 76px; z-index: 3; }
-  #s8 .top h2 { font-size: 64px; }
-  #s8 .who { font-size: 54px; font-weight: 800; letter-spacing: -.02em; margin: 14px 0 22px; }
-  #s8 .f { margin-top: 20px; } #s8 .f small { display: block; font-size: 19px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
-  #s8 .f b { display: block; font-size: 30px; font-weight: 700; margin-top: 4px; line-height: 1.25; }
-  #s8 .f b em { font-style: normal; color: var(--warn); }
-  #s8 .vs { position: absolute; left: 930px; top: 560px; width: 60px; height: 60px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 800; font-size: 22px; display: grid; place-items: center; z-index: 4; box-shadow: 0 0 0 8px #fff; }
-  #s8 .note { position: absolute; right: 96px; top: 66px; z-index: 3; }
+  /* S8 AI */
+  #s8 .wrap { bottom: 220px; }
+  #s8 .lv { padding: 34px 34px; display: flex; flex-direction: column; gap: 10px; }
+  #s8 .lv h3 { font-size: 34px; } #s8 .lv .chip { align-self: flex-start; font-size: 19px; margin-bottom: 6px; }
+  #s8 .lv.hot { background: var(--grad); border: 0; color: #fff; }
+  #s8 .lv.hot h3, #s8 .lv.hot p, #s8 .lv.hot li { color: #fff; }
+  #s8 .lv.hot li::before { background: rgba(255,255,255,.18); box-shadow: inset 0 0 0 5px #fff; }
+  #s8 .lv.hot .chip { background: rgba(255,255,255,.2); color: #fff; }
+  #s8 .guard { position: absolute; left: 96px; right: 96px; bottom: 72px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  #s8 .guard small { font-size: 22px; font-weight: 800; color: var(--navy); margin-right: 6px; }
 
-  /* ===== S9 demo ===== */
-  #s9 h2 { font-size: 68px; }
-  #s9 .flow { position: absolute; left: 96px; right: 96px; top: 280px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 52px; }
-  #s9 .fs { position: relative; text-align: center; }
-  #s9 .fs .phone { --w: 290px; margin: 0 auto; }
-  #s9 .fs b { display: block; margin-top: 26px; font-size: 32px; font-weight: 800; }
-  #s9 .fs span { display: block; margin-top: 6px; font-size: 22px; color: rgba(255,255,255,.7); }
-  #s9 .fs:not(:last-child)::after { content: ""; position: absolute; right: -44px; top: 300px; width: 36px; height: 36px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360C5FA' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"); }
-  #s9 .cta { position: absolute; right: 96px; top: 64px; display: flex; align-items: center; gap: 22px; }
-  #s9 .cta .u { font-size: 26px; font-weight: 600; color: rgba(255,255,255,.8); }
+  /* S9 ChatGPT/Claude */
+  #s9 .arch { position: absolute; left: 96px; right: 96px; top: 290px; display: grid; grid-template-columns: 1fr 170px 1.15fr 170px 1fr; align-items: stretch; }
+  #s9 .node { border-radius: 30px; padding: 34px 34px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.28); display: flex; flex-direction: column; gap: 12px; }
+  #s9 .node.mid { background: #fff; color: var(--navy); border: 0; box-shadow: 0 40px 70px -24px rgba(0,0,0,.5); }
+  #s9 .node small { font-size: 19px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--sky); }
+  #s9 .node.mid small { color: var(--pri); }
+  #s9 .node b { font-size: 36px; font-weight: 800; line-height: 1.15; }
+  #s9 .node p, #s9 .node li { font-size: 23px; line-height: 1.4; color: rgba(255,255,255,.82); }
+  #s9 .node.mid p, #s9 .node.mid li { color: #3b4766; }
+  #s9 .node ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  #s9 .node li { padding-left: 30px; position: relative; } #s9 .node li::before { content: ""; position: absolute; left: 0; top: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--sky); }
+  #s9 .node.mid li::before { background: var(--pri); }
+  #s9 .arr { display: grid; place-items: center; }
+  #s9 .arr svg { width: 64px; height: 64px; stroke: var(--sky); }
+  #s9 .arr span { font-size: 18px; font-weight: 700; color: rgba(255,255,255,.75); text-align: center; line-height: 1.25; margin-top: 6px; }
+  #s9 .do { position: absolute; left: 96px; right: 96px; top: 700px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  #s9 .do div { border-radius: 22px; padding: 22px 28px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); font-size: 24px; line-height: 1.4; color: rgba(255,255,255,.9); }
+  #s9 .do b { display: block; font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  #s9 .strip { background: rgba(255,255,255,.14); }
 
-  /* ===== S10 progress ===== */
-  #s10 h2 { font-size: 68px; }
-  #s10 .cols { position: absolute; left: 96px; right: 96px; top: 280px; bottom: 210px; display: grid; grid-template-columns: 1.45fr 1fr 1fr; gap: 30px; }
-  #s10 .c { border-radius: 30px; padding: 40px 42px; background: #fff; border: 1px solid var(--line); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 18px; }
-  #s10 .c::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: var(--ok); }
-  #s10 .c.t::before { background: #E39A1B; } #s10 .c.n::before { background: var(--pri); }
-  #s10 .c h3 { font-size: 38px; font-weight: 800; letter-spacing: -.01em; margin-top: 8px; }
-  #s10 .nums { display: flex; gap: 46px; margin: 4px 0 6px; }
-  #s10 .nums div { font-size: 21px; color: var(--mute); font-weight: 500; }
-  #s10 .nums b { display: block; font-size: 66px; font-weight: 800; color: var(--navy); letter-spacing: -.03em; line-height: 1.05; }
-  #s10 ul { list-style: none; display: flex; flex-direction: column; gap: 20px; }
-  #s10 .strip { position: absolute; left: 96px; right: 96px; bottom: 80px; height: 92px; border-radius: 24px; background: var(--navy); color: #fff; display: flex; align-items: center; gap: 22px; padding: 0 40px; font-size: 28px; font-weight: 600; }
-  #s10 .strip i { width: 14px; height: 14px; border-radius: 50%; background: var(--sky); display: block; flex: none; }
-  #s10 li { font-size: 28px; font-weight: 500; line-height: 1.35; padding-left: 38px; position: relative; color: #253150; }
-  #s10 li::before { content: ""; position: absolute; left: 0; top: 9px; width: 20px; height: 20px; border-radius: 50%; background: var(--ok-soft); box-shadow: inset 0 0 0 6px var(--ok); }
-  #s10 .t li::before { background: var(--warn-soft); box-shadow: inset 0 0 0 6px #E39A1B; }
-  #s10 .n li::before { background: var(--pri-soft); box-shadow: inset 0 0 0 6px var(--pri); }
+  /* S10 flywheel */
+  #s10 .loop { position: absolute; left: 96px; top: 310px; width: 1090px; grid-template-rows: 1fr 1fr; bottom: 130px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 56px; }
+  #s10 .lp { position: relative; border-radius: 24px; background: var(--bg); border: 2px solid var(--line); padding: 24px 28px 24px 100px; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+  #s10 .lp .n { position: absolute; left: 26px; top: 50%; margin-top: -28px; width: 56px; height: 56px; border-radius: 50%; background: var(--grad); color: #fff; font-weight: 800; font-size: 26px; display: grid; place-items: center; }
+  #s10 .lp b { font-size: 36px; font-weight: 800; line-height: 1.2; display: block; }
+  #s10 .lp p { font-size: 25px; line-height: 1.4; color: #3b4766; margin-top: 6px; }
+  #s10 .rules { position: absolute; right: 96px; top: 310px; width: 570px; bottom: 130px; border-radius: 30px; background: var(--navy); color: #fff; padding: 36px 38px; display: flex; flex-direction: column; gap: 14px; }
+  #s10 .rules h3 { font-size: 32px; font-weight: 800; }
+  #s10 .rules li { font-size: 24px; line-height: 1.4; color: rgba(255,255,255,.85); padding-left: 32px; position: relative; list-style: none; }
+  #s10 .rules li::before { content: ""; position: absolute; left: 0; top: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--sky); }
+  #s10 .rules ul { display: flex; flex-direction: column; gap: 12px; }
+  #s10 .rules .chip { align-self: flex-start; margin-top: auto; white-space: normal; font-size: 19px; }
 
-  /* ===== S11 closing ===== */
-  #s11 .txt { position: absolute; left: 96px; top: 0; bottom: 0; width: 1000px; display: flex; flex-direction: column; justify-content: center; gap: 40px; }
-  #s11 h2 { font-size: 82px; }
-  #s11 .phones { position: absolute; right: 120px; top: 0; bottom: 0; width: 640px; }
-  #s11 .phones .phone { position: absolute; }
-  #s11 .meta { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 26px; color: rgba(255,255,255,.8); font-weight: 600; }
-  #s11 .meta i { width: 6px; height: 6px; border-radius: 50%; background: var(--sky); display: block; }
+  /* S11 moat */
+  #s11 .wrap { bottom: 190px; }
+  #s11 .mo { padding: 34px 30px; display: flex; flex-direction: column; gap: 12px; }
+  #s11 .mo .n { font-size: 20px; font-weight: 800; letter-spacing: .12em; color: var(--sky); }
+  #s11 .mo h3 { font-size: 33px; } #s11 .mo p { font-size: 23px; }
+  #s11 .mo .chip { align-self: flex-start; margin-top: auto; font-size: 18px; white-space: normal; }
 
-  /* ===== HUD ===== */
-  #hud { position: absolute; right: 36px; bottom: 26px; z-index: 50; font-size: 18px; font-weight: 600; color: #94A3B8; letter-spacing: .08em; mix-blend-mode: normal; opacity: .85; }
+  /* S12 status */
+  #s12 .wrap { bottom: 196px; }
+  #s12 .c { border-radius: 30px; padding: 34px 34px; background: #fff; border: 1px solid var(--line); position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; }
+  #s12 .c::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: var(--ok); }
+  #s12 .c.t::before { background: #E39A1B; } #s12 .c.n::before { background: #C2410C; }
+  #s12 .c h3 { font-size: 34px; margin-top: 8px; }
+  #s12 .c li { font-size: 23px; line-height: 1.38; }
+  #s12 .c ul { gap: 11px; margin-top: 6px; }
+  #s12 .t li::before { background: var(--warn-soft); box-shadow: inset 0 0 0 5px #E39A1B; }
+  #s12 .n li::before { background: #FDE8DC; box-shadow: inset 0 0 0 5px #C2410C; }
+  #s12 .c:not(.t):not(.n) li::before { background: var(--ok-soft); box-shadow: inset 0 0 0 5px var(--ok); }
+
+  /* S13 roadmap */
+  #s13 .tl { position: absolute; left: 96px; right: 96px; top: 330px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  #s13 .tl::before { content: ""; position: absolute; left: 30px; right: 30px; top: 21px; height: 4px; background: linear-gradient(90deg, #2554D9, #60C5FA); border-radius: 4px; opacity: .4; }
+  #s13 .ms .dot { position: relative; width: 46px; height: 46px; border-radius: 50%; background: var(--grad); box-shadow: 0 10px 24px -6px rgba(37,84,217,.6); margin-left: 12px; }
+  #s13 .ms .card { margin-top: 26px; padding: 30px 30px 30px; min-height: 380px; }
+  #s13 .ms small { font-size: 20px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--pri); display: block; margin-bottom: 8px; }
+  #s13 .ms h3 { font-size: 32px; margin-bottom: 10px; }
+  #s13 .ms li { font-size: 23px; line-height: 1.38; }
+  #s13 .ms ul { gap: 10px; }
+
+  /* S14 closing */
+  #s14 .txt { position: absolute; left: 96px; top: 0; bottom: 0; width: 1050px; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+  #s14 h2 { font-size: 78px; }
+  #s14 .phones { position: absolute; right: 120px; top: 0; bottom: 0; width: 640px; }
+  #s14 .phones .phone { position: absolute; }
+  #s14 .meta { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 26px; color: rgba(255,255,255,.82); font-weight: 600; }
+  #s14 .meta i { width: 6px; height: 6px; border-radius: 50%; background: var(--sky); display: block; }
+  #s14 .three { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* ===== HUD, ghi chú người nói ===== */
+  #hud { position: absolute; right: 36px; bottom: 26px; z-index: 50; font-size: 18px; font-weight: 600; color: #94A3B8; letter-spacing: .08em; opacity: .9; }
   #bar { position: absolute; left: 0; bottom: 0; height: 5px; background: var(--grad); z-index: 50; transition: width .4s ease; }
+  #notes { position: fixed; left: 0; right: 0; bottom: 0; z-index: 99; background: rgba(4,7,15,.94); color: #E5ECFF; font: 500 20px/1.55 var(--font); padding: 18px 28px 22px; display: none; border-top: 2px solid #2554D9; max-height: 38vh; overflow: auto; }
+  #notes.on { display: block; }
+  #notes .m { display: flex; gap: 22px; align-items: center; margin-bottom: 8px; font-size: 17px; font-weight: 700; letter-spacing: .06em; color: #7FB6FF; }
+  #notes .m b { color: #fff; }
+  #notes .late { color: #FFB454; } #notes .ok { color: #6EE7B7; }
+
+  .lst { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-top: 6px; }
+  .lst li { font-size: 23px; line-height: 1.38; padding-left: 34px; position: relative; color: #3b4766; }
+  .lst li::before { content: ""; position: absolute; left: 0; top: 9px; width: 18px; height: 18px; border-radius: 50%; }
 </style>
 </head>
 <body>
@@ -217,14 +269,26 @@
   </defs>
 </svg>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5c2 .7 3.5 2.6 3.5 5.5"/></symbol>
+  </defs>
+</svg>
+
 <div id="stage">
 
-<!-- 01 HERO -->
+<!-- 01 BÌA · 0:30 -->
 <section class="slide light glow on" id="s1">
   <div class="txt">
-    <h1 data-r style="--i:1">Nguyện Vọng <span class="grad-text">AI</span></h1>
-    <p data-r style="--i:2;max-width:760px" class="sub"><b style="color:var(--navy);font-weight:700">Hiểu năng lực.</b><br>Chọn đúng hướng đi.</p>
-    <div data-r style="--i:3"><span class="chip">Dành cho học sinh THPT Việt Nam</span></div>
+    <div data-r style="--i:0" class="logo"><svg><use href="#i-logo"/></svg>Nguyện Vọng AI</div>
+    <h1 data-r style="--i:1">Từ dữ liệu tuyển sinh <span class="grad-text">đến quyết định.</span></h1>
+    <p data-r style="--i:2" class="sub">Lớp dữ liệu và hỗ trợ ra quyết định cho kỳ tuyển sinh đại học Việt Nam.</p>
+    <div data-r style="--i:3"><span class="chip">Bài toán 6 · Chọn trường và chương trình học</span></div>
   </div>
   <div class="phones">
     <div class="phone" data-r style="--i:2;--w:330px;left:20px;top:210px;transform:rotate(-7deg)"><img src="assets/hom-nay.png" alt="Màn Hôm nay"></div>
@@ -232,196 +296,226 @@
     <div class="phone" data-r style="--i:3;--w:390px;left:290px;top:120px;z-index:3"><img src="assets/nguyen-vong.png" alt="Màn Nguyện vọng"></div>
   </div>
   <div class="foot"><i></i>RTC Team · MLAI Hackathon 2026</div>
+  <aside class="nt" hidden data-t="30">Kính chào Ban giám khảo. Mỗi mùa tuyển sinh có hơn một triệu thí sinh phải đặt nguyện vọng đại học. Nhóm em là RTC Team, sản phẩm là Nguyện Vọng AI: một lớp dữ liệu và ra quyết định, trả lời câu hỏi "em nên chọn gì, và từ hôm nay làm gì". Trong 10 phút, em sẽ nói bốn việc: sản phẩm chạy thật thế nào, dữ liệu và AI nằm ở đâu, chỗ nào chưa hoàn thiện, và dự án tự lớn lên ra sao.</aside>
 </section>
 
-<!-- 02 PROBLEM -->
+<!-- 02 VẤN ĐỀ · 0:40 -->
 <section class="slide navy glow" id="s2">
-  <div class="codes" aria-hidden="true">
-    <span style="left:760px;top:92px">A00</span><span style="left:1100px;top:40px">D01</span><span style="left:1380px;top:960px">B00</span>
-    <span style="left:600px;top:760px">A01</span><span style="left:980px;top:880px">C00</span><span style="left:1240px;top:780px">D07</span>
-    <span style="left:1560px;top:880px">A02</span><span style="left:830px;top:640px">D90</span><span style="left:1500px;top:60px">C01</span><span style="left:1280px;top:970px">B08</span>
-  </div>
-  <div class="head">
-    <div data-r style="--i:0" class="eyebrow">Vấn đề</div>
-    <h2 data-r style="--i:1">Chọn sai nguyện vọng có thể thay đổi <span class="grad-text">cả tương lai.</span></h2>
-  </div>
-  <div class="rows">
-    <div data-r style="--i:2" class="card row"><div class="num">01</div><div><b>Không hiểu rõ năng lực</b></div></div>
-    <div data-r style="--i:3" class="card row"><div class="num">02</div><div><b>Quá nhiều lựa chọn</b></div></div>
-    <div data-r style="--i:4" class="card row"><div class="num">03</div><div><b>Khó xác định thứ tự nguyện vọng</b></div></div>
-  </div>
-  <div class="stat" data-r style="--i:5">
-    <div><b>3.652</b>chương trình đào tạo</div>
-    <div><b>118</b>trường đại học</div>
-    <div><b>73</b>tổ hợp xét tuyển</div>
-  </div>
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Vấn đề</div><h2 data-r style="--i:1">Một quyết định cả đời, <span class="grad-text">trên dữ liệu rời rạc.</span></h2></div>
+  <div class="wrap"><div class="g3">
+    <div class="card" data-r style="--i:2"><div class="num">01</div><b>Dữ liệu phân mảnh</b><p>Hàng trăm đề án PDF dài, mỗi trường một cách trình bày, 73 tổ hợp môn.</p></div>
+    <div class="card" data-r style="--i:3"><div class="num">02</div><b>Quy chế phức tạp</b><p>Điểm ưu tiên khu vực và đối tượng giảm dần từ 22,5 điểm. Hầu hết trang tra cứu không tính.</p></div>
+    <div class="card" data-r style="--i:4"><div class="num">03</div><b>Thứ tự nguyện vọng</b><p>Đủ điểm một nguyện vọng thì các nguyện vọng sau không còn được xét. Đặt ngành dễ lên đầu là mất ngành mơ ước.</p></div>
+  </div></div>
+  <div class="stat" data-r style="--i:5"><div><b>3.652</b>chương trình đào tạo</div><div><b>118</b>trường đại học</div><div><b>73</b>tổ hợp xét tuyển</div></div>
+  <aside class="nt" hidden data-t="40">Vấn đề có ba lớp. Một, dữ liệu nằm rải trong hàng trăm file PDF. Hai, quy chế điểm ưu tiên giảm dần từ 22,5 điểm mà hầu hết trang tra cứu không tính. Ba, và đây là lỗi nặng nhất: thí sinh đủ điểm nguyện vọng nào thì các nguyện vọng sau bị bỏ. Đặt ngành an toàn lên đầu thì ngành mơ ước phía sau không bao giờ được xét. Dữ liệu thì đủ lớn: 3.652 chương trình, 118 trường. Người dùng thiếu thứ biến dữ liệu thành quyết định.</aside>
 </section>
 
-<!-- 03 GAP -->
+<!-- 03 KHOẢNG TRỐNG · 0:35 -->
 <section class="slide white" id="s3">
   <div data-r style="--i:0" class="eyebrow">Khoảng trống</div>
-  <h2 data-r style="--i:1;margin-top:22px;font-size:64px;width:1720px">Học sinh có dữ liệu, <span class="grad-text">nhưng thiếu định hướng.</span></h2>
+  <h2 data-r style="--i:1;margin-top:20px;font-size:64px;width:1720px">Không thiếu thông tin. <span class="grad-text">Thiếu người biến nó thành quyết định.</span></h2>
   <div class="gap">
     <div data-r style="--i:2" class="box"><span class="chip">Đầu vào</span><b>Điểm số + thông tin tuyển sinh</b></div>
     <div data-r style="--i:3" class="bridge"><span>Ai biến dữ liệu thành quyết định?</span></div>
-    <div data-r style="--i:4" class="box end"><span class="chip ghost">Đầu ra</span><b>Quyết định chọn trường</b></div>
+    <div data-r style="--i:4" class="box end"><span class="chip ghost">Đầu ra</span><b>Danh sách nguyện vọng và việc cần làm</b></div>
   </div>
   <div class="cmp">
-    <div data-r style="--i:5" class="c"><small>Tra cứu điểm chuẩn</small><b>Dừng ở con số của các năm trước</b></div>
-    <div data-r style="--i:6" class="c"><small>Chatbot chung</small><b>Không có hồ sơ riêng, không có nguồn kiểm chứng</b></div>
-    <div data-r style="--i:7" class="c us"><small>Nguyện Vọng AI</small><b>Hồ sơ riêng → nhãn nguyện vọng có giải thích → việc cần làm mỗi tuần</b></div>
+    <div data-r style="--i:5" class="c"><small>Cổng tra cứu</small><b>Dừng ở con số của các năm trước</b></div>
+    <div data-r style="--i:6" class="c"><small>Chatbot chung</small><b>Không có hồ sơ riêng, dễ bịa số, không có nguồn</b></div>
+    <div data-r style="--i:7" class="c us"><small>Nguyện Vọng AI</small><b>Hồ sơ riêng → nhãn nguyện vọng có giải thích, có nguồn → việc cần làm mỗi tuần</b></div>
   </div>
+  <aside class="nt" hidden data-t="35">Cổng tra cứu chỉ cho con số của năm trước. Chatbot chung nói trôi chảy nhưng không biết hồ sơ của em, và có thể bịa điểm chuẩn. Chúng em xây phần ở giữa: lấy hồ sơ riêng của từng học sinh, đối chiếu với dữ liệu có nguồn, ra danh sách nguyện vọng có giải thích, rồi biến thành việc làm mỗi tuần.</aside>
 </section>
 
-<!-- 04 SOLUTION -->
-<section class="slide blue" id="s4">
-  <div data-r style="--i:0;text-align:center" class="eyebrow">&nbsp;</div>
-  <h2 data-r style="--i:1">Một người đồng hành trong hành trình chọn nguyện vọng.</h2>
-  <div class="center phone" data-r style="--i:2;--w:340px;top:290px"><img src="assets/hom-nay.png" alt="Màn Hôm nay"></div>
-  <div class="ben l" data-r style="--i:3;left:96px;top:400px"><div class="ic"><svg><use href="#i-user"/></svg></div><div><b>Hiểu năng lực</b><span>Điểm từng môn, theo từng tổ hợp</span></div></div>
-  <div class="ben l" data-r style="--i:4;left:96px;top:690px"><div class="ic"><svg><use href="#i-compass"/></svg></div><div><b>Khám phá lựa chọn</b><span>3.652 chương trình, có nguồn</span></div></div>
-  <div class="ben r" data-r style="--i:3;right:96px;top:400px"><div class="ic"><svg><use href="#i-layers"/></svg></div><div><b>Xếp nguyện vọng</b><span>Thử sức, Vừa sức, An toàn, Dự phòng</span></div></div>
-  <div class="ben r" data-r style="--i:4;right:96px;top:690px"><div class="ic"><svg><use href="#i-cal"/></svg></div><div><b>Việc tiếp theo</b><span>Kế hoạch học theo từng tuần</span></div></div>
+<!-- 04 BỐN CÂU HỎI · 0:40 -->
+<section class="slide light" id="s4">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Giải pháp</div><h2 data-r style="--i:1">Bốn câu hỏi, <span class="grad-text">một hành trình.</span></h2></div>
+  <div class="wrap"><div class="g4">
+    <div class="card q" data-r style="--i:2"><div class="ico"><svg><use href="#i-user"/></svg></div><div class="n">Câu hỏi 1</div><h3>Mình đang ở đâu?</h3><p>Điểm từng môn, theo từng tổ hợp, cộng điểm ưu tiên đúng quy chế.</p><span class="chip">Hồ sơ thông minh</span></div>
+    <div class="card q" data-r style="--i:3"><div class="ico"><svg><use href="#i-compass"/></svg></div><div class="n">Câu hỏi 2</div><h3>Muốn đi tới đâu?</h3><p>Lọc 3.652 chương trình theo ngành, nơi ở, học phí và sở thích.</p><span class="chip">Khám phá có nguồn</span></div>
+    <div class="card q" data-r style="--i:4"><div class="ico"><svg><use href="#i-layers"/></svg></div><div class="n">Câu hỏi 3</div><h3>Còn cách bao xa?</h3><p>Nhãn Thử sức, Vừa sức, An toàn, Dự phòng và danh sách cân bằng.</p><span class="chip">Nguyện vọng và mục tiêu</span></div>
+    <div class="card q" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><div class="n">Câu hỏi 4</div><h3>Hôm nay làm gì?</h3><p>Việc mỗi tuần xếp vào thời khóa biểu, xuất ra Google Calendar.</p><span class="chip">Kế hoạch tuần</span></div>
+  </div></div>
+  <aside class="nt" hidden data-t="40">Sản phẩm trả lời bốn câu hỏi của học sinh. Mình đang ở đâu: hồ sơ điểm theo từng tổ hợp. Muốn đi tới đâu: khám phá 3.652 chương trình. Còn cách bao xa: nhãn nguyện vọng và khoảng cách tới mục tiêu. Hôm nay làm gì: việc từng tuần, xếp vào đúng giờ trống của em. Không cần tài khoản: dữ liệu ở lại trên máy học sinh.</aside>
 </section>
 
-<!-- 05 HOW IT WORKS -->
-<section class="slide light" id="s5">
-  <div data-r style="--i:0" class="eyebrow">Cách hoạt động</div>
-  <h2 data-r style="--i:1;margin-top:22px">Từ điểm số <span class="grad-text">đến quyết định.</span></h2>
-  <div class="steps">
-    <div class="st" data-r style="--i:2"><div class="n">1</div><div class="card"><div class="ic"><svg><use href="#i-form"/></svg></div><b>Nhập thông tin</b><p class="cap">Điểm các môn, ngân sách, khu vực</p><span class="chip">Không cần tài khoản</span></div></div>
-    <div class="st" data-r style="--i:3"><div class="n">2</div><div class="card"><div class="ic"><svg><use href="#i-chart"/></svg></div><b>Phân tích năng lực</b><p class="cap">Điểm theo tổ hợp, cộng điểm ưu tiên</p><span class="chip">Theo tổ hợp từng ngành</span></div></div>
-    <div class="st" data-r style="--i:4"><div class="n">3</div><div class="card"><div class="ic"><svg><use href="#i-search"/></svg></div><b>Khám phá trường phù hợp</b><p class="cap">Lọc theo điểm, học phí, nơi ở</p><span class="chip">Số có nguồn, ước tính ghi rõ</span></div></div>
-    <div class="st" data-r style="--i:5"><div class="n">4</div><div class="card"><div class="ic"><svg><use href="#i-layers"/></svg></div><b>Sắp xếp nguyện vọng</b><p class="cap">Cân bằng bốn nhóm, có nhận xét</p><span class="chip">Kéo thả đổi thứ tự</span></div></div>
-    <div class="st" data-r style="--i:6"><div class="n">5</div><div class="card"><div class="ic"><svg><use href="#i-cal"/></svg></div><b>Nhận kế hoạch hành động</b><p class="cap">Việc mỗi tuần, xếp vào lịch học</p><span class="chip">Có nhắc việc trong app</span></div></div>
-  </div>
-  <div class="note" data-r style="--i:7"><i></i>Mỗi con số kèm nguồn. Số ước tính ghi “≈”, thiếu thì nói “chưa có”.</div>
-</section>
-
-<!-- 06 DECISION INTELLIGENCE -->
-<section class="slide navy glow" id="s6">
-  <div data-r style="--i:0" class="eyebrow">Decision Intelligence</div>
-  <h2 data-r style="--i:1;margin-top:22px">Không chỉ gợi ý.<br><span class="grad-text">Giúp học sinh hiểu vì sao.</span></h2>
-  <div class="inputs" data-r style="--i:2"><small>Kết hợp</small><span class="chip ghost">Điểm số</span><span class="chip ghost">Tổ hợp xét tuyển</span><span class="chip ghost">Dữ liệu tuyển sinh</span><span class="chip ghost">Sở thích</span><span class="chip ghost">Ngân sách</span></div>
-  <div class="why" data-r style="--i:3">
-    <small>Ví dụ giải thích trong app</small>
-    <div class="t">Hệ thống thông tin · QSC</div>
-    <div class="l">Chuẩn 2024: <b>26,3</b> · bạn <b>24,5</b> <span class="m">(−1,8)</span></div>
-    <div style="margin-top:12px"><span class="chip" style="background:#EFEBFC;color:#5137BF">Thử sức</span></div>
-  </div>
-  <div class="cols">
-    <div class="card col" data-r style="--i:4"><span class="chip ok" style="align-self:flex-start">Dữ liệu đã có</span><div class="big">3.652</div><h3>Chương trình thật</h3><p>118 trường, link tới trang PDF của đề án.</p></div>
-    <div class="card col" data-r style="--i:5"><span class="chip ok" style="align-self:flex-start">Logic đã triển khai</span><div class="big">4 mức</div><h3>Nhãn nguyện vọng</h3><p>Tính theo tổ hợp từng ngành, có điểm ưu tiên, công thức công khai.</p></div>
-    <div class="card col" data-r style="--i:6"><span class="chip sky" style="align-self:flex-start">Dự báo đã kiểm định</span><div class="big" style="font-size:44px;white-space:nowrap">89 · 95 · 64%</div><h3>Khoảng điểm chuẩn</h3><p>Mức phủ khi kiểm lại trên năm 2023, 2024, 2025. Không phải xác suất đậu.</p></div>
-    <div class="card col" data-r style="--i:7"><span class="chip warn" style="align-self:flex-start">Đang phát triển</span><div class="big">Hỏi đáp AI</div><h3>Chỉ trích nguồn có thật</h3><p>Hiện tự trả lời từ dữ liệu. Chờ khóa API để bật mô hình ngôn ngữ.</p></div>
-  </div>
-</section>
-
-<!-- 07 PRODUCT -->
-<section class="slide white" id="s7">
-  <div data-r style="--i:0" class="eyebrow">Trải nghiệm sản phẩm</div>
-  <h2 data-r style="--i:1;margin-top:22px;width:1300px">Thiết kế để học sinh <span class="grad-text">dùng mỗi ngày.</span></h2>
-  <span class="chip tag" data-r style="--i:1">Ảnh chụp từ ứng dụng đang chạy</span>
-  <div class="ph" data-r style="--i:2;left:96px;top:290px"><div class="phone"><img src="assets/hom-nay.png" alt="Trang chủ"></div><b>Trang chủ</b><span>Việc hôm nay, mục tiêu</span></div>
-  <div class="ph" data-r style="--i:3;left:575px;top:250px"><div class="phone"><img src="assets/ho-so.png" alt="Phân tích năng lực"></div><b>Phân tích năng lực</b><span>Nhận xét từ điểm của em</span></div>
-  <div class="ph" data-r style="--i:4;left:1054px;top:290px"><div class="phone"><img src="assets/nguyen-vong.png" alt="Xếp nguyện vọng"></div><b>Xếp nguyện vọng</b><span>Nhãn và độ cân bằng</span></div>
-  <div class="ph" data-r style="--i:5;left:1533px;top:250px"><div class="phone"><img src="assets/ke-hoach-tuan.png" alt="Kế hoạch học tập"></div><b>Kế hoạch học tập</b><span>Việc xếp vào lịch tuần</span></div>
-</section>
-
-<!-- 08 PERSONALIZATION -->
-<section class="slide" id="s8">
-  <div class="top" data-r style="--i:0"><div class="eyebrow">Cá nhân hóa</div><h2 style="margin-top:14px">Mỗi học sinh có một hành trình riêng.</h2></div>
-  <div class="half a">
-    <div data-r style="--i:2;flex:1">
-      <span class="chip">Hồ sơ mẫu A</span>
-      <div class="who">Minh Anh</div>
-      <div class="f"><small>Khối · mục tiêu</small><b>A01 · Hệ thống thông tin (QSC)</b></div>
-      <div class="f"><small>Điểm hiện tại → mục tiêu</small><b>24,5 → 26,3</b></div>
-      <div class="f"><small>Nguyện vọng 1</small><b>Thử sức <em>(−1,8 điểm)</em></b></div>
-      <div class="f"><small>Cần làm trước</small><b>Kéo điểm Toán</b></div>
-    </div>
-    <div class="phone" data-r style="--i:3;--w:330px"><img src="assets/nguyen-vong.png" alt="Danh sách nguyện vọng của Minh Anh"></div>
-  </div>
-  <div class="half b">
-    <div data-r style="--i:4;flex:1">
-      <span class="chip">Hồ sơ mẫu B</span>
-      <div class="who">Gia Bảo</div>
-      <div class="f"><small>Khối · mục tiêu</small><b>D01 · Quản trị kinh doanh (LPS)</b></div>
-      <div class="f"><small>Điểm hiện tại → mục tiêu</small><b>23,7 → 24,0</b></div>
-      <div class="f"><small>Nguyện vọng 1</small><b>Thử sức <em>(−0,3 điểm)</em></b></div>
-      <div class="f"><small>Gợi ý</small><b>Danh sách khác, ngành khác</b></div>
-    </div>
-    <div class="phone" data-r style="--i:5;--w:330px"><img src="assets/gb-nguyen-vong.png" alt="Danh sách nguyện vọng của Gia Bảo"></div>
-  </div>
-  <div class="vs">VS</div>
-  <span class="chip warn note" data-r style="--i:1">Hai hồ sơ mẫu minh họa, không phải kết quả thực nghiệm</span>
-</section>
-
-<!-- 09 DEMO -->
-<section class="slide navy glow" id="s9">
+<!-- 05 DEMO · 0:40 -->
+<section class="slide navy glow" id="s5">
   <div data-r style="--i:0" class="eyebrow">Demo thật</div>
-  <h2 data-r style="--i:1;margin-top:22px;font-size:62px;white-space:nowrap">Từ một lựa chọn đến <span class="grad-text">một kế hoạch cụ thể.</span></h2>
+  <h2 data-r style="--i:1;margin-top:20px;font-size:62px;white-space:nowrap">Từ một hồ sơ đến <span class="grad-text">một kế hoạch cụ thể.</span></h2>
   <div class="cta" data-r style="--i:2"><a class="btn" href="https://nguyenvongai.pages.dev" target="_blank" rel="noopener">Mở demo trực tiếp</a></div>
   <div class="flow">
-    <div class="fs" data-r style="--i:3"><div class="phone"><img src="assets/buoc-2.png" alt="Nhập điểm"></div><b>1 · Nhập</b><span>Điểm các môn và chứng chỉ</span></div>
-    <div class="fs" data-r style="--i:4"><div class="phone"><img src="assets/kham-pha.png" alt="Phân tích"></div><b>2 · Phân tích</b><span>Ngành đủ điểm, ngành thử sức</span></div>
-    <div class="fs" data-r style="--i:5"><div class="phone"><img src="assets/nguyen-vong.png" alt="Danh sách"></div><b>3 · Danh sách</b><span>Nguyện vọng có nhãn, có căn cứ</span></div>
-    <div class="fs" data-r style="--i:6"><div class="phone"><img src="assets/muc-tieu.png" alt="Hành động"></div><b>4 · Hành động</b><span>Mục tiêu điểm và việc tuần này</span></div>
+    <div class="fs" data-r style="--i:3"><div class="phone"><img src="assets/ho-so.png" alt="Hồ sơ"></div><b>1 · Hồ sơ</b><span>Điểm, tổ hợp, ưu tiên</span></div>
+    <div class="fs" data-r style="--i:4"><div class="phone"><img src="assets/kham-pha.png" alt="Khám phá"></div><b>2 · Khám phá</b><span>Ngành đủ điểm, ngành thử sức</span></div>
+    <div class="fs" data-r style="--i:5"><div class="phone"><img src="assets/nguyen-vong.png" alt="Nguyện vọng"></div><b>3 · Nguyện vọng</b><span>Nhãn, căn cứ, độ cân bằng</span></div>
+    <div class="fs" data-r style="--i:6"><div class="phone"><img src="assets/ke-hoach-tuan.png" alt="Kế hoạch tuần"></div><b>4 · Kế hoạch</b><span>Việc tuần này, vào lịch</span></div>
   </div>
+  <aside class="nt" hidden data-t="40">Chuyển sang máy điện thoại: mở hồ sơ mẫu, vào Khám phá, bấm một ngành để xem điểm chuẩn kèm trang PDF nguồn, vào Nguyện vọng xem nhãn và nhận xét cân bằng, cuối cùng vào Kế hoạch tuần, bấm Thêm vào lịch. Nếu mạng lỗi, dùng các ảnh trên slide này. Nhớ mở sẵn demo trước giờ lên sân khấu.</aside>
 </section>
 
-<!-- 10 PROGRESS -->
-<section class="slide light" id="s10">
-  <div data-r style="--i:0" class="eyebrow">Tiến độ hiện tại</div>
-  <h2 data-r style="--i:1;margin-top:22px">Chúng tôi đã xây dựng được gì?</h2>
-  <div class="cols">
-    <div class="c" data-r style="--i:2">
-      <span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span>
-      <div class="nums"><div><b>3.652</b>chương trình</div><div><b>118</b>trường</div><div><b>47</b>bộ kiểm thử</div></div>
-      <ul><li>Nhãn nguyện vọng và điểm ưu tiên</li><li>Kế hoạch tuần theo thời khóa biểu</li><li>Chia sẻ cho phụ huynh, thầy cô</li><li>Dự báo điểm chuẩn có kiểm định</li></ul>
-    </div>
-    <div class="c t" data-r style="--i:3">
-      <span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span>
-      <ul style="margin-top:14px"><li>CMS cho tình nguyện viên: đã chạy online (đăng nhập, duyệt, xuất bản)</li><li>Hỏi đáp AI: chạy online, chỉ dùng số liệu trong app</li><li>Trắc nghiệm hướng nghiệp: chưa kiểm định tâm lý</li></ul>
-    </div>
-    <div class="c n" data-r style="--i:4">
-      <span class="chip" style="align-self:flex-start">Bước tiếp theo</span>
-      <ul style="margin-top:14px"><li>Dựng hạ tầng thật cho CMS</li><li>Tuyển tình nguyện viên từ các trường</li><li>Nhập điểm chuẩn mùa 2027</li><li>Đo tác động với người dùng thật</li></ul>
-    </div>
+<!-- 06 LỚP DỮ LIỆU · 0:55 -->
+<section class="slide white" id="s6">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Lớp dữ liệu ra quyết định</div><h2 data-r style="--i:1">Mỗi con số có nguồn, có phiên bản, <span class="grad-text">có nhãn tin cậy.</span></h2></div>
+  <div class="pipe">
+    <div class="st" data-r style="--i:2"><small>Nguồn</small><b>Đề án, trang tổng hợp, cộng đồng</b><p>Chia ba tầng tin cậy, ghi link và số trang.</p></div>
+    <div class="st" data-r style="--i:3"><small>Chuẩn hóa</small><b>Một dạng, một mã trường</b><p>73 tổ hợp, 34 tỉnh sau sáp nhập, bí danh trường.</p></div>
+    <div class="st" data-r style="--i:4"><small>Kho có phiên bản</small><b>Duyệt rồi mới xuất bản</b><p>Snapshot có mã băm, tự kiểm khi tải.</p></div>
+    <div class="st" data-r style="--i:5"><small>Phục vụ</small><b>App, chatbot, ChatGPT, Claude</b><p>Cùng một nguồn sự thật cho mọi kênh.</p></div>
   </div>
-  <div class="strip" data-r style="--i:5"><i></i>Chưa có dữ liệu người dùng thật hay số đo tác động. Đây là hướng đo, chưa phải kết quả.</div>
+  <div class="tiers">
+    <div class="tier" data-r style="--i:6"><span class="chip ok">Tầng 1</span><b>Đề án tuyển sinh chính thức</b><p>Kiểm chứng được tới trang PDF của trường.</p></div>
+    <div class="tier" data-r style="--i:7"><span class="chip">Tầng 2</span><b>Trang tổng hợp có đối chiếu</b><p>Dùng khi chưa có đề án, ghi rõ chưa đối chiếu.</p></div>
+    <div class="tier" data-r style="--i:8"><span class="chip warn">Tầng 3</span><b>Ghi chú cộng đồng</b><p>Nơi ở, ký túc xá, lưu ý. Luôn ghi "chưa chính thức".</p></div>
+  </div>
+  <div class="states" data-r style="--i:9"><small>Mỗi câu trả lời mang một trạng thái:</small><span class="chip ok">đã xác minh</span><span class="chip">lịch sử</span><span class="chip warn">ước tính</span><span class="chip sky" style="background:#E3F4FE;color:#0A6FA8">dự báo</span><span class="chip" style="background:#F1F3F8;color:#64748B">chưa có</span></div>
+  <aside class="nt" hidden data-t="55">Đây là lớp dữ liệu, phần quan trọng nhất của hệ thống. Nguồn chia ba tầng tin cậy. Tầng một là đề án chính thức, kiểm chứng được tới trang PDF. Tầng hai là trang tổng hợp. Tầng ba là ghi chú cộng đồng, luôn gắn nhãn chưa chính thức. Dữ liệu qua chuẩn hóa, người duyệt, rồi xuất bản thành snapshot có mã băm. Mọi kênh dùng chung nguồn này. Và mọi câu trả lời mang một trạng thái: đã xác minh, lịch sử, ước tính, dự báo hoặc chưa có. Thiếu dữ liệu thì chúng em nói thiếu, không điền thay.</aside>
 </section>
 
-<!-- 11 CLOSING -->
-<section class="slide navy glow" id="s11" style="background: linear-gradient(150deg, #0B1330 0%, #162A6E 60%, #2554D9 130%)">
+<!-- 07 ENGINE · 0:55 -->
+<section class="slide navy glow" id="s7">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Động cơ ra quyết định</div><h2 data-r style="--i:1">Thuật toán <span class="grad-text">giải thích được,</span> không phải hộp đen.</h2></div>
+  <div class="wrap"><div class="g4">
+    <div class="card col4" data-r style="--i:2"><div class="ico"><svg><use href="#i-chart"/></svg></div><h3>Điểm đúng từng tổ hợp</h3><p>Tính theo tổ hợp của chính từng ngành, cộng ưu tiên giảm dần. Thiếu môn thì báo thiếu, không điền 0.</p><span class="chip ok">Tất định, có test</span></div>
+    <div class="card col4" data-r style="--i:3"><div class="ico"><svg><use href="#i-target"/></svg></div><h3>Nhãn và xác suất ước lượng</h3><p>Độ lệch so với điểm chuẩn, chia cho biến động lịch sử của chính ngành đó. Là ước lượng, không phải cam kết.</p><span class="chip sky">Thống kê, có bất định</span></div>
+    <div class="card col4" data-r style="--i:4"><div class="ico"><svg><use href="#i-layers"/></svg></div><h3>Tối ưu danh mục nguyện vọng</h3><p>Phát hiện và chặn "nghịch đảo thứ tự": ngành dễ đứng trước làm mất các ngành sau.</p><span class="chip sky">Tổ hợp tối ưu</span></div>
+    <div class="card col4" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><h3>Kế hoạch học tối ưu</h3><p>Chia giờ tự học vào môn có lợi suất điểm cao nhất, xếp vào giờ trống thật của em.</p><span class="chip sky">Knapsack, lợi suất giảm dần</span></div>
+  </div></div>
+  <div class="strip" data-r style="--i:6"><i></i>Dự báo khoảng điểm chuẩn năm tới, kiểm lại bằng cách bỏ một năm: khoảng phủ 89% (2023) · 95% (2024) · 64% (2025). Năm 2025 yếu hơn, và chúng em nói thẳng.</div>
+  <aside class="nt" hidden data-t="55">Động cơ gồm bốn phần, đều giải thích được. Một, điểm đúng từng tổ hợp và điểm ưu tiên. Hai, nhãn nguyện vọng và xác suất ước lượng từ độ lệch so với điểm chuẩn và biến động lịch sử, luôn kèm bất định, không phải cam kết đỗ. Ba, tối ưu danh mục: chặn lỗi nghịch đảo thứ tự mà em nói ở slide hai. Bốn, kế hoạch học theo lợi suất giảm dần, xếp vào giờ trống thật. Chúng em kiểm chứng bằng bỏ-một-năm: khoảng dự báo phủ 89, 95 và 64 phần trăm trên 2023, 2024, 2025. Năm 2025 yếu vì quy chế đổi, và chúng em nói rõ điều đó.</aside>
+</section>
+
+<!-- 08 AI Ở ĐÂU · 0:45 -->
+<section class="slide light" id="s8">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">AI được dùng ở đâu</div><h2 data-r style="--i:1">Quy tắc trước, dữ liệu sau, <span class="grad-text">AI để diễn giải.</span></h2></div>
+  <div class="wrap"><div class="g3">
+    <div class="card lv" data-r style="--i:2"><span class="chip ok">Không dùng AI</span><h3>Phần cần đúng</h3><ul><li>Tính điểm, ưu tiên, nhãn</li><li>Chào hỏi, điều hướng, tra cứu</li><li>Xếp lịch, cân bằng danh sách</li></ul></div>
+    <div class="card lv" data-r style="--i:3"><span class="chip sky" style="background:#E3F4FE;color:#0A6FA8">Thống kê</span><h3>Phần cần ước lượng</h3><ul><li>Khoảng điểm chuẩn năm tới</li><li>Xác suất, tối ưu danh mục</li><li>Kiểm định bỏ-một-năm</li></ul></div>
+    <div class="card lv hot" data-r style="--i:4"><span class="chip">Mô hình ngôn ngữ</span><h3>Phần cần diễn giải</h3><ul><li>Hỏi đáp, so sánh, giải thích đánh đổi</li><li>Chỉ nhận số liệu app gửi kèm</li><li>Người dùng tự bật hoặc tắt</li></ul></div>
+  </div></div>
+  <div class="guard" data-r style="--i:5"><small>Rào chắn:</small><span class="chip ok">chặn số không có trong dữ liệu</span><span class="chip ok">lọc mã và nguồn bịa</span><span class="chip ok">50 lượt AI mỗi hồ sơ mỗi ngày</span><span class="chip ok">chế độ Tiết kiệm không gọi AI</span><span class="chip ok">AI không tự ghi dữ liệu</span></div>
+  <aside class="nt" hidden data-t="45">Nguyên tắc: AI không quyết định sự thật. Phần cần đúng thì dùng thuật toán tất định, không tốn AI: tính điểm, nhãn, xếp lịch, cả lời chào. Phần cần ước lượng dùng thống kê có kiểm định. Mô hình ngôn ngữ chỉ ở phần diễn giải, và chỉ nhận đúng số liệu app gửi kèm. Có hậu kiểm: câu trả lời chứa số không có trong dữ liệu bị chặn, mã và nguồn bịa bị lọc. Mỗi hồ sơ có 50 lượt AI mỗi ngày, người dùng có thể chuyển sang chế độ Tiết kiệm để không dùng AI. Cách này giữ chi phí thấp và giữ AI khỏi việc bịa.</aside>
+</section>
+
+<!-- 09 CHATGPT / CLAUDE · 0:55 -->
+<section class="slide blue glow" id="s9">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Vai trò của ChatGPT và Claude</div><h2 data-r style="--i:1">Họ là <span class="grad-text" style="background:linear-gradient(135deg,#fff,#BFE3FF);-webkit-background-clip:text;background-clip:text">kênh tiếp cận.</span> Sự thật nằm ở lớp dữ liệu.</h2></div>
+  <div class="arch">
+    <div class="node" data-r style="--i:2"><small>Học sinh, phụ huynh</small><b>Hỏi ở nơi đã quen</b><p>ChatGPT hoặc Claude trên điện thoại, không cài thêm app.</p></div>
+    <div class="arr" data-r style="--i:3"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>MCP<br>GPT Actions</span></div></div>
+    <div class="node mid" data-r style="--i:4"><small>Nguyện Vọng AI</small><b>Nguồn sự thật và hành động</b><ul><li>Đọc hồ sơ và nguyện vọng thật</li><li>Điểm chuẩn kèm nguồn, kế hoạch tuần</li><li>Chỉ đề xuất, em bấm Xác nhận mới đổi</li></ul></div>
+    <div class="arr" data-r style="--i:5"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>Lịch<br>.ics</span></div></div>
+    <div class="node" data-r style="--i:6"><small>Đầu ra</small><b>Google Calendar</b><p>Một câu nói thành lịch ôn cả tuần, đúng giờ Việt Nam.</p></div>
+  </div>
+  <div class="do">
+    <div data-r style="--i:7"><b>Đọc</b>"Xem nguyện vọng của mình, nhóm nào thiếu an toàn?" trả lời bằng số thật.</div>
+    <div data-r style="--i:8"><b>Đề xuất</b>"Thêm UIT vào nguyện vọng 3": thẻ hiện trong app, bấm Xác nhận mới đổi.</div>
+    <div data-r style="--i:9"><b>Lên lịch</b>"Xếp lịch ôn tuần này": sự kiện thật trên Google Calendar.</div>
+  </div>
+  <div class="strip" data-r style="--i:10"><i style="background:#fff"></i>Trạng thái: đã có mã nguồn và test tự động; đang kiểm với connector thật. Ghép nối bằng liên kết bí mật, chưa có tài khoản và OAuth.</div>
+  <aside class="nt" hidden data-t="55">Vì sao ChatGPT và Claude? Vì học sinh đã dùng chúng mỗi ngày. Thay vì ép học sinh cài thêm một app, chúng em để họ hỏi ở nơi quen, còn Nguyện Vọng AI làm nguồn sự thật phía sau, qua MCP và GPT Actions. Trợ lý đọc được hồ sơ và nguyện vọng thật, trả lời bằng số có nguồn. Khi muốn đổi nguyện vọng, trợ lý chỉ đề xuất, em bấm Xác nhận trong app mới đổi. Và một câu nói có thể thành lịch ôn cả tuần trên Google Calendar. Nói thật về trạng thái: phần này vừa hoàn thành mã và test tự động, chúng em đang thử với connector thật. Ghép nối bằng liên kết bí mật, chưa có tài khoản. Vai trò của ChatGPT là kênh tiếp cận. Bộ não và sự thật vẫn là lớp dữ liệu.</aside>
+</section>
+
+<!-- 10 CỘNG ĐỒNG · 0:45 -->
+<section class="slide white" id="s10">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Tự cải tiến</div><h2 data-r style="--i:1">Dữ liệu tốt hơn mỗi mùa, <span class="grad-text">nhờ chính người trong trường.</span></h2></div>
+  <div class="loop">
+    <div class="lp" data-r style="--i:2"><div class="n">1</div><b>Học sinh báo số sai</b><p>Nút báo sai ngay trên từng số liệu, vào hộp thư CMS.</p></div>
+    <div class="lp" data-r style="--i:3"><div class="n">2</div><b>Tình nguyện viên nhập, có AI hỗ trợ</b><p>Nhờ AI đọc đề án PDF, gửi điểm chuẩn kèm nguồn và câu trích.</p></div>
+    <div class="lp" data-r style="--i:4"><div class="n">3</div><b>Vào hàng chờ duyệt</b><p>Gắn nhãn "Nhập qua AI", đối chiếu trích dẫn, cờ nếu chênh lớn.</p></div>
+    <div class="lp" data-r style="--i:5"><div class="n">4</div><b>Xuất bản và kiểm định lại</b><p>Học sinh thấy số mới. Dự báo được kiểm lại khi có năm mới.</p></div>
+  </div>
+  <div class="rules" data-r style="--i:6">
+    <h3>Mở cho cộng đồng, vẫn kiểm soát</h3>
+    <ul><li>Chỉ người có vai trò và đúng trường được giao</li><li>Bắt buộc nguồn và trích dẫn nguyên văn</li><li>AI chỉ ghi vào hàng chờ, người duyệt mới xuất bản</li><li>Nhật ký ghi ai, công cụ nào, lúc nào</li></ul>
+    <span class="chip warn">Đang thử nghiệm · chưa có tình nguyện viên thật</span>
+  </div>
+  <aside class="nt" hidden data-t="45">Dự án tự cải thiện nhờ vòng lặp này. Học sinh báo số sai. Tình nguyện viên trong trường nhờ AI đọc đề án PDF và gửi điểm chuẩn kèm nguồn và câu trích nguyên văn. Mọi thứ vào hàng chờ duyệt, gắn nhãn nhập qua AI để người duyệt đối chiếu nhanh. Duyệt xong thì xuất bản, học sinh thấy số mới, dự báo được kiểm lại khi có thêm một năm dữ liệu. AI không bao giờ tự xuất bản. Chúng em thừa nhận: kênh này chưa có tình nguyện viên thật. Mục tiêu mùa tới là tuyển từ các trường.</aside>
+</section>
+
+<!-- 11 MOAT · 0:45 -->
+<section class="slide navy glow" id="s11">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Điểm ưu và lợi thế bền vững</div><h2 data-r style="--i:1">Khó sao chép không nằm ở <span class="grad-text">chatbot, mà ở dữ liệu và vòng lặp.</span></h2></div>
+  <div class="wrap"><div class="g4">
+    <div class="card mo" data-r style="--i:2"><div class="n">01</div><h3>Dữ liệu có nguồn, do cộng đồng giữ</h3><p>Tới trang PDF, có người duyệt, có lịch sử phiên bản. Chatbot chung không có.</p><span class="chip ghost">Vòng dữ liệu</span></div>
+    <div class="card mo" data-r style="--i:3"><div class="n">02</div><h3>Logic đúng quy chế Việt Nam</h3><p>Điểm ưu tiên giảm dần, 73 tổ hợp, đúng từng ngành, tên tỉnh sau sáp nhập.</p><span class="chip ghost">Bản địa hóa</span></div>
+    <div class="card mo" data-r style="--i:4"><div class="n">03</div><h3>Bộ kiểm chứng tự động</h3><p>Hàng chục bộ test, kiểm định bỏ-một-năm, audit dữ liệu. Sai thì lộ ra, không lặng lẽ.</p><span class="chip ghost">Đáng tin</span></div>
+    <div class="card mo" data-r style="--i:5"><div class="n">04</div><h3>Riêng tư, mọi kênh AI</h3><p>Dữ liệu ở máy học sinh; chỉ chia sẻ khi bật. Một lớp dữ liệu phục vụ ChatGPT, Claude và app.</p><span class="chip ghost">Phân phối</span></div>
+  </div></div>
+  <div class="strip" data-r style="--i:6"><i></i>Nói thật: chưa có người dùng thật nên lợi thế bền vững là giả thuyết đang kiểm chứng, chưa phải số đã đo.</div>
+  <aside class="nt" hidden data-t="45">Lợi thế của chúng em không nằm ở chatbot, vì chatbot ai cũng làm được. Nó nằm ở bốn thứ. Một, dữ liệu có nguồn, có người duyệt, do cộng đồng trường giữ, nên mỗi mùa tốt hơn. Hai, logic đúng quy chế Việt Nam: điểm ưu tiên, 73 tổ hợp, tỉnh sau sáp nhập. Ba, bộ kiểm chứng tự động nên sai là lộ ra. Bốn, riêng tư và phân phối: dữ liệu ở máy học sinh, một lớp dữ liệu phục vụ mọi kênh AI. Nhưng em nói thẳng: chưa có người dùng thật, nên đây là giả thuyết đang kiểm chứng.</aside>
+</section>
+
+<!-- 12 TRẠNG THÁI · 0:50 -->
+<section class="slide light" id="s12">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Trạng thái thật</div><h2 data-r style="--i:1">Cái gì xong, cái gì đang thử, <span class="grad-text">cái gì chưa.</span></h2></div>
+  <div class="wrap"><div class="g3">
+    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span><h3>Chạy được và có test</h3><ul class="lst"><li>3.652 chương trình, 118 trường, có nguồn</li><li>Nhãn nguyện vọng, điểm ưu tiên, so sánh</li><li>Kế hoạch tuần, chia sẻ cho phụ huynh, thầy cô</li><li>Hỏi đáp có căn cứ, hạn mức 50 lượt, chế độ Tiết kiệm</li><li>CMS online: đăng nhập, duyệt, xuất bản</li></ul></div>
+    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span><h3>Có mã, chưa kiểm ngoài thực tế</h3><ul class="lst"><li>Xuất .ics, Google Calendar; kết nối ChatGPT và Claude (MCP, GPT Actions)</li><li>Cổng đóng góp qua AI cho tình nguyện viên</li><li>Xác suất và tối ưu danh mục: chưa hiệu chỉnh bằng kết quả tuyển sinh nhiều năm</li><li>Trắc nghiệm hướng nghiệp: chưa kiểm định tâm lý</li></ul></div>
+    <div class="c n" data-r style="--i:4"><span class="chip" style="align-self:flex-start;background:#FDE8DC;color:#C2410C">Chưa làm, đã biết</span><h3>Giới hạn chúng em tự tìm ra</h3><ul class="lst"><li>Audit 16/10 phát hiện: điểm 2026 là điểm dự kiến, cụm điểm đúng bằng 15, thang ĐGNL, học phí mặc định. Đang xử lý</li><li>Tài khoản, đồng bộ nhiều thiết bị</li><li>Chưa đo tác động trên người dùng thật</li><li>Học phí có văn bản mới ở 602 chương trình</li></ul></div>
+  </div></div>
+  <div class="strip" data-r style="--i:5"><i></i>Chúng em tự kiểm toán dữ liệu và công bố lỗi tìm thấy. Mọi số trên slide này đo được hoặc nói rõ là chưa.</div>
+  <aside class="nt" hidden data-t="50">Em xin nói thẳng trạng thái. Đã hoàn thiện và có test: dữ liệu 3.652 chương trình, nhãn nguyện vọng, kế hoạch tuần, hỏi đáp có căn cứ với hạn mức, CMS chạy online. Đang thử nghiệm: kết nối ChatGPT và Claude, cổng đóng góp cho tình nguyện viên, và mô hình xác suất chưa được hiệu chỉnh bằng nhiều năm kết quả thật. Chưa làm và đã biết: hôm qua chúng em tự kiểm toán dữ liệu và tìm ra bốn vấn đề, như điểm năm 2026 thực chất là điểm dự kiến và nhiều chương trình có điểm đúng bằng 15. Chúng em đã ghi thành issue và đang xử lý. Chúng em chọn công bố điều này thay vì giấu, vì sản phẩm ra quyết định thì phải đáng tin trước.</aside>
+</section>
+
+<!-- 13 LỘ TRÌNH · 0:40 -->
+<section class="slide white" id="s13">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Phương hướng</div><h2 data-r style="--i:1">Từ công cụ chạy được đến <span class="grad-text">hạ tầng quyết định tuyển sinh.</span></h2></div>
+  <div class="tl">
+    <div class="ms" data-r style="--i:2"><div class="dot"></div><div class="card"><small>Ngay bây giờ</small><h3>Làm sạch dữ liệu</h3><ul><li>Xử lý 4 lỗi audit, xác minh điểm 2026 với nguồn</li><li>Thử kết nối với ChatGPT, Claude thật</li></ul></div></div>
+    <div class="ms" data-r style="--i:3"><div class="dot"></div><div class="card"><small>1 đến 3 tháng</small><h3>Mở cho người dùng thật</h3><ul><li>Tài khoản, OAuth, đồng bộ thiết bị</li><li>Tuyển tình nguyện viên từ 10 trường đầu</li></ul></div></div>
+    <div class="ms" data-r style="--i:4"><div class="dot"></div><div class="card"><small>Mùa tuyển sinh 2027</small><h3>Vòng lặp tự cải tiến</h3><ul><li>Nhập điểm mới qua cổng đóng góp</li><li>Hiệu chỉnh xác suất bằng kết quả thật, backtest tự chạy</li></ul></div></div>
+    <div class="ms" data-r style="--i:5"><div class="dot"></div><div class="card"><small>6 đến 12 tháng</small><h3>Mở rộng</h3><ul><li>Cao đẳng, ngành nghề, du học</li><li>Đối tác trường và Sở GD&amp;ĐT, đo tác động</li></ul></div></div>
+  </div>
+  <div class="strip" data-r style="--i:6"><i></i>Nguyên tắc: chỉ mở rộng bước sau khi bước trước đã được kiểm chứng bằng dữ liệu và người dùng thật.</div>
+  <aside class="nt" hidden data-t="40">Phương hướng bốn bước. Ngay bây giờ: xử lý các lỗi dữ liệu audit tìm ra và thử kết nối với ChatGPT, Claude thật. Một đến ba tháng: tài khoản, OAuth, đồng bộ nhiều thiết bị và tuyển tình nguyện viên từ mười trường đầu. Mùa tuyển sinh 2027: nhập điểm mới qua cổng đóng góp, hiệu chỉnh mô hình bằng kết quả thật, backtest tự chạy lại. Sáu đến mười hai tháng: mở rộng sang cao đẳng, ngành nghề, và làm việc với trường, Sở để đo tác động thật.</aside>
+</section>
+
+<!-- 14 KẾT · 0:20 -->
+<section class="slide navy glow" id="s14" style="background: linear-gradient(150deg, #0B1330 0%, #162A6E 60%, #2554D9 130%)">
   <div class="txt">
     <div data-r style="--i:0" class="logo"><svg><use href="#i-logo"/></svg>Nguyện Vọng AI</div>
-    <h2 data-r style="--i:1">Mỗi nguyện vọng xứng đáng có <span class="grad-text">một định hướng rõ ràng.</span></h2>
-    <div data-r style="--i:2" class="meta"><span>RTC Team</span><i></i><span>MLAI Hackathon 2026</span><i></i><span>nguyenvongai.pages.dev</span></div>
+    <h2 data-r style="--i:1">Không thay học sinh quyết định. <span class="grad-text">Giúp em quyết định có căn cứ.</span></h2>
+    <div data-r style="--i:2" class="three"><span class="chip ghost">Dữ liệu có nguồn</span><span class="chip ghost">AI có rào chắn</span><span class="chip ghost">Cộng đồng cùng cải thiện</span></div>
+    <div data-r style="--i:3" class="meta"><span>RTC Team</span><i></i><span>MLAI Hackathon 2026</span><i></i><span>nguyenvongai.pages.dev</span></div>
   </div>
-  <div class="phones">
-    <div class="phone" data-r style="--i:3;--w:410px;left:110px;top:100px"><img src="assets/hom-nay.png" alt="Màn Hôm nay"></div>
-  </div>
+  <div class="phones"><div class="phone" data-r style="--i:4;--w:410px;left:110px;top:100px"><img src="assets/hom-nay.png" alt="Màn Hôm nay"></div></div>
+  <aside class="nt" hidden data-t="20">Chúng em không thay học sinh quyết định. Chúng em giúp em quyết định có căn cứ: dữ liệu có nguồn, AI có rào chắn, và cộng đồng cùng cải thiện mỗi mùa. Xin cảm ơn Ban giám khảo. Chúng em sẵn sàng trả lời câu hỏi và demo trực tiếp.</aside>
 </section>
 
 <div id="bar"></div>
 <div id="hud"></div>
 </div>
 
+<div id="notes"></div>
 <script>
 (function () {
   var stage = document.getElementById('stage');
   var slides = Array.prototype.slice.call(stage.querySelectorAll('.slide'));
-  var hud = document.getElementById('hud'), bar = document.getElementById('bar');
-  var i = 0;
+  var hud = document.getElementById('hud'), bar = document.getElementById('bar'), notes = document.getElementById('notes');
+  var i = 0, t0 = null;
+  var targets = slides.map(function (s) { var n = s.querySelector('.nt'); return n ? +n.getAttribute('data-t') : 0; });
+  var cum = []; targets.reduce(function (a, v, k) { cum[k] = a + v; return a + v; }, 0);
+  var total = cum[cum.length - 1];
+  function fmt(s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function renderNotes() {
+    var n = slides[i].querySelector('.nt');
+    var el = t0 === null ? 0 : (Date.now() - t0) / 1000;
+    var due = i > 0 ? cum[i - 1] : 0; // mốc nên bắt đầu slide này
+    var lech = t0 === null ? null : el - due;
+    var cls = lech === null ? '' : (lech > 20 ? 'late' : 'ok');
+    var tt = lech === null ? 'Bấm T để bắt đầu bấm giờ' : (lech > 20 ? 'chậm ' + fmt(lech) : (lech < -20 ? 'sớm ' + fmt(-lech) : 'đúng nhịp'));
+    notes.innerHTML = '<div class="m"><b>Slide ' + (i + 1) + '/' + slides.length + '</b><span>mục tiêu ' + targets[i] + ' giây</span><span>cộng dồn ' + fmt(cum[i]) + ' / ' + fmt(total) + '</span><span class="' + cls + '">' + (t0 === null ? '' : 'đã nói ' + fmt(el) + ' · ') + tt + '</span></div>' + (n ? n.textContent : '');
+  }
   function show(n) {
     n = Math.max(0, Math.min(slides.length - 1, n)); i = n;
     slides.forEach(function (s, k) { s.classList.toggle('on', k === n); });
-    var dark = /navy|blue/.test(slides[n].className) || n === 10;
+    var dark = /navy|blue/.test(slides[n].className);
     hud.style.color = dark ? 'rgba(255,255,255,.55)' : '#94A3B8';
     hud.textContent = String(n + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
     bar.style.width = ((n + 1) / slides.length * 100) + '%';
     try { history.replaceState(null, '', '#' + (n + 1)); } catch (e) {}
+    renderNotes();
   }
   function fit() {
     var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
@@ -439,9 +533,11 @@
     else if (k === 'Home') show(0);
     else if (k === 'End') show(slides.length - 1);
     else if (k === 'f' || k === 'F') fs();
+    else if (k === 'n' || k === 'N') notes.classList.toggle('on');
+    else if (k === 't' || k === 'T') { t0 = t0 === null ? Date.now() : null; renderNotes(); }
   });
   window.addEventListener('click', function (e) {
-    if (e.target.closest('a')) return;
+    if (e.target.closest('a') || e.target.closest('#notes')) return;
     show(e.clientX > window.innerWidth / 3 ? i + 1 : i - 1);
   });
   var tx = null;
@@ -450,6 +546,7 @@
     if (tx === null) return; var d = e.changedTouches[0].clientX - tx; tx = null;
     if (Math.abs(d) > 50) { show(i + (d < 0 ? 1 : -1)); }
   });
+  setInterval(function () { if (notes.classList.contains('on') && t0 !== null) renderNotes(); }, 1000);
   fit();
   var start = parseInt(location.hash.slice(1), 10);
   show(isNaN(start) ? 0 : start - 1);
