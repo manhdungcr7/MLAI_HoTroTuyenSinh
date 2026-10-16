@@ -9,6 +9,7 @@ import DiemXetTuyenSom from "./diem-xet-tuyen-som";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop, toHopCaoNhatDayDu } from "./tinh-toan";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
+import { phanTichDiemNghen } from "@/engine/phan-tich";
 
 export const idDiem = (m: MonId) => `bd-diem-${m}`;
 const TO_HOP_APP: string[] = Object.keys(TO_HOP);
@@ -26,6 +27,10 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
   const diemDung = Object.fromEntries(ketQua.map(({ m, kq }) => [m, kq.loai === "hopLe" ? kq.gia : null])) as Record<MonId, number | null>;
   const toHop = tinhCacToHop(diemDung);
   const caoNhat = Math.max(...toHop.map((t) => t.tong ?? -1));
+  const toHopCaoNhat = toHop.find((t) => t.tong !== null && t.tong === caoNhat);
+  const diemNghen = toHopCaoNhat && toHopCaoNhat.tong !== null
+    ? phanTichDiemNghen(diemDung, toHopCaoNhat.mon, toHopCaoNhat.ma)
+    : null;
   // Con số Khám phá thật sự dùng (73 tổ hợp + ưu tiên); chỉ nhắc khi khác với 4 thẻ ở trên.
   const dayDu = toHopCaoNhatDayDu(diemDung, h.diemThem, h.uuTienTuyenSinh);
   const loiDiem = ketQua.filter(({ kq }) => kq.loai === "khongPhaiSo" || kq.loai === "ngoaiKhoang");
@@ -127,6 +132,17 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
             Cao nhất (gồm môn khác, ưu tiên): <b className="text-muc">{dayDu.toHop} · {dinhDang(dayDu.tong, 1)}</b>
             {dayDu.uuTienCong > 0 && <> (+{dinhDangDiem(dayDu.uuTienCong)} ưu tiên)</>}
           </p>
+        )}
+        {diemNghen && (
+          <div role="status" aria-live="polite" className="mt-2.5 rounded-xl border border-cam/30 bg-cam-nhat p-3 text-[13px] text-chu space-y-1">
+            <span className="flex items-center gap-1.5 font-bold text-cam-chu">
+              <TrendingUp size={16} />
+              Gợi ý bứt phá tổ hợp {diemNghen.toHop}
+            </span>
+            <p className="leading-snug">
+              {diemNghen.thongDiep}
+            </p>
+          </div>
         )}
       </section>
 

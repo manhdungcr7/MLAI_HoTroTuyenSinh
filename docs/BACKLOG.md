@@ -76,14 +76,17 @@
 
 ## 📌 Issue #04: Cảnh báo sớm độ lệch môn thi và tổ hợp xét tuyển
 - 👤 **Phụ trách (Owner):** Kiệt (`muc-tieu`) & Hưng (`tu-hoc`)
-- ⏳ **Trạng thái:** `Ghi nhận (Backlog)`
-- 🏷️ **Nhãn:** `smart-advice`, `tu-hoc`, `ai-insight`
+- ✅ **Trạng thái:** `Đã hoàn thành (2026-10-16)`
+- 🏷️ **Nhãn:** `smart-advice`, `tu-hoc`, `ai-insight`, `engine`
 
 ### 1. Bối cảnh & Vấn đề
 - Khi học sinh nhập điểm các môn ở Bước 2, hệ thống cần lập tức tính toán ra điểm của các tổ hợp phổ biến (A00, A01, B00, C00, D01, D07...) và chỉ ra môn nào đang là "điểm nghẽn" (bottleneck) kéo tụt điểm xét tuyển.
 
-### 2. Yêu cầu nghiệp vụ (User Story)
-- Ngay tại màn hình gợi ý / kết quả ban đầu, hệ thống hiển thị badge: *"Tổ hợp A01 của em đang cao nhất (25.5 điểm). Môn Tiếng Anh là môn có tiềm năng kéo thêm +1.0 điểm nhanh nhất."*
+### 2. Đã xử lý
+- ✅ Hàm thuần `phanTichDiemNghen` trong `src/engine/phan-tich.ts` phân tích tự động độ lệch điểm của môn thấp nhất so với trung bình các môn còn lại trong tổ hợp cao nhất.
+- ✅ Hiển thị gợi ý thông minh bứt phá điểm số ngay tại Bước 2 (`khoi-dau/buoc-2.tsx`) khi đang nhập điểm.
+- ✅ Hiển thị khuyến nghị kéo điểm nghẽn tại màn hình kết quả ngay sau khi tạo hồ sơ (`khoi-dau/man-hinh-phan-tich.tsx`).
+- ✅ Bộ kiểm thử toàn diện `tests/diem-nghen.test.ts` (100% pass, đã tích hợp vào cổng `npm test`).
 
 ---
 

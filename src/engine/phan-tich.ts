@@ -3,6 +3,7 @@
 import type { HoSo, LuaChon, MonId, NhanNguyenVong } from "@/state/types";
 import { TEN_MON } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
+import { dinhDang } from "./dinh-dang";
 
 export const NGAN_SACH_TOI_DA: Record<NonNullable<HoSo["nganSach"]>, number> = {
   duoi30: 30, "30-60": 60, "60-100": 100, tren100: 150,
@@ -168,3 +169,59 @@ export function soSanhTinhHuong(lcs: LuaChon[], goc: DieuKienThu, moi: DieuKienT
     thayDoiLonNhat: [...a].sort((x, y) => Math.abs(y.moi - y.goc) - Math.abs(x.moi - x.goc))[0] ?? null,
   };
 }
+
+export interface DiemNghenToHop {
+  toHop: string;
+  monNghen: MonId;
+  tenMonNghen: string;
+  diemHienTai: number;
+  diemTbMonKhac: number;
+  doLech: number;
+  mucTieuGoiY: number;
+  thongDiep: string;
+}
+
+/**
+ * Phân tích điểm nghẽn môn thi trong một tổ hợp:
+ * Tìm môn có điểm thấp hơn đáng kể so với các môn còn lại trong cùng tổ hợp xét tuyển.
+ * Trả về null nếu chưa đủ điểm 3 môn hoặc các môn đã cân bằng (độ lệch < 0.5).
+ */
+export function phanTichDiemNghen(
+  diem: Record<MonId, number | null>,
+  toHopMon: MonId[],
+  maToHop: string,
+): DiemNghenToHop | null {
+  if (!toHopMon || toHopMon.length !== 3) return null;
+  const thieu = monThieuCuaToHop(diem, toHopMon);
+  if (thieu.length > 0) return null;
+
+  const diemCacMon = toHopMon.map((m) => ({
+    mon: m,
+    ten: TEN_MON[m],
+    diem: diem[m]!,
+  }));
+
+  diemCacMon.sort((a, b) => a.diem - b.diem);
+  const thapNhat = diemCacMon[0];
+  const haiMonConLai = [diemCacMon[1], diemCacMon[2]];
+  const diemTbHaiMon = lam((haiMonConLai[0].diem + haiMonConLai[1].diem) / 2, 2);
+  const doLech = lam(diemTbHaiMon - thapNhat.diem, 2);
+
+  // Nếu lệch từ 0.5 điểm trở lên và môn thấp nhất còn dư địa kéo (dưới 9.5)
+  if (doLech >= 0.5 && thapNhat.diem < 9.5) {
+    const mucKeo = Math.min(1.0, Math.min(doLech, lam(10 - thapNhat.diem, 1)));
+    return {
+      toHop: maToHop,
+      monNghen: thapNhat.mon,
+      tenMonNghen: thapNhat.ten,
+      diemHienTai: thapNhat.diem,
+      diemTbMonKhac: diemTbHaiMon,
+      doLech,
+      mucTieuGoiY: lam(thapNhat.diem + mucKeo, 1),
+      thongDiep: `Môn ${thapNhat.ten} (${dinhDang(thapNhat.diem, 1)}) đang thấp hơn trung bình các môn khác ${dinhDang(doLech, 1)} điểm. Kéo môn này thêm +${dinhDang(mucKeo, 1)} điểm sẽ cải thiện mạnh tổ hợp ${maToHop}.`,
+    };
+  }
+
+  return null;
+}
+

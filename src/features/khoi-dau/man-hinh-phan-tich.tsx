@@ -1,6 +1,6 @@
 // Màn ngay sau khi tạo hồ sơ: cho em thấy kết quả thật (bao nhiêu ngành trong tầm điểm), thay cho màn chờ giả.
 // Số liệu lấy từ tinhCoHoi của Khám phá, nên khớp đúng con số em sẽ thấy ở tab Khám phá.
-import { CheckCircle2, Compass, ListChecks, PencilLine, Sparkles } from "lucide-react";
+import { CheckCircle2, Compass, ListChecks, PencilLine, Sparkles, TrendingUp } from "lucide-react";
 import { NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { Nut, The } from "@/components/ui/nut-the";
@@ -48,6 +48,15 @@ export function ManHinhKetQua({ kq, denNguyenVong, onDi, onNhapDiem }: {
                 </div>
               </div>
             </The>
+
+            {kq.diemNghen && (
+              <div role="status" aria-live="polite" className="rounded-xl border border-cam/30 bg-cam-nhat p-3.5 text-[13px] text-chu space-y-1">
+                <b className="flex items-center gap-1.5 text-cam-chu font-bold">
+                  <TrendingUp size={16} /> Gợi ý bứt phá điểm số ({kq.diemNghen.toHop})
+                </b>
+                <p className="leading-snug text-chu">{kq.diemNghen.thongDiep}</p>
+              </div>
+            )}
 
             {kq.nhomQuanTam.length > 0 && (
               <section aria-label="Nhóm ngành bạn quan tâm">

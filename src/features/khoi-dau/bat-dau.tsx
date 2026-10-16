@@ -96,7 +96,7 @@ export default function BatDau() {
   if (dangPhanTich) {
     if (!san) return <ChoDuLieu />; // danh mục nạp lười: chờ xong mới so điểm
     // Nước rút và thi lại đã có điểm: lối chính là danh sách nguyện vọng; còn lại là Khám phá.
-    const kq = ketQuaBanDau(tinhCoHoi(diemDayDu(s)), h.nganhQuanTam);
+    const kq = ketQuaBanDau(tinhCoHoi(diemDayDu(s)), h.nganhQuanTam, h.diem);
     const denNguyenVong = changCuaEm({ hoSo: h }) !== "dinhHuong" && kq.coDiem;
     return (
       <ManHinhKetQua kq={kq} denNguyenVong={denNguyenVong}

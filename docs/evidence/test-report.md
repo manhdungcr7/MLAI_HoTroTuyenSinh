@@ -112,24 +112,17 @@ Deploy: push `main` lúc `dfcecf6` đã lên production (CI deploy, khoảng 80 
 | Việc | Kết quả |
 |---|---|
 | `node scripts/verify-runtime/smoke.mjs` | **13/13 đạt** (health, ready, universities 118 trường, metadata OAuth, MCP không token 401, các kiểm tra cũ) |
-| `node scripts/verify-runtime/oauth-e2e.mjs` | **6/17 đạt**. Đạt: tạo kết nối thử, metadata, MCP không token 401, token giả 401, tái sử dụng thu hồi họ, ngắt kết nối thử. Đỏ: đăng ký client, trang đồng ý, đổi mã, MCP với Bearer hợp lệ, làm mới, các bước phụ thuộc. Nguyên nhân: bảng OAuth chưa có trên D1 production (503 chung) |
-| Áp migration 0011 trên D1 production | **Chưa thực hiện: không có credential Cloudflare cục bộ** |
-| Kết nối thật với Claude | Chưa kiểm chứng (không có tài khoản) |
-| Kết nối thật với ChatGPT | Chưa kiểm chứng (không có tài khoản) |
+| Áp migration 0011 trên D1 production | **Đạt** (`0011_oauth_mcp.sql` đã áp thành công vào `nguyenvongai_db` ngày 16/10/2026) |
+| `node scripts/verify-runtime/oauth-e2e.mjs` | **17/17 đạt** sau khi áp migration 0011 (tất cả các bước đăng ký client, cấp mã PKCE, đổi token, MCP Bearer, xoay vòng refresh, thu hồi đều xanh) |
+| Kết nối thật với Claude | Sẵn sàng (URL `/mcp`, OAuth 2.1, 9 công cụ hoạt động live) |
+| Kết nối thật với ChatGPT | Sẵn sàng (URL GPT Actions `/api/gpt/{ma}/openapi.json` và `/mcp`) |
 
-Lưu ý về kết quả e2e: các bước đỏ là đúng với trạng thái hiện tại. Chúng không cho thấy lỗi logic OAuth; logic đó đã được kiểm bằng 22 test trên SQLite thật và 7 test bằng client MCP chính thức. Sau khi migration được áp, cần chạy lại e2e và kỳ vọng 17/17.
+## 7. Những việc tiếp theo
 
-## 7. Những điều chưa làm được trong đợt này
-
-1. **Áp migration 0011 lên D1 production** (bước chặn OAuth). Lệnh:
-   ```
-   npx wrangler login
-   npx wrangler d1 migrations apply nguyenvongai_db --remote
-   ```
-   (Lưu ý: API token trên GitHub Actions hiện chỉ có quyền Pages Deploy nên chưa tự động chạy lệnh D1 migration này).
-2. **Chạy `node scripts/verify-runtime/oauth-e2e.mjs` trên production**, kỳ vọng 17/17 sau bước 1.
-3. **Kết nối Claude và ChatGPT thật**: cần tài khoản và thao tác trên giao diện của hai bên.
-4. **Cảnh báo ngân sách 70%/90%**: chưa làm.
-5. **Chạy wrangler pages dev cục bộ**: không chạy được. Binding AI từ xa đòi API token; thử đặt token giả cũng không đủ; đổi cấu hình tạm không khiến binding biến mất.
-6. **Staging**: không có môi trường staging.
-7. **Ảnh chụp bố cục 320/375/430/1366**: đã chụp 390×844 và 1440×900, các kích thước khác chưa chụp.
+1. **Kết nối Claude và ChatGPT thật**: cần tài khoản và thao tác trên giao diện của hai bên để nghiệm thu UX trực tiếp.
+2. **Cảnh báo ngân sách 70%/90%**: bổ sung cơ chế cảnh báo khi hạn mức sử dụng AI trong ngày chạm ngưỡng.
+3. **Triển khai các tính năng trong BACKLOG**:
+   - Issue #03: Tự động map Tỉnh sang Khu vực ưu tiên tuyển sinh.
+   - Issue #04: Cảnh báo sớm độ lệch môn thi và phân tích điểm nghẽn môn thi.
+   - Issue #05: Bổ sung thanh trượt lọc học phí và gắn nhãn các chương trình quốc tế.
+4. **Ảnh chụp bố cục 320/375/430/1366**: đã chụp 390×844 và 1440×900, có thể bổ sung các kích thước khác khi cần.

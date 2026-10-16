@@ -1,6 +1,6 @@
 // Hàm thuần (không React) cho luồng Khởi đầu: đọc điểm, kiểm tra bước 1, tổ hợp tự tính, gợi ý học phí.
 import { mucUuTien } from "@/engine/diem-uu-tien";
-import { tongDiem } from "@/engine/phan-tich";
+import { phanTichDiemNghen, tongDiem, type DiemNghenToHop } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { TEN_MON_NGAN, TO_HOP, type HoSo, type MaToHop, type MonId } from "@/state/types";
 
@@ -112,14 +112,19 @@ export interface KetQuaBanDau {
   soThuSuc: number;
   /** Các nhóm ngành em chọn ở Bước 1, giữ thứ tự em chọn; nhóm chưa có ngành nào trong tầm thì số là 0. */
   nhomQuanTam: NhomCoHoi[];
+  diemNghen?: DiemNghenToHop | null;
 }
 
 /** Gom "cơ hội của em" (tính ở Khám phá) thành kết quả ngắn cho màn sau khi tạo hồ sơ. Không tự đặt thêm số. */
 export function ketQuaBanDau(
   coHoi: { tong: number; toHop: string; soDuDiem: number; soThuSuc: number; theoNhom: NhomCoHoi[] } | null,
   nganhQuanTam: string[],
+  diem?: Record<MonId, number | null>,
 ): KetQuaBanDau {
-  if (!coHoi) return { coDiem: false, toHop: null, tong: null, soDuDiem: 0, soThuSuc: 0, nhomQuanTam: [] };
+  if (!coHoi) return { coDiem: false, toHop: null, tong: null, soDuDiem: 0, soThuSuc: 0, nhomQuanTam: [], diemNghen: null };
   const nhomQuanTam = nganhQuanTam.map((n) => coHoi.theoNhom.find((g) => g.nhom === n) ?? { nhom: n, duDiem: 0, thuSuc: 0 });
-  return { coDiem: true, toHop: coHoi.toHop, tong: coHoi.tong, soDuDiem: coHoi.soDuDiem, soThuSuc: coHoi.soThuSuc, nhomQuanTam };
+  const diemNghen = diem && coHoi.toHop && (coHoi.toHop in TO_HOP)
+    ? phanTichDiemNghen(diem, TO_HOP[coHoi.toHop as MaToHop], coHoi.toHop)
+    : null;
+  return { coDiem: true, toHop: coHoi.toHop, tong: coHoi.tong, soDuDiem: coHoi.soDuDiem, soThuSuc: coHoi.soThuSuc, nhomQuanTam, diemNghen };
 }
