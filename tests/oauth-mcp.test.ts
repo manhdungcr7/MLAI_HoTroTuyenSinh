@@ -6,9 +6,9 @@ import { taoD1KetNoiTest, type D1KetNoiTest } from "./nap-d1-ket-noi";
 import { kvTest } from "./nap-d1-han-muc";
 import { taoKetNoi, xoaKetNoi, bamMa, type EnvKetNoi } from "../functions/_thu-vien/ket-noi";
 import { s256, laRedirectHopLe, kiemTraPhamVi, PHAM_VI } from "../functions/_thu-vien/oauth";
-import { xuLyDangKy } from "../functions/oauth/register";
+import { xuLyDangKy, onRequestPost as dangKyPost } from "../functions/oauth/register";
 import { xuLyAuthorize } from "../functions/oauth/authorize";
-import { xuLyToken } from "../functions/oauth/token";
+import { xuLyToken, onRequestPost as tokenPost } from "../functions/oauth/token";
 import { xuLyThuHoi } from "../functions/oauth/revoke";
 import { xuLyMcpBearer } from "../functions/mcp/index";
 import { xuLyMcp } from "../functions/mcp/[ma]";
@@ -281,6 +281,20 @@ test("rollout: thiếu bảng OAuth (chưa áp migration 0011) thì tạo và ng
   const con = await db.prepare("SELECT COUNT(*) AS n FROM ket_noi_ai WHERE ma_bam = ?").bind(maBam).first<{ n: number }>();
   assert.equal(con?.n, 0, "ngắt kết nối phải xóa được bản chụp dù thiếu bảng OAuth");
   assert.equal((await xuLySanSang(env)).status, 200, "ready vẫn báo ok, vì OAuth không thuộc phần sẵn sàng bắt buộc");
+});
+
+test("rollout: thiếu bảng OAuth thì endpoint trả lỗi chung, không lộ tên bảng, MCP Bearer trả 401", async () => {
+  const db = taoD1KetNoiTest();
+  for (const b of ["oauth_token", "oauth_ma_xac_nhan", "oauth_client"]) db.db.exec(`DROP TABLE ${b}`);
+  const env: EnvKetNoi = { DB: db, RATE_KV: kvTest().kv };
+  const dk = await dangKyPost({ request: req(`${ORIGIN}/oauth/register`, { json: { redirect_uris: [URI] } }), env });
+  const textDk = await dk.text();
+  assert.equal(dk.status, 503);
+  assert.ok(!/oauth_|no such table|SQL/i.test(textDk), `không được lộ chi tiết: ${textDk}`);
+  const tk = await tokenPost({ request: req(`${ORIGIN}/oauth/token`, { form: { grant_type: "refresh_token", refresh_token: "a".repeat(43), client_id: "x" } }), env });
+  assert.equal(tk.status, 503);
+  const mc = await mcp({ db, env, ma: "", maBam: "", } as unknown as Moi, "a".repeat(43), { jsonrpc: "2.0", id: 1, method: "ping" });
+  assert.equal(mc.status, 401, "token không đọc được thì coi như không hợp lệ, không phải 500");
 });
 
 async function main() {

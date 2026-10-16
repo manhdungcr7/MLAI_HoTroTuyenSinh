@@ -161,8 +161,12 @@ export async function thuHoiToken(db: KhoD1Ket, token: string): Promise<void> {
 /** Tra token truy cập: trả về kết nối và phạm vi, hoặc null nếu hết hạn, đã thu hồi hoặc kết nối không còn. */
 export async function tokenTruyCap(env: EnvKetNoi, token: string, bayGio: number = Date.now()): Promise<{ ok: true; keBam: string; phamVi: PhamVi[]; hang: Extract<Awaited<ReturnType<typeof xacThucMaBam>>, { ok: true }>["hang"] } | { ok: false }> {
   if (!env.DB) return { ok: false };
-  const r = await env.DB.prepare("SELECT ket_noi_bam, pham_vi, het_han FROM oauth_token WHERE token_bam = ? AND loai = 'access' AND thu_hoi = 0")
-    .bind(await bamMa(token)).first<{ ket_noi_bam: string; pham_vi: string; het_han: number }>();
+  // Lỗi D1 (ví dụ bảng chưa có khi chưa áp migration) coi như token không hợp lệ: không làm lộ lỗi và không trả 500.
+  let r: { ket_noi_bam: string; pham_vi: string; het_han: number } | null;
+  try {
+    r = await env.DB.prepare("SELECT ket_noi_bam, pham_vi, het_han FROM oauth_token WHERE token_bam = ? AND loai = 'access' AND thu_hoi = 0")
+      .bind(await bamMa(token)).first<{ ket_noi_bam: string; pham_vi: string; het_han: number }>();
+  } catch { return { ok: false }; }
   if (!r || Number(r.het_han) <= bayGio) return { ok: false };
   const xt = await xacThucMaBam(env, r.ket_noi_bam, bayGio);
   if (!xt.ok) return { ok: false };

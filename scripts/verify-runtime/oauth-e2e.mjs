@@ -64,11 +64,11 @@ try {
   kiem("mã xác nhận chỉ dùng một lần", again.status === 400, `status ${again.status}`);
 
   // 5. MCP bằng Bearer
-  const init = await rpc(tk.json.access_token, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "e2e", version: "1" } } });
+  const init = await rpc(tk.json?.access_token, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "e2e", version: "1" } } });
   kiem("MCP initialize với Bearer", init.status === 200 && init.json?.result?.protocolVersion === "2025-06-18", `status ${init.status}`);
-  const list = await rpc(tk.json.access_token, { jsonrpc: "2.0", id: 2, method: "tools/list" });
+  const list = await rpc(tk.json?.access_token, { jsonrpc: "2.0", id: 2, method: "tools/list" });
   kiem("MCP tools/list trả đủ công cụ", (list.json?.result?.tools?.length ?? 0) >= 6, `${list.json?.result?.tools?.length} công cụ`);
-  const hs = await rpc(tk.json.access_token, { jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "lay_ho_so", arguments: {} } });
+  const hs = await rpc(tk.json?.access_token, { jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "lay_ho_so", arguments: {} } });
   kiem("công cụ lay_ho_so đọc được bản chụp", !hs.json?.result?.isError && /TP\.HCM/.test(hs.json?.result?.content?.[0]?.text ?? ""));
   const noToken = await rpc(null, { jsonrpc: "2.0", id: 4, method: "ping" });
   kiem("MCP không token: 401 kèm WWW-Authenticate", noToken.status === 401 && /resource_metadata=/.test(noToken.headers.get("www-authenticate") ?? ""), `status ${noToken.status}`);
@@ -76,9 +76,9 @@ try {
   kiem("MCP token giả: 401 invalid_token", sai.status === 401 && /invalid_token/.test(sai.headers.get("www-authenticate") ?? ""), `status ${sai.status}`);
 
   // 6. Làm mới có xoay vòng và phát hiện tái sử dụng
-  const moi = await json("/oauth/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: form({ grant_type: "refresh_token", refresh_token: tk.json.refresh_token, client_id: clientId }) });
+  const moi = await json("/oauth/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: form({ grant_type: "refresh_token", refresh_token: tk.json?.refresh_token, client_id: clientId }) });
   kiem("làm mới token: cấp cặp mới", moi.status === 200 && !!moi.json?.access_token, `status ${moi.status}`);
-  const dung = await json("/oauth/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: form({ grant_type: "refresh_token", refresh_token: tk.json.refresh_token, client_id: clientId }) });
+  const dung = await json("/oauth/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: form({ grant_type: "refresh_token", refresh_token: tk.json?.refresh_token, client_id: clientId }) });
   kiem("dùng lại refresh đã xoay: từ chối", dung.status === 400, `status ${dung.status}`);
   const sauTaiSuDung = await rpc(moi.json?.access_token, { jsonrpc: "2.0", id: 6, method: "ping" });
   kiem("tái sử dụng làm thu hồi cả họ token", sauTaiSuDung.status === 401, `status ${sauTaiSuDung.status}`);

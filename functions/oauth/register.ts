@@ -34,4 +34,5 @@ export async function xuLyDangKy(request: Request, env: EnvKetNoi): Promise<Resp
   }, 201);
 }
 
-export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) => xuLyDangKy(ctx.request, ctx.env);
+export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) =>
+  xuLyDangKy(ctx.request, ctx.env).catch(() => loiOAuth("server_error", "Dịch vụ tạm thời không sẵn sàng", 503));

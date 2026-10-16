@@ -82,5 +82,6 @@ export async function xuLyAuthorize(request: Request, env: EnvKetNoi, method: "G
   return chuyenHuong(t.redirectUri, { code: maXacNhan, ...(t.state ? { state: t.state } : {}) });
 }
 
-export const onRequestGet = (ctx: { request: Request; env: EnvKetNoi }) => xuLyAuthorize(ctx.request, ctx.env, "GET");
-export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) => xuLyAuthorize(ctx.request, ctx.env, "POST");
+const loiTrang = () => html(trangLoi("Dịch vụ kết nối đang tạm thời không sẵn sàng. Thử lại sau ít phút."), 503);
+export const onRequestGet = (ctx: { request: Request; env: EnvKetNoi }) => xuLyAuthorize(ctx.request, ctx.env, "GET").catch(loiTrang);
+export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) => xuLyAuthorize(ctx.request, ctx.env, "POST").catch(loiTrang);

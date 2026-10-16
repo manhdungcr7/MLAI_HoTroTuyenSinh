@@ -15,4 +15,5 @@ export async function xuLyThuHoi(request: Request, env: EnvKetNoi): Promise<Resp
   return new Response(null, { status: 200, headers: ocNoStore });
 }
 
-export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) => xuLyThuHoi(ctx.request, ctx.env);
+export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) =>
+  xuLyThuHoi(ctx.request, ctx.env).catch(() => loiOAuth("server_error", "Dịch vụ tạm thời không sẵn sàng", 503));

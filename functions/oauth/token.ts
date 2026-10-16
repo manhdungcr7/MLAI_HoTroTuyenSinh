@@ -30,4 +30,5 @@ export async function xuLyToken(request: Request, env: EnvKetNoi): Promise<Respo
   return loiOAuth("unsupported_grant_type", "Chỉ hỗ trợ authorization_code và refresh_token");
 }
 
-export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) => xuLyToken(ctx.request, ctx.env);
+export const onRequestPost = (ctx: { request: Request; env: EnvKetNoi }) =>
+  xuLyToken(ctx.request, ctx.env).catch(() => loiOAuth("server_error", "Dịch vụ tạm thời không sẵn sàng", 503));
