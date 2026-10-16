@@ -74,7 +74,9 @@ export async function goiMoHinh(env: EnvLLM, noiDung: string, f: typeof fetch = 
     return (d.choices?.[0]?.message?.content ?? "").trim();
   }
   if (env.AI) {
-    const model = env.AI_MODEL ?? "@cf/meta/llama-3.3-70b-instruct";
+    const model = env.AI_MODEL && (env.AI_MODEL.startsWith("@cf/") || env.AI_MODEL.startsWith("@hf/"))
+      ? env.AI_MODEL
+      : "@cf/meta/llama-3.3-70b-instruct";
     try {
       const res = (await env.AI.run(model, {
         messages: [

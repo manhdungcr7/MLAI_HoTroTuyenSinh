@@ -152,6 +152,8 @@ export function timTruongTrongCau(cau: string, boQuaCum: (string | null)[] = [])
       const cum = tu.slice(i, i + n).join(" ");
       // Một từ đơn chỉ được coi là trường khi nó là mã hoặc viết tắt riêng của đúng một trường (uit, dtl), không phải từ thường như "viet".
       if (n === 1 && (TU_DEM.has(cum) || VIET_TAT_NGANH[cum] || maTuVietTat(cum).length !== 1)) continue;
+      // "công nghệ thông tin" đứng một mình hoặc sau chữ "ngành/học" là tên ngành, chỉ coi là ĐH CNTT (QSC) khi có từ chỉ trường phía trước.
+      if (cum === "cong nghe thong tin" && !(i > 0 && /^(truong|dh|hoc)$/.test(tu[i - 1]) && (tu[i - 1] !== "hoc" || (i > 1 && tu[i - 2] === "dai")))) continue;
       const kq = resolveTruong(cum);
       if (kq.kieu !== "chinh-xac" || !kq.ma) continue;
       ra.push({ chuoi: cum, kq, vt: i });

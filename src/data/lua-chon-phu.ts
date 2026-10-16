@@ -8,7 +8,8 @@ export const coHocPhi = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax">): boolean =
 /** "35 – 45" (triệu đồng/năm), "≈ 28,5" khi là ước tính chưa có nguồn, hoặc "chưa có" khi chưa có số nào. */
 export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax"> & { hocPhiUocTinh?: boolean }): string => {
   if (!coHocPhi(l)) return "chưa có";
-  const so = l.hocPhiMin === l.hocPhiMax ? `${l.hocPhiMin}` : `${l.hocPhiMin} – ${l.hocPhiMax}`;
+  const d = (x: number) => String(x).replace(".", ",");
+  const so = l.hocPhiMin === l.hocPhiMax ? d(l.hocPhiMin!) : `${d(l.hocPhiMin!)} – ${d(l.hocPhiMax!)}`;
   return l.hocPhiUocTinh ? `≈ ${so}` : so;
 };
 

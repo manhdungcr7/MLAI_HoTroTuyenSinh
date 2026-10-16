@@ -91,7 +91,7 @@ export default function DanhSachAnToan() {
       <NoiDung>
         {tong === null ? (
           <DongThongBao tone="cam" icon={GraduationCap} tieuDe="Chưa đủ điểm để xếp nhãn"
-            moTa="Nhập điểm Toán, Vật lý, Tiếng Anh để biết mỗi nguyện vọng là Thử sức, Vừa sức, An toàn hay Dự phòng."
+            moTa="Nhập điểm các môn theo tổ hợp xét tuyển để biết mỗi nguyện vọng là Thử sức, Vừa sức, An toàn hay Dự phòng."
             hanhDong="Nhập điểm ngay" onClick={() => nav(DUONG_DAN.batDau(2))} />
         ) : (
           <KhungCanhBao kl={kl} />

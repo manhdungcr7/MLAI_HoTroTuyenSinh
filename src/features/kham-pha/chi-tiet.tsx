@@ -115,22 +115,23 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
   );
 }
 
-function KhoiXacSuatDecisionIntelligence({ lc, diemThiRaw, uuTien }: { lc: LuaChon; diemThiRaw: number | null; uuTien?: any }) {
-  if (diemThiRaw === null) return null;
-  const xs = tinhXacSuatTrungTuyen(diemThiRaw, lc, uuTien);
+function KhoiXacSuatDecisionIntelligence({ lc, diemXet }: { lc: LuaChon; diemXet: number | null }) {
+  if (diemXet === null) return null;
+  const xs = tinhXacSuatTrungTuyen(diemXet, lc);
   if (!xs) return null;
 
   return (
-    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-2.5" aria-label="Xác suất trúng tuyển dự kiến">
+    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-2.5" aria-label="Ước lượng cơ hội trúng tuyển tham khảo">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <b className="text-[16px] text-muc font-extrabold">Xác suất trúng tuyển dự kiến</b>
+          <b className="text-[16px] text-muc font-extrabold">Ước lượng cơ hội trúng tuyển</b>
+          <span className="block text-[11px] text-chu-phu mt-0.5">Tham khảo từ biến động điểm chuẩn lịch sử (không phải cam kết đậu)</span>
         </div>
         <div className="text-right">
           <span className={gop("text-[26px] font-black leading-none", xs.xacSuat >= 0.8 ? "text-luc-chu" : xs.xacSuat >= 0.45 ? "text-xanh" : "text-cam-chu")}>
             {xs.phanTram}%
           </span>
-          <span className="block text-[11px] text-chu-phu mt-0.5">Khoảng tin cậy: {xs.khoangTinCay[0]}% – {xs.khoangTinCay[1]}%</span>
+          <span className="block text-[11px] text-chu-phu mt-0.5">Khoảng tham chiếu: {xs.khoangTinCay[0]}% – {xs.khoangTinCay[1]}%</span>
         </div>
       </div>
       <div className="rounded-xl bg-nen p-2.5 space-y-1 text-[13px] text-chu leading-snug">
@@ -323,7 +324,7 @@ export default function ChiTiet() {
 
         <BangDiemChuan lc={lc} diemEm={kq.tong} uuTienCong={tongChoLuaChon(lc, bc.diem).uuTienCong} />
 
-        <KhoiXacSuatDecisionIntelligence lc={lc} diemThiRaw={kq.tong} uuTien={s.hoSo.uuTienTuyenSinh} />
+        <KhoiXacSuatDecisionIntelligence lc={lc} diemXet={kq.tong} />
 
         <KhoiDuBao lc={lc} diemEm={kq.tong} />
 

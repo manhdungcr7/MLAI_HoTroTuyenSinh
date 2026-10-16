@@ -86,7 +86,7 @@ export function HopTruot({ mo, dong, tieuDe, children }: { mo: boolean; dong: ()
         if (e.shiftKey && document.activeElement === dau) { e.preventDefault(); cuoi?.focus(); }
         if (!e.shiftKey && document.activeElement === cuoi) { e.preventDefault(); dau?.focus(); }
       }}
-      className="fixed inset-0 z-50 m-0 h-dvh w-screen max-w-none max-h-none border-0 p-0 open:flex items-end sm:items-center justify-center bg-muc/50 backdrop-blur-sm sm:p-4" onClick={(e) => { if (e.target === e.currentTarget) dong(); }}>
+      className="fixed inset-0 z-50 m-0 h-dvh w-screen max-w-none max-h-none border-0 p-0 open:flex items-end sm:items-center justify-center bg-muc/50 sm:p-4" onClick={(e) => { if (e.target === e.currentTarget) dong(); }}>
       <div onClick={(e) => e.stopPropagation()}
         className="hien-len w-full max-w-[430px] sm:max-w-[480px] max-h-[88dvh] overflow-y-auto bg-trang rounded-t-lon sm:rounded-2xl p-5 vung-an-toan-duoi shadow-lon">
         <div className="flex items-center justify-between mb-3">

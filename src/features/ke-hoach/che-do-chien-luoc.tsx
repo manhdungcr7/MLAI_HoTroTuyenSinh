@@ -31,7 +31,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
 
   // Điểm mục tiêu của NV1 hoặc mục tiêu đã chọn
   const lcTarget = s.mucTieu?.luaChonId ? timLuaChon(s.mucTieu.luaChonId) : (s.nguyenVong[0] ? timLuaChon(s.nguyenVong[0]) : undefined);
-  const diemChuanMucTieu = s.mucTieu?.diemMucTieu ?? (lcTarget?.diemMin ?? 26.0);
+  const diemChuanMucTieu = m?.mucTieuTho ?? s.mucTieu?.diemMucTieu ?? (lcTarget?.diemMin ?? 26.0);
   const diemHienTai = diemDayDu(s);
 
   // Phân bổ giờ học toán học theo mô hình Knapsack

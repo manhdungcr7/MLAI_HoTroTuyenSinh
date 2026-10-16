@@ -1,0 +1,1244 @@
+{
+  "summary": {
+    "duLieuThatCount": 3648,
+    "luaChonMauCount": 3648,
+    "distinctSchoolsInRaw": 118,
+    "danhMucTruongCount": 118,
+    "ptCounts": {
+      "THPT": 3320,
+      "HOC_BA": 220,
+      "NANG_KHIEU": 9,
+      "KET_HOP": 21,
+      "DGNL_KHAC": 65,
+      "DGTD": 8,
+      "DGNL_HCM": 5
+    },
+    "tierCounts": {
+      "official_pdf": 1492,
+      "aggregator_verified": 2156
+    },
+    "yearCounts": {
+      "2021": 22,
+      "2022": 487,
+      "2023": 1017,
+      "2024": 1181,
+      "2025": 1029,
+      "2026": 1679
+    },
+    "has2026Count": 1679,
+    "has2026Schools": 47,
+    "has2026ByTier": {
+      "aggregator_verified": 1679
+    },
+    "combos": {
+      "officialCount": 86,
+      "nangKhieuCount": 12,
+      "emptyCombo": 1,
+      "onlyUnknownCombo": 93,
+      "mixedUnknownCombo": 238,
+      "unknownCombos": {
+        "M00": 39,
+        "M01": 30,
+        "V00": 50,
+        "V01": 49,
+        "H00": 33,
+        "H01": 43,
+        "D04": 63,
+        "D96": 6,
+        "D02": 10,
+        "D06": 41,
+        "D03": 45,
+        "D45": 24,
+        "D65": 24,
+        "T00": 14,
+        "T01": 16,
+        "M05": 9,
+        "M07": 7,
+        "M08": 2,
+        "M10": 3,
+        "M13": 2,
+        "M09": 4,
+        "M06": 4,
+        "M11": 6,
+        "M14": 2,
+        "T03": 3,
+        "T04": 5,
+        "T05": 4,
+        "T06": 4,
+        "T07": 3,
+        "K01": 4,
+        "N00": 2,
+        "C09": 2,
+        "M30": 3,
+        "C15": 1,
+        "D20": 2,
+        "D25": 12,
+        "D30": 23,
+        "D35": 6,
+        "D40": 1,
+        "D44": 11,
+        "D50": 1,
+        "D71": 1,
+        "D89": 2,
+        "X90": 12,
+        "T08": 3,
+        "D55": 14,
+        "C07": 14,
+        "D05": 10,
+        "D23": 12,
+        "D28": 22,
+        "X46": 1,
+        "X54": 4,
+        "X56": 15,
+        "D42": 10,
+        "D43": 18,
+        "D53": 12,
+        "D63": 21,
+        "X37": 6,
+        "D85": 2,
+        "D62": 5,
+        "D64": 12,
+        "D41": 6,
+        "D61": 6,
+        "M02": 7,
+        "M03": 6,
+        "T10": 1,
+        "V02": 7,
+        "V03": 2,
+        "M04": 1,
+        "T02": 2,
+        "T09": 1,
+        "V04": 1,
+        "V05": 2,
+        "V06": 2,
+        "V07": 1,
+        "V08": 1,
+        "V09": 1,
+        "C10": 7,
+        "N01": 3,
+        "N02": 1,
+        "N03": 2,
+        "N04": 1,
+        "N05": 2,
+        "N06": 1,
+        "N07": 1,
+        "T20": 1,
+        "K00": 7,
+        "H06": 4,
+        "H08": 1,
+        "D29": 21,
+        "D54": 5,
+        "X33": 8,
+        "X45": 8,
+        "X49": 5,
+        "X86": 9,
+        "X87": 7,
+        "X91": 7,
+        "X98": 11,
+        "X99": 9,
+        "Y03": 10,
+        "Y04": 6,
+        "C11": 3,
+        "D60": 2,
+        "D48": 2,
+        "D58": 2,
+        "X82": 4,
+        "X94": 4,
+        "X57": 9,
+        "X95": 2,
+        "D26": 16,
+        "D27": 16,
+        "D21": 11,
+        "D24": 11,
+        "D22": 11,
+        "D31": 5,
+        "D32": 5,
+        "D33": 5,
+        "D34": 5,
+        "X41": 3,
+        "X29": 3,
+        "A16": 3
+      }
+    },
+    "tuition": {
+      "totalInHocPhiJson": 3648,
+      "officialCount": 601,
+      "officialSchoolsCount": 18,
+      "officialSchools": [
+        "BKA",
+        "DCN",
+        "DDY",
+        "GHA",
+        "HQT",
+        "HTC",
+        "LPH",
+        "NHH",
+        "NTH",
+        "PKA",
+        "QHE",
+        "QHT",
+        "QSC",
+        "QSX",
+        "QSY",
+        "XDA",
+        "YDS",
+        "YHB"
+      ],
+      "estimatedCount": 3047,
+      "estimatedSchoolsCount": 101
+    },
+    "otherFiles": {
+      "nguonNamCount": 1461,
+      "nguonNamTCCount": 26,
+      "deAnTruongCount": 84,
+      "deAnTruongTCCount": 26,
+      "viecLamCount": 50,
+      "chuongTrinhCount": 619,
+      "trangTruongCount": 26
+    }
+  },
+  "stratifiedSampleCount": 32,
+  "stratifiedSample": [
+    {
+      "id": "bka-41c92ac8",
+      "ma": "BKA",
+      "truong": "ĐH Bách Khoa Hà Nội",
+      "nganh": "Khoa học Dữ liệu và Trí tuệ nhân tạo (CT tiên tiến)",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "B03",
+        "C01",
+        "C02",
+        "X02"
+      ],
+      "diem": {
+        "2026": 29.54
+      },
+      "dk": 29.54,
+      "hocPhi": {
+        "trieuNam": 38,
+        "nam": "2026",
+        "trang": 20,
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0907/thong-tin-tuyen-sinh-dai-hoc-bach-khoa-ha-noi-2026.pdf"
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-BKA.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "bka-3c32ab77",
+      "ma": "BKA",
+      "truong": "ĐH Bách Khoa Hà Nội",
+      "nganh": "Hệ thống điện và năng lượng tái tạo (CT tiên tiến)",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "B03",
+        "C01",
+        "C02",
+        "X02"
+      ],
+      "diem": {
+        "2026": 27.29
+      },
+      "dk": 27.29,
+      "hocPhi": {
+        "trieuNam": 38,
+        "nam": "2026",
+        "trang": 20,
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0907/thong-tin-tuyen-sinh-dai-hoc-bach-khoa-ha-noi-2026.pdf"
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-BKA.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "nth-9984231c",
+      "ma": "NTH",
+      "truong": "Trường Đại học Ngoại thương",
+      "nganh": "CT TC Kinh tế đối ngoại",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D06",
+        "D07"
+      ],
+      "diem": {
+        "2026": 28.25
+      },
+      "dk": 28.25,
+      "hocPhi": {
+        "trieuNam": 25,
+        "nam": "2026",
+        "trang": 20,
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0711/ftu-thong-tin-tuyen-sinh-dhcq-2026-8426.pdf"
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/dai-hoc-ngoai-thuong-co-so-phia-bac-NTH.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "kha-2f4660f6",
+      "ma": "KHA",
+      "truong": "Trường Đại học Kinh tế Quốc dân",
+      "nganh": "Marketing",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ],
+      "diem": {
+        "2026": 27.99
+      },
+      "dk": 27.99,
+      "hocPhi": {
+        "trieuNam": 20,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/dai-hoc-kinh-te-quoc-dan-KHA.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "yhb-80534b5c",
+      "ma": "YHB",
+      "truong": "ĐH Y Hà Nội",
+      "nganh": "Y khoa",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "B00"
+      ],
+      "diem": {
+        "2021": 28.85,
+        "2022": 28.15,
+        "2023": 27.73,
+        "2024": 28.27
+      },
+      "dk": 28.27,
+      "hocPhi": {
+        "trieuNam": 55.2,
+        "nam": "2025",
+        "trang": 12,
+        "url": "https://images.tuyensinh247.com/picture/2025/0612/thong-tin-tuyen-sinh-2025-truong-dh-y-ha-noi.pdf"
+      },
+      "nguon": "https://hmu.edu.vn/tuyen-sinh/dai-hoc-chinh-quy",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "qhi-37ef2b14",
+      "ma": "QHI",
+      "truong": "ĐH Công nghệ - ĐHQGHN",
+      "nganh": "Trí tuệ nhân tạo",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ],
+      "diem": {
+        "2024": 27.75,
+        "2025": 27.75
+      },
+      "dk": 27.75,
+      "hocPhi": {
+        "trieuNam": 35,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://uet.vnu.edu.vn/tuyen-sinh-dai-hoc-chinh-quy-nam-2024/",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "dcn-1a57cf24",
+      "ma": "DCN",
+      "truong": "ĐH Công nghiệp Hà Nội",
+      "nganh": "Ngôn ngữ Trung Quốc (Chương trình LKĐT 2+2) - Ngôn ngữ Trung Quốc",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "D01",
+        "D04",
+        "D14",
+        "D15"
+      ],
+      "diem": {
+        "2024": 26.01
+      },
+      "dk": 26.01,
+      "hocPhi": {
+        "trieuNam": 21,
+        "nam": "2026",
+        "trang": 87,
+        "url": "https://images.tuyensinh247.com/picture/2026/0402/thong-tin-tuyen-sinh-dai-hoc-cong-nghiep-ha-noi-2026.pdf"
+      },
+      "nguon": "https://tuyensinh.haui.edu.vn/",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "sph-b8792aeb",
+      "ma": "SPH",
+      "truong": "ĐH Sư phạm Hà Nội",
+      "nganh": "Chính trị học",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "X70",
+        "X74",
+        "X78"
+      ],
+      "diem": {
+        "2026": 23.56
+      },
+      "dk": 23.56,
+      "hocPhi": {
+        "trieuNam": 17.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/dai-hoc-su-pham-ha-noi-SPH.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "xda-c890cab9",
+      "ma": "XDA",
+      "truong": "ĐH Xây dựng Hà Nội",
+      "nganh": "CTĐT Nghệ thuật và thiết kế - Thiết kế công nghiệp",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "C00"
+      ],
+      "diem": {
+        "2025": 23.3
+      },
+      "dk": 23.3,
+      "hocPhi": {
+        "trieuNam": 18.5,
+        "nam": "2026",
+        "trang": 25,
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0616/thong-tin-tuyen-sinh-dhcq-nam-2026.pdf"
+      },
+      "nguon": "https://tuyensinh.huce.edu.vn/",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "bvh-ee8d55d9",
+      "ma": "BVH",
+      "truong": "Học viện Công nghệ Bưu chính Viễn thông",
+      "nganh": "Báo chí",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "X06",
+        "X26"
+      ],
+      "diem": {
+        "2026": 22
+      },
+      "dk": 22,
+      "hocPhi": {
+        "trieuNam": 27.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-bac-BVH.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "ddk-bc06675a",
+      "ma": "DDK",
+      "truong": "ĐH Bách Khoa - ĐH Đà Nẵng",
+      "nganh": "Công nghệ thông tin (Đặc thù - Hợp tác doanh nghiệp), chuyên ngành Khoa học dữ liệu và Trí tuệ nhân tạo - Công nghệ thông tin",
+      "tinh": "Đà Nẵng",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ],
+      "diem": {
+        "2023": 26.45,
+        "2024": 27.11
+      },
+      "dk": 27.11,
+      "hocPhi": {
+        "trieuNam": 28.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": null,
+      "daKiemChungUI": false
+    },
+    {
+      "id": "ddq-fb110225",
+      "ma": "DDQ",
+      "truong": "ĐH Kinh tế - ĐH Đà Nẵng",
+      "nganh": "Kinh doanh quốc tế - Chương trình cử nhân liên kết quốc tế",
+      "tinh": "Đà Nẵng",
+      "pt": "KET_HOP",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ],
+      "diem": {
+        "2024": 16,
+        "2025": 16
+      },
+      "dk": 16,
+      "hocPhi": {
+        "trieuNam": 45,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://due.udn.vn/tuyen-sinh",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "dds-6740e5ba",
+      "ma": "DDS",
+      "truong": "ĐH Sư phạm - ĐH Đà Nẵng",
+      "nganh": "Giáo dục Mầm non",
+      "tinh": "Đà Nẵng",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "M00",
+        "M01"
+      ],
+      "diem": {
+        "2023": 20,
+        "2024": 24.25,
+        "2025": 25.88
+      },
+      "dk": 25.88,
+      "hocPhi": {
+        "trieuNam": 15.2,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2025/0617/thong-tin-tuyen-sinh-2025-truong-dh-su-pham-dai-hoc-da-nang.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "tdv-fb33f75b",
+      "ma": "TDV",
+      "truong": "ĐH Vinh",
+      "nganh": "Chính trị học",
+      "tinh": "Nghệ An",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "C00",
+        "X70"
+      ],
+      "diem": {
+        "2023": 19,
+        "2024": 18
+      },
+      "dk": 18,
+      "hocPhi": {
+        "trieuNam": 19.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2025/0426/thongtintuyensinh2025.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "tsn-244218df",
+      "ma": "TSN",
+      "truong": "ĐH Nha Trang",
+      "nganh": "Kỹ thuật cơ khí động lực",
+      "tinh": "Khánh Hòa",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "D07"
+      ],
+      "diem": {
+        "2022": 15.5,
+        "2023": 16,
+        "2024": 16.5
+      },
+      "dk": 16.5,
+      "hocPhi": {
+        "trieuNam": 26.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://tuyensinh.ntu.edu.vn/",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "qsc-77d4a3a1",
+      "ma": "QSC",
+      "truong": "ĐH Công nghệ Thông tin - ĐHQG TP.HCM",
+      "nganh": "Khoa học máy tính",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ],
+      "diem": {
+        "2023": 26.9,
+        "2024": 27.3
+      },
+      "dk": 27.3,
+      "hocPhi": {
+        "trieuNam": 35,
+        "nam": "2025",
+        "trang": 21,
+        "url": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf"
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "qsc-24737475",
+      "ma": "QSC",
+      "truong": "ĐH Công nghệ Thông tin - ĐHQG TP.HCM",
+      "nganh": "Hệ thống thông tin",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "D07"
+      ],
+      "diem": {
+        "2023": 26.1,
+        "2024": 26.25
+      },
+      "dk": 26.25,
+      "hocPhi": {
+        "trieuNam": 35,
+        "nam": "2025",
+        "trang": 21,
+        "url": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf"
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "qst-b44776a1",
+      "ma": "QST",
+      "truong": "ĐH Khoa học Tự nhiên - ĐHQG TP.HCM",
+      "nganh": "Trí tuệ nhân tạo",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "B08",
+        "D07"
+      ],
+      "diem": {
+        "2022": 16.5,
+        "2023": 27,
+        "2024": 27.7
+      },
+      "dk": 27.7,
+      "hocPhi": {
+        "trieuNam": 40.5,
+        "nam": "2024",
+        "uocTinh": true
+      },
+      "nguon": "https://hcmus.edu.vn/tuyen-sinh-dai-hoc/",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "qsx-6c5d8a1a",
+      "ma": "QSX",
+      "truong": "ĐH KHXH&NV - ĐHQG TP.HCM",
+      "nganh": "CT chuẩn - Lưu trữ học",
+      "tinh": "TP.HCM",
+      "pt": "DGNL_KHAC",
+      "tier": "official_pdf",
+      "toHop": [
+        "C00",
+        "D01",
+        "A00",
+        "A01"
+      ],
+      "diem": {
+        "2024": 16
+      },
+      "dk": 16,
+      "hocPhi": {
+        "trieuNam": 26,
+        "nam": "2024",
+        "trang": 32,
+        "url": "https://images.tuyensinh247.com/picture/2024/0426/de-an-tuyen-sinh-2024-truong-dh-khxhnv-dhqg-hcm.pdf"
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2025/0614/thong-tin-tuyen-sinh-nam-2025.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "yds-ec5a439c",
+      "ma": "YDS",
+      "truong": "ĐH Y Dược TP.HCM",
+      "nganh": "Dinh dưỡng",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "B00",
+        "D07"
+      ],
+      "diem": {
+        "2022": 20.35,
+        "2023": 23.4
+      },
+      "dk": 23.4,
+      "hocPhi": {
+        "trieuNam": 48,
+        "nam": "2026",
+        "trang": 10,
+        "url": "https://cdn.tuyensinh247.com/picture/2026/0616/2415-thongbao-xettuyendhcq2026.pdf"
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2024/0602/de-an-ts-dh-y-duoc-tphcm-2024.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "spk-548bb8c3",
+      "ma": "SPK",
+      "truong": "ĐH Công nghệ Kỹ thuật TP.HCM",
+      "nganh": "Công nghệ Kỹ thuật máy tính (đào tạo bằng tiếng Anh)",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "C01",
+        "D01"
+      ],
+      "diem": {
+        "2026": 24.3
+      },
+      "dk": 24.3,
+      "hocPhi": {
+        "trieuNam": 54,
+        "nam": "2024",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-SPK.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "sgd-c2c1be12",
+      "ma": "SGD",
+      "truong": "ĐH Sài Gòn",
+      "nganh": "Kỹ thuật phần mềm",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "B00"
+      ],
+      "diem": {
+        "2026": 22.76
+      },
+      "dk": 22.76,
+      "hocPhi": {
+        "trieuNam": 27.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-SGD.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "ntt-02bcda66",
+      "ma": "NTT",
+      "truong": "ĐH Nguyễn Tất Thành",
+      "nganh": "Vật lý y khoa",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "A02",
+        "B00"
+      ],
+      "diem": {
+        "2025": 15
+      },
+      "dk": 15,
+      "hocPhi": {
+        "trieuNam": 95,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-NTT.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "hiu-02b30c5f",
+      "ma": "HIU",
+      "truong": "ĐH Quốc tế Hồng Bàng",
+      "nganh": "Y khoa",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A02",
+        "B00",
+        "D07",
+        "D08",
+        "X14"
+      ],
+      "diem": {
+        "2025": 20.5
+      },
+      "dk": 20.5,
+      "hocPhi": {
+        "trieuNam": 180,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-HIU.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "fpt-472054b8",
+      "ma": "FPT",
+      "truong": "ĐH FPT",
+      "nganh": "Ngôn ngữ Trung Quốc",
+      "tinh": "Hà Nội",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "C01",
+        "C02",
+        "C03",
+        "C04"
+      ],
+      "diem": {
+        "2024": 21
+      },
+      "dk": 21,
+      "hocPhi": {
+        "trieuNam": 86.7,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-FPT.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "uef-21ae965c",
+      "ma": "UEF",
+      "truong": "ĐH Kinh tế - Tài chính TP.HCM (UEF)",
+      "nganh": "Thiết kế đồ họa",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "C01",
+        "C03",
+        "C04",
+        "D01",
+        "X01",
+        "X02"
+      ],
+      "diem": {
+        "2026": 15
+      },
+      "dk": 15,
+      "hocPhi": {
+        "trieuNam": 68,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-UEF.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "bvu-089fe802",
+      "ma": "BVU",
+      "truong": "ĐH Bà Rịa - Vũng Tàu",
+      "nganh": "Công nghệ thông tin",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "D01",
+        "X26"
+      ],
+      "diem": {
+        "2025": 15
+      },
+      "dk": 15,
+      "hocPhi": {
+        "trieuNam": 28.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-BVU.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "dkc-86f20189",
+      "ma": "DKC",
+      "truong": "ĐH Công nghệ TP.HCM (HUTECH)",
+      "nganh": "Công nghệ điện ảnh, truyền hình",
+      "tinh": "TP.HCM",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A01",
+        "C00",
+        "C01",
+        "C03",
+        "C04",
+        "D01",
+        "D09",
+        "D10",
+        "H01",
+        "V00",
+        "X01",
+        "X25"
+      ],
+      "diem": {
+        "2026": 15
+      },
+      "dk": 15,
+      "hocPhi": {
+        "trieuNam": 38,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/truong-DKC.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "yct-c3d314bd",
+      "ma": "YCT",
+      "truong": "Trường Đại học Y Dược Cần Thơ",
+      "nganh": "Y khoa",
+      "tinh": "Cần Thơ",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "B00"
+      ],
+      "diem": {
+        "2026": 25.3
+      },
+      "dk": 25.3,
+      "hocPhi": {
+        "trieuNam": 44.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/dai-hoc-y-duoc-can-tho-YCT.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "tct-b8d24d2a",
+      "ma": "TCT",
+      "truong": "Trường Đại học Cần Thơ",
+      "nganh": "An toàn thông tin",
+      "tinh": "Cần Thơ",
+      "pt": "THPT",
+      "tier": "aggregator_verified",
+      "toHop": [
+        "A00",
+        "A01",
+        "X06",
+        "X26"
+      ],
+      "diem": {
+        "2026": 22.85
+      },
+      "dk": 22.85,
+      "hocPhi": {
+        "trieuNam": 24.5,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://diemthi.tuyensinh247.com/diem-chuan/dai-hoc-can-tho-TCT.html",
+      "daKiemChungUI": false
+    },
+    {
+      "id": "ttn-166161bc",
+      "ma": "TTN",
+      "truong": "ĐH Tiền Giang",
+      "nganh": "Sư phạm Sinh học",
+      "tinh": "Đồng Tháp",
+      "pt": "DGNL_HCM",
+      "tier": "official_pdf",
+      "toHop": [
+        "A02",
+        "B00",
+        "B03",
+        "B08",
+        "X14"
+      ],
+      "diem": {
+        "2025": 28
+      },
+      "dk": 28,
+      "hocPhi": {
+        "trieuNam": 15.2,
+        "nam": "2026",
+        "uocTinh": true
+      },
+      "nguon": "https://images.tuyensinh247.com/picture/2026/0415/thong-tin-tuyen-sinh-truong-dai-hoc-tay-nguyen-2026.pdf",
+      "daKiemChungUI": true
+    },
+    {
+      "id": "qst-5c488ee5",
+      "ma": "QST",
+      "truong": "ĐH Khoa học Tự nhiên - ĐHQG TP.HCM",
+      "nganh": "Vật lý y khoa",
+      "tinh": "TP.HCM",
+      "pt": "DGNL_KHAC",
+      "tier": "official_pdf",
+      "toHop": [
+        "A00",
+        "A01",
+        "A02",
+        "A03",
+        "C01",
+        "X06"
+      ],
+      "diem": {
+        "2023": 27
+      },
+      "dk": 27,
+      "hocPhi": {
+        "trieuNam": 32.6,
+        "nam": "2024",
+        "uocTinh": true
+      },
+      "nguon": "https://hcmus.edu.vn/tuyen-sinh-dai-hoc/",
+      "daKiemChungUI": true
+    }
+  ],
+  "goldenTests": [
+    {
+      "id": "GT-01",
+      "group": "1. Thiếu 1 môn trong tổ hợp",
+      "input": "Tổ hợp A01 (Toán 8.5, Lý 8.5, Tiếng Anh = null)",
+      "expected": "monThieuCuaToHop = ['tiengAnh'], không xếp nhãn giả",
+      "actual": {
+        "thieu": [
+          "tiengAnh"
+        ],
+        "tongTam": 17
+      },
+      "pass": true
+    },
+    {
+      "id": "GT-02",
+      "group": "2. Điểm bằng đúng ngưỡng (chenh = 0.0)",
+      "input": "Điểm xét = 26.25 (bằng đúng chuẩn 26.25)",
+      "expected": "Nhãn = 'Vừa sức' (0 <= chenh < 1.5), xác suất logistic z=0 -> 50%",
+      "actual": {
+        "nhan": "Vừa sức",
+        "xacSuatAtKyVong": 50
+      },
+      "pass": true
+    },
+    {
+      "id": "GT-03",
+      "group": "3. Điểm sát ngưỡng (-0.05 và +0.05, +1.49 và +1.50, +3.99 và +4.00)",
+      "input": "Chuẩn = 25.0; thử 24.95, 25.00, 25.05, 26.49, 26.50, 28.99, 29.00",
+      "expected": "24.95 -> Thử sức; 25.00..26.49 -> Vừa sức; 26.50..28.99 -> An toàn; 29.00 -> Dự phòng",
+      "actual": [
+        {
+          "diem": 24.95,
+          "nhan": "Thử sức"
+        },
+        {
+          "diem": 25,
+          "nhan": "Vừa sức"
+        },
+        {
+          "diem": 25.05,
+          "nhan": "Vừa sức"
+        },
+        {
+          "diem": 26.49,
+          "nhan": "Vừa sức"
+        },
+        {
+          "diem": 26.5,
+          "nhan": "An toàn"
+        },
+        {
+          "diem": 28.99,
+          "nhan": "An toàn"
+        },
+        {
+          "diem": 29,
+          "nhan": "Dự phòng"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "GT-04",
+      "group": "4. Điểm ưu tiên có điều kiện (tổng < 22.5, >= 22.5, = 30.0)",
+      "input": "KV1 (+0.75) + UT1 (+2.0) => muc = 2.75; thử tại tổng = 21.0, 22.5, 25.5, 30.0",
+      "expected": "21.0 -> +2.75 (tổng 23.75); 22.5 -> +2.75 (tổng 25.25); 25.5 -> +1.65 (tổng 27.15); 30.0 -> +0 (tổng 30.0)",
+      "actual": [
+        {
+          "tong3": 21,
+          "uuTien": 2.75,
+          "tongXet": 23.75
+        },
+        {
+          "tong3": 22.5,
+          "uuTien": 2.75,
+          "tongXet": 25.25
+        },
+        {
+          "tong3": 25.5,
+          "uuTien": 1.65,
+          "tongXet": 27.15
+        },
+        {
+          "tong3": 30,
+          "uuTien": 0,
+          "tongXet": 30
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "GT-05",
+      "group": "5. Điểm vượt phạm vi (< 0, > 10, NaN)",
+      "input": "tong = 31.0 hoặc muc = -1 hoặc NaN",
+      "expected": "diemUuTien(31, 2.75) = 0; tongCoUuTien không vượt 30.0; docDiem chặn <0 và >10",
+      "actual": {
+        "utAt31": 0,
+        "tongAt31": 30,
+        "utAtNaN": 0
+      },
+      "pass": true
+    },
+    {
+      "id": "GT-06",
+      "group": "6. Đổi phương thức xét tuyển (THPT vs DGNL_HCM / DGTD)",
+      "input": "Ngành có phuongThuc = 'DGNL_HCM' hoặc 'DGTD'",
+      "expected": "lyDoKhacPhuongThuc chặn so sánh trực tiếp với thang 30",
+      "actual": {
+        "id": "c19-f2b80438",
+        "pt": "HOC_BA",
+        "diemMin": 22.85
+      },
+      "pass": true
+    },
+    {
+      "id": "GT-07",
+      "group": "7. Đổi khu vực ưu tiên (KV3 -> KV2 -> KV2-NT -> KV1)",
+      "input": "Tổng 3 môn = 24.0; đổi KV3 (0), KV2 (0.25), KV2-NT (0.5), KV1 (0.75)",
+      "expected": "Hệ số giảm = (30-24)/7.5 = 0.8 -> cộng lần lượt 0, +0.20, +0.40, +0.60",
+      "actual": [
+        {
+          "kv": "KV3",
+          "mucGoc": 0,
+          "congThucTe": 0,
+          "tongXet": 24
+        },
+        {
+          "kv": "KV2",
+          "mucGoc": 0.25,
+          "congThucTe": 0.2,
+          "tongXet": 24.2
+        },
+        {
+          "kv": "KV2-NT",
+          "mucGoc": 0.5,
+          "congThucTe": 0.4,
+          "tongXet": 24.4
+        },
+        {
+          "kv": "KV1",
+          "mucGoc": 0.75,
+          "congThucTe": 0.6,
+          "tongXet": 24.6
+        }
+      ],
+      "pass": true
+    },
+    {
+      "id": "GT-08",
+      "group": "8. Dữ liệu không tồn tại (ID ngành giả, không có năm điểm)",
+      "input": "ID ngành không tồn tại hoặc diemTheoNam rỗng",
+      "expected": "Không crash, trả về null / undefined an toàn",
+      "actual": {
+        "xacSuatEmpty": {
+          "xacSuat": 0.79,
+          "phanTram": 79,
+          "khoangTinCay": [
+            64,
+            94
+          ],
+          "nhanRuiRo": "An toàn",
+          "chenhDiem": 1,
+          "diemXet": 25,
+          "diemUuTienThucTe": 0,
+          "diemKyVong": 24,
+          "doBienDongTau": 1.25,
+          "soNamLichSu": 0,
+          "khuyenNghi": "Điểm của bạn cao hơn mốc dự báo an toàn. Rất vững tâm làm nguyện vọng bảo hiểm."
+        },
+        "duBaoEmpty": null
+      },
+      "pass": true
+    }
+  ]
+}

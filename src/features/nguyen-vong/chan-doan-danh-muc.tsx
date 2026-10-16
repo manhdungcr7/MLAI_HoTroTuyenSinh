@@ -106,7 +106,7 @@ export function ChanDoanDanhMucCard({
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
                 <b className="text-[15px] font-extrabold text-muc">
-                  Đánh giá Cơ hội Trúng tuyển
+                  Đánh giá cơ hội trúng tuyển
                 </b>
                 <span
                   className={gop(
@@ -121,6 +121,9 @@ export function ChanDoanDanhMucCard({
                   {chanDoan.danhGiaRuiRo}
                 </span>
               </div>
+              <span className="block text-[11px] text-chu-phu mt-0.5">
+                Ước lượng tham khảo từ biến động điểm chuẩn lịch sử
+              </span>
             </div>
           </div>
 
@@ -132,10 +135,10 @@ export function ChanDoanDanhMucCard({
                 tongXacSuat >= 90 ? "text-luc-chu" : tongXacSuat >= 75 ? "text-xanh" : "text-do"
               )}
             >
-              {tongXacSuat}%
+              ~{tongXacSuat}%
             </span>
             <span className="block text-[11px] font-semibold text-chu-phu mt-0.5">
-              Đỗ ≥ 1 nguyện vọng
+              Cơ hội ≥ 1 NV
             </span>
           </div>
         </div>
@@ -211,13 +214,11 @@ export function ChanDoanDanhMucCard({
       <HopTruot
         mo={moToiUuModal}
         dong={() => setMoToiUuModal(false)}
-        tieuDe="Gợi ý danh mục thông minh (Decision Intelligence)"
+        tieuDe="Gợi ý danh mục thông minh"
       >
         <div className="space-y-4">
           <p className="text-[13px] text-chu-phu leading-relaxed">
-            Hệ thống áp dụng giải thuật chọn lọc đa mục tiêu (Knapsack & Portfolio
-            Theory) từ 3.652 ngành đào tạo, tự động sắp xếp thứ tự chuẩn xác để đạt cơ hội trúng
-            tuyển cao nhất mà không bị nghịch đảo.
+            Hệ thống chọn lọc danh mục cân bằng 3 tầng (Thử sức · Vừa sức · An toàn) từ 3.648 chương trình đào tạo theo điểm số, ngân sách và khu vực của em, đồng thời sắp xếp thứ tự không bị nghịch đảo.
           </p>
 
           {/* Chọn chiến lược lựa chọn */}
@@ -246,7 +247,7 @@ export function ChanDoanDanhMucCard({
                     : "bg-trang border-vien text-chu hover:bg-luc-nhat"
                 )}
               >
-                Thận trọng (An toàn 100%)
+                Thận trọng (Ưu tiên an toàn)
               </button>
               <button
                 type="button"

@@ -19,7 +19,8 @@ import type { DiemDayDu, HoSo, LuaChon } from "@/state/types";
 import { tinhXacSuatTrungTuyen, type ThongSoXacSuat } from "@/engine/xac-suat-trung-tuyen";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
-import { NGAN_SACH_TOI_DA } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, nhanChoLuaChon } from "@/engine/phan-tich";
+import { mucUuTien } from "@/engine/diem-uu-tien";
 
 export interface PhapNghiemNguyenVong {
   id: string;
@@ -66,6 +67,13 @@ export interface HoSoXetTuyenToiUu {
   uuTienTuyenSinh?: HoSo["uuTienTuyenSinh"] | null;
 }
 
+/** Chuẩn hoá bảng điểm có sẵn mức ưu tiên (tránh cộng ưu tiên 2 lần khi tongChoLuaChon đã cộng). */
+function diemCoUuTien(diemThi: DiemDayDu, uuTien?: HoSo["uuTienTuyenSinh"] | null): DiemDayDu {
+  if (diemThi.uuTien !== undefined) return diemThi;
+  const muc = mucUuTien(uuTien);
+  return muc > 0 ? { ...diemThi, uuTien: muc } : diemThi;
+}
+
 /**
  * Đánh giá toàn diện một danh mục nguyện vọng đã chọn của thí sinh
  */
@@ -76,6 +84,7 @@ export function danhGiaDanhMucToanDien(
   hoSo: HoSoXetTuyenToiUu
 ): ChanDoanDanhMuc {
   const nganSachToiDa = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : null;
+  const diemChuanHoa = diemCoUuTien(diemThi, hoSo.uuTienTuyenSinh);
 
   const cacNguyenVong: PhapNghiemNguyenVong[] = [];
   let tichXacSuatTruot = 1.0;
@@ -86,15 +95,15 @@ export function danhGiaDanhMucToanDien(
     .map((id) => timLuaChon(id))
     .filter((lc): lc is LuaChon => lc !== undefined);
 
-  // Bước 1: Tính xác suất độc lập cho từng nguyện vọng
+  // Bước 1: Tính xác suất độc lập cho từng nguyện vọng (tongMon.tong đã bao gồm ưu tiên)
   for (let i = 0; i < validEntries.length; i++) {
     const lc = validEntries[i];
-    const tongMon = tongChoLuaChon(lc, diemThi);
-    const thongSo = tinhXacSuatTrungTuyen(tongMon.tong, lc, hoSo.uuTienTuyenSinh);
+    const tongMon = tongChoLuaChon(lc, diemChuanHoa);
+    const thongSo = tinhXacSuatTrungTuyen(tongMon.tong, lc);
 
     const vuotNganSach = nganSachToiDa !== null && (lc.hocPhiMin ?? 0) > nganSachToiDa;
 
-    const pDocLap = thongSo ? thongSo.xacSuat : 0.5; // Giả định trung vị nếu chưa tính được điểm
+    const pDocLap = thongSo ? thongSo.xacSuat : 0; // Chưa đủ điểm tổ hợp của ngành thì không tính xác suất ảo
     const xacSuatThucTe = LAM_TRON(pDocLap * tichXacSuatTruot);
     tichXacSuatTruot *= (1 - pDocLap);
 
@@ -113,20 +122,21 @@ export function danhGiaDanhMucToanDien(
   }
 
   // Bước 2: Phát hiện nghịch đảo thứ tự (Inversion Detection)
-  // Nếu một nguyện vọng đứng trước có điểm chuẩn thấp hơn rõ rệt (> 1.2 điểm) hoặc xác suất đỗ cao hơn (> 35%) so với nguyện vọng đứng sau
+  // Chỉ so sánh các cặp nguyện vọng đã đủ điểm tính xác suất
   const canhBaoNghiemTrong: string[] = [];
   for (let i = 0; i < cacNguyenVong.length; i++) {
     for (let j = i + 1; j < cacNguyenVong.length; j++) {
       const nvTruoc = cacNguyenVong[i];
       const nvSau = cacNguyenVong[j];
+      if (!nvTruoc.thongSo || !nvSau.thongSo) continue;
 
-      const pTruoc = nvTruoc.thongSo?.xacSuat ?? 0.5;
-      const pSau = nvSau.thongSo?.xacSuat ?? 0.5;
+      const pTruoc = nvTruoc.thongSo.xacSuat;
+      const pSau = nvSau.thongSo.xacSuat;
 
-      // Nguyện vọng trước rất dễ đỗ (>= 80%) mà nguyện vọng sau lại là ngành cạnh tranh (<= 50%)
+      // Nguyện vọng trước rất dễ đỗ (>= 78%) mà nguyện vọng sau lại là ngành cạnh tranh (<= 52%)
       if (pTruoc >= 0.78 && pSau <= 0.52) {
         nvTruoc.biNghichDao = true;
-        nvTruoc.canhBaoNghichDao = `NV${nvTruoc.thuTu} (${nvTruoc.lc.nganh} - ${nvTruoc.lc.truong}, xác suất đỗ ${nvTruoc.thongSo?.phanTram}%) đang đứng TRƯỚC NV${nvSau.thuTu} (${nvSau.lc.nganh} - ${nvSau.lc.truong}, xác suất ${nvSau.thongSo?.phanTram}%). Nếu đỗ NV${nvTruoc.thuTu}, hệ thống sẽ tự động hủy NV${nvSau.thuTu}!`;
+        nvTruoc.canhBaoNghichDao = `NV${nvTruoc.thuTu} (${nvTruoc.lc.nganh} - ${nvTruoc.lc.truong}, cơ hội tham khảo ~${nvTruoc.thongSo.phanTram}%) đang đứng TRƯỚC NV${nvSau.thuTu} (${nvSau.lc.nganh} - ${nvSau.lc.truong}, cơ hội ~${nvSau.thongSo.phanTram}%). Nếu đỗ NV${nvTruoc.thuTu}, hệ thống sẽ không xét NV${nvSau.thuTu} nữa!`;
         if (!canhBaoNghiemTrong.includes(nvTruoc.canhBaoNghichDao)) {
           canhBaoNghiemTrong.push(nvTruoc.canhBaoNghichDao);
         }
@@ -134,19 +144,17 @@ export function danhGiaDanhMucToanDien(
     }
   }
 
-  // Bước 3: Phân loại cơ cấu
+  // Bước 3: Phân loại cơ cấu đồng nhất với nhãn 4 tầng chuẩn của ứng dụng (nhanChoLuaChon)
   let thuSuc = 0;
   let vuaSuc = 0;
   let anToan = 0;
 
   cacNguyenVong.forEach((nv) => {
-    if (!nv.thongSo) {
-      vuaSuc++;
-      return;
-    }
-    if (nv.thongSo.xacSuat < 0.45) thuSuc++;
-    else if (nv.thongSo.xacSuat < 0.78) vuaSuc++;
-    else anToan++;
+    if (!nv.thongSo) return;
+    const nhan = nhanChoLuaChon(nv.lc, nv.thongSo.diemXet);
+    if (nhan === "Thử sức") thuSuc++;
+    else if (nhan === "Vừa sức") vuaSuc++;
+    else if (nhan === "An toàn" || nhan === "Dự phòng") anToan++;
   });
 
   const xacSuatDoItNhatMotNV = Math.round((1 - tichXacSuatTruot) * 100);
@@ -210,12 +218,13 @@ export function toiUuThuTuDanhMuc(
   diemThi: DiemDayDu,
   hoSo: HoSoXetTuyenToiUu
 ): string[] {
+  const diemChuanHoa = diemCoUuTien(diemThi, hoSo.uuTienTuyenSinh);
   const entries = danhSachIds
     .map((id) => {
       const lc = timLuaChon(id);
       if (!lc) return null;
-      const tongMon = tongChoLuaChon(lc, diemThi);
-      const thongSo = tinhXacSuatTrungTuyen(tongMon.tong, lc, hoSo.uuTienTuyenSinh);
+      const tongMon = tongChoLuaChon(lc, diemChuanHoa);
+      const thongSo = tinhXacSuatTrungTuyen(tongMon.tong, lc);
       return {
         id,
         lc,
@@ -240,7 +249,7 @@ export function toiUuThuTuDanhMuc(
 
 /**
  * Thuật toán tối ưu hoá danh mục thông minh (Smart Portfolio Builder)
- * Lựa chọn ra K nguyện vọng tốt nhất từ toàn bộ dữ liệu 3.652 ngành
+ * Lựa chọn ra K nguyện vọng tốt nhất từ toàn bộ dữ liệu 3.648 ngành
  * thoả mãn ngân sách, khu vực, ngành quan tâm và cấu trúc rủi ro cân bằng tối ưu.
  */
 export function timKiemDanhMucToiUu(
@@ -253,6 +262,7 @@ export function timKiemDanhMucToiUu(
   const nganSachMax = hoSo.nganSach ? NGAN_SACH_TOI_DA[hoSo.nganSach] : Infinity;
   const khuVucHopLe = Array.isArray(hoSo.khuVuc) ? hoSo.khuVuc : [];
   const nganhQuanTam = Array.isArray(hoSo.nganhQuanTam) ? hoSo.nganhQuanTam : [];
+  const diemChuanHoa = diemCoUuTien(diemThi, hoSo.uuTienTuyenSinh);
 
   // Lọc sơ bộ các ngành khả thi
   const khaThi = tatCa
@@ -261,8 +271,8 @@ export function timKiemDanhMucToiUu(
       return true;
     })
     .map((lc) => {
-      const tong = tongChoLuaChon(lc, diemThi).tong;
-      const thongSo = tinhXacSuatTrungTuyen(tong, lc, hoSo.uuTienTuyenSinh);
+      const tong = tongChoLuaChon(lc, diemChuanHoa).tong;
+      const thongSo = tinhXacSuatTrungTuyen(tong, lc);
       const hopKhuVuc = dungKhuVuc(lc, khuVucHopLe) === true;
       const hopNganh = nganhQuanTam.length === 0 || nganhQuanTam.includes(lc.nhomNganh);
       return { lc, thongSo, hopKhuVuc, hopNganh };
@@ -339,10 +349,10 @@ export function timKiemDanhMucToiUu(
 
   // Đảm bảo thứ tự xuất ra là tối ưu (xác suất thấp lên trên, an toàn xuống dưới)
   return ketQua.sort((a, b) => {
-    const tongA = tongChoLuaChon(a, diemThi).tong ?? a.diemMin;
-    const tongB = tongChoLuaChon(b, diemThi).tong ?? b.diemMin;
-    const pA = tinhXacSuatTrungTuyen(tongA, a, hoSo.uuTienTuyenSinh)?.xacSuat ?? 0.5;
-    const pB = tinhXacSuatTrungTuyen(tongB, b, hoSo.uuTienTuyenSinh)?.xacSuat ?? 0.5;
+    const tongA = tongChoLuaChon(a, diemChuanHoa).tong ?? a.diemMin;
+    const tongB = tongChoLuaChon(b, diemChuanHoa).tong ?? b.diemMin;
+    const pA = tinhXacSuatTrungTuyen(tongA, a)?.xacSuat ?? 0.5;
+    const pB = tinhXacSuatTrungTuyen(tongB, b)?.xacSuat ?? 0.5;
     return pA - pB;
   });
 }

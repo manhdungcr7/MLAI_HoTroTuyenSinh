@@ -182,7 +182,7 @@ export default function TuVan() {
         </section>
 
         {/* Thanh nhập câu hỏi và câu hỏi gợi ý: Cố định ngay trên thanh 5 tab điều hướng với khoảng cách thoáng */}
-        <div className="fixed bottom-[var(--cao-nav)] inset-x-0 mx-auto max-w-[430px] z-30 bg-trang/95 backdrop-blur-md border-t border-vien px-3 py-2 shadow-sm">
+        <div className="fixed bottom-[var(--cao-nav)] inset-x-0 mx-auto max-w-[430px] z-30 bg-trang border-t border-vien px-3 py-2 shadow-sm">
           {/* Câu hỏi đề xuất hỏi nhanh đặt ngay trên thanh nhập */}
           {tin.length === 0 && (
             <div className="mb-2">

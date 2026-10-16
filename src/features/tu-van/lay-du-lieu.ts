@@ -23,12 +23,12 @@ const BO_QUA = new Set(["nganh", "truong", "hoc", "dai", "diem", "chuan", "em", 
 /** Các cụm từ quen thuộc chỉ trường (đối chiếu tên tiếng Việt). */
 export const CUM_TU_TRUONG: { regex: RegExp; ma: string }[] = [
   { regex: /\b(bach khoa ha noi|dh bach khoa ha noi|bkhn|hust)\b/i, ma: "BKA" },
-  { regex: /\b(bach khoa (?:tp\.?hcm|hcm|sai gon)|qsb)\b/i, ma: "QSB" },
+  { regex: /\b(bach khoa (?:tp\.?\s*hcm|hcm|sai gon)|qsb|hcmut)\b/i, ma: "QSB" },
   { regex: /\b(bach khoa da nang|ddk)\b/i, ma: "DDK" },
   { regex: /\b(bach khoa|dai hoc bach khoa)\b/i, ma: "BKA" },
   { regex: /\b(kinh te quoc dan|ktqd|neu)\b/i, ma: "KHA" },
   { regex: /\b(ngoai thuong|ftu)\b/i, ma: "NTH" },
-  { regex: /\b(cong nghe thong tin|dh cntt|uit)\b/i, ma: "QSC" },
+  { regex: /\b((?:truong|dh|dai hoc) cong nghe thong tin|dh cntt|uit)\b/i, ma: "QSC" },
   { regex: /\b(khoa hoc tu nhien (?:tp\.?hcm|hcm)|hcmus)\b/i, ma: "QST" },
   { regex: /\b(khoa hoc tu nhien (?:ha noi|hn)|hus)\b/i, ma: "QHT" },
   { regex: /\b(buu chinh vien thong|ptit)\b/i, ma: "BVH" },
@@ -74,6 +74,9 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
   const qKhongDau = khongDau(cauHoi);
   const maTruongUuTien = new Set<string>();
   for (const c of CUM_TU_TRUONG) {
+    if (c.ma === "BKA" && c.regex.source === "\\b(bach khoa|dai hoc bach khoa)\\b" && (maTruongUuTien.has("QSB") || maTruongUuTien.has("DDK")) && !/\b(bach khoa ha noi|bkhn|hust)\b/i.test(qKhongDau)) {
+      continue;
+    }
     if (c.regex.test(qKhongDau)) maTruongUuTien.add(c.ma);
   }
 
@@ -702,7 +705,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
       ? `\n\n⚠️ **CẢNH BÁO NGHỊCH ĐẢO THỨ TỰ (NGUY CƠ CAO):**\n` + cd.canhBaoNghiemTrong.map((cb) => `• ${cb}`).join("\n") + "\n👉 Bạn hãy vào mục **Nguyện vọng** và bấm nút **Tự động chỉnh thứ tự chuẩn** để bảo vệ cơ hội trúng tuyển vào ngành mơ ước!"
       : "";
 
-    const xacSuatStr = `\n\n📈 **Đánh giá xác suất (Decision Intelligence Engine):**\n• **Tổng xác suất đỗ ít nhất 1 nguyện vọng**: **${cd.xacSuatDoItNhatMotNV}%**.\n• **Cơ cấu 3 tầng**: ${cd.coCau.thuSuc} Thử sức, ${cd.coCau.vuaSuc} Vừa sức, ${cd.coCau.anToan} An toàn.`;
+    const xacSuatStr = `\n\n📈 **Đánh giá cơ hội tham khảo (từ biến động điểm chuẩn lịch sử):**\n• **Ước lượng cơ hội đỗ ít nhất 1 nguyện vọng**: **~${cd.xacSuatDoItNhatMotNV}%**.\n• **Cơ cấu 3 tầng**: ${cd.coCau.thuSuc} Thử sức, ${cd.coCau.vuaSuc} Vừa sức, ${cd.coCau.anToan} An toàn.`;
 
     const mn = phanTichMoNeo(s);
     const gocNV1 = mn

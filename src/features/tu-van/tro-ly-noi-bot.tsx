@@ -285,8 +285,8 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
     };
   }, [mo]);
 
-  // Không hiển thị trên màn tư vấn chính hoặc màn chào mừng ban đầu
-  if (pathname === "/tu-van" || pathname.startsWith("/tu-van") || pathname.startsWith("/chao")) {
+  // Không hiển thị trên màn tư vấn chính, màn chào mừng hoặc luồng khởi đầu (tránh đè nút Tiếp tục cố định ở đáy)
+  if (pathname === "/tu-van" || pathname.startsWith("/tu-van") || pathname.startsWith("/chao") || pathname.startsWith("/bat-dau")) {
     return null;
   }
 

@@ -21,12 +21,12 @@ const MOCK_STATE = {
     giaiThuongHsg: { cap: "tinh", mon: "Toán", giai: "ba" },
   },
   mucTieu: {
-    luaChonId: "qsc-060cb1c0", phuongThuc: "THPT", maToHop: "A01",
-    toHop: ["toan", "vatLy", "tiengAnh"], diemMucTieu: 26.5, ngayThi: "2026-06-25"
+    luaChonId: "qsc-24737475", phuongThuc: "THPT", maToHop: "A01",
+    toHop: ["toan", "vatLy", "tiengAnh"], diemMucTieu: 26.6, ngayThi: "2026-06-25"
   },
-  nguyenVong: ["qsc-060cb1c0", "qst-5caf16b0", "bvh-1a2b3c4d", "bka-789xyz12"],
-  yeuThich: ["qsc-060cb1c0"],
-  soSanh: ["qsc-060cb1c0", "qst-5caf16b0"],
+  nguyenVong: ["qsc-24737475", "gsa-330d931f", "spk-548bb8c3", "hhk-b4a12eac", "dvl-f2b05705"],
+  yeuThich: ["qsc-24737475", "gsa-330d931f"],
+  soSanh: ["qsc-24737475", "gsa-330d931f"],
   diemThi: [
     { mon: "toan", diem: 8.4, ngay: "2026-10-01" },
     { mon: "vatLy", diem: 8.2, ngay: "2026-10-01" },

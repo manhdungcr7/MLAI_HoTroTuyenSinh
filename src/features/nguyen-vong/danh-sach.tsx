@@ -220,7 +220,7 @@ export default function DanhSachNguyenVong() {
 
             {tong === null && (
               <DongThongBao tone="cam" icon={GraduationCap} tieuDe="Chưa đủ điểm để xếp nhãn"
-                moTa="Nhập điểm Toán, Vật lý, Tiếng Anh để biết mỗi nguyện vọng là Thử sức, Vừa sức, An toàn hay Dự phòng."
+                moTa="Nhập điểm các môn theo tổ hợp xét tuyển để biết mỗi nguyện vọng là Thử sức, Vừa sức, An toàn hay Dự phòng."
                 hanhDong="Nhập điểm ngay" onClick={() => nav(s.diemThi.length ? DUONG_DAN.diemThiThu() : DUONG_DAN.batDau(2))} />
             )}
 
@@ -332,9 +332,9 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
                           ? "bg-xanh/10 text-xanh border-xanh/30"
                           : "bg-cam/10 text-cam-chu border-cam/30"
                       )}
-                      title={`Độ biến động τ = ${xs.doBienDongTau}. Khoảng tin cậy: ${xs.khoangTinCay[0]}% – ${xs.khoangTinCay[1]}%`}
+                      title={`Ước lượng tham khảo (τ = ${xs.doBienDongTau}). Khoảng tham chiếu: ${xs.khoangTinCay[0]}% – ${xs.khoangTinCay[1]}%`}
                     >
-                      Xác suất đỗ ~{xs.phanTram}%
+                      Cơ hội tham khảo ~{xs.phanTram}%
                     </span>
                   )}
                 </span>

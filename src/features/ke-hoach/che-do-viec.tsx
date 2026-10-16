@@ -36,12 +36,12 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
   /** Tạo việc cho tuần đang xem từ mục tiêu và điểm hiện tại, rồi xếp ngay vào các khung giờ trống (chỉ từ hôm nay trở đi). */
   const [hoiLich, setHoiLich] = useState(false); // hộp xác nhận khi chưa có lịch học trên lớp
   const [moNhanh, setMoNhanh] = useState(false);
-  const taoVaXep = (daXacNhan = false) => {
+  const taoVaXep = (daXacNhan = false, nhe = !s.mucTieu) => {
     if (s.coDinh.length === 0 && !daXacNhan) { setHoiLich(true); return; }
     setHoiLich(false);
     const bd = ngayBatDauXep(tuan, hom, phutBayGio(), s.cauHinh.ngayNghi);
     if (bd.hetTuan) return hienThongBao(bd.ghiChu ?? "Tuần này đã gần hết. Bạn chuyển sang tuần sau rồi tạo việc nhé.");
-    const kq = viecChoTuan(s, tuan, bd.tuNgay);
+    const kq = viecChoTuan(s, tuan, bd.tuNgay, new Date(), nhe);
     if (!kq.ok) return hienThongBao(kq.lyDo);
     const r = xepLai(tuan, bd.tuNgay, kq.viec);
     hienThongBao(bd.ghiChu ? `${bd.ghiChu} Đã tạo ${kq.moi} việc.` : r.chuaXep ? `Đã tạo ${kq.moi} việc, còn ${r.chuaXep} việc chưa có chỗ trong tuần` : `Đã tạo ${kq.moi} việc và xếp vào lịch tuần này`);
@@ -76,12 +76,16 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
         {hopCanLich}
       </>
     ) : (
-      <TrangThaiTrong bieuTuong={<Target size={26} />} tieuDe="Bạn chưa có mục tiêu"
-        moTa="Chọn một mục tiêu để hệ thống lập kế hoạch học tập cá nhân hóa theo điểm số của bạn.">
-        <div className="space-y-2">
-          <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Chọn mục tiêu ở Khám phá</Nut>
-        </div>
-      </TrangThaiTrong>
+      <>
+        <TrangThaiTrong bieuTuong={<Target size={26} />} tieuDe="Bạn chưa có mục tiêu"
+          moTa="Chọn một mục tiêu để lập kế hoạch sát ngành mơ ước, hoặc tạo lịch ôn nền tảng 3 môn chung ngay bây giờ.">
+          <div className="space-y-2">
+            <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Chọn mục tiêu ở Khám phá</Nut>
+            <Nut kieu="vien" bieuTuong={ListPlus} onClick={() => taoVaXep(false, true)}>Tạo lịch ôn nền tảng</Nut>
+          </div>
+        </TrangThaiTrong>
+        {hopCanLich}
+      </>
     );
   }
 

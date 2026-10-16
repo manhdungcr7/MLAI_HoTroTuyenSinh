@@ -1,0 +1,536 @@
+{
+  "app": "nguyen-vong-ai",
+  "phienBan": 2,
+  "luc": "2026-10-16T07:10:25.345Z",
+  "duLieu": {
+    "phienBan": 2,
+    "hoSo": {
+      "hoTen": "Nguyễn Minh Anh",
+      "khoi": 12,
+      "tinh": "TP. Hồ Chí Minh",
+      "giaiDoan": "",
+      "nganhQuanTam": [
+        "CNTT"
+      ],
+      "diem": {
+        "toan": 7.8,
+        "vatLy": 6.9,
+        "hoaHoc": 7.2,
+        "sinh": 8.3,
+        "nguVan": 7.6,
+        "tiengAnh": 8.1
+      },
+      "diemManh": [
+        "Tư duy logic",
+        "Giải quyết vấn đề",
+        "Tiếng Anh"
+      ],
+      "canCaiThien": [
+        "Vật lý",
+        "Diễn đạt",
+        "Quản lý thời gian"
+      ],
+      "nganSach": "30-60",
+      "choO": "oNha",
+      "khuVuc": [
+        "TP.HCM"
+      ],
+      "hocXaNha": true,
+      "quanTamViecLam": "rat",
+      "hoanTat": true,
+      "laMau": true,
+      "chungChiNgoaiNgu": {
+        "loai": "IELTS",
+        "diem": 7
+      },
+      "diemDgnl": {
+        "hcm": 875,
+        "hn": null,
+        "tsa": null
+      },
+      "hocBa": {
+        "dtbLop10": 8.6,
+        "dtbLop11": 8.8,
+        "dtbLop12": 9,
+        "dtb3Nam": 8.8,
+        "hocLuc": "gioi",
+        "hanhKiem": "tot"
+      },
+      "giaiThuongHsg": {
+        "cap": "tinh",
+        "mon": "Toán",
+        "giai": "ba"
+      },
+      "soThich": {
+        "diem": {
+          "R": 1,
+          "I": 5,
+          "A": 1,
+          "S": 1,
+          "E": 2,
+          "C": 2
+        },
+        "top": [
+          "I",
+          "C",
+          "E"
+        ],
+        "luc": "2026-10-16T07:10:16.819Z",
+        "giaTri": [
+          "thuNhap",
+          "sangTao"
+        ]
+      }
+    },
+    "mucTieu": {
+      "luaChonId": "qsc-24737475",
+      "phuongThuc": "THPT",
+      "maToHop": "A01",
+      "toHop": [
+        "toan",
+        "vatLy",
+        "tiengAnh"
+      ],
+      "diemMucTieu": 26.25,
+      "ngayThi": "2027-06-26"
+    },
+    "nguyenVong": [
+      "qsc-24737475",
+      "gsa-330d931f",
+      "spk-548bb8c3",
+      "hhk-b4a12eac",
+      "dvl-f2b05705"
+    ],
+    "yeuThich": [
+      "qsc-24737475"
+    ],
+    "soSanh": [
+      "qsc-24737475",
+      "gsa-330d931f"
+    ],
+    "diemThi": [
+      {
+        "mon": "toan",
+        "diem": 7.2,
+        "ngay": "2026-09-17"
+      },
+      {
+        "mon": "toan",
+        "diem": 7.6,
+        "ngay": "2026-10-01"
+      },
+      {
+        "mon": "toan",
+        "diem": 8,
+        "ngay": "2026-10-15"
+      },
+      {
+        "mon": "vatLy",
+        "diem": 8,
+        "ngay": "2026-09-17"
+      },
+      {
+        "mon": "vatLy",
+        "diem": 8.3,
+        "ngay": "2026-10-01"
+      },
+      {
+        "mon": "vatLy",
+        "diem": 8.5,
+        "ngay": "2026-10-15"
+      },
+      {
+        "mon": "tiengAnh",
+        "diem": 7,
+        "ngay": "2026-09-17"
+      },
+      {
+        "mon": "tiengAnh",
+        "diem": 7.5,
+        "ngay": "2026-10-01"
+      },
+      {
+        "mon": "tiengAnh",
+        "diem": 8,
+        "ngay": "2026-10-15"
+      },
+      {
+        "mon": "hoaHoc",
+        "diem": 7,
+        "ngay": "2026-09-17"
+      },
+      {
+        "mon": "hoaHoc",
+        "diem": 7.2,
+        "ngay": "2026-10-01"
+      },
+      {
+        "mon": "hoaHoc",
+        "diem": 7.2,
+        "ngay": "2026-10-15"
+      },
+      {
+        "mon": "nguVan",
+        "diem": 7.6,
+        "ngay": "2026-09-17"
+      },
+      {
+        "mon": "nguVan",
+        "diem": 7.5,
+        "ngay": "2026-10-01"
+      },
+      {
+        "mon": "nguVan",
+        "diem": 7.6,
+        "ngay": "2026-10-15"
+      },
+      {
+        "mon": "sinh",
+        "diem": 8,
+        "ngay": "2026-09-17"
+      },
+      {
+        "mon": "sinh",
+        "diem": 8.2,
+        "ngay": "2026-10-01"
+      },
+      {
+        "mon": "sinh",
+        "diem": 8.3,
+        "ngay": "2026-10-15"
+      }
+    ],
+    "tinhHuong": [],
+    "coDinh": [
+      {
+        "id": "sang-1",
+        "ten": "Toán (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "toan",
+        "thu": 1,
+        "batDau": "07:00",
+        "ketThuc": "08:30"
+      },
+      {
+        "id": "sang-2",
+        "ten": "Vật lý (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "vatLy",
+        "thu": 2,
+        "batDau": "07:00",
+        "ketThuc": "08:30"
+      },
+      {
+        "id": "sang-3",
+        "ten": "Ngữ văn (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "nguVan",
+        "thu": 3,
+        "batDau": "07:00",
+        "ketThuc": "08:30"
+      },
+      {
+        "id": "sang-4",
+        "ten": "Tiếng Anh (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "tiengAnh",
+        "thu": 4,
+        "batDau": "07:00",
+        "ketThuc": "08:30"
+      },
+      {
+        "id": "sang-5",
+        "ten": "Hóa học (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "hoaHoc",
+        "thu": 5,
+        "batDau": "07:00",
+        "ketThuc": "08:30"
+      },
+      {
+        "id": "chieu-1",
+        "ten": "Hóa học (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "hoaHoc",
+        "thu": 1,
+        "batDau": "13:30",
+        "ketThuc": "15:00"
+      },
+      {
+        "id": "chieu-3",
+        "ten": "Hóa học (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "hoaHoc",
+        "thu": 3,
+        "batDau": "13:30",
+        "ketThuc": "15:00"
+      },
+      {
+        "id": "chieu-5",
+        "ten": "Hóa học (lớp học)",
+        "loai": "chinhKhoa",
+        "mon": "hoaHoc",
+        "thu": 5,
+        "batDau": "13:30",
+        "ketThuc": "15:00"
+      },
+      {
+        "id": "them-toan-t2",
+        "ten": "Học thêm Toán",
+        "loai": "hocThem",
+        "mon": "toan",
+        "thu": 1,
+        "batDau": "19:15",
+        "ketThuc": "21:00"
+      },
+      {
+        "id": "them-ly-t6",
+        "ten": "Học thêm Vật lý",
+        "loai": "hocThem",
+        "mon": "vatLy",
+        "thu": 5,
+        "batDau": "19:15",
+        "ketThuc": "21:00"
+      },
+      {
+        "id": "clb-t4",
+        "ten": "Câu lạc bộ trường",
+        "loai": "khac",
+        "thu": 3,
+        "batDau": "16:00",
+        "ketThuc": "17:30"
+      }
+    ],
+    "viec": [
+      {
+        "id": "v-2026-10-12-toan-0",
+        "tuan": "2026-10-12",
+        "mon": "toan",
+        "tieuDe": "Toán – làm nửa đề tính giờ",
+        "chiTiet": "45' làm đề + 30' chữa câu sai.",
+        "phut": 75,
+        "mucUuTien": "cao",
+        "lyDo": "Toán đang 8,0 điểm, cần khoảng 8,6 để tổ hợp đạt 26,3 điểm (xét Hệ thống thông tin – QSC) (còn thiếu 0,6). Còn 253 ngày đến kỳ thi.",
+        "mucTieuBuoi": "Biết điểm thật của Toán lúc này và các dạng bài hay sai, để biết tuần sau ôn gì.",
+        "cacBuoc": [
+          {
+            "phut": 45,
+            "ten": "Làm đề"
+          },
+          {
+            "phut": 30,
+            "ten": "Chữa câu sai"
+          },
+          {
+            "phut": 5,
+            "ten": "Tóm tắt lỗi hay gặp"
+          }
+        ],
+        "tieuChi": [
+          "Làm xong phần đề đã chọn trong đúng thời gian quy định.",
+          "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.",
+          "Đánh dấu 3 dạng bài cần ôn lại."
+        ],
+        "taiLieu": [
+          {
+            "ten": "Sách giáo khoa Toán 12"
+          },
+          {
+            "ten": "Đề minh họa và đề thi thử gần nhất bạn đã có"
+          }
+        ]
+      },
+      {
+        "id": "v-2026-10-12-vatLy-0",
+        "tuan": "2026-10-12",
+        "mon": "vatLy",
+        "tieuDe": "Vật lý – làm nửa đề tính giờ",
+        "chiTiet": "45' làm đề + 30' chữa câu sai.",
+        "phut": 75,
+        "mucUuTien": "cao",
+        "lyDo": "Vật lý đang 8,5 điểm, cần khoảng 9,1 để tổ hợp đạt 26,3 điểm (xét Hệ thống thông tin – QSC) (còn thiếu 0,6). Còn 253 ngày đến kỳ thi.",
+        "mucTieuBuoi": "Biết điểm thật của Lý lúc này và các dạng bài hay sai, để biết tuần sau ôn gì.",
+        "cacBuoc": [
+          {
+            "phut": 45,
+            "ten": "Làm đề"
+          },
+          {
+            "phut": 30,
+            "ten": "Chữa câu sai"
+          },
+          {
+            "phut": 5,
+            "ten": "Tóm tắt lỗi hay gặp"
+          }
+        ],
+        "tieuChi": [
+          "Làm xong phần đề đã chọn trong đúng thời gian quy định.",
+          "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.",
+          "Đánh dấu 3 dạng bài cần ôn lại."
+        ],
+        "taiLieu": [
+          {
+            "ten": "Sách giáo khoa Vật lý 12"
+          },
+          {
+            "ten": "Đề minh họa và đề thi thử gần nhất bạn đã có"
+          }
+        ]
+      },
+      {
+        "id": "v-2026-10-12-tiengAnh-0",
+        "tuan": "2026-10-12",
+        "mon": "tiengAnh",
+        "tieuDe": "Tiếng Anh – làm nửa đề tính giờ",
+        "chiTiet": "45' làm đề + 30' chữa câu sai.",
+        "phut": 75,
+        "mucUuTien": "cao",
+        "lyDo": "Tiếng Anh đang 8,0 điểm, cần khoảng 8,6 để tổ hợp đạt 26,3 điểm (xét Hệ thống thông tin – QSC) (còn thiếu 0,6). Còn 253 ngày đến kỳ thi.",
+        "mucTieuBuoi": "Biết điểm thật của Anh lúc này và các dạng bài hay sai, để biết tuần sau ôn gì.",
+        "cacBuoc": [
+          {
+            "phut": 45,
+            "ten": "Làm đề"
+          },
+          {
+            "phut": 30,
+            "ten": "Chữa câu sai"
+          },
+          {
+            "phut": 5,
+            "ten": "Tóm tắt lỗi hay gặp"
+          }
+        ],
+        "tieuChi": [
+          "Làm xong phần đề đã chọn trong đúng thời gian quy định.",
+          "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.",
+          "Đánh dấu 3 dạng bài cần ôn lại."
+        ],
+        "taiLieu": [
+          {
+            "ten": "Sách giáo khoa Tiếng Anh 12"
+          },
+          {
+            "ten": "Đề minh họa và đề thi thử gần nhất bạn đã có"
+          }
+        ]
+      }
+    ],
+    "trangThaiViec": {
+      "v-2026-10-12-toan-0": "xong",
+      "v-2026-10-12-vatLy-0": "xong"
+    },
+    "khoiHoc": [
+      {
+        "viecId": "v-2026-10-12-vatLy-0",
+        "ten": "Vật lý – làm nửa đề tính giờ",
+        "loai": "tuHoc",
+        "mon": "vatLy",
+        "ngay": "2026-10-16",
+        "batDau": "16:45",
+        "ketThuc": "18:00",
+        "id": "auto-2026-10-16-3"
+      },
+      {
+        "viecId": "v-2026-10-12-tiengAnh-0",
+        "ten": "Tiếng Anh – làm nửa đề tính giờ",
+        "loai": "tuHoc",
+        "mon": "tiengAnh",
+        "ngay": "2026-10-17",
+        "batDau": "16:45",
+        "ketThuc": "18:00",
+        "id": "auto-2026-10-17-4"
+      },
+      {
+        "viecId": "v-2026-10-12-toan-0",
+        "ten": "Toán – làm nửa đề tính giờ",
+        "loai": "tuHoc",
+        "mon": "toan",
+        "ngay": "2026-10-17",
+        "batDau": "19:00",
+        "ketThuc": "20:15",
+        "id": "auto-2026-10-17-2"
+      },
+      {
+        "viecId": null,
+        "ten": "Xem trước bài Toán (sáng mai có tiết)",
+        "loai": "tuHoc",
+        "mon": "toan",
+        "ngay": "2026-10-18",
+        "batDau": "19:00",
+        "ketThuc": "19:15",
+        "ghiChu": "Đọc lướt 15 phút để sáng mai nghe giảng dễ hơn.",
+        "id": "auto-2026-10-18-0"
+      },
+      {
+        "viecId": null,
+        "ten": "Xem trước bài Hóa (chiều mai có tiết)",
+        "loai": "tuHoc",
+        "mon": "hoaHoc",
+        "ngay": "2026-10-18",
+        "batDau": "19:25",
+        "ketThuc": "19:40",
+        "ghiChu": "Đọc lướt 15 phút để chiều mai nghe giảng dễ hơn.",
+        "id": "auto-2026-10-18-1"
+      }
+    ],
+    "cauHinh": {
+      "gioBatDau": "06:30",
+      "gioKetThuc": "21:30",
+      "gioHocToiDaMoiNgay": 3,
+      "thoiDiemTot": "toi",
+      "ngayNghi": [
+        7
+      ],
+      "nghiGiuaBuoi": 10
+    },
+    "tamTrang": "binhThuong",
+    "nhacNho": {
+      "bat": false,
+      "truocPhut": 15,
+      "nhacChuanBiBai": true,
+      "gioChuanBiBai": "20:00"
+    },
+    "lichSu": [
+      {
+        "viecId": "v-2026-10-12-vatLy-0",
+        "ten": "Vật lý – làm nửa đề tính giờ",
+        "luc": "2026-10-16T07:10:19.077Z",
+        "trangThai": "xong"
+      },
+      {
+        "viecId": "v-2026-10-12-toan-0",
+        "ten": "Toán – làm nửa đề tính giờ",
+        "luc": "2026-10-16T07:10:18.729Z",
+        "trangThai": "xong"
+      },
+      {
+        "viecId": "v-x1",
+        "ten": "Hoàn thành bài tập Toán (Chương 3)",
+        "luc": "2026-10-16T06:10:16.815Z",
+        "trangThai": "xong"
+      },
+      {
+        "viecId": "v-x2",
+        "ten": "Ôn lại công thức Vật lý",
+        "luc": "2026-10-16T05:10:16.815Z",
+        "trangThai": "xong"
+      },
+      {
+        "viecId": "v-x3",
+        "ten": "Đọc 1 bài báo tiếng Anh",
+        "luc": "2026-10-15T07:10:16.815Z",
+        "trangThai": "doi"
+      },
+      {
+        "viecId": "v-x4",
+        "ten": "Hoàn thành đề Hóa học",
+        "luc": "2026-10-15T06:10:16.815Z",
+        "trangThai": "xong"
+      }
+    ],
+    "cauNoiHomNay": 0,
+    "loiNhan": []
+  }
+}

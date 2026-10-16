@@ -1,0 +1,596 @@
+{
+  "executedAt": "2026-10-16T07:10:38.382Z",
+  "targetUrl": "https://nguyenvongai.pages.dev",
+  "results": [
+    {
+      "persona": "Persona A — Học sinh lớp 11",
+      "input": {
+        "hoTen": "Trần Minh Khôi",
+        "lop": "Lớp 10–11 (khoi: 11, chang: dinhHuong)",
+        "tinh": "Đà Nẵng",
+        "nganhQuanTam": [
+          "CNTT",
+          "Kinh tế"
+        ],
+        "diemTHPT": "Để trống (chưa có điểm thi THPT)",
+        "hocBa": {
+          "dtbLop10": "8,2",
+          "dtbLop11": "8,5"
+        },
+        "nganSach": "Dưới 30 triệu",
+        "choO": "Ở nhà",
+        "khuVuc": [
+          "Đà Nẵng"
+        ]
+      },
+      "steps": [
+        {
+          "step": "Hoàn tất tạo hồ sơ Lớp 11 -> Hôm nay",
+          "urlAfterComplete": "https://nguyenvongai.pages.dev/#/",
+          "hasNoCountdownPressure": true,
+          "homNaySnippet": "Nguyện Vọng AI\nChào Minh Khôi!\n\nKhám phá bản thân và tìm ngành học phù hợp nhé.\n\nBạn chưa cần chốt mục tiêu ngay\nKhám phá và lưu vài ngành thấy hợp trước đã.\nKhám phá ngành học\nChưa đặt được từ nguyện vọng: Danh sách nguyện vọng chưa có ngành nào để chọn làm mục tiêu.\n\nHôm nay bạn thấy thế nào?\n\nKhỏe\nỔn\nHơi mệt\n\nXong một việc quan trọng là đủ tốt rồi.\n\nHôm nay chỉ cần làm tốt một việc thôi.\n\nGợi ý cho bạn\nLàm trắc nghiệm 12 tình huống để biết nhóm ngành hợp bạn.\n1\nHôm nay\nKhám phá\nNguyện vọng\nKế"
+        },
+        {
+          "step": "Trắc nghiệm hướng nghiệp /huong-nghiep",
+          "summary": "Em nghiêng về\n\nThực hành, Tìm tòi và Giúp đỡ\n\nThích làm ra thứ cụ thể bằng tay, máy móc, công cụ; làm ngoài trời hoặc ở xưởng. Thích hiểu vì sao và hoạt động ra sao: phân tích, giải bài khó, nghiên cứu tới cùng.\n\nNhóm ngành đáng tìm hiểu\n\nKỹ thuật / Cơ khí / Điện - Điện tử / Tự động hóa\n\nHợp với kiểu thực hành và tìm tòi. 491 chương trình trong dữ liệu.\n\nThêm\n\nNông Lâm Ngư nghiệp / Công nghệ sinh "
+        },
+        {
+          "step": "Kiểm tra Mục tiêu, Hôm nay (có mục tiêu) & Kế hoạch tuần",
+          "mucTieuDistinguishesTargetVsCurrent": true,
+          "homNayShowsHocBaReferenceWithoutCountdown": true,
+          "mucTieuSnippet": "DDK\nNguyện vọng chính\nDDK · Công nghệ thông tin (Đặc thù - Hợp tác doanh nghiệp), chuyên ngành Khoa học dữ liệu và Trí tuệ nhân tạo\nĐH Bách Khoa - ĐH Đà Nẵng\n\nPhương thức xét tuyển\n\nTHPT\n\nTổ hợp xét tuyển\n\nA00\nA01\nD01\nB00\n\nA00: Toán – Vật lý – Hóa học\n\nChưa có điểm môn Toán, Vật lý, Hóa học\nCần điểm đủ 3 môn của tổ hợp A00 để tính khoảng cách. Em nhập điểm để mình tính tiếp nhé.\nNhập điểm các môn\nĐiểm hiện tại\n\n— / 30\n\nĐiểm mục tiêu\n(bấm để sửa)\n\n27,1 / 30\n\nĐiểm chuẩn tham khảo (2024): 27,1 điểm",
+          "homNayWithGoalSnippet": "Mục tiêu\nCông nghệ thông tin (Đặc thù - Hợp tác doanh nghiệp), chuyên ngành Khoa học dữ liệu và Trí tuệ nhân tạo – DDK\nHiện tại\n—\nMục tiêu\n27,1\nCòn thiếu\n—\nĐiểm học bạ, chỉ để so tham khảo\nThiếu điểm Toán, Lý, Hóa · Nhập điểm\n\nHôm nay bạn thấy thế nào?\n\nKhỏe\nỔn\nHơi mệt\n\nXong một việc quan trọng là đủ tốt rồi.\n\nHôm nay chỉ cần làm tốt một việc thôi.\n\nGợi ý cho bạn\nLưu 2–3 ngành thấy hợp để so sánh dần.",
+          "tuanSnippet": "Tuần 12/10 – 18/10\nT2\n12\nT3\n13\nT4\n14\nT5\n15\nT6\n16\nT7\n17\nCN\n18\nViệc cần làm\nLịch\nChiến lược\nThêm vào lịch\n\nXếp giờ cho việc trước, rồi thêm vào lịch của bạn.\n\nTuần này chưa có việc cần học\n\nTự động xếp việc ôn theo môn cần cải thiện vào khung giờ trống của bạn.\n\nTạo việc và xếp lịch\nXem môn nên ưu tiên"
+        }
+      ],
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "No `HydrateFallback` element provided to render during initial hydration"
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "httpErrorResponses": [],
+      "screenshots": [
+        {
+          "file": "persona-a-01-chao.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-01-chao.png",
+          "description": "Màn chào mừng /chao",
+          "url": "https://nguyenvongai.pages.dev/#/chao"
+        },
+        {
+          "file": "persona-a-02-buoc1.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-02-buoc1.png",
+          "description": "Bước 1: Chọn Lớp 10-11, Đà Nẵng, CNTT & Kinh tế",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/1"
+        },
+        {
+          "file": "persona-a-03-buoc2-hocba.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-03-buoc2-hocba.png",
+          "description": "Bước 2: Không nhập điểm THPT, nhập Học bạ Lớp 10 (8,2) & Lớp 11 (8,5)",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/2"
+        },
+        {
+          "file": "persona-a-04-buoc3.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-04-buoc3.png",
+          "description": "Bước 3: Chọn ngân sách Dưới 30 triệu, Ở nhà, Đà Nẵng",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/3"
+        },
+        {
+          "file": "persona-a-05-hom-nay.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-05-hom-nay.png",
+          "description": "Trang Hôm nay cho học sinh lớp 11 (chặng định hướng, không đếm ngược áp lực)",
+          "url": "https://nguyenvongai.pages.dev/#/"
+        },
+        {
+          "file": "persona-a-06-huong-nghiep-intro.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-06-huong-nghiep-intro.png",
+          "description": "Trang giới thiệu Trắc nghiệm hướng nghiệp /huong-nghiep",
+          "url": "https://nguyenvongai.pages.dev/#/huong-nghiep"
+        },
+        {
+          "file": "persona-a-07-huong-nghiep-ket-qua.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-07-huong-nghiep-ket-qua.png",
+          "description": "Kết quả trắc nghiệm hướng nghiệp",
+          "url": "https://nguyenvongai.pages.dev/#/huong-nghiep"
+        },
+        {
+          "file": "persona-a-08-kham-pha.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-08-kham-pha.png",
+          "description": "Trang Khám phá cho học sinh lớp 11",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha"
+        },
+        {
+          "file": "persona-a-09-chi-tiet-nganh.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-09-chi-tiet-nganh.png",
+          "description": "Chi tiết ngành và nút Đặt mục tiêu",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha/ddk-bc06675a"
+        },
+        {
+          "file": "persona-a-10-muc-tieu-lop11.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-10-muc-tieu-lop11.png",
+          "description": "Trang Mục tiêu của học sinh lớp 11 (kiểm tra điểm hiện tại — vs điểm mục tiêu, ẩn đếm ngược)",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/muc-tieu"
+        },
+        {
+          "file": "persona-a-11-hom-nay-co-muc-tieu.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-11-hom-nay-co-muc-tieu.png",
+          "description": "Trang Hôm nay khi Lớp 11 đã đặt mục tiêu (hiển thị \"Điểm học bạ, chỉ để so tham khảo\", không đếm ngược ngày thi)",
+          "url": "https://nguyenvongai.pages.dev/#/"
+        },
+        {
+          "file": "persona-a-12-ke-hoach-tuan.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-a-12-ke-hoach-tuan.png",
+          "description": "Trang Kế hoạch tuần của học sinh lớp 11",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/tuan"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "persona": "Persona B — Học sinh lớp 12 chưa có điểm thi (có học bạ & điểm thi thử)",
+      "input": {
+        "hoTen": "Lê Hoàng Nam",
+        "lop": "Lớp 12 (khoi: 12, chang: nuocRut)",
+        "tinh": "TP. Hồ Chí Minh",
+        "nganhQuanTam": [
+          "CNTT"
+        ],
+        "diemDuKienBuoc2": {
+          "toan": "7,5",
+          "vatLy": "6,0",
+          "tiengAnh": "8,2"
+        },
+        "hocBa": {
+          "dtbLop10": "8,0",
+          "dtbLop11": "8,2",
+          "dtbLop12": "8,4"
+        },
+        "canCaiThien": [
+          "Vật lý"
+        ],
+        "thiThuMoi": {
+          "vatLy": "6,3",
+          "toan": "7,8"
+        }
+      },
+      "steps": [
+        {
+          "step": "Bước 2: Tự tính tổ hợp A01 và kiểm tra cảnh báo điểm nghẽn trên Production",
+          "hasA01Score21_7": true,
+          "hasInlineBottleneckInStep2OnProd": false,
+          "note": "Production bundle hiện tại chưa deploy thay đổi uncommitted ở working tree cho Bước 2, nhưng /ke-hoach/muc-tieu và /ke-hoach/muc-tieu/mon-keo-diem đã có đầy đủ phân tích môn kéo điểm.",
+          "buoc2Snippet": "Điểm các môn\nĐiểm các môn\nToán\n/10\nLý\n/10\nHóa\n/10\nVăn\n/10\nAnh\n/10\nSinh\n/10\nĐiểm các môn khác (Sử, Địa, Tin...)\nĐiểm ưu tiên khu vực, đối tượng\nKỳ thi ĐGNL, Ngoại ngữ (IELTS) & Học bạ\nĐã nhập\nChứng chỉ ngoại ngữ (IELTS, VSTEP, TOEIC...)\nIELTS Academic\nTOEFL iBT\nTOEIC (4 kỹ năng)\nVSTEP Bậc 3-5\nTiếng Nhật JLPT\nTiếng Trung HSK\n\nCác trường quy đổi IELTS 6.5+ thành điểm 10 tiếng Anh hoặc xét kết hợp.\n\nĐiểm kỳ thi Đánh giá năng lực / Đánh giá tư duy\nĐHQG-HCM\n/1200\nĐHQG Hà Nội\n/150\nTSA Bách Khoa\n/100\nĐiểm trung bình học bạ THPT\nLớp 10\nLớp 11\nLớp 12\nĐTB 3 năm\nHọc sinh trường THPT Chuyên\nHạnh kiểm Tốt\nH"
+        },
+        {
+          "step": "Nhập điểm thi thử mới tại /diem-thi-thu",
+          "kqThiThuSnippet": "Danh sách đã thay đổi thế nào?\n\nDựa trên điểm thi thử ngày 16/10, gợi ý trường (bạn chưa có nguyện vọng nên dùng danh sách gợi ý) đã được cập nhật.\n\nToán\n7,5\n→\nthành\n7,8\nLý\n6,0\n→\nthành\n6,3\nA01\n21,7\n→\nthành\n22,3\n1 lựa chọn lên nhóm có điểm chuẩn thấp hơn điểm của bạn\nchuyển từ Vừa sức → An toàn\n3 lựa chọn an toàn\n2 vẫn giữ nguyên, thêm 1 mới\nNên xem lại 1 trường\ncó học phí cao so với điều kiện hiện tại\nMột số trường thay đổi đáng chú ý\nXem tất cả\nSPH\nĐH Sư phạm Hà Nội\nTăng cơ hội\nTrí tuệ nhân tạo\nVừa sức\nAn toàn\n· phù hợp \n78\n→\nthành\n82\nMBS\nĐH Mở TP.HCM\nTăng cơ hội\nKỹ thuật phần mềm\nVừa sức\nVừa"
+        },
+        {
+          "step": "Kiểm tra Mục tiêu, Môn kéo điểm & Kế hoạch tuần",
+          "vatLyPrioritizedInMonKeoDiem": true,
+          "vatLyPrioritizedInWeeklyPlan": true,
+          "mucTieuSnippet": "QSC\nNguyện vọng chính\nQSC · Trí tuệ nhân tạo\nĐH Công nghệ Thông tin - ĐHQG TP.HCM\n\nPhương thức xét tuyển\n\nTHPT\n\nTổ hợp xét tuyển\n\nA00\nA01\nD01\nB00\n\nA01: Toán – Vật lý – Tiếng Anh\n\nĐiểm hiện tại\n\n22,3 / 30\n\nĐiểm mục tiêu\n(bấm để sửa)\n\n28,3 / 30\n\nĐạt 78% điểm mục tiêu\n\nĐiểm chuẩn tham khảo (2024): 28,3 điểm.\n\nKhoảng cách cần vượt qua\n\n6,0 điểm\n\nThời gian còn lại đến kỳ thi\n253 ngày\nThi ngày 26/06/2027 (dự kiến)\nBạn đang thiếu chủ yếu ở môn Vật lý\nVật lý còn thiếu 3,5 điểm, nhiều nhất trong tổ hợp A01. Tập trung môn này sẽ thu hẹp khoảng cách nhanh hơn.\n\nNếu chỉ học dàn trải, bạn sẽ khó bù đủ 6,0 ",
+          "monKeoDiemSnippet": "Môn nào kéo điểm nhanh nhất?\nHiện tại\n22,3\nMục tiêu\n28,3\nCòn thiếu\n6,0\n\nTổ hợp A01: Toán – Vật lý – Tiếng Anh\n\nVật lý\nNên ưu tiên\nĐiểm hiện tại\n6,3\nCần đạt\n9,8\nCòn thiếu\n+3,5\nCông sức cần bỏ ra\nCao\nToán\nNên ưu tiên\nĐiểm hiện tại\n7,8\nCần đạt\n9,2\nCòn thiếu\n+1,4\nCông sức cần bỏ ra\nCao\nTiếng Anh\nNên ưu tiên\nĐiểm hiện tại\n8,2\nCần đạt\n9,3\nCòn thiếu\n+1,1\nCông sức cần bỏ ra\nCao\nĐề xuất bù 6,0 điểm\nVật lý\n+3,5\nToán\n+1,4\nTiếng Anh\n+1,1\nCách bù điểm ít tốn sức nhất theo số liệu hiện có\nMôn còn nhiều dư địa và môn bạn muốn cải thiện nhận phần lớn hơn.\nĐiểm cần tập trung tuần này\nCủng cố chắc kiến thức nhậ",
+          "tuanSnippet": "Tuần 12/10 – 18/10\nT2\n12\nT3\n13\nT4\n14\nT5\n15\nT6\n16\nT7\n17\nCN\n18\nViệc cần làm\nLịch\nChiến lược\nTự động xếp lịch\nThêm vào lịch\nMục tiêu hôm nay\nXem chi tiết\nBù +3,5 điểm cho Vật lý\nƯu tiên: Vật lý – làm nửa đề tính giờ\nLộ trình riêng cho Hoàng Nam\nCá nhân hóa\n\nMục tiêu: Trí tuệ nhân tạo · QSC (tổ hợp A01, cần 28,3đ).\n\nTrọng tâm tuần này là kéo điểm môn Vật lý (còn thiếu 3,5đ).\n\nGợi ý lịch học chi tiết\nMôn kéo điểm\nHôm nay · Thứ 6, 16/10\n0/2 hoàn thành\nNên làm trước\n(3 việc)\nVật lý – làm nửa đề tính giờ\nHôm nay · 19:00 – 20:30 · 1 giờ 30 phút\nToán – làm nửa đề tính giờ\nNgày mai · 19:00 – 20:15 · 1 giờ 15 phút\nTiếng Anh – làm một phần đề tính giờ\nHôm nay · 17:00 – 18:00 · 1 giờ\nTiếp theo\n(1 việc)\nVật lý – ôn từ trường và dòng điện\nNgày mai · 17:00 – 18:00 · 1 giờ\nCập nhật việc theo điểm mới"
+        }
+      ],
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "No `HydrateFallback` element provided to render during initial hydration"
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "httpErrorResponses": [],
+      "screenshots": [
+        {
+          "file": "persona-b-01-buoc1.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-01-buoc1.png",
+          "description": "Bước 1: Hồ sơ Lớp 12, TP.HCM, CNTT",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/1"
+        },
+        {
+          "file": "persona-b-02-buoc2-diem-nghen.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-02-buoc2-diem-nghen.png",
+          "description": "Bước 2: Nhập Toán 7.5, Lý 6.0, Anh 8.2 -> Tổ hợp A01 = 21,7",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/2"
+        },
+        {
+          "file": "persona-b-03-man-phan-tich.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-03-man-phan-tich.png",
+          "description": "Màn kết quả phân tích cơ hội sau khi hoàn tất hồ sơ Lớp 12",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/3"
+        },
+        {
+          "file": "persona-b-04-diem-thi-thu-nhap.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-04-diem-thi-thu-nhap.png",
+          "description": "Trang /diem-thi-thu nhập điểm thi thử mới (Toán 7.5->7.8, Lý 6.0->6.3)",
+          "url": "https://nguyenvongai.pages.dev/#/diem-thi-thu"
+        },
+        {
+          "file": "persona-b-05-diem-thi-thu-ket-qua.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-05-diem-thi-thu-ket-qua.png",
+          "description": "Trang /diem-thi-thu/ket-qua so sánh trước/sau đợt thi thử",
+          "url": "https://nguyenvongai.pages.dev/#/diem-thi-thu/ket-qua"
+        },
+        {
+          "file": "persona-b-06-muc-tieu.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-06-muc-tieu.png",
+          "description": "Trang /ke-hoach/muc-tieu hiển thị tổ hợp A01, khoảng cách điểm và nhận định môn Vật lý cần tập trung",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/muc-tieu"
+        },
+        {
+          "file": "persona-b-07-mon-keo-diem.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-07-mon-keo-diem.png",
+          "description": "Trang /ke-hoach/muc-tieu/mon-keo-diem phân tích môn kéo điểm nhanh nhất (Vật lý Nên ưu tiên)",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/muc-tieu/mon-keo-diem"
+        },
+        {
+          "file": "persona-b-08-mon-keo-diem-giai-thich.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-08-mon-keo-diem-giai-thich.png",
+          "description": "Hộp giải thích chi tiết công sức và xu hướng thi thử môn Vật lý",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/muc-tieu/mon-keo-diem"
+        },
+        {
+          "file": "persona-b-09-ke-hoach-tuan.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-b-09-ke-hoach-tuan.png",
+          "description": "Trang /ke-hoach/tuan tự động tạo việc ưu tiên môn kéo điểm (Vật lý đứng nhóm Nên làm trước)",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/tuan"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "persona": "Persona C — Học sinh đã có điểm thi (Toán 8.5, Lý 8.25, Hóa 8.0, Văn 7.0, Anh 8.5, KV2-NT)",
+      "input": {
+        "hoTen": "Nguyễn Quốc Bảo",
+        "lop": "Đã tốt nghiệp / Đã có điểm thi",
+        "tinh": "Nghệ An",
+        "nganhQuanTam": [
+          "CNTT"
+        ],
+        "diem": {
+          "toan": "8,5",
+          "vatLy": "8,25",
+          "hoaHoc": "8,0",
+          "nguVan": "7,0",
+          "tiengAnh": "8,5",
+          "sinh": null
+        },
+        "uuTien": {
+          "khuVuc": "KV2-NT (+0,5)",
+          "doiTuong": "khong"
+        },
+        "nganSach": "30 – 60 triệu"
+      },
+      "steps": [
+        {
+          "step": "Kiểm tra công thức điểm ưu tiên giảm dần khi tổng >= 22.5",
+          "expectedRawA01": 25.25,
+          "expectedPriorityBonus": "+0,32 ưu tiên",
+          "expectedTotalDisplay": "25,6",
+          "actualMatchesFormula": true,
+          "buoc2Snippet": "Điểm các môn\nĐiểm các môn\nToán\n/10\nLý\n/10\nHóa\n/10\nVăn\n/10\nAnh\n/10\nSinh\n/10\nĐiểm các môn khác (Sử, Địa, Tin...)\nĐiểm ưu tiên khu vực, đối tượng\n+0,5 điểm ưu tiên\nKhu vực ưu tiên\nBạn chưa biết hoặc chưa chọn\nKV1 (vùng núi, hải đảo, vùng đặc biệt khó khăn) · +0,75\nKV2-NT (nông thôn, thị trấn) · +0,5\nKV2 (thị xã, thành phố thuộc tỉnh, huyện ngoại thành) · +0,25\nKV3 (quận nội thành thành phố trực thuộc trung ương) · +0\nĐối tượng ưu tiên\nBạn chưa biết hoặc chưa chọn\nKhông thuộc đối tượng ưu tiên\nNhóm UT1 (đối tượng 01 đến 04, ví dụ con liệt sĩ, người dân tộc thiểu số vùng khó khăn) · +2\nNhóm UT2 (đối tượng 05 đến 07, ví dụ con thương binh, người kh"
+        },
+        {
+          "step": "Kiểm tra danh sách nguyện vọng, giới hạn gợi ý, thiếu môn, giải thích bất định và reload",
+          "nvCount": 0,
+          "hasOver6Notice": true,
+          "hasMissingSubjectDetection": true,
+          "sortSwappedNV1AndNV2": true,
+          "hasVolatilityDisclaimer": true,
+          "hasNotProbabilityDisclaimer": true,
+          "orderPreservedAfterReload": true,
+          "nvSnippet": "Đánh giá Cơ hội Trúng tuyển\nCần điều chỉnh\n100%\nĐỗ ≥ 1 nguyện vọng\nPhát hiện lỗi nghịch đảo thứ tự nguyện vọng!\n\n• NV2 (Công nghệ thông tin (định hướng ứng dụng) - BVH, xác suất đỗ 80%) đang đứng TRƯỚC NV7 (Y khoa - DDY, xác suất undefined%). Nếu đỗ NV2, hệ thống sẽ tự động hủy NV7!\n\n• NV3 (Công nghệ thông tin - GSA, xác suất đỗ 88%) đang đứng TRƯỚC NV7 (Y khoa - DDY, xác suất undefined%). Nếu đỗ NV3, hệ thống sẽ tự động hủy NV7!\n\n• NV4 (Công nghệ thông tin ứng dụng - QHQ, xác suất đỗ 98%) đang đứng TRƯỚC NV7 (Y khoa - DDY, xác suất undefined%). Nếu đỗ NV4, hệ thống sẽ tự động hủy NV7!\n\n• NV5 (Kỹ sư Tự động hóa và Tin học - QHQ, xác suất đỗ 98%) đang đứng TRƯỚC NV7 (Y khoa - DDY, xác suất un",
+          "anToanSnippet": "Chưa đủ căn cứ để nhận xét cả danh sách\n\nHiện bạn có 1 nguyện vọng thử sức, 2 vừa sức, 2 an toàn và 1 dự phòng.\n\nChưa đủ căn cứ cho 1 nguyện vọng (thiếu điểm môn hoặc khác phương thức).\n\nNguyện vọng chưa xếp được nhãn\nNguyện Vọng 7 · DDY – Y khoa: Bạn chưa nhập điểm Sinh học.\nSo với điểm chuẩn\n7 nguyện vọng\n1\n2\n2\n1\nThử sức\n17%\nVừa sức\n33%\nAn toàn\n33%\nDự phòng\n17%\nGợi ý điều chỉnh\nChưa cần điều chỉnh\nCó điểm thi thử mới thì quay lại xem nhãn có đổi không.\nĐánh giá tổng quan\nĐộ cân bằng\n100/100\n\nRất cân đối\n\nPhù hợp tài chính\n100/100\n\nRất phù hợp\n\nPhù hợp khu vực\n86/100\n\nRất phù hợp\n\nTác vụ nhanh\nThêm nguyện vọng An toàn\nGợi ý thứ tự\nXem trước rồi mới đổi\nThử nếu tăng điểm\nĐiều chỉnh danh sách"
+        }
+      ],
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "No `HydrateFallback` element provided to render during initial hydration",
+        "No `HydrateFallback` element provided to render during initial hydration"
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "httpErrorResponses": [],
+      "screenshots": [
+        {
+          "file": "persona-c-01-buoc1.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-01-buoc1.png",
+          "description": "Bước 1: Hồ sơ Đã có điểm thi, Nghệ An, CNTT",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/1"
+        },
+        {
+          "file": "persona-c-02-buoc2-uutien.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-02-buoc2-uutien.png",
+          "description": "Bước 2: Toán 8.5, Lý 8.25, Hóa 8.0, Văn 7.0, Anh 8.5 + KV2-NT -> giảm dần ưu tiên còn +0,32 (tổng 25,6)",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/2"
+        },
+        {
+          "file": "persona-c-03-phan-tich.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-03-phan-tich.png",
+          "description": "Màn phân tích cơ hội của Persona C",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/3"
+        },
+        {
+          "file": "persona-c-04-goi-y-sheet.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-04-goi-y-sheet.png",
+          "description": "Sheet gợi ý danh sách nguyện vọng tự động",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong"
+        },
+        {
+          "file": "persona-c-05-tim-nganh-thieu-mon.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-05-tim-nganh-thieu-mon.png",
+          "description": "Tìm thêm ngành Y khoa (xét B00 - thiếu môn Sinh học) để kiểm tra phát hiện thiếu điều kiện",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong"
+        },
+        {
+          "file": "persona-c-06-danh-sach-7-nv.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-06-danh-sach-7-nv.png",
+          "description": "Danh sách 7 nguyện vọng: kiểm tra nhắc vượt 6 nguyện vọng (SO_NV_GOI_Y) và phát hiện ngành thiếu môn Sinh học",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong"
+        },
+        {
+          "file": "persona-c-07-sau-sap-xep.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-07-sau-sap-xep.png",
+          "description": "Danh sách nguyện vọng sau khi đổi thứ tự NV1 xuống NV2",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong"
+        },
+        {
+          "file": "persona-c-08-nguyen-vong-an-toan.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-08-nguyen-vong-an-toan.png",
+          "description": "Trang /nguyen-vong/an-toan phân tích cơ cấu, cảnh báo nguyện vọng chưa xếp được nhãn do thiếu môn Sinh học",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong/an-toan"
+        },
+        {
+          "file": "persona-c-09-cach-xep-nhan.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-09-cach-xep-nhan.png",
+          "description": "Hộp giải thích Cách xếp nhãn: nêu rõ điểm chuẩn mỗi năm có thể dao động",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong/an-toan"
+        },
+        {
+          "file": "persona-c-10-khong-nham-xac-suat.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-10-khong-nham-xac-suat.png",
+          "description": "Hộp giải thích điểm /100: \"Đây là điểm gợi ý trên 100, không phải khả năng đậu.\"",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong/an-toan"
+        },
+        {
+          "file": "persona-c-11-reload-nguyen-vong.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-c-11-reload-nguyen-vong.png",
+          "description": "Reload trang /nguyen-vong: thứ tự và danh sách nguyện vọng giữ nguyên 100%",
+          "url": "https://nguyenvongai.pages.dev/#/nguyen-vong"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "persona": "Persona D — Học sinh ngân sách hạn chế (< 15-20 triệu/năm, tìm trường công lập theo khu vực)",
+      "input": {
+        "hoTen": "Phạm Thị Mai",
+        "lop": "Lớp 12",
+        "tinh": "TP. Hồ Chí Minh",
+        "nganhQuanTam": [
+          "CNTT",
+          "Sư phạm"
+        ],
+        "diem": {
+          "toan": "8,0",
+          "vatLy": "8,0",
+          "tiengAnh": "8,0"
+        },
+        "nganSachHoSo": "Dưới 30 triệu (mức thấp nhất trong Bước 3) + Bộ lọc Dưới 20 triệu + Tìm kiếm tự nhiên \"dưới 15 triệu\"",
+        "khuVuc": [
+          "TP.HCM"
+        ]
+      },
+      "steps": [
+        {
+          "step": "Kiểm tra bộ lọc học phí, chi tiết ngành (ước tính vs chính thức, cảnh báo vượt ngân sách) và bảng so sánh",
+          "nlpUnder15M": true,
+          "highFeeWarningPresent": true,
+          "estimatedFeeDisclaimerPresent": true,
+          "soSanhHighlightsCheaper": true,
+          "soSanhSnippet": "TDM\nSư phạm Toán\nTDM\nĐại học · TP.HCM\nĐổi ngành\nVS\nQST\nKhoa học máy tính (Chương trình Tiên tiến)\nQST\nĐại học · TP.HCM\nĐổi ngành\nĐiểm đầu vào\ntham khảo\n25,9\nđiểm (2026)\n(tốt hơn cho bạn)\n28,5\nđiểm (2024)\nHọc phí / năm\ndự kiến\n≈ 15.2\ntriệu đồng\n(tốt hơn cho bạn)\n≈ 70\ntriệu đồng\nTổ hợp xét tuyển\nA00, A01, A02, C01\nA00, A01, B08, D07\nKhu vực\nTP.HCM\nTP.HCM\nMức phù hợp với bạn\nCó thể thử sức\n(tốt hơn cho bạn)\nCần cân nhắc\nSo với điểm chuẩn\nThấp hơn điểm chuẩn\nThấp hơn điểm chuẩn\n\nÔ nền xanh lá là bên có lợi thế hơn ở tiêu chí đó.\n\nKết luận nhanh\n1\nQST có điểm đầu vào cao hơn khoảng 2,6 điểm.\n2\nTDM có học phí thấp hơn khoảng 55 triệu/năm.\n3\nVới điểm hiện tại, TDM hợp với bạn hơn (có thể thử sức).\n",
+          "soSanhAfterSwapSnippet": "TDM\nSư phạm Toán\nTDM\nĐại học · TP.HCM\nĐổi ngành\nVS\nC\nGiáo dục Mầm non\nC19\nCao đẳng · Bắc Ninh\nĐổi ngành\nĐiểm đầu vào\ntham khảo\n25,9\nđiểm (2026)\n22,9\nđiểm (2025)\n(tốt hơn cho bạn)\nHọc phí / năm\ndự kiến\n≈ 15.2\ntriệu đồng\n≈ 15.2\ntriệu đồng\nTổ hợp xét tuyển\nA00, A01, A02, C01\nC00, D01\nKhu vực\nTP.HCM\n(tốt hơn cho bạn)\nBắc Ninh\nMức phù hợp với bạn\nCó thể thử sức\nKhác phương thức\nSo với điểm chuẩn\nThấp hơn điểm chuẩn\nKhác phương thức\n\nÔ nền xanh lá là bên có lợi thế hơn ở tiêu chí đó.\n\nKết luận nhanh\n1\nTDM có điểm đầu vào cao hơn khoảng 3,0 điểm.\n2\nHọc phí hai bên gần bằng nhau.\n3\nChưa so được cơ hội"
+        }
+      ],
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "No `HydrateFallback` element provided to render during initial hydration"
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "httpErrorResponses": [],
+      "screenshots": [
+        {
+          "file": "persona-d-01-buoc3-ngan-sach.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-01-buoc3-ngan-sach.png",
+          "description": "Bước 3: Chọn ngân sách Dưới 30 triệu + Ký túc xá (hiển thị Học phí khuyến nghị Dưới 20 triệu/năm)",
+          "url": "https://nguyenvongai.pages.dev/#/bat-dau/3"
+        },
+        {
+          "file": "persona-d-02-bo-loc-duoi20.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-02-bo-loc-duoi20.png",
+          "description": "Trang /kham-pha/bo-loc: chọn Học phí tối đa Dưới 20 triệu & Khu vực TP.HCM",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha/bo-loc"
+        },
+        {
+          "file": "persona-d-03-kham-pha-da-loc.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-03-kham-pha-da-loc.png",
+          "description": "Trang /kham-pha sau khi lọc Dưới 20 triệu tại TP.HCM",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha"
+        },
+        {
+          "file": "persona-d-04-tim-duoi-15-trieu.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-04-tim-duoi-15-trieu.png",
+          "description": "Tìm kiếm câu tự nhiên \"cntt sài gòn dưới 15 triệu\" -> tự hiểu Học phí ≤ 15tr",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha"
+        },
+        {
+          "file": "persona-d-05-kham-pha-vuot-ngan-sach.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-05-kham-pha-vuot-ngan-sach.png",
+          "description": "Các ngành học phí Trên 40 triệu: thẻ hiển thị cảnh báo \"Học phí vượt ngân sách của bạn\" / \"Cần cân nhắc\"",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha"
+        },
+        {
+          "file": "persona-d-06-chi-tiet-vuot-ngan-sach.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-06-chi-tiet-vuot-ngan-sach.png",
+          "description": "Chi tiết ngành học phí cao: cảnh báo vượt ngân sách 30 tr và ghi rõ ước tính/dự kiến theo năm",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha/qst-257323bc"
+        },
+        {
+          "file": "persona-d-07-chi-tiet-hoc-phi-thap.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-07-chi-tiet-hoc-phi-thap.png",
+          "description": "Chi tiết ngành học phí thấp (< 20 triệu/năm)",
+          "url": "https://nguyenvongai.pages.dev/#/kham-pha/tdm-93607471"
+        },
+        {
+          "file": "persona-d-08-so-sanh-hoc-phi.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-08-so-sanh-hoc-phi.png",
+          "description": "Bảng so sánh (/so-sanh) 2 ngành: tô xanh bên học phí thấp hơn và kết luận chênh lệch học phí triệu/năm",
+          "url": "https://nguyenvongai.pages.dev/#/so-sanh?a=tdm-93607471&b=qst-257323bc"
+        },
+        {
+          "file": "persona-d-09-hop-chon-nganh-so-sanh.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-09-hop-chon-nganh-so-sanh.png",
+          "description": "Hộp chọn ngành để đổi trên trang /so-sanh",
+          "url": "https://nguyenvongai.pages.dev/#/so-sanh?a=tdm-93607471&b=qst-257323bc"
+        },
+        {
+          "file": "persona-d-10-so-sanh-sau-doi-nganh.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-d-10-so-sanh-sau-doi-nganh.png",
+          "description": "Bảng so sánh (/so-sanh) sau khi đổi ngành thứ hai sang nhóm Sư phạm",
+          "url": "https://nguyenvongai.pages.dev/#/so-sanh?a=tdm-93607471&b=c19-f2b80438"
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "persona": "Persona E — Người dùng quay lại sau nhiều ngày (Lưu trữ, hoàn thành 2 buổi học, sao lưu/khôi phục JSON, chia sẻ & kết nối)",
+      "input": {
+        "hoSo": "Hồ sơ đầy đủ + nguyện vọng + lịch học + 2 việc đã đánh dấu hoàn thành"
+      },
+      "steps": [
+        {
+          "step": "Reload trang & Mở tab mới cùng origin kiểm tra persistence",
+          "stateIdentical100Percent": true,
+          "uiIdentical": true
+        },
+        {
+          "step": "Sao lưu JSON -> Xóa hết -> Khôi phục từ tệp JSON",
+          "backupFileSaved": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-backup.json",
+          "backupSizeBytes": 12780,
+          "clearedSuccessfully": true,
+          "restoredIdentical100Percent": true,
+          "tienDoMatchesBeforeClear": true,
+          "restoreStatusSnippet": "Hồ sơ\nSửa hồ sơ\nSửa điểm\nHọc tập\nLịch học của bạn\n11 buổi cố định mỗi tuần\nCài đặt tự học\n06:30–21:30, tối đa 3 giờ mỗi ngày\nNhắc nhở\nNhắc trước giờ học để bạn không quên\nĐang tắt\nTrợ lý AI\nDùng AI để diễn giải câu hỏi mở (tối đa 50 lượt mỗi ngày, đặt lại lúc 0 giờ giờ Việt Nam)\n\nHôm nay còn 50/50 lượt AI. Tra cứu số liệu và chào hỏi không tính lượt.\n\nKết nối Claude và ChatGPT\nCho Claude/ChatGPT x"
+        },
+        {
+          "step": "Kiểm tra /ho-so/chia-se và mở liên kết /dong-hanh",
+          "shareLinkLength": 2936,
+          "dongHanhRendered": true
+        },
+        {
+          "step": "Kiểm tra tính năng Kết nối (/ho-so/cai-dat)",
+          "ketNoiCreated": true,
+          "ketNoiSnippet": "Hồ sơ\nSửa hồ sơ\nSửa điểm\nHọc tập\nLịch học của bạn\n11 buổi cố định mỗi tuần\nCài đặt tự học\n06:30–21:30, tối đa 3 giờ mỗi ngày\nNhắc nhở\nNhắc trước giờ học để bạn không quên\nĐang tắt\nTrợ lý AI\nDùng AI để diễn giải câu hỏi mở (tối đa 50 lượt mỗi ngày, đặt lại lúc 0 giờ giờ Việt Nam)\n\nHôm nay còn 50/50 lượt AI. Tra cứu số liệu và chào hỏi không tính lượt.\n\nKết nối Claude và ChatGPT\nCho Claude/ChatGPT xem hồ sơ của bạn (mặc định tắt)\n\nLiên kết này chỉ hiện một lần. Hãy sao chép và cất ở nơi an toàn; sau khi rời trang sẽ không xem lại được. Muốn dùng tiếp thì bấm Tạo lại.\n\nhttps://nguyenvongai.pages."
+        }
+      ],
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "No `HydrateFallback` element provided to render during initial hydration",
+        "No `HydrateFallback` element provided to render during initial hydration",
+        "No `HydrateFallback` element provided to render during initial hydration"
+      ],
+      "pageErrors": [],
+      "networkErrors": [],
+      "httpErrorResponses": [],
+      "screenshots": [
+        {
+          "file": "persona-e-01-ke-hoach-tuan-2-buoi-xong.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-01-ke-hoach-tuan-2-buoi-xong.png",
+          "description": "Trang /ke-hoach/tuan sau khi đánh dấu hoàn thành các buổi học",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/tuan"
+        },
+        {
+          "file": "persona-e-02-tien-do-truoc-reload.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-02-tien-do-truoc-reload.png",
+          "description": "Trang /ke-hoach/tien-do trước khi reload/đóng mở tab",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/tien-do"
+        },
+        {
+          "file": "persona-e-03-tien-do-tab-moi.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-03-tien-do-tab-moi.png",
+          "description": "Mở tab mới cùng origin: dữ liệu và tiến độ học được khôi phục 100%",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/tien-do"
+        },
+        {
+          "file": "persona-e-04-cai-dat-truoc-sao-luu.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-04-cai-dat-truoc-sao-luu.png",
+          "description": "Trang /ho-so/cai-dat trước khi xuất bản sao lưu JSON",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        },
+        {
+          "file": "persona-e-05-da-xuat-json.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-05-da-xuat-json.png",
+          "description": "Đã tải bản sao lưu JSON về máy",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        },
+        {
+          "file": "persona-e-06-hop-xac-nhan-xoa.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-06-hop-xac-nhan-xoa.png",
+          "description": "Hộp trượt xác nhận Xóa hết dữ liệu",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        },
+        {
+          "file": "persona-e-07-sau-khi-xoa-ve-chao.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-07-sau-khi-xoa-ve-chao.png",
+          "description": "Sau khi xóa hết: ứng dụng xóa sạch hồ sơ và quay về /chao",
+          "url": "https://nguyenvongai.pages.dev/#/chao"
+        },
+        {
+          "file": "persona-e-08-hop-xac-nhan-khoi-phuc.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-08-hop-xac-nhan-khoi-phuc.png",
+          "description": "Hộp trượt xác nhận Khôi phục bản sao lưu từ tệp JSON",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        },
+        {
+          "file": "persona-e-09-sau-khi-khoi-phuc.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-09-sau-khi-khoi-phuc.png",
+          "description": "Sau khi khôi phục từ tệp sao lưu JSON",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        },
+        {
+          "file": "persona-e-10-tien-do-sau-khoi-phuc.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-10-tien-do-sau-khoi-phuc.png",
+          "description": "Trang /ke-hoach/tien-do sau khi khôi phục từ tệp JSON: khớp 100%",
+          "url": "https://nguyenvongai.pages.dev/#/ke-hoach/tien-do"
+        },
+        {
+          "file": "persona-e-11-chia-se-dong-hanh.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-11-chia-se-dong-hanh.png",
+          "description": "Trang /ho-so/chia-se tạo liên kết cho người đồng hành",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/chia-se"
+        },
+        {
+          "file": "persona-e-12-xem-trang-dong-hanh.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-12-xem-trang-dong-hanh.png",
+          "description": "Mở liên kết /dong-hanh?d=... xem bản tóm tắt từ góc nhìn phụ huynh/thầy cô",
+          "url": "https://nguyenvongai.pages.dev/#/dong-hanh?d=eyJ2IjoxLCJsdWMiOiIyMDI2LTEwLTE2VDA3OjEwOjMyLjM1NloiLCJtdWMiOlt7InRpZXVEZSI6Ikjhu5Mgc8ahIiwiZG9uZyI6WyJM4bubcCAxMiIsIlRQLiBI4buTIENow60gTWluaCIsIlF1YW4gdMOibTogQ05UVCIsIlRy4bqvYyBuZ2hp4buHbSBoxrDhu5tuZyBuZ2hp4buHcDogbmdoacOqbmcgduG7gSB0w6xtIHTDsmksIGPhuqluIHRo4bqtbiwgbmfEg24gbuG6r3AgdsOgIGThuqtuIGThuq90IiwiSOG7jWMgcGjDrSBnaWEgxJHDrG5oIGThu7Ega2nhur9uOiAzMCDigJMgNjAgdHJp4buHdSBt4buXaSBuxINtIiwiQ2jhu5cg4bufOiDhu58gbmjDoCIsIk7GoWkgbXXhu5FuIGjhu41jOiBUUC5IQ00iXX0seyJ0aWV1RGUiOiLEkGnhu4NtIGhp4buHbiB04bqhaSIsImRvbmciOlsiVG_DoW4gOCwwIMK3IFbhuq10IGzDvSA4LDUgwrcgSMOzYSBo4buNYyA3LDIgwrcgTmfhu68gdsSDbiA3LDYgwrcgVGnhur9uZyBBbmggOCwwIMK3IFNpbmggaOG7jWMgOCwzIl19LHsidGlldURlIjoiTeG7pWMgdGnDqnUgY2jDrW5oIiwiZG9uZyI6WyJI4buHIHRo4buRbmcgdGjDtG5nIHRpbiDigJMgxJBIIEPDtG5nIG5naOG7hyBUaMO0bmcgdGluIC0gxJBIUUcgVFAuSENNIiwiVOG7lSBo4bujcCBBMDE6IMSRYW5nIDI0LDUsIGPhuqduIDI2LDMgKGPDsm4gdGhp4bq_dSAxLDgpIiwiQ8OybiAyNTMgbmfDoHkgxJHhur9uIGvhu7MgdGhpIl19LHsidGlldURlIjoiRGFuaCBzw6FjaCBuZ3V54buHbiB24buNbmcgKDUpIiwiZG9uZyI6WyJOZ3V54buHbiBW4buNbmcgMTogUVNDIOKAkyBI4buHIHRo4buRbmcgdGjDtG5nIHRpbiAoVGjhu60gc-G7qWM7IMSRaeG7g20gY2h14bqpbiAyNiwzIG7Eg20gMjAyNCkiLCJOZ3V54buHbiBW4buNbmcgMjogR1NBIOKAkyBDw7RuZyBuZ2jhu4cgdGjDtG5nIHRpbiAoQ2jGsMahbmcgdHLDrG5oIGNo4bqldCBsxrDhu6NuZyBjYW8gQ8O0bmcgbmdo4buHIHRow7RuZyB0aW4gVmnhu4d0IC0gQW5oKSAoVuG7q2Egc-G7qWM7IMSRaeG7g20gY2h14bqpbiAyNCw0IG7Eg20gMjAyNCkiLCJOZ3V54buHbiBW4buNbmcgMzogU1BLIOKAkyBDw7RuZyBuZ2jhu4cgS-G7uSB0aHXhuq10IG3DoXkgdMOtbmggKMSRw6BvIHThuqFvIGLhurFuZyB0aeG6v25nIEFuaCkgKFbhu6thIHPhu6ljOyDEkWnhu4NtIGNodeG6qW4gMjQsMyBuxINtIDIwMjYpIiwiTmd1eeG7h24gVuG7jW5nIDQ6IEhISyDigJMgxJBp4buHbiB04butIHZp4buFbiB0aMO0bmcgdsOgIFRyw60gdHXhu4cgbmjDom4gdOG6oW8gKEFJKSAoQW4gdG_DoG47IMSRaeG7g20gY2h14bqpbiAyMywwIG7Eg20gMjAyNikiLCJOZ3V54buHbiBW4buNbmcgNTogRFZMIOKAkyBDw7RuZyBuZ2jhu4cgdGjDtG5nIHRpbiAoROG7sSBwaMOybmc7IMSRaeG7g20gY2h14bqpbiAxOCwwIG7Eg20gMjAyMykiXX0seyJ0aWV1RGUiOiJUaeG6v24gYuG7mSIsImRvbmciOlsiSOG7kyBzxqEgxJHDoyBob8OgbiB0aGnhu4duOiAxMDAlIiwiTmd1eeG7h24gduG7jW5nIGPDsyBjxINuIGPhu6k6IDUvNSIsIk5oaeG7h20gduG7pSB0deG6p24gbsOgeTogMi8zIiwiS2hv4bqjbmcgY8OhY2ggdOG7m2kgbeG7pWMgdGnDqnU6IDEsOCDEkWnhu4NtIl19LHsidGlldURlIjoixJBp4buBdSBj4bqnbiBsxrB1IMO9IiwiZG9uZyI6WyJUb8OhbjogOCwwLCBj4bqnbiB0aMOqbSAwLDYiLCJW4bqtdCBsw706IDgsNSwgY-G6p24gdGjDqm0gMCw2IiwiTXXhu5FuIHLDqG46IGRp4buFbiDEkeG6oXQgdsOgIHF14bqjbiBsw70gdGjhu51pIGdpYW4iXX0seyJ0aWV1RGUiOiJFbSBtdeG7kW4gdHJhbyDEkeG7lWkiLCJkb25nIjpbIkVtIGPDsm4gdGhp4bq_dSBraG_huqNuZyAxLDggxJFp4buDbSDEkeG7gyDEkeG6oXQgbeG7pWMgdGnDqnUuIFRo4bqneSBjw7QgaG_hurdjIGdpYSDEkcOsbmggY8OzIHRo4buDIGdpw7pwIGVtIGNo4buNbiBjw6FjaCDDtG4gbsOgbz8iXX1dLCJjaGlTbyI6W3sidGVuIjoiSOG7kyBzxqEgxJHDoyBob8OgbiB0aGnhu4duIiwiZ2lhVHJpIjoiMTAwJSJ9LHsidGVuIjoiTmd1eeG7h24gduG7jW5nIGPDsyBjxINuIGPhu6kiLCJnaWFUcmkiOiI1LzUifSx7InRlbiI6Ik5oaeG7h20gduG7pSB0deG6p24gbsOgeSIsImdpYVRyaSI6IjIvMyJ9LHsidGVuIjoiS2hv4bqjbmcgY8OhY2ggdOG7m2kgbeG7pWMgdGnDqnUiLCJnaWFUcmkiOiIxLDggxJFp4buDbSJ9XX0"
+        },
+        {
+          "file": "persona-e-13-ket-noi-xac-nhan.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-13-ket-noi-xac-nhan.png",
+          "description": "Bật Kết nối Claude/ChatGPT trong /ho-so/cai-dat: hiện hộp xác nhận quyền riêng tư",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        },
+        {
+          "file": "persona-e-14-ket-noi-da-tao-ma.png",
+          "path": "D:\\07-Competitions-Hackathons\\mlai\\nguyenvongai\\evidence\\personas\\persona-e-14-ket-noi-da-tao-ma.png",
+          "description": "Đã tạo mã/liên kết kết nối MCP trong /ho-so/cai-dat",
+          "url": "https://nguyenvongai.pages.dev/#/ho-so/cai-dat"
+        }
+      ],
+      "status": "PASS"
+    }
+  ]
+}
