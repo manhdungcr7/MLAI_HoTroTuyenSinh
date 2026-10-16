@@ -15,6 +15,8 @@ import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
 import { dinhDang } from "@/engine/dinh-dang";
+import { toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
+import { MajorLabel, ProgramVariant, UniversityLabel } from "@/components/ui/academic-display";
 
 /**
  * Chữ trên huy hiệu. HuyHieuTruong lấy 4 chữ cái đầu nên HCMUTE, HCMUE, HCMUS, HCMUT đều thành "HCMU";
@@ -62,14 +64,16 @@ export function NutTim({ id, ten, className }: { id: string; ten: string; classN
 export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; onClick: () => void }) {
   const { s } = useApp();
   const viTriNV = s.nguyenVong.indexOf(l.id);
+  const hocThuat = toAcademicDisplay(l);
   return (
     <article className="relative rounded-the bg-trang border border-vien shadow-the">
       <button type="button" onClick={onClick} className="w-full text-left block p-3.5 rounded-the active:bg-xanh-nhat">
         <span className="flex items-start gap-3 pr-9">
           <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={48} />
           <span className="flex-1 min-w-0">
-            <b className="block text-[16px] text-muc leading-snug">{l.nganh}</b>
-            <span className="block text-[13px] text-chu-phu leading-snug truncate"><b className="font-semibold text-chu">{l.truong}</b> · {l.tenTruong}</span>
+            <MajorLabel ten={hocThuat?.majorNameDisplay ?? l.nganh} className="text-[16px]" />
+            {hocThuat?.programVariant && <span className="mt-1 block"><ProgramVariant variant={hocThuat.programVariant} /></span>}
+            {hocThuat && <UniversityLabel tenHienThi={hocThuat.universityNameDisplay} ma={hocThuat.universityCode} daXacMinh={hocThuat.universityNameDisplay !== "Tên trường chưa xác minh"} className="mt-0.5" />}
             <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
               <NhanPhuHop kq={kq} />
               {viTriNV >= 0 && <Nhan tone="luc">Đã thêm · Nguyện Vọng {viTriNV + 1}</Nhan>}
@@ -96,7 +100,7 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
 export function GhiChuDuLieuMau({ className }: { className?: string }) {
   return (
     <div className={gop("flex items-center justify-between gap-2 rounded-xl bg-nen px-3 py-2 text-[12px] text-chu-phu", className)}>
-      <span>Số liệu được đối chiếu từ đề án tuyển sinh chính thức.</span>
+      <span>Nguồn và tình trạng dữ liệu được ghi riêng cho từng lựa chọn.</span>
       <Link to={DUONG_DAN.veDuLieu()} className="font-semibold text-xanh hover:underline shrink-0">Nguồn dữ liệu</Link>
     </div>
   );
@@ -127,8 +131,14 @@ export function HopChonLuaChon({ mo, dong, tieuDe, boQua = [], onChon }: {
                 className="w-full min-h-14 flex items-center gap-3 rounded-xl border border-vien bg-trang px-3 py-2 text-left active:bg-xanh-nhat">
                 <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={40} />
                 <span className="flex-1 min-w-0">
-                  <b className="block text-[14px] text-muc leading-snug">{l.nganh}</b>
-                  <span className="block text-[13px] text-chu-phu truncate">{l.truong} · {l.khuVuc}</span>
+                  {(() => {
+                    const hocThuat = toAcademicDisplay(l);
+                    return <>
+                      <MajorLabel ten={hocThuat?.majorNameDisplay ?? l.nganh} className="text-[14px]" />
+                      {hocThuat?.programVariant && <ProgramVariant variant={hocThuat.programVariant} className="mt-1" />}
+                      <span className="block text-[12px] text-chu-phu whitespace-normal break-words">{hocThuat?.universityNameDisplay ?? "Tên trường chưa xác minh"} · {l.khuVuc}</span>
+                    </>;
+                  })()}
                 </span>
                 {quen && <Heart size={16} className="text-do shrink-0" fill="currentColor" aria-label="Bạn đã lưu" />}
               </button>

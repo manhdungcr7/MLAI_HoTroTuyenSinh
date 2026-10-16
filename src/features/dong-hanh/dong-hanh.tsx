@@ -10,8 +10,61 @@ import { DongThongBao } from "@/components/ui/thong-bao";
 import { DUONG_DAN } from "@/duong-dan";
 import type { VaiDongHanh } from "@/state/types";
 import { CAC_VAI, TOI_DA_LOI_NHAN, TOI_DA_TEN, docGoiChiaSe, lienKetDayDu, maHoa, taoLoiNhan } from "./goi-tin";
+import { phanGiaiTenTruong, tachNganhVaBienThe } from "@/engine/trinh-bay-hoc-thuat";
+import { NhanNguyenVongTag } from "@/components/ui/co-cau";
+import type { NhanNguyenVong } from "@/state/types";
 
 const ngayDai = (iso: string) => { const d = new Date(iso); return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`; };
+const soLuaChon = (tieuDe: string, dong: string[]) => {
+  const trongTieuDe = tieuDe.match(/\((\d+)\)/);
+  if (trongTieuDe) return Number(trongTieuDe[1]);
+  return dong.filter((x) => !/^(Chưa lưu nguyện vọng nào\.|Không còn trong dữ liệu)/i.test(x)).length;
+};
+
+function docDongNguyenVong(dong: string) {
+  const m = dong.match(/^Nguyện Vọng (\d+): (.+?) – (.+?) \((Thử sức|Vừa sức|An toàn|Dự phòng|chưa so được:[^;]+)(?:; điểm chuẩn ([^ ]+) năm (\d+))?\)$/i);
+  if (!m) return null;
+  const truong = phanGiaiTenTruong(m[2]);
+  const nganh = tachNganhVaBienThe(m[3]);
+  const nhan = ["Thử sức", "Vừa sức", "An toàn", "Dự phòng"].includes(m[4]) ? m[4] as NhanNguyenVong : null;
+  return {
+    viTri: Number(m[1]),
+    tenTruong: truong.tenHienThi,
+    tenTruongDayDu: truong.tenChinhThuc,
+    nganh: nganh.core,
+    nganhDayDu: m[3],
+    bienThe: nganh.variant,
+    nhan,
+    diemChuan: m[5],
+    nam: m[6],
+  };
+}
+
+function TheNguyenVong({ dong, i }: { dong: string; i: number }) {
+  const nv = docDongNguyenVong(dong);
+  if (!nv) return <li className="rounded-xl border border-vien bg-trang p-3 text-[13px] text-chu-phu">Thông tin lựa chọn {i + 1} cần được cập nhật.</li>;
+  return (
+    <li className="rounded-xl border border-vien bg-trang p-3">
+      <details className="group">
+        <summary className="list-none cursor-pointer rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            <span className="text-[12px] font-bold text-chu-phu">NV {String(nv.viTri).padStart(2, "0")}</span>
+            {nv.nhan ? <NhanNguyenVongTag nhan={nv.nhan} /> : <span className="text-[12px] text-chu-phu">Chưa so được</span>}
+          </div>
+          <b className="block text-[15px] font-extrabold text-muc leading-snug">{nv.nganh}</b>
+          <span className="block text-[13px] text-chu-phu leading-snug">{nv.tenTruong}</span>
+          {nv.bienThe && <span className="inline-flex mt-1 text-[11px] font-semibold text-xanh bg-xanh-nhat px-2 py-0.5 rounded-md">{nv.bienThe}</span>}
+          <span className="mt-1 block text-[12px] font-semibold text-xanh">Xem chi tiết</span>
+        </summary>
+        <div className="mt-3 rounded-lg bg-nen p-3 text-[12px] space-y-1.5">
+          <p><span className="text-chu-phu">Tên trường đầy đủ: </span><span className="font-medium text-muc">{nv.tenTruongDayDu}</span></p>
+          <p><span className="text-chu-phu">Tên ngành trong đề án: </span><span className="font-medium text-muc">{nv.nganhDayDu}</span></p>
+          {nv.diemChuan && nv.nam && <p className="text-chu-phu">Điểm tham khảo {nv.nam}: {nv.diemChuan}. Đây là điểm của năm trước, không bảo đảm kết quả xét tuyển.</p>}
+        </div>
+      </details>
+    </li>
+  );
+}
 
 export default function DongHanh() {
   const [q] = useSearchParams();
@@ -36,6 +89,8 @@ export default function DongHanh() {
   }
 
   const loi = taoLoiNhan(tu, vai, noiDung, new Date());
+  const mucNguyenVong = goi.muc.find((k) => /^Danh sách nguyện vọng/.test(k.tieuDe));
+  const soNguyenVong = mucNguyenVong ? soLuaChon(mucNguyenVong.tieuDe, mucNguyenVong.dong) : 0;
   const tao = () => {
     if (!loi) return;
     setLienKet(lienKetDayDu(DUONG_DAN.nhanLoiNhan(maHoa(loi))));
@@ -54,8 +109,16 @@ export default function DongHanh() {
     <>
       <DauTrangCoQuayLai tieuDe="Người đồng hành" quayLai={DUONG_DAN.homNay()} />
       <NoiDung className="space-y-4">
-        <DongThongBao tone="xanh" icon={Users} tieuDe={goi.ten ? `Hồ sơ của ${goi.ten}` : "Hồ sơ một học sinh chia sẻ"}
-          moTa={`Bản tóm tắt ngày ${ngayDai(goi.luc)}. Bạn không cần tài khoản. Nội dung nằm ngay trong liên kết, không lưu trên máy chủ nào. Điểm chuẩn là số các năm trước, chỉ để cân nhắc.`} />
+        <DongThongBao tone="xanh" icon={Users} tieuDe={goi.ten ? `Nguyện vọng của ${goi.ten.split(/\s+/).slice(-2).join(" ")}` : "Nguyện vọng học sinh chia sẻ"}
+          moTa={`${soNguyenVong} lựa chọn đang cân nhắc · Bản chia sẻ ngày ${ngayDai(goi.luc)}. Bạn có thể xem ngành, trường và góp ý cho học sinh.`} />
+
+        {mucNguyenVong && (
+          <section aria-label="Các nguyện vọng đang cân nhắc" className="space-y-2">
+            <TieuDeMuc>Các lựa chọn</TieuDeMuc>
+            <ol className="space-y-2">{mucNguyenVong.dong.map((d, i) => <TheNguyenVong key={`${i}-${d}`} dong={d} i={i} />)}</ol>
+            <p className="text-[12px] text-chu-phu">Nhãn tham khảo từ điểm chuẩn năm trước, không bảo đảm kết quả xét tuyển.</p>
+          </section>
+        )}
 
         {goi.chiSo.length > 0 && (
           <section aria-label="Chỉ số">
@@ -70,7 +133,7 @@ export default function DongHanh() {
 
         <section aria-label="Nội dung tóm tắt">
           <The className="space-y-3.5">
-            {goi.muc.map((k) => (
+            {goi.muc.filter((k) => !/^Danh sách nguyện vọng/.test(k.tieuDe)).map((k) => (
               <div key={k.tieuDe}>
                 <h2 className="text-[14px] font-bold text-muc">{k.tieuDe}</h2>
                 <ul className="mt-1 space-y-1">{k.dong.map((d) => <li key={d} className="text-[14px] text-chu leading-snug">{d}</li>)}</ul>

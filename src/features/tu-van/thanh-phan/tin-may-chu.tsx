@@ -5,6 +5,8 @@ import { gop } from "@/components/ui/nut-the";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { coTruong, tenTruong } from "@/engine/truong";
+import { rutGonTenTruong, toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
+import { MajorLabel, ProgramVariant } from "@/components/ui/academic-display";
 import type { HanhDongDeXuat } from "@/engine/tu-van";
 import { useApp } from "@/state/store";
 import type { TinNhan } from "../hoi-thoai";
@@ -13,6 +15,7 @@ import { SuggestedActionChips, type ChipHanhDong } from "./chip-hanh-dong";
 import { DataSourceLabel } from "./nhan-nguon-du-lieu";
 import { AIClarificationMessage } from "./tin-lam-ro";
 import { UniversityMiniCard } from "./the-truong-mini";
+import { trinhBayPhanHoi } from "../trinh-bay-phan-hoi";
 
 const TOI_DA_HIEN = 3;
 const NUT_PHU = "min-h-11 shrink-0 rounded-lg px-3 text-[13px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh";
@@ -32,9 +35,10 @@ interface Props {
 
 /** Hành động từ ID đã xác thực (máy chủ hoặc bộ trả lời tự động) thành nút điều hướng. Hành động thay đổi dữ liệu không nằm ở đây. */
 function chipTuHanhDong(h: HanhDongDeXuat): ChipHanhDong | null {
-  if (h.loai === "xem-truong" && h.maTruong && coTruong(h.maTruong)) return { nhan: h.nhan, to: DUONG_DAN.truong(h.maTruong) };
-  if ((h.loai === "xem-nganh" || h.loai === "xem-diem-chuan") && h.idChuongTrinh && tim(h.idChuongTrinh)) return { nhan: h.nhan, to: DUONG_DAN.chiTiet(h.idChuongTrinh) };
-  if (h.loai === "so-sanh" && h.ids && h.ids.length >= 2 && h.ids.every((i) => tim(i))) return { nhan: h.nhan, to: DUONG_DAN.soSanh(h.ids[0], h.ids[1]) };
+  const nhan = trinhBayPhanHoi(h.nhan);
+  if (h.loai === "xem-truong" && h.maTruong && coTruong(h.maTruong)) return { nhan, to: DUONG_DAN.truong(h.maTruong) };
+  if ((h.loai === "xem-nganh" || h.loai === "xem-diem-chuan") && h.idChuongTrinh && tim(h.idChuongTrinh)) return { nhan, to: DUONG_DAN.chiTiet(h.idChuongTrinh) };
+  if (h.loai === "so-sanh" && h.ids && h.ids.length >= 2 && h.ids.every((i) => tim(i))) return { nhan, to: DUONG_DAN.soSanh(h.ids[0], h.ids[1]) };
   return null;
 }
 
@@ -58,13 +62,14 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
   const dsThem = hanh.filter((h) => h.loai === "them-nguyen-vong" && h.idChuongTrinh && tim(h.idChuongTrinh));
   // Nút Xem trường đã có trên thẻ thì không lặp lại thành chip riêng.
   const chips: ChipHanhDong[] = hanh.filter((h) => !(h.loai === "xem-truong" && the.some((x) => x.ma === h.maTruong))).map(chipTuHanhDong).filter((c): c is ChipHanhDong => !!c);
-  const chipsNhanh: ChipHanhDong[] = (t.luaChon ?? []).map((l) => ({ nhan: l.nhan, onClick: () => onGui(l.cau) }));
+  const chipsNhanh: ChipHanhDong[] = (t.luaChon ?? []).map((l) => ({ nhan: trinhBayPhanHoi(l.nhan), onClick: () => onGui(l.cau) }));
   const idChon = chon ?? (dsThem.length === 1 ? dsThem[0].idChuongTrinh! : null);
   const lcChon = idChon ? tim(idChon) : undefined;
 
   const soSanhThe = (i: number) => {
     const a = theHien[i], b = the.find((x, j) => j !== i && x.id && a?.id);
-    if (a?.id && b?.id) { onDi?.(); nav(DUONG_DAN.soSanh(a.id, b.id)); } else onGui(`So sánh ${tenTruong(a.ma) ?? a.ma} với trường khác`);
+    if (a?.id && b?.id) { onDi?.(); nav(DUONG_DAN.soSanh(a.id, b.id)); }
+    else if (a) onGui(`So sánh ${rutGonTenTruong(tenTruong(a.ma) ?? "Tên trường chưa xác minh")} với trường khác`);
   };
 
   return (
@@ -86,9 +91,14 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
           <ul className="space-y-1.5">
             {nganhHien.map((l) => {
               const daCo = s.nguyenVong.includes(l.id);
+              const display = toAcademicDisplay(l);
               return (
                 <li key={l.id} className="rounded-xl border border-xanh/20 bg-xanh-nhat p-2 flex flex-col gap-1.5 min-[420px]:flex-row min-[420px]:items-center">
-                  <Link to={DUONG_DAN.chiTiet(l.id)} onClick={onDi} className="min-h-11 min-w-0 flex-1 px-1 text-[13px] font-bold leading-snug text-xanh hover:underline flex items-center">{l.tenTruong || l.truong} · {l.nganh}</Link>
+                  <Link to={DUONG_DAN.chiTiet(l.id)} onClick={onDi} className="min-h-11 min-w-0 flex-1 px-1 py-1 text-left text-xanh hover:underline">
+                    <MajorLabel ten={display?.majorNameDisplay ?? l.nganh} className="text-[13px]" />
+                    <span className="block text-[12px] leading-snug break-words">{display?.universityNameDisplay ?? "Tên trường chưa xác minh"}</span>
+                    <ProgramVariant variant={display?.programVariant} className="mt-1" />
+                  </Link>
                   <button type="button" disabled={daCo} onClick={() => { if (!daCo) themNguyenVong(l.id); }} aria-label={daCo ? `Đã có ${l.nganh} trong nguyện vọng` : `Thêm ${l.nganh} vào nguyện vọng`}
                     className={gop(NUT_PHU, daCo ? "bg-luc-nhat text-luc-chu" : "border border-xanh/40 bg-trang text-xanh active:bg-xanh-nhat")}>
                     {daCo ? <><Check size={15} />Đã thêm</> : "+ Thêm NV"}
@@ -104,12 +114,12 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
       )}
 
       {t.hoiLai && (
-        <AIClarificationMessage cauHoi={t.hoiLai}>
+        <AIClarificationMessage cauHoi={trinhBayPhanHoi(t.hoiLai)}>
           {dsThem.length > 1 && !idChon && (
             <ul className="space-y-1.5">
               {dsThem.map((h) => (
                 <li key={h.idChuongTrinh} className="flex items-center gap-2 rounded-lg bg-trang p-1.5 border border-vien">
-                  <span className="min-w-0 flex-1 px-1 text-[13px] font-semibold text-chu leading-snug break-words">{h.nhan}</span>
+                  <span className="min-w-0 flex-1 px-1 text-[13px] font-semibold text-chu leading-snug break-words">{trinhBayPhanHoi(h.nhan)}</span>
                   <button type="button" onClick={() => { setChon(h.idChuongTrinh!); setHuy(false); }} className={gop(NUT_PHU, "border border-xanh/40 bg-trang text-xanh")}>Chọn</button>
                 </li>
               ))}
@@ -138,7 +148,7 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
       )}
       {!t.hoiLai && !lcChon && dsThem.length > 1 && (
         <div className="mt-2 space-y-1.5">
-          {dsThem.map((h) => <button key={h.idChuongTrinh} type="button" onClick={() => setChon(h.idChuongTrinh!)} className={gop(NUT_PHU, "w-full border border-xanh/40 bg-trang text-xanh")}>{h.nhan}</button>)}
+          {dsThem.map((h) => <button key={h.idChuongTrinh} type="button" onClick={() => setChon(h.idChuongTrinh!)} className={gop(NUT_PHU, "w-full border border-xanh/40 bg-trang text-xanh")}>{trinhBayPhanHoi(h.nhan)}</button>)}
         </div>
       )}
       {dsThem.length === 1 && huy && !lcChon && (
@@ -153,8 +163,8 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
           <Link to={DUONG_DAN.tuan()} onClick={onDi} className={gop(NUT_PHU, "bg-xanh text-white")}><CalendarCheck size={14} /> Vào Kế hoạch tuần</Link>
         </div>
       )}
-      {t.viecTiep && <p className="mt-1.5 text-[13px] text-muc">Việc nên làm tiếp: <span className="text-chu">{t.viecTiep}</span></p>}
-      <DataSourceLabel trangThai={t.trangThaiDuLieu} cheDo={t.cheDo} tang={t.tang} congDong={!!t.congDong?.length} />
+      {t.viecTiep && <p className="mt-1.5 text-[13px] text-muc">Việc nên làm tiếp: <span className="text-chu">{trinhBayPhanHoi(t.viecTiep)}</span></p>}
+      <DataSourceLabel trangThai={t.trangThaiDuLieu} congDong={!!t.congDong?.length} />
       {t.ghiChu && <p className="mt-1.5 text-[12px] text-chu-phu">{t.ghiChu}</p>}
       {t.batAI && laCuoi && !dang && cheDo === "tietKiem" && (
         <div className="mt-1.5">

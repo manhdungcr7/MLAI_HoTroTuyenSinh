@@ -7,29 +7,29 @@ import {
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { NhanNguyenVongTag } from "@/components/ui/co-cau";
 import { BieuTuongTron, HuyHieuTruong, NenHero } from "@/components/ui/hinh-nen";
-import { HangBam, Nhan, Nut, gop } from "@/components/ui/nut-the";
+import { HangBam, Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
-import { TONE_NHAN } from "@/components/ui/co-cau";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
-import type { NhanNguyenVong, ToneTen } from "@/state/types";
+import type { NhanNguyenVong } from "@/state/types";
 import { GoiYSheet, NutGoiYDanhSach } from "./goi-y-sheet";
 import { useKeoTha } from "./dung-keo-tha";
-import { CHU_O, CanhBaoThuTuThe, OSoThuTu, ThanhHoanTac, useHoanTac } from "./thanh-phan";
+import { CanhBaoThuTuThe, ThanhHoanTac, useHoanTac } from "./thanh-phan";
 import { SO_NV_GOI_Y, canhBaoThuTu, demNhan, dungDanhSach, ketLuan, toHopTotNhat, xetCoCau, type DongNV } from "./tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
 import { ChanDoanDanhMucCard } from "./chan-doan-danh-muc";
-import { tinhXacSuatTrungTuyen } from "@/engine/xac-suat-trung-tuyen";
+import { FitIndicator, MajorLabel, PreferenceSummary, ProgramVariant, UniversityLabel } from "@/components/ui/academic-display";
+import { phanGiaiTenTruong, toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
 
 const CAC_LOAI_NHAN: { nhan: NhanNguyenVong; moTa: string }[] = [
-  { nhan: "Thử sức", moTa: "Điểm chuẩn cao hơn điểm bạn một chút, đáng thử một hai ngành" },
-  { nhan: "Vừa sức", moTa: "Điểm bạn sát điểm chuẩn, cơ hội ngang ngửa" },
-  { nhan: "An toàn", moTa: "Điểm bạn cao hơn điểm chuẩn rõ, khả năng đỗ cao" },
-  { nhan: "Dự phòng", moTa: "Giữ chỗ học cho bạn nếu các ngành trên không đạt" },
+  { nhan: "Thử sức", moTa: "Điểm chuẩn lịch sử cao hơn điểm của bạn" },
+  { nhan: "Vừa sức", moTa: "Điểm của bạn thấp hơn điểm chuẩn lịch sử tối đa 1,5 điểm" },
+  { nhan: "An toàn", moTa: "Điểm của bạn cao hơn điểm chuẩn lịch sử từ 1,5 đến dưới 4 điểm" },
+  { nhan: "Dự phòng", moTa: "Điểm của bạn cao hơn điểm chuẩn lịch sử từ 4 điểm" },
 ];
 
 /** Danh sách chưa có ngành nào: một thẻ hành động chính, rồi cách xếp danh sách để bạn biết mình sẽ nhận được gì. */
@@ -231,9 +231,9 @@ export default function DanhSachNguyenVong() {
 
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
-            <ol className={gop("rounded-the bg-trang border border-vien shadow-the divide-y divide-vien overflow-hidden", keo && "select-none")} aria-label="Danh sách nguyện vọng theo thứ tự ưu tiên">
+            <ol className={gop("space-y-2", keo && "select-none")} aria-label="Danh sách nguyện vọng theo thứ tự ưu tiên">
               {ds.map((d, i) => (
-                <li key={d.id} ref={ganHang(i)} style={kieuHang(i)} className={gop("bg-trang", keo?.tu === i && "ring-2 ring-inset ring-xanh")}>
+                <li key={d.id} ref={ganHang(i)} style={kieuHang(i)} className={gop("rounded-2xl bg-trang border border-vien shadow-xs overflow-hidden", keo?.tu === i && "ring-2 ring-xanh")}>
                   <HangNguyenVong d={d} soHang={ds.length} chuaDuDiem={tong === null} dangKeo={keo?.tu === i}
                     tayNam={tayNam(i)} onLen={() => chuyen(i, i - 1)} onXuong={() => chuyen(i, i + 1)}
                     onMo={() => d.lc && nav(DUONG_DAN.chiTiet(d.id))} onXoa={() => setHoiXoa(d.id)} />
@@ -266,25 +266,9 @@ export default function DanhSachNguyenVong() {
   );
 }
 
-/** Thanh 4 ô số: Tổng | An toàn (gồm Dự phòng) | Vừa sức | Thử sức. Cột bằng chiều cao. */
+/** Tóm tắt dạng dòng, giữ Dự phòng thành nhóm riêng và tính cả lựa chọn chưa xếp nhãn. */
 function ThanhChiSo({ tong, dem }: { tong: number; dem: Record<NhanNguyenVong, number> }) {
-  const o: { ten: string; so: number; tone: ToneTen; moTa?: string }[] = [
-    { ten: "Tổng", so: tong, tone: "muc" },
-    { ten: "An toàn", so: dem["An toàn"] + dem["Dự phòng"], tone: TONE_NHAN["An toàn"], moTa: `gồm ${dem["Dự phòng"]} dự phòng` },
-    { ten: "Vừa sức", so: dem["Vừa sức"], tone: TONE_NHAN["Vừa sức"] },
-    { ten: "Thử sức", so: dem["Thử sức"], tone: TONE_NHAN["Thử sức"] },
-  ];
-  return (
-    <ul className="grid grid-cols-4 gap-2 items-stretch" aria-label="Cơ cấu danh sách">
-      {o.map((x) => (
-        <li key={x.ten} className="rounded-the bg-trang border border-vien shadow-the py-3 px-1 flex flex-col items-center justify-center text-center"
-          aria-label={`${x.ten}: ${x.so}${x.moTa ? ` (${x.moTa})` : ""}`}>
-          <span className={gop("so-lon text-[30px] font-extrabold leading-none", CHU_O[x.tone])}>{x.so}</span>
-          <span className="mt-1.5 text-[13px] font-semibold text-chu leading-tight">{x.ten}</span>
-        </li>
-      ))}
-    </ul>
-  );
+  return <PreferenceSummary tong={tong} dem={dem} />;
 }
 
 const NUT_NHO = "size-11 grid place-items-center rounded-xl text-chu-phu active:bg-xanh-nhat disabled:opacity-35 disabled:pointer-events-none";
@@ -298,74 +282,53 @@ function HangNguyenVong({ d, soHang, chuaDuDiem, dangKeo, tayNam, onLen, onXuong
   const lc = d.lc;
   const coChuan = !!lc && lc.diemMin > 0;
   const link = lc && (lc.linkNguon || (/^https?:/.test(lc.nguon) ? lc.nguon : ""));
-  const xs = useMemo(() => {
-    if (!lc || chuaDuDiem || d.chenh === null) return null;
-    return tinhXacSuatTrungTuyen(lc.diemMin + d.chenh, lc);
-  }, [lc, chuaDuDiem, d.chenh]);
-
+  const model = toAcademicDisplay(lc, d.nhan);
+  const truong = lc ? phanGiaiTenTruong(lc.maTruong || lc.truong, lc.tenTruong) : null;
   return (
-    <div className="flex">
-      <button type="button" {...tayNam} aria-label={`Kéo để đổi thứ tự ${nv}`} aria-roledescription="tay nắm kéo thả"
-        onKeyDown={(e) => { if (e.key === "ArrowUp") { e.preventDefault(); onLen(); } if (e.key === "ArrowDown") { e.preventDefault(); onXuong(); } }}
-        className={gop("w-8 shrink-0 grid place-items-center text-chu-phu touch-none", dangKeo ? "cursor-grabbing text-xanh" : "cursor-grab")}>
-        <GripVertical size={18} />
-      </button>
-
-      <div className="flex-1 min-w-0 pr-2 py-2.5">
-        <button type="button" onClick={onMo} disabled={!lc} className="w-full text-left flex items-start gap-3 active:opacity-80">
-          <OSoThuTu viTri={d.viTri} nhan={d.nhan} />
-          <span className="flex-1 min-w-0">
-            {lc ? (
-              <>
-                <b className="block text-[16px] text-muc leading-snug">{lc.nganh}</b>
-                <span className="block text-[13px] text-chu-phu leading-snug truncate"><b className="text-chu">{lc.truong}</b> · {lc.tenTruong}</span>
-                <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-                  {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <Nhan tone="muc">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa so được"}</Nhan>}
-                  <span className="text-[12px] text-chu-phu">{lc.maTruong ?? lc.truong}{d.toHop ? ` · ${d.toHop}${d.suyRa ? " (suy ra)" : ""}` : ""}</span>
-                  {xs && (
-                    <span
-                      className={gop(
-                        "text-[11px] font-bold px-1.5 py-0.5 rounded-md border",
-                        xs.xacSuat >= 0.8
-                          ? "bg-luc/10 text-luc-chu border-luc/30"
-                          : xs.xacSuat >= 0.45
-                          ? "bg-xanh/10 text-xanh border-xanh/30"
-                          : "bg-cam/10 text-cam-chu border-cam/30"
-                      )}
-                      title={`Ước lượng tham khảo (τ = ${xs.doBienDongTau}). Khoảng tham chiếu: ${xs.khoangTinCay[0]}% – ${xs.khoangTinCay[1]}%`}
-                    >
-                      Cơ hội tham khảo ~{xs.phanTram}%
-                    </span>
-                  )}
-                </span>
-              </>
-            ) : (
-              <>
-                <b className="block text-[15px] text-muc">Chưa có dữ liệu</b>
-                <span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong danh mục. Bạn có thể xóa đi.</span>
-              </>
-            )}
-          </span>
+    <div className="p-3.5">
+      <div className="flex items-center gap-2">
+        <button type="button" {...tayNam} aria-label={`Kéo để đổi thứ tự ${nv}`} aria-roledescription="tay nắm kéo thả"
+          onKeyDown={(e) => { if (e.key === "ArrowUp") { e.preventDefault(); onLen(); } if (e.key === "ArrowDown") { e.preventDefault(); onXuong(); } }}
+          className={gop("size-11 -ml-1 rounded-lg grid place-items-center text-chu-phu touch-none shrink-0", dangKeo ? "cursor-grabbing text-xanh" : "cursor-grab")}>
+          <GripVertical size={18} />
         </button>
+        <span className="text-[13px] font-extrabold text-muc">NV {String(d.viTri + 1).padStart(2, "0")}</span>
+        <span className="ml-auto"><FitIndicator fitCategory={d.nhan} chuaDuDiem={chuaDuDiem} /></span>
+      </div>
 
-        {lc && (
-          <p className="mt-1.5 ml-14 text-[13px] text-chu leading-snug">
-            {coChuan ? <>Chuẩn {lc.namDiem}: <b>{dinhDang(lc.diemMin, 1)}</b></> : "Điểm chuẩn: chưa có"}
-            {" · "}
-            {d.chenh !== null && coChuan ? (
-              <>bạn <b>{dinhDang(lc.diemMin + d.chenh, 1)}</b>{" "}
-                <b className={d.chenh < 0 ? "text-cam-chu" : "text-luc-chu"} title={`Điểm bạn so với điểm chuẩn ${lc.namDiem}`}>({d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 1)})</b></>
-            ) : <span className="text-chu-phu">{d.lyDoKhongNhan ?? "bạn: chưa có"}</span>}
-            {link && <> · <a href={link} target="_blank" rel="noreferrer" className="text-xanh font-semibold inline-flex items-center min-h-11 px-1 -my-3">Nguồn</a></>}
-          </p>
-        )}
+      {lc && model ? (
+        <button type="button" onClick={onMo} className="w-full text-left mt-1.5 rounded-lg py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh" aria-label={`Mở chi tiết ${model.majorNameDisplay} tại ${model.universityNameDisplay}`}>
+          <MajorLabel ten={model.majorNameDisplay} className="text-[16px]" />
+          <UniversityLabel tenHienThi={model.universityNameDisplay} daXacMinh={!!truong?.daXacMinh} className="mt-1 block text-[14px]" />
+          {model.programVariant && <ProgramVariant variant={model.programVariant} className="mt-1.5" />}
+          {!truong?.daXacMinh && <span className="block mt-1 text-[12px] text-cam-chu">Chưa xác minh tên trường</span>}
+        </button>
+      ) : (
+        <p className="mt-1 text-[14px] text-chu"><b>Chưa có dữ liệu</b><span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong danh mục. Em có thể xóa đi.</span></p>
+      )}
 
-        <div className="mt-0.5 flex items-center">
-          <button type="button" onClick={onLen} disabled={d.viTri === 0} aria-label={`Đưa ${tenNgan(d)} lên trên`} className={NUT_NHO}><ArrowUp size={20} /></button>
-          <button type="button" onClick={onXuong} disabled={d.viTri === soHang - 1} aria-label={`Đưa ${tenNgan(d)} xuống dưới`} className={NUT_NHO}><ArrowDown size={20} /></button>
-          <span className="flex-1" />
-          <button type="button" onClick={onXoa} aria-label={`Xóa ${nv}`} className={gop(NUT_NHO, "text-do-chu active:bg-do-nhat")}><Trash2 size={19} /></button>
-        </div>
+      {lc && (
+        <details className="mt-2 border-t border-vien/70 pt-2 text-[13px]">
+          <summary className="min-h-11 inline-flex cursor-pointer list-none items-center gap-1.5 font-semibold text-xanh focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh rounded">
+            Xem điểm và thông tin <ChevronDown size={16} aria-hidden />
+          </summary>
+          <div className="space-y-1.5 pb-1 text-chu">
+            <p>{coChuan ? <>Điểm chuẩn năm {lc.namDiem}: <b>{dinhDang(lc.diemMin, 1)}</b></> : "Chưa có điểm chuẩn tham khảo"}</p>
+            <p>{d.chenh !== null && coChuan ? <>Điểm của em: <b>{dinhDang(lc.diemMin + d.chenh, 1)}</b> <span className={d.chenh < 0 ? "text-cam-chu" : "text-luc-chu"}>({d.chenh < 0 ? "−" : "+"}{dinhDang(Math.abs(d.chenh), 1)} so với điểm chuẩn)</span></> : <span className="text-chu-phu">{d.lyDoKhongNhan ?? "Chưa có điểm để đối chiếu"}</span>}</p>
+            {d.toHop && <p>Tổ hợp: <b>{d.toHop}</b>{d.suyRa ? " (tổ hợp có điểm cao nhất của em)" : ""}</p>}
+            <p>Tên ngành trong danh mục: {model?.majorNameOfficial ?? lc.nganh}</p>
+            <p>Tên trường đầy đủ: {model?.universityNameOfficial ?? lc.tenTruong}</p>
+            <p>Nguồn: {model?.sourceStatus === "de_an_chinh_thuc" ? "đề án tuyển sinh của trường" : model?.sourceStatus === "da_kiem_chung" ? "đã kiểm chứng" : "nguồn tổng hợp"}</p>
+            {link && <a href={link} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center font-semibold text-xanh">Xem nguồn điểm chuẩn</a>}
+          </div>
+        </details>
+      )}
+
+      <div className="mt-1 flex items-center border-t border-vien/70 pt-1">
+        <button type="button" onClick={onLen} disabled={d.viTri === 0} aria-label={`Đưa ${tenNgan(d)} lên trên`} className={NUT_NHO}><ArrowUp size={20} /></button>
+        <button type="button" onClick={onXuong} disabled={d.viTri === soHang - 1} aria-label={`Đưa ${tenNgan(d)} xuống dưới`} className={NUT_NHO}><ArrowDown size={20} /></button>
+        <span className="flex-1" />
+        <button type="button" onClick={onXoa} aria-label={`Xóa ${nv}`} className={gop(NUT_NHO, "text-do-chu active:bg-do-nhat")}><Trash2 size={19} /></button>
       </div>
     </div>
   );
@@ -450,6 +413,7 @@ function TheDanhSachYeuThich({
             {dsYeuThich.map((l) => {
               const daThem = nguyenVong.includes(l.id);
               const viTriNV = nguyenVong.indexOf(l.id);
+              const model = toAcademicDisplay(l);
               return (
                 <li key={l.id} className="py-2.5 flex items-center justify-between gap-2.5">
                   <button
@@ -457,12 +421,17 @@ function TheDanhSachYeuThich({
                     onClick={() => onDieuHuong(l.id)}
                     className="flex items-center gap-2.5 text-left min-w-0 flex-1 active:opacity-75 cursor-pointer"
                   >
-                    <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={38} />
+                    <HuyHieuTruong ten={kyHieu(model?.universityCode || l.truong)} tone={l.tone} kichThuoc={38} />
                     <div className="min-w-0 flex-1">
-                      <b className="block text-[14px] text-muc leading-tight truncate">{l.nganh}</b>
+                      <b className="block text-[14px] text-muc leading-tight truncate">{model?.majorNameDisplay ?? l.nganh}</b>
                       <span className="block text-[12px] text-chu-phu truncate mt-0.5">
-                        {l.truong} · {l.khuVuc} · {khoangDiem(l)} điểm
+                        {model?.universityNameDisplay ?? l.truong} · {l.khuVuc} · {khoangDiem(l)} điểm
                       </span>
+                      {model?.programVariant && (
+                        <span className="inline-block mt-0.5 text-[11px] font-semibold text-xanh bg-xanh-nhat px-1.5 py-0.2 rounded">
+                          {model.programVariant}
+                        </span>
+                      )}
                     </div>
                   </button>
                   {daThem ? (

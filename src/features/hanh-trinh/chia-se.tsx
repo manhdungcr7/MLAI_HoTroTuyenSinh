@@ -17,46 +17,51 @@ import { dinhDang } from "@/engine/dinh-dang";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { demNhan, dungDanhSach } from "@/features/nguyen-vong/tinh-toan";
 import type { AppState } from "@/state/store";
+import { toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
+import { PreferenceSummary, UniversityLabel, MajorLabel, ProgramVariant } from "@/components/ui/academic-display";
 
 /** Thẻ tóm tắt danh sách nguyện vọng: bố cục đối xứng, gọn để chụp màn hình gửi người đồng hành. */
 function TheTomTatNguyenVong({ s }: { s: AppState }) {
   const ds = useMemo(() => dungDanhSach(s.nguyenVong, diemDayDu(s), tim), [s]);
   const dem = demNhan(ds);
-  const o = [
-    { ten: "Tổng", so: ds.length },
-    { ten: "An toàn", so: dem["An toàn"] + dem["Dự phòng"] },
-    { ten: "Vừa sức", so: dem["Vừa sức"] },
-    { ten: "Thử sức", so: dem["Thử sức"] },
-  ];
   if (ds.length === 0) return null;
   return (
     <section aria-label="Tóm tắt danh sách nguyện vọng" className="rounded-the bg-trang border border-vien shadow-the overflow-hidden">
       <div className="px-4 py-3 border-b border-vien">
-        <h2 className="text-[16px] font-extrabold text-muc leading-snug">Danh sách nguyện vọng{s.hoSo.hoTen.trim() ? ` của ${s.hoSo.hoTen.trim()}` : ""}</h2>
+        <h2 className="text-[16px] font-extrabold text-muc leading-snug">Nguyện vọng{s.hoSo.hoTen.trim() ? ` của ${s.hoSo.hoTen.trim().split(/\s+/).slice(-2).join(" ")}` : " của bạn"}</h2>
+        <p className="mt-1 text-[13px] text-chu-phu">{ds.length} lựa chọn đang cân nhắc</p>
       </div>
-      <ul className="grid grid-cols-4 divide-x divide-vien border-b border-vien">
-        {o.map((x) => (
-          <li key={x.ten} className="py-3 text-center">
-            <span className="block so-lon text-[26px] font-extrabold leading-none text-muc">{x.so}</span>
-            <span className="block mt-1 text-[12px] text-chu-phu">{x.ten}</span>
-          </li>
-        ))}
-      </ul>
-      <ol className="divide-y divide-vien">
+      <div className="px-3 py-2.5 border-b border-vien"><PreferenceSummary tong={ds.length} dem={dem} className="border-0 bg-transparent p-0 shadow-none" /></div>
+      <ol className="divide-y divide-vien px-3">
         {ds.map((d) => (
-          <li key={d.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5">
-            <span className="so-lon text-[13px] font-bold text-chu-phu whitespace-nowrap">Nguyện Vọng {d.viTri + 1}</span>
-            <span className="min-w-0">
-              <b className="block text-[14px] text-muc leading-snug">{d.lc ? d.lc.nganh : "Chưa có dữ liệu"}</b>
-              <span className="block text-[12px] text-chu-phu truncate">
-                {d.lc ? `${d.lc.truong} · chuẩn ${d.lc.namDiem}: ${d.lc.diemMin > 0 ? dinhDang(d.lc.diemMin, 1) : "chưa có"}` : "Không còn trong danh mục"}
-              </span>
-            </span>
-            {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <span className="text-[12px] text-chu-phu">Chưa so được</span>}
+          <li key={d.id} className="py-3">
+            {(() => {
+              const model = toAcademicDisplay(d.lc, d.nhan);
+              return <details className="group">
+                <summary className="list-none cursor-pointer rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-[12px] font-bold text-chu-phu">NV {String(d.viTri + 1).padStart(2, "0")}</span>
+                    {d.nhan ? <NhanNguyenVongTag nhan={d.nhan} /> : <span className="text-[12px] text-chu-phu">Chưa so được</span>}
+                  </div>
+                  {model ? <>
+                    <MajorLabel ten={model.majorNameDisplay} />
+                    <UniversityLabel tenHienThi={model.universityNameDisplay} daXacMinh={model.universityNameDisplay !== "Tên trường chưa xác minh"} />
+                    <ProgramVariant variant={model.programVariant} />
+                  </> : <p className="text-[14px] font-semibold text-chu">Lựa chọn không còn trong danh mục</p>}
+                  <span className="mt-1 block text-[12px] font-semibold text-xanh">Xem chi tiết</span>
+                </summary>
+                {model && d.lc && <div className="mt-2 rounded-lg bg-nen p-3 text-[12px] space-y-1.5">
+                  <p><span className="text-chu-phu">Tên trường đầy đủ: </span><span className="font-medium text-muc">{model.universityNameOfficial}</span></p>
+                  <p><span className="text-chu-phu">Tên ngành trong đề án: </span><span className="font-medium text-muc">{model.majorNameOfficial}</span></p>
+                  <p className="text-chu-phu">Nguồn: {model.sourceStatus === "de_an_chinh_thuc" ? "Đề án chính thức của trường" : model.sourceStatus === "da_kiem_chung" ? "Đã kiểm chứng" : "Nguồn dữ liệu đang được rà soát"}.</p>
+                  <p className="text-chu-phu">Điểm tham khảo năm {d.lc.namDiem}: {d.lc.diemMin > 0 ? dinhDang(d.lc.diemMin, 1) : "chưa có dữ liệu"}. Nhãn chỉ để cân nhắc, không bảo đảm kết quả xét tuyển.</p>
+                </div>}
+              </details>;
+            })()}
           </li>
         ))}
       </ol>
-      <p className="px-4 py-2 text-[12px] text-chu-phu border-t border-vien">An toàn gồm cả Dự phòng.</p>
+      <p className="px-4 py-2 text-[12px] text-chu-phu border-t border-vien">Nhãn tham khảo từ điểm chuẩn năm trước, không bảo đảm kết quả xét tuyển. Bấm từng lựa chọn để xem chi tiết.</p>
     </section>
   );
 }

@@ -13,6 +13,7 @@ import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
 import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, type TinNhan } from "./hoi-thoai";
 import { TinMayChu } from "./thanh-phan/tin-may-chu";
 import { DinhDangMarkdown } from "@/components/ui/dinh-dang-markdown";
+import { trinhBayPhanHoi } from "./trinh-bay-phan-hoi";
 
 export function NutTuVan({ nguCanh }: { nguCanh: string }) {
   const nav = useNavigate();
@@ -141,7 +142,7 @@ export default function TuVan() {
             <div>
               <h3 className="text-[16px] font-bold text-muc">Trợ lý Tuyển sinh AI</h3>
               <p className="text-[13px] text-chu-phu mt-1 leading-relaxed">
-                Tra cứu điểm chuẩn các năm gần đây, tìm trường theo tỉnh và ngành, phân tích nguyện vọng và lập lịch ôn thi.
+                Hỏi về điểm chuẩn, so sánh trường và ngành, hoặc nhờ mình xem danh sách nguyện vọng của em.
               </p>
             </div>
           </div>
@@ -161,7 +162,7 @@ export default function TuVan() {
                   <p className="whitespace-pre-line">{t.chu}</p>
                 ) : (
                   <>
-                    <DinhDangMarkdown noiDung={t.chu} />
+                    <DinhDangMarkdown noiDung={trinhBayPhanHoi(t.chu)} />
                     <TinMayChu t={t} laCuoi={i === viTriCuoi} dang={dang} cauTruoc={tin[i - 1]?.vai === "em" ? tin[i - 1].chu : undefined}
                       onGui={(c) => gui(c)} onThuLai={() => gui(tin[i - 1].chu, i - 1)} />
                   </>

@@ -12,6 +12,7 @@ import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
 import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, type TinNhan } from "./hoi-thoai";
 import { TinMayChu } from "./thanh-phan/tin-may-chu";
 import { DinhDangMarkdown } from "@/components/ui/dinh-dang-markdown";
+import { trinhBayPhanHoi } from "./trinh-bay-phan-hoi";
 
 /** Khung chat mini nổi ở góc màn hình giống phong cách các website thương mại. Dùng chung logic trả lời với màn Tư vấn (cau-tra-loi.ts). */
 function KhungChatMini({ dong }: { dong: () => void }) {
@@ -149,8 +150,8 @@ function KhungChatMini({ dong }: { dong: () => void }) {
                 <Bot size={15} />
               </span>
               <div className="bg-white border border-vien rounded-2xl rounded-tl-xs p-3 text-[13px] text-chu shadow-2xs leading-relaxed max-w-[88%]">
-                <p>Xin chào! 👋</p>
-                <p className="mt-1">Mình là Chatbot AI tư vấn tuyển sinh. Mình có thể giúp bạn tra cứu điểm chuẩn các năm gần đây, phân tích nguyện vọng và hỗ trợ kế hoạch học tập.</p>
+                <p>Chào em!</p>
+                <p className="mt-1">Mình giúp em tra điểm chuẩn, so sánh trường và ngành, hoặc xem danh sách nguyện vọng. Hỏi điều em đang băn khoăn nhé.</p>
               </div>
             </div>
 
@@ -198,7 +199,7 @@ function KhungChatMini({ dong }: { dong: () => void }) {
                 {t.vai === "em" ? (
                   <p className="whitespace-pre-line">{t.chu}</p>
                 ) : (
-                  <DinhDangMarkdown noiDung={t.chu} />
+                  <DinhDangMarkdown noiDung={trinhBayPhanHoi(t.chu)} />
                 )}
                 {t.vai === "mayChu" && (
                   <TinMayChu t={t} laCuoi={i === viTriCuoi} dang={dang} cauTruoc={tin[i - 1]?.vai === "em" ? tin[i - 1].chu : undefined}
@@ -285,52 +286,71 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
     };
   }, [mo]);
 
-  // Không hiển thị trên màn tư vấn chính, màn chào mừng hoặc luồng khởi đầu (tránh đè nút Tiếp tục cố định ở đáy)
-  if (pathname === "/tu-van" || pathname.startsWith("/tu-van") || pathname.startsWith("/chao") || pathname.startsWith("/bat-dau")) {
+  // Không hiển thị trên màn tư vấn chính, màn chào mừng, luồng bắt đầu, hoặc màn chia sẻ/người đồng hành
+  if (
+    pathname === "/tu-van" ||
+    pathname.startsWith("/tu-van") ||
+    pathname.startsWith("/chao") ||
+    pathname.startsWith("/bat-dau") ||
+    pathname.startsWith("/ho-so/chia-se") ||
+    pathname.startsWith("/dong-hanh") ||
+    pathname.startsWith("/loi-nhan")
+  ) {
     return null;
   }
 
-  return (
-    <div
-      ref={vungRef}
-      className={gop(
-        "fixed z-50 flex flex-col items-end pointer-events-none",
-        khongThanh ? "bottom-5 right-4 sm:bottom-6 sm:right-6" : "bottom-20 right-4 sm:bottom-6 sm:right-6",
-      )}
-    >
-      {/* Khung chat nhỏ gọn nổi phía trên nút tròn */}
-      {mo && (
-        <div
-          role="dialog"
-          aria-label="Chatbot AI Tuyển sinh"
-          className="pointer-events-auto mb-3 w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100dvh-120px)] bg-white rounded-2xl shadow-2xl border border-vien overflow-hidden flex flex-col hien-len"
-        >
-          <KhungChatMini dong={() => setMo(false)} />
-        </div>
-      )}
-
-      {/* Nút tròn nổi ở góc màn hình: Icon Bot kèm huy hiệu đỏ báo tin nhắn */}
-      <button
-        type="button"
-        onClick={() => setMo((m) => !m)}
-        aria-label={mo ? "Đóng Chatbot AI" : "Mở Chatbot AI"}
-        title={mo ? "Đóng chat" : "Chatbot AI Tuyển sinh"}
-        className="pointer-events-auto size-14 rounded-full gd-xanh text-white shadow-xl shadow-xanh/35 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer border-2 border-white relative group"
-      >
-        {mo ? (
-          <X size={22} className="text-white" />
-        ) : (
-          <>
-            <Bot size={26} className="text-white" />
-            <span className="absolute -top-0.5 -right-0.5 flex size-4">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-              <span className="relative inline-flex rounded-full size-4 bg-red-500 text-[9.5px] font-bold text-white items-center justify-center border border-white">
-                1
-              </span>
-            </span>
-          </>
+  // Danh sách nguyện vọng dài có nhiều thao tác sát đáy; dùng lối mở chat trong luồng trang để không che thẻ.
+  if (pathname.startsWith("/nguyen-vong")) {
+    return (
+      <div ref={vungRef} className="mx-auto w-full max-w-[430px] px-4 py-3">
+        <button type="button" onClick={() => setMo(true)} aria-label="Hỏi trợ lý tuyển sinh"
+          className="min-h-11 inline-flex items-center gap-2 rounded-xl border border-xanh/30 bg-trang px-3 text-[13px] font-bold text-xanh active:bg-xanh-nhat focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">
+          <Bot size={17} aria-hidden />Hỏi trợ lý tuyển sinh
+        </button>
+        {mo && (
+          <div role="dialog" aria-label="Chatbot AI Tuyển sinh" className="fixed inset-x-2 bottom-[calc(4.5rem+env(safe-area-inset-bottom)+0.5rem)] z-50 mx-auto h-[min(520px,calc(100dvh-9rem))] max-w-[360px] overflow-hidden rounded-2xl border border-vien bg-trang shadow-2xl">
+            <KhungChatMini dong={() => setMo(false)} />
+          </div>
         )}
-      </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none mx-auto max-w-[430px]">
+      <div className="relative w-full h-0 flex justify-end">
+        <div
+          ref={vungRef}
+          className={gop(
+            "pointer-events-auto absolute right-4 flex flex-col items-end",
+            khongThanh
+              ? "bottom-[calc(1.25rem+env(safe-area-inset-bottom))]"
+              : "bottom-[calc(4.5rem+env(safe-area-inset-bottom)+10px)]"
+          )}
+        >
+          {/* Khung chat nhỏ gọn nổi phía trên nút tròn */}
+          {mo && (
+            <div
+              role="dialog"
+              aria-label="Chatbot AI Tuyển sinh"
+              className="mb-3 w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100dvh-130px)] bg-white rounded-2xl shadow-2xl border border-vien overflow-hidden flex flex-col hien-len"
+            >
+              <KhungChatMini dong={() => setMo(false)} />
+            </div>
+          )}
+
+          {/* Nút tròn nổi ở góc màn hình: Icon Bot sạch, không huy hiệu giả */}
+          <button
+            type="button"
+            onClick={() => setMo((m) => !m)}
+            aria-label={mo ? "Đóng Chatbot AI" : "Mở Chatbot AI"}
+            title={mo ? "Đóng chat" : "Chatbot AI Tuyển sinh"}
+            className="size-13 rounded-full gd-xanh text-white shadow-lg shadow-xanh/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer border-2 border-white relative"
+          >
+            {mo ? <X size={22} className="text-white" /> : <Bot size={24} className="text-white" />}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

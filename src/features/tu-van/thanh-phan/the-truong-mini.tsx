@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { GitCompareArrows, School } from "lucide-react";
-import { tim } from "@/data/lua-chon-mau";
+import { LUA_CHON_MAU, tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
 import { tenTruong, tinhCuaTruong } from "@/engine/truong";
+import { rutGonTenTruong, toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
+import { MajorLabel, ProgramVariant } from "@/components/ui/academic-display";
 import { gop } from "@/components/ui/nut-the";
 
 const NUT = "min-h-11 min-w-0 rounded-[10px] px-2 text-[13px] font-bold inline-flex items-center justify-center gap-1.5 text-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh";
@@ -21,19 +23,23 @@ export function UniversityMiniCard({ ma, idNganh, muc, onSoSanh, onDi }: {
   onDi?: () => void;
 }) {
   const ct = idNganh ? tim(idNganh) : undefined;
+  const luaChonTruong = ct ?? LUA_CHON_MAU.find((l) => l.maTruong === ma);
+  const hocThuat = toAcademicDisplay(luaChonTruong);
+  const ten = hocThuat?.universityNameDisplay ?? (tenTruong(ma) ? rutGonTenTruong(tenTruong(ma)!) : "Tên trường chưa xác minh");
   const noi = tinhCuaTruong(ma).slice(0, 2).join(", ");
   return (
     <li className="rounded-xl border border-vien bg-trang p-2.5 space-y-2 min-w-0">
       <div className="flex items-start gap-2 min-w-0">
         <span className="size-8 rounded-lg bg-xanh-nhat text-xanh grid place-items-center shrink-0" aria-hidden><School size={16} /></span>
         <div className="min-w-0 flex-1">
-          <p className="text-[14px] font-bold text-muc leading-snug break-words">{tenTruong(ma) ?? ma}</p>
-          <p className="text-[12.5px] text-chu-phu leading-snug break-words">{noi || "Chưa rõ nơi đặt trường"} · Loại hình: chưa có dữ liệu</p>
+          <p className="text-[14px] font-bold text-muc leading-snug break-words">{ten}</p>
+          {noi && <p className="text-[12.5px] text-chu-phu leading-snug break-words">{noi}</p>}
           {ct && (
-            <p className="mt-0.5 text-[12.5px] text-chu leading-snug break-words">
-              Ngành: {ct.nganh}
-              {muc === "lien-quan" && <span className="ml-1 rounded bg-cam-nhat px-1 text-[12px] font-semibold text-cam-chu">liên quan, không trùng tên</span>}
-            </p>
+            <div className="mt-1 space-y-1">
+              {hocThuat && <MajorLabel ten={hocThuat.majorNameDisplay} className="text-[13px]" />}
+              {hocThuat?.programVariant && <ProgramVariant variant={hocThuat.programVariant} />}
+              {muc === "lien-quan" && <span className="inline-flex rounded bg-cam-nhat px-1.5 py-0.5 text-[11px] font-semibold text-cam-chu">Ngành gần với câu hỏi</span>}
+            </div>
           )}
         </div>
       </div>
