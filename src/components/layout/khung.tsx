@@ -31,7 +31,7 @@ export function KhungCoThanhDuoi() {
             return (
               <li key={t.id}>
                 <Link to={t.den} aria-current={dang ? "page" : undefined}
-                  className={gop("relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
+                  className={gop("relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[10px] min-[375px]:text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
                   {/* Tab đang mở: một nét mực ngắn ở mép trên, như gạch chân bằng bút. */}
                   {dang && <span aria-hidden className="absolute top-0 inset-x-5 h-[3px] rounded-b-full bg-xanh" />}
                   <Icon size={22} strokeWidth={dang ? 2.4 : 1.8} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />

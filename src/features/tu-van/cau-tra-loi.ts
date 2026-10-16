@@ -6,6 +6,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { coTruong } from "@/engine/truong";
 import { GIOI_HAN, type TraLoiTuVan, type YeuCauTuVan } from "@/engine/tu-van";
 import { phanTichMoNeo, tomTatMoNeoChoAI } from "@/features/nguyen-vong/mo-neo";
+import { HO_SO_TRONG } from "@/state/mau";
 import type { AppState } from "@/state/store";
 import { phanTichCau, timTruongMoHo } from "./hieu-cau";
 import { lamSachHanhDong, lamSachThe, nganhLuotTruoc, taoNguCanh, type TheTruong, type TinNhan } from "./hoi-thoai";
@@ -79,6 +80,27 @@ function tinTuDong(td: KetQuaTuDong, idDuLieu: string[], phu: Partial<TinNhan>):
 
 export interface DauVaoTraLoi { cau: string; truoc: TinNhan[]; s: AppState; nguon: NguonTaiSau | null; dungHoSo: boolean; manHinh: string; phien?: PhienAI }
 
+/** Khi học sinh bỏ chọn kèm hồ sơ, mọi nhánh tư vấn dùng cùng một snapshot đã bỏ dữ liệu cá nhân.
+ * Nhờ vậy context, event gửi AI và câu trả lời cục bộ khi AI lỗi đều không suy ra điểm, nguyện vọng hay mục tiêu riêng. */
+function trangThaiKhongKemHoSo(s: AppState): AppState {
+  return {
+    ...s,
+    hoSo: { ...HO_SO_TRONG },
+    mucTieu: null,
+    nguyenVong: [],
+    yeuThich: [],
+    soSanh: [],
+    diemThi: [],
+    tinhHuong: [],
+    coDinh: [],
+    viec: [],
+    trangThaiViec: {},
+    khoiHoc: [],
+    lichSu: [],
+    loiNhan: [],
+  };
+}
+
 /** Một lượt hỏi–đáp hoàn chỉnh, trả về tin của máy để ghi vào lịch sử. */
 export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, manHinh, phien: phienGoc }: DauVaoTraLoi): Promise<TinNhan> {
   const phien: PhienAI = phienGoc ?? { cheDo: CHE_DO_MAC_DINH, idHoSo: idHoSoAI(null), luot: null };
@@ -87,17 +109,20 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
   if (quyTac) return tinTuDong(traLoiQuyTac(quyTac.y, { cheDo: phien.cheDo, luot: phien.luot }), [], {});
   // "Chào, UIT là trường gì": bỏ lời chào, xử lý phần nội dung.
   const cau = bocLoiChao(cauGoc) ?? cauGoc;
-  const giu = nganhLuotTruoc(truoc);
+  const stateTuVan = dungHoSo ? s : trangThaiKhongKemHoSo(s);
+  // Lịch sử có thể đã chứa câu trả lời cá nhân hóa, nên cũng không đưa vào lúc bỏ chọn hồ sơ.
+  const truocTuVan = dungHoSo ? truoc : [];
+  const giu = nganhLuotTruoc(truocTuVan);
   const y: YeuCauTuVan = {
-    cauHoi: cau, nguCanh: nguCanhVoiNV1(manHinh, truoc, s), hoSo: dungHoSo ? tomTatHoSo(s) : null,
-    duLieu: chonDuLieuKemTheo(cau, s, nguon, 8, giu),
+    cauHoi: cau, nguCanh: nguCanhVoiNV1(manHinh, truocTuVan, stateTuVan), hoSo: dungHoSo ? tomTatHoSo(s) : null,
+    duLieu: chonDuLieuKemTheo(cau, stateTuVan, nguon, 8, giu),
   };
   const idDuLieu = y.duLieu.map((d) => d.id);
-  if (traLoiNoiBo(cau, truoc)) return tinTuDong(traLoiTuDong(cau, s, nguon, giu, truoc), idDuLieu, {});
+  if (traLoiNoiBo(cau, truocTuVan)) return tinTuDong(traLoiTuDong(cau, stateTuVan, nguon, giu, truocTuVan), idDuLieu, {});
   const cauDoc = "hỏi theo kiểu tra cứu như “điểm chuẩn Khoa học máy tính UIT”";
   // Chế độ Tiết kiệm: không bao giờ gọi AI. Câu không hiểu thì nói rõ cần bật AI (không phải lỗi mạng).
   if (phien.cheDo === "tietKiem") {
-    const td = traLoiTuDong(cau, s, nguon, giu, truoc);
+    const td = traLoiTuDong(cau, stateTuVan, nguon, giu, truocTuVan);
     if (!td.khongHieu) return tinTuDong(td, idDuLieu, {});
     return { vai: "mayChu", chu: `Câu này cần AI diễn giải, mà bạn đang ở chế độ Tiết kiệm. Bạn bật chế độ AI để mình trả lời, hoặc ${cauDoc}.`, nguon: [], cheDo: "tuDong", idDuLieu, batAI: true };
   }
@@ -112,7 +137,7 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
       ...(ai.hoiLai ? { hoiLai: ai.hoiLai } : {}), ...(ai.trangThaiDuLieu ? { trangThaiDuLieu: ai.trangThaiDuLieu } : {}),
     };
   }
-  const td = traLoiTuDong(cau, s, nguon, giu, truoc);
+  const td = traLoiTuDong(cau, stateTuVan, nguon, giu, truocTuVan);
   // Hết lượt trong ngày: không phải lỗi, tự trả lời từ số liệu có sẵn kèm một dòng thông báo.
   if (loi === "het-luot") {
     const toiDa = phien.luot?.toiDa ?? 50;

@@ -1,0 +1,40 @@
+# Audit microcopy và nội dung
+
+Ngày rà soát: 2026-10-16
+Phạm vi: chuỗi UI thực tế trong `src/features/` và proposal hiện có `docs/submission/NGUYEN-VONG-AI-PROPOSAL.md`. Đây là rà soát nội dung/source tĩnh; chưa chạy browser hay kiểm chứng từng state runtime. Không chỉnh source UI trong lượt này.
+
+## Tóm tắt
+
+- Thuật ngữ cốt lõi **Thử sức · Vừa sức · An toàn · Dự phòng** đã được dùng nhất quán trong logic và UI nguyện vọng. Nội dung hiện cũng nói rõ nhãn dựa trên điểm chuẩn lịch sử, không phải xác suất trúng tuyển (`src/features/nguyen-vong/danh-sach.tsx`, `chan-doan-danh-muc.tsx`, `src/features/thu-tinh-huong/ket-qua-diem-thi.tsx`). Giữ cách diễn đạt này.
+- Các chuỗi “Chưa đủ điểm để so”, “Chưa có dữ liệu”, “Chưa có điểm để đối chiếu” nhìn chung tránh biến dữ liệu thiếu thành số 0 và cho biết giới hạn nhận định.
+- Nên thống nhất đại từ hiển thị: UI tư vấn/gợi ý thường dùng “em”, nhưng một số màn hình dùng “bạn” hoặc “Bạn” (ví dụ `src/features/kham-pha/ve-du-lieu.tsx`, `src/features/tu-van/lay-du-lieu.ts`, `src/features/landing-page/reference-landing.tsx`). Mức P2; rà theo màn hình và theo nguyên văn source trước khi thay hàng loạt.
+- Proposal hiện có nhiều tuyên bố tuyệt đối hoặc tính kết luận vượt quá wording an toàn trong UI, gồm “giải quyết triệt để”, “100%”, “loại trừ 100%”, “chắc chắn”, “kiểm chứng tuyệt đối” và “tối ưu”. Đây là rủi ro P1 về độ tin cậy hồ sơ. Proposal còn tự nhận một triệu người dùng mục tiêu, quy mô dữ liệu, test coverage và mức sẵn sàng mà tài liệu proposal tự nó chưa đủ chứng minh. Cần đối chiếu bằng chứng hiện hành trước khi giữ số liệu.
+
+## Danh sách đề xuất có cấu trúc
+
+| ID / mức | File / vị trí | Hiện tại | Đề xuất | Điều kiện xác minh / tái hiện |
+|---|---|---|---|---|
+| COPY-01 / P2 | `src/features/tu-van/tu-van.tsx`, `src/features/tu-van/lay-du-lieu.ts`, `src/features/kham-pha/ve-du-lieu.tsx`; các màn hình khác dùng “bạn” | “em” và “bạn” cùng xuất hiện trong lời hướng dẫn | Chọn “em” làm đại từ mặc định theo quy tắc repo; chỉ sửa chuỗi hướng trực tiếp đến học sinh, giữ “bạn” nếu là trích dẫn hoặc ngữ cảnh không gọi riêng học sinh | Mở từng route, đọc cả empty/error/loading và thông báo do engine tạo; tìm `bạn/Bạn` trong `src/features` rồi phân loại trước khi sửa. Không chỉ thay chuỗi bằng search/replace mù. |
+| COPY-02 / P2 | `src/features/nguyen-vong/danh-sach.tsx:29-32`; `src/features/nguyen-vong/an-toan.tsx:152-155` | Mô tả các khoảng cách điểm theo năm lịch sử; ranh giới 1,5 điểm được viết theo hai cách (“tối đa 1,5” và “chưa tới 1,5”) | Dùng một mô tả chuẩn lấy từ engine, ghi rõ “so với điểm chuẩn tham khảo năm …”; giữ đúng bất đẳng thức mà engine thực thi | Đối chiếu ranh giới `chenh` trong logic tính nhãn và test tại đúng giá trị -1,5 / +1,5 / +4; đảm bảo mô tả không làm tròn tạo khoảng chồng/lỗ. Không đổi ngưỡng trong công việc copy. |
+| COPY-03 / P2 | `src/features/nguyen-vong/danh-sach.tsx:29-32`; `src/features/nguyen-vong/chan-doan-danh-muc.tsx:106,183`; `src/features/thu-tinh-huong/ket-qua-diem-thi.tsx:153` | Cảnh báo nhãn là khoảng cách điểm, không phải xác suất; trang thử tình huống viết “KHÔNG” in hoa | Giữ cảnh báo, đổi nhấn mạnh in hoa thành câu thường: “Nhãn phản ánh khoảng cách với điểm chuẩn tham khảo, không phải xác suất trúng tuyển.” | Rà trên mobile để đảm bảo ghi chú vẫn hiện cạnh kết quả; xác minh mọi biểu đồ/điểm phù hợp cũng có chú giải cùng nghĩa. |
+| COPY-04 / P2 | `src/features/tu-van/tu-van.tsx:145`, `src/features/tu-van/tro-ly-noi-bot.tsx:154` | “Hỏi về điểm chuẩn…” / “Mình giúp em tra…” là lời mời ngắn, dễ hiểu | Giữ; tiếp tục dùng câu hỏi gợi ý như hành động tiếp theo, tránh thêm danh sách dài tính năng vào đầu màn hình | Kiểm tra state mới và state có hội thoại; câu gợi ý chỉ xuất hiện khi truy vấn trước phù hợp và không gây hiểu nhầm rằng mọi câu trả lời đều từ LLM. |
+| COPY-05 / P2 | `src/features/hanh-trinh/cai-dat.tsx:103,134-137` | Có nêu lịch sử trò chuyện được đưa vào bản sao lưu và cảnh báo khôi phục sẽ thay toàn bộ dữ liệu | Giữ cảnh báo cụ thể; cân nhắc rút gọn câu phụ thành “Tệp cũng chứa lịch sử trò chuyện với AI.” | Xác minh export/import thực tế gồm/không gồm đúng các trường được thông báo; kiểm tra nội dung trước bước xác nhận khôi phục. |
+| COPY-06 / P1 | `docs/submission/NGUYEN-VONG-AI-PROPOSAL.md:59-65,74` | “giải quyết triệt để”, “100% có nguồn đối chiếu”, “kiểm tra chéo loại trừ 100% số liệu sai lệch”, “tối ưu” | Thay bằng mô tả có phạm vi: “hỗ trợ học sinh hệ thống hóa lựa chọn”; nêu rõ số chương trình có nguồn/ước tính/thiếu nguồn theo snapshot audit; mô tả guardrail là giảm nguy cơ và chặn một số loại số liệu không có căn cứ, không bảo đảm loại trừ mọi lỗi | Gắn từng số liệu với snapshot ngày, truy vấn/báo cáo tái lập được và định nghĩa mẫu số. Đối chiếu `docs/audits/MASTER-ISSUES.md` và audit dữ liệu hiện hành; không dùng báo cáo ngày khác như hiện trạng nếu chưa xác minh checkout. |
+| COPY-07 / P1 | `docs/submission/NGUYEN-VONG-AI-PROPOSAL.md:64-65,482,502` | “chính xác”, “khoa học”, “kiểm chứng tuyệt đối”; dự báo 60% thời lượng cho môn nghẽn; khẳng định tuân thủ quy chế hiện hành | Thay từ tuyệt đối bằng mô tả thuật toán/phiên bản và ranh giới đã kiểm tra. Chỉ giữ tỷ lệ 60% nếu cấu hình/engine hiện tại thực thi đúng trong mọi trường hợp mô tả | Kiểm tra trực tiếp engine, cấu hình, test biên và nguồn quy chế còn hiệu lực. Đặc biệt không gọi phân tầng theo điểm lịch sử là “rủi ro khoa học” nếu chưa có hiệu chuẩn/đánh giá hồi cứu. |
+| COPY-08 / P1 | `docs/submission/NGUYEN-VONG-AI-PROPOSAL.md:42,59,223,772,891` | Các claim “100% đạt”, “60+ Test Suites”, “144 Responsive Viewport Checks”, “đạt 100% tiêu chí”, “sẵn sàng” | Báo kết quả lệnh cụ thể, số lượng thực đo và phạm vi; bỏ “100% đạt” nếu không có coverage denominator/CI artifact rõ | Chạy lệnh trên checkout được nêu, kiểm tra report/CI cùng commit; tách typecheck, test, build và browser checks. Không suy ra độ bao phủ code từ số test suite. |
+| COPY-09 / P1 | `docs/submission/NGUYEN-VONG-AI-PROPOSAL.md:811` | Nêu MCP hoàn thiện 100% giao thức/test nội bộ, đồng thời nói chưa kết nối tài khoản ChatGPT/Claude production | Giữ ranh giới “đã kiểm thử giao thức nội bộ” và nói rõ tích hợp client ngoài chưa được xác nhận; bỏ “100% chuẩn giao thức” | Có log client thật cho discovery, auth, gọi tool, quyền người dùng và write confirmation mới được mô tả là tích hợp client đã xác minh. |
+| COPY-10 / P2 | `src/features/ket-noi/huong-dan.tsx:7,9,58` | Hướng dẫn đúng nguyên tắc: không bịa số liệu, không cam kết đỗ/trượt, lưu ý khả năng ChatGPT tùy gói/thời điểm | Giữ; tránh rút gọn đi mất điều kiện “tùy gói và thời điểm” khi dùng lại trong proposal/demo | Kiểm tra nội dung help ở route kết nối sau mỗi thay đổi, và không biến hướng dẫn thành claim đã kiểm thử client ngoài. |
+
+## Nội dung chính xác nên giữ
+
+- Nhãn nguyện vọng được giải thích bằng khoảng cách so với điểm chuẩn lịch sử và có cảnh báo không phải xác suất (`src/features/nguyen-vong/danh-sach.tsx`, `src/features/nguyen-vong/chan-doan-danh-muc.tsx`).
+- Khi thiếu dữ liệu, UI có thể báo “Chưa có dữ liệu”, “Chưa đủ điểm để so” hoặc chưa thể xếp nhãn thay vì ngầm coi là 0 (`src/features/kham-pha/thanh-phan.tsx`, `src/features/nguyen-vong/danh-sach.tsx`).
+- Màn chia sẻ nói rõ nhãn tham khảo từ điểm chuẩn năm trước và không bảo đảm kết quả (`src/features/hanh-trinh/chia-se.tsx:64`).
+- Trợ lý hướng dẫn không khẳng định chắc chắn đỗ/trượt và không nêu số liệu nếu thiếu dữ liệu (`src/features/ket-noi/huong-dan.tsx:7-9`).
+- Khôi phục bản sao lưu cảnh báo thay thế hồ sơ, nguyện vọng, kế hoạch và lịch sử trò chuyện (`src/features/hanh-trinh/cai-dat.tsx:134-135`).
+
+## Điểm chưa xác minh
+
+- Chưa xem/nghe trải nghiệm UI qua browser, chưa đo độ dài trên viewport nhỏ và chưa rà mọi state runtime; đây là audit source và tài liệu.
+- Các con số quy mô dữ liệu, test, latency/độ chính xác và tuyên bố quy chế trong proposal cần Agent tích hợp kiểm tra nguồn bằng chứng trước khi dùng trong bản nộp.
+- Tên trường viết tắt, tên chương trình và biến thể chính thức không được tự chuẩn hóa nếu chưa đối chiếu dữ liệu gốc; audit này không đưa ra suy đoán alias.

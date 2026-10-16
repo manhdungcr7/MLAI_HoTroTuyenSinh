@@ -73,6 +73,7 @@ try {
   await page.setViewport({ width: 390, height: 900 }); await go('/chao');
   await check('minimal-grade11-no-scores', async () => {
     await go('/bat-dau/1');
+    await page.waitForSelector('#bd-ho-ten', { timeout: 10000 });
     const hoTen = await page.$('#bd-ho-ten') ?? await page.$('input[placeholder="Ví dụ: Minh Anh"]');
     await assert(hoTen, 'Onboarding name field did not render');
     await hoTen.type('Học sinh kiểm tra');

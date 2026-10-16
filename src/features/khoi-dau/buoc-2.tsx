@@ -73,7 +73,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
                     aria-invalid={sai}
                     aria-describedby={sai ? "loi-diem" : undefined}
                     className={gop(
-                      "w-14 text-center text-[22px] sm:text-[24px] font-black text-muc placeholder:text-chu-phu/30 outline-none bg-transparent",
+                      "w-14 min-h-11 text-center text-[22px] sm:text-[24px] font-black text-muc placeholder:text-chu-phu/30 outline-none bg-transparent",
                       sai && "text-do"
                     )}
                   />

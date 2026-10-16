@@ -102,9 +102,7 @@ export function ChanDoanDanhMucCard({
                   {chanDoan.danhGiaRuiRo}
                 </span>
               </div>
-              <span className="block text-[11px] text-chu-phu mt-0.5">
-                  Nhãn là khoảng cách điểm, không phải xác suất trúng tuyển
-              </span>
+
             </div>
           </div>
 
@@ -156,7 +154,7 @@ export function ChanDoanDanhMucCard({
           <button
             type="button"
             onClick={() => setMoToiUuModal(true)}
-            className="flex-1 min-h-10 px-3 rounded-xl bg-xanh-nhat text-xanh text-[13px] font-bold inline-flex items-center justify-center gap-1.5 hover:bg-xanh/15 active:scale-[0.99] transition-all cursor-pointer"
+            className="flex-1 min-h-11 px-3 rounded-xl bg-xanh-nhat text-xanh text-[13px] font-bold inline-flex items-center justify-center gap-1.5 hover:bg-xanh/15 active:scale-[0.99] transition-all cursor-pointer"
           >
             <Sparkles size={16} /> Gợi ý danh mục thông minh
           </button>
@@ -164,7 +162,7 @@ export function ChanDoanDanhMucCard({
             <button
               type="button"
               onClick={onXemChiTietAnToan}
-              className="px-3 min-h-10 rounded-xl border border-vien bg-trang text-chu-phu text-[13px] font-semibold hover:text-chu active:bg-nen transition-colors cursor-pointer"
+              className="px-3 min-h-11 rounded-xl border border-vien bg-trang text-chu-phu text-[13px] font-semibold hover:text-chu active:bg-nen transition-colors cursor-pointer"
             >
               Chi tiết
             </button>

@@ -1,0 +1,2978 @@
+{
+  "base": "http://127.0.0.1:3030",
+  "at": "2026-10-16T14:21:34.693Z",
+  "viewports": [],
+  "routes": [
+    {
+      "route": "/chao",
+      "width": 320,
+      "height": 720,
+      "textLength": 512,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Xếp nguyện vọng vừa sức, rồi học để đạt"
+      ],
+      "title": "Chào mừng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/1",
+      "width": 320,
+      "height": 720,
+      "textLength": 1012,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Y Dược",
+          "right": 347,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Xã hội",
+          "right": 422,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Mỹ thuật",
+          "right": 512,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        }
+      ],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điền nhanh trong 60 giây"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/2",
+      "width": 320,
+      "height": 720,
+      "textLength": 1280,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 28,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 35,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 35,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 45,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 45,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 45,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 45,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 13,
+          "height": 16
+        },
+        {
+          "tag": "SELECT",
+          "text": "Hạnh kiểm Tốt\nHạnh kiểm Khá",
+          "aria": null,
+          "width": 126,
+          "height": 27
+        },
+        {
+          "tag": "SELECT",
+          "text": "Cấp thi\nQuốc gia\nTỉnh / TP\nTrường Chuyên",
+          "aria": null,
+          "width": 79,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 79,
+          "height": 40
+        },
+        {
+          "tag": "SELECT",
+          "text": "Giải\nGiải Nhất\nGiải Nhì\nGiải Ba\nGiải Khuyến khích",
+          "aria": null,
+          "width": 79,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điểm các môn"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/3",
+      "width": 320,
+      "height": 720,
+      "textLength": 495,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Mục tiêu & ưu tiên"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/nguyen-vong",
+      "width": 320,
+      "height": 720,
+      "textLength": 1016,
+      "horizontalOverflow": 0,
+      "clippedText": [
+        {
+          "tag": "A",
+          "text": "Nguyện vọng",
+          "width": 64,
+          "scrollWidth": 67
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "BUTTON",
+          "text": "Gợi ý danh mục thông minh",
+          "aria": null,
+          "width": 173,
+          "height": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Chi tiết",
+          "aria": null,
+          "width": 73,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 649,
+        "bottom": 720,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Danh sách nguyện vọng"
+      ],
+      "title": "Nguyện vọng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/tu-van",
+      "width": 320,
+      "height": 720,
+      "textLength": 449,
+      "horizontalOverflow": 0,
+      "clippedText": [
+        {
+          "tag": "A",
+          "text": "Nguyện vọng",
+          "width": 64,
+          "scrollWidth": 67
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Điểm của mình đã đủ cho ngành CNTT chưa?",
+          "right": 526,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?",
+          "right": 788,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nên bắt đầu tìm ngành từ đâu?",
+          "right": 1009,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        }
+      ],
+      "bottomNav": {
+        "top": 649,
+        "bottom": 720,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Tư vấn cùng AI"
+      ],
+      "title": "Tư vấn · Nguyện Vọng AI"
+    },
+    {
+      "route": "/ho-so/chia-se",
+      "width": 320,
+      "height": 720,
+      "textLength": 1166,
+      "horizontalOverflow": 0,
+      "clippedText": [
+        {
+          "tag": "A",
+          "text": "Nguyện vọng",
+          "width": 64,
+          "scrollWidth": 67
+        }
+      ],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 649,
+        "bottom": 720,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Chia sẻ với người đồng hành",
+        "Nguyện vọng của Minh Anh",
+        "Gửi liên kết"
+      ],
+      "title": "Chia sẻ với người đồng hành · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha",
+      "width": 320,
+      "height": 720,
+      "textLength": 5673,
+      "horizontalOverflow": 0,
+      "clippedText": [
+        {
+          "tag": "A",
+          "text": "Nguyện vọng",
+          "width": 64,
+          "scrollWidth": 67
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "Nguồn dữ liệu",
+          "aria": null,
+          "width": 80,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "DIV",
+          "text": "Đã lưu (1)\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiế",
+          "right": 2043,
+          "class": "flex gap-2 w-max"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Kinh tế",
+          "right": 374,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "CNTT",
+          "right": 446,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo chí",
+          "right": 530,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Kỹ thuật",
+          "right": 621,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Thiết kế",
+          "right": 709,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Tài chính",
+          "right": 802,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marketing",
+          "right": 903,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        }
+      ],
+      "bottomNav": {
+        "top": 649,
+        "bottom": 720,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 586,
+        "bottom": 638,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Khám phá"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/bo-loc",
+      "width": 320,
+      "height": 720,
+      "textLength": 880,
+      "horizontalOverflow": 0,
+      "clippedText": [
+        {
+          "tag": "A",
+          "text": "Nguyện vọng",
+          "width": 64,
+          "scrollWidth": 67
+        }
+      ],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 649,
+        "bottom": 720,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 586,
+        "bottom": 638,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Bộ lọc",
+        "Ngành quan tâm (hồ sơ: CNTT)",
+        "Khoảng điểm tổ hợp (thang 30)",
+        "Học phí tối đa (triệu đồng/năm)",
+        "Khu vực",
+        "Loại hình",
+        "Bạn có sẵn sàng học xa nhà?"
+      ],
+      "title": "Bộ lọc · Nguyện Vọng AI"
+    },
+    {
+      "route": "/chao",
+      "width": 375,
+      "height": 812,
+      "textLength": 512,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Xếp nguyện vọng vừa sức, rồi học để đạt"
+      ],
+      "title": "Chào mừng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/1",
+      "width": 375,
+      "height": 812,
+      "textLength": 1012,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Xã hội",
+          "right": 422,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Mỹ thuật",
+          "right": 512,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        }
+      ],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điền nhanh trong 60 giây"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/2",
+      "width": 375,
+      "height": 812,
+      "textLength": 1280,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 46,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 53,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 53,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 59,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 59,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 59,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 59,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 14,
+          "height": 16
+        },
+        {
+          "tag": "SELECT",
+          "text": "Hạnh kiểm Tốt\nHạnh kiểm Khá",
+          "aria": null,
+          "width": 126,
+          "height": 27
+        },
+        {
+          "tag": "SELECT",
+          "text": "Cấp thi\nQuốc gia\nTỉnh / TP\nTrường Chuyên",
+          "aria": null,
+          "width": 98,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 98,
+          "height": 40
+        },
+        {
+          "tag": "SELECT",
+          "text": "Giải\nGiải Nhất\nGiải Nhì\nGiải Ba\nGiải Khuyến khích",
+          "aria": null,
+          "width": 98,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điểm các môn"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/3",
+      "width": 375,
+      "height": 812,
+      "textLength": 495,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Mục tiêu & ưu tiên"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/nguyen-vong",
+      "width": 375,
+      "height": 812,
+      "textLength": 1016,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "BUTTON",
+          "text": "Gợi ý danh mục thông minh",
+          "aria": null,
+          "width": 228,
+          "height": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Chi tiết",
+          "aria": null,
+          "width": 73,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 741,
+        "bottom": 812,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Danh sách nguyện vọng"
+      ],
+      "title": "Nguyện vọng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/tu-van",
+      "width": 375,
+      "height": 812,
+      "textLength": 449,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Điểm của mình đã đủ cho ngành CNTT chưa?",
+          "right": 614,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?",
+          "right": 920,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nên bắt đầu tìm ngành từ đâu?",
+          "right": 1141,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        }
+      ],
+      "bottomNav": {
+        "top": 741,
+        "bottom": 812,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Tư vấn cùng AI"
+      ],
+      "title": "Tư vấn · Nguyện Vọng AI"
+    },
+    {
+      "route": "/ho-so/chia-se",
+      "width": 375,
+      "height": 812,
+      "textLength": 1166,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 741,
+        "bottom": 812,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Chia sẻ với người đồng hành",
+        "Nguyện vọng của Minh Anh",
+        "Gửi liên kết"
+      ],
+      "title": "Chia sẻ với người đồng hành · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha",
+      "width": 375,
+      "height": 812,
+      "textLength": 5673,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "Nguồn dữ liệu",
+          "aria": null,
+          "width": 80,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "DIV",
+          "text": "Đã lưu (1)\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiế",
+          "right": 2043,
+          "class": "flex gap-2 w-max"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "CNTT",
+          "right": 446,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo chí",
+          "right": 530,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Kỹ thuật",
+          "right": 621,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Thiết kế",
+          "right": 709,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Tài chính",
+          "right": 802,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marketing",
+          "right": 903,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Logistics",
+          "right": 998,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        }
+      ],
+      "bottomNav": {
+        "top": 741,
+        "bottom": 812,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 678,
+        "bottom": 730,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Khám phá"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/bo-loc",
+      "width": 375,
+      "height": 812,
+      "textLength": 880,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 741,
+        "bottom": 812,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 678,
+        "bottom": 730,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Bộ lọc",
+        "Ngành quan tâm (hồ sơ: CNTT)",
+        "Khoảng điểm tổ hợp (thang 30)",
+        "Học phí tối đa (triệu đồng/năm)",
+        "Khu vực",
+        "Loại hình",
+        "Bạn có sẵn sàng học xa nhà?"
+      ],
+      "title": "Bộ lọc · Nguyện Vọng AI"
+    },
+    {
+      "route": "/chao",
+      "width": 390,
+      "height": 844,
+      "textLength": 512,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Xếp nguyện vọng vừa sức, rồi học để đạt"
+      ],
+      "title": "Chào mừng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/1",
+      "width": 390,
+      "height": 844,
+      "textLength": 1012,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Xã hội",
+          "right": 422,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Mỹ thuật",
+          "right": 512,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        }
+      ],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điền nhanh trong 60 giây"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/2",
+      "width": 390,
+      "height": 844,
+      "textLength": 1280,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 51,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 58,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 58,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 63,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 63,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 63,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 63,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 15,
+          "height": 16
+        },
+        {
+          "tag": "SELECT",
+          "text": "Hạnh kiểm Tốt\nHạnh kiểm Khá",
+          "aria": null,
+          "width": 126,
+          "height": 27
+        },
+        {
+          "tag": "SELECT",
+          "text": "Cấp thi\nQuốc gia\nTỉnh / TP\nTrường Chuyên",
+          "aria": null,
+          "width": 103,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 103,
+          "height": 40
+        },
+        {
+          "tag": "SELECT",
+          "text": "Giải\nGiải Nhất\nGiải Nhì\nGiải Ba\nGiải Khuyến khích",
+          "aria": null,
+          "width": 103,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điểm các môn"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/3",
+      "width": 390,
+      "height": 844,
+      "textLength": 495,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Mục tiêu & ưu tiên"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/nguyen-vong",
+      "width": 390,
+      "height": 844,
+      "textLength": 1016,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "BUTTON",
+          "text": "Gợi ý danh mục thông minh",
+          "aria": null,
+          "width": 243,
+          "height": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Chi tiết",
+          "aria": null,
+          "width": 73,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 773,
+        "bottom": 844,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Danh sách nguyện vọng"
+      ],
+      "title": "Nguyện vọng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/tu-van",
+      "width": 390,
+      "height": 844,
+      "textLength": 449,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Điểm của mình đã đủ cho ngành CNTT chưa?",
+          "right": 627,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?",
+          "right": 945,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nên bắt đầu tìm ngành từ đâu?",
+          "right": 1165,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        }
+      ],
+      "bottomNav": {
+        "top": 773,
+        "bottom": 844,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Tư vấn cùng AI"
+      ],
+      "title": "Tư vấn · Nguyện Vọng AI"
+    },
+    {
+      "route": "/ho-so/chia-se",
+      "width": 390,
+      "height": 844,
+      "textLength": 1166,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 773,
+        "bottom": 844,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Chia sẻ với người đồng hành",
+        "Nguyện vọng của Minh Anh",
+        "Gửi liên kết"
+      ],
+      "title": "Chia sẻ với người đồng hành · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha",
+      "width": 390,
+      "height": 844,
+      "textLength": 5673,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "Nguồn dữ liệu",
+          "aria": null,
+          "width": 80,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "DIV",
+          "text": "Đã lưu (1)\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiế",
+          "right": 2043,
+          "class": "flex gap-2 w-max"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "CNTT",
+          "right": 446,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo chí",
+          "right": 530,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Kỹ thuật",
+          "right": 621,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Thiết kế",
+          "right": 709,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Tài chính",
+          "right": 802,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marketing",
+          "right": 903,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Logistics",
+          "right": 998,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        }
+      ],
+      "bottomNav": {
+        "top": 773,
+        "bottom": 844,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 710,
+        "bottom": 762,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Khám phá"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/bo-loc",
+      "width": 390,
+      "height": 844,
+      "textLength": 880,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 773,
+        "bottom": 844,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 710,
+        "bottom": 762,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Bộ lọc",
+        "Ngành quan tâm (hồ sơ: CNTT)",
+        "Khoảng điểm tổ hợp (thang 30)",
+        "Học phí tối đa (triệu đồng/năm)",
+        "Khu vực",
+        "Loại hình",
+        "Bạn có sẵn sàng học xa nhà?"
+      ],
+      "title": "Bộ lọc · Nguyện Vọng AI"
+    },
+    {
+      "route": "/chao",
+      "width": 430,
+      "height": 932,
+      "textLength": 512,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Xếp nguyện vọng vừa sức, rồi học để đạt"
+      ],
+      "title": "Chào mừng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/1",
+      "width": 430,
+      "height": 932,
+      "textLength": 1012,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Mỹ thuật",
+          "right": 512,
+          "class": "min-h-11 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors cursor-po"
+        }
+      ],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điền nhanh trong 60 giây"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/2",
+      "width": 430,
+      "height": 932,
+      "textLength": 1280,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 33
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 64,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 72,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 71,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 16,
+          "height": 16
+        },
+        {
+          "tag": "SELECT",
+          "text": "Hạnh kiểm Tốt\nHạnh kiểm Khá",
+          "aria": null,
+          "width": 126,
+          "height": 27
+        },
+        {
+          "tag": "SELECT",
+          "text": "Cấp thi\nQuốc gia\nTỉnh / TP\nTrường Chuyên",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        },
+        {
+          "tag": "SELECT",
+          "text": "Giải\nGiải Nhất\nGiải Nhì\nGiải Ba\nGiải Khuyến khích",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điểm các môn"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/3",
+      "width": 430,
+      "height": 932,
+      "textLength": 495,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Mục tiêu & ưu tiên"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/nguyen-vong",
+      "width": 430,
+      "height": 932,
+      "textLength": 1016,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "BUTTON",
+          "text": "Gợi ý danh mục thông minh",
+          "aria": null,
+          "width": 283,
+          "height": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Chi tiết",
+          "aria": null,
+          "width": 73,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 861,
+        "bottom": 932,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Danh sách nguyện vọng"
+      ],
+      "title": "Nguyện vọng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/tu-van",
+      "width": 430,
+      "height": 932,
+      "textLength": 449,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Điểm của mình đã đủ cho ngành CNTT chưa?",
+          "right": 659,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?",
+          "right": 1009,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nên bắt đầu tìm ngành từ đâu?",
+          "right": 1229,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        }
+      ],
+      "bottomNav": {
+        "top": 861,
+        "bottom": 932,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Tư vấn cùng AI"
+      ],
+      "title": "Tư vấn · Nguyện Vọng AI"
+    },
+    {
+      "route": "/ho-so/chia-se",
+      "width": 430,
+      "height": 932,
+      "textLength": 1166,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 861,
+        "bottom": 932,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Chia sẻ với người đồng hành",
+        "Nguyện vọng của Minh Anh",
+        "Gửi liên kết"
+      ],
+      "title": "Chia sẻ với người đồng hành · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha",
+      "width": 430,
+      "height": 932,
+      "textLength": 5673,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "Nguồn dữ liệu",
+          "aria": null,
+          "width": 80,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "DIV",
+          "text": "Đã lưu (1)\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiế",
+          "right": 2043,
+          "class": "flex gap-2 w-max"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "CNTT",
+          "right": 446,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo chí",
+          "right": 530,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Kỹ thuật",
+          "right": 621,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Thiết kế",
+          "right": 709,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Tài chính",
+          "right": 802,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marketing",
+          "right": 903,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Logistics",
+          "right": 998,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        }
+      ],
+      "bottomNav": {
+        "top": 861,
+        "bottom": 932,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 798,
+        "bottom": 850,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Khám phá"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/bo-loc",
+      "width": 430,
+      "height": 932,
+      "textLength": 880,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 861,
+        "bottom": 932,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 798,
+        "bottom": 850,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Bộ lọc",
+        "Ngành quan tâm (hồ sơ: CNTT)",
+        "Khoảng điểm tổ hợp (thang 30)",
+        "Học phí tối đa (triệu đồng/năm)",
+        "Khu vực",
+        "Loại hình",
+        "Bạn có sẵn sàng học xa nhà?"
+      ],
+      "title": "Bộ lọc · Nguyện Vọng AI"
+    },
+    {
+      "route": "/chao",
+      "width": 768,
+      "height": 1024,
+      "textLength": 512,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Xếp nguyện vọng vừa sức, rồi học để đạt"
+      ],
+      "title": "Chào mừng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/1",
+      "width": 768,
+      "height": 1024,
+      "textLength": 1012,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điền nhanh trong 60 giây"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/2",
+      "width": 768,
+      "height": 1024,
+      "textLength": 1280,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 64,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 72,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 71,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 16,
+          "height": 16
+        },
+        {
+          "tag": "SELECT",
+          "text": "Hạnh kiểm Tốt\nHạnh kiểm Khá",
+          "aria": null,
+          "width": 126,
+          "height": 27
+        },
+        {
+          "tag": "SELECT",
+          "text": "Cấp thi\nQuốc gia\nTỉnh / TP\nTrường Chuyên",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        },
+        {
+          "tag": "SELECT",
+          "text": "Giải\nGiải Nhất\nGiải Nhì\nGiải Ba\nGiải Khuyến khích",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điểm các môn"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/3",
+      "width": 768,
+      "height": 1024,
+      "textLength": 495,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Mục tiêu & ưu tiên"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/nguyen-vong",
+      "width": 768,
+      "height": 1024,
+      "textLength": 1016,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "BUTTON",
+          "text": "Gợi ý danh mục thông minh",
+          "aria": null,
+          "width": 283,
+          "height": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Chi tiết",
+          "aria": null,
+          "width": 73,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 953,
+        "bottom": 1024,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Danh sách nguyện vọng"
+      ],
+      "title": "Nguyện vọng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/tu-van",
+      "width": 768,
+      "height": 1024,
+      "textLength": 449,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Điểm của mình đã đủ cho ngành CNTT chưa?",
+          "right": 841,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?",
+          "right": 1198,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nên bắt đầu tìm ngành từ đâu?",
+          "right": 1419,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        }
+      ],
+      "bottomNav": {
+        "top": 953,
+        "bottom": 1024,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Tư vấn cùng AI"
+      ],
+      "title": "Tư vấn · Nguyện Vọng AI"
+    },
+    {
+      "route": "/ho-so/chia-se",
+      "width": 768,
+      "height": 1024,
+      "textLength": 1166,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 953,
+        "bottom": 1024,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Chia sẻ với người đồng hành",
+        "Nguyện vọng của Minh Anh",
+        "Gửi liên kết"
+      ],
+      "title": "Chia sẻ với người đồng hành · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha",
+      "width": 768,
+      "height": 1024,
+      "textLength": 5673,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "Nguồn dữ liệu",
+          "aria": null,
+          "width": 80,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "DIV",
+          "text": "Đã lưu (1)\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiế",
+          "right": 2212,
+          "class": "flex gap-2 w-max"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Kỹ thuật",
+          "right": 790,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Thiết kế",
+          "right": 878,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Tài chính",
+          "right": 971,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Marketing",
+          "right": 1072,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Logistics",
+          "right": 1167,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Xây dựng",
+          "right": 1263,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nông Lâm",
+          "right": 1365,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        }
+      ],
+      "bottomNav": {
+        "top": 953,
+        "bottom": 1024,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 890,
+        "bottom": 942,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Khám phá"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/bo-loc",
+      "width": 768,
+      "height": 1024,
+      "textLength": 880,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 953,
+        "bottom": 1024,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 890,
+        "bottom": 942,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Bộ lọc",
+        "Ngành quan tâm (hồ sơ: CNTT)",
+        "Khoảng điểm tổ hợp (thang 30)",
+        "Học phí tối đa (triệu đồng/năm)",
+        "Khu vực",
+        "Loại hình",
+        "Bạn có sẵn sàng học xa nhà?"
+      ],
+      "title": "Bộ lọc · Nguyện Vọng AI"
+    },
+    {
+      "route": "/chao",
+      "width": 1440,
+      "height": 900,
+      "textLength": 512,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Xếp nguyện vọng vừa sức, rồi học để đạt"
+      ],
+      "title": "Chào mừng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/1",
+      "width": 1440,
+      "height": 900,
+      "textLength": 1012,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điền nhanh trong 60 giây"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/2",
+      "width": 1440,
+      "height": 900,
+      "textLength": 1280,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 56,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 64,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 72,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 71,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 73,
+          "height": 36
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 16,
+          "height": 16
+        },
+        {
+          "tag": "SELECT",
+          "text": "Hạnh kiểm Tốt\nHạnh kiểm Khá",
+          "aria": null,
+          "width": 126,
+          "height": 27
+        },
+        {
+          "tag": "SELECT",
+          "text": "Cấp thi\nQuốc gia\nTỉnh / TP\nTrường Chuyên",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        },
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        },
+        {
+          "tag": "SELECT",
+          "text": "Giải\nGiải Nhất\nGiải Nhì\nGiải Ba\nGiải Khuyến khích",
+          "aria": null,
+          "width": 116,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Điểm các môn"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/bat-dau/3",
+      "width": 1440,
+      "height": 900,
+      "textLength": 495,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": null,
+      "floatingWidget": null,
+      "headings": [
+        "Tạo hồ sơ",
+        "Mục tiêu & ưu tiên"
+      ],
+      "title": "Tạo hồ sơ · Nguyện Vọng AI"
+    },
+    {
+      "route": "/nguyen-vong",
+      "width": 1440,
+      "height": 900,
+      "textLength": 1016,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "BUTTON",
+          "text": "Gợi ý danh mục thông minh",
+          "aria": null,
+          "width": 283,
+          "height": 40
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Chi tiết",
+          "aria": null,
+          "width": 73,
+          "height": 40
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 829,
+        "bottom": 900,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Danh sách nguyện vọng"
+      ],
+      "title": "Nguyện vọng · Nguyện Vọng AI"
+    },
+    {
+      "route": "/tu-van",
+      "width": 1440,
+      "height": 900,
+      "textLength": 449,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "INPUT",
+          "text": "",
+          "aria": null,
+          "width": 20,
+          "height": 20
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "BUTTON",
+          "text": "Với điểm hiện tại nên xếp Nguyện Vọng 1 trường nào?",
+          "right": 1534,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nên bắt đầu tìm ngành từ đâu?",
+          "right": 1755,
+          "class": "snap-start shrink-0 min-h-11 max-w-[80vw] rounded-full border border-vien bg-white px-3 text-[12.5px"
+        }
+      ],
+      "bottomNav": {
+        "top": 829,
+        "bottom": 900,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Tư vấn cùng AI"
+      ],
+      "title": "Tư vấn · Nguyện Vọng AI"
+    },
+    {
+      "route": "/ho-so/chia-se",
+      "width": 1440,
+      "height": 900,
+      "textLength": 1166,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 829,
+        "bottom": 900,
+        "height": 71
+      },
+      "floatingWidget": null,
+      "headings": [
+        "Chia sẻ với người đồng hành",
+        "Nguyện vọng của Minh Anh",
+        "Gửi liên kết"
+      ],
+      "title": "Chia sẻ với người đồng hành · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha",
+      "width": 1440,
+      "height": 900,
+      "textLength": 5673,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "Nguồn dữ liệu",
+          "aria": null,
+          "width": 80,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "DIV",
+          "text": "Đã lưu (1)\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiế",
+          "right": 2548,
+          "class": "flex gap-2 w-max"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Logistics",
+          "right": 1503,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Xây dựng",
+          "right": 1599,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Nông Lâm",
+          "right": 1701,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Khoa học tự nhiên",
+          "right": 1853,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Ngôn ngữ",
+          "right": 1950,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Xã hội",
+          "right": 2026,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Du lịch",
+          "right": 2105,
+          "class": "min-h-11 px-3 rounded-xl border text-[13.5px] font-semibold whitespace-nowrap transition-colors curs"
+        }
+      ],
+      "bottomNav": {
+        "top": 829,
+        "bottom": 900,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 766,
+        "bottom": 818,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Khám phá"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/bo-loc",
+      "width": 1440,
+      "height": 900,
+      "textLength": 880,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 829,
+        "bottom": 900,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 766,
+        "bottom": 818,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Bộ lọc",
+        "Ngành quan tâm (hồ sơ: CNTT)",
+        "Khoảng điểm tổ hợp (thang 30)",
+        "Học phí tối đa (triệu đồng/năm)",
+        "Khu vực",
+        "Loại hình",
+        "Bạn có sẵn sàng học xa nhà?"
+      ],
+      "title": "Bộ lọc · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/qsc-24737475",
+      "width": 320,
+      "height": 720,
+      "textLength": 1288,
+      "horizontalOverflow": 0,
+      "clippedText": [
+        {
+          "tag": "A",
+          "text": "Nguyện vọng",
+          "width": 64,
+          "scrollWidth": 67
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "",
+          "aria": null,
+          "width": 163,
+          "height": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo số liệu sai",
+          "aria": null,
+          "width": 103,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "SPAN",
+          "text": "Có nguồn chính thức · chưa xác minh độc lập",
+          "right": 413,
+          "class": "inline-flex items-center rounded-md px-1.5 py-0.5 text-[12px] font-bold whitespace-nowrap bg-luc-nha"
+        }
+      ],
+      "bottomNav": {
+        "top": 649,
+        "bottom": 720,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 586,
+        "bottom": 638,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Chi tiết lựa chọn",
+        "Hệ thống thông tin",
+        "Điểm chuẩn các năm",
+        "Vì sao nên cân nhắc",
+        "Điều cần lưu ý"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/qsc-24737475",
+      "width": 375,
+      "height": 812,
+      "textLength": 1288,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "",
+          "aria": null,
+          "width": 163,
+          "height": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo số liệu sai",
+          "aria": null,
+          "width": 103,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "SPAN",
+          "text": "Có nguồn chính thức · chưa xác minh độc lập",
+          "right": 413,
+          "class": "inline-flex items-center rounded-md px-1.5 py-0.5 text-[12px] font-bold whitespace-nowrap bg-luc-nha"
+        }
+      ],
+      "bottomNav": {
+        "top": 741,
+        "bottom": 812,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 678,
+        "bottom": 730,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Chi tiết lựa chọn",
+        "Hệ thống thông tin",
+        "Điểm chuẩn các năm",
+        "Vì sao nên cân nhắc",
+        "Điều cần lưu ý"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/qsc-24737475",
+      "width": 390,
+      "height": 844,
+      "textLength": 1288,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "",
+          "aria": null,
+          "width": 163,
+          "height": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo số liệu sai",
+          "aria": null,
+          "width": 103,
+          "height": 18
+        }
+      ],
+      "overflowElements": [
+        {
+          "tag": "SPAN",
+          "text": "Có nguồn chính thức · chưa xác minh độc lập",
+          "right": 413,
+          "class": "inline-flex items-center rounded-md px-1.5 py-0.5 text-[12px] font-bold whitespace-nowrap bg-luc-nha"
+        }
+      ],
+      "bottomNav": {
+        "top": 773,
+        "bottom": 844,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 710,
+        "bottom": 762,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Chi tiết lựa chọn",
+        "Hệ thống thông tin",
+        "Điểm chuẩn các năm",
+        "Vì sao nên cân nhắc",
+        "Điều cần lưu ý"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/qsc-24737475",
+      "width": 430,
+      "height": 932,
+      "textLength": 1288,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "",
+          "aria": null,
+          "width": 163,
+          "height": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo số liệu sai",
+          "aria": null,
+          "width": 103,
+          "height": 18
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 861,
+        "bottom": 932,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 798,
+        "bottom": 850,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Chi tiết lựa chọn",
+        "Hệ thống thông tin",
+        "Điểm chuẩn các năm",
+        "Vì sao nên cân nhắc",
+        "Điều cần lưu ý"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/qsc-24737475",
+      "width": 768,
+      "height": 1024,
+      "textLength": 1288,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "",
+          "aria": null,
+          "width": 163,
+          "height": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo số liệu sai",
+          "aria": null,
+          "width": 103,
+          "height": 18
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 953,
+        "bottom": 1024,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 890,
+        "bottom": 942,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Chi tiết lựa chọn",
+        "Hệ thống thông tin",
+        "Điểm chuẩn các năm",
+        "Vì sao nên cân nhắc",
+        "Điều cần lưu ý"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    },
+    {
+      "route": "/kham-pha/qsc-24737475",
+      "width": 1440,
+      "height": 900,
+      "textLength": 1288,
+      "horizontalOverflow": 0,
+      "clippedText": [],
+      "smallTargets": [
+        {
+          "tag": "A",
+          "text": "",
+          "aria": null,
+          "width": 163,
+          "height": 20
+        },
+        {
+          "tag": "BUTTON",
+          "text": "Báo số liệu sai",
+          "aria": null,
+          "width": 103,
+          "height": 18
+        }
+      ],
+      "overflowElements": [],
+      "bottomNav": {
+        "top": 829,
+        "bottom": 900,
+        "height": 71
+      },
+      "floatingWidget": {
+        "top": 766,
+        "bottom": 818,
+        "width": 52,
+        "height": 52,
+        "overlapBottomNav": false
+      },
+      "headings": [
+        "Chi tiết lựa chọn",
+        "Hệ thống thông tin",
+        "Điểm chuẩn các năm",
+        "Vì sao nên cân nhắc",
+        "Điều cần lưu ý"
+      ],
+      "title": "Khám phá · Nguyện Vọng AI"
+    }
+  ],
+  "errors": [
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/api/manifest"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/snapshots/schools.2026.10.07.01.9e6aab9c.json"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "[BoDongBo] Lỗi tải dataset schools từ /snapshots/schools.2026.10.07.01.9e6aab9c.json: Error: HTTP 502"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/snapshots/tuition.2026.10.07.01.dff0e444.json"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "[BoDongBo] Lỗi tải dataset tuition từ /snapshots/tuition.2026.10.07.01.dff0e444.json: Error: HTTP 502"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/snapshots/scholarships.2026.10.07.01.4f53cda1.json"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "[BoDongBo] Lỗi tải dataset scholarships từ /snapshots/scholarships.2026.10.07.01.4f53cda1.json: Error: HTTP 502"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/snapshots/admissions.2026.10.07.01.4f53cda1.json"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "[BoDongBo] Lỗi tải dataset admissions từ /snapshots/admissions.2026.10.07.01.4f53cda1.json: Error: HTTP 502"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/snapshots/announcements.2026.10.07.01.4f53cda1.json"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "[BoDongBo] Lỗi tải dataset announcements từ /snapshots/announcements.2026.10.07.01.4f53cda1.json: Error: HTTP 502"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "http",
+      "status": 502,
+      "url": "http://127.0.0.1:3030/snapshots/cutoff-scores.2026.10.07.01.4f53cda1.json"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 502 (Bad Gateway)"
+    },
+    {
+      "route": "/bat-dau/2",
+      "type": "console",
+      "message": "[BoDongBo] Lỗi tải dataset cutoffScores từ /snapshots/cutoff-scores.2026.10.07.01.4f53cda1.json: Error: HTTP 502"
+    }
+  ],
+  "detailRoute": "/kham-pha/qsc-24737475",
+  "emptyPreferenceState": {
+    "text": "Đang tải dữ liệu chương trình…\n\nHỏi trợ lý tuyển sinh\nHôm nay\nKhám phá\nNguyện vọng\nKế hoạch\nHồ sơ",
+    "overflow": 0
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "base": "http://127.0.0.1:8790",
+  "startedAt": "2026-10-16T14:35:40.937Z",
+  "syntheticProfile": true,
+  "screens": [
+    {
+      "file": "01-start.png",
+      "route": "#/chao",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:42.943Z"
+    },
+    {
+      "file": "02-profile.png",
+      "route": "#/bat-dau/1",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:44.204Z"
+    },
+    {
+      "file": "03-scores.png",
+      "route": "#/bat-dau/2",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:44.792Z"
+    },
+    {
+      "file": "04-analysis.png",
+      "route": "#/bat-dau/3",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:46.791Z"
+    },
+    {
+      "file": "05-discovery.png",
+      "route": "#/kham-pha",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:48.186Z"
+    },
+    {
+      "file": "06-discovery-search.png",
+      "route": "#/kham-pha",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:50.376Z"
+    },
+    {
+      "file": "07-preference-review.png",
+      "route": "#/nguyen-vong",
+      "viewport": "390x844 CSS px",
+      "capturedAt": "2026-10-16T14:35:51.125Z"
+    }
+  ],
+  "checks": [
+    {
+      "name": "profile-analysis",
+      "pass": true,
+      "hasDeterministicScore": true
+    },
+    {
+      "name": "suggestion-review",
+      "pass": true
+    },
+    {
+      "name": "six-preferences-saved",
+      "pass": true
+    }
+  ],
+  "browserErrors": [],
+  "failedRequests": [],
+  "httpErrors": [],
+  "chat": null,
+  "discoveryAfterClick": {
+    "route": "#/kham-pha",
+    "bodyStart": "Nguyện Vọng AI\nKhám phá\nBộ lọc\n2\nbộ lọc đang bật\nTất cả\nSư phạm\nKinh tế\nCNTT\nBáo chí\nKỹ thuật\nThiết kế\nTài chính\nMarketing\nLogistics\nXây dựng\nNông Lâm\nKhoa học tự nhiên\nNgôn ngữ\nXã hội\nDu lịch\nĐiều dưỡng\nLuật\nKiến trúc\nY Dược\nThể thao\n\nVới điểm của bạn\n\nTổ hợp D07 được 24,0 điểm: đủ điểm chuẩn năm gần nhất của 1848 ngành, thử sức thêm 431 ngành (trong 2594 ngành đã đối soát).\n\nKỹ thuật · 301 đủ điểm\nKinh tế · 205 đủ điểm\nCNTT · 196 đủ điểm\nTài chính · 170 đủ điểm\nTrắc nghiệm hướng nghiệp\n\nCó 124"
+  },
+  "pass": false,
+  "fatal": "TimeoutError: Waiting failed: 10000ms exceeded\n    at new WaitTask (file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)\n    at IsolatedWorld.waitForFunction (file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/node_modules/puppeteer-core/lib/puppeteer/api/Realm.js:49:26)\n    at CdpFrame.waitForFunction (file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:585:43)\n    at CdpFrame.<anonymous> (file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/node_modules/puppeteer-core/lib/puppeteer/util/decorators.js:101:27)\n    at CdpPage.waitForFunction (file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1540:37)\n    at waitText (file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/demo/scripts/run-demo-e2e.mjs:67:14)\n    at file:///D:/07-Competitions-Hackathons/mlai/nguyenvongai/demo/scripts/run-demo-e2e.mjs:168:9",
+  "fatalRoute": "http://127.0.0.1:8790/#/nguyen-vong",
+  "fatalBody": "Đang tải dữ liệu chương trình…\n\nHỏi trợ lý tuyển sinh\nHôm nay\nKhám phá\nNguyện vọng\nKế hoạch\nHồ sơ"
+}
