@@ -1,11 +1,11 @@
 # Dữ liệu ngành và trường: nguồn, cách sinh lại, giới hạn
 
-Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.652 chương trình** của 118 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
+Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.648 chương trình** của 118 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
 
 ## Các tệp dữ liệu (`src/data/`)
 | Tệp | Nội dung | Sinh bởi |
 |---|---|---|
-| `du-lieu-that.json` | 3.652 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
+| `du-lieu-that.json` | 3.648 chương trình: tên ngành, trường, tỉnh, phương thức, tổ hợp, điểm chuẩn từng năm, điểm dự kiến, nguồn | `scripts/xuat-du-lieu-that.py` |
 | `nguon-nam.json` | Với mỗi chương trình và mỗi năm có điểm: link file đề án PDF và **số trang** có điểm đó | `scripts/sinh-nguon-nam.py` (cần `tim-url-de-an.py` chạy trước) |
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
@@ -43,7 +43,7 @@ npm test
 - Khung chương trình học chi tiết (môn từng học kỳ) **chưa có dữ liệu**; trang chi tiết dẫn tới trang ngành của trường nếu có, không thì nói thẳng và cho đường tìm kiếm.
 - Hồ sơ có 6 môn chính + 5 môn thêm không bắt buộc (Sử, Địa, GDKT&PL, Tin, Công nghệ; `HoSo.diemThem`). Tổ hợp có môn năng khiếu / vẽ (V00, T00, M01...) và ngoại ngữ khác (D02-D06...) không tính được từ điểm hồ sơ nên app ghi 'chưa so được'.
 - Học phí: chỉ khoảng 30 ngành có số theo năm; các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
-- Điểm chuẩn năm nay chưa có; app dùng năm gần nhất và luôn ghi "điểm chuẩn các năm trước".
+- Điểm chuẩn năm nay chưa có; app dùng năm gần nhất và luôn ghi "điểm chuẩn các năm trước". Với 1.680 chương trình từ nguồn tổng hợp có ghi điểm 2026, app coi đây là điểm tham chiếu / dự kiến công bố sớm và ghi rõ nguồn tổng hợp. Mức điểm 15,0 ở các trường tư thục/địa phương là mức điểm sàn xét tuyển trúng tuyển chung theo quy định của trường.
 
 ## Lớp dữ liệu từ CMS (bản xuất bản)
 - Ứng dụng nạp nền `/api/manifest` (nếu chưa có bản xuất bản thì dùng `/data/manifest.json` đi kèm bản dựng), tải đúng bộ dữ liệu đổi hash, kiểm tra SHA-256, lưu IndexedDB, rồi hợp nhất lên dữ liệu gốc bằng `src/engine/du-lieu-tuyen-sinh/hop-nhat.ts`. Chưa có bản nào thì app chạy bằng dữ liệu gốc.
