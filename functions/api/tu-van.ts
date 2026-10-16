@@ -68,9 +68,12 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
     if (r.kq.tang === "cache") await tra(); else await chotLuot(env.DB, giu.giu).catch(() => {});
     const luot = await luotConLai(env.DB, hoSo, toiDa).catch(() => undefined);
     return json(luot ? { ...r.kq, luot } : r.kq);
-  } catch {
+  } catch (e) {
     await tra();
-    return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút" }, 502);
+    // Mã ngắn (ví dụ "openrouter 401", "rong") để chẩn đoán; không chứa khóa hay dữ liệu người dùng.
+    const ma = (e instanceof Error ? `${e.name}: ${e.message}` : "loi-la").replace(/[^\w .:/-]/g, "").slice(0, 80);
+    console.error(JSON.stringify({ tang: "tu-van", loi: "502", ma }));
+    return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút", ma }, 502);
   }
 }
 
