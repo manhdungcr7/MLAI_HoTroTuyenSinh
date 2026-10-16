@@ -43,6 +43,14 @@ Tùy chọn: `AI_MODEL` để đổi mô hình. Sau khi thêm, deploy lại (ho�
 
 Chạy thử trên máy: `npm run build && npx wrangler pages dev dist --port 8788` (đặt khóa trong file `.dev.vars`, đã được ignore).
 
+## Chế độ AI và hạn mức lượt
+Trong khung chat và ở **Cài đặt > Trợ lý AI** có công tắc hai chế độ, mặc định là **Dùng AI**:
+- **Dùng AI**: câu hỏi mở được gửi tới máy chủ để diễn giải. Mỗi ngày tối đa `AI_QUOTA_DAILY` lượt (mặc định 50), đặt lại lúc 0 giờ giờ Việt Nam. Chip "AI: còn N/50" hiện số lượt còn lại.
+- **Tiết kiệm**: không bao giờ gọi `/api/tu-van`. Câu không hiểu thì app nói cần bật AI, kèm nút bật nhanh.
+- Chỉ lượt AI **thành công** mới bị trừ. Lỗi, số liệu bị chặn, chào hỏi, tra cứu số liệu và câu hỏi về số lượt không bị trừ. Hết lượt thì app tự trả lời từ số liệu có sẵn và báo "Hôm nay đã dùng hết 50 lượt AI".
+- Hạn mức đếm ở máy chủ trong D1 (bảng `ai_luot_ngay`, `ai_yeu_cau`, migration `0008_ai_han_muc.sql`), mỗi bước là một giao dịch nguyên tử. Mỗi yêu cầu mang `requestId` do trình duyệt sinh; gửi lại cùng mã không bị trừ hai lần. Thiếu binding `DB` thì máy chủ không gọi AI (503, fail-closed).
+- Hồ sơ AI là một UUID ẩn danh lưu trong localStorage (`nvai:ai-ho-so`), gửi kèm yêu cầu; máy chủ kiểm định dạng (sai thì 400). Giới hạn: chưa có đăng nhập, nên **xóa dữ liệu trình duyệt hoặc "Xóa hết" sẽ tạo hồ sơ mới và hạn mức bắt đầu lại từ đầu**. Trình duyệt khác hoặc chế độ riêng tư cũng là hồ sơ khác. Khi có tài khoản, mã này sẽ thay bằng mã tài khoản.
+
 ## Quyền riêng tư và chi phí
 - Em thấy đúng dữ liệu sẽ gửi (nút "Xem dữ liệu sẽ gửi đi") và có thể tắt chia sẻ hồ sơ. Không gửi tên, không gửi thông tin liên hệ.
 - Khóa API chỉ nằm ở biến bí mật của Cloudflare, không xuống trình duyệt (có test kiểm tra).

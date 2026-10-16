@@ -119,7 +119,8 @@ export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof
   const ragP = sau(layManhCongDong(env, y).catch(() => ({ manh: [] as MangChiMuc[], diemToanKho: [] as number[] })), NGAN_SACH.rag, { manh: [] as MangChiMuc[], diemToanKho: [] as number[] }).then((r) => ({ ...r, ms: Date.now() - t0 }));
   const [{ r: qd, ms: msClef }, { manh, diemToanKho, ms: msRag }] = await Promise.all([clefP, ragP]);
   const viec = qd?.hanhDong?.chon;
-  const y2: YeuCauTuVan = qd ? { ...y, duLieu: catSuKien(y.duLieu, qd.uuTienLLM) } : y;
+  // Chỉ 3 ngành đầu vào lời nhắc (khớp quy tắc "tối đa 3 kết quả"); danh sách nguồn hợp lệ cũng chỉ gồm 3 ngành đó.
+  const y2: YeuCauTuVan = { ...y, duLieu: (qd ? catSuKien(y.duLieu, qd.uuTienLLM) : y.duLieu).slice(0, 3) };
 
   if (!coKhoaLLM(env)) {
     console.log(JSON.stringify({ tang: "khong-llm", msClef, msLLM: 0, soSuKien: y2.duLieu.length, tokenVaoUocTinh: 0 }));

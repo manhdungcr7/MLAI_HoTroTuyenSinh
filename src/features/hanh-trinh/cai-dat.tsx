@@ -7,6 +7,8 @@ import { HopTruot, TieuDeMuc } from "@/components/ui/hien-thi";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { docLichSu, ghiLichSu } from "@/features/tu-van/hoi-thoai";
+import { LUOT_AI_MOI_NGAY } from "@/features/tu-van/che-do-ai";
+import { useCheDoAI } from "@/features/tu-van/dung-che-do-ai";
 import { docBanSaoLuu, taoBanSaoLuu } from "@/state/sao-luu";
 
 // Giữ khớp với "version" trong package.json.
@@ -19,6 +21,7 @@ export default function CaiDat() {
   const oTep = useRef<HTMLInputElement>(null);
   const [tin, setTin] = useState<{ ok: boolean; chu: string } | null>(null);
   const nav = useNavigate();
+  const ai = useCheDoAI();
   const [kemChat, setKemChat] = useState(false); // mặc định tắt: lịch sử chat chỉ vào tệp khi bạn tự bật
   const [hoi, setHoi] = useState<HoiLai>(null);
   const [choKhoiPhuc, setChoKhoiPhuc] = useState<Extract<ReturnType<typeof docBanSaoLuu>, { ok: true }> | null>(null);
@@ -72,6 +75,21 @@ export default function CaiDat() {
               phu={s.nhacNho.bat ? `Nhắc trước ${s.nhacNho.truocPhut} phút mỗi buổi học` : "Nhắc trước giờ học để bạn không quên"}
               nhan={<Nhan tone={s.nhacNho.bat ? "luc" : "xanh"}>{s.nhacNho.bat ? "Đang bật" : "Đang tắt"}</Nhan>} />
           </div>
+        </section>
+
+        <section>
+          <TieuDeMuc>Trợ lý AI</TieuDeMuc>
+          <The className="space-y-1.5">
+            <label className="flex items-start gap-3 min-h-11">
+              <input type="checkbox" checked={ai.cheDo === "ai"} onChange={(e) => ai.doiCheDo(e.target.checked ? "ai" : "tietKiem")} className="mt-0.5 size-5 shrink-0 accent-[var(--color-xanh)]" />
+              <span className="text-[14px] text-chu">Dùng AI để diễn giải câu hỏi mở <span className="text-chu-phu">(tối đa {LUOT_AI_MOI_NGAY} lượt mỗi ngày, đặt lại lúc 0 giờ giờ Việt Nam)</span></span>
+            </label>
+            <p role="status" className="text-[13px] text-chu-phu">
+              {ai.cheDo === "ai"
+                ? `Hôm nay còn ${(ai.luot ?? { con: LUOT_AI_MOI_NGAY, toiDa: LUOT_AI_MOI_NGAY }).con}/${(ai.luot ?? { toiDa: LUOT_AI_MOI_NGAY }).toiDa} lượt AI. Tra cứu số liệu và chào hỏi không tính lượt.`
+                : "Đang ở chế độ Tiết kiệm: chỉ trả lời từ số liệu có sẵn, không gửi câu hỏi tới AI."}
+            </p>
+          </The>
         </section>
 
         <section>

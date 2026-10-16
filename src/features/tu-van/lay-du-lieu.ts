@@ -230,6 +230,8 @@ export interface KetQuaTuDong {
   luaChon?: LuaChonNhanh[];
   trangThaiDuLieu?: TrangThaiDuLieu;
   cho?: ChoTraLoi;
+  /** Không nhận ra ý định nào: lớp trên có thể nhờ AI, nếu AI lỗi thì không nói "chưa hiểu". */
+  khongHieu?: boolean;
 }
 
 // ---------- Ngữ cảnh lượt trước và tra cứu chương trình ----------
@@ -718,7 +720,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
 
   return {
     traLoi: "Mình chưa hiểu rõ câu hỏi. Bạn nêu giúp một ngành, một trường hoặc một tỉnh (ví dụ “điểm chuẩn Khoa học máy tính UIT”, “ở Cần Thơ có trường nào dạy Y khoa”).",
-    nguon: [],
+    nguon: [], khongHieu: true,
     luaChon: [
       { nhan: "Danh sách nguyện vọng", cau: "Danh sách nguyện vọng của mình có cân bằng không?" },
       { nhan: "Nên bắt đầu từ đâu", cau: "Nên bắt đầu tìm ngành từ đâu?" },

@@ -2,6 +2,7 @@ import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước 
 // Hợp đồng phản hồi có cấu trúc của Tư vấn AI: kiểm schema, id bịa, hành động đề xuất, số bịa, khóa cache. Chạy: npx tsx tests/tu-van-phan-hoi.test.ts
 import assert from "node:assert/strict";
 import { xuLy, type Env } from "../functions/api/tu-van";
+import { taoD1Test, themDinhDanh } from "./nap-d1-han-muc";
 import { khoaCache } from "../functions/_thu-vien/ai/cache";
 import { NHAC_HE_THONG, docPhanHoiLLM, kiemTraPhanHoiCauTruc, kiemTraYeuCau, soLieuLech, type SuKien } from "../src/engine/tu-van";
 
@@ -82,7 +83,7 @@ const cho = ["a1", "a2"];
   const kv = { get: async (k: string) => m.get(k) ?? null, put: async (k: string, v: string) => { m.set(k, v); } };
   let tra = "";
   const f = (async () => ({ ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: tra }] }) })) as unknown as typeof fetch;
-  const goi = async (cauHoi: string) => { const r = await xuLy(new Request("https://x/api/tu-van", { method: "POST", body: JSON.stringify({ cauHoi, duLieu: du }) }), { ANTHROPIC_API_KEY: "k", RATE_KV: kv } as Env, f); return { status: r.status, d: (await r.json()) as Record<string, unknown> }; };
+  const goi = async (cauHoi: string) => { const r = await xuLy(new Request("https://x/api/tu-van", { method: "POST", body: JSON.stringify(themDinhDanh({ cauHoi, duLieu: du })) }), { ANTHROPIC_API_KEY: "k", RATE_KV: kv, DB: taoD1Test() } as Env, f); return { status: r.status, d: (await r.json()) as Record<string, unknown> }; };
   tra = JSON.stringify({ traLoi: "Điểm chuẩn 2024 là 29,9 điểm. [nguồn: a1]" });
   const bia = await goi("Điểm chuẩn BKA?");
   assert.equal(bia.status, 422); assert.equal(bia.d.loi, "so-lieu-khong-khop"); assert.equal(m.size - 1 >= 0 && [...m.keys()].filter((k) => k.startsWith("tvc")).length, 0, "không cache câu bị chặn");
@@ -110,7 +111,7 @@ const cho = ["a1", "a2"];
 // 7) Lời nhắc: ngắn gọn, không ép persona cũ, không hardcode danh sách trường
 {
   for (const cam of ["chuyên gia", "3 tầng", "sâu sắc", "vượt trội"]) assert.ok(!NHAC_HE_THONG.includes(cam), `lời nhắc còn "${cam}"`);
-  for (const can of ["120 từ", "Tối đa 3 kết quả", "MỘT câu", "tên đầy đủ", "TƯ LIỆU"]) assert.ok(NHAC_HE_THONG.includes(can), `lời nhắc thiếu "${can}"`);
+  for (const can of ["100 từ", "Tối đa 3 kết quả", "MỘT câu", "tên trường đầy đủ", "TƯ LIỆU"]) assert.ok(NHAC_HE_THONG.includes(can), `lời nhắc thiếu "${can}"`);
   assert.ok(!/\b(BKA|KHA|QSC|UIT|NEU|FTU)\b/.test(NHAC_HE_THONG), "không hardcode mã trường");
 }
 

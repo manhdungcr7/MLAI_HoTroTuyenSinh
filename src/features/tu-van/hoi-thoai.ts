@@ -36,6 +36,10 @@ export interface TinNhan {
   cho?: ChoTraLoi;
   /** Tin tự động do lỗi mạng/hết giờ (không phải do chưa bật AI): cho phép "Thử lại". */
   thuLai?: boolean;
+  /** Chế độ Tiết kiệm gặp câu cần AI diễn giải: hiện nút bật nhanh chế độ AI. */
+  batAI?: boolean;
+  /** Dòng ghi chú ngắn dưới tin (ví dụ đã hết lượt AI hôm nay). */
+  ghiChu?: string;
 }
 
 const ds = (x: unknown, n: number, dai: number): string[] | undefined =>
@@ -75,6 +79,8 @@ export function lamSachLichSu(x: unknown): TinNhan[] {
       if (typeof o.viecTiep === "string") t.viecTiep = o.viecTiep.slice(0, 300);
       const id = ds(o.idDuLieu, 12, 40); if (id) t.idDuLieu = id;
       if (o.thuLai === true) t.thuLai = true;
+      if (o.batAI === true) t.batAI = true;
+      if (typeof o.ghiChu === "string" && o.ghiChu.trim()) t.ghiChu = o.ghiChu.trim().slice(0, 200);
       const the = lamSachThe(o.the); if (the.length) t.the = the;
       const hd = lamSachHanhDong(o.hanhDong); if (hd.length) t.hanhDong = hd;
       if (typeof o.hoiLai === "string" && o.hoiLai.trim()) t.hoiLai = o.hoiLai.trim().slice(0, 200);

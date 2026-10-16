@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CalendarCheck, Check, RotateCcw } from "lucide-react";
+import { CalendarCheck, Check, RotateCcw, Sparkles } from "lucide-react";
 import { gop } from "@/components/ui/nut-the";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
@@ -8,6 +8,7 @@ import { coTruong, tenTruong } from "@/engine/truong";
 import type { HanhDongDeXuat } from "@/engine/tu-van";
 import { useApp } from "@/state/store";
 import type { TinNhan } from "../hoi-thoai";
+import { useCheDoAI } from "../dung-che-do-ai";
 import { SuggestedActionChips, type ChipHanhDong } from "./chip-hanh-dong";
 import { DataSourceLabel } from "./nhan-nguon-du-lieu";
 import { AIClarificationMessage } from "./tin-lam-ro";
@@ -41,6 +42,7 @@ function chipTuHanhDong(h: HanhDongDeXuat): ChipHanhDong | null {
 export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: Props) {
   const nav = useNavigate();
   const { s, themNguyenVong } = useApp();
+  const { cheDo, doiCheDo } = useCheDoAI();
   const [xemThemThe, setXemThemThe] = useState(false);
   const [xemThemNganh, setXemThemNganh] = useState(false);
   const [chon, setChon] = useState<string | null>(null);
@@ -153,9 +155,15 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
       )}
       {t.viecTiep && <p className="mt-1.5 text-[13px] text-muc">Việc nên làm tiếp: <span className="text-chu">{t.viecTiep}</span></p>}
       <DataSourceLabel trangThai={t.trangThaiDuLieu} cheDo={t.cheDo} tang={t.tang} congDong={!!t.congDong?.length} />
+      {t.ghiChu && <p className="mt-1.5 text-[12px] text-chu-phu">{t.ghiChu}</p>}
+      {t.batAI && laCuoi && !dang && cheDo === "tietKiem" && (
+        <div className="mt-1.5">
+          <button type="button" onClick={() => { doiCheDo("ai"); if (cauTruoc) onThuLai(); }} className={gop(NUT_PHU, "border border-xanh/40 bg-trang text-xanh")}><Sparkles size={14} />Bật AI, hỏi lại</button>
+        </div>
+      )}
       {t.thuLai && laCuoi && !dang && cauTruoc && (
         <div className="mt-1 flex flex-wrap items-center gap-x-2">
-          <span className="text-[12px] text-chu-phu">Chưa kết nối được AI.</span>
+          <span className="text-[12px] text-chu-phu">Dịch vụ AI chưa phản hồi.</span>
           <button type="button" onClick={onThuLai} className="inline-flex min-h-11 items-center gap-1.5 px-1 text-[13px] font-bold text-xanh"><RotateCcw size={15} />Thử lại</button>
         </div>
       )}

@@ -2,6 +2,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { HO_SO_TRONG, TRANG_THAI_BAN_DAU, taoHoSoMau, type KieuMau } from "./mau";
 import { chuanHoa } from "./chuan-hoa";
+import { KHOA_AI, datLaiHoSoAI } from "@/features/tu-van/che-do-ai";
 import { xepLaiTuan } from "./xep-lai";
 import { isoNgay } from "@/engine/xep-lich";
 import type {
@@ -37,7 +38,7 @@ function xoaDuLieuPhu() {
   for (const kho of [() => localStorage, () => sessionStorage]) {
     try {
       const k = kho();
-      for (const ten of Object.keys(k)) if (ten.startsWith("nvai:") && ten !== KHOA) k.removeItem(ten);
+      for (const ten of Object.keys(k)) if (ten.startsWith("nvai:") && ten !== KHOA && !(KHOA_AI as readonly string[]).includes(ten)) k.removeItem(ten);
     } catch { /* trình duyệt chặn lưu: bỏ qua */ }
   }
   window.dispatchEvent(new Event("nvai-lam-lai")); // các màn đang giữ dữ liệu trong bộ nhớ tự đặt lại
@@ -62,6 +63,7 @@ export function docThoDaLuu(): string | null {
 
 /** Xóa mọi khóa nvai:* (đặt lại hoàn toàn). Dùng khi dữ liệu hỏng đến mức app không chạy được. */
 export function xoaTatCaDuLieu() {
+  datLaiHoSoAI({ getItem: () => null, setItem: () => {}, removeItem: () => {} }); // quên mã hồ sơ tạm trong bộ nhớ
   for (const kho of [() => localStorage, () => sessionStorage]) {
     try { const k = kho(); for (const ten of Object.keys(k)) if (ten.startsWith("nvai:")) k.removeItem(ten); } catch { /* bỏ qua */ }
   }
@@ -165,7 +167,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     xoaTinhHuong: (id) => cap((x) => ({ ...x, tinhHuong: x.tinhHuong.filter((t) => t.id !== id) })),
     dungHoSoMau: () => { xoaDuLieuPhu(); dat(taoHoSoMau()); },
     dungHoSoMauKieu: (kieu) => { xoaDuLieuPhu(); dat(taoHoSoMau(kieu)); },
-    lamLai: () => { xoaDuLieuPhu(); dat({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
+    lamLai: () => { xoaDuLieuPhu(); try { datLaiHoSoAI(localStorage); } catch { /* bỏ qua */ } dat({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
     themLoiNhan: (l) => cap((x) => (x.loiNhan.some((k) => k.id === l.id) ? x : { ...x, loiNhan: [l, ...x.loiNhan].slice(0, 30) })),
     xoaLoiNhan: (id) => cap((x) => ({ ...x, loiNhan: x.loiNhan.filter((k) => k.id !== id) })),
     khoiPhuc: (n) => { xoaDuLieuPhu(); dat(chuanHoa(n)); },

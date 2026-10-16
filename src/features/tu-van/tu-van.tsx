@@ -7,6 +7,8 @@ import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { layTinTraLoi } from "./cau-tra-loi";
+import { phienHienTai } from "./che-do-ai";
+import { ChipCheDoAI } from "./thanh-phan/chip-che-do-ai";
 import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
 import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, type TinNhan } from "./hoi-thoai";
 import { TinMayChu } from "./thanh-phan/tin-may-chu";
@@ -83,13 +85,13 @@ export default function TuVan() {
   /** `thay`: vị trí tin của bạn cần hỏi lại (Thử lại): bỏ cặp hỏi–đáp cũ rồi gửi lại đúng câu đó. */
   const gui = async (q: string, thay?: number) => {
     const cau = q.trim();
-    if (cau.length < 3 || dangRef.current) return;
+    if (cau.length < 2 || dangRef.current) return;
     dangRef.current = true; setDang(true);
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     cuonSau.current = true;
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
     // Chạy ở mức module: rời màn giữa chừng vẫn nhận và ghi được câu trả lời.
-    await guiNen(localStorage, cau, truoc, () => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh }));
+    await guiNen(localStorage, cau, truoc, () => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage) }));
   };
 
   const goiY = goiYBanDau({ soNguyenVong: s.nguyenVong.length, nganhQuanTam: s.hoSo.nganhQuanTam });
@@ -125,6 +127,10 @@ export default function TuVan() {
             <input type="checkbox" checked={dungHoSo} onChange={(e) => setDungHoSo(e.target.checked)} className="size-5 accent-[var(--color-xanh)]" />
             <span>Kèm hồ sơ của bạn</span>
           </label>
+        </div>
+
+        <div className="flex items-center justify-between gap-2">
+          <ChipCheDoAI />
         </div>
 
         {tin.length === 0 && (
@@ -217,7 +223,7 @@ export default function TuVan() {
               value={cauHoi}
               onChange={(e) => setCauHoi(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !dang && cauHoi.trim().length >= 3) {
+                if (e.key === "Enter" && !dang && cauHoi.trim().length >= 2) {
                   e.preventDefault();
                   gui(cauHoi);
                 }
@@ -231,7 +237,7 @@ export default function TuVan() {
               rong={false}
               bieuTuong={Send}
               className="!h-11 !min-h-11 shrink-0 px-4 !rounded-xl cursor-pointer"
-              disabled={dang || cauHoi.trim().length < 3}
+              disabled={dang || cauHoi.trim().length < 2}
               onClick={() => gui(cauHoi)}
             >
               Gửi

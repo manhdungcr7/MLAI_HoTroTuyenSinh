@@ -2,6 +2,7 @@ import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước 
 // Kiểm thử Tư vấn AI: kiểm tra yêu cầu, lọc nguồn, máy chủ (giả lập mạng), tìm ngành và trả lời tự động. Chạy: npx tsx tests/tu-van.test.ts
 import assert from "node:assert/strict";
 import { xuLy } from "../functions/api/tu-van";
+import { taoD1Test, themDinhDanh } from "./nap-d1-han-muc";
 import { GIOI_HAN, NHAC_HE_THONG, choPhepTanSuat, dungNoiDung, kiemTraYeuCau, lamSachHoSo, locNguon, type KhoKV } from "../src/engine/tu-van";
 import { maTuVietTat } from "../src/engine/truong";
 import assertNguon from "node:assert/strict";
@@ -16,7 +17,7 @@ import { chonDuLieuKemTheo, timNganhKhop, traLoiTuDong } from "../src/features/t
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
 import { taoHoSoMau, TRANG_THAI_BAN_DAU } from "../src/state/mau";
 
-const yc = (o: object) => new Request("https://x/api/tu-van", { method: "POST", body: JSON.stringify(o) });
+const yc = (o: object) => new Request("https://x/api/tu-van", { method: "POST", body: JSON.stringify(themDinhDanh(o)) });
 const sk = { id: "a1", nganh: "Khoa học máy tính", truong: "UIT", tenTruong: "ĐH CNTT", tinh: "TP.HCM", phuongThuc: "THPT", toHop: ["A01"], diem: { "2024": 26.9 }, nguon: "Đề án 2024, trang 3" };
 const kvCho: KhoKV = { get: async () => null, put: async () => {} };
 
@@ -27,7 +28,7 @@ assert.equal(kiemTraYeuCau({ cauHoi: "x".repeat(1001), duLieu: [] }).ok, false);
 const t = kiemTraYeuCau({ cauHoi: "Điểm chuẩn?", duLieu: [sk, { id: 5 }, { ...sk, id: "a2", diem: { "2024": 99, "2023": 25 } }], hoSo: { lop: 12 } });
 assert.ok(t.ok);
 if (t.ok) { assert.equal(t.v.duLieu.length, 2, "bỏ mục sai kiểu"); assert.deepEqual(t.v.duLieu[1].diem, { "2023": 25 }, "bỏ điểm ngoài thang 30"); }
-assert.ok(NHAC_HE_THONG.includes("Chỉ được dùng số liệu") && NHAC_HE_THONG.includes("không tự nêu"), "lời nhắc phải cấm bịa số");
+assert.ok(NHAC_HE_THONG.includes("Chỉ dùng số liệu") && NHAC_HE_THONG.includes("Không tự nêu"), "lời nhắc phải cấm bịa số");
 if (t.ok) assert.ok(dungNoiDung(t.v).includes("Khoa học máy tính") && dungNoiDung(t.v).includes("CÂU HỎI"));
 
 // 2) Lọc nguồn: bỏ mã AI tự bịa
@@ -44,18 +45,18 @@ assert.equal((await xuLy(new Request("https://x/", { method: "POST", body: "{h�
 assert.equal((await xuLy(yc({ cauHoi: "ab" }), { ANTHROPIC_API_KEY: "k" }, gia({}))).status, 400);
 let thamSo: { url?: string; init?: RequestInit } = {};
 const spy = (async (url: string, init: RequestInit) => { thamSo = { url, init }; return { ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: "Điểm 26,9 (2024). [nguồn: a1, giả]" }] }) }; }) as unknown as typeof fetch;
-const r1 = await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { ANTHROPIC_API_KEY: "khoa-bi-mat", RATE_KV: kvCho }, spy);
+const r1 = await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { ANTHROPIC_API_KEY: "khoa-bi-mat", RATE_KV: kvCho, DB: taoD1Test() }, spy);
 const d1 = (await r1.json()) as { traLoi: string; nguon: string[] };
 assert.equal(r1.status, 200); assert.deepEqual(d1.nguon, ["a1"]);
 assert.equal(thamSo.url, "https://api.anthropic.com/v1/messages");
 assert.ok(String(thamSo.init?.body).includes("DỮ LIỆU") && !String(r1.headers.get("content-type")).includes("khoa-bi-mat"));
 assert.ok(!JSON.stringify(d1).includes("khoa-bi-mat"), "khóa API không được lộ ra câu trả lời");
 const spyOA = (async (url: string) => ({ ok: true, status: 200, json: async () => ({ choices: [{ message: { content: `ok ${url}` } }] }) })) as unknown as typeof fetch;
-assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENAI_API_KEY: "k", RATE_KV: kvCho }, spyOA)).json() as { traLoi: string }).traLoi.startsWith("ok https://api.openai.com"), true);
+assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENAI_API_KEY: "k", RATE_KV: kvCho, DB: taoD1Test() }, spyOA)).json() as { traLoi: string }).traLoi.startsWith("ok https://api.openai.com"), true);
 const spyOR = (async (url: string) => ({ ok: true, status: 200, json: async () => ({ choices: [{ message: { content: `ok ${url}` } }] }) })) as unknown as typeof fetch;
-assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENROUTER_API_KEY: "k", RATE_KV: kvCho }, spyOR)).json() as { traLoi: string }).traLoi.startsWith("ok https://openrouter.ai"), true);
+assert.equal((await (await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?", duLieu: [sk] }), { OPENROUTER_API_KEY: "k", RATE_KV: kvCho, DB: taoD1Test() }, spyOR)).json() as { traLoi: string }).traLoi.startsWith("ok https://openrouter.ai"), true);
 assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k" }, spy)).status, 503, "thiếu KV thì không gọi mô hình");
-assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k", RATE_KV: kvCho }, gia({}, false))).status, 502, "dịch vụ lỗi thì 502, không lộ chi tiết");
+assert.equal((await xuLy(yc({ cauHoi: "Điểm chuẩn UIT?" }), { ANTHROPIC_API_KEY: "k", RATE_KV: kvCho, DB: taoD1Test() }, gia({}, false))).status, 502, "dịch vụ lỗi thì 502, không lộ chi tiết");
 
 // 3b) Giới hạn: body, hồ sơ whitelist, tần suất
 const lon = new Request("https://x/", { method: "POST", body: "{}", headers: { "content-length": String(GIOI_HAN.kichThuocBody + 1) } });
@@ -110,19 +111,18 @@ assert.ok(dl.length > 0 && !JSON.stringify(dl).includes(mau.hoSo.hoTen));
     assert.equal(k.v.duLieu[1].tongCuaEm, undefined); assert.equal(k.v.duLieu[1].toHopDaTinh, undefined);
     assert.ok(dungNoiDung(k.v).includes("\"tongCuaEm\":24.5"));
   }
-  assert.ok(NHAC_HE_THONG.includes("tongCuaEm") && NHAC_HE_THONG.includes("KHÔNG dùng làm điểm của một ngành"));
-  assert.ok(NHAC_HE_THONG.includes("Không mô tả phạm vi dữ liệu"));
+  assert.ok(NHAC_HE_THONG.includes("tongCuaEm") && NHAC_HE_THONG.includes("một ngành chỉ lấy tongCuaEm"));
 }
 // Ngữ cảnh nối tiếp: nhận, cắt đúng giới hạn, bỏ khi rỗng, và vào lời nhắc ở vai trò ngữ cảnh (không phải nguồn số liệu)
 {
   const k = kiemTraYeuCau({ cauHoi: "Còn ngành kia thì sao?", nguCanh: "Tư vấn chung\nEm hỏi: UIT?\n" + "d".repeat(2000), duLieu: [] });
   assert.ok(k.ok && k.v.nguCanh && k.v.nguCanh.length === GIOI_HAN.nguCanh && GIOI_HAN.nguCanh === 700);
-  assert.ok(k.ok && dungNoiDung(k.v).includes("Em hỏi: UIT?") && dungNoiDung(k.v).includes("KHÔNG phải nguồn số liệu"));
+  assert.ok(k.ok && dungNoiDung(k.v).includes("Em hỏi: UIT?") && dungNoiDung(k.v).includes("không là nguồn số liệu"));
   const r = kiemTraYeuCau({ cauHoi: "Câu hỏi bình thường", nguCanh: "   ", duLieu: [] });
   assert.ok(r.ok && r.v.nguCanh === undefined);
   const n = kiemTraYeuCau({ cauHoi: "Câu hỏi bình thường", nguCanh: 5, duLieu: [] });
   assert.ok(n.ok && n.v.nguCanh === undefined);
-  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 11, "đủ 11 quy tắc (10: NV1 làm gốc, 11: hỏi lại đúng một câu)");
+  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 4, "đủ 4 quy tắc (4: NV1 làm gốc và hỏi lại đúng một câu)");
 }
 // 6) Trả lời tự động hiểu địa danh và tên trường (chi tiết ở tests/tu-van-chat.test.ts)
 {

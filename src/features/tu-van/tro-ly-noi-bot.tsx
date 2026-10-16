@@ -6,6 +6,8 @@ import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { layTinTraLoi } from "./cau-tra-loi";
+import { phienHienTai } from "./che-do-ai";
+import { ChipCheDoAI } from "./thanh-phan/chip-che-do-ai";
 import { cauDangCho, guiNen, SU_KIEN_XONG, type ChiTietXong } from "./dang-cho";
 import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, type TinNhan } from "./hoi-thoai";
 import { TinMayChu } from "./thanh-phan/tin-may-chu";
@@ -89,12 +91,12 @@ function KhungChatMini({ dong }: { dong: () => void }) {
 
   const gui = async (q: string, thay?: number) => {
     const cau = q.trim();
-    if (cau.length < 3 || dangRef.current) return;
+    if (cau.length < 2 || dangRef.current) return;
     dangRef.current = true;
     setDang(true);
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
-    await guiNen(localStorage, cau, truoc, () => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh }));
+    await guiNen(localStorage, cau, truoc, () => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage) }));
   };
 
   const goiY = goiYBanDau({ soNguyenVong: s.nguyenVong.length, nganhQuanTam: s.hoSo.nganhQuanTam });
@@ -111,11 +113,12 @@ function KhungChatMini({ dong }: { dong: () => void }) {
           <div className="min-w-0">
             <h3 className="text-[14px] font-bold text-white leading-tight truncate">Chatbot AI Tuyển sinh</h3>
             <span className="text-[11px] text-white/90 font-medium flex items-center gap-1.5 mt-0.5">
-              <span className="size-2 rounded-full bg-emerald-400 inline-block animate-pulse" /> Đang hoạt động
+              Tra cứu số liệu tuyển sinh
             </span>
           </div>
         </div>
         <div className="flex items-center gap-1">
+          <ChipCheDoAI tren />
           <button
             type="button"
             onClick={() => { dong(); nav(DUONG_DAN.tuVan(), { state: { nguCanh: manHinh } }); }}
@@ -232,7 +235,7 @@ function KhungChatMini({ dong }: { dong: () => void }) {
             value={cauHoi}
             onChange={(e) => setCauHoi(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !dang && cauHoi.trim().length >= 3) {
+              if (e.key === "Enter" && !dang && cauHoi.trim().length >= 2) {
                 e.preventDefault();
                 gui(cauHoi);
               }
@@ -244,7 +247,7 @@ function KhungChatMini({ dong }: { dong: () => void }) {
           />
           <button
             type="button"
-            disabled={dang || cauHoi.trim().length < 3}
+            disabled={dang || cauHoi.trim().length < 2}
             onClick={() => gui(cauHoi)}
             aria-label="Gửi tin nhắn"
             className="size-10 rounded-full gd-xanh text-white grid place-items-center shrink-0 hover:brightness-110 active:scale-95 disabled:opacity-40 transition-all cursor-pointer shadow-xs"

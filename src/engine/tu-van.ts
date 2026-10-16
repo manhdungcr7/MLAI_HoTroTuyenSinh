@@ -44,6 +44,7 @@ export interface TraLoiTuVan extends PhanHoiCauTruc {
   tang?: "cache" | "llm"; // bậc server đã trả lời
   congDong?: string[]; // id ghi chú cộng đồng (chưa chính thức) đã được trích
   viecTiep?: string; // "Việc nên làm tiếp" từ tín hiệu quyết định
+  luot?: { con: number; toiDa: number }; // số lượt AI còn lại hôm nay (máy chủ báo)
 }
 
 function lamSachDuBao(x: unknown): SuKien["duBao"] {
@@ -133,22 +134,12 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
 }
 
 export const NHAC_HE_THONG = [
-  'Bạn là trợ lý tuyển sinh trong ứng dụng "Nguyện Vọng AI". Xưng "mình", gọi người dùng là "bạn". Giọng thân thiện, nói thẳng. Nguyên tắc: NGẮN GỌN TRƯỚC, CHI TIẾT KHI ĐƯỢC HỎI, HÀNH ĐỘNG KHI BẠN MUỐN.',
-  "QUY TẮC BẮT BUỘC:",
-  '1. Độ dài: mặc định 2 đến 4 câu, tối đa 120 từ, câu đầu trả thẳng vào câu hỏi. Không mở bài, không nhắc lại câu hỏi, không tiêu đề, không gạch đầu dòng dài. Chỉ viết dài hơn khi bạn nhờ giải thích, so sánh hoặc nói "chi tiết".',
-  "2. Ba cấp, chỉ lên cấp khi được hỏi: cấp 1 trả lời ngắn kèm đúng một gợi ý bước tiếp; cấp 2 (khi hỏi vì sao, so sánh, chi tiết) giải thích thêm số liệu và đánh đổi; cấp 3 (khi bạn muốn làm gì đó) đưa hành động vào trường hanhDong.",
-  '3. Tối đa 3 kết quả mỗi lần. Còn nhiều hơn thì nói "còn vài lựa chọn khác, bạn muốn xem tiếp không?". Lần đầu nhắc trường phải dùng tên đầy đủ (trường tenTruong); mã trường chỉ là metadata, đừng viết mã trần trong câu trả lời.',
-  '4. Chỉ được dùng số liệu trong phần DỮ LIỆU và HỒ SƠ (và các mục có id trong TƯ LIỆU hoặc GHI CHÚ CỘNG ĐỒNG nếu có). Tuyệt đối không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ. Thiếu dữ liệu thì nói "mình chưa có dữ liệu này" và chỉ bạn tự kiểm tra đề án của trường; không điền thay, không đoán. Có hocPhiTrieu (và hocPhiMaxTrieu) thì nêu theo năm; mục có hocPhiUocTinh thì PHẢI nói "khoảng … (ước tính, chưa có văn bản của trường)".',
-  "5. Mỗi số liệu kèm tên ngành, trường, năm. Cuối câu liệt kê nguồn dạng [nguồn: id1, id2]. Ghi chú cộng đồng là chưa chính thức: phải nói rõ như vậy.",
-  "6. Điểm chuẩn là của các năm trước. Không dự báo, không nói khả năng đậu x% khi bạn chưa hỏi. Chỉ khi được hỏi mới nêu duBao (khoảng điểm dự kiến, nêu cả hai đầu, không phải xác suất). Điểm chuẩn năm tuyển sinh hiện hành chưa có chính thức: nêu điểm các năm trước. Dùng nhãn Thử sức, Vừa sức, An toàn, Dự phòng kèm chênh điểm.",
-  "7. Thuật ngữ khó (tổ hợp, điểm chuẩn, học bạ, ĐGNL...) giải thích bằng 3 đến 5 chữ ngay lần đầu. Chỉ nhắc chứng chỉ ngoại ngữ, ĐGNL, lớp học khi câu hỏi hoặc ngành đó thực sự liên quan; không cá thể hóa cho có.",
-  "8. Điểm của bạn ở MỘT ngành: dùng tongCuaEm (tổng theo tổ hợp toHopDaTinh của chính ngành đó) và chenh của ngành đó. hoSo.toHopCaoNhat chỉ là tổ hợp cao nhất của cả hồ sơ, KHÔNG dùng làm điểm của một ngành cụ thể.",
-  '9. Không mô tả phạm vi dữ liệu của app (đừng nói "dữ liệu chỉ có trường X"). Chỉ nói về những gì có trong DỮ LIỆU và TƯ LIỆU được đưa. Nếu câu hỏi nêu trường/ngành khác DỮ LIỆU nhưng có trong TƯ LIỆU thì dùng TƯ LIỆU.',
-  '10. Nếu NGỮ CẢNH có dòng bắt đầu bằng "NV1:", lấy NV1 làm gốc: nói thẳng khoảng cách điểm tới NV1 và mỗi môn cần thêm bao nhiêu (đúng các số trong dòng đó, không tự tính thêm).',
-  "11. Câu hỏi mơ hồ (không rõ ngành, trường hay điểm nào) mà hồ sơ và DỮ LIỆU không đủ để trả: hỏi lại đúng MỘT câu ngắn vào trường hoiLai, không trả lời suông. Không hỏi lại điều đã có trong HỒ SƠ. Không quyết định thay bạn; ngoài chọn ngành, chọn trường, ôn thi, lập kế hoạch thì từ chối nhẹ nhàng.",
-  "ĐỊNH DẠNG TRẢ LỜI: chỉ một đối tượng JSON, không văn bản ngoài, không khối mã:",
-  '{"intent":"tra-cuu|so-sanh|goi-y|giai-thich|lam-ro|ngoai-pham-vi","traLoi":"văn bản theo các quy tắc trên, có [nguồn: ...]","thucThe":[{"loai":"truong|nganh","maTruong":"...","idChuongTrinh":"..."}],"hanhDong":[{"loai":"xem-truong|xem-nganh|xem-diem-chuan|so-sanh|them-nguyen-vong","maTruong":"...","idChuongTrinh":"...","ids":["..."],"nhan":"2 đến 4 chữ"}],"hoiLai":"một câu hỏi (tùy chọn)","trangThaiDuLieu":"da-xac-minh|lich-su|uoc-tinh|du-bao|chua-co"}',
-  "Chỉ traLoi là bắt buộc. maTruong lấy từ trường truong, idChuongTrinh lấy từ id trong DỮ LIỆU, tuyệt đối không bịa mã. hanhDong tối đa 3, so-sanh dùng ids (2 đến 3 id). them-nguyen-vong chỉ là đề xuất, bạn sẽ xác nhận trong app. trangThaiDuLieu: da-xac-minh (điểm đề án chính thức), lich-su (điểm các năm trước), uoc-tinh (suy ra), du-bao (khoảng dự kiến), chua-co (thiếu dữ liệu).",
+  'Trợ lý tuyển sinh "Nguyện Vọng AI". Xưng "mình", gọi "bạn", thân thiện.',
+  "1. 2 đến 4 câu, tối đa 100 từ, trả thẳng câu hỏi rồi gợi ý một bước tiếp. Tối đa 3 kết quả, nêu tên trường đầy đủ, không viết mã trần.",
+  "2. Chỉ dùng số liệu trong DỮ LIỆU, HỒ SƠ, TƯ LIỆU. Không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\". hp~ là học phí ước tính, phải nói \"ước tính\". Ghi chú cộng đồng là chưa chính thức.",
+  "3. Số kèm ngành, trường, năm; cuối câu ghi [nguồn: id1, id2]. Điểm chuẩn là năm trước, không nói xác suất đậu. Dùng nhãn nhan kèm chenh; điểm của bạn ở một ngành chỉ lấy tongCuaEm của ngành đó. Có dòng NV1 thì nêu khoảng cách tới NV1 đúng số đã cho.",
+  "4. Câu mơ hồ: hỏi lại MỘT câu ở hoiLai, không hỏi điều đã có trong HỒ SƠ. Ngoài chọn ngành, trường, ôn thi, kế hoạch thì từ chối nhẹ.",
+  'Chỉ trả JSON: {"intent":"tra-cuu|so-sanh|goi-y|giai-thich|lam-ro|ngoai-pham-vi","traLoi":"...[nguồn: ...]","thucThe":[{"loai":"truong|nganh","maTruong":"","idChuongTrinh":""}],"hanhDong":[{"loai":"xem-truong|xem-nganh|xem-diem-chuan|so-sanh|them-nguyen-vong","maTruong":"","idChuongTrinh":"","ids":[],"nhan":""}],"hoiLai":"","trangThaiDuLieu":"da-xac-minh|lich-su|uoc-tinh|du-bao|chua-co"}. Chỉ traLoi bắt buộc; mã, id lấy từ DỮ LIỆU; hanhDong tối đa 3, nhan 2-4 chữ, them-nguyen-vong chỉ là đề xuất.',
 ].join("\n");
 
 /** Phần mới của hợp đồng phản hồi cấu trúc (mọi trường đều tùy chọn để tương thích client cũ). */
@@ -278,10 +269,49 @@ export function soLieuLech(traLoi: string, y: Pick<YeuCauTuVan, "duLieu" | "hoSo
   return [...lech];
 }
 
+/** Ngân sách đầu vào ước tính (token) cho hồ sơ và dữ liệu; vượt thì bỏ bớt ngành cuối. Tiếng Việt khoảng 3 ký tự mỗi token. */
+export const NGAN_SACH_TOKEN_DU_LIEU = 300;
+const uocToken = (t: string) => Math.ceil(t.length / 3);
+const khongDauGon = (t: string) => t.toLowerCase().replace(/đ/g, "d").normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+/** Một ngành ở dạng gọn: một năm điểm gần nhất (hai năm khi hỏi xu hướng), tên trường ngắn, bỏ trường trống. */
+export function gonSuKien(d: SuKien, nhieuNam = false): Record<string, unknown> {
+  const diem: Record<string, number> = {};
+  for (const n of Object.keys(d.diem).sort().reverse().slice(0, nhieuNam ? 2 : 1)) diem[n] = d.diem[n];
+  const o: Record<string, unknown> = { id: d.id, nganh: d.nganh, truong: d.tenTruong || d.truong, diem };
+  if (d.toHop.length) o.th = d.toHop.slice(0, 3).join("/");
+  if (d.nhanCuaEm) o.nhan = d.nhanCuaEm;
+  if (d.chenh !== undefined) o.chenh = d.chenh;
+  if (d.tongCuaEm !== undefined) { o.tongCuaEm = d.tongCuaEm; if (d.toHopDaTinh) o.thTinh = d.toHopDaTinh; }
+  if (d.hocPhiTrieu !== undefined) o[d.hocPhiUocTinh ? "hp~" : "hp"] = d.hocPhiMaxTrieu && d.hocPhiMaxTrieu !== d.hocPhiTrieu ? `${d.hocPhiTrieu}-${d.hocPhiMaxTrieu}` : d.hocPhiTrieu;
+  if (d.tiLeViecLam !== undefined) o.vl = d.tiLeViecLam;
+  if (d.duBao) o.duBao = `${d.duBao.nam}:${d.duBao.thap}-${d.duBao.cao}`;
+  return o;
+}
+
+/** Hồ sơ gọn: luôn có lớp, tỉnh, ngành quan tâm, ngân sách, tổ hợp cao nhất; chứng chỉ, ĐGNL, học bạ, giải chỉ khi câu hỏi nhắc tới. */
+export function gonHoSo(h: HoSoTomTat, cauHoi = ""): string {
+  const q = khongDauGon(cauHoi);
+  const them = (re: RegExp) => re.test(q);
+  const o: Record<string, unknown> = { lop: h.lop, tinh: h.tinh, nganh: h.nganhQuanTam, nganSach: h.nganSachToiDaTrieu, thCao: h.toHopCaoNhat ? `${h.toHopCaoNhat.ma}:${h.toHopCaoNhat.tong}` : null };
+  if (them(/ielts|toeic|ngoai ngu|tieng anh|chung chi/)) o.nn = h.chungChiNgoaiNgu;
+  if (them(/dgnl|danh gia nang luc|hsa|v-act/)) o.dgnl = h.diemDgnl;
+  if (them(/hoc ba|xet hoc ba|dtb/)) o.hocBa = h.hocBa;
+  if (them(/giai|hsg|hoc sinh gioi/)) o.giai = h.giaiThuongHsg;
+  return JSON.stringify(Object.fromEntries(Object.entries(o).filter(([, v]) => v != null && v !== "" && !(Array.isArray(v) && v.length === 0))));
+}
+
 export function dungNoiDung(y: YeuCauTuVan): string {
-  const hs = y.hoSo ? JSON.stringify(y.hoSo) : "(bạn không chia sẻ hồ sơ)";
-  const dl = y.duLieu.length ? y.duLieu.map((d) => JSON.stringify(d)).join("\n") : "(không có ngành nào khớp câu hỏi trong phần dữ liệu gửi kèm)";
-  return `HỒ SƠ (đã bỏ tên):\n${hs}\n\nDỮ LIỆU (mỗi dòng một ngành, có mã id; các ngành này chỉ là phần khớp câu hỏi, KHÔNG phải toàn bộ dữ liệu của app):\n${dl}\n\nNGỮ CẢNH MÀN HÌNH VÀ CÁC LƯỢT TRƯỚC (chỉ để hiểu "ngành đó", "trường này", "còn … thì sao"; KHÔNG phải nguồn số liệu, mọi con số phải lấy từ DỮ LIỆU): ${y.nguCanh ?? "Tư vấn chung"}\n\nCÂU HỎI CỦA BẠN:\n${y.cauHoi}`;
+  const hs = y.hoSo ? gonHoSo(y.hoSo, y.cauHoi) : "(không chia sẻ)";
+  const q = khongDauGon(y.cauHoi);
+  const toiDa = /so sanh|khac nhau|\bvs\b/.test(q) ? 3 : 2;
+  const nhieuNam = /xu huong|cac nam|3 nam|gan day|tang|giam|du bao|nam toi/.test(q);
+  const dong = y.duLieu.slice(0, toiDa).map((d) => JSON.stringify(gonSuKien(d, nhieuNam)));
+  // Giữ thứ tự ưu tiên; bỏ ngành cuối tới khi vừa ngân sách (luôn giữ ít nhất 1 ngành).
+  while (dong.length > 1 && uocToken(hs) + uocToken(dong.join("\n")) > NGAN_SACH_TOKEN_DU_LIEU) dong.pop();
+  const dl = dong.length ? dong.join("\n") : "(không có ngành nào khớp)";
+  const nc = /^(Tư vấn tuyển sinh|Tư vấn chung)?$/.test((y.nguCanh ?? "").trim()) ? "" : (y.nguCanh ?? "").slice(0, 200);
+  return `HỒ SƠ: ${hs}\nDỮ LIỆU (hp: học phí triệu/năm, vl: % việc làm):\n${dl}${nc ? `\nNGỮ CẢNH (chỉ để hiểu "ngành đó", không là nguồn số liệu): ${nc}` : ""}\nCÂU HỎI: ${y.cauHoi}`;
 }
 
 /** Giữ lại các mã nguồn có thật trong dữ liệu đã gửi; bỏ mã AI tự bịa. */

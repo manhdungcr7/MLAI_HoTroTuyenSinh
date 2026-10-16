@@ -1,6 +1,7 @@
 // Kiểm thử bậc thang tư vấn với AI/VECTORIZE/KV giả. Chạy: npx tsx tests/bac-thang.test.ts
 import assert from "node:assert/strict";
 import { xuLy, type Env } from "../functions/api/tu-van";
+import { taoD1Test, themDinhDanh } from "./nap-d1-han-muc";
 import { chuanHoaCauHoi, khoaCache } from "../functions/_thu-vien/ai/cache";
 import { boLocRag, cauTruyVanRag, chuDeLuotTruoc } from "../functions/_thu-vien/ai/bac-thang";
 import { nhanDienTruongTinh } from "../functions/_thu-vien/ai/ten-truong";
@@ -38,7 +39,7 @@ const f = (async (_u: string, init: RequestInit) => {
   goi++; loiNhan = String(init.body);
   return { ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: traVe }] }) };
 }) as unknown as typeof fetch;
-const goiXuLy = async (env: Env, body: object) => { const r = await xuLy(yc(body), env, f); return { status: r.status, d: (await r.json()) as Record<string, unknown> }; };
+const goiXuLy = async (env: Env, body: object) => { const r = await xuLy(yc(themDinhDanh(body)), { DB: taoD1Test(), ...env }, f); return { status: r.status, d: (await r.json()) as Record<string, unknown> }; };
 const body = { cauHoi: "Nơi ở quanh UIT thế nào?", hoSo: { tinh: "TP.HCM", nganSachToiDaTrieu: 25 }, duLieu: [0, 1, 2, 3, 4, 5, 6, 7].map(sk) };
 
 // 1) Cache: lần hai không gọi LLM; khác dấu/hoa thường vẫn trúng; đổi nhãn thì không trúng
@@ -66,7 +67,7 @@ const body = { cauHoi: "Nơi ở quanh UIT thế nào?", hoSo: { tinh: "TP.HCM",
   const gui = JSON.parse(loiNhan).messages[0].content as string;
   assert.ok(gui.includes("GHI CHÚ CỘNG ĐỒNG") && gui.includes("chưa chính thức") && gui.includes("TÍN HIỆU THỨ HAI"));
   const soDong = gui.split("\n").filter((l) => l.startsWith('{"id":"s')).length;
-  assert.ok(soDong >= 4 && soDong <= 6, `cắt còn 4-6 sự kiện, có ${soDong}`);
+  assert.ok(soDong >= 2 && soDong <= 3, `chỉ 2-3 sự kiện vào lời nhắc, có ${soDong}`);
   assert.ok(gui.includes('"id":"s0"') && gui.includes('"id":"s1"'), "ứng viên Clef nêu phải còn lại");
 }
 
@@ -75,7 +76,7 @@ const body = { cauHoi: "Nơi ở quanh UIT thế nào?", hoSo: { tinh: "TP.HCM",
   const { kv } = kvMoi();
   const r = await goiXuLy({ ANTHROPIC_API_KEY: "k", RATE_KV: kv, AI: aiGia(true) }, body);
   assert.equal(r.status, 200); assert.equal(r.d.tang, "llm");
-  assert.equal((JSON.parse(loiNhan).messages[0].content as string).split("\n").filter((l) => l.startsWith('{"id":"s')).length, 8);
+  assert.equal((JSON.parse(loiNhan).messages[0].content as string).split("\n").filter((l) => l.startsWith('{"id":"s')).length, 2);
   assert.equal(r.d.viecTiep, undefined);
 }
 

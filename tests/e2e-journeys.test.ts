@@ -39,6 +39,7 @@ import { docLichSu, nganhLuotTruoc, taoNguCanh } from "../src/features/tu-van/ho
 import { cauDangCho, guiNen } from "../src/features/tu-van/dang-cho";
 import { GIOI_HAN, choPhepTanSuat, lamSachHoSo, locNguon, type KhoKV } from "../src/engine/tu-van";
 import { xuLy as xuLyTuVan } from "../functions/api/tu-van";
+import { themDinhDanh } from "./nap-d1-han-muc";
 import { dungStateEn, quyetDinhNguyenVong, type HoSoEn, type UngVienEn } from "../functions/_thu-vien/ai/clef";
 import type { KhoAI } from "../functions/_thu-vien/ai/kieu";
 
@@ -461,7 +462,7 @@ console.log("=== BẮT ĐẦU KIỂM THỬ HÀNH TRÌNH ĐẦU-CUỐI (E2E JOURN
     new Request("https://nguyenvongai.vn/api/tu-van", {
       method: "POST",
       headers: { "cf-connecting-ip": "203.0.113.5" },
-      body: JSON.stringify({ cauHoi: "Điểm chuẩn UIT?" }),
+      body: JSON.stringify(themDinhDanh({ cauHoi: "Điểm chuẩn UIT?" })),
     }),
     { ANTHROPIC_API_KEY: "secret-key-123", RATE_KV: { get: async () => "999", put: async () => {} } },
   );
