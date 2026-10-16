@@ -56,7 +56,7 @@ function TheTomTatNguyenVong({ s }: { s: AppState }) {
           </li>
         ))}
       </ol>
-      <p className="px-4 py-2 text-[12px] text-chu-phu border-t border-vien">An toàn gồm cả Dự phòng. Nhãn so với điểm chuẩn năm trước, không phải cam kết trúng tuyển.</p>
+      <p className="px-4 py-2 text-[12px] text-chu-phu border-t border-vien">An toàn gồm cả Dự phòng.</p>
     </section>
   );
 }

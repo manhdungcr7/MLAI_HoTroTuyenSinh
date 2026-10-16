@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChartColumn, Clock, GraduationCap, ShieldCheck, Sparkles, Target, type LucideIcon } from "lucide-react";
+import { ChartColumn, Clock, GraduationCap, ShieldCheck, Target, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { Nut, The, gop } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
-import { khoDuLieu } from "@/engine/du-lieu-tuyen-sinh/kho-du-lieu";
 import { useApp } from "@/state/store";
-import { DANH_SACH_MAU, type KieuMau } from "@/state/mau";
 import type { ToneTen } from "@/state/types";
 
 const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string }[] = [
@@ -46,23 +44,12 @@ function MinhHoa() {
 
 export default function ChaoMung() {
   const nav = useNavigate();
-  const { s, dungHoSoMauKieu, lamLai } = useApp();
-  const [hoiThay, setHoiThay] = useState<KieuMau | null>(null);
+  const { s, lamLai } = useApp();
   const [hoiLamLai, setHoiLamLai] = useState(false);
-  const [mau, setMau] = useState<"nghi" | "cho" | "loi">("nghi");
   const h = s.hoSo;
   const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null) || s.yeuThich.length || s.nguyenVong.length);
   // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải hồ sơ mẫu) và chưa bấm hoàn tất
   const dangDienDo = daCoThongTin && !h.hoanTat && !h.laMau;
-
-  // Hồ sơ mẫu dựng nguyện vọng từ danh mục chương trình (nạp lười): chờ danh mục xong mới tạo, không tạo hồ sơ rỗng.
-  const xemMau = async (k: KieuMau) => {
-    setHoiThay(null); setMau("cho");
-    try { await khoDuLieu.sanSang(); } catch { setMau("loi"); return; }
-    dungHoSoMauKieu(k); nav(DUONG_DAN.homNay());
-  };
-  // Hồ sơ mẫu thay toàn bộ dữ liệu trên máy, nên hỏi lại nếu bạn đã nhập gì đó (trừ khi đang là hồ sơ mẫu).
-  const bamXemMau = (k: KieuMau) => (daCoThongTin && !h.laMau ? setHoiThay(k) : xemMau(k));
 
   const thucLamLai = () => {
     lamLai();
@@ -81,20 +68,6 @@ export default function ChaoMung() {
 
   return (
     <div className="min-h-dvh pb-6">
-      <section aria-labelledby="tieu-de-mau" className="px-4 pt-3 pb-1">
-        <h2 id="tieu-de-mau" className="flex items-center gap-1.5 text-[14px] font-bold text-chu"><Sparkles size={16} className="text-xanh" />Dùng thử hồ sơ mẫu</h2>
-        <div className="grid grid-cols-2 gap-2 mt-2">
-          {DANH_SACH_MAU.map((m) => (
-            <button key={m.kieu} type="button" disabled={mau === "cho"} onClick={() => bamXemMau(m.kieu)}
-              className="min-h-14 rounded-xl border border-vien bg-trang px-3 py-2 text-left cursor-pointer active:bg-xanh-nhat hover:border-xanh/40">
-              <b className="block text-[14px] text-muc leading-tight">{m.ten} · {m.khoi}</b>
-              <span className="block text-[12.5px] text-chu-phu leading-tight mt-0.5 truncate">Mục tiêu {m.mucTieu}</span>
-            </button>
-          ))}
-        </div>
-        {mau === "cho" && <p role="status" className="text-[13px] text-chu-phu mt-2">Đang chuẩn bị dữ liệu chương trình…</p>}
-        {mau === "loi" && <p role="alert" className="text-[13px] text-do-chu mt-2">Chưa tải được dữ liệu. Kiểm tra mạng rồi thử lại.</p>}
-      </section>
       <NenHero tone="xanh" className="!rounded-t-none px-4 pt-4 pb-6">
         <div className="flex items-center justify-between gap-2">
           {/* Logo dùng chung giữ nguyên; khung bọc cao 44px (kéo giãn link) nhưng chiếm 32px trong hàng */}
@@ -144,13 +117,6 @@ export default function ChaoMung() {
         <ShieldCheck size={16} className="text-luc shrink-0 mt-px" />Không cần tài khoản. Thông tin chỉ lưu trên thiết bị này.
       </p>
 
-      <HopTruot mo={hoiThay !== null} dong={() => setHoiThay(null)} tieuDe="Dùng hồ sơ mẫu?">
-        <p className="text-[14px] text-chu">Hồ sơ mẫu sẽ <b>thay toàn bộ</b> thông tin bạn đã nhập trên máy này (hồ sơ, nguyện vọng, kế hoạch).</p>
-        <div className="mt-4 space-y-2.5">
-          <Nut kieu="nguyHiem" onClick={() => hoiThay && xemMau(hoiThay)}>Dùng hồ sơ mẫu</Nut>
-          <Nut kieu="vien" onClick={() => setHoiThay(null)}>Giữ hồ sơ cũ</Nut>
-        </div>
-      </HopTruot>
 
       <HopTruot mo={hoiLamLai} dong={() => setHoiLamLai(false)} tieuDe="Xóa hết và làm lại?">
         <p className="text-[14px] text-chu">Mọi thông tin bạn đã nhập sẽ bị <b>xóa hoàn toàn</b> (hồ sơ, nguyện vọng, kế hoạch, mục tiêu). Bạn muốn xóa hết không?</p>

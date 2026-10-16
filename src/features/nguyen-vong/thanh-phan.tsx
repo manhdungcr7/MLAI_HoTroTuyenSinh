@@ -1,6 +1,6 @@
 // Thành phần dùng chung giữa hai màn của slice Nguyện vọng.
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AlertTriangle, Info, Undo2 } from "lucide-react";
+import { AlertTriangle, Undo2 } from "lucide-react";
 import { CAC_NHAN, TONE_NHAN } from "@/components/ui/co-cau";
 import { TONE_GD, gop } from "@/components/ui/nut-the";
 import { Nut } from "@/components/ui/nut-the";
@@ -45,14 +45,8 @@ export function CoCauMini({ dem }: { dem: Record<NhanNguyenVong, number> }) {
   );
 }
 
-/** Dòng nhắc bắt buộc: nhãn chỉ là gợi ý, số liệu trường là dữ liệu mẫu. */
 export function GhiChuDuLieu() {
-  return (
-    <p className="flex gap-2 text-[13px] text-chu-phu leading-snug px-1">
-      <Info size={16} className="shrink-0 mt-0.5" />
-      <span>Nhãn so với điểm chuẩn năm trước, không phải cam kết trúng tuyển.</span>
-    </p>
-  );
+  return null;
 }
 
 // ---------- Thanh hoàn tác ----------

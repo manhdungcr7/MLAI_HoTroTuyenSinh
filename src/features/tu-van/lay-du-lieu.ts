@@ -15,6 +15,7 @@ import { cauKhoangCachNV1, phanTichMoNeo } from "@/features/nguyen-vong/mo-neo";
 import type { AppState } from "@/state/store";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, LuaChon } from "@/state/types";
+import { danhGiaDanhMucToanDien } from "@/engine/toi-uu-nguyen-vong";
 
 const khongDau = chuanHoaChung;
 const BO_QUA = new Set(["nganh", "truong", "hoc", "dai", "diem", "chuan", "em", "la", "co", "khong", "nao", "gi", "the", "can", "muon", "cua", "va", "voi", "cho", "nen", "o", "tai", "nhu", "bao", "nhieu", "hay", "duoc", "thi", "mot", "cac", "nhung", "minh", "toi", "xin", "hoi", "ve", "tu", "den", "thay", "khac", "tot", "so", "sanh", "dau", "ra", "sao", "lam", "chinh", "quy", "con", "kia", "tren", "vay", "truoc", "tuong", "phi", "thap", "nhat", "cao", "dat", "uoc", "chon", "them", "nguyen", "vong"]);
@@ -683,6 +684,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
       const g = coHoi ? goiYDanhSach(diem, s.hoSo, [], undefined, moNeoNV1(s)).slice(0, TOI_DA_HIEN) : [];
       return { traLoi: g.length ? `Bạn chưa có nguyện vọng nào. Dựa trên điểm của bạn (tổ hợp ${coHoi?.toHop}, ${so1(coHoi?.tong ?? 0)} điểm${s.hoSo.nganhQuanTam.length ? `, quan tâm ${s.hoSo.nganhQuanTam.join(", ")}` : ""}), mình gợi ý:\n${g.map((x) => `• ${x.lc.nganh}, ${x.lc.tenTruong} (${x.nhan}): điểm chuẩn ${so1(x.lc.diemMin)}`).join("\n")}\nVào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn” để xem đầy đủ.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: g.map((x) => x.lc.id) };
     }
+    const cd = danhGiaDanhMucToanDien(s.nguyenVong, timTheoId, diem, { nganSach: s.hoSo.nganSach, khuVuc: s.hoSo.khuVuc, uuTienTuyenSinh: s.hoSo.uuTienTuyenSinh });
     const sk = ds.map((l) => dungSuKien(l, diem, nguon));
     const dem: Record<string, number> = {};
     sk.forEach((x) => { if (x.nhanCuaEm) dem[x.nhanCuaEm] = (dem[x.nhanCuaEm] ?? 0) + 1; });
@@ -693,14 +695,21 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
       : (dem["Thử sức"] ?? 0) > sk.length / 2
         ? "Hơn một nửa danh sách là Thử sức, bạn cân nhắc thêm ngành Vừa sức."
         : (dem["Thử sức"] ?? 0) === 0 && sk.length >= 3
-          ? "Danh sách khá an toàn, bạn có thể thêm 1 ngành Thử sức ở Nguyện Vọng 1."
-          : "Danh sách có cả Thử sức, Vừa sức và An toàn, khá cân bằng.";
+          ? "Danh sách khá an toàn, bạn có thể tự tin thêm 1 ngành Thử sức ở Nguyện Vọng 1 để không bỏ lỡ ước mơ."
+          : "Danh sách của bạn có cơ cấu 3 tầng khá cân bằng giữa Thử sức, Vừa sức và An toàn.";
+
+    const canhBaoNghichDaoStr = cd.canhBaoNghiemTrong.length > 0
+      ? `\n\n⚠️ **CẢNH BÁO NGHỊCH ĐẢO THỨ TỰ (NGUY CƠ CAO):**\n` + cd.canhBaoNghiemTrong.map((cb) => `• ${cb}`).join("\n") + "\n👉 Bạn hãy vào mục **Nguyện vọng** và bấm nút **Tự động chỉnh thứ tự chuẩn** để bảo vệ cơ hội trúng tuyển vào ngành mơ ước!"
+      : "";
+
+    const xacSuatStr = `\n\n📈 **Đánh giá xác suất (Decision Intelligence Engine):**\n• **Tổng xác suất đỗ ít nhất 1 nguyện vọng**: **${cd.xacSuatDoItNhatMotNV}%**.\n• **Cơ cấu 3 tầng**: ${cd.coCau.thuSuc} Thử sức, ${cd.coCau.vuaSuc} Vừa sức, ${cd.coCau.anToan} An toàn.`;
+
     const mn = phanTichMoNeo(s);
     const gocNV1 = mn
       ? ` Lấy Nguyện Vọng 1 ${mn.lc.tenTruong}, ${mn.lc.nganh} làm gốc: ${cauKhoangCachNV1(mn) ?? (mn.monChuaCoDiem.length ? "bạn nhập đủ điểm các môn của tổ hợp để mình tính khoảng cách." : "điểm hiện tại của bạn đã chạm mốc điểm chuẩn.")}${mn.luoiDo.length ? ` Các nguyện vọng sau đỡ cho nó: ${mn.luoiDo.slice(0, 3).map((d) => `Nguyện Vọng ${d.thuTu} ${d.lc.truong} (${d.nhan})`).join(", ")}.` : ""}`
       : "";
     return {
-      traLoi: `Danh sách của bạn có ${sk.length} nguyện vọng: ${lietKe}.${gocNV1} ${loi}\n${sk.slice(0, TOI_DA_HIEN).map((d) => dongNganh(d)).join("\n")}${sk.length > TOI_DA_HIEN ? `\nCòn ${sk.length - TOI_DA_HIEN} nguyện vọng khác trong mục Nguyện vọng.` : ""}\n${NHAC}`,
+      traLoi: `Danh sách của bạn có ${sk.length} nguyện vọng: ${lietKe}.${gocNV1}${xacSuatStr}${canhBaoNghichDaoStr} ${loi}\n${sk.slice(0, TOI_DA_HIEN).map((d) => dongNganh(d)).join("\n")}${sk.length > TOI_DA_HIEN ? `\nCòn ${sk.length - TOI_DA_HIEN} nguyện vọng khác trong mục Nguyện vọng.` : ""}\n${NHAC}`,
       nguon: ds.map((l) => l.id), trangThaiDuLieu: "lich-su",
     };
   }
