@@ -1,4 +1,4 @@
-// Công cụ dùng chung cho MCP (/mcp/{mã}) và GPT Actions (/api/gpt/{mã}/...): một nguồn logic, không nhân đôi.
+// Công cụ dùng chung cho MCP (/mcp/{mã} hoặc /mcp với Bearer) và GPT Actions (/api/gpt/{mã}/...): một nguồn logic, không nhân đôi.
 // Công cụ chỉ đọc bản chụp hoặc tạo đề xuất chờ xác nhận. Không công cụ nào đổi dữ liệu thật của học sinh.
 import { linkGoogleCalendar, taoIcs } from "../../src/engine/lich-ics";
 import type { BanChup } from "../../src/engine/ket-noi-kieu";
@@ -100,7 +100,7 @@ export const CONG_CU: CongCu[] = [
       ok: true,
       data: {
         capNhat: cc.ban.capNhat,
-        suKien: cc.ban.keHoachTuan.map((e) => ({ ...e, linkGoogleCalendar: linkGoogleCalendar(e), icsUrl: `${cc.origin}/api/gpt/${cc.ma}/lich.ics` })),
+        suKien: cc.ban.keHoachTuan.map((e) => ({ ...e, linkGoogleCalendar: linkGoogleCalendar(e), ...(cc.ma ? { icsUrl: `${cc.origin}/api/gpt/${cc.ma}/lich.ics` } : {}) })),
       },
     }),
   },
@@ -128,6 +128,16 @@ export const CONG_CU: CongCu[] = [
     },
   },
 ];
+
+/** Phạm vi OAuth cần để gọi từng công cụ. Đăng nhập bằng mã trong đường dẫn (cách cũ) không kiểm phạm vi. */
+export const PHAM_VI_CONG_CU: Record<string, string> = {
+  lay_ho_so: "profile:read",
+  lay_nguyen_vong: "preferences:read",
+  goi_y_nganh: "admissions:read",
+  diem_chuan: "admissions:read",
+  ke_hoach_tuan: "study:read",
+  de_xuat_them_nguyen_vong: "preferences:write",
+};
 
 export const tenCongCu = (ten: string): CongCu | undefined => CONG_CU.find((c) => c.ten === ten);
 

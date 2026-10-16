@@ -10,6 +10,7 @@ import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { BO_LOC_MAC_DINH, cacKhuVuc, cacNhom, dem, loc } from "./bo-loc";
 import { tinhCoHoi } from "./co-hoi";
+import { dinhDangSo } from "@/engine/dinh-dang";
 import { useBoLoc } from "./dung-bo-loc";
 import { CAC_KIEU_SAP_XEP, boiCanhTu, coDiemDeSo, danhGia, sapXep, type KieuSapXep } from "./phu-hop";
 import { GhiChuDuLieuMau, TheKhamPha } from "./thanh-phan";
@@ -156,7 +157,7 @@ export default function KhamPha() {
         )}
 
         <div className="flex items-center justify-between gap-2 pt-1">
-          <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{ds.length}</b> ngành</p>
+          <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{dinhDangSo(ds.length)}</b> ngành</p>
           <label className="relative inline-flex items-center gap-1 min-h-11 pl-2 pr-1 rounded-xl text-[13px] font-bold text-xanh active:bg-xanh-nhat">
             <ArrowUpDown size={15} aria-hidden />
             <span className="sr-only">Sắp xếp theo</span>
@@ -183,7 +184,7 @@ export default function KhamPha() {
             <TrangThaiTrong bieuTuong={<SearchX size={28} />} tieuDe="Bộ lọc đang che kết quả"
               moTa={`Không có ngành nào khớp đồng thời từ khóa «${tuKhoa.trim()}» và bộ lọc đang bật (còn ${soNeuTatLoc} ngành nếu tắt bộ lọc).`}>
               <div className="space-y-2">
-                <Nut onClick={() => datLai()}>Xóa bộ lọc để xem {soNeuTatLoc} ngành</Nut>
+                <Nut onClick={() => datLai()}>Xóa bộ lọc để xem {dinhDangSo(soNeuTatLoc)} ngành</Nut>
                 <Nut kieu="vien" onClick={() => nav(DUONG_DAN.boLoc())}>Chỉnh bộ lọc</Nut>
               </div>
             </TrangThaiTrong>

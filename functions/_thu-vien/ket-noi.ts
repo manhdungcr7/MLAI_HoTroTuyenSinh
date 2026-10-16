@@ -46,12 +46,16 @@ export const traJson = (v: unknown, status = 200) =>
 export interface HangKetNoi { maBam: string; banChup: BanChup; hetHan: number; soTruyCap: number; lanCuoi: number | null; db: KhoD1Ket }
 export type KetQuaXacThuc = { ok: true; hang: HangKetNoi } | { ok: false; status: number; loi: string };
 
-/** Xác thực mã: kiểm định dạng, giới hạn tần suất, rồi tra D1 theo hash (mã hết hạn hoặc đã thu hồi coi như không tồn tại). */
+/** Xác thực mã: kiểm định dạng, rồi xác thực theo hash (xem xacThucMaBam). */
 export async function xacThuc(env: EnvKetNoi, ma: unknown, bayGio: number = Date.now()): Promise<KetQuaXacThuc> {
   if (!laMa(ma)) return { ok: false, status: 404, loi: LOI_MA };
+  return xacThucMaBam(env, await bamMa(ma), bayGio);
+}
+
+/** Xác thực theo ma_bam (dùng cho cả mã ghép nối lẫn token OAuth đã tra ra kết nối). Giới hạn tần suất theo kết nối, KV lỗi thì từ chối. */
+export async function xacThucMaBam(env: EnvKetNoi, maBam: string, bayGio: number = Date.now()): Promise<KetQuaXacThuc> {
   if (!env.DB) return { ok: false, status: 503, loi: "Dịch vụ kết nối chưa sẵn sàng" };
   if (!env.RATE_KV) return { ok: false, status: 503, loi: "Dịch vụ kết nối chưa sẵn sàng" };
-  const maBam = await bamMa(ma);
   const db = env.DB;
   try {
     const khoa = `kn:${maBam.slice(0, 24)}:${Math.floor(bayGio / 60_000)}`;
@@ -100,6 +104,9 @@ export async function taoKetNoi(db: KhoD1Ket, banChup: BanChup, bayGio: number =
     db.prepare("INSERT INTO ket_noi_ai (ma_bam, ban_chup, cap_nhat, tao_luc, het_han, so_truy_cap, lan_cuoi) VALUES (?, ?, ?, ?, ?, 0, NULL)")
       .bind(maBam, JSON.stringify(banChup), banChup.capNhat, bayGio, hetHan),
   ]);
+  // Dọn token OAuth hết hạn: làm riêng và bỏ qua lỗi, để việc tạo mã không phụ thuộc migration 0011 đã áp dụng hay chưa.
+  await db.prepare("DELETE FROM oauth_token WHERE het_han <= ?").bind(bayGio).run().catch(() => undefined);
+  await db.prepare("DELETE FROM oauth_ma_xac_nhan WHERE het_han <= ?").bind(bayGio).run().catch(() => undefined);
   return { ma, hetHan };
 }
 
@@ -110,12 +117,16 @@ export async function doiBanChup(db: KhoD1Ket, maBam: string, banChup: BanChup, 
   return (kq.meta?.changes ?? 0) > 0;
 }
 
-/** Xóa bản chụp, đề xuất và chính mã. */
+/** Xóa bản chụp, đề xuất, token OAuth và chính mã. Sau khi xóa, mọi token của kết nối này không còn dùng được. */
 export async function xoaKetNoi(db: KhoD1Ket, maBam: string): Promise<void> {
   await db.batch([
     db.prepare("DELETE FROM ket_noi_de_xuat WHERE ma_bam = ?").bind(maBam),
     db.prepare("DELETE FROM ket_noi_ai WHERE ma_bam = ?").bind(maBam),
   ]);
+  // Token OAuth của kết nối này không dùng được ngay khi ket_noi_ai bị xóa (xác thực luôn đi qua ket_noi_ai).
+  // Xóa các bản ghi OAuth còn lại là dọn dẹp, làm riêng và bỏ qua lỗi (trước khi có migration 0011 bảng chưa tồn tại).
+  await db.prepare("DELETE FROM oauth_token WHERE ket_noi_bam = ?").bind(maBam).run().catch(() => undefined);
+  await db.prepare("DELETE FROM oauth_ma_xac_nhan WHERE ket_noi_bam = ?").bind(maBam).run().catch(() => undefined);
 }
 
 /** Đề xuất đang chờ xác nhận, mới nhất trước (tối đa 20). */

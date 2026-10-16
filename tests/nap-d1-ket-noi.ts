@@ -1,4 +1,4 @@
-// Kho D1 giả bằng SQLite thật (node:sqlite) cho kết nối Claude/ChatGPT: chỉ nạp migration 0009. Batch chạy trong một giao dịch, giống D1.
+// Kho D1 giả bằng SQLite thật (node:sqlite) cho kết nối Claude/ChatGPT và OAuth: nạp migration 0009 và 0011. Batch chạy trong một giao dịch, giống D1.
 // Không phải test độc lập (không có *.test.ts): các test import tệp này.
 import fs from "node:fs";
 import path from "node:path";
@@ -23,10 +23,10 @@ export class CauKetNoiTest implements CauD1Ket {
 
 export interface D1KetNoiTest extends KhoD1Ket { readonly db: DatabaseSync }
 
-/** Một cơ sở dữ liệu trong bộ nhớ, mỗi lần gọi là một bản mới, chỉ có bảng của migration 0009. */
+/** Một cơ sở dữ liệu trong bộ nhớ, mỗi lần gọi là một bản mới, có bảng của migration 0009 và 0011. */
 export function taoD1KetNoiTest(): D1KetNoiTest {
   const db = new DatabaseSync(":memory:");
-  db.exec(fs.readFileSync(path.join("migrations", "0009_ket_noi_claude.sql"), "utf8"));
+  for (const f of ["0009_ket_noi_claude.sql", "0011_oauth_mcp.sql"]) db.exec(fs.readFileSync(path.join("migrations", f), "utf8"));
   return {
     db,
     prepare: (sql: string) => new CauKetNoiTest(db, sql),

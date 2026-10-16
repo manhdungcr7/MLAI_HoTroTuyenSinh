@@ -1,7 +1,7 @@
 // Kiểm thử các hàm định dạng số và điểm số thuần Việt.
 // Chạy: npx tsx tests/dinh-dang.test.ts
 import assert from "node:assert/strict";
-import { dinhDang, dinhDangDiem } from "../src/engine/dinh-dang";
+import { dinhDang, dinhDangDiem, dinhDangSo } from "../src/engine/dinh-dang";
 
 // ---------- 1) Định dạng số thông thường (dinhDang) ----------
 assert.equal(dinhDang(24.5, 1), "24,5", "Đổi dấu chấm sang phẩy");
@@ -25,3 +25,8 @@ assert.equal(dinhDangDiem(undefined), "—");
 
 console.log("dinh-dang: tất cả kiểm tra đều qua");
 
+// ---------- 3) Số nguyên có dấu chấm hàng nghìn (dinhDangSo) ----------
+assert.equal(dinhDangSo(3652), "3.652", "Số bốn chữ số có một dấu chấm");
+assert.equal(dinhDangSo(999), "999", "Dưới một nghìn không có dấu chấm");
+assert.equal(dinhDangSo(1234567), "1.234.567", "Nhiều nhóm nghìn");
+assert.equal(dinhDangSo(null), "—", "Thiếu thì trả về nội dung dự phòng");

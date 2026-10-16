@@ -151,7 +151,7 @@ async function main() {
   const init = await mcp(m, ma, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } } });
   assert.equal(init.json.result.protocolVersion, "2025-06-18");
   assert.deepEqual(init.json.result.capabilities, { tools: {} });
-  assert.deepEqual(init.json.result.serverInfo, { name: "nguyen-vong-ai", version: "1.0.0" });
+  assert.deepEqual(init.json.result.serverInfo, { name: "nguyen-vong-ai", version: "1.1.0" });
   const initLa = await mcp(m, ma, { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "1999-01-01" } });
   assert.equal(initLa.json.result.protocolVersion, "2025-03-26", "phiên bản lạ thì trả 2025-03-26");
   const thongBao = await mcp(m, ma, { jsonrpc: "2.0", method: "notifications/initialized" });

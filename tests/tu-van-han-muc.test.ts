@@ -159,4 +159,20 @@ const HO = "11111111-1111-4111-8111-111111111111";
   assert.notEqual(idHoSoAI(kho), a, "Xóa hết cấp mã mới");
 }
 
+// 3) Trần toàn hệ thống: đổi mã hồ sơ không lách được. 5 hồ sơ khác nhau, trần 3 lượt/ngày toàn hệ thống.
+{
+  const db = taoD1Test(); const { kv } = kvTest(); const dem = { n: 0 };
+  const e: Env = { ...env(db, kv), AI_TONG_NGAY: "3" };
+  const hoSo = ["21111111-1111-4111-8111-111111111111", "31111111-1111-4111-8111-111111111111", "41111111-1111-4111-8111-111111111111", "51111111-1111-4111-8111-111111111111", "61111111-1111-4111-8111-111111111111"];
+  const rs: Response[] = [];
+  for (let i = 0; i < hoSo.length; i++) {
+    rs.push(await xuLy(yc({ ...themDinhDanh({ cauHoi: `Điểm chuẩn UIT đợt ${i} thế nào?`, duLieu: [sk] }, hoSo[i]) }, `198.51.101.${i}`), e, moHinh(dem)));
+  }
+  assert.deepEqual(rs.map((r) => r.status), [200, 200, 200, 429, 429], "3 lượt đầu được, sau đó 429 toàn hệ thống");
+  assert.equal(((await rs[3].json()) as { loi: string }).loi, "het-luot-he-thong");
+  assert.equal(dem.n, 3, "chỉ 3 lần gọi mô hình");
+  assert.equal((await luotConLai(db, hoSo[3], 50)).con, 50, "hồ sơ bị từ chối không mất lượt cá nhân");
+  assert.equal((await luotConLai(db, hoSo[0], 50)).con, 49, "hồ sơ được phục vụ bị trừ đúng một lượt");
+}
+
 console.log("tu-van-han-muc: tất cả kiểm tra đều qua");

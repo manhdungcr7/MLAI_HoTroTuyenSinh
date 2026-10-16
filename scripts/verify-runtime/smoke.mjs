@@ -12,7 +12,7 @@ async function goi(duong, opt = {}) {
   const chu = await r.text();
   let json = null;
   try { json = JSON.parse(chu); } catch { /* không phải JSON */ }
-  return { status: r.status, type: r.headers.get("content-type") ?? "", json, ms: Date.now() - t0 };
+  return { status: r.status, type: r.headers.get("content-type") ?? "", json, ms: Date.now() - t0, headers: r.headers };
 }
 
 // 1. Manifest là JSON đúng schema, không phải HTML fallback
@@ -59,6 +59,20 @@ async function goi(duong, opt = {}) {
 {
   const r = await fetch(base + "/", { signal: AbortSignal.timeout(30000) });
   kiem("trang chủ: 200 HTML", r.status === 200 && (r.headers.get("content-type") ?? "").includes("text/html"), `status ${r.status}`);
+}
+
+// 8. Health và metadata OAuth: chỉ đọc, không đụng D1
+{
+  const h = await goi("/api/v1/health");
+  kiem("health: 200 JSON ok", h.status === 200 && h.json?.ok === true, `status ${h.status}`);
+  const rd = await goi("/api/v1/ready");
+  kiem("ready: JSON có trạng thái từng thành phần", (rd.status === 200 || rd.status === 503) && typeof rd.json?.thanhPhan === "object", `status ${rd.status}`);
+  const as = await goi("/.well-known/oauth-authorization-server");
+  kiem("metadata máy chủ ủy quyền: đủ endpoint và PKCE S256", as.json?.token_endpoint === `${base}/oauth/token` && as.json?.code_challenge_methods_supported?.includes("S256"), `status ${as.status}`);
+  const pr = await goi("/.well-known/oauth-protected-resource/mcp");
+  kiem("metadata tài nguyên /mcp: trỏ tới máy chủ ủy quyền", pr.json?.resource === `${base}/mcp` && pr.json?.authorization_servers?.[0] === base, `status ${pr.status}`);
+  const nt = await goi("/mcp", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "ping" }) });
+  kiem("mcp không token: 401 kèm WWW-Authenticate", nt.status === 401 && /resource_metadata=/.test(nt.headers?.get?.("www-authenticate") ?? ""), `status ${nt.status}`);
 }
 
 let loi = 0;

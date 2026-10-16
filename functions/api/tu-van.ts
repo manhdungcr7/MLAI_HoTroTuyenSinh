@@ -6,10 +6,14 @@
 import { GIOI_HAN, choPhepTanSuat, kiemTraYeuCau } from "../../src/engine/tu-van";
 import { traLoiBacThang, type EnvBacThang } from "../_thu-vien/ai/bac-thang";
 import { coKhoaLLM } from "../_thu-vien/ai/sinh-van-ban";
-import { chotLuot, docHanMuc, giuLuot, laUuid, luotConLai, traLaiLuot, type KhoD1HanMuc } from "../_thu-vien/han-muc-ai";
+import { chotLuot, docHanMuc, giuLuot, laUuid, luotConLai, traLaiLuot, type GiuCho, type KhoD1HanMuc } from "../_thu-vien/han-muc-ai";
+
+// Trần toàn hệ thống theo ngày (mọi hồ sơ cộng lại), để việc đổi mã hồ sơ không làm vượt chi phí.
+const KHOA_TONG_HE_THONG = "he-thong";
+export const TONG_NGAY_MAC_DINH = 500;
 
 export { goiMoHinh } from "../_thu-vien/ai/sinh-van-ban";
-export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string }
+export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string }
 interface Ctx { request: Request; env: Env }
 
 const json = (v: unknown, status = 200) =>
@@ -60,12 +64,23 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   let giu;
   try { giu = await giuLuot(env.DB, hoSo, yeuCau, toiDa); } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
   if (!giu.ok) return giu.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-ngay", luot: { con: 0, toiDa } }, 429);
-  const tra = () => traLaiLuot(env.DB!, giu.giu).catch(() => {});
+  // Trần toàn hệ thống: giữ thêm một chỗ ở khóa chung. Hết thì trả lại lượt cá nhân vừa giữ.
+  const toiDaTong = Math.max(1, Math.floor(Number(env.AI_TONG_NGAY) || TONG_NGAY_MAC_DINH));
+  let giuTong: Awaited<ReturnType<typeof giuLuot>>;
+  try { giuTong = await giuLuot(env.DB, KHOA_TONG_HE_THONG, `${yeuCau}:tong`, toiDaTong); } catch {
+    await traLaiLuot(env.DB, giu.giu).catch(() => {});
+    return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503);
+  }
+  if (!giuTong.ok) {
+    await traLaiLuot(env.DB, giu.giu).catch(() => {});
+    return giuTong.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-he-thong" }, 429);
+  }
+  const tra = () => Promise.all([traLaiLuot(env.DB!, giu.giu), traLaiLuot(env.DB!, giuTong.giu as GiuCho)]).then(() => undefined, () => undefined);
   try {
     const r = await traLoiBacThang(env, kt.v, f);
     if (!r.ok) { await tra(); return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, r.loi === "chua-cau-hinh" ? 503 : 422); }
     // Trả từ cache không tốn nhà cung cấp nên không tính lượt.
-    if (r.kq.tang === "cache") await tra(); else await chotLuot(env.DB, giu.giu).catch(() => {});
+    if (r.kq.tang === "cache") await tra(); else await Promise.all([chotLuot(env.DB, giu.giu), chotLuot(env.DB, giuTong.giu as GiuCho)]).catch(() => {});
     const luot = await luotConLai(env.DB, hoSo, toiDa).catch(() => undefined);
     return json(luot ? { ...r.kq, luot } : r.kq);
   } catch (e) {
