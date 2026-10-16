@@ -164,7 +164,7 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
         </div>
       )}
       {t.viecTiep && <p className="mt-1.5 text-[13px] text-muc">Việc nên làm tiếp: <span className="text-chu">{trinhBayPhanHoi(t.viecTiep)}</span></p>}
-      <DataSourceLabel trangThai={t.trangThaiDuLieu} congDong={!!t.congDong?.length} />
+      <DataSourceLabel trangThai={t.trangThaiDuLieu} congDong={!!t.congDong?.length} cheDo={t.cheDo || cheDo} />
       {t.ghiChu && <p className="mt-1.5 text-[12px] text-chu-phu">{t.ghiChu}</p>}
       {t.batAI && laCuoi && !dang && cheDo === "tietKiem" && (
         <div className="mt-1.5">
