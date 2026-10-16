@@ -13,3 +13,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
 /sw.js
   Cache-Control: no-cache
+
+# Bộ slide thuyết trình nội bộ (nguồn: slides/). Luôn lấy bản mới, không cho công cụ tìm kiếm lập chỉ mục.
+/thuyetrinh/*
+  Cache-Control: no-cache
+  X-Robots-Tag: noindex, nofollow
