@@ -8,6 +8,7 @@ import type { RoutesCuaSlice } from "@/routes-type";
 import { routes as khoiDau } from "@/features/khoi-dau/routes";
 import { routes as hanhTrinh } from "@/features/hanh-trinh/routes";
 import { routes as khamPha } from "@/features/kham-pha/routes";
+import { routes as coHoi } from "@/features/co-hoi/routes";
 import { routes as nguyenVong } from "@/features/nguyen-vong/routes";
 import { routes as thuTinhHuong } from "@/features/thu-tinh-huong/routes";
 import { routes as mucTieu } from "@/features/muc-tieu/routes";
@@ -24,11 +25,11 @@ import { routes as landingPage } from "@/features/landing-page/routes";
 import { DongBoLichNen } from "@/features/ke-hoach/dong-bo-lich-nen";
 
 // Thêm slice mới: import `routes` của nó rồi thêm vào mảng này. Không sửa gì khác.
-const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan, huongNghiep, dongHanh, truong, dongGop, landingPage];
+const CAC_SLICE: RoutesCuaSlice[] = [khoiDau, hanhTrinh, khamPha, coHoi, nguyenVong, thuTinhHuong, mucTieu, keHoach, tuHoc, thietKe, tuVan, huongNghiep, dongHanh, truong, dongGop, landingPage];
 
 // Tiêu đề tab trình duyệt theo màn (khớp theo đầu đường dẫn, dài nhất thắng).
 const TIEU_DE: [string, string][] = [
-  ["/kham-pha/bo-loc", "Bộ lọc"], ["/kham-pha", "Khám phá"], ["/so-sanh", "So sánh"],
+  ["/co-hoi/thu-diem", "Phòng thử điểm"], ["/co-hoi", "Bản đồ cơ hội"], ["/kham-pha/bo-loc", "Bộ lọc"], ["/kham-pha", "Khám phá"], ["/so-sanh", "So sánh"],
   ["/nguyen-vong/an-toan", "Cơ cấu danh sách"], ["/nguyen-vong", "Nguyện vọng"],
   ["/thu-tinh-huong", "Thử tình huống"], ["/diem-thi-thu", "Điểm thi thử"],
   ["/ke-hoach/tuan", "Kế hoạch tuần"], ["/ke-hoach/tien-do", "Tiến độ"], ["/ke-hoach/viec", "Chi tiết việc"], ["/ke-hoach/cai-dat", "Cài đặt"], ["/ke-hoach", "Mục tiêu"],

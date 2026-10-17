@@ -18,6 +18,8 @@ export const MAU = {
   boLoc: "/kham-pha/bo-loc",
   veDuLieu: "/kham-pha/ve-du-lieu",
   chiTiet: "/kham-pha/:id",
+  banDoCoHoi: "/co-hoi",
+  phongThuDiem: "/co-hoi/thu-diem",
   truong: "/truong/:ma",
   soSanh: "/so-sanh",
   nguyenVong: "/nguyen-vong",
@@ -60,6 +62,8 @@ export const DUONG_DAN = {
   boLoc: () => "/kham-pha/bo-loc",
   veDuLieu: () => "/kham-pha/ve-du-lieu",
   chiTiet: (id: string) => `/kham-pha/${id}`,
+  banDoCoHoi: () => "/co-hoi",
+  phongThuDiem: () => "/co-hoi/thu-diem",
   truong: (ma: string) => `/truong/${encodeURIComponent(ma)}`,
   /** So sánh 2 lựa chọn; bỏ trống thì dùng cặp em đã chọn gần nhất. */
   soSanh: (a?: string, b?: string) => (a && b ? `/so-sanh?a=${a}&b=${b}` : "/so-sanh"),
@@ -88,7 +92,7 @@ export const DUONG_DAN = {
 /** 5 tab ở thanh dưới. Thứ tự và tên cố định cho cả ứng dụng. */
 export const CAC_TAB = [
   { id: "homNay", nhan: "Hôm nay", den: DUONG_DAN.homNay(), khop: (p: string) => p === "/" },
-  { id: "khamPha", nhan: "Khám phá", den: DUONG_DAN.khamPha(), khop: (p: string) => p.startsWith("/kham-pha") || p.startsWith("/so-sanh") },
+  { id: "khamPha", nhan: "Khám phá", den: DUONG_DAN.khamPha(), khop: (p: string) => p.startsWith("/kham-pha") || p.startsWith("/so-sanh") || p.startsWith("/co-hoi") },
   { id: "nguyenVong", nhan: "Nguyện vọng", den: DUONG_DAN.nguyenVong(), khop: (p: string) => p.startsWith("/nguyen-vong") || p.startsWith("/thu-tinh-huong") || p.startsWith("/diem-thi-thu") },
   { id: "keHoach", nhan: "Kế hoạch", den: DUONG_DAN.keHoach(), khop: (p: string) => p.startsWith("/ke-hoach") },
   { id: "hoSo", nhan: "Hồ sơ", den: DUONG_DAN.hoSo(), khop: (p: string) => p.startsWith("/ho-so") },
