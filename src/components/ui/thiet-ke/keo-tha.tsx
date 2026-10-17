@@ -2,6 +2,14 @@ import { useRef, useState, type ReactNode } from "react";
 import { ChevronDown, ChevronUp, GripVertical } from "lucide-react";
 import { gop } from "../nut-the";
 
+export interface BoDieuKhienKeoTha {
+  doi: (tu: number, den: number) => void;
+  nutLen: (className?: string) => ReactNode;
+  nutXuong: (className?: string) => ReactNode;
+  tayNam: (className?: string) => ReactNode;
+  dangKeo: boolean;
+}
+
 export interface HangKeoThaProps<T> {
   muc: T[];
   khoa: (m: T) => string;
@@ -9,8 +17,8 @@ export interface HangKeoThaProps<T> {
   onDoiCho: (tu: number, den: number) => void;
   /** Tên đọc cho trình đọc màn hình, ví dụ "Luật Kinh tế". */
   ten: (m: T) => string;
-  /** Vẽ nội dung một hàng. `dieuKhien` là cụm Lên / nắm kéo / Xuống, đặt ở chỗ em muốn. */
-  veMuc: (m: T, i: number, dieuKhien: ReactNode) => ReactNode;
+  /** Vẽ nội dung một hàng. `dieuKhien` là cụm Lên / nắm kéo / Xuống xếp dọc, `boDieuKhien` là các nút rời để tự bố trí ngang / góc thẻ. */
+  veMuc: (m: T, i: number, dieuKhien: ReactNode, boDieuKhien?: BoDieuKhienKeoTha) => ReactNode;
   className?: string;
 }
 
@@ -59,22 +67,44 @@ export function HangKeoTha<T>({ muc, khoa, onDoiCho, ten, veMuc, className }: Ha
       <ol className={gop("space-y-2", className)}>
         {muc.map((m, i) => {
           const dangKeo = keo?.i === i;
+          const nutLen = (cls?: string) => (
+            <button type="button" aria-label={`Chuyển ${ten(m)} lên`} disabled={i === 0} onClick={() => doi(i, i - 1)}
+              className={cls ?? "size-11 grid place-items-center rounded-xl text-chu-phu disabled:opacity-30 active:bg-xanh-nhat cursor-pointer"}>
+              <ChevronUp size={cls ? 16 : 20} aria-hidden />
+            </button>
+          );
+          const nutXuong = (cls?: string) => (
+            <button type="button" aria-label={`Chuyển ${ten(m)} xuống`} disabled={i === muc.length - 1} onClick={() => doi(i, i + 1)}
+              className={cls ?? "size-11 grid place-items-center rounded-xl text-chu-phu disabled:opacity-30 active:bg-xanh-nhat cursor-pointer"}>
+              <ChevronDown size={cls ? 16 : 20} aria-hidden />
+            </button>
+          );
+          const tayNam = (cls?: string) => (
+            <button type="button" aria-label={`Kéo để sắp xếp ${ten(m)}, hoặc dùng phím mũi tên lên xuống`} onKeyDown={(e) => phim(e, i)}
+              onPointerDown={(e) => batDau(e, i)} onPointerMove={dichuyen} onPointerUp={tha} onPointerCancel={tha}
+              className={cls ?? "size-11 grid place-items-center rounded-xl text-chu-phu active:bg-xanh-nhat cursor-grab touch-none"}>
+              <GripVertical size={cls ? 16 : 20} aria-hidden />
+            </button>
+          );
+          const boDieuKhien: BoDieuKhienKeoTha = {
+            doi,
+            nutLen,
+            nutXuong,
+            tayNam,
+            dangKeo,
+          };
           const dieuKhien = (
             <div className="flex flex-col items-center shrink-0" role="group" aria-label={`Sắp xếp ${ten(m)}`}>
-              <button type="button" aria-label={`Chuyển ${ten(m)} lên`} disabled={i === 0} onClick={() => doi(i, i - 1)}
-                className="size-11 grid place-items-center rounded-xl text-chu-phu disabled:opacity-30 active:bg-xanh-nhat cursor-pointer"><ChevronUp size={20} aria-hidden /></button>
-              <button type="button" aria-label={`Kéo để sắp xếp ${ten(m)}, hoặc dùng phím mũi tên lên xuống`} onKeyDown={(e) => phim(e, i)}
-                onPointerDown={(e) => batDau(e, i)} onPointerMove={dichuyen} onPointerUp={tha} onPointerCancel={tha}
-                className="size-11 grid place-items-center rounded-xl text-chu-phu active:bg-xanh-nhat cursor-grab touch-none"><GripVertical size={20} aria-hidden /></button>
-              <button type="button" aria-label={`Chuyển ${ten(m)} xuống`} disabled={i === muc.length - 1} onClick={() => doi(i, i + 1)}
-                className="size-11 grid place-items-center rounded-xl text-chu-phu disabled:opacity-30 active:bg-xanh-nhat cursor-pointer"><ChevronDown size={20} aria-hidden /></button>
+              {nutLen()}
+              {tayNam()}
+              {nutXuong()}
             </div>
           );
           return (
             <li key={khoa(m)} ref={(el) => { refs.current[i] = el; }}
               className={gop("relative", dangKeo && "z-10 shadow-lg scale-[1.01]", keo && !dangKeo && keo.den === i && "outline-2 outline-dashed outline-xanh rounded-xl")}
               style={dangKeo ? { transform: `translateY(${keo.dy}px)` } : undefined}>
-              {veMuc(m, i, dieuKhien)}
+              {veMuc(m, i, dieuKhien, boDieuKhien)}
             </li>
           );
         })}

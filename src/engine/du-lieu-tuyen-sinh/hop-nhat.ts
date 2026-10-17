@@ -82,8 +82,7 @@ export function hopNhatLuaChonVaCms(
 
     // 1. Ghi đè / bổ sung Học phí từ CMS nếu có
     // Học phí đúng chương trình thì luôn dùng. Học phí cấp trường chỉ để LẤP CHỖ TRỐNG, không đè số riêng của từng chương trình.
-    // Học phí ước tính (chưa có nguồn) cũng được học phí cấp trường của CMS thay thế: số có nguồn luôn hơn số ước tính.
-    const hpCms = mapHocPhi.get(item.id) || (item.hocPhiMin === undefined || item.hocPhiUocTinh ? hocPhiCapTruong.get((item.maTruong ?? item.truong).toUpperCase()) : undefined);
+    const hpCms = mapHocPhi.get(item.id) || (item.hocPhiMin === undefined ? hocPhiCapTruong.get((item.maTruong ?? item.truong).toUpperCase()) : undefined);
     // Bản ghi chỉ lặp lại số đã có trong dữ liệu gốc (cùng nguồn, cùng mức thấp) thì không ghi đè: tránh kéo theo mức cao suy ra.
     const trungGoc = !!hpCms && ketQua.nguonHocPhi?.url === hpCms.nguon.url && ketQua.hocPhiMin === hpCms.mucThap;
     if (hpCms && !trungGoc) {
@@ -91,7 +90,6 @@ export function hopNhatLuaChonVaCms(
         ...ketQua,
         hocPhiMin: hpCms.mucThap,
         hocPhiMax: hpCms.mucCao,
-        hocPhiUocTinh: false,
         nguonHocPhi: {
           nam: String(hpCms.nam),
           url: hpCms.nguon.url,
