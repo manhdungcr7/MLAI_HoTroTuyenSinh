@@ -18,6 +18,7 @@ import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, loiChaoTheoChang, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
 import { changCuaEm, type Chang } from "@/state/chang";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
+import { TheHanhTrinh } from "./the-hanh-trinh";
 
 const SO_DONG_GON = 3;
 
@@ -75,6 +76,8 @@ function HomNayDayDu() {
             <span className="size-9 rounded-xl bg-tim-nhat text-tim-chu grid place-items-center shrink-0"><ListChecks size={18} aria-hidden /></span>Nguyện vọng
           </button>
         </div>
+
+        <TheHanhTrinh />
 
         <TamTrangHomNay />
 

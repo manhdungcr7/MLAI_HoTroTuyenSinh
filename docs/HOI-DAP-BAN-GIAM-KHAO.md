@@ -19,7 +19,7 @@ Có, nếu học sinh khai (`features/khoi-dau/diem-uu-tien.tsx`). Mức theo qu
 ## B. Dữ liệu
 
 **5. Dữ liệu lấy ở đâu?**
-3.652 chương trình của 118 trường từ đề án tuyển sinh chính thức (PDF, có link và số trang) và trang tổng hợp điểm chuẩn (đã đối chiếu với đề án khi tìm thấy cùng con số). Chi tiết, giới hạn: `docs/DU-LIEU.md`; trang "Số liệu từ đâu ra" trong app.
+3.648 chương trình của 118 trường từ đề án tuyển sinh chính thức (PDF, có link và số trang) và trang tổng hợp điểm chuẩn (đã đối chiếu với đề án khi tìm thấy cùng con số). Chi tiết, giới hạn: `docs/DU-LIEU.md`; trang "Số liệu từ đâu ra" trong app.
 
 **6. Sao biết dữ liệu không sai?**
 Ba lớp: (a) con số chỉ nhận khi tìm thấy đúng ngành và điểm ở trang PDF ghi; (b) nhãn "Đã kiểm chứng" hay "Chưa kiểm chứng" hiện ngay ở từng ngành; (c) học sinh bấm "Báo số liệu sai", báo cáo vào hộp thư CMS để người của trường kiểm tra nguồn và sửa. Không bao giờ tự đè số khi có báo sai.
