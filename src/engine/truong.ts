@@ -23,7 +23,7 @@ export function chuanHoa(t: string): string {
  * Cố ý KHÔNG có "bk", "bach khoa", "ha noi", "nong nghiep": các cụm này chung cho nhiều trường, để bộ phân giải tự báo mơ hồ.
  */
 const BI_DANH_TAY: Record<string, string[]> = {
-  QHI: ["uet", "vnuuet", "cong nghe dhqghn"],
+  QHI: ["uet", "vnuuet", "cong nghe dhqghn", "dh cong nghe dhqghn", "dai hoc cong nghe dhqghn", "cong nghe vnu"],
   QSC: ["uit", "cntt tphcm", "cntt dhqg"],
   BKA: ["hust", "bkhn", "bka"],
   KHA: ["neu", "ktqd"],

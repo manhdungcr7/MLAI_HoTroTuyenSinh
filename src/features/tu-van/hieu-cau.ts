@@ -13,7 +13,7 @@ const TU_DEM = new Set([
 ]);
 
 /** Viết tắt ngành thông dụng (đã chuẩn hóa) -> cụm đầy đủ. "it", "ai" bị bỏ vì trùng từ thường. */
-const VIET_TAT_NGANH: Record<string, string> = {
+export const VIET_TAT_NGANH: Record<string, string> = {
   cntt: "cong nghe thong tin", ktpm: "ky thuat phan mem", attt: "an toan thong tin", khmt: "khoa hoc may tinh", httt: "he thong thong tin",
   qtkd: "quan tri kinh doanh", tcnh: "tai chinh ngan hang", ktdn: "ke toan", ngon: "ngon ngu",
 };
@@ -123,11 +123,14 @@ export function phanTichCau(cau: string): YDinhCau {
   const hocPhi = /\bhoc phi\b|\bchi phi\b|\bhoc re\b|\bre nhat\b/.test(q);
   const xepHang = hocPhi && /\b(thap|re|it|thap nhat|re nhat|vua tui)\b/.test(q) ? "hoc-phi-thap" : hocPhi && /\b(cao nhat|dat nhat|dat)\b/.test(q) ? "hoc-phi-cao" : null;
   const daiTu = /\b(truong|nganh|khoa|cai|no|noi) (nay|do|kia|ay)\b|\b(truong|nganh) vua roi\b|\bno\b/.test(q);
+  const laSoSanh = /\b(so sanh|phan van|doi chieu|chon truong nao|truong nao tot hon|truong nao hon|nen hoc truong nao|nen chon truong nao|khac nhau the nao)\b/.test(q)
+    || (truongs.length >= 2 && /\b(hay|va|voi|vs|hon|giua|nen chon|nen hoc)\b/.test(q))
+    || (/\b(nen chon|nen hoc|phan van)\b/.test(q) && /\b(hay|giua)\b/.test(q));
   let kieu: TheLoaiHoi = "khac";
   if (/\bthem\b.*\bnguyen vong\b|\bdua\b.*\bnguyen vong\b|\bluu\b.*\bnguyen vong\b|\bbo sung\b.*\bnguyen vong\b/.test(q)) kieu = "them-nguyen-vong";
   else if (chuTruongDinhNghia(cau)) kieu = "la-truong-gi";
+  else if (laSoSanh && (new Set(truongs.filter((t) => t.chuoi !== tinhTim?.goc).map((t) => t.kq.ma)).size >= 2 || /\b(so sanh|phan van|doi chieu|giua)\b/.test(q) || (/\btruong\b/.test(q) && !/\bnganh\b/.test(q)))) kieu = "so-sanh-truong";
   else if (/\b(co co hoi|co nen|co kha nang|do khong|dau khong|do duoc khong|vao duoc khong|co du diem|nen dang ky|nen chon|co dau|co do)\b/.test(q) && (diem !== null || daiTu || /co hoi|do khong|dau khong/.test(q)) && !/viec lam|nghe nghiep|luong|ra truong/.test(q)) kieu = "co-hoi";
-  else if (/\bso sanh\b/.test(q) && (new Set(truongs.filter((t) => t.chuoi !== tinhTim?.goc).map((t) => t.kq.ma)).size >= 2 || (/\btruong\b/.test(q) && !/\bnganh\b/.test(q)))) kieu = "so-sanh-truong";
   else if (/\b(ky tuc|ktx|o tro|nha tro|cho o|noi o)\b/.test(q)) kieu = "cho-o";
   else if (xepHang) kieu = "xep-hang-hoc-phi";
   else if (tinhTim && (/\btruong\b/.test(q) || cumNganh) && !/\b(diem chuan|hoc phi|viec lam)\b/.test(q)) kieu = "kham-pha-truong";
@@ -137,7 +140,7 @@ export function phanTichCau(cau: string): YDinhCau {
 
 /** Các trường được nêu trong câu (tên, mã, viết tắt). Chỉ nhận khớp chính xác; mơ hồ thì bỏ qua, để lớp trên hỏi lại. `boQuaCum`: cụm đã dùng làm tên tỉnh. */
 export interface TruongNeu { chuoi: string; kq: KetQuaTruong }
-const LIEN_TU_SO_SANH = new Set(["va", "voi", "hay", "hoac", "vs"]);
+const LIEN_TU_SO_SANH = new Set(["va", "voi", "hay", "hoac", "vs", "giua", "cua", "so", "sanh"]);
 
 /** Chỉ bắt tên trường được nêu rõ, không bắt "trường nào" hay câu khám phá theo tỉnh. */
 export function tenTruongChuaCo(cau: string): string | null {
@@ -154,9 +157,10 @@ export function timTruongMoHo(cau: string): TruongNeu | null {
   const ro = timTruongTrongCau(cau);
   for (let n = Math.min(10, tu.length); n >= 1; n--) {
     for (let i = 0; i + n <= tu.length; i++) {
+      if (LIEN_TU_SO_SANH.has(tu[i]) || LIEN_TU_SO_SANH.has(tu[i + n - 1])) continue;
       const cum = tu.slice(i, i + n).join(" ");
       // Không nhận cụm ngành ("Khoa học máy tính") làm tên trường mơ hồ.
-      if (!/^(?:(?:truong|dai hoc|dh|hoc vien) .+|bach khoa(?: .+)?|bk|utc|nong nghiep|su pham ky thuat)$/.test(cum)) continue;
+      if (!/^(?:(?:truong|dai hoc|dh|hoc vien)\s+.+|bach khoa(?:\s+[a-z0-9]+)?|bk|utc|nong nghiep|su pham ky thuat)$/.test(cum)) continue;
       // Giữ địa danh của trường chưa có trong kho, không lùi về tên chung.
       if (cum === "bach khoa" && /^(?:tp |hcm|tphcm|thanh pho|sai gon)/.test(tu.slice(i + n).join(" "))) continue;
       if (ro.some((t) => ` ${t.chuoi} `.includes(` ${cum} `))) continue;
@@ -182,6 +186,7 @@ export function timTruongTrongCau(cau: string, boQuaCum: (string | null)[] = [])
   for (let n = Math.min(10, tu.length); n >= 1; n--) {
     for (let i = 0; i + n <= tu.length; i++) {
       if (dung.slice(i, i + n).some(Boolean)) continue;
+      if (LIEN_TU_SO_SANH.has(tu[i]) || LIEN_TU_SO_SANH.has(tu[i + n - 1])) continue;
       const cum = tu.slice(i, i + n).join(" ");
       // Một từ đơn chỉ được coi là trường khi nó là mã hoặc viết tắt riêng của đúng một trường (uit, dtl), không phải từ thường như "viet".
       if (n === 1 && (TU_DEM.has(cum) || VIET_TAT_NGANH[cum] || maTuVietTat(cum).length !== 1)) continue;
@@ -194,7 +199,7 @@ export function timTruongTrongCau(cau: string, boQuaCum: (string | null)[] = [])
       const vi = lt.findIndex((t, k) => k > 0 && k < lt.length - 1 && LIEN_TU_SO_SANH.has(t));
       if (vi > 0) {
         const trai = resolveTruong(lt.slice(0, vi).join(" ")), phai = resolveTruong(lt.slice(vi + 1).join(" "));
-        if ((phai.kieu === "chinh-xac" && phai.ma === kq.ma) || (trai.kieu === "chinh-xac" && trai.ma === kq.ma)) continue;
+        if (trai.kieu !== "khong-thay" || phai.kieu !== "khong-thay") continue;
       }
       ra.push({ chuoi: cum, kq, vt: i });
       for (let j = i; j < i + n; j++) dung[j] = true;

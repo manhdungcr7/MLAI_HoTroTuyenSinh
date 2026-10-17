@@ -3,7 +3,7 @@
     python -I ml/huan-luyen-2027.py
 
 Quy trình (mỗi bước có số liệu in ra và ghi vào ml/ket-qua-du-bao-2027.json):
-  1. Dữ liệu: các chương trình xét điểm thi THPT có điểm chuẩn nhiều năm (src/data/du-lieu-that.json).
+  1. Dữ liệu: các chương trình xét điểm thi THPT có điểm chuẩn nhiều năm (src/data/du-lieu-that.json) SAU KHI áp src/data/hieu-chinh-diem.json (đúng dữ liệu app hiển thị).
   2. Tập huấn luyện: mỗi cặp (chương trình, năm đích t) với điểm của năm gần nhất trước đó; biến đích = điểm_t - điểm_gần_nhất.
   3. Mô hình: LightGBM hồi quy phân vị (p10, p50, p90), trung bình 5 hạt giống, đặc trưng ở ml/thu-nghiem.py (COT).
   4. Kiểm định lăn theo thời gian: huấn luyện chỉ bằng năm đích < T, dự báo năm T (T = 2024, 2025). Không rò rỉ tương lai.
@@ -92,7 +92,7 @@ def main() -> None:
     ket_qua: dict = {"tao_luc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
     # ---- 1. Thống kê dữ liệu ----
-    tho_thpt = [x for x in json.loads((ROOT / "src" / "data" / "du-lieu-that.json").read_text(encoding="utf-8")) if x["pt"] == "THPT" and x["diem"]]
+    tho_thpt = [x for x in tn.doc_tho_da_sua() if x["pt"] == "THPT" and x["diem"]]
     nam_moi = pd.Series([max(int(y) for y in x["diem"]) for x in ds])
     ket_qua["du_lieu"] = {
         "so_chuong_trinh_thpt": len(ds), "so_co_tu_2_nam": int(sum(1 for x in ds if len(x["diem"]) >= 2)),
@@ -179,9 +179,7 @@ def main() -> None:
 
     meta = {
         "namDuBao": NAM_DU_BAO, "moHinh": "LightGBM hồi quy phân vị (p10, p50, p90), trung bình 5 hạt giống",
-        "catalogSha256": hashlib.sha256((ROOT / "src" / "data" / "du-lieu-that.json").read_bytes().replace(b"
-", b"
-")).hexdigest(),
+        "catalogSha256": tn.dau_van_tay_du_lieu(),
         "mucTinCay": 0.8, "heSoHieuChinh": round(lam, 3), "tranBienDong": [round(tran_all[0], 2), round(tran_all[1], 2)], "taoLuc": ket_qua["tao_luc"][:10],
         "kiemDinh": {"phuGop": round(khoang["gop"]["phu"], 3), "phuNgoaiMau": round(khoang["ngoai_mau_lam_2024_ap_2025"]["phu"], 3), "winkler": round(khoang["gop"]["winkler"], 2),
                      "winklerHeuristicCu": round(doi_chieu["heuristic_cu"]["winkler"], 2)},

@@ -457,7 +457,7 @@ body {
 /* ===== chuyển động 2027 đợt 2 ===== */
 /* Chuyển trang: nội dung tab mới vào bằng fade + trượt 10px (ChuyenTrang, khóa theo pathname). */
 @keyframes chuyen-vao { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.chuyen-trang { animation: chuyen-vao .22s var(--ease-ra) both; }
+.chuyen-trang { animation: chuyen-vao .22s var(--ease-ra) backwards; }
 
 /* Thanh tab: MỘT viên chỉ báo trượt giữa 5 tab (--i = chỉ số tab đang mở). */
 .nav-chi-bao { position: absolute; top: .75rem; left: .25rem; height: 2rem; width: calc((100% - .5rem) / 5); transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .28s cubic-bezier(.34, 1.25, .64, 1), opacity .2s ease; pointer-events: none; }

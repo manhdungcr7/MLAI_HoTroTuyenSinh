@@ -76,6 +76,7 @@ export default function KhungChatMini({ dong }: { dong: () => void }) {
     setDang(true);
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
+    if (thay === undefined) setCauHoi(""); // gửi xong là xóa ô nhập ngay, bạn gõ tiếp được trong lúc chờ trả lời
 
     const onChunk = (chuoiStream: string) => {
       setTin((cu) => {
@@ -115,6 +116,6 @@ export default function KhungChatMini({ dong }: { dong: () => void }) {
         <div ref={cuoi} />
       </section>
     </div>
-    <footer className="border-t border-vien bg-white p-2.5 shrink-0"><div className="flex items-center gap-2"><input type="text" value={cauHoi} onChange={(e) => setCauHoi(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !dang && cauHoi.trim().length >= 2) { e.preventDefault(); gui(cauHoi); } }} readOnly={dang} maxLength={1000} placeholder="Nhập tin nhắn..." className="h-10 min-w-0 flex-1 rounded-full border border-vien bg-slate-100 px-4 text-[13px] text-chu placeholder:text-chu-phu focus:border-xanh focus:bg-white outline-none transition-all" /><button type="button" disabled={dang || cauHoi.trim().length < 2} onClick={() => gui(cauHoi)} aria-label="Gửi tin nhắn" className="size-10 rounded-full gd-xanh text-white grid place-items-center shrink-0 hover:brightness-110 active:scale-95 disabled:opacity-40 transition-all cursor-pointer shadow-xs"><Send size={16} /></button></div></footer>
+    <footer className="border-t border-vien bg-white p-2.5 shrink-0"><div className="flex items-center gap-2"><div className="relative min-w-0 flex-1"><input id="khung-mini-cau-hoi" type="text" value={cauHoi} onChange={(e) => setCauHoi(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !dang && cauHoi.trim().length >= 2) { e.preventDefault(); gui(cauHoi); } }} maxLength={1000} placeholder="Nhập tin nhắn..." className="h-10 w-full min-w-0 rounded-full border border-vien bg-slate-100 pl-4 pr-10 text-[13px] text-chu placeholder:text-chu-phu focus:border-xanh focus:bg-white outline-none transition-all" />{cauHoi && <button type="button" aria-label="Xóa câu đang gõ" onClick={() => { setCauHoi(""); document.getElementById("khung-mini-cau-hoi")?.focus(); }} className="absolute right-0 top-0 grid size-10 place-items-center rounded-full text-chu-phu active:bg-xanh-nhat cursor-pointer"><X size={15} /></button>}</div><button type="button" disabled={dang || cauHoi.trim().length < 2} onClick={() => gui(cauHoi)} aria-label="Gửi tin nhắn" className="size-10 rounded-full gd-xanh text-white grid place-items-center shrink-0 hover:brightness-110 active:scale-95 disabled:opacity-40 transition-all cursor-pointer shadow-xs"><Send size={16} /></button></div></footer>
   </div>;
 }
