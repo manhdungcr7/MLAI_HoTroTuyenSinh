@@ -131,7 +131,7 @@ function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiD
               ? <PillTrangThai tong={m.tong} icon={m.icon}>{d.nhan}</PillTrangThai>
               : <PillTrangThai tong="trung">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa so được"}</PillTrangThai>}
           </span>
-          <span className="ml-auto text-[13px] font-semibold text-chu-phu shrink-0">NV{String(d.viTri + 1).padStart(2, "0")}</span>
+          <span className="ml-auto text-[13px] font-semibold text-chu-phu shrink-0">Nguyện vọng {d.viTri + 1}</span>
           {!chiDoc && (
             <button type="button" onClick={onXoa} aria-label="Xóa nguyện vọng" title="Xóa nguyện vọng"
               className="-my-1 -mr-1 size-11 shrink-0 rounded-xl grid place-items-center text-do-chu active:bg-do-nhat cursor-pointer">
@@ -322,16 +322,18 @@ export default function DanhSachNguyenVong() {
 
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
-            {loc === "tat-ca" ? (
-              <HangKeoTha muc={ds} khoa={(d) => d.id} onDoiCho={chuyen} ten={tenNgan} veMuc={(d, _i, dk) => veThe(d, dk)} />
-            ) : (
-              <>
-                <p className="text-[13px] text-chu-phu">Đang lọc nhóm {loc}. Chọn Tất cả để kéo thả đổi thứ tự.</p>
-                {dsHien.length === 0
-                  ? <p className="rounded-2xl o-mem p-4 text-[14px] text-chu">Chưa có nguyện vọng nhóm {loc}. Bạn có thể thêm bằng nút Thêm ở trên.</p>
-                  : <ol className="space-y-2">{dsHien.map((d) => <li key={d.id}>{veThe(d, null, true)}</li>)}</ol>}
-              </>
-            )}
+            <div className="mr-6 sm:mr-8">
+              {loc === "tat-ca" ? (
+                <HangKeoTha muc={ds} khoa={(d) => d.id} onDoiCho={chuyen} ten={tenNgan} veMuc={(d, _i, dk) => veThe(d, dk)} />
+              ) : (
+                <>
+                  <p className="text-[13px] text-chu-phu mb-2">Đang lọc nhóm {loc}. Chọn Tất cả để kéo thả đổi thứ tự.</p>
+                  {dsHien.length === 0
+                    ? <p className="rounded-2xl o-mem p-4 text-[14px] text-chu">Chưa có nguyện vọng nhóm {loc}. Bạn có thể thêm bằng nút Thêm ở trên.</p>
+                    : <ol className="space-y-2">{dsHien.map((d) => <li key={d.id}>{veThe(d, null, true)}</li>)}</ol>}
+                </>
+              )}
+            </div>
           </>
         )}
       </div>
