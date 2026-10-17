@@ -1,15 +1,15 @@
 // Màn Nguyện vọng (nền thiết kế 2027): tổng quan cơ cấu đo được, 4 nhóm, danh sách kéo thả có hoàn tác.
 // Không có phần trăm trúng tuyển: chỉ nhãn định tính, chênh điểm so với điểm chuẩn năm gần nhất và khoảng dự báo.
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpDown, Check, ChevronDown, ChevronRight, ChevronUp, Heart, Lightbulb, Plus, Search, Sparkles, Trash2, Wand2 } from "lucide-react";
+import { ArrowUpDown, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Heart, Lightbulb, Plus, Search, Sparkles, Trash2, Wand2 } from "lucide-react";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { FeaturePreferenceRanking } from "@/components/ui/bieu-tuong-nguyen-vong";
 import {
-  ChipLoc, HangChipLoc, HangKeoTha, MAU_NHAN_NV, PillTrangThai, THU_TU_NHAN_NV, TheNen, TieuDeMan, VongDiem,
+  ChipLoc, HangKeoTha, MAU_NHAN_NV, PillTrangThai, THU_TU_NHAN_NV, TheNen, TieuDeMan, VongDiem,
 } from "@/components/ui/thiet-ke";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
@@ -113,6 +113,79 @@ function ThanhKhoang({ ts }: { ts: TomTatDiemNganh }) {
   );
 }
 
+/** Hàng chip lọc có chỉ báo lướt trái/phải với nút cuộn nhanh và viền mờ 2 mép. */
+function HangChipLocCuon({ children, nhan }: { children: React.ReactNode; nhan: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [coTrai, setCoTrai] = useState(false);
+  const [coPhai, setCoPhai] = useState(false);
+
+  const capNhat = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setCoTrai(el.scrollLeft > 6);
+    setCoPhai(el.scrollLeft + el.clientWidth < el.scrollWidth - 6);
+  }, []);
+
+  useEffect(() => {
+    capNhat();
+    const el = ref.current;
+    if (!el) return;
+    el.addEventListener("scroll", capNhat, { passive: true });
+    window.addEventListener("resize", capNhat);
+    const t = setTimeout(capNhat, 150);
+    return () => {
+      el.removeEventListener("scroll", capNhat);
+      window.removeEventListener("resize", capNhat);
+      clearTimeout(t);
+    };
+  }, [capNhat]);
+
+  const cuon = (huong: "trai" | "phai") => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollBy({ left: huong === "trai" ? -160 : 160, behavior: "smooth" });
+  };
+
+  return (
+    <div className="relative group">
+      {coTrai && (
+        <div className="absolute left-0 inset-y-0 z-10 flex items-center pr-3 pl-0 bg-gradient-to-r from-nen via-nen/90 to-transparent pointer-events-none">
+          <button
+            type="button"
+            onClick={() => cuon("trai")}
+            aria-label="Cuộn các nhóm sang trái"
+            className="pointer-events-auto size-7 rounded-full bg-trang shadow-sm border border-vien/80 grid place-items-center text-muc hover:text-xanh active:scale-95 transition-all cursor-pointer"
+          >
+            <ChevronLeft size={15} strokeWidth={2.5} aria-hidden />
+          </button>
+        </div>
+      )}
+
+      <div
+        ref={ref}
+        role="group"
+        aria-label={nhan}
+        className="flex gap-2 overflow-x-auto an-thanh-cuon cuon-snap-x py-1"
+      >
+        {children}
+      </div>
+
+      {coPhai && (
+        <div className="absolute right-0 inset-y-0 z-10 flex items-center pl-3 pr-0 bg-gradient-to-l from-nen via-nen/90 to-transparent pointer-events-none">
+          <button
+            type="button"
+            onClick={() => cuon("phai")}
+            aria-label="Cuộn các nhóm sang phải"
+            className="pointer-events-auto size-7 rounded-full bg-trang shadow-sm border border-vien/80 grid place-items-center text-muc hover:text-xanh active:scale-95 transition-all cursor-pointer"
+          >
+            <ChevronRight size={15} strokeWidth={2.5} aria-hidden />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiDoc }: {
   d: DongNV; ts: TomTatDiemNganh | null; dieuKhien: React.ReactNode; vuaDoi: boolean; chuaDuDiem: boolean; onMo: () => void; onXoa: () => void; chiDoc?: boolean;
 }) {
@@ -122,8 +195,7 @@ function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiD
   const truong = lc ? phanGiaiTenTruong(lc.maTruong || lc.truong, lc.tenTruong) : null;
   return (
     <div className={gop("relative overflow-hidden rounded-2xl border flex items-stretch", m ? `${m.nenNhe} ${m.vien}` : "bg-trang border-vien", vuaDoi && "vao-len")}>
-      {m && <span aria-hidden className={gop("absolute inset-y-0 left-0 w-1.5", m.dam)} />}
-      <div className={gop("min-w-0 flex-1 pt-2 pb-2.5 pr-2", chiDoc ? "pl-4" : "pl-3")}>
+      <div className="min-w-0 flex-1 pt-2 pb-2.5 pl-3.5 pr-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="so-lon text-[15px] font-bold text-muc shrink-0">{d.viTri + 1}</span>
           <span className="min-w-0">
@@ -305,13 +377,10 @@ export default function DanhSachNguyenVong() {
               </button>
             </div>
 
-            <div className="relative">
-              <HangChipLoc nhan="Lọc theo nhóm">
-                <ChipLoc chon={loc === "tat-ca"} onClick={() => setLoc("tat-ca")} dem={ds.length}>Tất cả</ChipLoc>
-                {THU_TU_NHAN_NV.map((n) => <ChipLoc key={n} chon={loc === n} onClick={() => setLoc(n)} icon={MAU_NHAN_NV[n].icon} dem={dem[n]}>{n}</ChipLoc>)}
-              </HangChipLoc>
-              <span aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-nen to-transparent" />
-            </div>
+            <HangChipLocCuon nhan="Lọc theo nhóm">
+              <ChipLoc chon={loc === "tat-ca"} onClick={() => setLoc("tat-ca")} dem={ds.length}>Tất cả</ChipLoc>
+              {THU_TU_NHAN_NV.map((n) => <ChipLoc key={n} chon={loc === n} onClick={() => setLoc(n)} icon={MAU_NHAN_NV[n].icon} dem={dem[n]}>{n}</ChipLoc>)}
+            </HangChipLocCuon>
 
             {dsYeuThich.some((l) => !s.nguyenVong.includes(l.id)) && (
               <TheDanhSachYeuThich dsYeuThich={dsYeuThich} nguyenVong={s.nguyenVong} onThemTatCa={themTatCaYeuThich} onThemMot={themNganh}
@@ -322,7 +391,7 @@ export default function DanhSachNguyenVong() {
 
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
-            <div className="ml-3.5 sm:ml-4">
+            <div>
               {loc === "tat-ca" ? (
                 <HangKeoTha muc={ds} khoa={(d) => d.id} onDoiCho={chuyen} ten={tenNgan} veMuc={(d, _i, dk) => veThe(d, dk)} />
               ) : (
