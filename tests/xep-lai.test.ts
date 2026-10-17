@@ -191,7 +191,9 @@ const nen: AppState = { ...goc, coDinh: LICH_CO_DINH_MAU, cauHinh: cfgNghiCN, vi
     diemMucTieu: 25, canCaiThien: [], tuan: TUAN, chiSoTuan: 40, phutTuHoc: 15 * 60,
   });
   const dauTien = v.filter((x) => x.tieuDe.includes("đề tính giờ"));
-  assert.ok(dauTien.length >= 3);
+  // Chỉ Toán và Lý (môn giải bài) mở đầu bằng đề tính giờ; Hóa là môn ôn nhớ nên có khung buổi riêng.
+  assert.ok(dauTien.length >= 2 && dauTien.every((x) => x.mon === "toan" || x.mon === "vatLy"));
+  assert.ok(!v.some((x) => x.mon === "hoaHoc" && x.tieuDe.includes("đề tính giờ")), "Hóa không dùng khung đề tính giờ");
   // mỗi buổi tối đa 90 phút, phần làm đề chỉ ~60%, nên không buổi nào được hứa "1 đề"
   assert.ok(dauTien.every((x) => !x.tieuDe.includes("làm 1 đề")), "không hứa 1 đề khi chỉ có ~54 phút làm đề");
   assert.ok(dauTien.every((x) => /nửa đề|một phần đề/.test(x.tieuDe)));

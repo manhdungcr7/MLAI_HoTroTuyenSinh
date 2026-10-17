@@ -1,11 +1,14 @@
-// Chế độ "Chiến lược & Lộ trình": Chẩn đoán năng lực học tập theo hàm độ khó cận biên, phân bổ giờ tự học thông minh và lộ trình tuyển sinh đa phương thức cá nhân hóa.
+// Chế độ "Chiến lược & Lộ trình": Chẩn đoán năng lực học tập theo hiệu quả biên của từng môn, phân bổ giờ tự học thông minh và lộ trình tuyển sinh đa phương thức cá nhân hóa.
 import { useState } from "react";
 import { BookOpen, CheckCircle, Clock, Compass, Flame, HelpCircle, WandSparkles, Zap } from "lucide-react";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { useApp } from "@/state/store";
 import { mucTieuDayDu, khoangCachCuaToi, tuanHienTai } from "@/state/chon";
-import { TEN_MON, TEN_MON_NGAN, type MonId, type ToneTen, type ViecCanHoc } from "@/state/types";
-import { NOI_DUNG_ON } from "@/engine/tao-viec";
+import { CAC_MON, TEN_MON, TEN_MON_NGAN, type MonId, type ToneTen, type ViecCanHoc } from "@/state/types";
+import { NOI_DUNG_ON, nganSachPhut } from "@/engine/tao-viec";
+import { HO_SO_MON, khungBuoi } from "@/engine/ho-so-mon";
+import { uocLuongGioTuHoc } from "@/features/tu-hoc/tinh-tien-do";
+import { diemCacLanGanNhat, doDocXuHuong } from "@/features/muc-tieu/tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
 import { toiUuPhanBoLichHoc } from "@/engine/toi-uu-lich-hoc";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
@@ -34,8 +37,12 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
   const diemChuanMucTieu = m?.mucTieuTho ?? s.mucTieu?.diemMucTieu ?? (lcTarget?.diemMin ?? 26.0);
   const diemHienTai = diemDayDu(s);
 
-  // Phân bổ giờ học toán học theo mô hình Knapsack
-  const phanBo = toiUuPhanBoLichHoc(toHop, diemHienTai, diemChuanMucTieu, 0, 16);
+  // Chia giờ theo hiệu quả biên từng môn, dùng quỹ giờ trống thật của tuần này (không còn con số 16 giờ cố định).
+  const tuanNay = tuanHienTai();
+  const quyPhut = nganSachPhut(uocLuongGioTuHoc(s.coDinh, s.cauHinh, tuanNay).tongPhut, s.tamTrang);
+  const doDoc: Partial<Record<MonId, number | null>> = {};
+  for (const mon of CAC_MON) doDoc[mon] = doDocXuHuong(diemCacLanGanNhat(s.diemThi, mon));
+  const phanBo = toiUuPhanBoLichHoc(toHop, diemHienTai, diemChuanMucTieu, 0, quyPhut / 60, { soNgayConDenThi: m?.soNgayCon, doDoc, canCaiThien: s.hoSo.canCaiThien });
 
   // Môn có độ bứt phá cao nhất (Leverage Subject)
   const monDonBay = [...phanBo.phanBoTungMon].sort((a, b) => b.diemCanTang - a.diemCanTang)[0];
@@ -70,37 +77,32 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
 
   // Hành động thật: Áp dụng phân bổ thông minh vào lịch học tuần
   const apDungPhanBoVaoLich = () => {
-    const tuan = tuanHienTai();
+    const tuan = tuanNay;
     const viecMoi: ViecCanHoc[] = phanBo.phanBoTungMon.flatMap((pb, i) => {
       const phutTong = Math.round(pb.soGioMoiTuan * 60 / 15) * 15;
-      const phut1 = Math.min(90, Math.round(phutTong * 0.6 / 15) * 15);
-      const phut2 = Math.max(30, phutTong - phut1);
-      return [
-        {
-          id: `cd-${pb.mon}-${Date.now().toString(36)}-${i}a`,
+      if (phutTong <= 0) return [];
+      const hs = HO_SO_MON[pb.mon];
+      const soBuoi = Math.max(1, Math.round(phutTong / hs.buoiToiUuPhut));
+      const moi = Math.max(15, Math.round(phutTong / soBuoi / 15) * 15);
+      const dsChuDe = NOI_DUNG_ON[pb.mon] ?? [];
+      return Array.from({ length: soBuoi }, (_, k) => {
+        const chuDe = k === 0 && hs.kieu === "giaiBai" ? undefined : dsChuDe[(k + i) % Math.max(1, dsChuDe.length)];
+        const khung = khungBuoi(hs.kieu, moi, { chuDe, dauTuan: k === 0 });
+        return {
+          id: `cd-${pb.mon}-${Date.now().toString(36)}-${i}-${k}`,
           tuan,
           mon: pb.mon,
-          tieuDe: `${pb.tenMon} – Chuyên đề bứt phá`,
-          chiTiet: pb.trongTamOnTap,
-          phut: phut1,
+          tieuDe: `${pb.tenMon} – ${khung.tieuDe}`,
+          chiTiet: khung.chiTiet,
+          phut: moi,
           mucUuTien: pb.diemCanTang >= 1.0 ? "cao" : "vua",
-          lyDo: `Kế hoạch tăng +${pb.diemCanTang} điểm`,
-          tieuChi: ["Nắm vững dạng bài thường gặp", "Không để sai sót phần nhận biết & thông hiểu"],
+          lyDo: pb.diemCanTang > 0 ? `${pb.tenMon} nhận ${String(pb.soGioMoiTuan).replace(".", ",")} giờ/tuần vì mỗi giờ ở đây ước tăng thêm khoảng ${String(pb.diemMoiGioDau).replace(".", ",")} điểm.` : "Giữ nhịp ôn.",
+          tieuChi: khung.tieuChi,
+          mucTieuBuoi: khung.mucTieuBuoi,
+          cacBuoc: khung.cacBuoc,
           taiLieu: [{ ten: `Đề cương chuyên đề ${pb.tenMon}` }],
-        },
-        {
-          id: `lt-${pb.mon}-${Date.now().toString(36)}-${i}b`,
-          tuan,
-          mon: pb.mon,
-          tieuDe: `${pb.tenMon} – Luyện đề bấm giờ`,
-          chiTiet: "Luyện đề thi thử có bấm giờ 50 phút, rèn kỹ năng giải nhanh",
-          phut: phut2,
-          mucUuTien: "vua",
-          lyDo: "Rèn phản xạ và tốc độ làm đề chuẩn",
-          tieuChi: ["Bấm giờ chuẩn thời gian thi", "Chữa kỹ các câu làm sai"],
-          taiLieu: [{ ten: `Bộ đề thi thử chuẩn ${pb.tenMon}` }],
-        },
-      ];
+        } as ViecCanHoc;
+      });
     });
 
     const cacViecKhac = s.viec.filter((v) => v.tuan !== tuan);
@@ -172,7 +174,12 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
           )}
         </div>
 
-        {/* Bảng phân bổ quỹ giờ tự học hàng tuần theo bài toán Knapsack */}
+        {/* Bảng chia quỹ giờ tự học hàng tuần theo hiệu quả biên của từng môn */}
+        {phanBo.loiKetLuan && (
+          <p className={gop("rounded-xl p-2.5 text-[13px] leading-snug", phanBo.khaThi === "khong" ? "bg-do-nhat text-do-chu" : phanBo.khaThi === "gan" ? "bg-cam-nhat text-cam-chu" : "bg-nen text-chu")}>
+            {phanBo.loiKetLuan}
+          </p>
+        )}
         <div className="grid grid-cols-3 gap-2">
           {phanBo.phanBoTungMon.map((pb) => (
             <div key={pb.mon} className="rounded-xl border border-vien p-2.5 text-center bg-trang space-y-1">
@@ -187,6 +194,8 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
             </div>
           ))}
         </div>
+
+        <p className="text-[12px] text-chu-phu leading-snug">Gợi ý dựa trên quy tắc ôn tập thông thường, chưa hiệu chỉnh bằng dữ liệu học sinh. Em chỉnh theo cảm nhận của mình nhé.</p>
 
         {/* Nút hành động áp dụng phân bổ vào lịch học thật */}
         <div className="pt-1">

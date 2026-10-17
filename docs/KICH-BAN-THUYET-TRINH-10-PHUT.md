@@ -147,7 +147,7 @@
 > 1. **Thuật toán tính điểm xét tuyển**: Áp dụng đúng công thức tổ hợp của từng ngành và cơ chế giảm điểm ưu tiên trên 22,5 điểm.  
 > 2. **Ước lượng khoảng biến động điểm chuẩn**: Dựa trên độ lệch lịch sử của chính ngành đó qua các năm, đưa ra khoảng tin cậy chứ không bao giờ cam kết 'chắc chắn đậu 100%'.  
 > 3. **Tối ưu danh mục nguyện vọng**: Tự động phát hiện và chặn lỗi 'nghịch đảo thứ tự' — ngăn học sinh đặt ngành dễ trúng tuyển lên trước ngành mơ ước.  
-> 4. **Tối ưu kế hoạch tự học (Knapsack Engine)**: Phân bổ thời lượng ôn tập theo nguyên lý lợi suất giảm dần, ưu tiên môn nghẽn điểm trước.  
+> 4. **Chia giờ tự học theo hiệu quả biên**: mỗi giờ đi vào môn mà em này tăng được nhiều điểm nhất, mỗi môn một cách ôn riêng, và nói thật khi mục tiêu khó đạt với quỹ giờ này.  
 > 
 > Đặc biệt, chúng em đã thực hiện **Kiểm định ngược (Leave-one-year-out backtesting)** trên dữ liệu thật: Khoảng dự báo 80% phủ trúng **89%** điểm chuẩn năm 2023, **95%** năm 2024, và **64%** năm 2025 khi đề thi biến động bất thường. Chúng em minh bạch toàn bộ các con số này trong tài liệu kiểm thử."*
 

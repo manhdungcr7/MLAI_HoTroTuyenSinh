@@ -1,17 +1,9 @@
-// Mô hình tối ưu hoá phân bổ thời gian học tập tuần (Adaptive Knapsack Study Schedule Allocation).
-// Decision Intelligence Engine cho Phân hệ Kế hoạch & Tự học.
-//
-// Cơ sở lý thuyết & Thuật toán:
-//  1. Mục tiêu: Thu hẹp khoảng cách điểm Gap = DiemChuan(NV1) - TongDiemHienTai.
-//  2. Quy luật lợi suất giảm dần (Diminishing Marginal Returns):
-//     - Nâng điểm từ 6.0 lên 7.0 dễ hơn rất nhiều so với nâng từ 9.0 lên 9.5.
-//     - Hàm độ khó cận biên: Difficulty(s) = 1.0 / (10.1 - s)^1.4
-//     - Tỷ suất sinh lời điểm số trên mỗi giờ học: MarginalGain(s) = Potential(s) / Difficulty(s)
-//  3. Phân bổ quỹ thời gian tự học tuần (Budget H_total ví dụ 14 - 20 giờ/tuần) theo bài toán Continuous Knapsack:
-//     - Ưu tiên các môn có Marginal Gain cao nhất cho đến khi đạt điểm trần môn thi (<= 10.0)
-//     - Đảm bảo tính cân bằng (không bỏ quên môn nào dưới ngưỡng sàn).
-//  4. Tự động sinh lịch học chi tiết 7 ngày trong tuần với mục tiêu cụ thể cho từng buổi.
-
+// Kế hoạch học tuần cho màn Chiến lược: chia giờ theo hiệu quả biên từng môn (engine/phan-bo-gio-hoc) rồi rải thành các buổi trong tuần.
+// TypeScript thuần. Mỗi môn có hồ sơ riêng (engine/ho-so-mon): Hóa/Sinh chia thành nhiều buổi ngắn rải đều, Văn là buổi viết bài dài,
+// Anh là buổi ngắn đều đặn, Toán/Lý là buổi giải bài. Số giờ mỗi môn quyết định số buổi: tổng giờ trong lịch đúng bằng quỹ giờ.
+// Mọi tham số mô hình là giả định sư phạm chưa đo trên học sinh thật (xem ho-so-mon.ts), nên đây là gợi ý, không phải dự đoán chắc chắn.
+import { HO_SO_MON, khungBuoi, trongTamTheoKieu, type KieuBuoiMon } from "@/engine/ho-so-mon";
+import { loiKetLuanKhaThi, phanBoGioHoc, type KhaThi } from "@/engine/phan-bo-gio-hoc";
 import type { DiemDayDu, MonId } from "@/state/types";
 import { TEN_MON } from "@/state/types";
 
@@ -23,7 +15,9 @@ export interface PhanBoMonHoc {
   diemCanTang: number;
   soGioMoiTuan: number;
   tiLePhanBo: number; // 0 - 100%
-  doKhoCanBien: number;
+  /** Điểm tăng thêm ước lượng cho giờ học đầu tiên của môn này. Môn nào cao hơn thì được nhiều giờ hơn. */
+  diemMoiGioDau: number;
+  kieuBuoi: KieuBuoiMon;
   trongTamOnTap: string;
 }
 
@@ -47,28 +41,40 @@ export interface KeHoachHocTapToiUu {
   phanBoTungMon: PhanBoMonHoc[];
   lichTuan: BuoiHocChiTiet[];
   loiKhuyenChienLuoc: string[];
+  khaThi: KhaThi;
+  /** Câu nói thật về khả năng đạt mục tiêu với quỹ giờ này (luôn là ước lượng). */
+  loiKetLuan: string;
+  gioCanThemMoiTuan: number | null;
+}
+
+export interface TuyChonKeHoach {
+  soNgayConDenThi?: number;
+  doDoc?: Partial<Record<MonId, number | null>>;
+  canCaiThien?: string[];
 }
 
 const LAM_TRON_1 = (n: number) => Math.round(n * 10) / 10;
-const LAM_TRON_2 = (n: number) => Math.round(n * 100) / 100;
+const lam15 = (n: number) => Math.max(15, Math.round(n / 15) * 15);
+
+const CAC_THU: Array<{ thu: BuoiHocChiTiet["thu"]; tenThu: string }> = [
+  { thu: "T2", tenThu: "Thứ Hai" }, { thu: "T3", tenThu: "Thứ Ba" }, { thu: "T4", tenThu: "Thứ Tư" }, { thu: "T5", tenThu: "Thứ Năm" },
+  { thu: "T6", tenThu: "Thứ Sáu" }, { thu: "T7", tenThu: "Thứ Bảy" }, { thu: "CN", tenThu: "Chủ Nhật" },
+];
+
+const gioTuPhut = (p: number) => `${String(Math.floor(p / 60)).padStart(2, "0")}:${String(p % 60).padStart(2, "0")}`;
+const tenCaGio = (ca: "chieu" | "toi", batDau: number, phut: number) => `${ca === "chieu" ? "Chiều" : "Tối"} (${gioTuPhut(batDau)} - ${gioTuPhut(batDau + phut)})`;
 
 /**
- * Tính hàm độ khó cận biên để tăng điểm tại mức điểm hiện tại `s` (0 <= s <= 10)
- */
-function tinhDoKhoCanBien(s: number): number {
-  const diemAnToan = Math.min(9.9, Math.max(1.0, s));
-  return LAM_TRON_2(1.0 / Math.pow(10.1 - diemAnToan, 1.4));
-}
-
-/**
- * Tối ưu hoá phân bổ quỹ giờ học hàng tuần dựa trên khoảng cách điểm tới NV1
+ * Chia quỹ giờ tự học tuần cho các môn của tổ hợp theo hiệu quả biên, và rải thành lịch 7 ngày.
+ * `diemChuanMucTieu` là tổng điểm cần đạt SAU khi đã trừ điểm ưu tiên (xem mucTieuTho); `diemUuTien` chỉ dùng khi truyền điểm chuẩn thô.
  */
 export function toiUuPhanBoLichHoc(
   cacMonXet: MonId[],
   diemHienTai: DiemDayDu,
   diemChuanMucTieu: number,
   diemUuTien = 0,
-  quyGioTuan = 16 // Mặc định 16 giờ tự học/tuần
+  quyGioTuan = 16,
+  tuyChon: TuyChonKeHoach = {},
 ): KeHoachHocTapToiUu {
   if (!cacMonXet || cacMonXet.length === 0) {
     return {
@@ -78,143 +84,96 @@ export function toiUuPhanBoLichHoc(
       khoangCachGap: LAM_TRON_1(Math.max(0, diemChuanMucTieu)),
       phanBoTungMon: [],
       lichTuan: [],
-      loiKhuyenChienLuoc: ["Vui lòng chọn tổ hợp môn xét tuyển để hệ thống tối ưu hóa thời khóa biểu học tập."],
+      loiKhuyenChienLuoc: ["Vui lòng chọn tổ hợp môn xét tuyển để hệ thống chia giờ học."],
+      khaThi: "daDat",
+      loiKetLuan: "",
+      gioCanThemMoiTuan: null,
     };
   }
 
-  // Lấy điểm hiện tại của các môn trong tổ hợp
-  const danhSachMon = cacMonXet.map((m) => {
-    const raw = (diemHienTai[m] as number | null | undefined) ?? 6.0;
+  const mucTong = diemChuanMucTieu - diemUuTien;
+  const kq = phanBoGioHoc({
+    mon: cacMonXet, diem: diemHienTai as Partial<Record<MonId, number | null>>, mucTieuTong: mucTong,
+    quyPhutTuan: Math.round(quyGioTuan * 60), soNgayConDenThi: tuyChon.soNgayConDenThi, doDoc: tuyChon.doDoc, canCaiThien: tuyChon.canCaiThien,
+  });
+  const tongDiem = kq.phanBo.reduce((s, m) => s + m.diemHienTai, 0);
+
+  const phanBoTungMon: PhanBoMonHoc[] = kq.phanBo.map((p) => {
+    const kieu = HO_SO_MON[p.mon].kieu;
     return {
-      mon: m,
-      tenMon: TEN_MON[m] ?? m,
-      diem: Math.min(10, Math.max(0, raw)),
+      mon: p.mon,
+      tenMon: TEN_MON[p.mon] ?? p.mon,
+      diemHienTai: p.diemHienTai,
+      diemMucTieu: LAM_TRON_1(Math.min(10, p.diemHienTai + p.diemCanTang)),
+      diemCanTang: p.diemCanTang,
+      soGioMoiTuan: LAM_TRON_1(p.phutMoiTuan / 60),
+      tiLePhanBo: quyGioTuan > 0 ? Math.round((p.phutMoiTuan / 60 / quyGioTuan) * 100) : 0,
+      diemMoiGioDau: p.diemMoiGioDau,
+      kieuBuoi: kieu,
+      trongTamOnTap: trongTamTheoKieu(kieu, p.diemHienTai),
     };
   });
 
-  const tongDiemHienTai = danhSachMon.reduce((s, m) => s + m.diem, 0);
-  const tongDiemCoUT = Math.min(30, tongDiemHienTai + diemUuTien);
-  const gap = LAM_TRON_1(Math.max(0, diemChuanMucTieu - tongDiemCoUT));
-
-  // Tính tiềm năng và độ khó của từng môn
-  const phanTichMon = danhSachMon.map((item) => {
-    const tiemNang = Math.max(0, 10 - item.diem);
-    const doKho = tinhDoKhoCanBien(item.diem);
-    // Tỷ suất biên: Môn có tiềm năng cao và độ khó thấp sẽ có hệ số biên cao nhất
-    const heSoBien = tiemNang > 0 ? LAM_TRON_2(Math.sqrt(tiemNang) / doKho) : 0.05;
-    return {
-      ...item,
-      tiemNang,
-      doKho,
-      heSoBien,
-    };
-  });
-
-  const tongHeSoBien = phanTichMon.reduce((s, m) => s + m.heSoBien, 0);
-
-  // Phân bổ điểm cần tăng tỉ lệ theo hệ số biên (nếu có gap)
-  const phanBoTungMon: PhanBoMonHoc[] = phanTichMon.map((item) => {
-    const tiLe = tongHeSoBien > 0 ? item.heSoBien / tongHeSoBien : 1 / phanTichMon.length;
-
-    // Điểm cần tăng cho môn này (không vượt quá tiềm năng 10 - điểm)
-    const diemCanTang = gap > 0 ? Math.min(item.tiemNang, LAM_TRON_1(gap * tiLe * 1.05)) : 0;
-    const diemMucTieu = LAM_TRON_1(Math.min(10, item.diem + diemCanTang));
-
-    // Số giờ học được gán (tối thiểu 2.5h/tuần để duy trì phong độ)
-    const gioCoBan = 2.5;
-    const gioConLai = Math.max(0, quyGioTuan - gioCoBan * phanTichMon.length);
-    const soGioMoiTuan = LAM_TRON_1(gioCoBan + gioConLai * tiLe);
-    const tiLePhanBo = Math.round((soGioMoiTuan / quyGioTuan) * 100);
-
-    // Xác định trọng tâm ôn tập theo mức điểm hiện tại
-    let trongTamOnTap: string;
-    if (item.diem < 7.0) {
-      trongTamOnTap = "Củng cố lý thuyết căn bản, xử lý triệt để các câu nhận biết & thông hiểu, không để mất điểm oan.";
-    } else if (item.diem < 8.5) {
-      trongTamOnTap = "Luyện các dạng bài vận dụng vừa, rèn kỹ thuật bấm máy tính và bấm giờ giải nhanh từng phần.";
-    } else {
-      trongTamOnTap = "Chuyên đề vận dụng cao (câu phân loại 9 - 10 điểm), tổng hợp bẫy đề thi các năm trước.";
+  // Rải thành buổi: số buổi theo độ dài buổi hợp lý của môn; các buổi của một môn cách đều nhau trong tuần.
+  type Buoi = { mon: MonId; thuTu: number; phut: number; dauTuan: boolean; suaLoi: boolean; kieu: KieuBuoiMon };
+  const cacBuoi: Buoi[] = [];
+  const thuTuMon = [...kq.phanBo].sort((a, b) => b.phutMoiTuan - a.phutMoiTuan);
+  thuTuMon.forEach((p, mi) => {
+    if (p.phutMoiTuan <= 0) return;
+    const hs = HO_SO_MON[p.mon];
+    const soBuoi = Math.max(1, Math.min(7, Math.round(p.phutMoiTuan / hs.buoiToiUuPhut)));
+    const moi = lam15(p.phutMoiTuan / soBuoi);
+    for (let k = 0; k < soBuoi; k++) {
+      cacBuoi.push({ mon: p.mon, thuTu: Math.min(6, Math.floor((k * 7) / soBuoi + (mi % 3))) % 7, phut: moi, dauTuan: k === 0, suaLoi: p.dangXuong && k === 0, kieu: hs.kieu });
     }
-
-    return {
-      mon: item.mon,
-      tenMon: item.tenMon,
-      diemHienTai: item.diem,
-      diemMucTieu,
-      diemCanTang,
-      soGioMoiTuan,
-      tiLePhanBo,
-      doKhoCanBien: item.doKho,
-      trongTamOnTap,
-    };
   });
-
-  // Xây dựng lịch học tuần (7 ngày)
+  const taiNgay = new Array(7).fill(0) as number[];
   const lichTuan: BuoiHocChiTiet[] = [];
-  const cacThu: Array<{ thu: BuoiHocChiTiet["thu"]; tenThu: string }> = [
-    { thu: "T2", tenThu: "Thứ Hai" },
-    { thu: "T3", tenThu: "Thứ Ba" },
-    { thu: "T4", tenThu: "Thứ Tư" },
-    { thu: "T5", tenThu: "Thứ Năm" },
-    { thu: "T6", tenThu: "Thứ Sáu" },
-    { thu: "T7", tenThu: "Thứ Bảy" },
-    { thu: "CN", tenThu: "Chủ Nhật" },
-  ];
-
-  // Sắp xếp môn theo số giờ giảm dần để xếp lịch xen kẽ hợp lý
-  const sortedMon = [...phanBoTungMon].sort((a, b) => b.soGioMoiTuan - a.soGioMoiTuan);
-
-  cacThu.forEach((thuItem, idx) => {
-    // Luân phiên các môn chính
-    const monChinh = sortedMon[idx % sortedMon.length];
-    const monPhu = sortedMon[(idx + 1) % sortedMon.length];
-
-    // Chiều: 90 phút ôn lý thuyết hoặc chuyên đề
+  for (const b of [...cacBuoi].sort((a, c) => a.thuTu - c.thuTu || c.phut - a.phut)) {
+    // Ngày dự kiến có thể đã dày: chuyển sang ngày gần nhất còn nhẹ, tránh trùng môn trong ngày.
+    let ngay = b.thuTu, tot = Infinity;
+    for (let d = 0; d < 7; d++) {
+      const trung = lichTuan.some((x) => x.thu === CAC_THU[d].thu && x.mon === b.mon) ? 120 : 0;
+      const diem = taiNgay[d] * 1.5 + trung + Math.abs(d - b.thuTu) * 25;
+      if (diem < tot) { tot = diem; ngay = d; }
+    }
+    // Mỗi ngày: tối trước, rồi chiều; buổi thứ ba trở đi nối tiếp sau buổi chiều (nghỉ 10 phút), không chồng giờ.
+    const trongNgay = lichTuan.filter((x) => x.thu === CAC_THU[ngay].thu);
+    const ca: "chieu" | "toi" = trongNgay.some((x) => x.ca === "toi") ? "chieu" : "toi";
+    const batDau = ca === "toi" ? 19 * 60 + 30 : 14 * 60 + 30 + trongNgay.filter((x) => x.ca === "chieu").reduce((t, x) => t + x.thoiLuongPhut + 10, 0);
+    const khung = khungBuoi(b.kieu, b.phut, { dauTuan: b.dauTuan, suaLoi: b.suaLoi });
+    taiNgay[ngay] += b.phut;
     lichTuan.push({
-      thu: thuItem.thu,
-      tenThu: thuItem.tenThu,
-      ca: "chieu",
-      tenCa: "Chiều (14:30 - 16:30)",
-      mon: monChinh.mon,
-      tenMon: monChinh.tenMon,
-      thoiLuongPhut: 120,
-      noiDung: idx % 2 === 0 ? `Học chuyên đề trọng tâm & bài tập dạng mới môn ${monChinh.tenMon}` : `Luyện giải đề thi thử bấm giờ môn ${monChinh.tenMon}`,
-      loaiBuoi: idx % 2 === 0 ? "lyThuyet" : "luyenDe",
+      thu: CAC_THU[ngay].thu, tenThu: CAC_THU[ngay].tenThu, ca, tenCa: tenCaGio(ca, batDau, b.phut),
+      mon: b.mon, tenMon: TEN_MON[b.mon] ?? b.mon, thoiLuongPhut: b.phut,
+      noiDung: khung.chiTiet,
+      loaiBuoi: b.suaLoi ? "suaBai" : b.kieu === "giaiBai" || b.kieu === "vietBai" ? "luyenDe" : "lyThuyet",
     });
+  }
+  const thuTuThu = (t: BuoiHocChiTiet["thu"]) => CAC_THU.findIndex((x) => x.thu === t);
+  lichTuan.sort((a, c) => thuTuThu(a.thu) - thuTuThu(c.thu) || (a.ca === c.ca ? 0 : a.ca === "chieu" ? -1 : 1));
 
-    // Tối: 90 phút sửa bài & ôn tập xen kẽ
-    lichTuan.push({
-      thu: thuItem.thu,
-      tenThu: thuItem.tenThu,
-      ca: "toi",
-      tenCa: "Tối (19:30 - 21:00)",
-      mon: monPhu.mon,
-      tenMon: monPhu.tenMon,
-      thoiLuongPhut: 90,
-      noiDung: `Sửa chi tiết các câu sai, ghi chép sổ tay công thức môn ${monPhu.tenMon}`,
-      loaiBuoi: "suaBai",
-    });
-  });
-
-  // Lời khuyên chiến lược
   const loiKhuyenChienLuoc: string[] = [];
-  if (gap === 0) {
+  if (kq.khaThi === "daDat") {
     loiKhuyenChienLuoc.push("Điểm hiện tại của bạn đã đạt mốc điểm chuẩn kỳ vọng. Trọng tâm lúc này là duy trì sự ổn định tâm lý và tốc độ làm bài.");
   } else {
-    const monKeoDiem = [...phanBoTungMon].sort((a, b) => b.diemCanTang - a.diemCanTang)[0];
-    if (monKeoDiem) {
-      loiKhuyenChienLuoc.push(`Để san bằng khoảng cách ${gap} điểm tới NV1, môn "${monKeoDiem.tenMon}" là trọng tâm cần bứt phá (mục tiêu tăng +${monKeoDiem.diemCanTang} điểm).`);
+    const nhieuNhat = [...phanBoTungMon].sort((a, b) => b.soGioMoiTuan - a.soGioMoiTuan)[0];
+    if (nhieuNhat) {
+      loiKhuyenChienLuoc.push(`${nhieuNhat.tenMon} nhận nhiều giờ nhất (${String(nhieuNhat.soGioMoiTuan).replace(".", ",")} giờ/tuần) vì mỗi giờ ở môn này ước tăng thêm nhiều điểm nhất cho bạn lúc này.`);
     }
-    loiKhuyenChienLuoc.push(`Quỹ thời gian ${quyGioTuan} giờ/tuần đã được tối ưu hóa toán học theo hàm biên, tập trung vào môn có khả năng bứt phá nhanh nhất.`);
   }
+  loiKhuyenChienLuoc.push(...kq.ghiChu);
 
   return {
     tongGioTuan: quyGioTuan,
-    diemHienTaiTong: LAM_TRON_1(tongDiemHienTai),
+    diemHienTaiTong: LAM_TRON_1(tongDiem),
     diemMucTieuTong: LAM_TRON_1(diemChuanMucTieu),
-    khoangCachGap: gap,
+    khoangCachGap: kq.gap,
     phanBoTungMon,
     lichTuan,
     loiKhuyenChienLuoc,
+    khaThi: kq.khaThi,
+    loiKetLuan: loiKetLuanKhaThi(kq),
+    gioCanThemMoiTuan: kq.gioCanThemMoiTuan,
   };
 }

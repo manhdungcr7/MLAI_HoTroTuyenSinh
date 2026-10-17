@@ -77,7 +77,7 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
 │    - Xác suất trúng thực tế: P(trung NV_j) = p_j * prod_{m<j}(1 - p_m)│
 │    - Thuật toán Inversion Detection: Phát hiện & xóa bỏ nghịch đảo     │
 │                                                                        │
-│ 4. Adaptive Knapsack Schedule Engine (Thời khóa biểu ôn tập tuần)      │
+│ 4. Chia giờ tự học theo hiệu quả biên từng môn (kế hoạch ôn tập tuần)  │
 │    - Lực cản bão hòa Logistic: Difficulty(s) = 1 / (10.1 - s)^1.4      │
 │    - Tỷ suất sinh lời điểm số: MarginalGain = sqrt(10 - s) / Difficulty│
 │    - Phân bổ quỹ 168h/tuần vào môn tạo đòn bẩy điểm số cao nhất       │
@@ -107,9 +107,9 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
 - **Phát hiện nghịch đảo thứ tự:** Nếu NV đứng trước có điểm chuẩn thấp hơn rõ rệt ($P \ge 80\%$) so với NV đứng sau ($P \le 50\%$), hệ thống lập tức phát cảnh báo đỏ vì thí sinh sẽ bị mất cơ hội vào ngành mơ ước.
 - **Tự động tái cân đối:** Thuật toán tự động sắp xếp lại danh mục theo nguyên tắc: Ngành điểm cao/thử sức xếp trên, ngành an toàn/bảo hiểm xếp dưới, khóa trần rủi ro trượt trắng $P(\text{fail all}) \le 5\%$.
 
-### 4. Tối ưu Thời khóa biểu Ôn thi (Continuous Knapsack Study Plan)
+### 4. Chia giờ ôn thi theo hiệu quả biên từng môn
 - Tuân theo **Quy luật lợi suất giảm dần (Diminishing Marginal Returns)**: kéo điểm từ 6 lên 7 dễ hơn nhiều so với kéo từ 8.5 lên 9.5.
-- Xác định môn học có tỷ suất hoàn vốn thời gian cao nhất (Subject ROI) để phân bổ lịch học 7 ngày trong tuần, tự động sinh lịch học chi tiết và xuất sang Google Calendar / file `.ics`.
+- Mỗi 15 phút được đưa vào môn có hiệu quả biên (điểm tăng thêm trên mỗi giờ) cao nhất; mỗi môn có hồ sơ riêng (`src/engine/ho-so-mon.ts`: kiểu buổi, độ dài buổi, trần tăng điểm). Các tham số là giả định sư phạm chưa đo trên học sinh thật. Kết quả gồm lịch tuần, kết luận khả thi (đủ / gần đủ / không đủ) và xuất sang Google Calendar / file `.ics`.
 
 ---
 
