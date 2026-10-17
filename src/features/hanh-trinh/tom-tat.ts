@@ -5,6 +5,7 @@ import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { tim } from "@/data/lua-chon-mau";
 import { NGAN_SACH_TOI_DA, tongDiem } from "@/engine/phan-tich";
+import { lyDoKhongSoDuoc } from "@/engine/trang-thai-du-lieu";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { demNhan, dungDanhSach, xetCoCau } from "@/features/nguyen-vong/tinh-toan";
 import { mucTieuDayDu, tienDoTuan } from "@/state/chon";
@@ -144,7 +145,7 @@ export function tomTatChiaSe(s: AppState, bayGio: Date, kemTen: boolean = false)
   muc.push({ tieuDe: `Danh sách nguyện vọng (${s.nguyenVong.length})`, dong: ds.length ? ds.map((d) => {
     if (!d.lc) return `Nguyện Vọng ${d.viTri + 1}: lựa chọn không còn trong dữ liệu`;
     const nhan: NhanNguyenVong | string = d.nhan ?? `chưa so được: ${d.lyDoKhongNhan ?? "thiếu điểm"}`;
-    return `Nguyện Vọng ${d.viTri + 1}: ${d.lc.truong} – ${d.lc.nganh} (${nhan}${d.suyRa ? " (suy ra)" : ""}; điểm chuẩn ${so(d.lc.diemMin)} năm ${d.lc.namDiem})`;
+    return `Nguyện Vọng ${d.viTri + 1}: ${d.lc.truong} – ${d.lc.nganh} (${nhan}${d.suyRa ? " (suy ra)" : ""}${lyDoKhongSoDuoc(d.lc) ? "; chưa có điểm chuẩn để so" : `; điểm chuẩn ${so(d.lc.diemMin)} năm ${d.lc.namDiem}`})`;
   }) : ["Chưa lưu nguyện vọng nào."] });
 
   const cs = chiSoTheoDoi(s);

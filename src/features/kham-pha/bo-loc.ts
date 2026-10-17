@@ -1,6 +1,7 @@
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import type { LuaChon } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
+import { diemChuanDeSo } from "@/engine/trang-thai-du-lieu";
 
 // Tính khi gọi (không ở mức module): danh mục nạp lười và có thể được thay bằng bản CMS.
 export const cacNhom = (): string[] => [...new Set(LUA_CHON_MAU.map((l) => l.nhomNganh))];
@@ -34,7 +35,10 @@ export const cungNoi = (khuVucTruong: string, noi: string) => {
 
 export function loc(ds: LuaChon[], b: BoLoc, tinhCuaEm?: string): LuaChon[] {
   return ds.filter((l) => {
-    if (l.diemMin > b.diemDen || l.diemMax < b.diemTu) return false;
+    if (b.diemTu !== BO_LOC_MAC_DINH.diemTu || b.diemDen !== BO_LOC_MAC_DINH.diemDen) {
+      const d = diemChuanDeSo(l); // chỉ lọc theo điểm chuẩn hợp lệ; điểm sàn/phương thức khác không được coi là điểm chuẩn
+      if (d === null || d > b.diemDen || d < b.diemTu) return false;
+    }
     // Chưa có dữ liệu học phí thì không loại (không thể nói là vượt hay vừa mức đã chọn).
     if (coHocPhi(l)) {
       const min = l.hocPhiMin as number, max = l.hocPhiMax as number;

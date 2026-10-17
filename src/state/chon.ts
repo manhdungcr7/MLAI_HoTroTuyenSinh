@@ -3,6 +3,7 @@ import { tim } from "@/data/lua-chon-mau";
 import { tongCanDatDeDen, mucUuTien } from "@/engine/diem-uu-tien";
 import { isoNgay, thuHaiCuaTuan, bayNgayCuaTuan, soNgayTu } from "@/engine/xep-lich";
 import { khoangCachTheoMon, monThieuCuaToHop, tongDiem } from "@/engine/phan-tich";
+import { lyDoKhongSoDuoc } from "@/engine/trang-thai-du-lieu";
 import { diemHienTaiCuaTungMon, type AppState } from "./store";
 import { changCuaEm, coDemNguoc, type Chang } from "./chang";
 import { TO_HOP, type LuaChon, type MaToHop, type MonId, type ViecCanHoc } from "./types";
@@ -92,6 +93,8 @@ function toHopChoMucTieu(lc: LuaChon, diem?: Record<MonId, number | null>): MaTo
 /** Mục tiêu chính chỉ lập kế hoạch học cho phương thức thi tốt nghiệp THPT và 4 tổ hợp A00, A01, D01, B00. Ngành khác thì nói rõ lý do, không đặt bừa. */
 export function coTheDatMucTieu(lc: LuaChon): { ok: true } | { ok: false; lyDo: string } {
   if (lc.phuongThuc && lc.phuongThuc !== "THPT") return { ok: false, lyDo: "Điểm chuẩn này thuộc phương thức xét khác (học bạ, đánh giá năng lực...), không so được với điểm thi tốt nghiệp nên mình chưa lập kế hoạch ôn thi cho nó." };
+  const khongSo = lyDoKhongSoDuoc(lc); // chỉ có điểm sàn 15,0 hoặc chưa có điểm: không có mốc để đặt mục tiêu
+  if (khongSo) return { ok: false, lyDo: `${khongSo} Nên mình chưa đặt được mục tiêu điểm cho ngành này.` };
   if (lc.toHopXet?.length && !lc.toHopXet.some((c) => c in TO_HOP)) return { ok: false, lyDo: `Ngành này xét tổ hợp ${lc.toHopXet.slice(0, 4).join(", ")}. Kế hoạch ôn thi hiện hỗ trợ A00, A01, D01, B00, nên mình chưa đặt được làm mục tiêu chính.` };
   return { ok: true };
 }

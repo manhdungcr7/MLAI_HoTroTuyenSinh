@@ -15,6 +15,7 @@ import { CAC_MON, TEN_MON, TEN_MON_NGAN, TO_HOP, type LuaChon, type MaToHop, typ
 import { ANH_TRONG, CAC_TO_HOP, chonToHopHienThi, chupTruocSau, dieuKienTuHoSo, docODiem, tongCacToHop, vietDiem, type AnhTruocSau, type Diem } from "./tinh-toan";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 import { ngayVN } from "@/features/muc-tieu/tinh-toan";
+import { ChuThichLoaiDiem, NhanLoaiDiem } from "@/features/khoi-dau/loai-diem";
 
 const O_MON: { mon: MonId; icon: LucideIcon; tone: ToneTen; neuCo?: boolean }[] = [
   { mon: "toan", icon: Calculator, tone: "xanh" },
@@ -47,6 +48,11 @@ export default function DiemThiThu() {
   }, [doc, diemTruoc]);
   const toHopTruoc = tongCacToHop(diemTruoc), toHopSau = tongCacToHop(diemSau);
   const { ma: maMucTieu, toHop: toHopMucTieu } = chonToHopHienThi(diemSau, s.mucTieu);
+  /** Điểm đang dùng của từng môn đến từ đâu: lần thi thử gần nhất hay ô em nhập ở hồ sơ. */
+  const nguonDiem = (m: MonId) => {
+    const ds = s.diemThi.filter((d) => d.mon === m);
+    return ds.length ? `thi thử ${ngayVN(ds.reduce((a, b) => (b.ngay >= a ? b.ngay : a), ds[0].ngay))}` : "em nhập ở hồ sơ";
+  };
   const soLoi = CAC_MON.filter((m) => doc[m].loi).length;
 
   const capNhat = () => {
@@ -70,9 +76,11 @@ export default function DiemThiThu() {
       <DauTrangCoQuayLai tieuDe="Điểm thi thử" quayLai={DUONG_DAN.nguyenVong()} />
       <NoiDung>
         <NenHero className="p-4">
+          <NhanLoaiDiem loai="thiThu" className="mb-1.5" />
           <h2 className="text-[22px] leading-tight font-extrabold text-muc">Nhập điểm thi thử mới</h2>
-          <p className="text-[14px] text-chu mt-1">Điểm mới sẽ cập nhật nhãn nguyện vọng và gợi ý.</p>
+          <p className="text-[14px] text-chu mt-1">Điểm mới sẽ cập nhật nhãn nguyện vọng và gợi ý. Chỉ nhập điểm bài thi thử thật, không nhập điểm mục tiêu ở đây.</p>
         </NenHero>
+        <ChuThichLoaiDiem cacLoai={["thiThu", "mucTieu", "thiThat"]} />
 
         <section aria-labelledby="diem-mon">
           <h2 id="diem-mon" className="text-[16px] font-extrabold text-muc mb-2 mt-1">Điểm các môn <span className="font-semibold text-chu-phu text-[14px]">(thang 10)</span></h2>
@@ -86,12 +94,12 @@ export default function DiemThiThu() {
                     <BieuTuongTron icon={icon} tone={tone} kichThuoc={32} />
                     <span className="text-[14px] font-bold text-chu leading-tight">{TEN_MON[mon]}{neuCo && <span className="block text-[12px] font-semibold text-chu-phu">nếu có</span>}</span>
                   </label>
-                  <input id={`dtt-${mon}`} inputMode="decimal" autoComplete="off" placeholder="Ví dụ 7,5" value={chuoi[mon]}
+                  <input id={`dtt-${mon}`} inputMode="decimal" enterKeyHint="next" autoComplete="off" placeholder="Ví dụ 7,5" value={chuoi[mon]}
                     aria-invalid={!!loi} aria-describedby={`dtt-${mon}-goi-y`}
                     onChange={(e) => { setChuoi((c) => ({ ...c, [mon]: e.target.value })); setBao(null); }}
                     className={gop("w-full min-h-12 rounded-xl border bg-trang px-3 text-[17px] font-bold text-muc focus:border-xanh", loi ? "border-do" : "border-vien")} />
-                  <p id={`dtt-${mon}-goi-y`} className={gop("mt-1 text-[12px] leading-snug min-h-4", loi ? "text-do-chu font-semibold" : doi ? "text-luc-chu font-semibold" : "text-chu-phu")}>
-                    {loi ?? (doi ? `Trước: ${truoc === null ? "chưa có" : vietDiem(truoc)} → ${vietDiem(gia!)}` : truoc === null ? "Chưa có điểm" : "")}
+                  <p id={`dtt-${mon}-goi-y`} className={gop("mt-1 text-[12px] leading-snug min-h-8", loi ? "text-do-chu font-semibold" : doi ? "text-luc-chu font-semibold" : "text-chu-phu")}>
+                    {loi ?? (doi ? `Trước: ${truoc === null ? "chưa có" : vietDiem(truoc)} → ${vietDiem(gia!)}` : truoc === null ? "Chưa có điểm" : `Đang dùng ${vietDiem(truoc)} (${nguonDiem(mon)})`)}
                   </p>
                 </div>
               );

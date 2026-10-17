@@ -3,7 +3,7 @@
 // TypeScript thuần, không React, không gọi mạng.
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
-import { nhanNguyenVong } from "@/engine/phan-tich";
+import { lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, LuaChon } from "@/state/types";
@@ -47,6 +47,7 @@ function oHocPhi(l: LuaChon): string {
 
 function oVoiDiemCuaEm(l: LuaChon, diem: DiemDayDu): { chu: string; coDiem: boolean } {
   if (!laTHPT(l)) return { chu: "Không so được (khác phương thức)", coDiem: false };
+  if (lyDoKhacPhuongThuc(l)) return { chu: "Chưa có điểm chuẩn riêng để so (mới có điểm sàn)", coDiem: false };
   const t = tongChoLuaChon(l, diem);
   if (t.tong === null) return { chu: "Chưa đủ điểm để so", coDiem: false };
   const chenh = Math.round((t.tong - l.diemMin) * 100) / 100;

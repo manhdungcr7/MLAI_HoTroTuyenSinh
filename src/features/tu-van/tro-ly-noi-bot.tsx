@@ -112,7 +112,7 @@ function KhungChatMini({ dong }: { dong: () => void }) {
             <Bot size={20} />
           </span>
           <div className="min-w-0">
-            <h3 className="text-[14px] font-bold text-white leading-tight truncate">Chatbot AI Tuyển sinh</h3>
+            <h3 className="text-[14px] font-bold text-white leading-tight truncate">Trợ lý tuyển sinh AI</h3>
             <span className="text-[11px] text-white/90 font-medium flex items-center gap-1.5 mt-0.5">
               Tra cứu số liệu tuyển sinh
             </span>
@@ -525,6 +525,9 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
     pathname.startsWith("/tu-van") ||
     pathname.startsWith("/chao") ||
     pathname.startsWith("/bat-dau") ||
+    pathname.startsWith("/diem-thi-thu") ||
+    pathname.startsWith("/ho-so/cai-dat") ||
+    pathname.startsWith("/ke-hoach/cai-dat") ||
     pathname.startsWith("/ho-so/chia-se") ||
     pathname.startsWith("/dong-hanh") ||
     pathname.startsWith("/loi-nhan")

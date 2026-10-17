@@ -1,22 +1,24 @@
 // Màn 20 · Tiến độ & điều chỉnh (ref bo-A/10 phải + bo-C/10 phải).
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight, BarChart3, Bell, CalendarClock, CalendarDays, CalendarPlus, CalendarX2, CircleAlert, CircleCheck, Clock,
-  Lightbulb, ListChecks, NotebookPen, RotateCcw, ShieldCheck, SkipForward, Sparkles, TrendingDown, TrendingUp, type LucideIcon,
+  Flame, Lightbulb, ListChecks, NotebookPen, RotateCcw, ShieldCheck, SkipForward, Sparkles, TrendingDown, TrendingUp, type LucideIcon,
 } from "lucide-react";
-import { DauTrangChinh, NoiDung, ThanhPhuKeHoach } from "@/components/layout/khung";
-import { HopTruot, TieuDeMuc, TrangThaiTrong, VongTienDo } from "@/components/ui/hien-thi";
+import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
+import { ThanhTabKeHoach } from "@/features/ke-hoach/thanh-tab";
+import { HopTruot, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { HangBam, Nut, The, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
+import { TheNen, VongDiem } from "@/components/ui/thiet-ke";
 import { DuongXuHuong } from "@/components/ui/xu-huong";
 import { DUONG_DAN } from "@/duong-dan";
-import { congNgay } from "@/engine/xep-lich";
+import { bayNgayCuaTuan, congNgay, isoNgay } from "@/engine/xep-lich";
 import { tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { useApp } from "@/state/store";
 import type { LichSuHoanThanh, ToneTen, TrangThaiViec } from "@/state/types";
 import { loaiCuaCanhBao, taoCanhBao, type LoaiCanhBao } from "./canh-bao";
-import { demTienDo, loiGhiNhan, ngayThang, nhanThoiDiem, soViet, soVoiTuanTruoc, xuHuongCacMon, type XuHuongMon } from "./tinh-tien-do";
+import { chuoiNgayHoc, demTienDo, loiGhiNhan, ngayThang, NHAN_THU, nhanThoiDiem, soViet, soVoiTuanTruoc, xuHuongCacMon, type XuHuongMon } from "./tinh-tien-do";
 import { dinhDang } from "@/engine/dinh-dang";
 
 const ICON_CANH_BAO: Record<LoaiCanhBao, LucideIcon> = {
@@ -40,13 +42,14 @@ export default function TienDo() {
   const ss = soVoiTuanTruoc(s.lichSu, bayGio, td.xong);
   const ghiNhan = loiGhiNhan(s, bayGio);
   const xuHuong = xuHuongCacMon(s);
+  const chuoi = chuoiNgayHoc(s.lichSu, bayGio);
   const canhBao = taoCanhBao(s, bayGio);
   const trongHet = !viecCuaTuan(s.viec, tuanHienTai()).length && !s.lichSu.length && !s.diemThi.length;
 
   return (
     <>
       <DauTrangChinh tieuDe="Tiến độ & điều chỉnh" moTa={`Tuần này · ${ngayThang(thuHai)} – ${ngayThang(congNgay(thuHai, 6))}`} />
-      <ThanhPhuKeHoach />
+      <ThanhTabKeHoach />
       <NoiDung>
         {trongHet ? (
           <TrangThaiTrong bieuTuong={<BarChart3 size={26} />} tieuDe="Chưa có gì để theo dõi"
@@ -59,6 +62,13 @@ export default function TienDo() {
         ) : (
           <>
             <TheTienDoTuan td={td} ss={ss} moTuan={() => nav(DUONG_DAN.tuan())} />
+            {td.tong > 0 && <TienDoTheoNgay s={s} thuHai={thuHai} bayGio={bayGio} />}
+            {chuoi >= 2 && (
+              <div className="the-nen-nhe-cam rounded-the p-3.5 flex items-center gap-3">
+                <span className="size-11 rounded-full bg-trang grid place-items-center shrink-0"><Flame size={24} className="text-cam" aria-hidden /></span>
+                <div><p className="text-[13px] text-chu-phu">Chuỗi học liên tiếp</p><p className="so-lon text-[20px] font-bold text-muc leading-tight">{chuoi} ngày</p></div>
+              </div>
+            )}
             {ghiNhan && <DongThongBao tone="luc" icon={Sparkles} tieuDe="Ghi nhận cho bạn" moTa={ghiNhan} />}
 
             <section aria-labelledby="kq-hoc-tap">
@@ -66,6 +76,9 @@ export default function TienDo() {
                 <span id="kq-hoc-tap">Kết quả học tập gần nhất</span>
               </TieuDeMuc>
               <KetQuaHocTap xuHuong={xuHuong} nhapDiem={() => nav(DUONG_DAN.diemThiThu())} />
+              {s.diemThi.length > 0 && (
+                <div className="mt-2.5"><HangBam bieuTuong={NotebookPen} tone="xanh" tieuDe="Nhập điểm thi thử" phu="Cập nhật kết quả để theo dõi tiến độ" onClick={() => nav(DUONG_DAN.diemThiThu())} /></div>
+              )}
             </section>
 
             <section aria-labelledby="hoat-dong">
@@ -137,9 +150,10 @@ function TheTienDoTuan({ td, ss, moTuan }: {
     { so: td.daDoi, nhan: "Đã dời", icon: Clock, tone: "cam" },
   ];
   return (
-    <The className="space-y-4">
+    <TheNen className={gop("space-y-4 relative overflow-hidden", td.phanTram === 100 && "the-nen-nhe-luc")}>
+      {td.phanTram === 100 && <Mung />}
       <div className="flex items-center gap-4">
-        <VongTienDo phanTram={td.phanTram} kichThuoc={96} />
+        <VongDiem value={td.phanTram} max={100} size={96} tong={td.phanTram === 100 ? "luc" : "xanh"} dinhDang={(n) => `${Math.round(n)}%`} aria={`Tiến độ tuần ${td.phanTram} phần trăm`} />
         <div className="min-w-0 flex-1">
           <p className="text-[14px] font-extrabold text-muc">Tiến độ tuần</p>
           <p className="leading-tight mt-0.5"><b className="text-[26px] font-extrabold text-muc">{td.xong}/{td.tong}</b> <span className="text-[14px] font-bold text-chu-phu">việc đã xong</span></p>
@@ -160,7 +174,68 @@ function TheTienDoTuan({ td, ss, moTuan }: {
           </li>
         ))}
       </ul>
-    </The>
+    </TheNen>
+  );
+}
+
+/** Hiệu ứng ăn mừng ngắn khi xong 100% tuần (một lần, tắt khi giảm chuyển động). */
+function Mung() {
+  const [hien, setHien] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setHien(false), 1800); return () => clearTimeout(t); }, []);
+  if (!hien) return null;
+  return (
+    <span aria-hidden className="absolute inset-0 pointer-events-none motion-reduce:hidden">
+      {[8, 22, 38, 54, 70, 86].map((x, i) => (
+        <Sparkles key={x} size={16} className="absolute text-cam animate-ping" style={{ left: `${x}%`, top: `${10 + (i % 3) * 8}%`, animationDelay: `${i * 120}ms`, animationIterationCount: 2 }} />
+      ))}
+    </span>
+  );
+}
+
+function TienDoTheoNgay({ s, thuHai, bayGio }: { s: ReturnType<typeof useApp>["s"]; thuHai: string; bayGio: Date }) {
+  const [chon, setChon] = useState<string | null>(null);
+  const idTuan = new Set(viecCuaTuan(s.viec, thuHai).map((v) => v.id));
+  const hom = isoNgay(bayGio);
+  const cot = bayNgayCuaTuan(thuHai).map((ngay, i) => {
+    const viec = [...new Set(s.khoiHoc.filter((k) => k.ngay === ngay && k.viecId && idTuan.has(k.viecId)).map((k) => k.viecId!))];
+    const xong = viec.filter((id) => s.trangThaiViec[id] === "xong").length;
+    return { ngay, nhan: NHAN_THU[i + 1], viec, xong };
+  });
+  const dangXem = cot.find((c) => c.ngay === chon);
+  const ten = (id: string) => s.viec.find((v) => v.id === id)?.tieuDe ?? "Việc";
+  return (
+    <TheNen>
+      <b className="text-[15px] text-muc">Tiến độ theo ngày</b>
+      <ul className="mt-3 grid grid-cols-7 gap-1.5">
+        {cot.map((c) => {
+          const ti = c.viec.length ? c.xong / c.viec.length : 0;
+          const tong = c.viec.length > 0 && c.xong === c.viec.length;
+          return (
+            <li key={c.ngay}>
+              <button type="button" disabled={!c.viec.length} aria-pressed={chon === c.ngay} onClick={() => setChon(chon === c.ngay ? null : c.ngay)}
+                aria-label={`${c.nhan} ${ngayThang(c.ngay)}: ${c.viec.length ? `${c.xong}/${c.viec.length} việc đã xong` : "không có việc"}`}
+                className="w-full min-h-11 flex flex-col items-center gap-1 cursor-pointer disabled:cursor-default">
+                <span className="h-4 grid place-items-center">{tong && <CircleCheck size={16} className="text-luc" aria-hidden />}</span>
+                <span className={gop("relative w-full max-w-7 h-16 rounded-lg bg-vien/50 overflow-hidden", chon === c.ngay && "ring-2 ring-xanh")}>
+                  <span className="absolute inset-x-0 bottom-0 gd-thanh-luc rounded-lg transition-[height] duration-700" style={{ height: `${Math.round(ti * 100)}%` }} />
+                </span>
+                <span className={gop("text-[13px] font-bold", c.ngay === hom ? "text-xanh" : "text-chu")}>{c.nhan}</span>
+                <span className="text-[12px] text-chu-phu">{ngayThang(c.ngay)}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      {cot.every((c) => !c.viec.length) && <p className="mt-2 text-[13px] text-chu-phu">Chưa xếp việc nào vào ngày cụ thể. Bạn xếp lịch ở Kế hoạch tuần để theo dõi từng ngày.</p>}
+      {dangXem && (
+        <ul className="mt-3 pt-2 border-t border-vien space-y-1.5">
+          {dangXem.viec.map((id) => {
+            const xong = s.trangThaiViec[id] === "xong";
+            return <li key={id} className="flex items-center gap-2 text-[14px]"><CircleCheck size={16} className={xong ? "text-luc" : "text-chu-phu"} aria-hidden /><span className="min-w-0">{ten(id)}</span><span className="ml-auto text-[13px] text-chu-phu">{xong ? "Đã xong" : "Chưa xong"}</span></li>;
+          })}
+        </ul>
+      )}
+    </TheNen>
   );
 }
 

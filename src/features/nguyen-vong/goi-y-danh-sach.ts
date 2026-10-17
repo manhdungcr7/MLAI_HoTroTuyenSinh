@@ -3,7 +3,8 @@
 // Hàm thuần (không React). Mỗi dòng kèm lý do bằng lời, chỉ dùng số có thật trong dữ liệu.
 import { LUA_CHON_MAU, tim } from "@/data/lua-chon-mau";
 import { coHocPhi } from "@/data/lua-chon-phu";
-import { NGAN_SACH_TOI_DA, nhanNguyenVong } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
+import { cacDiemHopLe } from "@/engine/trang-thai-du-lieu";
 import { cungNoi } from "@/features/kham-pha/bo-loc";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -64,7 +65,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
   const tinh = hoSo.tinh === "Tỉnh khác" ? "" : hoSo.tinh;
   const trongNganSach = (l: LuaChon) => !coHocPhi(l) || (l.hocPhiMin as number) <= ns;
   const ungVien = ds
-    .filter((l) => (!l.phuongThuc || l.phuongThuc === "THPT") && !daCo.includes(l.id))
+    .filter((l) => !lyDoKhacPhuongThuc(l) && !daCo.includes(l.id))
     .filter(trongNganSach)
     .map((l): UngVien | null => {
       const t = tongChoLuaChon(l, diem);
@@ -73,7 +74,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
     .filter((x): x is UngVien => x !== null);
 
   // Mỏ neo chỉ có tác dụng khi tính được tổng điểm theo tổ hợp của chính nó.
-  const tMoNeo = moNeo && (!moNeo.phuongThuc || moNeo.phuongThuc === "THPT") ? tongChoLuaChon(moNeo, diem) : null;
+  const tMoNeo = moNeo && !lyDoKhacPhuongThuc(moNeo) ? tongChoLuaChon(moNeo, diem) : null;
   const neo = moNeo && tMoNeo && tMoNeo.tong !== null ? { lc: moNeo, tong: tMoNeo.tong, toHop: tMoNeo.toHop, nhan: nhanNguyenVong(moNeo, tMoNeo.tong) } : null;
   const neoDaCo = !!neo && daCo.includes(neo.lc.id);
 
@@ -81,7 +82,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
   const nhomUuTien = moNeo ? [...hoSo.nganhQuanTam, moNeo.nhomNganh] : hoSo.nganhQuanTam;
   const nganh = (l: LuaChon) => (nhomUuTien.length === 0 || nhomUuTien.includes(l.nhomNganh) ? 0 : 1);
   const kv = (l: LuaChon) => (dungKhuVuc(l, hoSo.khuVuc) === false ? 2 : tinh && cungNoi(l.khuVuc, tinh) ? 0 : 1);
-  const nhieuNam = (l: LuaChon) => (Object.keys(l.diemTheoNam ?? {}).length >= 2 ? 0 : 1);
+  const nhieuNam = (l: LuaChon) => (cacDiemHopLe(l).length >= 2 ? 0 : 1);
   const chenhCua = (x: { tong: number; lc: LuaChon }) => Math.round((x.tong - x.lc.diemMin) * 100) / 100;
   const trongTam = (x: { tong: number; lc: LuaChon }) => { const c = chenhCua(x); return c >= -THIEU_TOI_DA_THU_SUC && c <= DU_TOI_DA; };
   const sat = (x: { nhan: NhanNguyenVong; tong: number; lc: LuaChon }, nhanO: NhanNguyenVong = x.nhan) =>

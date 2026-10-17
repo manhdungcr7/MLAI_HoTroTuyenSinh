@@ -37,6 +37,9 @@
   --color-cam: #dc8a00;   --color-cam-nhat: #fff1d8;   --color-cam-chu: #8a5100;
   --color-do: #d7362f;    --color-do-nhat: #fdebea;    --color-do-chu: #b2241e;
   --color-tim: #6a4fd6;   --color-tim-nhat: #efebfc;   --color-tim-chu: #5137bf;
+  /* Thêm cho thang vị trí điểm so với khoảng dự báo: ngọc (cao hơn cả khoảng) và san hô dịu (còn thấp xa), không dùng đỏ gắt. */
+  --color-ngoc: #0f766e;  --color-ngoc-nhat: #def4f1;  --color-ngoc-chu: #0b5d57;
+  --color-san-ho: #e0614e; --color-san-ho-nhat: #fdeae5; --color-san-ho-chu: #a2382a;
 
   /* Bo góc theo cấp: tờ giấy 18 · thẻ 12 · nút 10 (rounded-xl của Tailwind là 12) */
   --radius-the: .75rem;
@@ -300,3 +303,112 @@ body {
 .nv-page .nv-hero-art>div{position:relative;z-index:2;width:82%;margin:-18px auto 0;padding:14px!important}
 @media(max-width:1100px) and (min-width:761px){.nv-page .nv-hero-art{width:132%;margin-left:-22%}}
 @media(max-width:760px){.nv-page .nv-hero-grid{display:flex;flex-direction:column;gap:0;padding-top:24px;padding-bottom:8px;min-height:0}.nv-page .nv-hero-grid>div:first-child{width:82%;margin:0 auto}.nv-page .nv-hero-art{width:100%;margin:0}.nv-page .nv-hero-art img{aspect-ratio:1.27;object-fit:contain}.nv-page .nv-hero-art>div{display:none}}
+
+/* Hiệu ứng "vào chỗ" của thanh dự báo lúc mở trang (<= 400ms), tắt khi người dùng giảm chuyển động. */
+@keyframes vao-cho { from { transform: scaleX(.55); opacity: .35; } to { transform: none; opacity: 1; } }
+.vao-cho { transform-origin: left center; animation: vao-cho .4s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .vao-cho { animation: none; } }
+
+/* ---------- Ngôn ngữ "trời sáng": nền gradient nhạt, thẻ trắng bo lớn bóng mềm ----------
+   Gradient chỉ định nghĩa ở đây, bằng token màu. Trong TSX chỉ dùng tên class. Không dùng blur/kính. */
+.dau-nen-troi { display: none; }
+.khung-ung-dung:has(.dau-nen-troi) {
+  background-color: var(--color-nen);
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--color-xanh-nhat) 75%, var(--color-trang)) 0%, color-mix(in srgb, var(--color-tim-nhat) 70%, var(--color-trang)) 55%, var(--color-nen) 100%);
+  background-attachment: local;
+}
+.the-mem { background-color: var(--color-trang); border-radius: 1.25rem; border: 1px solid color-mix(in srgb, var(--color-vien) 55%, transparent); box-shadow: 0 10px 28px -14px rgba(36, 72, 196, .28), 0 1px 2px rgba(19, 28, 63, .05); }
+.o-mem { background-color: var(--color-trang); box-shadow: 0 4px 14px -6px rgba(36, 72, 196, .25), 0 1px 2px rgba(19, 28, 63, .05); }
+.nav-noi { border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 -10px 28px -16px rgba(36, 72, 196, .35); border-top: 0; }
+
+/* Huy hiệu trường, hero điểm, chip chọn, nhóm ngành: gradient từ token. Chữ trắng trên các dải này đều >= 4,5:1 ở điểm sáng nhất. */
+.huy-xanh { background-image: linear-gradient(135deg, var(--color-xanh) 0%, var(--color-xanh-dam) 100%); }
+.huy-luc  { background-image: linear-gradient(135deg, var(--color-luc) 0%, var(--color-ngoc-chu) 100%); }
+.huy-cam  { background-image: linear-gradient(135deg, #a86400 0%, var(--color-cam-chu) 100%); }
+.huy-tim  { background-image: linear-gradient(135deg, var(--color-tim) 0%, var(--color-tim-chu) 100%); }
+.huy-do   { background-image: linear-gradient(135deg, var(--color-do-chu) 0%, #8f1d18 100%); }
+.huy-muc  { background-image: linear-gradient(135deg, var(--color-chu) 0%, var(--color-muc) 100%); }
+.gd-chip-chon { background-image: linear-gradient(135deg, var(--color-xanh) 0%, var(--color-xanh-dam) 100%); color: var(--color-trang); }
+.gd-hero-xanh { background-image: linear-gradient(135deg, var(--color-xanh-nhat) 0%, color-mix(in srgb, var(--color-tim-nhat) 85%, var(--color-trang)) 100%); }
+.gd-menta { background-image: linear-gradient(135deg, var(--color-ngoc-nhat) 0%, color-mix(in srgb, var(--color-luc-nhat) 80%, var(--color-trang)) 100%); }
+.gd-nhom-cam  { background-image: linear-gradient(135deg, var(--color-cam-nhat) 0%, color-mix(in srgb, var(--color-cam-nhat) 40%, var(--color-trang)) 100%); }
+.gd-nhom-xanh { background-image: linear-gradient(135deg, var(--color-xanh-nhat) 0%, color-mix(in srgb, var(--color-xanh-nhat) 40%, var(--color-trang)) 100%); }
+.gd-nhom-tim  { background-image: linear-gradient(135deg, var(--color-tim-nhat) 0%, color-mix(in srgb, var(--color-tim-nhat) 40%, var(--color-trang)) 100%); }
+.gd-nhom-luc  { background-image: linear-gradient(135deg, var(--color-luc-nhat) 0%, color-mix(in srgb, var(--color-luc-nhat) 40%, var(--color-trang)) 100%); }
+.gd-nhom-ngoc { background-image: linear-gradient(135deg, var(--color-ngoc-nhat) 0%, color-mix(in srgb, var(--color-ngoc-nhat) 40%, var(--color-trang)) 100%); }
+/* Vòng điểm: màu cung và nền vòng lấy từ token */
+.vong-diem-nen { stroke: var(--color-ngoc-nhat); }
+.vong-diem-cung { stroke: url(#vong-diem-gd); }
+.vong-diem-dau { stop-color: var(--color-ngoc); }
+.vong-diem-cuoi { stop-color: var(--color-xanh); }
+
+/* =====================================================================
+   NỀN THIẾT KẾ 2027 (docs/THIET-KE-2027.md). Gradient + chuyển động định nghĩa MỘT lần ở đây.
+   ===================================================================== */
+@theme {
+  --ease-ra: cubic-bezier(.22, 1, .36, 1);
+  --tg-nhanh: .16s;
+  --tg-vua: .32s;
+  --tg-cham: .7s;
+}
+/* Nền trang trời sáng: đặt lên khung bằng <NenTrangTroi/> hoặc class này. */
+.nen-trang-troi { background-image: linear-gradient(180deg, color-mix(in srgb, var(--color-xanh-nhat) 75%, var(--color-trang)) 0%, color-mix(in srgb, var(--color-tim-nhat) 70%, var(--color-trang)) 55%, var(--color-nen) 100%); }
+.nen-trang-troi { background-color: var(--color-nen); }
+/* Huy hiệu trường 6 tông (chữ trắng, đều >= 4,5:1) */
+.gd-huy-hieu-xanh { background-image: linear-gradient(135deg, var(--color-xanh) 0%, var(--color-xanh-dam) 100%); }
+.gd-huy-hieu-luc  { background-image: linear-gradient(135deg, var(--color-luc) 0%, var(--color-ngoc-chu) 100%); }
+.gd-huy-hieu-cam  { background-image: linear-gradient(135deg, #a86400 0%, var(--color-cam-chu) 100%); }
+.gd-huy-hieu-tim  { background-image: linear-gradient(135deg, var(--color-tim) 0%, var(--color-tim-chu) 100%); }
+.gd-huy-hieu-do   { background-image: linear-gradient(135deg, var(--color-do-chu) 0%, #8f1d18 100%); }
+.gd-huy-hieu-muc  { background-image: linear-gradient(135deg, var(--color-chu) 0%, var(--color-muc) 100%); }
+/* Nút chính, thanh tiến độ, hero điểm */
+.gd-nut-chinh { background-image: linear-gradient(135deg, var(--color-xanh) 0%, var(--color-xanh-dam) 100%); color: var(--color-trang); box-shadow: 0 8px 18px -8px rgba(36, 72, 196, .6); }
+.gd-thanh-xanh { background-image: linear-gradient(90deg, var(--color-xanh) 0%, var(--color-tim) 100%); }
+.gd-thanh-luc  { background-image: linear-gradient(90deg, var(--color-luc) 0%, var(--color-ngoc) 100%); }
+.gd-thanh-cam  { background-image: linear-gradient(90deg, var(--color-cam) 0%, #a86400 100%); }
+.gd-thanh-tim  { background-image: linear-gradient(90deg, var(--color-tim) 0%, var(--color-xanh) 100%); }
+.gd-thanh-do   { background-image: linear-gradient(90deg, var(--color-san-ho) 0%, var(--color-do) 100%); }
+.gd-hero-diem  { background-image: linear-gradient(135deg, var(--color-xanh-nhat) 0%, color-mix(in srgb, var(--color-tim-nhat) 85%, var(--color-trang)) 100%); }
+/* Ô nhóm ngành thêm tông đỏ nhạt (san hô) cho đủ 6 ô */
+.gd-nhom-san-ho { background-image: linear-gradient(135deg, var(--color-san-ho-nhat) 0%, color-mix(in srgb, var(--color-san-ho-nhat) 40%, var(--color-trang)) 100%); }
+/* Màu cung vòng điểm theo tông (stop-color) */
+.vd-xanh .vd-dau { stop-color: var(--color-xanh); } .vd-xanh .vd-cuoi { stop-color: var(--color-tim); }
+.vd-luc  .vd-dau { stop-color: var(--color-ngoc); } .vd-luc  .vd-cuoi { stop-color: var(--color-luc); }
+.vd-tim  .vd-dau { stop-color: var(--color-tim); }  .vd-tim  .vd-cuoi { stop-color: var(--color-xanh); }
+.vd-cam  .vd-dau { stop-color: var(--color-cam); }  .vd-cam  .vd-cuoi { stop-color: var(--color-cam-chu); }
+.vd-do   .vd-dau { stop-color: var(--color-san-ho); } .vd-do .vd-cuoi { stop-color: var(--color-do); }
+.vd-nen { stroke: var(--color-vien); stroke-opacity: .55; }
+.vd-cung { transition: stroke-dashoffset var(--tg-cham) var(--ease-ra); }
+.the-nen-nhe-xanh { background-image: linear-gradient(135deg, var(--color-xanh-nhat) 0%, var(--color-trang) 70%); }
+.the-nen-nhe-luc  { background-image: linear-gradient(135deg, var(--color-luc-nhat) 0%, var(--color-trang) 70%); }
+.the-nen-nhe-cam  { background-image: linear-gradient(135deg, var(--color-cam-nhat) 0%, var(--color-trang) 70%); }
+.the-nen-nhe-tim  { background-image: linear-gradient(135deg, var(--color-tim-nhat) 0%, var(--color-trang) 70%); }
+.the-nen-nhe-do   { background-image: linear-gradient(135deg, var(--color-san-ho-nhat) 0%, var(--color-trang) 70%); }
+.nav-chip-dang { background-image: linear-gradient(135deg, var(--color-xanh-nhat) 0%, var(--color-tim-nhat) 100%); }
+
+/* ---------- Chuyển động: chỉ transform/opacity (trừ nét vòng điểm). Tắt khi giảm chuyển động. ---------- */
+@keyframes vao-len { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes hien-dan { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes ve-vong { from { stroke-dashoffset: var(--vd-chu-vi); } to { stroke-dashoffset: var(--vd-con-lai); } }
+@keyframes nhip-nhe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes truot-vao { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+.vao-len { animation: vao-len var(--tg-vua) var(--ease-ra) both; }
+/* Phần tử chờ vào màn: ẩn tới khi có .da-hien (hook useHienKhiVaoMan). --i là thứ tự để so le. */
+.hien-dan { opacity: 0; }
+.hien-dan.da-hien { animation: hien-dan var(--tg-vua) var(--ease-ra) both; animation-delay: calc(var(--i, 0) * 55ms); }
+.nhip-nhe { animation: nhip-nhe 2.4s ease-in-out infinite; }
+.nay-nhe { transition: transform var(--tg-nhanh) var(--ease-ra); }
+.nay-nhe:active { transform: scale(.97); }
+.shimmer { position: relative; overflow: hidden; }
+.shimmer::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent); animation: shimmer 1.4s linear infinite; }
+.chip-truot { transition: transform var(--tg-vua) var(--ease-ra); }
+.toast-vao { animation: truot-vao var(--tg-vua) var(--ease-ra) both; }
+.tg-thanh { transition: width var(--tg-cham) var(--ease-ra); }
+.cuon-snap-x { scroll-snap-type: x proximity; } .cuon-snap-x > * { scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce) {
+  .vao-len, .hien-dan.da-hien, .nhip-nhe, .shimmer::after, .toast-vao { animation: none !important; }
+  .hien-dan { opacity: 1; }
+  .nay-nhe:active { transform: none; }
+  .vd-cung, .tg-thanh, .chip-truot { transition: none !important; }
+}

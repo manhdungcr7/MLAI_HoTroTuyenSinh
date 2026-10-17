@@ -4,6 +4,7 @@ import type { HoSo, LuaChon, MonId, NhanNguyenVong } from "@/state/types";
 import { TEN_MON } from "@/state/types";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { dinhDang } from "./dinh-dang";
+import { lyDoKhongSoDuoc } from "./trang-thai-du-lieu";
 
 export const NGAN_SACH_TOI_DA: Record<NonNullable<HoSo["nganSach"]>, number> = {
   duoi30: 30, "30-60": 60, "60-100": 100, tren100: 150,
@@ -26,10 +27,15 @@ export const TEN_PHUONG_THUC: Record<string, string> = {
   DGNL_KHAC: "Đánh giá năng lực (khác)", DGTD: "Đánh giá tư duy", KET_HOP: "Kết hợp nhiều tiêu chí", NANG_KHIEU: "Có thi năng khiếu",
 };
 
-/** Điểm chuẩn của phương thức khác (học bạ, ĐGNL, năng khiếu...) không cùng thang với điểm thi tốt nghiệp: trả lý do, hoặc null nếu so được. Dữ liệu cũ không ghi phương thức coi là THPT. */
-export function lyDoKhacPhuongThuc(lc: Pick<LuaChon, "phuongThuc">): string | null {
-  if (!lc.phuongThuc || lc.phuongThuc === "THPT") return null;
-  return `Điểm này thuộc phương thức "${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}", chưa so được với điểm thi THPT.`;
+/**
+ * Lý do KHÔNG được so điểm thi THPT của em với điểm của chương trình này, hoặc null nếu so được. Gồm ba trường hợp:
+ * phương thức khác (học bạ, ĐGNL, năng khiếu...: khác thang), chỉ có điểm sàn 15,0 (không phải điểm chuẩn), không có điểm hợp lệ.
+ * Dữ liệu cũ không ghi phương thức coi là THPT. Đối tượng chỉ có `phuongThuc` (không kèm điểm) chỉ bị kiểm theo phương thức.
+ */
+export function lyDoKhacPhuongThuc(lc: Pick<LuaChon, "phuongThuc"> & Partial<LuaChon>): string | null {
+  if (lc.phuongThuc && lc.phuongThuc !== "THPT") return `Điểm này thuộc phương thức "${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}", chưa so được với điểm thi THPT.`;
+  if (lc.diemMin === undefined && lc.diemTheoNam === undefined) return null;
+  return lyDoKhongSoDuoc(lc as LuaChon);
 }
 
 export type MucUuTienMon = "cao" | "vua" | "duyTri";
