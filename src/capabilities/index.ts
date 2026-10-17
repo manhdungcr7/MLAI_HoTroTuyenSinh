@@ -117,7 +117,7 @@ export async function executeCapability(name: string, args: unknown, snapshot?: 
       const limit = Number(input.limit ?? 10);
       return success({ capNhatHoSo: snapshot!.capNhat, tong: withinBudget.length, limit, data: withinBudget.slice(0, limit),
         methodology: "Ưu tiên ngành quan tâm, rồi khoảng cách tuyệt đối tới điểm chuẩn gần nhất; cùng tổ hợp THPT, mã chương trình phá hòa. Không tự đổi thứ tự mong muốn.",
-        limitations: ["Chỉ dùng tổng của tổ hợp đã đồng bộ; không tìm được tổ hợp khác từ bản chụp.", "Học phí chưa có nguồn hoặc là ước tính không chứng minh phù hợp ngân sách."] }, "bundled-catalog-and-authorized-snapshot", [SOURCE_WARNING, SCORE_WARNING]);
+        limitations: ["Chỉ dùng tổng của tổ hợp đã đồng bộ; không tìm được tổ hợp khác từ bản chụp.", "Học phí thiếu chứng cứ sơ cấp không dùng để đánh giá ngân sách."] }, "bundled-catalog-and-authorized-snapshot", [SOURCE_WARNING, SCORE_WARNING]);
     }
     const ids = input.ids as string[] | undefined ?? snapshot!.nguyenVong.map((n) => n.id);
     const duplicates = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];

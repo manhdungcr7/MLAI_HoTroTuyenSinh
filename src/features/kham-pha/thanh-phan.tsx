@@ -18,7 +18,7 @@ import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
 import { dinhDang } from "@/engine/dinh-dang";
 import { cacDiemHopLe, lyDoKhongSoDuoc } from "@/engine/trang-thai-du-lieu";
 import { toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
-import { MajorLabel, ProgramVariant, UniversityLabel } from "@/components/ui/academic-display";
+import { MajorLabel, ProgramVariant } from "@/components/ui/academic-display";
 
 /**
  * Chữ trên huy hiệu. HuyHieuTruong lấy 4 chữ cái đầu nên HCMUTE, HCMUE, HCMUS, HCMUT đều thành "HCMU";
@@ -43,7 +43,7 @@ export const khoangHocPhi = (l: LuaChon) => hocPhiChu(l);
 export function NhanPhuHop({ kq, xuongDong }: { kq: KetQuaPhuHop; xuongDong?: boolean }) {
   // xuongDong: cho phép chữ xuống dòng khi nhãn nằm trong ô hẹp (bảng so sánh ở màn 360px).
   const dong = xuongDong ? "whitespace-normal text-center" : "whitespace-nowrap";
-  if (!kq.muc) return <span className={gop("inline-flex items-center rounded-lg px-2 py-0.5 text-[12px] font-bold bg-nen text-chu-phu border border-vien", dong)}>{kq.lyDoKhongSo ? "Khác phương thức" : "Chưa đủ điểm để so"}</span>;
+  if (!kq.muc) return <span className={gop("inline-flex items-center rounded-lg px-2 py-0.5 text-[13px] font-bold bg-nen text-chu-phu border border-vien", dong)}>{kq.lyDoKhongSo ? "Khác phương thức" : "Chưa đủ điểm để so"}</span>;
   return <Nhan tone={TONE_MUC[kq.muc]} className={xuongDong ? "!whitespace-normal text-center" : undefined}>{kq.muc}</Nhan>;
 }
 
@@ -75,18 +75,23 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
   const hocThuat = toAcademicDisplay(l);
   return (
     <article className="relative rounded-the bg-trang border border-vien shadow-the">
-      <button type="button" onClick={onClick} className="w-full text-left block p-3.5 rounded-the active:bg-xanh-nhat">
-        <span className="flex items-start gap-3 pr-9">
+      {/* pr-14: chừa chỗ cho nút tim (absolute, 44px) để chữ không đè lên tim */}
+      <button type="button" onClick={onClick} className="w-full text-left block p-3.5 pr-14 rounded-the active:bg-xanh-nhat">
+        <span className="flex items-start gap-3">
           <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={48} />
           <span className="flex-1 min-w-0">
-            <MajorLabel ten={hocThuat?.majorNameDisplay ?? l.nganh} className="text-[16px]" />
+            <b className="line-clamp-2 text-[16px] font-extrabold text-muc leading-snug [text-wrap:balance] break-words">{hocThuat?.majorNameDisplay ?? l.nganh}</b>
             {hocThuat?.programVariant && <span className="mt-1 block"><ProgramVariant variant={hocThuat.programVariant} /></span>}
-            {hocThuat && <UniversityLabel tenHienThi={hocThuat.universityNameDisplay} ma={hocThuat.universityCode} daXacMinh={hocThuat.universityNameDisplay !== "Tên trường chưa xác minh"} className="mt-0.5" />}
+            {hocThuat && (
+              <span className="mt-0.5 line-clamp-2 text-[13px] text-chu-phu leading-snug break-words [text-wrap:pretty]">
+                {hocThuat.universityNameDisplay}{hocThuat.universityCode && hocThuat.universityNameDisplay !== "Tên trường chưa xác minh" ? ` · ${hocThuat.universityCode}` : ""}
+              </span>
+            )}
             <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
               <NhanPhuHop kq={kq} />
               {viTriNV >= 0 && <Nhan tone="luc">Đã thêm · Nguyện Vọng {viTriNV + 1}</Nhan>}
-              <span className="text-[12px] text-chu-phu leading-snug">{kq.tomTat}</span>
             </span>
+            <span className="mt-1 block line-clamp-2 text-[13px] text-chu-phu leading-snug">{kq.tomTat}</span>
           </span>
         </span>
         <span className="mt-3 block border-t border-vien pt-2.5">
@@ -109,7 +114,7 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
 /** Dải nhắc nhỏ: nguồn số liệu minh bạch. */
 export function GhiChuDuLieuMau({ className }: { className?: string }) {
   return (
-    <div className={gop("flex items-center justify-between gap-2 rounded-xl bg-nen px-3 py-2 text-[12px] text-chu-phu", className)}>
+    <div className={gop("flex items-center justify-between gap-2 rounded-xl bg-nen px-3 py-2 text-[13px] text-chu-phu", className)}>
       <span>Nguồn và tình trạng dữ liệu được ghi riêng cho từng lựa chọn.</span>
       <Link to={DUONG_DAN.veDuLieu()} className="font-semibold text-xanh hover:underline shrink-0">Nguồn dữ liệu</Link>
     </div>
@@ -146,7 +151,7 @@ export function HopChonLuaChon({ mo, dong, tieuDe, boQua = [], onChon }: {
                     return <>
                       <MajorLabel ten={hocThuat?.majorNameDisplay ?? l.nganh} className="text-[14px]" />
                       {hocThuat?.programVariant && <ProgramVariant variant={hocThuat.programVariant} className="mt-1" />}
-                      <span className="block text-[12px] text-chu-phu whitespace-normal break-words">{hocThuat?.universityNameDisplay ?? "Tên trường chưa xác minh"} · {l.khuVuc}</span>
+                      <span className="block text-[13px] text-chu-phu whitespace-normal break-words">{hocThuat?.universityNameDisplay ?? "Tên trường chưa xác minh"} · {l.khuVuc}</span>
                     </>;
                   })()}
                 </span>

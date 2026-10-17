@@ -1,4 +1,6 @@
 # BÁO CÁO TOÀN DIỆN VỀ DỮ LIỆU, EDA, MACHINE LEARNING VÀ HỆ THỐNG RA QUYẾT ĐỊNH (DECISION INTELLIGENCE)
+
+> **Báo cáo lịch sử (16/10/2026), không mô tả trạng thái phát hành hiện tại.** Bản kiểm kê mới ở `docs/audits/data-quality-2026-10-17.md` còn nhiều ô điểm thiếu chứng cứ độc lập. Tệp dự báo ML 2027 được huấn luyện trên danh mục cũ và ứng dụng đang chặn sử dụng cho đến khi huấn luyện lại trên đúng phiên bản dữ liệu. Không dùng các tuyên bố “100% sạch” hoặc “production-ready” bên dưới làm bằng chứng pitch/deploy.
 **Dự án:** Nguyện Vọng AI — **Cuộc thi:** MLAI Hackathon 2026 (Track 6: TMA Decision Intelligence Challenge)  
 **Ngày kiểm định:** 16/10/2026 | **Trạng thái:** Sẵn sàng Triển khai Thương mại (Production-Ready)
 
@@ -65,7 +67,7 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
 ├────────────────────────────────────────────────────────────────────────┤
 │ 1. Predictive Model (Dự báo bất định điểm chuẩn)                       │
 │    - LightGBM Quantile Regression (alpha = 0.1, 0.5, 0.9)              │
-│    - Backtest bỏ-một-năm: Phủ thực tế 83.2% dải tin cậy                │
+│    - Kiểm định lăn theo năm: phủ 80.0% (đã hiệu chỉnh), xem ML-DU-BAO │
 │                                                                        │
 │ 2. Calibrated Probability Engine (Xác suất trúng tuyển độc lập)        │
 │    - Z-Score chuẩn hóa: z = (DiemXet - DiemKyVong) / Tau               │
@@ -91,7 +93,7 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
   - Nhóm ngành, Tỉnh thành, Phân hạng trường (Tier).
 - **Kiểm định Backtesting theo thời gian (Không rò rỉ tương lai):**
   - Huấn luyện trên các năm $< T$, dự báo khoảng $[P_{10}, P_{90}]$ cho năm $T$.
-  - Kết quả kiểm định ngược trên 1.443 cặp chương trình: Độ phủ trung bình của dải tin cậy đạt **83.2%**, sai số tuyệt đối trung bình $MAE \approx 1.18$ điểm.
+  - Kết quả kiểm định lăn theo thời gian trên 846 cặp (2024: 500, 2025: 346), sau khi loại điểm sàn 15 khỏi điểm chuẩn: độ phủ khoảng 80% sau hiệu chỉnh (73,1% ngoài mẫu), điểm Winkler 7,65 so với 7,99 của heuristic cũ (cùng độ phủ 80%); sai số tuyệt đối của điểm giữa 1,25 (2024) và 1,73 (2025) so với 1,21 và 1,78 của cách giữ nguyên điểm năm trước. Chi tiết và cách tái lập: `docs/ML-DU-BAO-DIEM-CHUAN-2027.md`.
 
 ### 2. Mô hình Xác suất Trúng tuyển Hiệu chuẩn (Calibrated Probability)
 - Điểm xét tuyển được tính chính xác theo quy chế Bộ GD&ĐT:

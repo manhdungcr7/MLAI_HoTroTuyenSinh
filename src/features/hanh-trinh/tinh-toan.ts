@@ -171,6 +171,8 @@ export interface HieuEm {
   manh: string[];
   luuY: string[];
   uuTien: string[];
+  /** Tên trường của mục tiêu, hiện ở dòng nhỏ dưới mục ưu tiên đầu (tách khỏi câu chính để không dài 3 dòng). */
+  truongMucTieu?: string;
   boSung: MucBoSung[];
   /** Phần trăm hồ sơ đã có, tính trên các mục ở danh sách kiểm. */
   dayDu: number;
@@ -226,7 +228,7 @@ export function hieuEm(s: AppState): HieuEm {
   // Ưu tiên hiện tại
   const uuTien: string[] = [];
   if (m) {
-    uuTien.push(`Đạt ${lam1(m.mucTieu)} (${s.mucTieu!.maToHop}) vào ${m.lc.nganh} – ${m.lc.truong}`);
+    uuTien.push(`Đạt ${lam1(m.mucTieu)} (${s.mucTieu!.maToHop}) vào ${m.lc.nganh}`);
     const keo = [...kc].sort((a, b) => b.thieu - a.thieu)[0];
     if (keo && keo.thieu > 0) uuTien.push(`Nâng ${keo.ten} trước: kéo điểm nhiều nhất`);
     const tiep = viecConLai(s)[0];
@@ -261,7 +263,7 @@ export function hieuEm(s: AppState): HieuEm {
     [s.coDinh.length > 0, { ten: "Lịch học ở trường", den: DUONG_DAN.caiDatLichHoc() }],
   ];
   const boSung = kiem.filter(([ok]) => !ok).map(([, x]) => x);
-  return { manh, luuY, uuTien, boSung, dayDu: Math.round(((kiem.length - boSung.length) / kiem.length) * 100) };
+  return { manh, luuY, uuTien, truongMucTieu: m?.lc.truong, boSung, dayDu: Math.round(((kiem.length - boSung.length) / kiem.length) * 100) };
 }
 
 export const TEN_NGAN_SACH: Record<string, string> = { duoi30: "Dưới 30 triệu", "30-60": "30 – 60 triệu", "60-100": "60 – 100 triệu", tren100: "Trên 100 triệu" };

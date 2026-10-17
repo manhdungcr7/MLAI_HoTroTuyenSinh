@@ -41,7 +41,7 @@ function DauCot({ l, onDoi, onChon }: { l?: LuaChon; onDoi: () => void; onChon: 
         <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={52} />
         <b className="mt-1.5 text-[16px] text-muc leading-tight break-words">{l.nganh}</b>
         <span className="text-[13px] text-chu leading-snug">{l.truong}</span>
-        <span className="text-[12px] text-chu-phu leading-snug">{l.bac} · {l.khuVuc}</span>
+        <span className="text-[13px] text-chu-phu leading-snug">{l.bac} · {l.khuVuc}</span>
       </button>
       <button type="button" onClick={onDoi} className="min-h-11 px-3 rounded-xl text-[13px] font-bold text-xanh inline-flex items-center gap-1 active:bg-xanh-nhat">
         <ArrowLeftRight size={14} />Đổi ngành
@@ -64,7 +64,7 @@ function Hang({ icon: Icon, nhan, phu, tot, a, b }: { icon: LucideIcon; nhan: st
     <div role="row" className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)_minmax(0,1fr)] gap-1.5 items-stretch py-1.5">
       <div role="rowheader" className="flex items-start gap-1.5 pr-1 py-1">
         <Icon size={16} className="text-xanh shrink-0 mt-0.5" aria-hidden />
-        <span className="min-w-0"><span className="block text-[13px] font-bold text-chu leading-snug">{nhan}</span>{phu && <span className="block text-[12px] text-chu-phu">{phu}</span>}</span>
+        <span className="min-w-0"><span className="block text-[13px] font-bold text-chu leading-snug">{nhan}</span>{phu && <span className="block text-[13px] text-chu-phu">{phu}</span>}</span>
       </div>
       <div role="cell" className="contents"><O tot={tot === "a"}>{a}</O></div>
       <div role="cell" className="contents"><O tot={tot === "b"}>{b}</O></div>
@@ -123,7 +123,7 @@ export default function SoSanh() {
         <section className="rounded-lon bg-trang border border-vien shadow-the p-3" aria-label="Hai lựa chọn đang so sánh">
           <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-1">
             <DauCot l={a} onDoi={() => setKhe(0)} onChon={() => setKhe(0)} />
-            <span className="mt-9 size-9 rounded-full bg-nen border border-vien grid place-items-center text-[12px] font-extrabold text-chu-phu" aria-hidden>VS</span>
+            <span className="mt-9 size-9 rounded-full bg-nen border border-vien grid place-items-center text-[13px] font-extrabold text-chu-phu" aria-hidden>VS</span>
             <DauCot l={b} onDoi={() => setKhe(1)} onChon={() => setKhe(1)} />
           </div>
         </section>
@@ -146,15 +146,15 @@ export default function SoSanh() {
                 b={<><DiemChuanO lc={b!} khacNam={a!.namDiem !== b!.namDiem} /></>} />
               {(coHocPhi(a!) || coHocPhi(b!)) && (
                 <Hang icon={Wallet} nhan="Học phí / năm" phu="dự kiến" tot={ss.tot.hocPhi}
-                a={coHocPhi(a!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>}
-                b={coHocPhi(b!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(b!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
+                a={coHocPhi(a!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[13px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>}
+                b={coHocPhi(b!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(b!)}</b><span className="text-[13px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
               )}
               <Hang icon={GraduationCap} nhan="Tổ hợp xét tuyển" tot={null}
                 a={<span className="text-[13px] text-chu">{a!.toHopXet?.length ? a!.toHopXet.slice(0, 4).join(", ") : "Đề án chưa ghi"}</span>}
                 b={<span className="text-[13px] text-chu">{b!.toHopXet?.length ? b!.toHopXet.slice(0, 4).join(", ") : "Đề án chưa ghi"}</span>} />
               <Hang icon={MapPin} nhan="Khu vực" tot={ss.tot.khuVuc}
-                a={<><b className="text-muc">{a!.khuVuc}</b><span className="text-[12px] text-chu-phu">{a!.diaChi?.split(",")[0]}</span></>}
-                b={<><b className="text-muc">{b!.khuVuc}</b><span className="text-[12px] text-chu-phu">{b!.diaChi?.split(",")[0]}</span></>} />
+                a={<><b className="text-muc">{a!.khuVuc}</b><span className="text-[13px] text-chu-phu">{a!.diaChi?.split(",")[0]}</span></>}
+                b={<><b className="text-muc">{b!.khuVuc}</b><span className="text-[13px] text-chu-phu">{b!.diaChi?.split(",")[0]}</span></>} />
               {(a!.coHoiViecLam || b!.coHoiViecLam) && (
                 <Hang icon={Briefcase} nhan="Cơ hội việc làm" tot={ss.tot.viecLam} a={a!.coHoiViecLam ? <b className="text-muc">{a!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} b={b!.coHoiViecLam ? <b className="text-muc">{b!.coHoiViecLam}</b> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>} />
               )}
@@ -164,9 +164,9 @@ export default function SoSanh() {
               <Hang icon={CheckCircle2} nhan="Mức phù hợp với bạn" tot={ss.tot.phuHop} a={<NhanPhuHop kq={ss.kqA} xuongDong />} b={<NhanPhuHop kq={ss.kqB} xuongDong />} />
               <Hang icon={ShieldCheck} nhan="So với điểm chuẩn" tot={ss.tot.chacChan} a={<ChacChan kq={ss.kqA} />} b={<ChacChan kq={ss.kqB} />} />
               {!coHocPhi(a!) && !coHocPhi(b!) && !a!.coHoiViecLam && !b!.coHoiViecLam && (
-                <p className="text-[12px] text-chu-phu py-1.5 border-t border-vien mt-1">Học phí và việc làm của hai ngành này chưa có trong dữ liệu. Bạn xem trên trang của trường.</p>
+                <p className="text-[13px] text-chu-phu py-1.5 border-t border-vien mt-1">Học phí và việc làm của hai ngành này chưa có trong dữ liệu. Bạn xem trên trang của trường.</p>
               )}
-              <p className="flex items-start gap-1.5 text-[12px] text-chu-phu pt-1.5 pb-1 border-t border-vien mt-1">
+              <p className="flex items-start gap-1.5 text-[13px] text-chu-phu pt-1.5 pb-1 border-t border-vien mt-1">
                 <span className="mt-0.5 size-3 rounded bg-luc-nhat ring-1 ring-luc/30 shrink-0" aria-hidden />
                 Ô nền xanh lá là bên có lợi thế hơn ở tiêu chí đó.
               </p>
@@ -182,7 +182,7 @@ export default function SoSanh() {
               <ol className="mt-2 space-y-2">
                 {ss.ketLuan.map((y, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-[14px] text-chu leading-snug">
-                    <span className="size-6 rounded-full gd-tim text-white text-[12px] font-extrabold grid place-items-center shrink-0">{i + 1}</span>
+                    <span className="size-6 rounded-full gd-tim text-white text-[13px] font-extrabold grid place-items-center shrink-0">{i + 1}</span>
                     <span className="pt-0.5">{y}</span>
                   </li>
                 ))}

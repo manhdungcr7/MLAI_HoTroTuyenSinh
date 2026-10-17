@@ -21,7 +21,7 @@ import { BannerNgoaiTuyen } from "@/components/ui/du-bao/banner-ngoai-tuyen";
 import { BannerKhongLuu } from "./banner-khong-luu";
 import { ThongBaoYeuThich } from "./thong-bao-yeu-thich";
 import { NutTroLyAI } from "@/features/tu-van/tro-ly-noi-bot";
-import { TieuDeMan } from "@/components/ui/thiet-ke";
+import { ChuyenTrang, NenTrangTroi, TheoDoiLanNhan, TieuDeMan, type BienTheNen } from "@/components/ui/thiet-ke";
 import { KetNoiNen } from "@/features/ket-noi/the-de-xuat";
 
 const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], { thuong: LucideIcon; dang: LucideIcon }> = {
@@ -35,32 +35,40 @@ const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], { thuong: LucideIcon; dan
 /** Khung có thanh 5 tab ở dưới. Dùng cho mọi trang trừ Chào mừng và các bước Bắt đầu. */
 export function KhungCoThanhDuoi() {
   const { pathname } = useLocation();
+  const iDang = CAC_TAB.findIndex((t) => t.khop(pathname));
   return (
     <div className="khung-ung-dung pb-[calc(var(--cao-nav)+4.25rem)]" style={{ "--cao-nav": "calc(4.5rem + env(safe-area-inset-bottom))" } as CSSProperties}>
       <BannerNgoaiTuyen />
       <BannerKhongLuu />
-      <Outlet />
+      <ChuyenTrang><Outlet /></ChuyenTrang>
       <ThongBaoYeuThich />
       <KetNoiNen />
       <NutTroLyAI />
+      <TheoDoiLanNhan />
       <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang nav-noi vung-an-toan-duoi">
-        <ul className="grid grid-cols-5 px-1 pt-1">
-          {CAC_TAB.map((t) => {
-            const dang = t.khop(pathname);
-            const Icon = dang ? ICON_TAB[t.id].dang : ICON_TAB[t.id].thuong;
-            return (
-              <li key={t.id}>
-                <Link to={t.den} aria-current={dang ? "page" : undefined}
-                  className={gop("nay-nhe relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap cursor-pointer", dang ? "text-xanh-dam" : "text-chu-phu hover:text-chu")}>
-                  <span className={gop("grid place-items-center h-8 w-14 rounded-full transition-colors", dang && "nav-chip-dang")}>
-                    <Icon size={22} strokeWidth={dang ? 2.1 : 1.8} aria-hidden />
-                  </span>
-                  {t.nhan}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="relative">
+          {/* Viên chỉ báo duy nhất: trượt tới tab đang mở (--i), ẩn khi không thuộc tab nào. */}
+          <span aria-hidden className="nav-chi-bao" style={{ "--i": Math.max(0, iDang), opacity: iDang < 0 ? 0 : 1 } as CSSProperties}>
+            <span className="nav-chi-bao-hop nav-chip-dang" />
+          </span>
+          <ul className="grid grid-cols-5 px-1 pt-1">
+            {CAC_TAB.map((t) => {
+              const dang = t.khop(pathname);
+              const Icon = dang ? ICON_TAB[t.id].dang : ICON_TAB[t.id].thuong;
+              return (
+                <li key={t.id}>
+                  <Link to={t.den} aria-current={dang ? "page" : undefined}
+                    className={gop("nay-nhe relative min-h-16 flex flex-col items-center justify-start pt-2 gap-0.5 text-[11px] whitespace-nowrap cursor-pointer", dang ? "text-xanh-dam font-extrabold" : "text-chu-phu font-semibold hover:text-chu")}>
+                    <span className={gop("nav-bieu-tuong grid place-items-center h-8 w-14 rounded-full", dang && "dang")}>
+                      <Icon size={22} strokeWidth={dang ? 2.1 : 1.8} aria-hidden />
+                    </span>
+                    {t.nhan}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </nav>
     </div>
   );
@@ -73,6 +81,7 @@ export function KhungKhongThanh() {
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
+      <TheoDoiLanNhan />
       <NutTroLyAI khongThanh />
     </div>
   );
@@ -88,9 +97,14 @@ export function Logo({ nho }: { nho?: boolean }) {
 }
 
 /** Đầu trang CỦA TAB (trang gốc): logo + chuông nhắc nhở + tiêu đề lớn. Dùng TieuDeMan của nền thiết kế. */
-export function DauTrangChinh({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?: string; phai?: ReactNode }) {
+export function DauTrangChinh({ tieuDe, moTa, phai, bienThe }: { tieuDe: ReactNode; moTa?: string; phai?: ReactNode; bienThe?: BienTheNen }) {
   const nav = useNavigate();
-  return <TieuDeMan tieuDe={tieuDe} phuDe={moTa} phai={phai} onChuong={() => nav(DUONG_DAN.nhacNho())} />;
+  return (
+    <>
+      <NenTrangTroi bienThe={bienThe} />
+      <TieuDeMan tieuDe={tieuDe} phuDe={moTa} phai={phai} onChuong={() => nav(DUONG_DAN.nhacNho())} />
+    </>
+  );
 }
 
 /** Đầu trang CON: nút quay lại, tiêu đề giữa, ghi chú nhỏ (ví dụ "Bước 2/3") hoặc nút ở bên phải. */

@@ -6,6 +6,7 @@
 import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
 import { TEN_PHUONG_THUC as TEN_PT, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
+import { laHocPhiDaKiemChung, type HocPhiNguon } from "./hoc-phi-kiem-chung";
 
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
@@ -38,14 +39,15 @@ export function tenGon(goc: string): { ten: string; them?: string } {
   return { ten: t };
 }
 
-// Dòng có `uocTinh` là ước tính theo trường/khối ngành (không có văn bản đối chiếu): giữ số để lọc theo ngân sách, nhưng không gắn link.
-type HocPhiTep = Record<string, { trieuNam: number; nam: string; trang?: number; url?: string; uocTinh?: boolean }>;
+// Tệp vẫn có thể chứa ứng viên/chứng cứ chưa đủ; chỉ `laHocPhiDaKiemChung` mới được đưa vào LuaChon.
+type HocPhiTep = Record<string, HocPhiNguon>;
 type ViecMoiTep = Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 let HOC_PHI: HocPhiTep = {};
 let VIEC_MOI: ViecMoiTep = {};
 
 function chuyen(d: Dong): LuaChon {
-  const hp = HOC_PHI[d.id];
+  const hpUngVien = HOC_PHI[d.id];
+  const hp = laHocPhiDaKiemChung(hpUngVien) ? hpUngVien : undefined;
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
@@ -64,7 +66,7 @@ function chuyen(d: Dong): LuaChon {
   if (d.scoreEvidence?.[moiNhat]?.includesPriority === true) luuY.push("Điểm trúng tuyển công bố đã bao gồm điểm ưu tiên; không cộng ưu tiên lần nữa vào ngưỡng này.");
   return {
     id: d.id,
-    truong: d.ma,
+    truong: d.truong,
     tenTruong: d.truong,
     nganh: gon.ten,
     nhomNganh: d.nhom,
@@ -83,9 +85,7 @@ function chuyen(d: Dong): LuaChon {
     nguon: d.scoreEvidence?.[moiNhat]?.kind === "diem_chuan" ? "Thông báo điểm trúng tuyển của trường (chưa thẩm định độc lập)" : d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: false,
     linkNguon: d.nguon ?? undefined,
-    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam } : {}),
-    ...(hp && !hp.uocTinh && hp.url ? { nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
-    ...(hp?.uocTinh ? { hocPhiUocTinh: true } : {}),
+    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,

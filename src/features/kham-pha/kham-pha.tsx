@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowDownWideNarrow, ArrowUpDown, ArrowUpNarrowWide, Check, ChevronDown, ChevronRight, CircleDollarSign, Heart, LayoutGrid, MapPin, Search, SearchX, SlidersHorizontal, X, type LucideIcon } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowUpDown, ArrowUpNarrowWide, Check, ChevronDown, ChevronRight, CircleDollarSign, Heart, LayoutGrid, Map as IconBanDo, MapPin, Search, SearchX, SlidersHorizontal, X, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -112,7 +112,7 @@ export default function KhamPha() {
           <button type="button" onClick={() => nav(DUONG_DAN.boLoc())}
             className="min-h-12 min-w-12 px-3 rounded-2xl o-mem text-[14px] font-bold text-chu inline-flex items-center justify-center gap-1.5 shrink-0 active:bg-xanh-nhat cursor-pointer" aria-label="Bộ lọc">
             <SlidersHorizontal size={20} className="text-xanh" />
-            {soLoc > 0 && <span className="min-w-5 h-5 px-1 rounded-full gd-xanh text-white text-[11px] grid place-items-center">{soLoc}<span className="sr-only"> bộ lọc đang bật</span></span>}
+            {soLoc > 0 && <span className="min-w-6 h-6 px-1.5 rounded-md gd-xanh text-white text-[13px] grid place-items-center">{soLoc}<span className="sr-only"> bộ lọc đang bật</span></span>}
           </button>
         </div>
 
@@ -122,12 +122,12 @@ export default function KhamPha() {
           </p>
         )}
 
-        <div className="relative -mx-4">
-          <div ref={chipRef} className="overflow-x-auto an-thanh-cuon px-4 py-1 pr-14" role="group" aria-label="Nhóm ngành">
-            <div className="flex gap-2 w-max">
+        <div className="-mx-4 flex items-center gap-1.5">
+          <div ref={chipRef} className="min-w-0 flex-1 overflow-x-auto an-thanh-cuon py-1 pl-4" role="group" aria-label="Nhóm ngành">
+            <div className="flex gap-2 w-max pr-4">
               {s.yeuThich.length > 0 && (
                 <button type="button" aria-pressed={chiHienYeuThich} onClick={() => setChiHienYeuThich(!chiHienYeuThich)}
-                  className={gop("min-h-11 px-3.5 rounded-full text-[14px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer", chiHienYeuThich ? "huy-do text-white" : "o-mem text-chu active:bg-xanh-nhat")}>
+                  className={gop("min-h-11 px-3.5 rounded-lg text-[14px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer", chiHienYeuThich ? "huy-do text-white" : "o-mem text-chu active:bg-xanh-nhat")}>
                   <Heart size={16} fill={chiHienYeuThich ? "currentColor" : "none"} className={chiHienYeuThich ? "text-white" : "text-do"} aria-hidden />Đã lưu ({s.yeuThich.length})
                 </button>
               )}
@@ -136,7 +136,7 @@ export default function KhamPha() {
                 const Icon = c.gia ? iconNhomNganh(c.gia) : LayoutGrid;
                 return (
                   <button key={c.gia || "tat-ca"} type="button" aria-pressed={chon} onClick={() => { setChiHienYeuThich(false); sua({ nhom: c.gia }); }}
-                    className={gop("min-h-11 px-3.5 rounded-full text-[14px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer", chon ? "gd-chip-chon" : "o-mem text-chu active:bg-xanh-nhat")}>
+                    className={gop("min-h-11 px-3.5 rounded-lg text-[14px] font-semibold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 cursor-pointer", chon ? "gd-chip-chon" : "o-mem text-chu active:bg-xanh-nhat")}>
                     {c.gia ? <Icon size={16} className={chon ? "text-white" : "text-xanh"} aria-hidden /> : <Icon size={16} className={chon ? "text-white" : "text-xanh"} aria-hidden />}{c.nhan}
                   </button>
                 );
@@ -144,10 +144,17 @@ export default function KhamPha() {
             </div>
           </div>
           <button type="button" aria-label="Xem thêm nhóm ngành" onClick={() => chipRef.current?.scrollBy({ left: 200, behavior: "smooth" })}
-            className="absolute right-2 top-1/2 -translate-y-1/2 size-11 grid place-items-center rounded-full o-mem text-xanh cursor-pointer"><ChevronRight size={20} aria-hidden /></button>
+            className="shrink-0 mr-2 size-11 grid place-items-center rounded-full o-mem text-xanh cursor-pointer"><ChevronRight size={20} aria-hidden /></button>
         </div>
 
         {!dangTim && <TheDiemCuaBan onChonNhom={(n) => { setChiHienYeuThich(false); sua({ nhom: n }); }} />}
+        {!dangTim && (
+          <button type="button" onClick={() => nav(DUONG_DAN.banDoCoHoi())} className="nay-nhe w-full min-h-14 rounded-2xl o-mem px-3 flex items-center gap-3 text-left text-[14px] font-bold text-muc">
+            <span className="size-9 rounded-xl bg-tim-nhat text-tim-chu grid place-items-center shrink-0"><IconBanDo size={18} aria-hidden /></span>
+            <span className="flex-1 min-w-0">Bản đồ cơ hội của em<span className="block text-[13px] font-normal text-chu-phu">Số ngành ở từng nhãn, theo nhóm ngành</span></span>
+            <ChevronRight size={18} className="text-chu-phu shrink-0" aria-hidden />
+          </button>
+        )}
 
         {!dangTim && !s.hoSo.soThich && (
           <div className="-mx-4 px-4 overflow-x-auto an-thanh-cuon">
@@ -170,7 +177,7 @@ export default function KhamPha() {
               aria-expanded={moSapXep}
               aria-haspopup="listbox"
               aria-label="Sắp xếp danh sách ngành"
-              className="min-h-11 px-3 rounded-full o-mem text-[13px] font-bold text-chu inline-flex items-center gap-1.5 shrink-0 active:bg-xanh-nhat hover:border-xanh transition-colors shadow-sm cursor-pointer"
+              className="min-h-11 px-3 rounded-xl o-mem text-[13px] font-bold text-chu inline-flex items-center gap-1.5 shrink-0 active:bg-xanh-nhat hover:border-xanh transition-colors shadow-sm cursor-pointer"
             >
               <ArrowUpDown size={14} className="text-xanh shrink-0" aria-hidden />
               <span>{SAP_XEP.find((k) => k.gia === kieu)?.nhan || "Sắp xếp"}</span>

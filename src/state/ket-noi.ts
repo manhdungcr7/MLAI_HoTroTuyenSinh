@@ -28,8 +28,7 @@ export function taoBanChup(s: AppState, bayGio: Date = new Date()): BanChup {
       ...(nam.length ? { diemChuan } : {}),
       ...(d.nhan ? { nhan: d.nhan } : {}),
       ...(d.chenh !== null ? { chenh: d.chenh } : {}),
-      ...(typeof lc.hocPhiMin === "number" ? { hocPhiTrieu: lc.hocPhiMin } : {}),
-      ...(lc.hocPhiUocTinh ? { hocPhiUocTinh: true } : {}),
+      ...(typeof lc.hocPhiMin === "number" && lc.nguonHocPhi?.url ? { hocPhiTrieu: lc.hocPhiMin } : {}),
       nguon: moTaNguon(lc, null),
     }];
   });

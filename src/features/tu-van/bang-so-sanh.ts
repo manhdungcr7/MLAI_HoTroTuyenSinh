@@ -5,6 +5,7 @@ import { coHocPhi } from "@/data/lua-chon-phu";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 import { lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { duBaoCua } from "@/features/kham-pha/du-bao";
+import { duBaoMLCua, metaDuBaoML } from "@/data/du-bao-ml";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, LuaChon } from "@/state/types";
 import { loaiDiemCuaNam } from "@/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
@@ -76,7 +77,13 @@ export function dungBangSoSanh(ls: LuaChon[], diem: DiemDayDu): BangSoSanh {
   hang.push({ khoa: "hocPhi", nhan: "Học phí / năm", o: hp, ...(re !== undefined ? { tot: re } : {}) });
   if (ls.some((l) => l.tiLeViecLam !== undefined)) hang.push({ khoa: "viecLam", nhan: "Có việc làm", o: ls.map((l) => (l.tiLeViecLam !== undefined ? `${dinhDang(l.tiLeViecLam, 0)}% (khảo sát của trường)` : "Chưa có")) });
   hang.push({ khoa: "diaDiem", nhan: "Địa điểm", o: ls.map((l) => l.khuVuc) });
-  const db = ls.map((l) => duBaoCua(l));
+  // Ưu tiên khoảng của mô hình học máy khi đã nạp; chưa có thì dùng cách thống kê cũ.
+  const db = ls.map((l) => {
+    const ml = duBaoMLCua(l.id), meta = metaDuBaoML();
+    if (ml && meta && meta.namDuBao > l.namDiem) return { thap: ml.thap, cao: ml.cao, namDuBao: meta.namDuBao };
+    const d = duBaoCua(l);
+    return d ? { thap: d.thap, cao: d.cao, namDuBao: d.namDuBao } : null;
+  });
   if (db.some(Boolean)) hang.push({ khoa: "duBao", nhan: "Dự kiến năm tới", o: db.map((d) => (d ? `${soDiem(d.thap)}–${soDiem(d.cao)} (${d.namDuBao})` : "Chưa dự báo được")) });
   hang.push({ khoa: "nguon", nhan: "Nguồn dữ liệu", o: ls.map((l) => (l.nguonCap === "official_pdf" ? "Đề án của trường" : "Trang tổng hợp, chưa đối chiếu đề án")) });
 

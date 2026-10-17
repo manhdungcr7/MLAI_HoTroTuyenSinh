@@ -147,7 +147,7 @@ export function danhGia(lc: LuaChon, bc: BoiCanh): KetQuaPhuHop {
   const giaiThich = muc === "Phù hợp"
     ? `Điểm của bạn ${phanDiem}${vuaNganSach ? ", học phí vừa ngân sách" : ""}.`
     : muc === "Có thể thử sức"
-      ? `Điểm của bạn ${phanDiem}. Cố thêm là có thể với tới.`
+      ? `Điểm của bạn ${phanDiem}, có thể với tới.`
       : vuotNganSach ? "Học phí vượt ngân sách, cần bàn với gia đình."
         : ngoaiKhuVuc ? "Trường ở xa nơi bạn muốn học."
           : khacNganh ? `Ngành này khác nhóm ngành bạn quan tâm. Điểm của bạn ${phanDiem}.`

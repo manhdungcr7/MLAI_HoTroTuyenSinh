@@ -23,6 +23,11 @@ import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
 import { NutBaoSai } from "./bao-sai-sheet";
 import { KhoiDuBao } from "./khoi-du-bao";
 import { phanLoaiDuLieu, type TrangThaiDuLieu } from "@/engine/trang-thai-du-lieu";
+import { apDungDuBaoML } from "@/engine/du-bao-ml-ap-dung";
+import { namTuyenSinhToi } from "@/engine/du-bao-diem-chuan";
+import { thongKeChung } from "./du-bao";
+import { useDuBaoML } from "./dung-du-bao-ml";
+import { TrendingUp } from "lucide-react";
 import { NhanTrangThaiDuLieu } from "@/components/ui/du-bao";
 import { tongChoLuaChon } from "./to-hop";
 import { ThongTinTruong } from "./thong-tin-truong";
@@ -75,7 +80,7 @@ function DanhSachY({ tone, icon: Icon, tieuDe, cuaEm, chung }: { tone: ToneTen; 
       <h2 className={gop("flex items-center gap-2 text-[16px] font-extrabold", TONE_CHU[tone])}><Icon size={20} />{tieuDe}</h2>
       {cuaEm.length > 0 && (
         <div className="mt-2 rounded-xl bg-trang/70 p-3">
-          <p className="mb-1.5 inline-flex items-center gap-1 text-[12px] font-bold text-xanh"><Sparkles size={13} />Theo hồ sơ của bạn</p>
+          <p className="mb-1.5 inline-flex items-center gap-1 text-[13px] font-bold text-xanh"><Sparkles size={13} />Theo hồ sơ của bạn</p>
           {ds(cuaEm)}
         </div>
       )}
@@ -193,6 +198,7 @@ export default function ChiTiet() {
   }, [lcGoc, nguon]);
   const thongTinTruong = lcGoc ? kho.layChiTietTruong(lcGoc.maTruong ?? lcGoc.truong) : null;
   const bc = useMemo(() => boiCanhTu(s), [s]);
+  const sanDuBaoML = useDuBaoML(); // nạp khoảng dự báo của mô hình học máy; chưa nạp xong thì dòng dự đoán dùng cách thống kê
   const [hoiTiep, setHoiTiep] = useState<null | "vuaThem" | "daCo">(null);
   const [chonThem, setChonThem] = useState(false);
 
@@ -211,6 +217,9 @@ export default function ChiTiet() {
 
   const kq = danhGia(lc, bc);
   const tt = phanLoaiDuLieu(lc);
+  // Dự báo năm tới chỉ có khi quy tắc dữ liệu cho phép (điểm chuẩn hợp lệ, không quá cũ); ưu tiên mô hình học máy khi đã nạp.
+  void sanDuBaoML; // chỉ để vẽ lại khi tệp dự báo nạp xong
+  const duBao = apDungDuBaoML(phanLoaiDuLieu(lc, thongKeChung(), namTuyenSinhToi()), lc.id).duBao;
   const hpTruong = nguon?.truong[lc.maTruong ?? ""]?.hocPhi;
   const trongDs = s.nguyenVong.includes(lc.id);
   const tone = kq.muc ? TONE_MUC[kq.muc] : "xanh";
@@ -235,9 +244,7 @@ export default function ChiTiet() {
       <NoiDung>
         {/* Đầu thẻ: ảnh bìa gradient theo màu trường (không dùng ảnh thật) */}
         <section className="rounded-lon bg-trang border border-vien shadow-the overflow-hidden">
-          <AnhBia tone={lc.tone} cao={96}>
-            <span aria-hidden className="absolute right-4 bottom-1 text-[52px] font-extrabold leading-none text-white/25 tracking-tight select-none">{lc.truong}</span>
-          </AnhBia>
+          <AnhBia tone={lc.tone} cao={96} />
           <div className="px-4 pb-4">
             <div className="relative z-10 -mt-9 flex items-end gap-3">
               <span className="rounded-2xl bg-trang p-1 shadow-the"><HuyHieuTruong ten={kyHieu(lc.truong)} tone={lc.tone} kichThuoc={64} /></span>
@@ -248,7 +255,7 @@ export default function ChiTiet() {
             </div>
             <h2 className="mt-2 text-[22px] font-extrabold text-muc leading-tight">{lc.nganh}</h2>
             <p className="text-[14px] text-chu mt-0.5">
-              {lc.maTruong ? <Link to={DUONG_DAN.truong(lc.maTruong)} className="inline-block py-3 -my-3 font-bold text-xanh underline">{lc.truong} · {lc.tenTruong}</Link> : <><b>{lc.truong}</b> · {lc.tenTruong}</>}
+              {lc.maTruong ? <Link to={DUONG_DAN.truong(lc.maTruong)} className="inline-block max-w-full min-w-0 py-3 -my-3 font-bold text-xanh underline break-words [text-wrap:balance]">{lc.truong} · {lc.tenTruong}</Link> : <><b>{lc.truong}</b> · {lc.tenTruong}</>}
             </p>
             <p className="text-[13px] text-chu-phu mt-1 line-clamp-2">{lc.moTa}</p>
           </div>
@@ -259,9 +266,8 @@ export default function ChiTiet() {
           <div className="flex items-start gap-3">
             <BieuTuongTron icon={kq.muc ? CheckCircle2 : PencilLine} tone={tone} kichThuoc={48} />
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] text-chu-phu">Mức độ phù hợp với bạn</p>
-              {kq.muc ? <p className={gop("text-[20px] font-extrabold leading-tight", TONE_CHU[tone])}>{kq.muc}</p> : <div className="mt-0.5"><NhanPhuHop kq={kq} /></div>}
-              <p className="text-[14px] text-chu mt-1 leading-snug">{kq.giaiThich}</p>
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] text-chu-phu">Mức độ phù hợp {kq.muc ? <b className={gop("text-[18px] font-extrabold leading-tight", TONE_CHU[tone])}>{kq.muc}</b> : <NhanPhuHop kq={kq} />}</p>
+              <p className="text-[14px] text-chu mt-1 leading-snug [text-wrap:pretty]">{kq.giaiThich}</p>
             </div>
           </div>
           {kq.muc ? (
@@ -282,6 +288,11 @@ export default function ChiTiet() {
             {tt.diemCuoi !== null
               ? <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn ${tt.namCuoi} (thang 30)`} giaTri={`${dinhDangDiem(tt.diemCuoi)} điểm`} phu={tt.nguonThuCap ? "Từ trang tổng hợp, chưa đối chiếu đề án." : undefined} />
               : <DongThongTin icon={BarChart3} tone="tim" nhan="Điểm chuẩn" giaTri={<NhanTrangThaiDuLieu tt={tt} />} phu={tt.loai === "chiDiemSan" ? "Mức điểm sàn không phải điểm chuẩn của ngành." : tt.loai === "phuongThucKhac" ? "Không so với điểm thi THPT." : undefined} />}
+            {duBao && (tt.loai === "nhieuNam" || tt.loai === "motNam") && (
+              <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán ${duBao.namDuBao}${duBao.moHinh === "hoc-may" ? " (mô hình học máy)" : ""}`}
+                giaTri={`${dinhDangDiem(duBao.kyVong)} điểm`}
+                phu={`Khoảng ${dinhDangDiem(duBao.thap)} đến ${dinhDangDiem(duBao.cao)} điểm (mục tiêu phủ ${Math.round(duBao.mucTinCay * 100)}%). Dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`} />
+            )}
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
@@ -313,15 +324,17 @@ export default function ChiTiet() {
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-xanh-nhat text-xanh"><FileText size={20} /></span>
           <div className="flex-1 min-w-0 space-y-2">
-            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-              <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
-              <Nhan tone={lc.nguonCap === "official_pdf" ? "luc" : "cam"}>
-                {lc.nguonCap === "official_pdf" ? "Có nguồn chính thức" : "Nguồn thứ cấp"}
-              </Nhan>
+            <div className="space-y-1.5">
+              <b className="block text-[14px] text-muc">Nguồn dữ liệu</b>
+              <div className="flex flex-wrap gap-1.5">
+                <Nhan tone={lc.nguonCap === "official_pdf" ? "luc" : "cam"}>
+                  {lc.nguonCap === "official_pdf" ? "Nguồn chính thức" : "Nguồn thứ cấp"}
+                </Nhan>
+              </div>
             </div>
             <details className="group">
               <summary className="flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none hover:underline py-0.5">Xem chi tiết nguồn</summary>
-              <div className="pt-2 pb-1 space-y-1 text-[12px] text-chu-phu border-t border-vien/50 mt-1.5">
+              <div className="pt-2 pb-1 space-y-1 text-[13px] text-chu-phu border-t border-vien/50 mt-1.5">
                 <p className="leading-snug">{lc.nguon}.</p>
                 <p>
                   {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}

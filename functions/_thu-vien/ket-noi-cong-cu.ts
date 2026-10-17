@@ -108,6 +108,8 @@ export const CONG_CU: CongCu[] = [
       ok: true,
       data: {
         capNhat: cc.ban.capNhat,
+        // Dùng cho update_study_progress (get_study_plan là bí danh của công cụ này): đề xuất phải kèm đúng phiên bản kế hoạch đã đọc.
+        snapshotUpdatedAt: cc.ban.capNhat,
         suKien: cc.ban.keHoachTuan.map((e) => ({ ...e, linkGoogleCalendar: linkGoogleCalendar(e), ...(cc.ma ? { icsUrl: `${cc.origin}/api/gpt/${cc.ma}/lich.ics` } : {}) })),
       },
     }),
@@ -174,9 +176,6 @@ export const PHAM_VI_CONG_CU: Record<string, string> = {
 const BIEN_THE: Record<string, string> = {
   get_student_profile: "lay_ho_so",
   get_study_plan: "ke_hoach_tuan",
-  calculate_admission_score: "diem_chuan",
-  estimate_admission_chance: "goi_y_nganh",
-  rank_preferences: "lay_nguyen_vong",
 };
 
 // Canonical tools share the exact deterministic capability implementation used by HTTP adapters.

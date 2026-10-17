@@ -63,7 +63,7 @@ export function NutBaoSai({ maChuongTrinh, tenNganh }: { maChuongTrinh: string; 
               <div className="rounded-xl border border-vien bg-white focus-within:border-xanh">
                 <textarea id="bs-noi-dung" rows={4} maxLength={1000} value={noiDung} onChange={(e) => setNoiDung(e.target.value)}
                   className="block w-full resize-none rounded-xl bg-transparent px-3 pt-2.5 text-[15px] text-chu outline-none" />
-                <p className="px-3 pb-2 text-right text-[12px] text-chu-phu">{noiDung.length}/1000</p>
+                <p className="px-3 pb-2 text-right text-[13px] text-chu-phu">{noiDung.length}/1000</p>
               </div>
             </Truong>
             <Truong nhan="Link nguồn (nếu có)" htmlFor="bs-link" goiY="Trang của trường hoặc thông báo chính thức. Có nguồn thì người phụ trách sửa nhanh hơn.">

@@ -51,7 +51,7 @@ export default function ManBoLoc() {
         <Muc tieuDe="Khoảng điểm tổ hợp" phu="(thang 30)">
           <div className="flex items-end justify-between">
             <p className="text-[24px] font-extrabold text-xanh leading-none">{dinhDang(b.diemTu, 1)} <span className="text-chu-phu text-[18px]">–</span> {dinhDang(b.diemDen, 1)}</p>
-            <p className="text-[12px] text-chu-phu">điểm tham khảo</p>
+            <p className="text-[13px] text-chu-phu">điểm tham khảo</p>
           </div>
           <label className="block text-[13px] font-semibold text-chu">Thấp nhất
             <input type="range" min={0} max={30} step={0.5} value={b.diemTu} aria-valuetext={`${b.diemTu} điểm`}
@@ -93,7 +93,7 @@ export default function ManBoLoc() {
               );
             })}
           </div>
-          <p className="text-[12px] text-chu-phu">Cần chọn ít nhất một loại hình.</p>
+          <p className="text-[13px] text-chu-phu">Cần chọn ít nhất một loại hình.</p>
         </Muc>
 
         <Muc tieuDe="Bạn có sẵn sàng học xa nhà?">

@@ -1,0 +1,3 @@
+{
+  "mcp-contracts": "Hợp đồng progress/proposal của capabilities lệch test (\"progress is a deduplicated pending proposal\"). Chủ: người làm src/capabilities (đang sửa tests/capabilities.test.ts). Phải sửa rồi xóa dòng này."
+}

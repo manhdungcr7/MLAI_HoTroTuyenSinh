@@ -45,7 +45,7 @@ export function SuaMucTieu({ mo, dong, mt, lc, luu }: {
             className="mt-2 min-h-11 px-3 rounded-xl bg-xanh-nhat text-xanh text-[13px] font-bold text-left">
             Dùng mức tham khảo {lc.namDiem}: {diem1(lc.diemMin)} điểm
           </button>
-          <p className="text-[12px] text-chu-phu mt-1">Mức tham khảo là điểm chuẩn các năm trước.</p>
+          <p className="text-[13px] text-chu-phu mt-1">Mức tham khảo là điểm chuẩn các năm trước.</p>
         </div>
         <div>
           <Truong nhan="Ngày thi dự kiến" goiY="Dùng để đếm số ngày còn lại.">

@@ -11,7 +11,7 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Tính năng trong slide | Nằm ở đâu |
 |---|---|
 | Hồ sơ học sinh thông minh | `src/features/khoi-dau` (nhập), `src/features/hanh-trinh/ho-so.tsx` (nhận xét tự động) |
-| Khám phá ngành/trường | `src/features/kham-pha` (3.652 chương trình thật của 118 trường, lọc, so sánh, chi tiết có nguồn) |
+| Khám phá ngành/trường | `src/features/kham-pha` (3.648 chương trình thật của 118 trường, lọc, so sánh, chi tiết có nguồn) |
 | Danh mục nguyện vọng cân bằng | `src/features/nguyen-vong`, `src/features/thu-tinh-huong` |
 | Mục tiêu và khoảng cách | `src/features/muc-tieu` |
 | Kế hoạch học theo tuần | `src/features/ke-hoach`, `src/features/tu-hoc` |
@@ -58,7 +58,7 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 
 - 3.648 chương trình thật ở `src/data/du-lieu-that.json`, chuyển sang kiểu `LuaChon` bởi `src/data/lua-chon-that.ts`.
 - Các file nạp lười (lazy): điểm theo năm, đề án trường, chương trình, trang ngành-trường.
-- Học phí: 602 chương trình có học phí chính thức từ văn bản đề án của 18 trường (DDY, QSY, YDS, BKA, DCN, HQT, HTC, LPH, NHH, NTH, PKA, QHE, QSC, XDA, YHB, GHA, QHT, QSX; KHA và QHI chưa có học phí văn bản chính thức; chỉ giữ học phí đã đối chiếu được với văn bản đúng trường — xem `scripts/lam-day-hoc-phi.py` (BO_QUA)) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
+- Học phí: 0 chương trình có học phí đã kiểm chứng (đo 17/10/2026, `src/data/hoc-phi-kiem-chung.ts`); `src/data/hoc-phi.json` có 601 mục, đều dẫn tới trang tổng hợp tuyensinh247, chưa mục nào đánh dấu đối chiếu văn bản gốc (xem `scripts/lam-day-hoc-phi.py`, BO_QUA) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
 - 73 tổ hợp xét tuyển chính thức: `src/data/to-hop-chinh-thuc.ts`.
 - Script sinh lại dữ liệu cần thư mục anh em `nguyen-vong` (nguồn thô). Hướng dẫn và giới hạn: `docs/DU-LIEU.md`.
 - Dữ liệu nào chưa có thì hiển thị "chưa có", không điền thay.
@@ -81,9 +81,9 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 ## 6. Việc đã làm và vì sao (lịch sử rà soát)
 
 Giai đoạn 1 — nạp dữ liệu thật và đưa lên main:
-- Thay dữ liệu mẫu bằng 3.652 chương trình thật của 118 trường, có nguồn, năm, tổ hợp, phương thức.
+- Thay dữ liệu mẫu bằng 3.648 chương trình thật của 118 trường, có nguồn, năm, tổ hợp, phương thức.
 - Trang "Về dữ liệu" nói rõ nguồn và giới hạn; lọc, so sánh, gợi ý danh sách nguyện vọng theo điểm và ngân sách.
-- Cloudflare Pages deploy từ `main` (https://nguyenvongai.pages.dev). `public/_headers` đặt no-cache cho HTML, `sw.js`, manifest để người dùng không kẹt bản cũ.
+- Cloudflare Pages (https://nguyenvongai.pages.dev) deploy bằng GitHub Actions khi push `main` (`.github/workflows/deploy.yml`: tsc + kiem-tra + build rồi `wrangler pages deploy`; test chạy job riêng, không chặn). Trước 17/10/2026 workflow này đỏ ở bước test nên không bao giờ tới bước deploy và bản trên site đều do `npm run deploy` thủ công; nếu CI đỏ thì deploy tay: `npm run build && npx wrangler pages deploy dist --project-name=nguyenvongai --branch=main`. `public/_headers` đặt no-cache cho HTML, `sw.js`, manifest để người dùng không kẹt bản cũ.
 
 Giai đoạn 2 — rà soát logic toàn bộ (mục tiêu: "chạy đúng thật, không chỉ hiển thị"):
 - Thử tình huống và điểm thi thử: tính theo từng chương trình thay vì một tổ hợp cố định.

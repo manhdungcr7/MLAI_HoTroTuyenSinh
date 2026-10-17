@@ -50,7 +50,7 @@ export function programDetails(record: AdmissionRecord, catalog: Catalog) {
     phuongThuc: record.pt, toHop: [...record.toHop], diemTheoNam: cutoffHistory,
     scoreEvidence: record.scoreEvidence ?? null,
     diemChuan: latest && typeof latest[1] === "number" && Number.isFinite(latest[1]) ? latest[1] : null, namDiem: latest ? Number(latest[0]) : null,
-    hocPhiTrieuNam: choice?.hocPhiMin ?? null, hocPhiUocTinh: choice?.hocPhiUocTinh ?? false,
+    hocPhiTrieuNam: choice?.nguonHocPhi?.url ? choice.hocPhiMin ?? null : null, hocPhiUocTinh: false,
     nguonHocPhi: choice?.nguonHocPhi ?? null,
     provenance: {
       sourceTier: record.tier, sourceUrl: record.nguon, verificationStatus: "not_independently_verified" as const,

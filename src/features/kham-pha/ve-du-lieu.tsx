@@ -10,6 +10,7 @@ import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
 import { coHocPhi } from "@/data/lua-chon-phu";
 import { DUONG_DAN, EMAIL_BAO_SAI } from "@/duong-dan";
+import { KhoiDoTinCay } from "./khoi-do-tin-cay";
 
 const so = (n: number) => n.toLocaleString("vi-VN");
 
@@ -42,7 +43,7 @@ export default function VeDuLieu() {
     <div className="rounded-the bg-trang border border-vien p-3 shadow-the">
       <b className="block text-[24px] leading-none font-extrabold text-xanh">{n}</b>
       <span className="block mt-1 text-[13px] font-semibold text-chu leading-snug">{nhan}</span>
-      {phu && <span className="block text-[12px] text-chu-phu leading-snug">{phu}</span>}
+      {phu && <span className="block text-[13px] text-chu-phu leading-snug">{phu}</span>}
     </div>
   );
 
@@ -52,8 +53,10 @@ export default function VeDuLieu() {
       <NoiDung className="pb-8">
         <section className="rounded-lon nen-xanh p-4">
           <h2 className="text-[19px] font-extrabold text-muc leading-snug">Mỗi con số đều có nguồn để bạn tự kiểm tra</h2>
-          <p className="mt-1 text-[14px] text-chu">Điểm chuẩn, tổ hợp, học phí, việc làm lấy từ đề án tuyển sinh của chính các trường. Số nào là ước tính thì ghi "≈ … (ước tính)" và không gắn link nguồn.</p>
+          <p className="mt-1 text-[14px] text-chu">Điểm chuẩn, tổ hợp, học phí, việc làm lấy từ đề án tuyển sinh của chính các trường. Số nào chưa có thì ghi "chưa có", không điền thay.</p>
         </section>
+
+        <KhoiDoTinCay />
 
         <section aria-label="Số liệu tổng quan" className="grid grid-cols-2 gap-2.5">
           <The so={so(tk.tong)} nhan="ngành và chương trình" phu={`của ${tk.truong} trường`} />
@@ -87,7 +90,7 @@ export default function VeDuLieu() {
         <DongThongBao tone="cam" icon={ShieldAlert} tieuDe="Những điều mình chưa có"
           moTa={<>
             <span className="block">- Điểm chuẩn năm nay chưa công bố: app dùng các năm trước và luôn ghi rõ năm.</span>
-            <span className="block">- Học phí có văn bản của trường ở {so(tk.hocPhi)} ngành. {so(tk.hocPhiUocTinh)} ngành khác chỉ có học phí ước tính theo trường và khối ngành (ghi "≈"), để lọc theo ngân sách; bạn xem đề án trước khi quyết định.</span>
+            <span className="block">- Học phí đã đối chiếu với văn bản của trường: {so(tk.hocPhi)} ngành. Học phí chưa đối chiếu thì app không hiển thị, bạn xem đề án của trường.</span>
             <span className="block">- Tỷ lệ có việc làm mới có ở {so(tk.viecLam)} ngành; ngành khác ghi chưa có dữ liệu.</span>
             <span className="block">- {so(tk.tong - tk.chinhThuc)} ngành lấy điểm từ trang tổng hợp, chưa đối chiếu được với đề án; trang chi tiết có ghi chưa kiểm chứng.</span>
           </>} />

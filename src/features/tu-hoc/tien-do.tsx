@@ -49,7 +49,7 @@ export default function TienDo() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Tiến độ & điều chỉnh" moTa={`Tuần này · ${ngayThang(thuHai)} – ${ngayThang(congNgay(thuHai, 6))}`} />
+      <DauTrangChinh tieuDe="Tiến độ & điều chỉnh" bienThe="luc" moTa={`Tuần này · ${ngayThang(thuHai)} – ${ngayThang(congNgay(thuHai, 6))}`} />
       <ThanhTabKeHoach />
       <NoiDung>
         {trongHet ? (

@@ -249,9 +249,12 @@ console.log("=== BẮT ĐẦU KIỂM THỬ HÀNH TRÌNH ĐẦU-CUỐI (E2E JOURN
   assert.equal(nhanDinh.datRoi, false);
 
   // 2.4. Đánh dấu chuyên đề cần ôn tập (canOnTap) & Sinh việc cần học trong tuần
-  const chuyenDeCanOn = NOI_DUNG_ON.tiengAnh[2]; // "Luyện ngữ pháp và từ vựng theo chủ đề"
+  const chuyenDeCanOn = NOI_DUNG_ON.tiengAnh[2]; // Unit 3. Green living
   state = chuanHoa({
     ...state,
+    // Bắt đầu tuần mới; việc mẫu đã hoàn thành có thể trùng ID và che việc vừa sinh.
+    viec: [],
+    trangThaiViec: {},
     hoSo: {
       ...state.hoSo,
       tienDoKienThuc: {

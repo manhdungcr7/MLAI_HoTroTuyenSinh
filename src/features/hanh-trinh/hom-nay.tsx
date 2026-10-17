@@ -12,12 +12,13 @@ import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { boCongDuLieu } from "@/components/layout/cong-du-lieu";
-import { chonNguyenVongLamMucTieu, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
+import { chonNguyenVongLamMucTieu, coHoSoDeHienThi, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, loiChaoTheoChang, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
 import { changCuaEm, type Chang } from "@/state/chang";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
+import { TheHanhTrinh } from "./the-hanh-trinh";
 
 const SO_DONG_GON = 3;
 
@@ -26,7 +27,7 @@ function HomNayDayDu() {
   const nav = useNavigate();
   const nv = chonNguyenVongLamMucTieu(s);
   // Chưa có hồ sơ (lần đầu mở ứng dụng): đưa tới màn Chào mừng.
-  const daCoDuLieu = Boolean(s.hoSo.hoanTat || s.hoSo.hoTen.trim() || s.hoSo.khoi || s.hoSo.tinh || s.hoSo.nganhQuanTam.length || Object.values(s.hoSo.diem).some((d) => d !== null));
+  const daCoDuLieu = coHoSoDeHienThi(s);
   if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
 
   const m = mucTieuDayDu(s);
@@ -38,7 +39,7 @@ function HomNayDayDu() {
 
   return (
     <>
-      <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={loiChaoTheoChang(s, chang)} />
+      <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={loiChaoTheoChang(s, chang)} bienThe="luc" />
       <NoiDung>
         <HienDan className="space-y-3">
           <HeroEmDangODau onNhapDiem={() => nav(DUONG_DAN.batDau(2))} />
@@ -76,6 +77,8 @@ function HomNayDayDu() {
           </button>
         </div>
 
+        <TheHanhTrinh />
+
         <TamTrangHomNay />
 
         {coKeHoach && <LichVaTienDo />}
@@ -110,7 +113,7 @@ function HeroEmDangODau({ onNhapDiem }: { onNhapDiem: () => void }) {
       <VongDiem value={ch.tong} max={30} size={96} tong="xanh" nhanGiua="/30 điểm" aria={`Tổ hợp ${ch.toHop} tốt nhất, ${dinhDangDiem(ch.tong)} trên 30`} />
       <div className="min-w-0 flex-1">
         <b className="block text-[16px] text-muc leading-tight">Em đang ở đâu?</b>
-        <p className="text-[13px] text-chu mt-0.5">Tổ hợp {ch.toHop} cho điểm cao nhất. So được {ch.soNganh} ngành: {ch.soDuDiem} ngành đủ điểm chuẩn năm trước, {ch.soThuSuc} ngành gần mức đó.</p>
+        <p className="text-[13px] text-chu mt-0.5 line-clamp-3">Tổ hợp {ch.toHop} cao nhất. {ch.soDuDiem} ngành đủ điểm năm trước, {ch.soThuSuc} gần mức.</p>
       </div>
     </TheNen>
   );
@@ -335,7 +338,7 @@ const HomNayCoDanhMuc = boCongDuLieu(HomNayDayDu);
 /** Lần đầu mở app (chưa có hồ sơ): chuyển sang Chào mừng ngay, không chờ danh mục. Có hồ sơ thì chờ danh mục rồi mới dựng. */
 export default function HomNay() {
   const { s } = useApp();
-  const daCoDuLieu = Boolean(s.hoSo.hoanTat || s.hoSo.hoTen.trim() || s.hoSo.khoi || s.hoSo.tinh || s.hoSo.nganhQuanTam.length || Object.values(s.hoSo.diem).some((d) => d !== null));
+  const daCoDuLieu = coHoSoDeHienThi(s);
   if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
   return <HomNayCoDanhMuc />;
 }

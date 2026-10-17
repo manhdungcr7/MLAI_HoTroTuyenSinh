@@ -59,6 +59,24 @@ const result = {
   programsWithoutCombination: records.filter((r) => !r.toHop.length).length,
   programsWithNoComputableCombination: records.filter((r) => r.toHop.length > 0 && r.toHop.every((ma) => !MON_CUA_TO_HOP[ma])).length,
   programsWithoutScore: records.filter((r) => !Object.values(r.diem).some((s) => s !== null && Number.isFinite(s))).length,
+  singleYearScoreCount: records.filter((r) => Object.values(r.diem).filter((s) => s !== null && Number.isFinite(s)).length === 1).length,
+  multiYearScoreCount: records.filter((r) => Object.values(r.diem).filter((s) => s !== null && Number.isFinite(s)).length >= 2).length,
+  programsWithFloorScoreOnly: records.filter((r) => {
+    const valid = Object.values(r.diem).filter((s): s is number => s !== null && Number.isFinite(s));
+    return valid.length > 0 && valid.every((s) => s === 15);
+  }).length,
+  flatCutoffUniversities: (() => {
+    const unis: Record<string, { ma: string; ten: string; scores: number[] }> = {};
+    for (const r of records) {
+      if (!unis[r.ma]) unis[r.ma] = { ma: r.ma, ten: r.truong, scores: [] };
+      const vals = Object.values(r.diem).filter((s): s is number => s !== null && Number.isFinite(s));
+      unis[r.ma].scores.push(...vals);
+    }
+    return Object.values(unis).filter((u) => {
+      const uScores = [...new Set(u.scores)];
+      return uScores.length === 1 && u.scores.length >= 3;
+    }).map((u) => ({ ma: u.ma, ten: u.ten, diemChung: u.scores[0] }));
+  })(),
   thptScoresOutside30: records.flatMap((r) => r.pt === "THPT" ? Object.entries(r.diem).filter(([, n]) => n !== null && n > 30).map(([year, score]) => ({ id: r.id, year, score })) : []),
   tuitionKnown: [...choices.values()].filter((r) => r.hocPhiMin !== undefined).length,
   tuitionEstimated: [...choices.values()].filter((r) => r.hocPhiUocTinh).length,

@@ -11,15 +11,15 @@ export const TONE_PHU_HOP: Record<MucPhuHop, ToneTen> = { "Phù hợp": "luc", "
 export function TheLuaChon({ l, onClick, phai, diemEm = null }: { l: LuaChon; onClick?: () => void; phai?: React.ReactNode; diemEm?: number | null }) {
   const Goc = onClick ? "button" : "div";
   return (
-    <Goc {...(onClick ? { type: "button" as const, onClick } : {})} className="w-full text-left rounded-the bg-trang border border-vien shadow-the p-3.5 active:bg-xanh-nhat block">
+    <Goc {...(onClick ? { type: "button" as const, onClick } : {})} className="nay-nhe w-full text-left rounded-the bg-trang border border-vien shadow-the p-3.5 active:bg-xanh-nhat block">
       <span className="flex items-start gap-3">
         <HuyHieuTruong ten={l.truong} tone={l.tone} />
         <span className="flex-1 min-w-0">
           <span className="flex items-start justify-between gap-2">
-            <b className="text-[16px] text-muc leading-snug">{l.nganh}</b>
+            <b className="min-w-0 line-clamp-2 break-words text-[16px] text-muc leading-snug [text-wrap:balance]">{l.nganh}</b>
             {phai ?? (l.mucPhuHop ? <Nhan tone={TONE_PHU_HOP[l.mucPhuHop]}>{l.mucPhuHop}</Nhan> : null)}
           </span>
-          <span className="block text-[13px] text-chu-phu">{l.truong} · {l.moTa}</span>
+          <span className="block line-clamp-2 break-words text-[13px] text-chu-phu leading-snug [text-wrap:pretty]">{l.truong} · {l.moTa}</span>
         </span>
       </span>
       <span className="mt-2.5 block border-t border-vien pt-2"><DongDiemThe lc={l} diemEm={diemEm} /></span>

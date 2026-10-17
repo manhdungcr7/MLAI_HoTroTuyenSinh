@@ -1,5 +1,5 @@
 // Primitive nền thiết kế 2027. Tài liệu: docs/THIET-KE-2027.md. Chỉ dùng token + class gd-*/the-*; không hex, không gradient tay.
-import { useEffect, useState, type ElementType, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Bell, type LucideIcon } from "lucide-react";
 import { DUONG_DAN } from "@/duong-dan";
@@ -8,12 +8,13 @@ import { gop } from "../nut-the";
 import { BieuTuongThuongHieuMau } from "../bieu-tuong-nguyen-vong";
 import { mauTheoTong, type TongPill } from "./mau-nghia";
 import { giamChuyenDong, useHienKhiVaoMan } from "./chuyen-dong";
+import { useHieuUngPhatSang } from "./phat-sang";
 
 /* ---------- PillTrangThai ---------- */
 export function PillTrangThai({ tong = "xanh", icon: Icon, children, className }: { tong?: TongPill; icon?: LucideIcon; children: ReactNode; className?: string }) {
   const m = mauTheoTong(tong);
   return (
-    <span className={gop("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-bold leading-tight whitespace-nowrap", m.nen, m.chu, className)}>
+    <span className={gop("inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[13px] font-bold leading-tight whitespace-nowrap", m.nen, m.chu, className)}>
       {Icon && <Icon size={14} strokeWidth={2.4} aria-hidden />}{children}
     </span>
   );
@@ -23,7 +24,7 @@ export function PillTrangThai({ tong = "xanh", icon: Icon, children, className }
 export function ChipLoc({ chon, onClick, icon: Icon, children, dem }: { chon?: boolean; onClick?: () => void; icon?: LucideIcon; children: ReactNode; dem?: number }) {
   return (
     <button type="button" onClick={onClick} aria-pressed={!!chon}
-      className={gop("nay-nhe min-h-11 px-3.5 rounded-full text-[14px] font-semibold whitespace-nowrap inline-flex items-center gap-1.5 shrink-0 cursor-pointer transition-colors",
+      className={gop("nay-nhe min-h-11 px-3.5 rounded-lg text-[14px] font-semibold whitespace-nowrap inline-flex items-center gap-1.5 shrink-0 cursor-pointer transition-colors",
         chon ? "gd-chip-chon" : "o-mem text-chu active:bg-xanh-nhat")}>
       {Icon && <Icon size={16} strokeWidth={2.2} aria-hidden />}{children}
       {dem !== undefined && <span className={gop("text-[13px]", chon ? "text-white/90" : "text-chu-phu")}>({dem})</span>}
@@ -60,14 +61,17 @@ const HUY: Record<ToneTen, string> = { xanh: "gd-huy-hieu-xanh", luc: "gd-huy-hi
 export function HuyHieuTruong({ ten, tone = "xanh", kichThuoc = 44 }: { ten: string; tone?: ToneTen; kichThuoc?: number }) {
   const chu = ten.replace(/[^A-Za-zÀ-ỹ]/g, "").slice(0, 4).toUpperCase();
   return (
-    <span aria-hidden className={gop("rounded-[14px] grid place-items-center text-white font-bold tracking-tight shrink-0 shadow-sm", HUY[tone])}
+    <span aria-hidden className={gop("rounded-xl grid place-items-center text-white font-bold tracking-tight shrink-0 shadow-sm", HUY[tone])}
       style={{ width: kichThuoc, height: kichThuoc, fontSize: Math.max(10, kichThuoc * (chu.length > 3 ? 0.24 : 0.3)) }}>{chu}</span>
   );
 }
 
 /* ---------- TheNen ---------- */
-export function TheNen({ tong, className, children, as: Tag = "div", ...p }: { tong?: "xanh" | "luc" | "cam" | "tim" | "do"; className?: string; children: ReactNode; as?: ElementType; "aria-label"?: string }) {
-  return <Tag {...p} className={gop("the-mem p-4", tong && `the-nen-nhe-${tong}`, className)}>{children}</Tag>;
+/** phatSang: quầng sáng + nghiêng theo con trỏ (chỉ chuột). Mặc định tắt. */
+export function TheNen({ tong, className, children, as: Tag = "div", phatSang = false, ...p }: { tong?: "xanh" | "luc" | "cam" | "tim" | "do"; className?: string; children: ReactNode; as?: ElementType; phatSang?: boolean; "aria-label"?: string }) {
+  const ref = useRef<HTMLElement>(null);
+  useHieuUngPhatSang(ref, phatSang);
+  return <Tag {...p} ref={ref} className={gop("the-mem p-4", tong && `the-nen-nhe-${tong}`, phatSang && "phat-sang", className)}>{children}</Tag>;
 }
 
 /* ---------- TabPhan: segmented, chip active trượt ---------- */
@@ -108,7 +112,7 @@ export function ThanhTienDo({ phanTram, tong = "xanh", nhanNoi, nhan = "Tiến �
   return (
     <div ref={ref} className="relative pt-7">
       {phanTram !== null && p > 0 && (
-        <span aria-hidden className="tg-thanh absolute top-0 -translate-x-1/2 rounded-full bg-muc px-2 py-0.5 text-[13px] font-bold text-white whitespace-nowrap"
+        <span aria-hidden className="tg-thanh absolute top-0 -translate-x-1/2 rounded-lg bg-muc px-2 py-0.5 text-[13px] font-bold text-white whitespace-nowrap"
           style={{ left: `${Math.min(88, Math.max(12, hienTai))}%` }}>{nhanNoi ?? `Đạt ${Math.round(p)}%`}</span>
       )}
       <div className="h-2.5 w-full rounded-full bg-vien/70 overflow-hidden" role="progressbar" aria-label={nhan}
@@ -155,7 +159,7 @@ export function ToastNho({ mo, noiDung, hoanTac, dong, thoiGian = 5000 }: { mo: 
   if (!mo) return null;
   return (
     <div role="status" aria-live="polite" className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom)+0.75rem)] z-[60] mx-auto max-w-[430px] px-4 pointer-events-none">
-      <div className="toast-vao pointer-events-auto flex items-center gap-3 rounded-2xl bg-muc text-white pl-4 pr-1 min-h-12 shadow-lg">
+      <div className="toast-vao pointer-events-auto flex items-center gap-3 rounded-2xl bg-muc text-white pl-4 pr-1 min-h-12 shadow-md">
         <span className="flex-1 text-[14px] py-2">{noiDung}</span>
         {hoanTac && <button type="button" onClick={() => { hoanTac(); dong(); }} className="min-h-11 px-3 rounded-xl text-[14px] font-bold text-da-quang cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Hoàn tác</button>}
       </div>
@@ -163,7 +167,11 @@ export function ToastNho({ mo, noiDung, hoanTac, dong, thoiGian = 5000 }: { mo: 
   );
 }
 
-/** Đặt một lần ở đầu màn: khung ứng dụng nhận nền trời sáng (gradient xanh lam nhạt sang lavender). */
-export function NenTrangTroi() {
-  return <span className="dau-nen-troi" aria-hidden />;
+/** Biến thể nền trang trời sáng. Màu nằm trong index.css (.nen-trang-troi*). */
+export type BienTheNen = "xanh" | "am" | "luc" | "tim";
+const LOP_NEN: Record<BienTheNen, string> = { xanh: "nen-trang-troi", am: "nen-trang-troi-am", luc: "nen-trang-troi-luc", tim: "nen-trang-troi-tim" };
+
+/** Đặt một lần ở đầu màn: khung ứng dụng nhận nền trời sáng nhiều lớp (đổi bienThe để đổi tông). */
+export function NenTrangTroi({ bienThe = "xanh" }: { bienThe?: BienTheNen }) {
+  return <span className={`dau-nen-troi ${LOP_NEN[bienThe]}`} aria-hidden />;
 }
