@@ -2,6 +2,7 @@
 // Nguyên tắc: thiếu thì ghi "chưa có", không suy ra số; điểm khác thang không đặt chung một thang.
 import type { LuaChon } from "@/state/types";
 import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
+import { DIEM_SAN_XET_TUYEN } from "@/engine/trang-thai-du-lieu";
 import { coSoCuaChuongTrinh, coTruong, tenTruong, tinhCuaTruong } from "@/engine/truong";
 
 export const CHUA_CO = "Chưa có dữ liệu xác minh";
@@ -26,7 +27,9 @@ export interface DongChuongTrinh {
   thang: string | null;
   nam: string | null; // năm mới nhất có điểm
   diem: number | null;
-  theoNam: [string, number][]; // mới nhất trước
+  theoNam: [string, number][]; // mới nhất trước; điểm THPT đúng mức sàn 15,0 không nằm ở đây
+  /** Chỉ có mức sàn xét tuyển (15,0), không phải điểm chuẩn: năm mới nhất ở mức sàn. */
+  diemSan: { nam: string; diem: number } | null;
   nguonDiem: "chinh-thuc" | "tong-hop";
   nhanNguon: string;
   toHop: string[] | null; // null = chưa ghi
@@ -61,7 +64,11 @@ export function hocPhiDayDu(l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "hocPhi
 }
 
 function dongTu(l: LuaChon): DongChuongTrinh {
-  const theoNam = Object.entries(l.diemTheoNam ?? {}).filter(([, d]) => typeof d === "number" && Number.isFinite(d)).sort((a, b) => b[0].localeCompare(a[0]));
+  const tho = Object.entries(l.diemTheoNam ?? {}).filter(([, d]) => typeof d === "number" && Number.isFinite(d)).sort((a, b) => b[0].localeCompare(a[0]));
+  // Điểm THPT đúng bằng mức sàn 15,0 không phải điểm chuẩn (cùng luật với engine/trang-thai-du-lieu). Phương thức khác giữ thang riêng.
+  const laThpt = !l.phuongThuc || l.phuongThuc === "THPT";
+  const theoNam = laThpt ? tho.filter(([, d]) => d !== DIEM_SAN_XET_TUYEN) : tho;
+  const san = laThpt ? tho.find(([, d]) => d === DIEM_SAN_XET_TUYEN) : undefined;
   const ng = nhanNguonDiem(l.nguonCap);
   const pt = l.phuongThuc ?? "";
   const hp = hocPhiDayDu(l);
@@ -73,6 +80,7 @@ function dongTu(l: LuaChon): DongChuongTrinh {
     nam: theoNam[0]?.[0] ?? null,
     diem: theoNam[0]?.[1] ?? null,
     theoNam,
+    diemSan: theoNam.length === 0 && san ? { nam: san[0], diem: san[1] } : null,
     nguonDiem: ng.loai,
     nhanNguon: ng.nhan,
     toHop: l.toHopXet && l.toHopXet.length > 0 ? l.toHopXet : null,

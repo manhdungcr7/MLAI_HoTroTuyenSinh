@@ -3,6 +3,7 @@ import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước 
 import assert from "node:assert/strict";
 import { hopNhatLuaChonVaCms, layChiTietTruongHopNhat } from "../src/engine/du-lieu-tuyen-sinh/hop-nhat";
 import { chuanHoaChoSnapshot, taoSnapshotVaManifest } from "../src/engine/du-lieu-tuyen-sinh/snapshot-builder";
+import { kiemTraData } from "../cms/functions/_thu-vien/ban-ghi-d1";
 import type { BanGhiCms } from "../src/engine/du-lieu-tuyen-sinh/kieu";
 import { LUA_CHON_MAU, datDanhMuc, tim } from "../src/data/lua-chon-mau";
 import { LUA_CHON } from "../src/data/lua-chon-that";
@@ -80,5 +81,33 @@ assert.equal(tim(goc0.id)?.diemMin, 29.9, "tim() thấy bản mới");
 assert.notEqual(LUA_CHON[0].diemMin, 29.9, "dữ liệu gốc không bị sửa");
 datDanhMuc([...LUA_CHON]);
 assert.equal(tim(goc0.id)?.diemMin, goc0.diemMin);
+
+// 6) Snapshot công khai: chỉ khóa dữ liệu tuyển sinh đã biết, và ô chữ chứa SĐT/email bị bỏ
+{
+  const bg = (entityType: string, entityId: string, data: Record<string, unknown>) => ({ id: entityId, entityType, entityId, version: 1, status: "PUBLISHED", data, source: nguon, createdBy: "a@b.vn", updatedAt: "2026-10-07T00:00:00Z", importance: "normal", changeNote: "" }) as unknown as BanGhiCms;
+  const kq = await taoSnapshotVaManifest([
+    bg("tuition", "ABC-HP2026-chuan", { donVi: "trieu_nam", mucThap: 30, mucCao: 36, nam: 2026, phamVi: "Chuẩn", ghiChu: "Liên hệ 0912345678 để hỏi", emailRieng: "x@y.vn", rawSubmission: { a: 1 }, __proto_x: 1 }),
+    bg("luu_y", "ABC-LY2026-x", { tieuDe: "Lưu ý", noiDung: "Gửi hồ sơ tại phong@truong.edu.vn", nam: 2026 }),
+    bg("luu_y", "ABC-LY2026-y", { tieuDe: "Lưu ý khác", noiDung: "Nộp trước 30/6", nam: 2026 }),
+  ], "2026.10.07.01");
+  const hp = kq.datasets.tuition.duLieu[0] as unknown as Record<string, unknown>;
+  assert.equal(hp.mucCao, 36, "khóa đã biết được giữ");
+  assert.equal("emailRieng" in hp, false, "khóa lạ bị bỏ");
+  assert.equal("ghiChu" in hp, false, "ô chữ có số điện thoại bị bỏ");
+  assert.ok(!kq.datasets.tuition.json.includes("0912345678") && !kq.datasets.community.json.includes("phong@truong.edu.vn"), "JSON công khai không có SĐT/email");
+  const cd = kq.datasets.community.duLieu.map((x) => x.noiDung);
+  assert.equal(cd.length, 2);
+  assert.equal("noiDung" in cd[0], false, "nội dung có email bị bỏ");
+  assert.equal(cd[1].noiDung, "Nộp trước 30/6", "nội dung sạch được giữ");
+}
+
+// 7) Lưu bản ghi (máy chủ): khóa lạ và SĐT/email trong ô chữ bị từ chối, dữ liệu hợp lệ qua
+{
+  assert.throws(() => kiemTraData({ donVi: "trieu_nam", mucThap: 1, mucCao: 2, nam: 2026, phamVi: "x", webhook: "evil" }, "ABC-HP2026-x", "tuition"), /không được phép/);
+  assert.throws(() => kiemTraData({ tieuDe: "Lưu ý", noiDung: "Gọi 0912 345 678 nhé" }, "ABC-LY2026-x", "luu_y"), /số điện thoại hoặc email/);
+  assert.throws(() => kiemTraData({ tieuDe: "Lưu ý", noiDung: "Mail a@b.vn" }, "ABC-LY2026-x", "luu_y"), /số điện thoại hoặc email/);
+  assert.doesNotThrow(() => kiemTraData({ donVi: "trieu_nam", mucThap: 1, mucCao: 2, nam: 2026, phamVi: "Chương trình chuẩn", id: "ABC-HP2026-x", maTruong: "ABC" }, "ABC-HP2026-x", "tuition"));
+  assert.doesNotThrow(() => kiemTraData({ tieuDe: "Lưu ý", noiDung: "Nộp trước 30/6, học phí 10.000.000đ" }, "ABC-LY2026-x", "luu_y"));
+}
 
 console.log("✓ hợp nhất snapshot: nguồn bắt buộc, không ghi đè số gốc bằng số suy ra");

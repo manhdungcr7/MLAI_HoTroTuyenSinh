@@ -171,25 +171,15 @@ const diemEm: DiemDayDu = {
 // 5. Kiểm thử phân loại 4 nhóm vị thế (Issue 14 - Task 1)
 {
   const { phanLoaiViThe } = await import("../src/engine/toi-uu-nguyen-vong");
-  // Thử sức: Δ ∈ [-2.0, -0.5)
-  assert.equal(phanLoaiViThe(-2.0), "Thử sức");
-  assert.equal(phanLoaiViThe(-1.5), "Thử sức");
-  assert.equal(phanLoaiViThe(-0.51), "Thử sức");
-
-  // Vừa sức: Δ ∈ [-0.5, +1.0]
-  assert.equal(phanLoaiViThe(-0.5), "Vừa sức");
-  assert.equal(phanLoaiViThe(0.0), "Vừa sức");
-  assert.equal(phanLoaiViThe(1.0), "Vừa sức");
-
-  // An toàn: Δ ∈ (+1.0, +2.5]
-  assert.equal(phanLoaiViThe(1.01), "An toàn");
-  assert.equal(phanLoaiViThe(2.0), "An toàn");
-  assert.equal(phanLoaiViThe(2.5), "An toàn");
-
-  // Dự phòng: Δ > +2.5
-  assert.equal(phanLoaiViThe(2.51), "Dự phòng");
-  assert.equal(phanLoaiViThe(3.5), "Dự phòng");
-  assert.equal(phanLoaiViThe(5.0), "Dự phòng");
+  // Ngưỡng chuẩn dùng chung với nhanNguyenVong: < 0 Thử sức, < 1,5 Vừa sức, < 4 An toàn, >= 4 Dự phòng.
+  for (const [d, nhan] of [[-2, "Thử sức"], [-0.51, "Thử sức"], [-0.5, "Thử sức"], [-0.01, "Thử sức"], [0, "Vừa sức"], [1.0, "Vừa sức"], [1.49, "Vừa sức"],
+    [1.5, "An toàn"], [2.5, "An toàn"], [3.99, "An toàn"], [4, "Dự phòng"], [5, "Dự phòng"]] as const) {
+    assert.equal(phanLoaiViThe(d), nhan, `chênh ${d}`);
+  }
+  const { nhanNguyenVong } = await import("../src/engine/phan-tich");
+  for (const d of [-1, -0.004, 0, 0.7, 1.49, 1.5, 2, 3.99, 4, 6]) {
+    assert.equal(phanLoaiViThe(d), nhanNguyenVong({ diemMin: 20 } as never, 20 + d), `hai hàm nhãn phải khớp ở chênh ${d}`);
+  }
 }
 
 // 6. Kiểm thử 2 lỗi chiến lược tuyển sinh (Issue 14 - Task 2 / Verification 1 & 2)
@@ -220,7 +210,7 @@ const diemEm: DiemDayDu = {
   
   const cbDonRuiRo = cdNT2.canhBaoNghiemTrong.find((cb) => cb.includes("Dồn rủi ro"));
   assert.ok(cbDonRuiRo, "phải có cảnh báo Dồn rủi ro khi 4 NV đều là thử sức");
-  assert.ok(cbDonRuiRo?.includes("trượt trắng cả mùa tuyển sinh"), "phải có cảnh báo nguy cơ trượt trắng cả mùa tuyển sinh");
+  assert.ok(cbDonRuiRo?.includes("thiếu phương án An toàn"), "phải nói danh sách thiếu phương án An toàn");
   
   const deXuatDuPhong = cdNT2.deXuatHanhDong.find((dx) => dx.includes("Thiếu nguyện vọng dự phòng"));
   assert.ok(deXuatDuPhong, "phải có đề xuất hành động: Thiếu nguyện vọng dự phòng");

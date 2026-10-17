@@ -15,8 +15,13 @@ export const TONG_NGAY_MAC_DINH = 500;
 const KHOA_WEB_HE_THONG = "he-thong-web";
 export const WEB_NGAY_MAC_DINH = 150;
 
+// Trần theo IP mỗi ngày: hồ sơ (hoSoId) do trình duyệt tự sinh nên đổi được; IP là khóa khó đổi hơn. Đặt trước trần toàn hệ thống
+// để một nguồn không dùng hết 500 lượt chung bằng UUID ngẫu nhiên. Thiếu IP (chỉ gặp khi chạy cục bộ) thì mọi yêu cầu dùng chung một khóa.
+export const IP_NGAY_MAC_DINH = 40;
+const KHOA_IP_KHONG_RO = "khong-ro";
+
 export { goiMoHinh } from "../_thu-vien/ai/sinh-van-ban";
-export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string }
+export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string; AI_IP_NGAY?: string }
 interface Ctx { request: Request; env: Env }
 
 const json = (v: unknown, status = 200) =>
@@ -61,49 +66,70 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   try {
     if (!await choPhepTanSuat(env.RATE_KV, ip, Date.now())) return json({ loi: "Bạn hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
   } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
-  // Hạn mức theo ngày: giữ chỗ nguyên tử trước khi gọi AI, chốt khi thành công, trả lại khi lỗi.
+  // Hạn mức theo ngày: giữ chỗ nguyên tử trước khi gọi AI, chốt khi thành công, trả lại khi lỗi hạ tầng (không trả khi 422/400/429).
   if (!env.DB) return json({ loi: "chua-cau-hinh-han-muc" }, 503);
+  const db = env.DB;
   const toiDa = docHanMuc(env.AI_QUOTA_DAILY);
+  const toiDaIp = Math.max(1, Math.floor(Number(env.AI_IP_NGAY) || IP_NGAY_MAC_DINH));
+  const khoaIp = `ip:${request.headers.get("cf-connecting-ip") ?? KHOA_IP_KHONG_RO}`;
+  const traCacGiu: GiuCho[] = [];
+  const traHet = () => Promise.all(traCacGiu.map((g) => traLaiLuot(db, g).catch(() => {}))).then(() => undefined);
+  const giuMot = async (khoa: string, yc: string, tran: number) => {
+    const g = await giuLuot(db, khoa, yc, tran);
+    if (g.ok) traCacGiu.push(g.giu);
+    return g;
+  };
+  try {
+    const gIp = await giuMot(khoaIp, `${yeuCau}:ip`, toiDaIp);
+    if (!gIp.ok) return gIp.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-ip" }, 429);
+  } catch { await traHet(); return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
   let giu;
-  try { giu = await giuLuot(env.DB, hoSo, yeuCau, toiDa); } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
-  if (!giu.ok) return giu.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-ngay", luot: { con: 0, toiDa } }, 429);
-  // Trần toàn hệ thống: giữ thêm một chỗ ở khóa chung. Hết thì trả lại lượt cá nhân vừa giữ.
+  try { giu = await giuMot(hoSo, yeuCau, toiDa); } catch { await traHet(); return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
+  if (!giu.ok) { await traHet(); return giu.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-ngay", luot: { con: 0, toiDa } }, 429); }
+  // Trần toàn hệ thống: giữ thêm một chỗ ở khóa chung. Hết thì trả lại các lượt vừa giữ.
   const toiDaTong = Math.max(1, Math.floor(Number(env.AI_TONG_NGAY) || TONG_NGAY_MAC_DINH));
   let giuTong: Awaited<ReturnType<typeof giuLuot>>;
-  try { giuTong = await giuLuot(env.DB, KHOA_TONG_HE_THONG, `${yeuCau}:tong`, toiDaTong); } catch {
-    await traLaiLuot(env.DB, giu.giu).catch(() => {});
+  try { giuTong = await giuMot(KHOA_TONG_HE_THONG, `${yeuCau}:tong`, toiDaTong); } catch {
+    await traHet();
     return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503);
   }
   if (!giuTong.ok) {
-    await traLaiLuot(env.DB, giu.giu).catch(() => {});
+    await traHet();
     return giuTong.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-he-thong" }, 429);
   }
   // Câu định tính cần thông tin cập nhật (học bổng, ký túc xá, tin tuyển sinh...): giữ thêm một chỗ ở trần web. Hết chỗ thì bỏ web, không báo lỗi.
   let giuWeb: GiuCho | null = null;
   if (canTimWeb(kt.v.cauHoi) && !kt.v.bangSoSanh && env.OPENROUTER_API_KEY) {
     const toiDaWeb = Math.max(0, Math.floor(Number(env.AI_WEB_NGAY) || WEB_NGAY_MAC_DINH));
-    try { const g = await giuLuot(env.DB, KHOA_WEB_HE_THONG, `${yeuCau}:web`, toiDaWeb); if (g.ok) giuWeb = g.giu; } catch { /* không có web, vẫn trả lời thường */ }
+    try { const g = await giuLuot(db, KHOA_WEB_HE_THONG, `${yeuCau}:web`, toiDaWeb); if (g.ok) giuWeb = g.giu; } catch { /* không có web, vẫn trả lời thường */ }
   }
-  const traWeb = () => (giuWeb ? traLaiLuot(env.DB!, giuWeb).catch(() => {}) : Promise.resolve());
-  const tra = () => Promise.all([traLaiLuot(env.DB!, giu.giu), traLaiLuot(env.DB!, giuTong.giu as GiuCho), traWeb()]).then(() => undefined, () => undefined);
+  const traWeb = () => (giuWeb ? traLaiLuot(db, giuWeb).catch(() => {}) : Promise.resolve());
+  // Hoàn lượt (cá nhân, IP, toàn hệ thống, web) chỉ khi lỗi hạ tầng hoặc không tốn nhà cung cấp. Lỗi do nội dung (422) thì KHÔNG hoàn:
+  // mô hình đã được gọi, nên lượt vẫn tính, và hoSoId do trình duyệt sinh không thể dùng để lách bằng cách gây lỗi lặp lại.
+  const tra = () => Promise.all([traHet(), traWeb()]).then(() => undefined, () => undefined);
+  const chotTatCa = () => Promise.all([...traCacGiu.map((g) => chotLuot(db, g)), traWeb()]).catch(() => {});
   try {
     const r = await traLoiBacThang(env, kt.v, f, { web: !!giuWeb });
-    if (!r.ok) { await tra(); return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, r.loi === "chua-cau-hinh" ? 503 : 422); }
+    if (!r.ok) {
+      if (r.loi === "chua-cau-hinh") { await tra(); return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, 503); }
+      await chotTatCa();
+      return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, 422);
+    }
     // Trả từ cache không tốn nhà cung cấp nên không tính lượt.
     if (r.kq.tang === "cache") await tra();
     else {
       // Chỗ web chỉ tính khi câu trả lời thật sự dựa trên web (có nguồn); không thì trả lại.
-      const chotWeb = giuWeb && r.kq.nguonWeb?.length ? chotLuot(env.DB, giuWeb) : traWeb();
-      await Promise.all([chotLuot(env.DB, giu.giu), chotLuot(env.DB, giuTong.giu as GiuCho), chotWeb]).catch(() => {});
+      const chotWeb = giuWeb && r.kq.nguonWeb?.length ? chotLuot(db, giuWeb) : traWeb();
+      await Promise.all([...traCacGiu.map((g) => chotLuot(db, g)), chotWeb]).catch(() => {});
     }
-    const luot = await luotConLai(env.DB, hoSo, toiDa).catch(() => undefined);
+    const luot = await luotConLai(db, hoSo, toiDa).catch(() => undefined);
     return json(luot ? { ...r.kq, luot } : r.kq);
   } catch (e) {
     await tra();
-    // Mã ngắn (ví dụ "openrouter 401", "rong") để chẩn đoán; không chứa khóa hay dữ liệu người dùng.
+    // Mã chẩn đoán (ví dụ "openrouter 401") chỉ ghi log máy chủ, không trả cho trình duyệt.
     const ma = (e instanceof Error ? `${e.name}: ${e.message}` : "loi-la").replace(/[^\w .:/-]/g, "").slice(0, 80);
     console.error(JSON.stringify({ tang: "tu-van", loi: "502", ma }));
-    return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút", ma }, 502);
+    return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút" }, 502);
   }
 }
 

@@ -7,6 +7,7 @@ import { HopTruot } from "@/components/ui/hien-thi";
 import { Nut, The, gop } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { coDuLieuNguoiDung } from "@/state/chon";
 import type { ToneTen } from "@/state/types";
 
 const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string }[] = [
@@ -47,7 +48,7 @@ export default function ChaoMung() {
   const { s, lamLai } = useApp();
   const [hoiLamLai, setHoiLamLai] = useState(false);
   const h = s.hoSo;
-  const daCoThongTin = Boolean(h.hoTen || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null) || s.yeuThich.length || s.nguyenVong.length);
+  const daCoThongTin = coDuLieuNguoiDung(s);
   // Chỉ coi là đang điền dở nếu người dùng tự nhập (không phải hồ sơ mẫu) và chưa bấm hoàn tất
   const dangDienDo = daCoThongTin && !h.hoanTat && !h.laMau;
 

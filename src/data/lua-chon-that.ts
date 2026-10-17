@@ -45,6 +45,8 @@ let HOC_PHI: HocPhiTep = {};
 // hoc-phi-vnexpress.json: học phí theo bảng VnExpress (nguồn thứ cấp, scripts/hoc-phi-vnexpress.py): [thấp, cao, năm, đường dẫn]; chỉ dùng khi chưa có học phí từ văn bản sơ cấp.
 let HOC_PHI_VN: Record<string, [number, number, string, string]> = {};
 let VIEC_MOI: ViecMoiTep = {};
+type ChiTieuTep = Record<string, { chiTieu: number; nam: string; url: string; trang: number }>;
+let CHI_TIEU: ChiTieuTep = {};
 
 function chuyen(d: Dong): LuaChon {
   const hpUngVien = HOC_PHI[d.id];
@@ -97,6 +99,7 @@ function chuyen(d: Dong): LuaChon {
     linkNguon: d.nguon ?? undefined,
     ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
     ...(hv ? { hocPhiMin: hv[0], hocPhiMax: hv[1], nguonHocPhi: { nam: hv[2], url: `https://diemthi.vnexpress.net${hv[3]}`, trang: 0, thuCap: true } } : {}),
+    ...(CHI_TIEU[d.id] ? { chiTieu: { so: CHI_TIEU[d.id].chiTieu, nam: CHI_TIEU[d.id].nam, url: CHI_TIEU[d.id].url, trang: CHI_TIEU[d.id].trang } } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,
@@ -117,7 +120,8 @@ export const daNapLuaChon = (): boolean => LUA_CHON.length > 0;
 /** Nạp danh mục gốc một lần (gọi nhiều lần vẫn một lần tải). Lỗi mạng thì lần gọi sau thử lại. */
 export function napLuaChon(): Promise<void> {
   dangNap ??= (async () => {
-    const [raw, viec, hp, hpVn] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./hoc-phi-vnexpress.json")]);
+    const [raw, viec, hp, hpVn, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./hoc-phi-vnexpress.json"), import("./chi-tieu.json")]);
+    CHI_TIEU = ct.default as unknown as ChiTieuTep;
     VIEC_MOI = viec.default as unknown as ViecMoiTep;
     HOC_PHI = hp.default as unknown as HocPhiTep;
     HOC_PHI_VN = hpVn.default as unknown as typeof HOC_PHI_VN;

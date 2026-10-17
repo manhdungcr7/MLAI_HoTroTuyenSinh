@@ -50,7 +50,7 @@ const HO = "11111111-1111-4111-8111-111111111111";
   assert.equal((await luotConLai(db, HO, 50)).con, 0);
 }
 
-// 3) Lỗi mô hình (500) và kết quả sai số liệu (422) không trừ lượt
+// 3) Lỗi hạ tầng (500) hoàn lượt; kết quả sai số liệu (422) KHÔNG hoàn (mô hình đã được gọi, tránh lách hạn mức bằng hoSoId mới)
 {
   const db = taoD1Test(); const { kv } = kvTest(); const dem = { n: 0 };
   const lo = await xuLy(yc(themDinhDanh({ cauHoi: HOI, duLieu: [sk] }, HO)), env(db, kv), moHinh(dem, 500));
@@ -58,7 +58,9 @@ const HO = "11111111-1111-4111-8111-111111111111";
   assert.equal((await luotConLai(db, HO, 50)).con, 50, "lỗi không trừ lượt");
   const sai = await xuLy(yc(themDinhDanh({ cauHoi: "Câu khác để không trúng cache", duLieu: [sk] }, HO)), env(db, kv), (async () => ({ ok: true, status: 200, json: async () => ({ content: [{ type: "text", text: "Điểm 99,9 (2024)." }] }) })) as unknown as typeof fetch);
   assert.equal(sai.status, 422, "số liệu bịa bị chặn");
-  assert.equal((await luotConLai(db, HO, 50)).con, 50, "câu bị chặn không trừ lượt");
+  assert.equal((await luotConLai(db, HO, 50)).con, 49, "câu bị chặn 422 vẫn tính một lượt");
+  assert.equal(((await sai.json()) as { ma?: string }).ma, undefined, "không lộ mã nhà cung cấp");
+  assert.equal(((await lo.json()) as { ma?: string }).ma, undefined, "502 không lộ mã nhà cung cấp");
 }
 
 // 4) Idempotent theo requestId: gửi lại cùng mã không trừ hai lần
@@ -173,6 +175,31 @@ const HO = "11111111-1111-4111-8111-111111111111";
   assert.equal(dem.n, 3, "chỉ 3 lần gọi mô hình");
   assert.equal((await luotConLai(db, hoSo[3], 50)).con, 50, "hồ sơ bị từ chối không mất lượt cá nhân");
   assert.equal((await luotConLai(db, hoSo[0], 50)).con, 49, "hồ sơ được phục vụ bị trừ đúng một lượt");
+}
+
+// 4b) Trần theo IP: một IP đổi hoSoId liên tục vẫn bị chặn ở 40 lượt, IP khác không bị ảnh hưởng
+{
+  const db = taoD1Test(); const { kv } = kvTest(); const dem = { n: 0 };
+  const e: Env = { ...env(db, kv), AI_IP_NGAY: "2" };
+  const st: number[] = [];
+  for (let i = 0; i < 4; i++) st.push((await xuLy(yc(themDinhDanh({ cauHoi: `Điểm chuẩn UIT lần ${i} ra sao?`, duLieu: [sk] }, crypto.randomUUID()), "192.0.2.1"), e, moHinh(dem))).status);
+  assert.deepEqual(st, [200, 200, 429, 429], "UUID ngẫu nhiên không lách được trần IP");
+  assert.equal(dem.n, 2);
+  assert.equal((await xuLy(yc(themDinhDanh({ cauHoi: "Điểm chuẩn UIT IP khác?", duLieu: [sk] }, crypto.randomUUID()), "192.0.2.2"), e, moHinh(dem))).status, 200, "IP khác vẫn dùng được");
+  const h = await xuLy(yc(themDinhDanh({ cauHoi: "Điểm chuẩn UIT lần nữa?", duLieu: [sk] }, crypto.randomUUID()), "192.0.2.1"), e, moHinh(dem));
+  assert.equal(((await h.json()) as { loi: string }).loi, "het-luot-ip");
+}
+
+// 9) Client: 422 và 429 chung không bị gộp thành "lỗi mạng"
+{
+  const s = TRANG_THAI_BAN_DAU;
+  const hoi = (status: number, body: object) => layTinTraLoi({ cau: CAU_MO, truoc: [], s, nguon: null, dungHoSo: false, manHinh: "Tư vấn chung", phien: { cheDo: "ai", idHoSo: HO, luot: { con: 50, toiDa: 50 }, fetch: (async () => ({ ok: false, status, json: async () => body })) as unknown as typeof fetch } });
+  const a = await hoi(422, { loi: "so-lieu-khong-khop" });
+  assert.equal(a.thuLai, undefined, "422 không phải lỗi mạng"); assert.ok(a.chu.includes("chưa khớp dữ liệu") || a.ghiChu?.includes("chưa khớp dữ liệu"), a.chu);
+  const b = await hoi(429, { loi: "het-luot-he-thong" });
+  assert.equal(b.thuLai, undefined, "429 chung không phải lỗi mạng"); assert.ok((b.ghiChu ?? b.chu).includes("hết lượt hỏi AI"));
+  const c = await hoi(502, { loi: "Dịch vụ tư vấn đang bận" });
+  assert.equal(c.ghiChu, undefined);
 }
 
 console.log("tu-van-han-muc: tất cả kiểm tra đều qua");
