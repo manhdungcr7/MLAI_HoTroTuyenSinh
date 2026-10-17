@@ -1,10 +1,13 @@
 // Chuẩn bị dữ liệu cho Tư vấn AI và trả lời tự động khi chưa có dịch vụ AI. TypeScript thuần, không gọi mạng.
-import { duBaoCua } from "@/features/kham-pha/du-bao";
+import { thongKeChung } from "@/features/kham-pha/du-bao";
+import { namTuyenSinhToi } from "@/engine/du-bao-diem-chuan";
+import { cacDiemHopLe, phanLoaiDuLieu } from "@/engine/trang-thai-du-lieu";
+import { tomTatDiemChoNganh } from "@/engine/tom-tat-nganh";
 import { LUA_CHON_MAU, tim as timTheoId } from "@/data/lua-chon-mau";
 import type { NguonTaiSau } from "@/data/lua-chon-that";
 import { CONG_TUYEN_SINH_CHINH_THUC } from "@/engine/link-chinh-thuc";
 import { chuanHoa as chuanHoaChung, locTheoTinh, maTuVietTat, resolveTruong, tenTruong, tinhCuaTruong } from "@/engine/truong";
-import { NGAN_SACH_TOI_DA, nhanNguyenVong, nhanChoLuaChon, khoangCachTheoMon } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, lyDoKhacPhuongThuc, nhanChoLuaChon, khoangCachTheoMon } from "@/engine/phan-tich";
 import { hieuCauTim } from "@/engine/hieu-cau-tim";
 import type { HanhDongDeXuat, HoSoTomTat, SuKien, TrangThaiDuLieu } from "@/engine/tu-van";
 import { chuTruongDinhNghia, ghiChuTinhGop, phanTichCau, tenTruongChuaCo, timTruongMoHo, timTruongTrongCau, type MucTuongDuong, type YDinhCau } from "./hieu-cau";
@@ -96,7 +99,7 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
   };
   return ds.filter((l) => maTruongUuTien.size === 0 || !!l.maTruong && maTruongUuTien.has(l.maTruong))
     .map((l) => ({ l, d: diem(l) })).filter((x) => x.d > 0)
-    .sort((a, b) => b.d - a.d || (Object.keys(b.l.diemTheoNam ?? {}).length - Object.keys(a.l.diemTheoNam ?? {}).length) || b.l.diemMin - a.l.diemMin)
+    .sort((a, b) => b.d - a.d || (cacDiemHopLe(b.l).length - cacDiemHopLe(a.l).length) || b.l.diemMin - a.l.diemMin)
     .slice(0, toiDa).map((x) => x.l);
 }
 
@@ -111,23 +114,37 @@ export const moTaNguon = (l: LuaChon, nguon: NguonTaiSau | null): string => {
 export type SuKienKemTong = SuKien & { tongCuaEm?: number; toHopDaTinh?: string };
 
 export function dungSuKien(l: LuaChon, diem: DiemDayDu, nguon: NguonTaiSau | null): SuKienKemTong {
-  const t = tongChoLuaChon(l, diem);
-  const duBao = duBaoCua(l);
-  const chenh = t.tong === null ? undefined : Math.round((t.tong - l.diemMin) * 100) / 100; // 2 chữ số, giống danhGia (phu-hop.ts)
+  // Một nguồn: cùng `tomTatDiemChoNganh` với các màn khác. Điểm sàn 15,0 và điểm phương thức khác không bao giờ thành "điểm chuẩn" hay nhãn.
+  const ts = tomTatDiemChoNganh(l, diem, thongKeChung(), namTuyenSinhToi());
+  const loai = ts.trangThai.loai;
+  const diemGui: Record<string, number> = loai === "chiDiemSan" || loai === "khongDu" ? {}
+    : loai === "phuongThucKhac" ? { ...(l.diemTheoNam ?? {}) } : Object.fromEntries(cacDiemHopLe(l).map(([n, d]) => [String(n), d]));
   return {
     id: l.id, nganh: l.nganh, truong: l.truong, tenTruong: l.tenTruong, tinh: l.khuVuc, phuongThuc: l.phuongThuc ?? "THPT",
-    toHop: l.toHopXet ?? [], diem: l.diemTheoNam ?? {},
-    ...(t.tong !== null ? { nhanCuaEm: nhanNguyenVong(l, t.tong), chenh, tongCuaEm: t.tong, ...(t.toHop ? { toHopDaTinh: t.toHop } : {}) } : {}),
+    toHop: l.toHopXet ?? [], diem: diemGui,
+    ...(ts.nhan && ts.tongEm !== null ? { nhanCuaEm: ts.nhan, chenh: ts.chenh ?? undefined, tongCuaEm: ts.tongEm, ...(ts.toHopEm ? { toHopDaTinh: ts.toHopEm } : {}) } : {}),
     ...(l.hocPhiMin !== undefined ? {
       hocPhiTrieu: l.hocPhiMin,
       ...(l.hocPhiUocTinh ? { hocPhiUocTinh: true } : {}),
       ...(l.hocPhiMax !== undefined && l.hocPhiMax !== l.hocPhiMin ? { hocPhiMaxTrieu: l.hocPhiMax } : {})
     } : {}),
     ...(l.tiLeViecLam !== undefined ? { tiLeViecLam: l.tiLeViecLam } : {}),
-    ...(duBao ? { duBao: { nam: duBao.namDuBao, thap: duBao.thap, cao: duBao.cao } } : {}),
+    ...(ts.duBao ? { duBao: { nam: ts.duBao.namDuBao, thap: ts.duBao.thap, cao: ts.duBao.cao } } : {}),
     nguon: moTaNguon(l, nguon),
+    loaiDuLieu: loai,
+    ...(ts.diemChuan?.laThamChieu || ts.diemChuan?.nguonThuCap ? { thamChieu: true } : {}),
+    ...(ts.viTriDuBao ? { viTriDuBao: ts.viTriDuBao } : {}),
   };
 }
+
+/** Cụm "điểm chuẩn {năm} là X" đúng trạng thái dữ liệu: chỉ có điểm sàn / chưa có điểm / phương thức khác thì nói đúng như vậy, không nêu 15,0 như điểm chuẩn. */
+const cumDiemChuan = (l: LuaChon): string => {
+  const t = phanLoaiDuLieu(l);
+  if (t.loai === "nhieuNam" || t.loai === "motNam") return `điểm chuẩn ${t.namCuoi} là ${so1(t.diemCuoi as number)}`;
+  if (t.loai === "chiDiemSan") return "mới có điểm sàn xét tuyển của trường, chưa có điểm chuẩn riêng của ngành";
+  if (t.loai === "phuongThucKhac") return `điểm ${l.namDiem} thuộc phương thức khác (${l.phuongThuc}), không so với điểm thi THPT`;
+  return "chưa có điểm chuẩn";
+};
 
 export function tomTatHoSo(s: AppState): HoSoTomTat {
   const h = s.hoSo;
@@ -301,7 +318,9 @@ const noiTen = (ms: string[], toiDa = TOI_DA_HIEN) => {
 };
 const hanhXemTruong = (ma: string): HanhDongDeXuat => ({ loai: "xem-truong", maTruong: ma, nhan: "Xem trường" });
 const taoThe = (ds: TruongTimThay[]): TheTruong[] => ds.map((x) => ({ ma: x.ma, ...(x.ct ? { id: x.ct.id } : {}), muc: x.muc }));
-const trangThaiTu = (ds: (LuaChon | null)[]): TrangThaiDuLieu => (ds.length && ds.every((l) => l?.nguonCap === "official_pdf") ? "chua-xac-minh" : "lich-su");
+const trangThaiTu = (ds: (LuaChon | null)[]): TrangThaiDuLieu =>
+  ds.length && ds.every((l) => !l || ["chiDiemSan", "khongDu"].includes(phanLoaiDuLieu(l).loai)) ? "chua-co"
+    : ds.length && ds.every((l) => l?.nguonCap === "official_pdf") ? "chua-xac-minh" : "lich-su";
 
 /** Phần câu hỏi còn lại sau khi bỏ tên trường và từ đệm: chỉ còn cụm ngành. */
 function cumConLai(y: YDinhCau, truongs: { chuoi: string }[]): string {
@@ -451,16 +470,20 @@ function traLoiCoHoi(cau: string, y: YDinhCau, ctx: NguCanhLuot, s: AppState, di
   }
   const nhan = nhanChoLuaChon(l, tong);
   if (nhan === null) {
+    const khac = !!l.phuongThuc && l.phuongThuc !== "THPT";
     return {
-      traLoi: `${l.nganh} của ${goc} xét theo ${l.phuongThuc ?? "phương thức khác"}, thang điểm khác điểm thi tốt nghiệp nên mình chưa so với ${so1(tong)} điểm. Bạn cho mình biết điểm theo đúng phương thức này nhé.`,
+      traLoi: khac
+        ? `${l.nganh} của ${goc} xét theo ${l.phuongThuc}, thang điểm khác điểm thi tốt nghiệp nên mình chưa so với ${so1(tong)} điểm. Bạn cho mình biết điểm theo đúng phương thức này nhé.`
+        : `${l.nganh} của ${goc}: ${cumDiemChuan(l)}, nên mình chưa so được với ${so1(tong)} điểm của bạn. Bạn xem đề án của trường để biết mức điểm xét tuyển.`,
       nguon: [l.id], the: [{ ma: l.maTruong!, id: l.id }], trangThaiDuLieu: "chua-co",
     };
   }
-  const chenh = Math.round((tong - l.diemMin) * 100) / 100;
+  const dc = phanLoaiDuLieu(l);
+  const chenh = Math.round((tong - (dc.diemCuoi ?? l.diemMin)) * 100) / 100;
   const toHop = l.toHopXet?.length ? ` Ngành xét tổ hợp ${l.toHopXet.slice(0, 4).join(", ")}.` : " Đề án chưa ghi rõ tổ hợp xét.";
   const nguonDiem = y.diem !== null ? `Mình hiểu ${so1(tong)} là tổng 3 môn theo thang 30, chưa cộng điểm ưu tiên.` : "Mình dùng điểm trong hồ sơ của bạn.";
   return {
-    traLoi: `Với ${so1(tong)} điểm, ${l.nganh} của ${goc} là nhóm ${nhan}: điểm chuẩn ${l.namDiem} là ${so1(l.diemMin)}, bạn ${chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(chenh))} điểm.${toHop} ${nguonDiem} Đây là so với điểm chuẩn năm trước, không phải khả năng đỗ.`,
+    traLoi: `Với ${so1(tong)} điểm, ${l.nganh} của ${goc} là nhóm ${nhan}: ${cumDiemChuan(l)}, bạn ${chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(chenh))} điểm.${toHop} ${nguonDiem} Đây là so với điểm chuẩn năm trước, không phải khả năng đỗ.`,
     nguon: [l.id], the: [{ ma: l.maTruong!, id: l.id }], trangThaiDuLieu: trangThaiTu([l]),
     ...(s.nguyenVong.includes(l.id) ? {} : { hanhDong: [xacNhanThem(l)] }),
   };
@@ -493,7 +516,7 @@ function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot): KetQuaT
   const A = theNganh(a), B = theNganh(b);
   if (A.length === 1 && B.length === 1) {
     const [la, lb] = [A[0], B[0]];
-    const dong = (l: LuaChon) => `${l.nganh} của ${ten(l.maTruong!)}: điểm chuẩn ${l.namDiem} là ${so1(l.diemMin)}`;
+    const dong = (l: LuaChon) => `${l.nganh} của ${ten(l.maTruong!)}: ${cumDiemChuan(l)}`;
     return {
       traLoi: `Mình đặt ${dong(la)} cạnh ${dong(lb)}. Bấm xem so sánh để thấy thêm học phí, tổ hợp và nhãn theo điểm của bạn. ${NHAC_NGAN}`,
       nguon: [la.id, lb.id], the: [{ ma: a, id: la.id }, { ma: b, id: lb.id }], trangThaiDuLieu: trangThaiTu([la, lb]),
@@ -545,7 +568,7 @@ function traLoiXepHangHocPhi(y: YDinhCau): KetQuaTuDong {
 export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | null, giuId: string[] = [], truoc: TinNhan[] = []): KetQuaTuDong {
   const q = khongDau(cauHoi);
   const diem = diemDayDu(s);
-  const coHoi = tinhCoHoi(diem);
+  const coHoi = tinhCoHoi(diem, LUA_CHON_MAU.filter((l) => !lyDoKhacPhuongThuc(l))); // bỏ ngành chỉ có điểm sàn/phương thức khác: không có điểm chuẩn để so
   const NHAC = `${NHAC_NGAN} Bạn đối chiếu với đề án của trường trước khi quyết định.`;
   const y = phanTichCau(cauHoi);
   const ctx = nguCanhLuotTruoc(truoc, giuId);
@@ -616,8 +639,8 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
   const toHopHoi = toHopKhop ? toHopKhop[1].toUpperCase() : null;
 
   if (diemHoi !== null && khop.length > 0 && !soSanhChuyenMon) {
-    const xet = khop.slice(0, TOI_DA_HIEN).map((l) => ({ l, nhan: nhanChoLuaChon(l, diemHoi), chenh: Math.round((diemHoi - l.diemMin) * 100) / 100 }));
-    const dong = xet.map(({ l, nhan, chenh }) => `• ${l.nganh}, ${l.tenTruong}: điểm chuẩn ${l.namDiem} là ${so1(l.diemMin)}${nhan ? ` → ${nhan} (${chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(chenh))} điểm)` : ` (xét theo ${l.phuongThuc ?? "phương thức khác"}, chưa so được)`}`).join("\n");
+    const xet = khop.slice(0, TOI_DA_HIEN).map((l) => ({ l, nhan: nhanChoLuaChon(l, diemHoi), chenh: Math.round((diemHoi - (phanLoaiDuLieu(l).diemCuoi ?? l.diemMin)) * 100) / 100 }));
+    const dong = xet.map(({ l, nhan, chenh }) => `• ${l.nganh}, ${l.tenTruong}: ${cumDiemChuan(l)}${nhan ? ` → ${nhan} (${chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(chenh))} điểm)` : " (chưa so được)"}`).join("\n");
     return {
       traLoi: `Với ${so1(diemHoi)} điểm${toHopHoi ? ` (tổ hợp ${toHopHoi})` : ""}, mình hiểu là tổng 3 môn thang 30, chưa cộng ưu tiên:\n${dong}\n${NHAC_NGAN}`,
       nguon: xet.map((x) => x.l.id), trangThaiDuLieu: trangThaiTu(xet.map((x) => x.l)),
@@ -712,7 +735,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     const ds = s.nguyenVong.map((id) => LUA_CHON_MAU.find((l) => l.id === id)).filter((l): l is LuaChon => !!l);
     if (ds.length === 0) {
       const g = coHoi ? goiYDanhSach(diem, s.hoSo, [], undefined, moNeoNV1(s)).slice(0, TOI_DA_HIEN) : [];
-      return { traLoi: g.length ? `Bạn chưa có nguyện vọng nào. Dựa trên điểm của bạn (tổ hợp ${coHoi?.toHop}, ${so1(coHoi?.tong ?? 0)} điểm${s.hoSo.nganhQuanTam.length ? `, quan tâm ${s.hoSo.nganhQuanTam.join(", ")}` : ""}), mình gợi ý:\n${g.map((x) => `• ${x.lc.nganh}, ${x.lc.tenTruong} (${x.nhan}): điểm chuẩn ${so1(x.lc.diemMin)}`).join("\n")}\nVào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn” để xem đầy đủ.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: g.map((x) => x.lc.id) };
+      return { traLoi: g.length ? `Bạn chưa có nguyện vọng nào. Dựa trên điểm của bạn (tổ hợp ${coHoi?.toHop}, ${so1(coHoi?.tong ?? 0)} điểm${s.hoSo.nganhQuanTam.length ? `, quan tâm ${s.hoSo.nganhQuanTam.join(", ")}` : ""}), mình gợi ý:\n${g.map((x) => `• ${x.lc.nganh}, ${x.lc.tenTruong} (${x.nhan}): ${cumDiemChuan(x.lc)}`).join("\n")}\nVào mục Nguyện vọng, bấm “Gợi ý danh sách cho bạn” để xem đầy đủ.` : "Bạn chưa có nguyện vọng nào, và chưa đủ điểm để mình gợi ý. Bạn nhập điểm 3 môn của một tổ hợp trước nhé.", nguon: g.map((x) => x.lc.id) };
     }
     const cd = danhGiaDanhMucToanDien(s.nguyenVong, timTheoId, diem, { nganSach: s.hoSo.nganSach, khuVuc: s.hoSo.khuVuc, uuTienTuyenSinh: s.hoSo.uuTienTuyenSinh });
     const sk = ds.map((l) => dungSuKien(l, diem, nguon));

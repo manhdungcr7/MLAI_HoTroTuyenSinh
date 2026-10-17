@@ -61,6 +61,14 @@ function chuanHoaHoSo(raw: unknown): HoSo {
     for (const m of CAC_MON_THEM) if (m in o.diemThem) them[m] = diem10(o.diemThem[m]);
     h.diemThem = them;
   }
+  // Điểm thi thật và điểm mục tiêu từng môn: hai trường mới, bản cũ không có thì để trống (không tự điền). Chỉ nhận số 0 đến 10.
+  for (const k of ["diemThiThat", "diemMucTieuMon"] as const) {
+    const raw = o[k];
+    if (!laObj(raw)) continue;
+    const r: Partial<Record<MonId, number | null>> = {};
+    for (const m of CAC_MON) if (m in raw) r[m] = diem10(raw[m]);
+    h[k] = r;
+  }
   // Điểm ưu tiên khu vực/đối tượng em khai: giữ khi tải lại, chỉ nhận giá trị trong danh sách quy định.
   if (laObj(o.uuTienTuyenSinh)) {
     h.uuTienTuyenSinh = {

@@ -22,7 +22,23 @@ export interface SuKien {
   /** Khoảng điểm chuẩn dự kiến của năm tới (suy từ biến động các năm trước, KHÔNG phải xác suất đậu). */
   duBao?: { nam: number; thap: number; cao: number };
   nguon: string; // mô tả nguồn: "Đề án 2024, trang 3" hoặc "Trang tổng hợp, chưa đối chiếu"
+  /**
+   * Trạng thái dữ liệu điểm chuẩn (cùng `phanLoaiDuLieu`): nhieuNam | motNam | chiDiemSan | khongDu | phuongThucKhac.
+   * chiDiemSan / khongDu: không có điểm chuẩn để nêu (`diem` rỗng, không có nhãn). phuongThucKhac: điểm không cùng thang với điểm thi THPT.
+   * Máy khách cũ không gửi trường này: coi như chưa biết (giữ hành vi cũ).
+   */
+  loaiDuLieu?: LoaiDuLieuAI;
+  /** Điểm gần nhất là điểm tham chiếu / dự kiến hoặc từ trang tổng hợp chưa đối chiếu đề án. */
+  thamChieu?: boolean;
+  /** Điểm của em nằm đâu so với khoảng dự báo (caoHonCa | tren | trongKhoang | duoi | thapHonCa); chỉ khi có `duBao` và `tongCuaEm`. */
+  viTriDuBao?: string;
 }
+
+export const LOAI_DU_LIEU_AI = ["nhieuNam", "motNam", "chiDiemSan", "khongDu", "phuongThucKhac"] as const;
+export type LoaiDuLieuAI = (typeof LOAI_DU_LIEU_AI)[number];
+const VI_TRI_DU_BAO_AI = ["caoHonCa", "tren", "trongKhoang", "duoi", "thapHonCa"];
+/** Loại mà server tuyệt đối không cho AI nêu điểm chuẩn hay nhãn so điểm, dù máy khách có gửi kèm. */
+export const KHONG_CO_DIEM_CHUAN: readonly LoaiDuLieuAI[] = ["chiDiemSan", "khongDu"];
 
 export interface HoSoTomTat { // không có tên, không có thông tin liên hệ
   lop?: number | null;
@@ -112,21 +128,28 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
     if (r.diem && typeof r.diem === "object") {
       for (const [n, v] of Object.entries(r.diem as Record<string, unknown>)) if (typeof v === "number" && v > 0 && v <= 30) diem[chuoi(n, 4)] = v;
     }
+    const loaiDuLieu = LOAI_DU_LIEU_AI.find((x) => x === r.loaiDuLieu);
+    const khongChuan = !!loaiDuLieu && KHONG_CO_DIEM_CHUAN.includes(loaiDuLieu);
+    // Điểm sàn / không có điểm: dù máy khách gửi kèm số, máy chủ bỏ hết để AI không thể nêu như điểm chuẩn.
+    if (khongChuan) for (const k of Object.keys(diem)) delete diem[k];
     sach.push({
       id: chuoi(r.id, 40), nganh: chuoi(r.nganh, 120), truong: chuoi(r.truong, 12), tenTruong: chuoi(r.tenTruong, 120), tinh: chuoi(r.tinh, 40),
       phuongThuc: chuoi(r.phuongThuc, 20),
       toHop: Array.isArray(r.toHop) ? r.toHop.filter((t): t is string => typeof t === "string").slice(0, 12).map((t) => t.slice(0, 6)) : [],
       diem,
-      nhanCuaEm: typeof r.nhanCuaEm === "string" ? r.nhanCuaEm.slice(0, 12) : undefined,
-      chenh: so(r.chenh, -30, 30),
+      nhanCuaEm: !khongChuan && typeof r.nhanCuaEm === "string" ? r.nhanCuaEm.slice(0, 12) : undefined,
+      chenh: khongChuan ? undefined : so(r.chenh, -30, 30),
       tongCuaEm: so(r.tongCuaEm, 0, 30),
       toHopDaTinh: typeof r.toHopDaTinh === "string" && r.toHopDaTinh.trim() ? r.toHopDaTinh.trim().slice(0, 6) : undefined,
       hocPhiTrieu: so(r.hocPhiTrieu, 0, 1000),
       hocPhiMaxTrieu: so(r.hocPhiMaxTrieu, 0, 1000),
       hocPhiUocTinh: r.hocPhiUocTinh === true ? true : undefined,
       tiLeViecLam: so(r.tiLeViecLam, 0, 100),
-      duBao: lamSachDuBao(r.duBao),
+      duBao: khongChuan ? undefined : lamSachDuBao(r.duBao),
       nguon: chuoi(r.nguon, 120),
+      ...(loaiDuLieu ? { loaiDuLieu } : {}),
+      ...(r.thamChieu === true ? { thamChieu: true } : {}),
+      ...(typeof r.viTriDuBao === "string" && VI_TRI_DU_BAO_AI.includes(r.viTriDuBao) && !khongChuan ? { viTriDuBao: r.viTriDuBao } : {}),
     });
   }
   const hoSo = lamSachHoSo(o.hoSo);
@@ -138,6 +161,7 @@ export const NHAC_HE_THONG = [
   "1. 2 đến 4 câu, tối đa 100 từ, trả thẳng câu hỏi rồi gợi ý một bước tiếp. Tối đa 3 kết quả, nêu tên trường đầy đủ, không viết mã trần.",
   "2. Chỉ dùng số liệu trong DỮ LIỆU, HỒ SƠ, TƯ LIỆU. Không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\". hp~ là học phí ước tính, phải nói \"ước tính\". Ghi chú cộng đồng là chưa chính thức.",
   "3. Số kèm ngành, trường, năm; cuối câu ghi [nguồn: id1, id2]. Điểm chuẩn là năm trước, không nói xác suất đậu. Dùng nhãn nhan kèm chenh; điểm của bạn ở một ngành chỉ lấy tongCuaEm của ngành đó. Có dòng NV1 thì nêu khoảng cách tới NV1 đúng số đã cho.",
+  "3b. dl=chiDiemSan|khongDu: ngành không có điểm chuẩn, nói \"chưa có điểm chuẩn riêng, mình chưa so được\", không nêu số nào và không đưa nhãn. dl=phuongThucKhac: điểm học bạ/ĐGNL, không so với điểm thi THPT. dl=motNam hoặc tc=1: nói điểm chỉ để tham khảo. duBao là khoảng dự kiến, không phải điểm chuẩn chính thức. Không hứa đỗ, không nói phần trăm khả năng.",
   "4. Câu mơ hồ: hỏi lại MỘT câu ở hoiLai, không hỏi điều đã có trong HỒ SƠ. Ngoài chọn ngành, trường, ôn thi, kế hoạch thì từ chối nhẹ.",
   'Chỉ trả JSON: {"intent":"tra-cuu|so-sanh|goi-y|giai-thich|lam-ro|ngoai-pham-vi","traLoi":"...[nguồn: ...]","thucThe":[{"loai":"truong|nganh","maTruong":"","idChuongTrinh":""}],"hanhDong":[{"loai":"xem-truong|xem-nganh|xem-diem-chuan|so-sanh|them-nguyen-vong","maTruong":"","idChuongTrinh":"","ids":[],"nhan":""}],"hoiLai":"","trangThaiDuLieu":"da-xac-minh|chua-xac-minh|lich-su|uoc-tinh|du-bao|chua-co"}. Chỉ traLoi bắt buộc; mã, id lấy từ DỮ LIỆU; hanhDong tối đa 3, nhan 2-4 chữ, them-nguyen-vong chỉ là đề xuất.',
 ].join("\n");
@@ -286,6 +310,10 @@ export function gonSuKien(d: SuKien, nhieuNam = false): Record<string, unknown> 
   if (d.hocPhiTrieu !== undefined) o[d.hocPhiUocTinh ? "hp~" : "hp"] = d.hocPhiMaxTrieu && d.hocPhiMaxTrieu !== d.hocPhiTrieu ? `${d.hocPhiTrieu}-${d.hocPhiMaxTrieu}` : d.hocPhiTrieu;
   if (d.tiLeViecLam !== undefined) o.vl = d.tiLeViecLam;
   if (d.duBao) o.duBao = `${d.duBao.nam}:${d.duBao.thap}-${d.duBao.cao}`;
+  // Trạng thái dữ liệu: chỉ ghi khi KHÁC trường hợp thường (nhiều năm), để tiết kiệm token; AI đọc "dl" để biết cái gì được phép nêu.
+  if (d.loaiDuLieu && d.loaiDuLieu !== "nhieuNam") o.dl = d.loaiDuLieu;
+  if (d.thamChieu) o.tc = 1;
+  if (d.viTriDuBao) o.vt = d.viTriDuBao;
   return o;
 }
 

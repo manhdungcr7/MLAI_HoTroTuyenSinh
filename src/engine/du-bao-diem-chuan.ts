@@ -33,6 +33,14 @@ export interface DuBaoDiemChuan {
   soMau: number;
   /** Câu cảnh báo khi dự báo yếu (dữ liệu cũ, ít mẫu). */
   luuY: string[];
+  /**
+   * Độ tin cậy của CHÍNH dự báo này (khác `mucTinCay` là mức phủ danh nghĩa của khoảng):
+   * cao = từ 2 năm điểm chính thức, cách 1 năm; vừa = một năm chính thức hoặc cách 2 năm;
+   * thấp = chỉ một năm lấy từ trang tổng hợp (chưa đối chiếu đề án, không kiểm định ngược được).
+   */
+  doTinCay: "cao" | "vua" | "thap";
+  /** Cận trên chạm trần 30: khoảng bị cắt, không còn nói được điểm chuẩn có thể cao tới đâu. */
+  chamTran: boolean;
 }
 
 /** Hệ số nở khoảng, chọn bằng kiểm định bỏ-một-năm: phủ trung bình ~84% khi chọn (12/10: 92% năm 2023, 93% năm 2024, 68% năm 2025; đo lại 15/10 sau khi sửa dữ liệu: 89%, 95%, 64% là năm biến động bất thường). */
@@ -43,7 +51,9 @@ export const NAM_BIEN_DONG_SOM_NHAT = 2023;
 export const TOI_DA_NAM_XA = 2;
 const DIEM_TOI_THIEU = 10, DIEM_TOI_DA = 30;
 
-const hopLe = (d: number) => Number.isFinite(d) && d >= DIEM_TOI_THIEU && d <= DIEM_TOI_DA;
+/** Điểm đúng 15,0 là điểm sàn xét tuyển, không phải điểm chuẩn: không đưa vào biến động hay dự báo. */
+const DIEM_SAN = 15;
+const hopLe = (d: number) => Number.isFinite(d) && d >= DIEM_TOI_THIEU && d <= DIEM_TOI_DA && d !== DIEM_SAN;
 
 /** Các năm điểm THPT hợp lệ của một chương trình, tăng dần. Chỉ chương trình xét điểm thi THPT (hoặc chưa ghi phương thức nhưng có điểm thang 30). */
 function chuoiNam(lc: LuaChon): [number, number][] {
@@ -96,8 +106,13 @@ export function duBaoDiemChuan(lc: LuaChon, tk: ThongKeBienDong, namDuBao: numbe
   const luuY: string[] = [];
   if (k > 1) luuY.push(`Điểm mới nhất của ngành là năm ${namCuoi}, cách ${k} năm nên khoảng dự kiến rộng hơn.`);
   if (c.length === 1) luuY.push("Ngành này mới có điểm của một năm, nên khoảng dựa vào biến động chung của các ngành khác.");
+  const thuCap = lc.nguonCap === "aggregator_verified";
+  if (thuCap && c.length === 1) luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường, nên dự báo chỉ để tham khảo.");
+  const doTinCay: DuBaoDiemChuan["doTinCay"] = thuCap && c.length === 1 ? "thap" : c.length >= 2 && k === 1 && !thuCap ? "cao" : "vua";
+  const chamTran = cao >= DIEM_TOI_DA;
+  if (chamTran) luuY.push(`Khoảng đã chạm trần ${DIEM_TOI_DA} điểm, nên mức cao nhất thật có thể không thấp hơn.`);
 
-  return { namDuBao, namCuoi, diemCuoi, kyVong: lam2(diemCuoi), thap: lam2(thap), cao: lam2(cao), mucTinCay: 0.8, soMau: tk.tatCa.length, luuY };
+  return { namDuBao, namCuoi, diemCuoi, kyVong: lam2(diemCuoi), thap: lam2(thap), cao: lam2(cao), mucTinCay: 0.8, soMau: tk.tatCa.length, luuY, doTinCay, chamTran };
 }
 
 export type ViTriSoVoiDuBao = "caoHonCa" | "tren" | "trongKhoang" | "duoi" | "thapHonCa";

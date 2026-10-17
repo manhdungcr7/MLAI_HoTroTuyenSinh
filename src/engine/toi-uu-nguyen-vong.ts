@@ -63,9 +63,10 @@ export function danhGiaDanhMucToanDien(
     const lc = timLuaChon(id);
     if (!lc) return [];
     const diemXet = tongChoLuaChon(lc, diemChuanHoa).tong;
-    const chenhDiem = diemXet === null ? null : Math.round((diemXet - lc.diemMin) * 100) / 100;
+    const nhan = nhanChoLuaChon(lc, diemXet); // null khi khác phương thức, chỉ có điểm sàn hoặc thiếu điểm
+    const chenhDiem = diemXet === null || nhan === null ? null : Math.round((diemXet - lc.diemMin) * 100) / 100;
     return [{ id: lc.id, thuTu: index + 1, lc, diemXet, chenhDiem,
-      nhan: nhanChoLuaChon(lc, diemXet), biNghichDao: false,
+      nhan, biNghichDao: false,
       vuotNganSach: nganSachToiDa !== null && (lc.hocPhiMin ?? 0) > nganSachToiDa }];
   });
 
@@ -117,7 +118,10 @@ export function danhGiaDanhMucToanDien(
   };
 
   let tichTruot = 1.0;
+  // Con số này CHƯA hiệu chỉnh (xem XAC_SUAT_DA_HIEU_CHINH) và không được hiển thị: nó là thuộc tính ẩn (không liệt kê, không vào JSON).
+  // Nguyện vọng không so được (nhan = null) không đóng góp: không tự gán xác suất cho dữ liệu thiếu.
   for (const nv of cacNguyenVong) {
+    if (nv.nhan === null) continue;
     const ts = nv.diemXet !== null ? tinhXacSuatTrungTuyen(nv.diemXet, nv.lc) : null;
     const p = ts ? ts.xacSuat : (nv.nhan === "Thử sức" ? 0.2 : nv.nhan === "Vừa sức" ? 0.6 : 0.85);
     tichTruot *= (1 - p);

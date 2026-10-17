@@ -3,7 +3,7 @@
 import { tim } from "@/data/lua-chon-mau";
 import { tongCanDatDeDen, mucUuTien } from "@/engine/diem-uu-tien";
 import { dinhDang } from "@/engine/dinh-dang";
-import { khoangCachTheoMon, monThieuCuaToHop, nhanNguyenVong, tongDiem, type KhoangCachMon } from "@/engine/phan-tich";
+import { khoangCachTheoMon, lyDoKhacPhuongThuc, monThieuCuaToHop, nhanChoLuaChon, tongDiem, type KhoangCachMon } from "@/engine/phan-tich";
 import { diemDayDu, tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { diemHienTaiCuaTungMon } from "@/state/diem-hien-tai";
 import type { AppState } from "@/state/store";
@@ -28,7 +28,7 @@ const lam1 = (n: number) => dinhDang(Math.round(n * 10) / 10, 1);
 
 export function phanTichMoNeo(s: AppState): PhanTichMoNeo | null {
   const lc = moNeoNV1(s);
-  if (!lc || (lc.phuongThuc && lc.phuongThuc !== "THPT")) return null;
+  if (!lc || lyDoKhacPhuongThuc(lc)) return null;
   const diemDay = diemDayDu(s);
   // Tổ hợp: nếu mỏ neo chính là mục tiêu thì dùng tổ hợp bạn đã chọn, không thì tổ hợp tốt nhất của chính chương trình đó.
   let toHop: MonId[];
@@ -51,8 +51,9 @@ export function phanTichMoNeo(s: AppState): PhanTichMoNeo | null {
     const x = tim(id);
     if (!x || x.id === lc.id) return;
     const t = tongChoLuaChon(x, diemDay);
-    if (t.tong === null) return;
-    luoiDo.push({ thuTu: i + 1, lc: x, nhan: nhanNguyenVong(x, t.tong), chenh: Math.round((t.tong - x.diemMin) * 10) / 10 });
+    const nhan = nhanChoLuaChon(x, t.tong); // null khi khác phương thức, chỉ có điểm sàn hoặc thiếu điểm: không đưa vào lưới đỡ
+    if (t.tong === null || nhan === null) return;
+    luoiDo.push({ thuTu: i + 1, lc: x, nhan, chenh: Math.round((t.tong - x.diemMin) * 10) / 10 });
   });
   return { lc, toHop, canDat, hienTai, conThieu, monChuaCoDiem, theoMon, luoiDo };
 }
