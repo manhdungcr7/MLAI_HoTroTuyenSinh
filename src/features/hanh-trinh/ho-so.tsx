@@ -142,19 +142,23 @@ export default function HoSo() {
       <NoiDung>
         <HienDan className="space-y-3">
           <TheNen tong="xanh" className="space-y-3">
-            <div className="flex items-center gap-3">
-              <span aria-hidden className="size-12 rounded-full gd-huy-hieu-xanh text-white grid place-items-center text-[16px] font-bold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
-              <div className="min-w-0 flex-1">
-                <p className="text-[17px] font-bold text-muc leading-tight line-clamp-1">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
-                <p className="text-[13px] text-chu-phu truncate">{thongTin}</p>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <span aria-hidden className="size-12 rounded-full gd-huy-hieu-xanh text-white grid place-items-center text-[16px] font-bold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
+                <div className="min-w-0">
+                  <p className="text-[17px] font-bold text-muc leading-tight line-clamp-1">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
+                  <p className="text-[13px] text-chu-phu truncate">{thongTin}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              {h.laMau ? <div className="min-w-0"><Nhan tone="cam" className="whitespace-normal line-clamp-2">Hồ sơ mẫu, không phải người thật</Nhan></div> : <span />}
               <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="nay-nhe shrink-0 whitespace-nowrap min-h-11 px-2.5 rounded-xl bg-trang text-xanh-dam text-[13px] font-bold inline-flex items-center gap-1.5">
                 <Pencil size={14} aria-hidden />Chỉnh sửa
               </button>
             </div>
+            {h.laMau && (
+              <div>
+                <Nhan tone="cam" className="whitespace-normal line-clamp-2">Hồ sơ mẫu, không phải người thật</Nhan>
+              </div>
+            )}
             <button type="button" onClick={() => nav(x.boSung[0]?.den ?? DUONG_DAN.batDau(1))} className="nay-nhe w-full text-left rounded-2xl bg-trang/80 p-3 flex items-center gap-3">
               <VongDiem value={x.dayDu} max={100} size={92} tong={tt.tong} nhanGiua="đã có" dinhDang={(n) => `${Math.round(n)}%`} aria={`Hồ sơ đã có ${x.dayDu} phần trăm`} />
               <span className="min-w-0 flex-1">
