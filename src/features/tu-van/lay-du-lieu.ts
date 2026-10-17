@@ -10,7 +10,7 @@ import { chuanHoa as chuanHoaChung, locTheoTinh, maTuVietTat, resolveTruong, ten
 import { NGAN_SACH_TOI_DA, lyDoKhacPhuongThuc, nhanChoLuaChon, khoangCachTheoMon } from "@/engine/phan-tich";
 import { hieuCauTim } from "@/engine/hieu-cau-tim";
 import type { HanhDongDeXuat, HoSoTomTat, SuKien, TrangThaiDuLieu } from "@/engine/tu-van";
-import { chuTruongDinhNghia, ghiChuTinhGop, phanTichCau, tenTruongChuaCo, timTruongMoHo, timTruongTrongCau, type MucTuongDuong, type YDinhCau } from "./hieu-cau";
+import { chuTruongDinhNghia, ghiChuTinhGop, phanTichCau, tenTruongChuaCo, timTruongMoHo, timTruongTrongCau, VIET_TAT_NGANH, type MucTuongDuong, type YDinhCau } from "./hieu-cau";
 import type { ChoTraLoi, LuaChonNhanh, TheTruong, TinNhan } from "./hoi-thoai";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
@@ -526,7 +526,7 @@ function boTenNganh(cau: string): string {
   if (!m) return cau;
   const c = cau.normalize("NFC");
   const sau = c.slice(m.index + m[0].length);
-  const ket = /\s(?:ở|tại|tai|o|,|và|va|với|voi|hay|hoặc|hoac)(?=\s|,)/i.exec(sau);
+  const ket = /\s(?:ở|tại|tai|o|,|và|va|với|voi|hay|hoặc|hoac|giữa|giua|của|cua)(?=\s|,|$)/i.exec(sau);
   const het = ket ? m.index + m[0].length + ket.index : c.length;
   return c.slice(0, m.index) + " ".repeat(het - m.index) + c.slice(het);
 }
@@ -537,17 +537,72 @@ function nganhDaNeu(cau: string): string | null {
   const m = /\b(?:ng\u00e0nh|nganh)\b/i.exec(c);
   if (!m) return null;
   const sau = c.slice(m.index + m[0].length);
-  const ket = /\s(?:\u1edf|t\u1ea1i|tai|o|,|v\u00e0|va|v\u1edbi|voi|hay|ho\u1eb7c|hoac)(?=\s|,)/i.exec(sau);
+  const ket = /\s(?:\u1edf|t\u1ea1i|tai|o|,|v\u00e0|va|v\u1edbi|voi|hay|ho\u1eb7c|hoac|gi\u1eefa|giua|c\u1ee7a|cua)(?=\s|,|$)/i.exec(sau);
   const cum = (ket ? sau.slice(0, ket.index) : sau).trim();
   return cum || null;
 }
 
+export function tenNganhCotLoi(ten: string): string {
+  let s = khongDau(ten);
+  s = s.replace(/^(ct\s+tc|ct\s+th|ct\s+dhnnqt|ct\s+dhptqt|ct\s+chuan|ct\s+clc|ct\s+chat\s+luong\s+cao|chuong\s+trinh\s+chuan|chuong\s+trinh\s+chat\s+luong\s+cao|chuong\s+trinh|dinh\s+huong|nganh)\s+/gi, "");
+  s = s.replace(/\b(co\s+so\s+hcm|co\s+so\s+quang\s+ninh|co\s+so\s+ha\s+noi)\b/gi, "");
+  s = s.replace(/\s+(theo\s+mo\s+hinh|theo\s+dinh\s+huong|tich\s+hop|chuyen\s+sau).*$/gi, "");
+  return s.trim();
+}
+
+function khopNganhTuongDuong(nganhA: string, nganhB: string): boolean {
+  const kA = khongDau(nganhA).trim();
+  const kB = khongDau(nganhB).trim();
+  if (kA === kB) return true;
+  const cA = tenNganhCotLoi(nganhA);
+  const cB = tenNganhCotLoi(nganhB);
+  if (cA && cB) {
+    if (cA === cB) return true;
+    if (cA.length > 5 && cB.length > 5 && (cA.includes(cB) || cB.includes(cA))) return true;
+  }
+  return false;
+}
+
 function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot, diem: DiemDayDu, nganhQuanTam: string[] = []): KetQuaTuDong {
   // Chỉ tìm trường ở phần trước chữ "ngành": "ngành Thương mại điện tử" không được hiểu là Trường Đại học Thương mại.
-  const neu = timTruongTrongCau(boTenNganh(cau));
+  const cauDaBo = boTenNganh(cau);
+  const neu = timTruongTrongCau(cauDaBo);
   let ma = duy(neu.map((n) => n.kq.ma!));
   if (ma.length === 1 && ctx.truong.length === 2) { const khac = ctx.truong.find((m) => m !== ma[0]); if (khac) ma = [ma[0], khac]; }
   if (ma.length === 0 && ctx.truong.length === 2) ma = ctx.truong;
+
+  // Nếu chưa đủ 2 trường, phân giải trường mơ hồ theo ngữ cảnh (ưu tiên trường cùng tỉnh hoặc trường đầu ngành)
+  if (ma.length < 2) {
+    const moHo = timTruongMoHo(cauDaBo);
+    if (moHo && moHo.kq.ung_vien?.length) {
+      let ungVienChon: string | undefined;
+      if (ma.length === 1) {
+        const tinhDaCo = tinhCuaTruong(ma[0]);
+        ungVienChon = moHo.kq.ung_vien.find((uv) => {
+          const tinhUV = tinhCuaTruong(uv);
+          return tinhUV.some((t) => tinhDaCo.includes(t));
+        });
+      }
+      if (!ungVienChon) {
+        const UU_TIEN_MO_HO: Record<string, string> = {
+          "bach khoa": "BKA",
+          "bk": "BKA",
+          "ngoai thuong": "NTH",
+          "ftu": "NTH",
+          "kinh te": "KHA",
+          "su pham ky thuat": "SPK",
+          "nong nghiep": "HVN",
+          "utc": "GHA",
+        };
+        const khoa = khongDau(moHo.chuoi);
+        ungVienChon = UU_TIEN_MO_HO[khoa] ?? moHo.kq.ung_vien[0];
+      }
+      if (ungVienChon && !ma.includes(ungVienChon)) {
+        ma = [...ma, ungVienChon];
+      }
+    }
+  }
+
   // Lượt trước có nhiều hơn hai trường: không chọn thay, hiện vài thẻ để bạn chọn hai trường.
   if (ma.length === 0 && ctx.truong.length > 2) {
     return { traLoi: "Lượt trước có nhiều trường, mình chưa biết bạn muốn so sánh hai trường nào.", nguon: [], the: ctx.truong.slice(0, 4).map((m) => ({ ma: m })), hoiLai: "Bạn muốn so sánh hai trường nào trong số này?" };
@@ -561,9 +616,17 @@ function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot, diem: Di
   }
   const truongs = ma.slice(0, 3);
   const cum = cumConLai(y, neu);
+  const nganhHoiRaw = nganhDaNeu(cau);
+  const nganhHoiChuan = nganhHoiRaw ? (VIET_TAT_NGANH[khongDau(nganhHoiRaw)] ?? khongDau(nganhHoiRaw)) : null;
+
   const theNganh = (m: string): LuaChon[] => {
     const cua = chuongTrinhCuaTruong(m);
-    const tuCau = cum || y.nhom ? cua.filter((l) => mucKhop(l, { nhom: y.nhom, cumNganh: cum }) === "chinh-xac") : [];
+    let tuCau: LuaChon[] = [];
+    if (nganhHoiChuan) {
+      tuCau = cua.filter((l) => khopNganhTuongDuong(l.nganh, nganhHoiChuan) || mucKhop(l, { nhom: y.nhom, cumNganh: nganhHoiChuan }) === "chinh-xac");
+    } else if (cum || y.nhom) {
+      tuCau = cua.filter((l) => mucKhop(l, { nhom: y.nhom, cumNganh: cum }) === "chinh-xac" || (cum ? khopNganhTuongDuong(l.nganh, cum) : false));
+    }
     const tuNgCanh = cua.filter((l) => ctx.nganh.includes(l.id));
     return gomTheoTenNganh(tuCau.length ? tuCau : tuNgCanh);
   };
@@ -576,23 +639,27 @@ function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot, diem: Di
   });
   if (moiTruong.every((ds) => ds.length === 1)) return baoSoSanh(moiTruong.map((ds) => ds[0]));
   // Chưa nêu ngành: so ngành mà mọi trường cùng có. Ưu tiên ngành bạn quan tâm, rồi ngành phổ biến nhất (nhiều chương trình trong danh mục),
-  // rồi mời đổi sang ngành khác. Trước đây app hỏi lại ngành nào, bắt học sinh gõ thêm một lượt dù dữ liệu đã đủ để so ngay.
+  // rồi mời đổi sang ngành khác.
   const tanSuat = new Map<string, number>();
   for (const l of LUA_CHON_MAU) tanSuat.set(khongDau(l.nganh), (tanSuat.get(khongDau(l.nganh)) ?? 0) + 1);
   const quanTam = nganhQuanTam.map(khongDau).filter(Boolean);
   const nhacTrongCau = khongDau(cau);
   // Ngành được nêu trong câu hỏi đứng đầu; rồi ngành bạn quan tâm trong hồ sơ.
-  const trongCau = (n: string) => (nhacTrongCau.includes(n) ? 2 : 0);
+  const trongCau = (n: string) => (nhacTrongCau.includes(n) || (nganhHoiChuan && khopNganhTuongDuong(n, nganhHoiChuan)) ? 2 : 0);
   const diemUuTien = (n: string) => trongCau(n) + (quanTam.some((q) => n.includes(q) || q.includes(n)) ? 1 : 0);
   const chung = gomTheoTenNganh(chuongTrinhCuaTruong(truongs[0]))
-    .map((l) => ({ ten: khongDau(l.nganh), cacTruong: moiTruong.length ? truongs.map((m) => gomTheoTenNganh(chuongTrinhCuaTruong(m)).find((x) => khongDau(x.nganh) === khongDau(l.nganh))) : [] }))
+    .map((l) => ({
+      ten: khongDau(l.nganh),
+      cacTruong: truongs.map((m) =>
+        gomTheoTenNganh(chuongTrinhCuaTruong(m)).find((x) => khopNganhTuongDuong(x.nganh, l.nganh))
+      )
+    }))
     .filter((x): x is { ten: string; cacTruong: LuaChon[] } => x.cacTruong.length === truongs.length && x.cacTruong.every((k) => !!k))
     .sort((p, q) => diemUuTien(q.ten) - diemUuTien(p.ten) || (tanSuat.get(q.ten) ?? 0) - (tanSuat.get(p.ten) ?? 0) || p.ten.length - q.ten.length);
-  const nauNganh = !!(cum || y.nhom);
-  const nganhHoi = nganhDaNeu(cau);
-  if (nganhHoi && !chung.some((x) => khongDau(x.cacTruong[0].nganh).includes(khongDau(nganhHoi)))) {
+  const nauNganh = !!(cum || y.nhom || nganhHoiRaw);
+  if (nganhHoiChuan && !chung.some((x) => x.cacTruong.some((ct) => khopNganhTuongDuong(ct.nganh, nganhHoiChuan)))) {
     return {
-      traLoi: `Trong dữ liệu mình chưa thấy ngành "${nganhHoi}" ở cả ${truongs.map(ten).join(" và ")}. Bạn kiểm tra tên ngành trong đề án của trường nhé.`,
+      traLoi: `Trong dữ liệu mình chưa thấy ngành "${nganhHoiRaw}" ở cả ${truongs.map(ten).join(" và ")}. Bạn kiểm tra tên ngành trong đề án của trường nhé.`,
       nguon: [], the: truongs.map((m) => ({ ma: m })), hoiLai: "Bạn muốn so sánh ngành nào khác?",
     };
   }
@@ -658,6 +725,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     traLoi: `Mình chưa thấy trường “${chuaCo}” trong danh mục. Em kiểm tra tên đầy đủ hoặc mã trường; mình chưa có dữ liệu để trả lời.`,
     nguon: [], trangThaiDuLieu: "chua-co",
   };
+  if (y.kieu === "so-sanh-truong") return traLoiSoSanhTruong(cauHoi, y, ctx, diem, s.hoSo.nganhQuanTam ?? []);
   const moHo = timTruongMoHo(cauHoi);
   if (moHo) return {
     traLoi: `Tên “${moHo.chuoi}” có thể chỉ nhiều trường. Em chọn đúng trường để mình tra cứu.`,
@@ -684,7 +752,6 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     case "them-nguyen-vong": return traLoiThemNguyenVong(cauHoi, y, ctx, s);
     case "la-truong-gi": { const r = traLoiLaTruongGi(cauHoi); if (r) return r; break; }
     case "co-hoi": return traLoiCoHoi(cauHoi, y, ctx, s, diem);
-    case "so-sanh-truong": return traLoiSoSanhTruong(cauHoi, y, ctx, diem, s.hoSo.nganhQuanTam ?? []);
     case "xep-hang-hoc-phi": return traLoiXepHangHocPhi(y);
     case "cho-o": return traLoiChoO(cauHoi, ctx, s);
     case "kham-pha-truong": if (timTruongTrongCau(cauHoi, [y.tinhGoc]).length === 0) return traLoiKhamPha(y); break;
