@@ -87,7 +87,7 @@ function BonONhom({ dem, tong, loc, onChon }: { dem: Record<NhanNguyenVong, numb
             {Icon && <Icon size={18} strokeWidth={2.4} className={gop("shrink-0", m.chu)} aria-hidden />}
             <span className="min-w-0 flex-1">
               <span className={gop("block text-[13px] font-bold leading-tight whitespace-nowrap", m.chu)}>{n}</span>
-              <span className="block so-lon text-[16px] font-bold leading-tight text-muc">{c}<span className="text-[13px] font-normal text-chu-phu">/{tong}</span></span>
+              <span className={gop("block so-lon text-[16px] font-bold leading-tight tabular-nums", m.chu)}>{c}/{tong}</span>
               <span className="mt-1 block h-1.5 rounded-full bg-vien/70 overflow-hidden">
                 <span className={gop("block h-full rounded-full transition-[width] duration-700 ease-out", m.dam)} style={{ width: ve && tong > 0 ? `${(c / tong) * 100}%` : "0%" }} />
               </span>
