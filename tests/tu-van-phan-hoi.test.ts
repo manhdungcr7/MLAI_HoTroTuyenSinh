@@ -102,7 +102,7 @@ const cho = ["a1", "a2"];
   const a = await khoaCache("x y z", [{ id: "a1" }], null, "v1");
   assert.equal(a, await khoaCache("x y z", [{ id: "a1" }], null, "v1", "", NHAC_HE_THONG));
   assert.notEqual(a, await khoaCache("x y z", [{ id: "a1" }], null, "v1", "", NHAC_HE_THONG + " thêm"));
-  assert.ok(a.startsWith("tvc4:"), "đổi phiên bản logic làm vô hiệu cache cũ");
+  assert.ok(a.startsWith("tvc5:"), "đổi phiên bản logic làm vô hiệu cache cũ");
   const k = kiemTraYeuCau({ cauHoi: "điểm chuẩn?", duLieu: [{ ...sk("a1", "BKA"), chenh: 1e9, hocPhiTrieu: -5, hocPhiMaxTrieu: 99999, tiLeViecLam: 250 }] });
   assert.ok(k.ok);
   if (k.ok) { const d = k.v.duLieu[0]; assert.equal(d.chenh, undefined); assert.equal(d.hocPhiTrieu, undefined); assert.equal(d.hocPhiMaxTrieu, undefined); assert.equal(d.tiLeViecLam, undefined); }

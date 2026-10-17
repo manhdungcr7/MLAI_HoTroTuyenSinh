@@ -15,6 +15,7 @@ import { SuggestedActionChips, type ChipHanhDong } from "./chip-hanh-dong";
 import { DataSourceLabel } from "./nhan-nguon-du-lieu";
 import { AIClarificationMessage } from "./tin-lam-ro";
 import { UniversityMiniCard } from "./the-truong-mini";
+import { BangSoSanhThe } from "./bang-so-sanh-the";
 import { trinhBayPhanHoi } from "../trinh-bay-phan-hoi";
 
 const TOI_DA_HIEN = 3;
@@ -52,7 +53,7 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
   const [chon, setChon] = useState<string | null>(null);
   const [huy, setHuy] = useState(false);
 
-  const the = (t.the ?? []).filter((x) => coTruong(x.ma));
+  const the = t.soSanh ? [] : (t.the ?? []).filter((x) => coTruong(x.ma));
   const theHien = xemThemThe ? the : the.slice(0, TOI_DA_HIEN);
   // Ngành liên quan dạng dòng chỉ hiện khi không có thẻ trường (thẻ đã nêu ngành).
   const nganh = the.length ? [] : (t.nguon ?? []).map((id) => tim(id)).filter((l): l is NonNullable<ReturnType<typeof tim>> => !!l);
@@ -61,7 +62,8 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
   const hanh = t.hanhDong ?? [];
   const dsThem = hanh.filter((h) => h.loai === "them-nguyen-vong" && h.idChuongTrinh && tim(h.idChuongTrinh));
   // Nút Xem trường đã có trên thẻ thì không lặp lại thành chip riêng.
-  const chips: ChipHanhDong[] = hanh.filter((h) => !(h.loai === "xem-truong" && the.some((x) => x.ma === h.maTruong))).map(chipTuHanhDong).filter((c): c is ChipHanhDong => !!c);
+  // Có bảng so sánh thì nút "Xem so sánh" đã nằm trong bảng, không lặp lại thành chip riêng.
+  const chips: ChipHanhDong[] = hanh.filter((h) => !(h.loai === "xem-truong" && the.some((x) => x.ma === h.maTruong)) && !(t.soSanh && h.loai === "so-sanh")).map(chipTuHanhDong).filter((c): c is ChipHanhDong => !!c);
   const chipsNhanh: ChipHanhDong[] = (t.luaChon ?? []).map((l) => ({ nhan: trinhBayPhanHoi(l.nhan), onClick: () => onGui(l.cau) }));
   const idChon = chon ?? (dsThem.length === 1 ? dsThem[0].idChuongTrinh! : null);
   const lcChon = idChon ? tim(idChon) : undefined;
@@ -74,6 +76,17 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
 
   return (
     <>
+      {t.soSanh && <BangSoSanhThe ids={t.soSanh.ids} onDi={onDi} />}
+      {t.nguonWeb && t.nguonWeb.length > 0 && (
+        <div className="mt-2 text-[12px] text-chu-phu leading-snug">
+          <p className="font-bold">Nguồn từ web (chưa kiểm chứng với đề án):</p>
+          <ul className="list-disc pl-4">
+            {t.nguonWeb.map((w) => (
+              <li key={w.url} className="break-all"><a href={w.url} target="_blank" rel="noopener noreferrer" className="text-xanh underline">{w.tieuDe || w.url}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
       {the.length > 0 && (
         <div className="mt-2.5 space-y-2" role="group" aria-label="Trường liên quan">
           <ul className="space-y-2">

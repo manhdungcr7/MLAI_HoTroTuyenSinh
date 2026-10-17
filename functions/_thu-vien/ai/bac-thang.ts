@@ -1,15 +1,15 @@
 // Bậc thang tư vấn, rẻ -> đắt: cache KV -> Clef (chọn sự kiện) -> RAG cộng đồng (Vectorize) -> LLM.
 // Mỗi bậc thiếu binding hoặc lỗi thì bị bỏ qua, bậc sau vẫn chạy; chỉ bậc LLM mới có thể làm cả lượt thất bại.
-import { docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
+import { NHAC_SO_SANH, NHAC_TU_VAN, docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type NguonWeb, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
 import { docCache, ghiCache, khoaCache } from "./cache";
 import { HANH_DONG, quyetDinhNguyenVong, type HanhDong, type NhanEn, type UngVienEn } from "./clef";
 import { truyVanNhieuBoLoc, type BoLoc, type MangChiMuc } from "./chi-muc";
 import { nhanDienTruongTinh } from "./ten-truong";
 import type { EnvAI } from "./kieu";
-import { coKhoaLLM, goiMoHinh, type EnvLLM } from "./sinh-van-ban";
+import { coKhoaLLM, goiMoHinh, goiMoHinhCoWeb, type EnvLLM } from "./sinh-van-ban";
 
 export interface EnvBacThang extends EnvLLM, EnvAI { RATE_KV?: KhoKV; DATA_VERSION?: string }
-export interface KetQuaBacThang extends PhanHoiCauTruc { traLoi: string; nguon: string[]; tang: "cache" | "llm"; congDong?: string[]; viecTiep?: string }
+export interface KetQuaBacThang extends PhanHoiCauTruc { traLoi: string; nguon: string[]; tang: "cache" | "llm"; congDong?: string[]; viecTiep?: string; nguonWeb?: NguonWeb[] }
 export type KhoiBacThang = { ok: true; kq: KetQuaBacThang } | { ok: false; loi: "chua-cau-hinh" | "so-lieu-khong-khop"; goiY?: { nextAction: HanhDong; viecTiep: string } };
 
 const NHAN_EN: Record<string, NhanEn> = { "Thử sức": "trial", "Vừa sức": "match", "An toàn": "safe", "Dự phòng": "backup" };
@@ -100,9 +100,31 @@ function phanMoRong(manh: MangChiMuc[], viec?: HanhDong): string {
   ].join("");
 }
 
-export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof fetch = fetch): Promise<KhoiBacThang> {
+/** Token đầu ra theo làn: tra cứu ngắn, còn so sánh và tư vấn mở cần chỗ cho kết luận và vài gạch đầu dòng. */
+export const TOKEN_RA_LAN = { soSanh: 700, tuVan: 650 } as const;
+
+/** Gỡ đường dẫn markdown mà mô hình hay chèn khi có kết quả web: ứng dụng tự hiển thị nguồn thành danh sách riêng. */
+export function goLienKetWeb(t: string): string {
+  return t
+    .replace(/\s*\((?:\[[^\]]*\]\([^)]*\)[;,\s]*)+\)/g, "")
+    .replace(/\s*\[[^\]]*\]\(https?:\/\/[^)]*\)/g, "")
+    .replace(/\s*\(https?:\/\/[^)]*\)/g, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .trim();
+}
+
+/** Các câu có nhắc "điểm chuẩn": nội dung từ web không được phép là nguồn của con số này (chỉ dữ liệu của ứng dụng). */
+export function cauNhacDiemChuan(t: string): string {
+  return t.split(/(?<=[.!?\n])\s+/).filter((c) => /điểm chuẩn/i.test(c)).join(" ");
+}
+
+/** `web`: cho phép tìm web (chỉ khi câu hỏi định tính và máy chủ đã giữ chỗ trong trần web). Không có khóa OpenRouter thì tự bỏ qua. */
+export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof fetch = fetch, tuyChon: { web?: boolean } = {}): Promise<KhoiBacThang> {
   const kv = env.CACHE_KV ?? env.RATE_KV;
-  const khoa = await khoaCache(y.cauHoi, y.duLieu, y.hoSo, env.DATA_VERSION, y.nguCanh).catch(() => "");
+  const laSoSanh = !!y.bangSoSanh;
+  const web = !!tuyChon.web && !laSoSanh && !!env.OPENROUTER_API_KEY;
+  const nhac = laSoSanh ? NHAC_SO_SANH : NHAC_TU_VAN;
+  const khoa = await khoaCache(y.cauHoi, y.duLieu, y.hoSo, env.DATA_VERSION, y.nguCanh, `${nhac}|${y.bangSoSanh ?? ""}|${web ? "web" : ""}`).catch(() => "");
   const trung = khoa ? await docCache(kv, khoa) : null;
   if (trung) {
     console.log(JSON.stringify({ tang: "cache", msClef: 0, msLLM: 0, soSuKien: y.duLieu.length, tokenVaoUocTinh: 0 }));
@@ -112,11 +134,14 @@ export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof
   // Bậc 2 và 3 chạy song song; mỗi bậc lỗi thì giữ nguyên dữ liệu của client.
   const ungVien = dungUngVien(y);
   const t0 = Date.now();
-  const clefP = env.AI && ungVien.length >= 2
+  const clefP = !laSoSanh && env.AI && ungVien.length >= 2
     ? quyetDinhNguyenVong(env.AI, { totalScore: y.hoSo?.toHopCaoNhat?.tong, budgetMillion: y.hoSo?.nganSachToiDaTrieu ?? undefined, province: y.hoSo?.tinh, interests: y.hoSo?.nganhQuanTam, grade: y.hoSo?.lop ?? undefined }, ungVien, { hanMs: NGAN_SACH.clef })
         .then((r) => ({ r, ms: Date.now() - t0 })).catch(() => ({ r: null, ms: Date.now() - t0 }))
     : Promise.resolve({ r: null, ms: 0 });
-  const ragP = sau(layManhCongDong(env, y).catch(() => ({ manh: [] as MangChiMuc[], diemToanKho: [] as number[] })), NGAN_SACH.rag, { manh: [] as MangChiMuc[], diemToanKho: [] as number[] }).then((r) => ({ ...r, ms: Date.now() - t0 }));
+  // So sánh đã có bảng tính sẵn từ dữ liệu thật: không cần tìm ghi chú cộng đồng, bớt một bước chờ.
+  const ragP = laSoSanh
+    ? Promise.resolve({ manh: [] as MangChiMuc[], diemToanKho: [] as number[], ms: 0 })
+    : sau(layManhCongDong(env, y).catch(() => ({ manh: [] as MangChiMuc[], diemToanKho: [] as number[] })), NGAN_SACH.rag, { manh: [] as MangChiMuc[], diemToanKho: [] as number[] }).then((r) => ({ ...r, ms: Date.now() - t0 }));
   const [{ r: qd, ms: msClef }, { manh, diemToanKho, ms: msRag }] = await Promise.all([clefP, ragP]);
   const viec = qd?.hanhDong?.chon;
   // Chỉ 3 ngành đầu vào lời nhắc (khớp quy tắc "tối đa 3 kết quả"); danh sách nguồn hợp lệ cũng chỉ gồm 3 ngành đó.
@@ -130,23 +155,40 @@ export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof
   const noiDung = dungNoiDung(y2) + phanMoRong(manh, viec);
   const t1 = Date.now();
   const conLai = Math.max(NGAN_SACH.llmToiThieu, NGAN_SACH.tong - (t1 - t0));
-  const tho = await goiMoHinh(env, noiDung, f, conLai);
+  const tuyChonGoi = { nhac, tokenRa: laSoSanh ? TOKEN_RA_LAN.soSanh : TOKEN_RA_LAN.tuVan };
+  let tho = "";
+  let nguonWeb: NguonWeb[] = [];
+  let trichWeb = "";
+  if (web) {
+    // Tìm web lỗi nhanh thì rơi về đường thường; đã tốn quá lâu thì dừng hẳn để khỏi vượt thời gian chờ của trình duyệt.
+    try {
+      const kw = await goiMoHinhCoWeb(env, noiDung, f, conLai, tuyChonGoi);
+      if (kw?.text) { tho = goLienKetWeb(kw.text); nguonWeb = kw.nguonWeb; trichWeb = kw.trichDoan; }
+    } catch (e) { if (Date.now() - t1 > 5_000) throw e; }
+  }
+  if (!tho) tho = await goiMoHinh(env, noiDung, f, Math.max(NGAN_SACH.llmToiThieu, conLai - (Date.now() - t1)), tuyChonGoi);
   const msLLM = Date.now() - t1;
   if (!tho) throw new Error("rong");
   const cho = [...y2.duLieu.map((d) => d.id), ...manh.map((m) => m.id)];
   const { traLoi, nguon, ...cauTruc } = docPhanHoiLLM(tho, y2, cho);
   if (!traLoi) throw new Error("rong");
   // Hậu kiểm: số điểm/học phí không có trong dữ liệu gửi kèm thì bỏ câu trả lời (client tự trả lời từ số liệu có sẵn), không cache.
-  const lech = soLieuLech(traLoi, y2, manh.map((m) => m.noiDung).join("\n"));
+  // Mọi số phải nằm trong dữ liệu gửi kèm (hoặc bảng so sánh). Câu trả lời có tìm web được phép dùng số có trong đoạn trích web,
+  // nhưng riêng con số "điểm chuẩn" vẫn phải khớp dữ liệu của ứng dụng: web không phải nguồn của điểm chuẩn.
+  const tuLieuCm = manh.map((m) => m.noiDung).join("\n");
+  const lech = [
+    ...soLieuLech(traLoi, y2, trichWeb ? `${tuLieuCm}\n${trichWeb}` : tuLieuCm),
+    ...(trichWeb ? soLieuLech(cauNhacDiemChuan(traLoi), y2, tuLieuCm) : []),
+  ];
   if (lech.length) {
     console.log(JSON.stringify({ tang: "llm", chan: "so-lieu-khong-khop", lech: lech.slice(0, 5) }));
     return { ok: false, loi: "so-lieu-khong-khop" };
   }
   const congDong = nguon.filter((id) => manh.some((m) => m.id === id && !m.chinhThuc));
-  const kq: KetQuaBacThang = { traLoi, nguon, ...cauTruc, tang: "llm", ...(congDong.length ? { congDong } : {}), ...(viec ? { viecTiep: VIEC_TIEP[viec] } : {}) };
+  const kq: KetQuaBacThang = { traLoi, nguon, ...cauTruc, tang: "llm", ...(congDong.length ? { congDong } : {}), ...(viec ? { viecTiep: VIEC_TIEP[viec] } : {}), ...(nguonWeb.length ? { nguonWeb } : {}) };
   // Không cache khi kho vector có mà RAG trả rỗng: có thể do chưa lập chỉ mục xong hoặc lỗi tạm, cache sẽ giữ câu "chưa có dữ liệu" sai trong 6 giờ.
   const phuThuocRag = !!(env.AI && env.VECTORIZE);
-  if (khoa && (!phuThuocRag || nguon.length > 0 || manh.length > 0)) await ghiCache(kv, khoa, { traLoi, nguon, ...cauTruc, congDong: kq.congDong, viecTiep: kq.viecTiep });
+  if (khoa && (!phuThuocRag || nguon.length > 0 || manh.length > 0)) await ghiCache(kv, khoa, { traLoi, nguon, ...cauTruc, congDong: kq.congDong, viecTiep: kq.viecTiep, nguonWeb: kq.nguonWeb });
   console.log(JSON.stringify({ tang: "llm", ai: !!env.AI, vec: !!env.VECTORIZE, uv: ungVien.length, clef: !!qd, nCm: manh.length, msClef, msRag, msLLM, msTong: Date.now() - t0, dRag: diemToanKho, soSuKien: y2.duLieu.length, tokenVaoUocTinh: Math.ceil(noiDung.length / 3) }));
   return { ok: true, kq };
 }

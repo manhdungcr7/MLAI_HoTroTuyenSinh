@@ -3,7 +3,7 @@
 // Hạn mức: mỗi hồ sơ ẩn danh (hoSoId, UUID do client sinh) tối đa AI_QUOTA_DAILY (mặc định 50) lượt AI mỗi ngày giờ Việt Nam, đếm bằng D1 (binding DB, migration 0008).
 // Chỉ trừ lượt khi AI trả lời thành công; mã yêu cầu (requestId) giúp gửi lại không bị trừ hai lần. Thiếu DB thì không gọi AI (fail-closed).
 // Bậc thang: cache KV > Clef > RAG > LLM (xem _thu-vien/ai/bac-thang.ts). Chưa có bậc server nào dùng được thì trả 503 và app tự dùng chế độ trả lời từ số liệu có sẵn.
-import { GIOI_HAN, choPhepTanSuat, kiemTraYeuCau } from "../../src/engine/tu-van";
+import { GIOI_HAN, canTimWeb, choPhepTanSuat, kiemTraYeuCau } from "../../src/engine/tu-van";
 import { traLoiBacThang, type EnvBacThang } from "../_thu-vien/ai/bac-thang";
 import { coKhoaLLM } from "../_thu-vien/ai/sinh-van-ban";
 import { chotLuot, docHanMuc, giuLuot, laUuid, luotConLai, traLaiLuot, type GiuCho, type KhoD1HanMuc } from "../_thu-vien/han-muc-ai";
@@ -11,9 +11,12 @@ import { chotLuot, docHanMuc, giuLuot, laUuid, luotConLai, traLaiLuot, type GiuC
 // Trần toàn hệ thống theo ngày (mọi hồ sơ cộng lại), để việc đổi mã hồ sơ không làm vượt chi phí.
 const KHOA_TONG_HE_THONG = "he-thong";
 export const TONG_NGAY_MAC_DINH = 500;
+// Trần riêng cho lượt có tìm web (đắt hơn một lượt thường): hết trần thì vẫn trả lời, chỉ không tìm web.
+const KHOA_WEB_HE_THONG = "he-thong-web";
+export const WEB_NGAY_MAC_DINH = 150;
 
 export { goiMoHinh } from "../_thu-vien/ai/sinh-van-ban";
-export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string }
+export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string }
 interface Ctx { request: Request; env: Env }
 
 const json = (v: unknown, status = 200) =>
@@ -75,12 +78,24 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
     await traLaiLuot(env.DB, giu.giu).catch(() => {});
     return giuTong.ly === "trung" ? json({ loi: "da-xu-ly" }, 409) : json({ loi: "het-luot-he-thong" }, 429);
   }
-  const tra = () => Promise.all([traLaiLuot(env.DB!, giu.giu), traLaiLuot(env.DB!, giuTong.giu as GiuCho)]).then(() => undefined, () => undefined);
+  // Câu định tính cần thông tin cập nhật (học bổng, ký túc xá, tin tuyển sinh...): giữ thêm một chỗ ở trần web. Hết chỗ thì bỏ web, không báo lỗi.
+  let giuWeb: GiuCho | null = null;
+  if (canTimWeb(kt.v.cauHoi) && !kt.v.bangSoSanh && env.OPENROUTER_API_KEY) {
+    const toiDaWeb = Math.max(0, Math.floor(Number(env.AI_WEB_NGAY) || WEB_NGAY_MAC_DINH));
+    try { const g = await giuLuot(env.DB, KHOA_WEB_HE_THONG, `${yeuCau}:web`, toiDaWeb); if (g.ok) giuWeb = g.giu; } catch { /* không có web, vẫn trả lời thường */ }
+  }
+  const traWeb = () => (giuWeb ? traLaiLuot(env.DB!, giuWeb).catch(() => {}) : Promise.resolve());
+  const tra = () => Promise.all([traLaiLuot(env.DB!, giu.giu), traLaiLuot(env.DB!, giuTong.giu as GiuCho), traWeb()]).then(() => undefined, () => undefined);
   try {
-    const r = await traLoiBacThang(env, kt.v, f);
+    const r = await traLoiBacThang(env, kt.v, f, { web: !!giuWeb });
     if (!r.ok) { await tra(); return json({ loi: r.loi, ...(r.goiY ? { goiY: r.goiY } : {}) }, r.loi === "chua-cau-hinh" ? 503 : 422); }
     // Trả từ cache không tốn nhà cung cấp nên không tính lượt.
-    if (r.kq.tang === "cache") await tra(); else await Promise.all([chotLuot(env.DB, giu.giu), chotLuot(env.DB, giuTong.giu as GiuCho)]).catch(() => {});
+    if (r.kq.tang === "cache") await tra();
+    else {
+      // Chỗ web chỉ tính khi câu trả lời thật sự dựa trên web (có nguồn); không thì trả lại.
+      const chotWeb = giuWeb && r.kq.nguonWeb?.length ? chotLuot(env.DB, giuWeb) : traWeb();
+      await Promise.all([chotLuot(env.DB, giu.giu), chotLuot(env.DB, giuTong.giu as GiuCho), chotWeb]).catch(() => {});
+    }
     const luot = await luotConLai(env.DB, hoSo, toiDa).catch(() => undefined);
     return json(luot ? { ...r.kq, luot } : r.kq);
   } catch (e) {

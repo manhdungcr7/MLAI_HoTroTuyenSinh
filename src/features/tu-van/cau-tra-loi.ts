@@ -13,6 +13,8 @@ import { lamSachHanhDong, lamSachThe, nganhLuotTruoc, taoNguCanh, type TheTruong
 import { CHE_DO_MAC_DINH, idHoSoAI, uuidMoi, type Luot, type PhienAI } from "./che-do-ai";
 import { bocLoiChao, nhanYDinhQuyTac, traLoiQuyTac } from "./y-dinh";
 import { chonDuLieuKemTheo, nguCanhLuotTruoc, tomTatHoSo, traLoiTuDong, type KetQuaTuDong } from "./lay-du-lieu";
+import { dungBangSoSanh, tomTatChoAI } from "./bang-so-sanh";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
 
 /** Dòng NV1 (nếu có) đứng đầu ngữ cảnh để AI lấy NV1 làm gốc; phần lượt trước bị cắt bớt cho vừa giới hạn. */
 export function nguCanhVoiNV1(manHinh: string, truoc: TinNhan[], s: AppState): string {
@@ -44,7 +46,7 @@ export async function hoiAI(y: YeuCauTuVan, phien: PhienAI): Promise<{ kq: TraLo
     }
     const ds = (x: unknown) => (Array.isArray(x) ? x.filter((t): t is string => typeof t === "string") : []);
     return typeof d.traLoi === "string" && d.traLoi
-      ? { kq: { ...d, traLoi: d.traLoi, nguon: ds(d.nguon), tang: d.tang, congDong: ds(d.congDong), viecTiep: typeof d.viecTiep === "string" ? d.viecTiep : undefined } }
+      ? { kq: { ...d, traLoi: d.traLoi, nguon: ds(d.nguon), tang: d.tang, congDong: ds(d.congDong), viecTiep: typeof d.viecTiep === "string" ? d.viecTiep : undefined, nguonWeb: Array.isArray(d.nguonWeb) ? d.nguonWeb : undefined } }
       : { kq: null, loi: "mang" };
   } catch { return { kq: null, loi: "mang" }; }
 }
@@ -75,6 +77,7 @@ function tinTuDong(td: KetQuaTuDong, idDuLieu: string[], phu: Partial<TinNhan>):
     ...(td.the?.length ? { the: td.the } : {}), ...(td.hanhDong?.length ? { hanhDong: td.hanhDong } : {}),
     ...(td.hoiLai ? { hoiLai: td.hoiLai } : {}), ...(td.luaChon?.length ? { luaChon: td.luaChon } : {}),
     ...(td.trangThaiDuLieu ? { trangThaiDuLieu: td.trangThaiDuLieu } : {}), ...(td.cho ? { cho: td.cho } : {}),
+    ...(td.soSanh ? { soSanh: td.soSanh } : {}),
   };
 }
 
@@ -118,7 +121,24 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
     duLieu: chonDuLieuKemTheo(cau, stateTuVan, nguon, 8, giu),
   };
   const idDuLieu = y.duLieu.map((d) => d.id);
-  if (traLoiNoiBo(cau, truocTuVan)) return tinTuDong(traLoiTuDong(cau, stateTuVan, nguon, giu, truocTuVan), idDuLieu, {});
+  // So sánh trường/ngành: app tính sẵn bảng từ dữ liệu thật. Ở chế độ AI, mô hình chỉ DIỄN GIẢI bảng (không tự tính số);
+  // AI lỗi hoặc hết lượt thì giữ bảng và câu tóm tắt tất định.
+  const tdSoSanh = traLoiTuDong(cau, stateTuVan, nguon, giu, truocTuVan);
+  if (tdSoSanh.soSanh && phien.cheDo === "ai" && !(phien.luot && phien.luot.con <= 0)) {
+    const ls = tdSoSanh.soSanh.ids.map((i) => tim(i)).filter((l): l is NonNullable<ReturnType<typeof tim>> => !!l);
+    if (ls.length >= 2) {
+      const bang = tomTatChoAI(dungBangSoSanh(ls, diemDayDu(stateTuVan)));
+      const { kq: ai, viecTiep, loi } = await hoiAI({ ...y, bangSoSanh: bang }, phien);
+      if (ai) {
+        return {
+          vai: "mayChu", chu: ai.traLoi, nguon: tdSoSanh.nguon, cheDo: "ai", tang: ai.tang, idDuLieu, soSanh: tdSoSanh.soSanh,
+          ...(viecTiep ? { viecTiep } : {}), ...(ai.nguonWeb?.length ? { nguonWeb: ai.nguonWeb } : {}),
+        };
+      }
+      void loi;
+    }
+  }
+  if (traLoiNoiBo(cau, truocTuVan)) return tinTuDong(tdSoSanh, idDuLieu, {});
   const cauDoc = "hỏi theo kiểu tra cứu như “điểm chuẩn Khoa học máy tính UIT”";
   // Chế độ Tiết kiệm: không bao giờ gọi AI. Câu không hiểu thì nói rõ cần bật AI (không phải lỗi mạng).
   if (phien.cheDo === "tietKiem") {

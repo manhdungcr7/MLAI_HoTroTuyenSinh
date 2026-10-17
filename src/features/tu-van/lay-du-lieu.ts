@@ -17,6 +17,7 @@ import type { AppState } from "@/state/store";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, LuaChon } from "@/state/types";
 import { danhGiaDanhMucToanDien } from "@/engine/toi-uu-nguyen-vong";
+import { dungBangSoSanh, tomTatKhongAI } from "./bang-so-sanh";
 
 const khongDau = chuanHoaChung;
 const BO_QUA = new Set(["nganh", "truong", "hoc", "dai", "diem", "chuan", "em", "la", "co", "khong", "nao", "gi", "the", "can", "muon", "cua", "va", "voi", "cho", "nen", "o", "tai", "nhu", "bao", "nhieu", "hay", "duoc", "thi", "mot", "cac", "nhung", "minh", "toi", "xin", "hoi", "ve", "tu", "den", "thay", "khac", "tot", "so", "sanh", "dau", "ra", "sao", "lam", "chinh", "quy", "con", "kia", "tren", "vay", "truoc", "tuong", "phi", "thap", "nhat", "cao", "dat", "uoc", "chon", "them", "nguyen", "vong"]);
@@ -236,6 +237,8 @@ export interface KetQuaTuDong {
   cho?: ChoTraLoi;
   /** Không nhận ra ý định nào: lớp trên có thể nhờ AI, nếu AI lỗi thì không nói "chưa hiểu". */
   khongHieu?: boolean;
+  /** So sánh 2 đến 3 chương trình: giao diện vẽ bảng từ danh mục (chỉ giữ id, số liệu luôn lấy mới từ dữ liệu). */
+  soSanh?: { ids: string[] };
 }
 
 // ---------- Ngữ cảnh lượt trước và tra cứu chương trình ----------
@@ -466,8 +469,21 @@ function traLoiCoHoi(cau: string, y: YDinhCau, ctx: NguCanhLuot, s: AppState, di
   };
 }
 
-function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot): KetQuaTuDong {
-  const neu = timTruongTrongCau(cau);
+/** Bỏ cụm tên ngành đứng ngay sau chữ "ngành" (tới dấu phân cách đầu tiên như "ở", "tại", ",", "và"), để tên ngành như "Thương mại điện tử" không bị nhận là trường. */
+function boTenNganh(cau: string): string {
+  // à = à: viết bằng mã để không lệ thuộc cách lưu dấu tiếng Việt của tệp.
+  const m = /ngành|nganh/i.exec(cau.normalize("NFC"));
+  if (!m) return cau;
+  const c = cau.normalize("NFC");
+  const sau = c.slice(m.index + m[0].length);
+  const ket = /\s(?:ở|tại|tai|o|,|và|va|với|voi|hay|hoặc|hoac)(?=\s|,)/i.exec(sau);
+  const het = ket ? m.index + m[0].length + ket.index : c.length;
+  return c.slice(0, m.index) + " ".repeat(het - m.index) + c.slice(het);
+}
+
+function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot, diem: DiemDayDu, nganhQuanTam: string[] = []): KetQuaTuDong {
+  // Chỉ tìm trường ở phần trước chữ "ngành": "ngành Thương mại điện tử" không được hiểu là Trường Đại học Thương mại.
+  const neu = timTruongTrongCau(boTenNganh(cau));
   let ma = duy(neu.map((n) => n.kq.ma!));
   if (ma.length === 1 && ctx.truong.length === 2) { const khac = ctx.truong.find((m) => m !== ma[0]); if (khac) ma = [ma[0], khac]; }
   if (ma.length === 0 && ctx.truong.length === 2) ma = ctx.truong;
@@ -482,7 +498,7 @@ function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot): KetQuaT
       hoiLai: ma.length === 1 ? `Bạn muốn so sánh ${ten(ma[0])} với trường nào?` : "Bạn muốn so sánh hai trường nào?",
     };
   }
-  const [a, b] = ma;
+  const truongs = ma.slice(0, 3);
   const cum = cumConLai(y, neu);
   const theNganh = (m: string): LuaChon[] => {
     const cua = chuongTrinhCuaTruong(m);
@@ -490,22 +506,42 @@ function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot): KetQuaT
     const tuNgCanh = cua.filter((l) => ctx.nganh.includes(l.id));
     return gomTheoTenNganh(tuCau.length ? tuCau : tuNgCanh);
   };
-  const A = theNganh(a), B = theNganh(b);
-  if (A.length === 1 && B.length === 1) {
-    const [la, lb] = [A[0], B[0]];
-    const dong = (l: LuaChon) => `${l.nganh} của ${ten(l.maTruong!)}: điểm chuẩn ${l.namDiem} là ${so1(l.diemMin)}`;
-    return {
-      traLoi: `Mình đặt ${dong(la)} cạnh ${dong(lb)}. Bấm xem so sánh để thấy thêm học phí, tổ hợp và nhãn theo điểm của bạn. ${NHAC_NGAN}`,
-      nguon: [la.id, lb.id], the: [{ ma: a, id: la.id }, { ma: b, id: lb.id }], trangThaiDuLieu: trangThaiTu([la, lb]),
-      hanhDong: [{ loai: "so-sanh", ids: [la.id, lb.id], nhan: "Xem so sánh" }],
-    };
+  const moiTruong = truongs.map(theNganh);
+  const baoSoSanh = (ls: LuaChon[], loiMo = "", coNutMo = true): KetQuaTuDong => ({
+    traLoi: `${loiMo}${tomTatKhongAI(dungBangSoSanh(ls, diem))} ${NHAC_NGAN}`,
+    nguon: ls.map((l) => l.id), the: ls.map((l, i) => ({ ma: truongs[i], id: l.id })), trangThaiDuLieu: trangThaiTu(ls),
+    soSanh: { ids: ls.map((l) => l.id) },
+    ...(coNutMo ? { hanhDong: [{ loai: "so-sanh" as const, ids: ls.slice(0, 2).map((l) => l.id), nhan: "Xem so sánh chi tiết" }] } : {}),
+  });
+  if (moiTruong.every((ds) => ds.length === 1)) return baoSoSanh(moiTruong.map((ds) => ds[0]));
+  // Chưa nêu ngành: so ngành mà mọi trường cùng có. Ưu tiên ngành bạn quan tâm, rồi ngành phổ biến nhất (nhiều chương trình trong danh mục),
+  // rồi mời đổi sang ngành khác. Trước đây app hỏi lại ngành nào, bắt học sinh gõ thêm một lượt dù dữ liệu đã đủ để so ngay.
+  const tanSuat = new Map<string, number>();
+  for (const l of LUA_CHON_MAU) tanSuat.set(khongDau(l.nganh), (tanSuat.get(khongDau(l.nganh)) ?? 0) + 1);
+  const quanTam = nganhQuanTam.map(khongDau).filter(Boolean);
+  const nhacTrongCau = khongDau(cau);
+  // Ngành được nêu trong câu hỏi đứng đầu; rồi ngành bạn quan tâm trong hồ sơ.
+  const trongCau = (n: string) => (nhacTrongCau.includes(n) ? 2 : 0);
+  const diemUuTien = (n: string) => trongCau(n) + (quanTam.some((q) => n.includes(q) || q.includes(n)) ? 1 : 0);
+  const chung = gomTheoTenNganh(chuongTrinhCuaTruong(truongs[0]))
+    .map((l) => ({ ten: khongDau(l.nganh), cacTruong: moiTruong.length ? truongs.map((m) => gomTheoTenNganh(chuongTrinhCuaTruong(m)).find((x) => khongDau(x.nganh) === khongDau(l.nganh))) : [] }))
+    .filter((x): x is { ten: string; cacTruong: LuaChon[] } => x.cacTruong.length === truongs.length && x.cacTruong.every((k) => !!k))
+    .sort((p, q) => diemUuTien(q.ten) - diemUuTien(p.ten) || (tanSuat.get(q.ten) ?? 0) - (tanSuat.get(p.ten) ?? 0) || p.ten.length - q.ten.length);
+  const nauNganh = !!(cum || y.nhom);
+  if (chung.length) {
+    const chon = chung[0];
+    // Nút gợi ý gửi lại đúng mã trường (luôn nhận diện được), không gửi tên dài có dấu phẩy.
+    const khac = chung.slice(1, 4).map((x) => ({ nhan: x.cacTruong[0].nganh.slice(0, 40), cau: `So sánh ${truongs.join(" và ")} ngành ${x.cacTruong[0].nganh}` }));
+    const loiMo = trongCau(chon.ten) ? `Mình so ngành ${chon.cacTruong[0].nganh}. ` : diemUuTien(chon.ten) ? `Bạn chưa nêu ngành, nên mình so ngành ${chon.cacTruong[0].nganh}, ngành bạn đang quan tâm. ` : `Bạn chưa nêu ngành, nên mình so ngành ${chon.cacTruong[0].nganh}, ngành phổ biến nhất mà các trường cùng có. `;
+    // Đã nêu ngành (ví dụ "Công nghệ thông tin") nhưng trường có nhiều chương trình cùng tên: bảng và nút mở so sánh, không hỏi lại.
+    if (nauNganh) return baoSoSanh(chon.cacTruong, loiMo, true);
+    // Chưa nêu ngành: vẫn hỏi lại để học sinh tự chọn; bảng ngành chung chỉ là điểm bắt đầu, không có nút mở tự động.
+    const r = baoSoSanh(chon.cacTruong, loiMo, false);
+    return { ...r, hoiLai: "Bạn muốn so theo ngành nào? Đây là ngành chung phổ biến nhất, bấm ngành khác bên dưới nếu muốn.", ...(khac.length ? { luaChon: khac } : {}) };
   }
-  // Chưa biết ngành nào: chỉ gợi ý những tên ngành cả hai trường đều có, không chọn thay.
-  const chung = gomTheoTenNganh(chuongTrinhCuaTruong(a)).filter((l) => gomTheoTenNganh(chuongTrinhCuaTruong(b)).some((k) => khongDau(k.nganh) === khongDau(l.nganh))).sort((p, q) => p.nganh.length - q.nganh.length).slice(0, 3);
   return {
-    traLoi: `Mình so ${ten(a)} và ${ten(b)} theo từng ngành, nên cần biết bạn muốn xem ngành nào.${chung.length ? "" : " Hai trường này chưa có ngành trùng tên trong dữ liệu."}`,
-    nguon: [], the: [{ ma: a }, { ma: b }], hoiLai: "Bạn muốn so sánh theo ngành nào?",
-    luaChon: chung.map((l) => ({ nhan: l.nganh.slice(0, 40), cau: `So sánh ${ten(a)} và ${ten(b)} ngành ${l.nganh}` })),
+    traLoi: `Mình so ${truongs.map(ten).join(", ")} theo từng ngành, mà các trường này chưa có ngành trùng tên trong dữ liệu. Bạn cho mình biết ngành cụ thể muốn so nhé.`,
+    nguon: [], the: truongs.map((m) => ({ ma: m })), hoiLai: "Bạn muốn so sánh những ngành nào?",
   };
 }
 
@@ -580,7 +616,7 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
     case "them-nguyen-vong": return traLoiThemNguyenVong(cauHoi, y, ctx, s);
     case "la-truong-gi": { const r = traLoiLaTruongGi(cauHoi); if (r) return r; break; }
     case "co-hoi": return traLoiCoHoi(cauHoi, y, ctx, s, diem);
-    case "so-sanh-truong": return traLoiSoSanhTruong(cauHoi, y, ctx);
+    case "so-sanh-truong": return traLoiSoSanhTruong(cauHoi, y, ctx, diem, s.hoSo.nganhQuanTam ?? []);
     case "xep-hang-hoc-phi": return traLoiXepHangHocPhi(y);
     case "cho-o": return traLoiChoO(cauHoi, ctx, s);
     case "kham-pha-truong": if (timTruongTrongCau(cauHoi, [y.tinhGoc]).length === 0) return traLoiKhamPha(y); break;
@@ -643,6 +679,16 @@ export function traLoiTuDong(cauHoi: string, s: AppState, nguon: NguonTaiSau | n
 
     const phanTichChuyenMonStr = soSanhChuyenMon ? `**${soSanhChuyenMon.tieuDe}**\n${soSanhChuyenMon.phanTich}\n\n` : "";
     const ghiChuNamMoi = hoiNamMoi ? "Năm tuyển sinh hiện tại chưa có điểm chuẩn chính thức, nên bảng dưới là các năm trước kèm khoảng dự kiến.\n\n" : "";
+    // Từ hai chương trình trở lên (không phải so khái niệm chuyên môn): vẽ bảng trong khung chat thay cho bảng chữ.
+    // Chỉ khi câu hỏi thật sự là so sánh (không phải hỏi xu hướng điểm theo năm như "điểm chuẩn năm 2025").
+    if (!soSanhChuyenMon && khop.length >= 2 && /so sanh|khac nhau|chon.*nao|chon.*hay|phan van/.test(q)) {
+      const ds = khop.slice(0, 3);
+      return {
+        traLoi: `${ghiChuNamMoi}${tomTatKhongAI(dungBangSoSanh(ds, diem))} ${NHAC}`,
+        nguon: ds.map((l) => l.id), trangThaiDuLieu: trangThaiTu(ds), soSanh: { ids: ds.map((l) => l.id) },
+        hanhDong: [{ loai: "so-sanh", ids: ds.slice(0, 2).map((l) => l.id), nhan: "Xem so sánh chi tiết" }],
+      };
+    }
     return {
       traLoi: `${phanTichChuyenMonStr}${ghiChuNamMoi}Điểm chuẩn các năm gần đây (năm nào chưa có ghi "—"):\n\n${bang3Nam}\n\n${NHAC}`,
       nguon: sk.map((l) => l.id), trangThaiDuLieu: trangThaiTu(khop.slice(0, 4)),

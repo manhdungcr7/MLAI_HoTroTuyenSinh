@@ -27,7 +27,7 @@ const BI_DANH_TAY: Record<string, string[]> = {
   QSC: ["uit", "cntt tphcm", "cntt dhqg"],
   BKA: ["hust", "bkhn", "bka"],
   KHA: ["neu", "ktqd"],
-  NTH: ["ftu"],
+  NTH: ["ftu", "ngoai thuong", "dai hoc ngoai thuong", "truong dai hoc ngoai thuong"],
   NTS: ["ftu2", "ftu", "ngoai thuong co so 2", "ngoai thuong tphcm"],
   BVH: ["ptit", "hvbcvt", "buu chinh ha noi"],
   BVT: ["ptit hcm", "buu chinh tphcm"],
@@ -178,14 +178,17 @@ export function coSoCuaChuongTrinh(tenNganh: string): { nganh: string; coSo: str
 // ---- Dựng chỉ mục ----
 for (const t of DS_TRUONG) {
   them(chuanHoa(t.ma), t.ma, "viet-tat");
+  const laCoSo = /\(\s*c[ơo]\s*s[ởo]/i.test(t.ten);
   const day = chuanHoa(t.ten.replace(/\([^)]*\)/g, " "));
-  them(day, t.ma, "cum");
-  them(day.replace(TIEN_TO, "dai hoc "), t.ma, "cum");
+  // Cơ sở có ghi trong ngoặc: chỉ nhận tên đầy đủ kèm cơ sở, không nhận tên bỏ phần cơ sở (tránh trùng với trường chính).
+  if (laCoSo) them(chuanHoa(t.ten), t.ma, "cum");
+  else { them(day, t.ma, "cum"); them(day.replace(TIEN_TO, "dai hoc "), t.ma, "cum"); }
   const [truocGach, ...sauGach] = t.ten.replace(/\([^)]*\)/g, " ").split(" - ");
   const loiTruoc = chuanHoa(truocGach).replace(TIEN_TO, "");
   if (sauGach.length === 0) {
-    them(t.loi, t.ma, "cum", true);
-    them(`dh ${t.loi}`, t.ma, "cum"); them(`dai hoc ${t.loi}`, t.ma, "cum");
+    // Tên có ghi cơ sở trong ngoặc (ví dụ "(Cơ sở TP.HCM)") không được chiếm tên lõi dùng chung với trường chính.
+    if (!laCoSo) them(t.loi, t.ma, "cum", true);
+    if (!laCoSo) { them(`dh ${t.loi}`, t.ma, "cum"); them(`dai hoc ${t.loi}`, t.ma, "cum"); }
   } else {
     const gop = `${loiTruoc} ${chuanHoa(sauGach.join(" ")).replace(TIEN_TO, "")}`.trim();
     them(gop, t.ma, "cum");

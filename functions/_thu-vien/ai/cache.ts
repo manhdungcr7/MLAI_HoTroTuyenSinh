@@ -1,13 +1,13 @@
 // Bậc 1: cache câu trả lời tư vấn trong KV. Lỗi KV không bao giờ làm vỡ tư vấn (đọc lỗi = miss, ghi lỗi = bỏ qua).
-import { NHAC_HE_THONG, type PhanHoiCauTruc } from "../../../src/engine/tu-van";
+import { NHAC_HE_THONG, type NguonWeb, type PhanHoiCauTruc } from "../../../src/engine/tu-van";
 import type { KhoKVAI } from "./kieu";
 
 export const TTL_CACHE_GIAY = 6 * 60 * 60;
 // Tăng số này mỗi khi đổi prompt/logic bậc thang hoặc dữ liệu gửi AI: câu trả lời cũ (có thể sai) không được phát lại tới 6 giờ.
-const PHIEN_BAN_LOGIC = "4";
+const PHIEN_BAN_LOGIC = "5";
 const TIEN_TO = `tvc${PHIEN_BAN_LOGIC}:`;
 
-export interface BanGhiCache extends PhanHoiCauTruc { traLoi: string; nguon: string[]; congDong?: string[]; viecTiep?: string }
+export interface BanGhiCache extends PhanHoiCauTruc { traLoi: string; nguon: string[]; congDong?: string[]; viecTiep?: string; nguonWeb?: NguonWeb[] }
 
 /** Bỏ dấu, viết thường, gộp khoảng trắng: "Điểm chuẩn UIT?" và "diem chuan uit" cùng một khóa. */
 export const chuanHoaCauHoi = (s: string) =>

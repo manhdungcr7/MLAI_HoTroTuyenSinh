@@ -40,6 +40,10 @@ export interface TinNhan {
   batAI?: boolean;
   /** Dòng ghi chú ngắn dưới tin (ví dụ đã hết lượt AI hôm nay). */
   ghiChu?: string;
+  /** So sánh 2 đến 3 chương trình: chỉ lưu id, bảng được dựng lại từ danh mục khi hiển thị (số liệu luôn mới, không lưu bản chụp). */
+  soSanh?: { ids: string[] };
+  /** Nguồn web (chưa kiểm chứng) mà câu trả lời dựa vào: hiện đường dẫn để học sinh tự đối chiếu. */
+  nguonWeb?: { url: string; tieuDe: string }[];
 }
 
 const ds = (x: unknown, n: number, dai: number): string[] | undefined =>
@@ -85,6 +89,11 @@ export function lamSachLichSu(x: unknown): TinNhan[] {
       const hd = lamSachHanhDong(o.hanhDong); if (hd.length) t.hanhDong = hd;
       if (typeof o.hoiLai === "string" && o.hoiLai.trim()) t.hoiLai = o.hoiLai.trim().slice(0, 200);
       const lc = lamSachLuaChon(o.luaChon); if (lc.length) t.luaChon = lc;
+      const ss = o.soSanh as Record<string, unknown> | undefined;
+      const ssIds = Array.isArray(ss?.ids) ? (ss!.ids as unknown[]).filter((i): i is string => typeof i === "string").slice(0, 3).map((i) => i.slice(0, 40)) : [];
+      if (ssIds.length >= 2) t.soSanh = { ids: ssIds };
+      const nw = mangDoiTuong(o.nguonWeb).slice(0, 3).flatMap((e) => (typeof e.url === "string" && /^https?:\/\//.test(e.url) ? [{ url: e.url.slice(0, 300), tieuDe: typeof e.tieuDe === "string" ? e.tieuDe.slice(0, 120) : "" }] : []));
+      if (nw.length) t.nguonWeb = nw;
       if ((TRANG_THAI_DU_LIEU as readonly unknown[]).includes(o.trangThaiDuLieu)) t.trangThaiDuLieu = o.trangThaiDuLieu as TrangThaiDuLieu;
       const ch = o.cho as Record<string, unknown> | undefined;
       if (ch && ch.y === "co-hoi-diem" && typeof ch.id === "string") t.cho = { y: "co-hoi-diem", id: ch.id.slice(0, 40) };

@@ -137,6 +137,8 @@ export function phanTichCau(cau: string): YDinhCau {
 
 /** Các trường được nêu trong câu (tên, mã, viết tắt). Chỉ nhận khớp chính xác; mơ hồ thì bỏ qua, để lớp trên hỏi lại. `boQuaCum`: cụm đã dùng làm tên tỉnh. */
 export interface TruongNeu { chuoi: string; kq: KetQuaTruong }
+const LIEN_TU_SO_SANH = new Set(["va", "voi", "hay", "hoac", "vs"]);
+
 /** Chỉ bắt tên trường được nêu rõ, không bắt "trường nào" hay câu khám phá theo tỉnh. */
 export function tenTruongChuaCo(cau: string): string | null {
   const q = chuanHoa(cau);
@@ -158,6 +160,8 @@ export function timTruongMoHo(cau: string): TruongNeu | null {
       // Giữ địa danh của trường chưa có trong kho, không lùi về tên chung.
       if (cum === "bach khoa" && /^(?:tp |hcm|tphcm|thanh pho|sai gon)/.test(tu.slice(i + n).join(" "))) continue;
       if (ro.some((t) => ` ${t.chuoi} `.includes(` ${cum} `))) continue;
+      // Cụm dài đã chứa một tên trường nhận diện rõ ("Bách Khoa Hà Nội và Xây dựng Hà Nội") thì không phải một tên mơ hồ; cụm con còn lại vẫn được xét ở vòng sau.
+      if (ro.some((t) => ` ${cum} `.includes(` ${t.chuoi} `))) continue;
       if (n === 1 && (TU_DEM.has(cum) || VIET_TAT_NGANH[cum])) continue;
       const kq = resolveTruong(cum);
       // Chỉ tên/bí danh có thật; không sửa một từ thường trong câu thành tên trường.
@@ -185,6 +189,13 @@ export function timTruongTrongCau(cau: string, boQuaCum: (string | null)[] = [])
       if (cum !== "uit" && cum !== "qsc" && "cong nghe thong tin".includes(cum) && !/\b(truong|dh|dai hoc)\s+(?:dai hoc\s+)?cong nghe thong tin\b/.test(chuanHoa(cau))) continue;
       const kq = resolveTruong(cum);
       if (kq.kieu !== "chinh-xac" || !kq.ma) continue;
+      // Cụm bắc qua một liên từ ("Hà Nội và Xây dựng Hà Nội") mà một nửa tự nhận ra đúng trường đó: nửa kia chỉ là chữ thừa bị nuốt, bỏ cụm này để hai tên được tách riêng.
+      const lt = tu.slice(i, i + n);
+      const vi = lt.findIndex((t, k) => k > 0 && k < lt.length - 1 && LIEN_TU_SO_SANH.has(t));
+      if (vi > 0) {
+        const trai = resolveTruong(lt.slice(0, vi).join(" ")), phai = resolveTruong(lt.slice(vi + 1).join(" "));
+        if ((phai.kieu === "chinh-xac" && phai.ma === kq.ma) || (trai.kieu === "chinh-xac" && trai.ma === kq.ma)) continue;
+      }
       ra.push({ chuoi: cum, kq, vt: i });
       for (let j = i; j < i + n; j++) dung[j] = true;
     }
