@@ -75,7 +75,7 @@ function DanhSachY({ tone, icon: Icon, tieuDe, cuaEm, chung }: { tone: ToneTen; 
       <h2 className={gop("flex items-center gap-2 text-[16px] font-extrabold", TONE_CHU[tone])}><Icon size={20} />{tieuDe}</h2>
       {cuaEm.length > 0 && (
         <div className="mt-2 rounded-xl bg-trang/70 p-3">
-          <p className="mb-1.5 inline-flex items-center gap-1 text-[12px] font-bold text-xanh"><Sparkles size={13} />Theo hồ sơ của bạn</p>
+          <p className="mb-1.5 inline-flex items-center gap-1 text-[13px] font-bold text-xanh"><Sparkles size={13} />Theo hồ sơ của bạn</p>
           {ds(cuaEm)}
         </div>
       )}
@@ -235,9 +235,7 @@ export default function ChiTiet() {
       <NoiDung>
         {/* Đầu thẻ: ảnh bìa gradient theo màu trường (không dùng ảnh thật) */}
         <section className="rounded-lon bg-trang border border-vien shadow-the overflow-hidden">
-          <AnhBia tone={lc.tone} cao={96}>
-            <span aria-hidden className="absolute right-4 bottom-1 text-[52px] font-extrabold leading-none text-white/25 tracking-tight select-none">{lc.truong}</span>
-          </AnhBia>
+          <AnhBia tone={lc.tone} cao={96} />
           <div className="px-4 pb-4">
             <div className="relative z-10 -mt-9 flex items-end gap-3">
               <span className="rounded-2xl bg-trang p-1 shadow-the"><HuyHieuTruong ten={kyHieu(lc.truong)} tone={lc.tone} kichThuoc={64} /></span>
@@ -248,7 +246,7 @@ export default function ChiTiet() {
             </div>
             <h2 className="mt-2 text-[22px] font-extrabold text-muc leading-tight">{lc.nganh}</h2>
             <p className="text-[14px] text-chu mt-0.5">
-              {lc.maTruong ? <Link to={DUONG_DAN.truong(lc.maTruong)} className="inline-block py-3 -my-3 font-bold text-xanh underline">{lc.truong} · {lc.tenTruong}</Link> : <><b>{lc.truong}</b> · {lc.tenTruong}</>}
+              {lc.maTruong ? <Link to={DUONG_DAN.truong(lc.maTruong)} className="inline-block max-w-full min-w-0 py-3 -my-3 font-bold text-xanh underline break-words [text-wrap:balance]">{lc.truong} · {lc.tenTruong}</Link> : <><b>{lc.truong}</b> · {lc.tenTruong}</>}
             </p>
             <p className="text-[13px] text-chu-phu mt-1 line-clamp-2">{lc.moTa}</p>
           </div>
@@ -259,9 +257,8 @@ export default function ChiTiet() {
           <div className="flex items-start gap-3">
             <BieuTuongTron icon={kq.muc ? CheckCircle2 : PencilLine} tone={tone} kichThuoc={48} />
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] text-chu-phu">Mức độ phù hợp với bạn</p>
-              {kq.muc ? <p className={gop("text-[20px] font-extrabold leading-tight", TONE_CHU[tone])}>{kq.muc}</p> : <div className="mt-0.5"><NhanPhuHop kq={kq} /></div>}
-              <p className="text-[14px] text-chu mt-1 leading-snug">{kq.giaiThich}</p>
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] text-chu-phu">Mức độ phù hợp {kq.muc ? <b className={gop("text-[18px] font-extrabold leading-tight", TONE_CHU[tone])}>{kq.muc}</b> : <NhanPhuHop kq={kq} />}</p>
+              <p className="text-[14px] text-chu mt-1 leading-snug [text-wrap:pretty]">{kq.giaiThich}</p>
             </div>
           </div>
           {kq.muc ? (
@@ -313,15 +310,17 @@ export default function ChiTiet() {
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-xanh-nhat text-xanh"><FileText size={20} /></span>
           <div className="flex-1 min-w-0 space-y-2">
-            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-              <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
-              <Nhan tone={lc.nguonCap === "official_pdf" ? "luc" : "cam"}>
-                {lc.nguonCap === "official_pdf" ? "Có nguồn chính thức" : "Nguồn thứ cấp"}
-              </Nhan>
+            <div className="space-y-1.5">
+              <b className="block text-[14px] text-muc">Nguồn dữ liệu</b>
+              <div className="flex flex-wrap gap-1.5">
+                <Nhan tone={lc.nguonCap === "official_pdf" ? "luc" : "cam"}>
+                  {lc.nguonCap === "official_pdf" ? "Nguồn chính thức" : "Nguồn thứ cấp"}
+                </Nhan>
+              </div>
             </div>
             <details className="group">
               <summary className="flex items-center text-[13px] font-bold text-xanh cursor-pointer list-none hover:underline py-0.5">Xem chi tiết nguồn</summary>
-              <div className="pt-2 pb-1 space-y-1 text-[12px] text-chu-phu border-t border-vien/50 mt-1.5">
+              <div className="pt-2 pb-1 space-y-1 text-[13px] text-chu-phu border-t border-vien/50 mt-1.5">
                 <p className="leading-snug">{lc.nguon}.</p>
                 <p>
                   {lc.ngayCapNhat ? <>Ngày công bố đề án: <b className="text-chu">{lc.ngayCapNhat}</b>{lc.donViXacThuc && ` · ${lc.donViXacThuc}`}</> : "Ngày cập nhật từ nguồn: chưa có."}

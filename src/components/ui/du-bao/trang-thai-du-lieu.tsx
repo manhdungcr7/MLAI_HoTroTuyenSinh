@@ -24,7 +24,7 @@ export function NhanTrangThaiDuLieu({ tt, moi, anNhieuNam, className }: { tt: Tr
   const tone = TONE[tt.loai];
   const chu = moi ? "Chương trình mới" : tt.loai === "motNam" ? "Tham chiếu hạn chế" : TIEU_DE_TRANG_THAI[tt.loai];
   const Icon = ICON[tt.loai];
-  if (!tone) return <span className={gop("inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[12px] font-bold bg-nen text-chu-phu border border-vien", className)}><Icon size={13} aria-hidden />{chu}</span>;
+  if (!tone) return <span className={gop("inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[13px] font-bold bg-nen text-chu-phu border border-vien", className)}><Icon size={13} aria-hidden />{chu}</span>;
   return <Nhan tone={tone} className={gop("gap-1", className)}><Icon size={13} aria-hidden />{chu}</Nhan>;
 }
 

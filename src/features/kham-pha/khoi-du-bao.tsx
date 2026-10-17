@@ -57,7 +57,7 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
       )}
 
       <div className="p-4 space-y-3">
-        {!d && <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-muc"><TrendingUp size={20} className="shrink-0 text-xanh" />Điểm chuẩn các năm</h2>}
+        {!d && <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-muc"><TrendingUp size={20} className="shrink-0 text-xanh" />Xu hướng điểm chuẩn</h2>}
         {d ? (
           <>
             <h2 className="text-[14px] font-normal text-chu leading-snug">

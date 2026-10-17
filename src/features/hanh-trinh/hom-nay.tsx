@@ -38,7 +38,7 @@ function HomNayDayDu() {
 
   return (
     <>
-      <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={loiChaoTheoChang(s, chang)} />
+      <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={loiChaoTheoChang(s, chang)} bienThe="luc" />
       <NoiDung>
         <HienDan className="space-y-3">
           <HeroEmDangODau onNhapDiem={() => nav(DUONG_DAN.batDau(2))} />
@@ -110,7 +110,7 @@ function HeroEmDangODau({ onNhapDiem }: { onNhapDiem: () => void }) {
       <VongDiem value={ch.tong} max={30} size={96} tong="xanh" nhanGiua="/30 điểm" aria={`Tổ hợp ${ch.toHop} tốt nhất, ${dinhDangDiem(ch.tong)} trên 30`} />
       <div className="min-w-0 flex-1">
         <b className="block text-[16px] text-muc leading-tight">Em đang ở đâu?</b>
-        <p className="text-[13px] text-chu mt-0.5">Tổ hợp {ch.toHop} cho điểm cao nhất. So được {ch.soNganh} ngành: {ch.soDuDiem} ngành đủ điểm chuẩn năm trước, {ch.soThuSuc} ngành gần mức đó.</p>
+        <p className="text-[13px] text-chu mt-0.5 line-clamp-3">Tổ hợp {ch.toHop} cao nhất. {ch.soDuDiem} ngành đủ điểm năm trước, {ch.soThuSuc} gần mức.</p>
       </div>
     </TheNen>
   );

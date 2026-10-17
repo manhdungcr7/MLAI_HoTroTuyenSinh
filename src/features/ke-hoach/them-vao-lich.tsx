@@ -123,10 +123,10 @@ export function ThemVaoLich() {
       <section className="rounded-[14px] border border-vien bg-trang p-3 space-y-2">
         <div>
           <p className="text-sm font-bold text-chu">Đồng bộ lịch tự động</p>
-          <p className="text-[13px] text-chu-phu">Lịch ngoài chỉ nhận sự kiện; không cần đăng nhập Google.</p>
+          <p className="text-[13px] text-chu-phu line-clamp-2">Chỉ nhận sự kiện, không cần đăng nhập Google.</p>
         </div>
         {s.hoSo.laMau && !feed ? (
-          <p className="text-[13px] text-chu-phu">Lịch hồ sơ mẫu không được gửi lên máy chủ.</p>
+          <p className="text-[13px] text-chu-phu line-clamp-2">Lịch hồ sơ mẫu không gửi lên máy chủ.</p>
         ) : feed ? (
           <>
             <label className="block text-[13px] font-semibold text-chu" htmlFor="nvai-feed-url">Liên kết riêng của lịch</label>

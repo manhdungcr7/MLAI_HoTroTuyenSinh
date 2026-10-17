@@ -44,7 +44,7 @@ export function GoiYSheet({ mo, dong }: { mo: boolean; dong: () => void }) {
                   </div>
                   <p className="text-[13px] text-chu-phu">{d.lc.truong} · {d.lc.khuVuc} · điểm chuẩn {dinhDang(d.lc.diemMin, 1).replace(".", ",")} ({d.lc.namDiem})</p>
                   <ul className="mt-1 space-y-0.5">
-                    {d.lyDo.map((r) => <li key={r} className="text-[12px] text-chu-phu">• {r}</li>)}
+                    {d.lyDo.map((r) => <li key={r} className="text-[13px] text-chu-phu">• {r}</li>)}
                   </ul>
                 </div>
               </div>

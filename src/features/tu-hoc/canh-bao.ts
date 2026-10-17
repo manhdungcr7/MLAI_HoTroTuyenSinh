@@ -124,8 +124,8 @@ export function taoCanhBao(s: DuLieuCanhBao, bayGio: Date): CanhBao[] {
     const danhSach = ten.length > 3 ? `${ten.slice(0, 2).join(", ")} và ${ten.length - 2} môn khác` : noi(ten);
     ra.push({
       id: `tangDiem:${tang.map((t) => t.mon).join("-")}`, tone: "luc",
-      tieuDe: tang.length === 1 ? `Điểm ${TEN_MON[t0.mon]} tăng 3 lần liền` : `Điểm ${danhSach} đều tăng 3 lần liền`,
-      moTa: `${TEN_MON[t0.mon]}: ${t0.ba.map((d) => dinhDang(d, 1)).join(" → ")}. Bạn đang đi đúng hướng, giữ nhịp này nhé!`,
+      tieuDe: tang.length === 1 ? `Điểm ${TEN_MON[t0.mon]} tăng 3 lần liền` : `Điểm ${danhSach} tăng 3 lần liền`,
+      moTa: `${TEN_MON[t0.mon]}: ${t0.ba.map((d) => dinhDang(d, 1)).join(" → ")}. Giữ nhịp này nhé!`,
     });
   }
 

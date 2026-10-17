@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { ArrowRight, BarChart3, PencilLine } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { MAU_NHOM_O, VongDiem, iconNhomNganh } from "@/components/ui/du-bao";
+import { TheNen } from "@/components/ui/thiet-ke";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
@@ -19,7 +20,7 @@ export function TheDiemCuaBan({ onChonNhom }: { onChonNhom?: (nhom: string) => v
   const k = useMemo(() => tinhDiemCuaBan(bc.diem, LUA_CHON_MAU), [bc.diem, LUA_CHON_MAU.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <section aria-label="Điểm của bạn" className="the-mem p-4">
+    <TheNen as="section" aria-label="Điểm của bạn" phatSang>
       <div className="flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-muc"><BarChart3 size={20} className="text-xanh" aria-hidden />Điểm của bạn</h2>
         <Link to={DUONG_DAN.hoSo()} className="inline-flex min-h-11 items-center gap-1 text-[13px] font-bold text-xanh">Xem chi tiết <ArrowRight size={15} aria-hidden /></Link>
@@ -30,10 +31,12 @@ export function TheDiemCuaBan({ onChonNhom }: { onChonNhom?: (nhom: string) => v
             <VongDiem diem={k.tong} nhanGiua="/30 điểm">
               <b className="so-lon text-[30px] font-bold leading-none text-muc tabular-nums">{dinhDang(k.tong, 1)}</b>
             </VongDiem>
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] text-chu-phu">Tổ hợp tốt nhất của bạn: {k.toHop}</p>
-              <span className="mt-1 inline-flex items-center rounded-full gd-menta px-3 py-1 text-[14px] font-bold text-ngoc-chu">Đủ điểm {dinhDangSo(k.soDuDiem)} ngành</span>
-              <p className="mt-1.5 text-[13px] leading-snug text-chu">So với điểm chuẩn năm gần nhất, thử sức thêm <b className="text-cam-chu">{dinhDangSo(k.soThuSuc)}</b> ngành (trong {dinhDangSo(k.soDoiSoat)} ngành đã đối soát).</p>
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="inline-flex items-center rounded-lg gd-menta px-3 py-1 text-[14px] font-bold text-ngoc-chu whitespace-nowrap">Đủ điểm {dinhDangSo(k.soDuDiem)} ngành</span>
+                <span className="inline-flex items-center rounded-md bg-nen px-2 py-0.5 text-[13px] font-bold text-chu whitespace-nowrap" title="Tổ hợp tốt nhất của bạn">Tổ hợp {k.toHop}</span>
+              </div>
+              <p className="text-[13px] leading-snug text-chu">Thử sức <b className="text-cam-chu">{dinhDangSo(k.soThuSuc)}</b> · đối soát {dinhDangSo(k.soDoiSoat)}</p>
             </div>
           </div>
           {k.theoNhom.length > 0 && (
@@ -62,6 +65,6 @@ export function TheDiemCuaBan({ onChonNhom }: { onChonNhom?: (nhom: string) => v
           </div>
         </div>
       )}
-    </section>
+    </TheNen>
   );
 }

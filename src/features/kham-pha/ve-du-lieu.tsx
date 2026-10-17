@@ -41,7 +41,7 @@ export default function VeDuLieu() {
     <div className="rounded-the bg-trang border border-vien p-3 shadow-the">
       <b className="block text-[24px] leading-none font-extrabold text-xanh">{n}</b>
       <span className="block mt-1 text-[13px] font-semibold text-chu leading-snug">{nhan}</span>
-      {phu && <span className="block text-[12px] text-chu-phu leading-snug">{phu}</span>}
+      {phu && <span className="block text-[13px] text-chu-phu leading-snug">{phu}</span>}
     </div>
   );
 

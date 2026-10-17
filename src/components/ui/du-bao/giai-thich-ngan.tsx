@@ -39,7 +39,7 @@ export function GiaiThichNgan({ khoa }: { khoa: keyof typeof THUAT_NGU | (string
   return (
     <>
       <button ref={nut} type="button" onClick={bam} aria-expanded={mo} aria-controls={mo ? id : undefined} aria-label={`${tn.ten} là gì?`}
-        className="relative inline-grid size-5 place-items-center rounded-full border border-chu-phu/50 text-[12px] font-bold leading-none text-chu-phu cursor-pointer align-middle after:absolute after:-inset-3 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">?</button>
+        className="relative inline-grid size-5 place-items-center rounded-full border border-chu-phu/50 text-[13px] font-bold leading-none text-chu-phu cursor-pointer align-middle after:absolute after:-inset-3 after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">?</button>
       {mo && (
         <span ref={hop} id={id} role="dialog" aria-label={tn.ten} className="fixed z-50 block rounded-the border border-vien bg-trang p-3 text-left shadow-lg"
           style={{ left: vt.left, top: vt.top, width: Math.min(RONG, window.innerWidth - 32) }}>

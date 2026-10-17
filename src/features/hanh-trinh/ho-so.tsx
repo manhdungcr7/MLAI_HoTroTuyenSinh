@@ -12,7 +12,7 @@ import { nhanLop } from "@/state/chang";
 import { CAC_MON, TEN_MON } from "@/state/types";
 import type { AppState } from "@/state/store";
 import { dinhDang } from "@/engine/dinh-dang";
-import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
+import { THONG_TIN_LOAI } from "@/features/huong-nghiep/cau-hoi";
 import { NhanLoaiDiem, type LoaiDiem } from "@/features/khoi-dau/loai-diem";
 import { ChiSoTheoDoi } from "./chi-so-theo-doi";
 import { TEN_CHO_O, TEN_NGAN_SACH, chuDaiDien, hieuEm } from "./tinh-toan";
@@ -27,8 +27,8 @@ const KHOI: Record<Tone, { nen: string; chu: string; cham: string; so: string; p
 };
 
 /** Một khối nhận xét. Mỗi dòng bấm được, dẫn tới đúng nơi em xem/sửa. */
-function KhoiNhanXet({ tone, icon: Icon, tieuDe, nhan, dong, trong, danhSo, dich, nav }: {
-  tone: Tone; icon: LucideIcon; tieuDe: string; nhan: string; dong: string[]; trong: string; danhSo?: boolean; dich: string[]; nav: NavigateFunction;
+function KhoiNhanXet({ tone, icon: Icon, tieuDe, nhan, dong, phuDong, trong, danhSo, dich, nav }: {
+  tone: Tone; icon: LucideIcon; tieuDe: string; nhan: string; dong: string[]; phuDong?: string; trong: string; danhSo?: boolean; dich: string[]; nav: NavigateFunction;
 }) {
   const k = KHOI[tone];
   const hien = dong.slice(0, SO_DONG_TOI_DA);
@@ -46,7 +46,10 @@ function KhoiNhanXet({ tone, icon: Icon, tieuDe, nhan, dong, trong, danhSo, dich
                 {danhSo
                   ? <span className={gop("size-5 rounded-full border-[1.5px] grid place-items-center text-[13px] font-bold shrink-0", k.so)}>{i + 1}</span>
                   : <span className={gop("size-2 rounded-full shrink-0 mx-1.5", k.cham)} />}
-                <span className="min-w-0 flex-1 py-1">{d}</span>
+                <span className="min-w-0 flex-1 py-1">
+                  <span className="block line-clamp-2 break-words">{d}</span>
+                  {i === 0 && phuDong && <span className="block text-[13px] text-chu-phu line-clamp-1 break-words">{phuDong}</span>}
+                </span>
                 <ChevronRight size={16} className="text-chu-phu shrink-0" aria-hidden />
               </button>
             </li>
@@ -102,7 +105,7 @@ export default function HoSo() {
   if (!daCoDuLieu) {
     return (
       <>
-        <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} />
+        <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} bienThe="luc" />
         <NoiDung>
           <TrangThaiTrong bieuTuong={<FileText size={28} />} tieuDe="Chưa có hồ sơ" moTa="Chỉ mất khoảng 1 phút. Bạn có thể cập nhật sau.">
             <div className="space-y-2">
@@ -126,29 +129,31 @@ export default function HoSo() {
   const coMucTieuMon = CAC_MON.some((m) => diem.mucTieu[m] !== null);
   const dichUuTien = [s.mucTieu ? DUONG_DAN.mucTieu() : DUONG_DAN.khamPha(), s.mucTieu ? DUONG_DAN.monKeoDiem() : DUONG_DAN.batDau(2)];
   const xetSom = [
-    { ten: "Chứng chỉ ngoại ngữ", gt: h.chungChiNgoaiNgu?.diem ? `${h.chungChiNgoaiNgu.loai} ${h.chungChiNgoaiNgu.diem}` : "Chưa có", co: !!h.chungChiNgoaiNgu?.diem, icon: GraduationCap },
-    { ten: "Đánh giá năng lực", gt: h.diemDgnl?.hcm ? `HCM ${h.diemDgnl.hcm}/1200` : h.diemDgnl?.hn ? `HSA ${h.diemDgnl.hn}/150` : h.diemDgnl?.tsa ? `TSA ${h.diemDgnl.tsa}/100` : "Chưa thi", co: !!(h.diemDgnl?.hcm || h.diemDgnl?.hn || h.diemDgnl?.tsa), icon: BarChart3 },
-    { ten: "Học bạ THPT", gt: h.hocBa?.dtb3Nam ? `ĐTB 3 năm: ${h.hocBa.dtb3Nam}` : h.hocBa?.dtbLop12 ? `Lớp 12: ${h.hocBa.dtbLop12}` : "Chưa nhập", co: !!(h.hocBa?.dtb3Nam || h.hocBa?.dtbLop12), icon: FileText },
-    { ten: "Giải học sinh giỏi", gt: h.giaiThuongHsg?.cap ? `${h.giaiThuongHsg.giai ? `Giải ${h.giaiThuongHsg.giai}` : "Có giải"} ${h.giaiThuongHsg.mon ?? ""}`.trim() : "Chưa có", co: !!h.giaiThuongHsg?.cap, icon: Award },
+    { ten: "Ngoại ngữ", gt: h.chungChiNgoaiNgu?.diem ? `${h.chungChiNgoaiNgu.loai} ${h.chungChiNgoaiNgu.diem}` : "Chưa có", co: !!h.chungChiNgoaiNgu?.diem, icon: GraduationCap },
+    { ten: "ĐGNL", gt: h.diemDgnl?.hcm ? `HCM ${h.diemDgnl.hcm}/1200` : h.diemDgnl?.hn ? `HSA ${h.diemDgnl.hn}/150` : h.diemDgnl?.tsa ? `TSA ${h.diemDgnl.tsa}/100` : "Chưa thi", co: !!(h.diemDgnl?.hcm || h.diemDgnl?.hn || h.diemDgnl?.tsa), icon: BarChart3 },
+    { ten: "Học bạ", gt: h.hocBa?.dtb3Nam ? `ĐTB 3 năm: ${h.hocBa.dtb3Nam}` : h.hocBa?.dtbLop12 ? `Lớp 12: ${h.hocBa.dtbLop12}` : "Chưa nhập", co: !!(h.hocBa?.dtb3Nam || h.hocBa?.dtbLop12), icon: FileText },
+    { ten: "Học sinh giỏi", gt: h.giaiThuongHsg?.cap ? `${h.giaiThuongHsg.giai ? `Giải ${h.giaiThuongHsg.giai}` : "Có giải"} ${h.giaiThuongHsg.mon ?? ""}`.trim() : "Chưa có", co: !!h.giaiThuongHsg?.cap, icon: Award },
   ];
 
   return (
     <>
-      <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} />
+      <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} bienThe="luc" />
       <NoiDung>
         <HienDan className="space-y-3">
           <TheNen tong="xanh" className="space-y-3">
             <div className="flex items-center gap-3">
-              <span aria-hidden className="size-14 rounded-full gd-huy-hieu-xanh text-white grid place-items-center text-[18px] font-bold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
+              <span aria-hidden className="size-12 rounded-full gd-huy-hieu-xanh text-white grid place-items-center text-[16px] font-bold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
               <div className="min-w-0 flex-1">
-                <p className="text-[18px] font-bold text-muc leading-tight line-clamp-2">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
-                <p className="text-[13px] text-chu-phu">{thongTin}</p>
+                <p className="text-[17px] font-bold text-muc leading-tight line-clamp-1">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
+                <p className="text-[13px] text-chu-phu truncate">{thongTin}</p>
               </div>
-              <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="nay-nhe shrink-0 min-h-11 px-3 rounded-xl bg-trang text-xanh-dam text-[13px] font-bold inline-flex items-center gap-1.5">
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              {h.laMau ? <div className="min-w-0"><Nhan tone="cam" className="whitespace-normal line-clamp-2">Hồ sơ mẫu, không phải người thật</Nhan></div> : <span />}
+              <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="nay-nhe shrink-0 whitespace-nowrap min-h-11 px-2.5 rounded-xl bg-trang text-xanh-dam text-[13px] font-bold inline-flex items-center gap-1.5">
                 <Pencil size={14} aria-hidden />Chỉnh sửa
               </button>
             </div>
-            {h.laMau && <Nhan tone="cam" className="whitespace-normal">Hồ sơ mẫu, không phải người thật</Nhan>}
             <button type="button" onClick={() => nav(x.boSung[0]?.den ?? DUONG_DAN.batDau(1))} className="nay-nhe w-full text-left rounded-2xl bg-trang/80 p-3 flex items-center gap-3">
               <VongDiem value={x.dayDu} max={100} size={92} tong={tt.tong} nhanGiua="đã có" dinhDang={(n) => `${Math.round(n)}%`} aria={`Hồ sơ đã có ${x.dayDu} phần trăm`} />
               <span className="min-w-0 flex-1">
@@ -164,17 +169,19 @@ export default function HoSo() {
             </button>
           </TheNen>
 
-          <ul className="grid grid-cols-4 gap-2" aria-label="Tiến độ theo nhóm">
+          <ul className="grid grid-cols-2 gap-2" aria-label="Tiến độ theo nhóm">
             {nhom.map((n) => (
-              <li key={n.ten} className={gop("rounded-2xl p-2 min-w-0 text-center", n.nen, n.chu)}>
-                <n.icon size={20} className="mx-auto" aria-hidden />
-                <b className="block text-[16px] leading-tight mt-1">{n.co}/{n.tong}</b>
-                <span className="block text-[13px] leading-tight truncate">{n.ten}</span>
+              <li key={n.ten} className={gop("rounded-2xl p-2.5 min-w-0 flex items-center gap-2.5", n.nen, n.chu)}>
+                <n.icon size={20} className="shrink-0" aria-hidden />
+                <span className="min-w-0">
+                  <b className="block text-[16px] leading-tight">{n.co}/{n.tong}</b>
+                  <span className="block text-[13px] leading-tight break-words">{n.ten}</span>
+                </span>
               </li>
             ))}
           </ul>
 
-          <KhoiNhanXet tone="xanh" icon={Target} tieuDe="Ưu tiên hiện tại" nhan="Gợi ý" dong={x.uuTien} danhSo dich={dichUuTien} nav={nav}
+          <KhoiNhanXet tone="xanh" icon={Target} tieuDe="Ưu tiên hiện tại" nhan="Gợi ý" dong={x.uuTien} phuDong={x.truongMucTieu} danhSo dich={dichUuTien} nav={nav}
             trong="Chọn một mục tiêu để bắt đầu." />
           <KhoiNhanXet tone="luc" icon={Trophy} tieuDe="Điểm mạnh" nhan="Giữ vững" dong={x.manh} dich={[DUONG_DAN.batDau(2)]} nav={nav}
             trong="Nhập điểm các môn để thấy điểm mạnh." />
@@ -216,7 +223,7 @@ export default function HoSo() {
                     <span className={gop("size-9 rounded-xl grid place-items-center shrink-0", o.co ? "bg-luc-nhat text-luc-chu" : "bg-tim-nhat text-tim-chu")}><o.icon size={18} aria-hidden /></span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-[13px] text-chu-phu leading-tight">{o.ten}</span>
-                      <b className="block text-[14px] text-muc leading-tight break-words">{o.gt}</b>
+                      <b className="block text-[14px] text-muc leading-tight line-clamp-1">{o.gt}</b>
                     </span>
                     <Plus size={16} className="text-xanh-dam shrink-0" aria-hidden />
                   </button>
@@ -231,7 +238,7 @@ export default function HoSo() {
 
         <TieuDeMuc>Hành động nhanh</TieuDeMuc>
         <div className="grid grid-cols-2 gap-2">
-          <ONhanh icon={Compass} tone="cam" ten="Trắc nghiệm" trangThai={h.soThich ? moTaTop(h.soThich) : "Chưa làm · 2 phút"} du={!!h.soThich} onClick={() => nav(DUONG_DAN.tracNghiem())} />
+          <ONhanh icon={Compass} tone="cam" ten="Trắc nghiệm" trangThai={h.soThich?.top[0] ? `Hợp ${THONG_TIN_LOAI[h.soThich.top[0]].ten}` : h.soThich ? "Đã làm" : "Chưa làm · 2 phút"} du={!!h.soThich} onClick={() => nav(DUONG_DAN.tracNghiem())} />
           <ONhanh icon={Users} tone="tim" ten="Chia sẻ" trangThai={s.loiNhan.length ? `${s.loiNhan.length} lời nhắn` : "Phụ huynh, thầy cô"} du onClick={() => nav(DUONG_DAN.chiaSe())} />
           <ONhanh icon={Wallet} tone="cam" ten="Ngân sách" trangThai={nganSach || "Còn thiếu"} du={!!h.nganSach} onClick={() => nav(DUONG_DAN.batDau(3))} />
           <ONhanh icon={MapPin} tone="xanh" ten="Khu vực" trangThai={h.khuVuc.length ? h.khuVuc.join(", ") : "Còn thiếu"} du={h.khuVuc.length > 0} onClick={() => nav(DUONG_DAN.batDau(3))} />

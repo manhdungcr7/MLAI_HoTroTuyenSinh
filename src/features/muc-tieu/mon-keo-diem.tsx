@@ -75,9 +75,9 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
 
       <div className="rounded-the bg-trang border border-vien shadow-the p-3">
         <div className="grid grid-cols-3 divide-x divide-vien text-center">
-          <span><span className="block text-[12px] text-chu-phu">Hiện tại</span><b className="text-[20px] text-xanh">{diem1(d.hienTai)}</b></span>
-          <span><span className="block text-[12px] text-chu-phu">Mục tiêu</span><b className="text-[20px] text-muc">{diem1(d.mucTieu)}</b></span>
-          <span><span className="block text-[12px] text-chu-phu">Còn thiếu</span><b className={gop("text-[20px]", d.conThieu > 0 ? "text-do-chu" : "text-luc-chu")}>{diem1(d.conThieu)}</b></span>
+          <span><span className="block text-[13px] text-chu-phu">Hiện tại</span><b className="text-[20px] text-xanh">{diem1(d.hienTai)}</b></span>
+          <span><span className="block text-[13px] text-chu-phu">Mục tiêu</span><b className="text-[20px] text-muc">{diem1(d.mucTieu)}</b></span>
+          <span><span className="block text-[13px] text-chu-phu">Còn thiếu</span><b className={gop("text-[20px]", d.conThieu > 0 ? "text-do-chu" : "text-luc-chu")}>{diem1(d.conThieu)}</b></span>
         </div>
         <p className="text-[13px] text-chu-phu text-center mt-2 pt-2 border-t border-vien">Tổ hợp {d.goc.maToHop}: {tenToHop(d.toHop)}</p>
       </div>
@@ -98,7 +98,7 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
               </Fragment>
             ))}
           </div>
-          {bu.lech !== 0 && <p className="text-[12px] text-chu-phu mt-1.5">Tổng các môn là {diem1(bu.tong)} điểm, lệch {diem1(Math.abs(bu.lech))} do làm tròn.</p>}
+          {bu.lech !== 0 && <p className="text-[13px] text-chu-phu mt-1.5">Tổng các môn là {diem1(bu.tong)} điểm, lệch {diem1(Math.abs(bu.lech))} do làm tròn.</p>}
           <div className="mt-3 rounded-xl bg-luc-nhat p-3 flex items-start gap-2.5">
             <CircleCheck size={20} className="text-luc shrink-0 mt-0.5" />
             <span>
@@ -140,10 +140,10 @@ function TheMon({ m, moGiaiThich }: { m: MonKeoDiem; moGiaiThich: () => void }) 
       </div>
 
       <div className="mt-3 grid grid-cols-[1fr_auto_1fr_auto] items-end gap-x-2">
-        <span><span className="block text-[12px] text-chu-phu">Điểm hiện tại</span><b className="text-[20px] text-muc">{diem1(m.hienTai)}</b></span>
+        <span><span className="block text-[13px] text-chu-phu">Điểm hiện tại</span><b className="text-[20px] text-muc">{diem1(m.hienTai)}</b></span>
         <ChevronRight size={18} className="text-chu-phu mb-1.5" aria-hidden />
-        <span className="pl-1"><span className="block text-[12px] text-chu-phu">Cần đạt</span><b className="text-[20px] text-muc">{diem1(m.mucTieu)}</b></span>
-        <span className="text-right"><span className="block text-[12px] text-chu-phu">Còn thiếu</span>
+        <span className="pl-1"><span className="block text-[13px] text-chu-phu">Cần đạt</span><b className="text-[20px] text-muc">{diem1(m.mucTieu)}</b></span>
+        <span className="text-right"><span className="block text-[13px] text-chu-phu">Còn thiếu</span>
           <b className={gop("text-[20px]", m.thieu > 0 ? TONE_CHU[tone] : "text-luc-chu")}>{m.thieu > 0 ? `+${diem1(m.thieu)}` : "Đủ"}</b></span>
       </div>
 

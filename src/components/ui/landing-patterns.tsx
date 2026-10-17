@@ -70,7 +70,7 @@ export function TheNguoiDongHanh({ ten, vaiTro, moTa, trangThai = "Sẵn sàng h
           <h3 className="text-sm font-bold text-muc">{ten}</h3>
           <p className="text-xs text-muc-phu">{vaiTro}</p>
         </div>
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-luc-nhat text-luc-chu text-[11px] font-medium rounded-full border border-luc/20 whitespace-nowrap">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-luc-nhat text-luc-chu text-[11px] font-medium rounded-lg border border-luc/20 whitespace-nowrap">
           <span className="w-1.5 h-1.5 rounded-full bg-luc animate-pulse" />
           {trangThai}
         </span>
@@ -130,7 +130,7 @@ export function HangKhuyenNghi({ thuHang, truong, nganh, diem, tags = [] }: Hang
 /** Chip giá trị dạng viên thuốc (Pill Chip) */
 export function ChipGiaTri({ icon: IconComponent, nhan }: { icon: LucideIcon; nhan: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-trang rounded-full border border-vien shadow-the text-xs font-medium text-muc whitespace-nowrap">
+    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-trang rounded-lg border border-vien shadow-the text-xs font-medium text-muc whitespace-nowrap">
       <IconComponent size={14} className="text-xanh shrink-0" />
       {nhan}
     </span>

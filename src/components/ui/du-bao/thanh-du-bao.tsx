@@ -22,7 +22,7 @@ export function ThanhDuBao({ d, diem, xemThu, mau = MAU_CHUA_CO_DIEM }: { d: DuB
     <div>
       <div role="img" aria-label={mo} className="relative h-[4.25rem]">
         {diem !== null && (
-          <span className="absolute top-0 -translate-x-1/2 rounded-full bg-muc px-2.5 py-1 text-[13px] font-bold leading-none text-trang whitespace-nowrap tabular-nums shadow-md transition-[left] duration-200 motion-reduce:transition-none" style={{ left: `${viTriChu}%` }}>
+          <span className="absolute top-0 -translate-x-1/2 rounded-lg bg-muc px-2.5 py-1 text-[13px] font-bold leading-none text-trang whitespace-nowrap tabular-nums shadow-md transition-[left] duration-200 motion-reduce:transition-none" style={{ left: `${viTriChu}%` }}>
             {xemThu ? "Thử" : "Bạn"} {dinhDangDiem(diem)}
           </span>
         )}
