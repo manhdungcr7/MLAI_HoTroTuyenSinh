@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RotateCcw, Send, Sparkles } from "lucide-react";
+import { RotateCcw, Send, Sparkles, X } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { taiNguon, type NguonTaiSau } from "@/data/lua-chon-that";
@@ -91,6 +91,7 @@ export default function TuVan() {
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     cuonSau.current = true;
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
+    if (thay === undefined) setCauHoi(""); // gửi xong là xóa ô nhập ngay, bạn gõ tiếp được trong lúc chờ trả lời
 
     const onChunk = (chuoiStream: string) => {
       setTin((cu) => {
@@ -239,6 +240,7 @@ export default function TuVan() {
 
           <label htmlFor="tu-van-cau-hoi" className="sr-only">Câu hỏi của bạn</label>
           <div className="flex items-center gap-2">
+            <div className="relative min-w-0 flex-1">
             <input
               id="tu-van-cau-hoi"
               type="text"
@@ -250,11 +252,15 @@ export default function TuVan() {
                   gui(cauHoi);
                 }
               }}
-              readOnly={dang}
               maxLength={1000}
               placeholder={tin.length ? "Hỏi tiếp (ví dụ: Còn ngành kia thì sao?)" : "Ví dụ: Điểm chuẩn các năm của Khoa học máy tính?"}
-              className="h-11 min-w-0 flex-1 rounded-xl border border-vien bg-trang px-3.5 text-[14.5px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none transition-colors"
+              className="h-11 w-full min-w-0 rounded-xl border border-vien bg-trang pl-3.5 pr-10 text-[14.5px] text-chu placeholder:text-chu-phu focus:border-xanh outline-none transition-colors"
             />
+            {cauHoi && (
+              <button type="button" aria-label="Xóa câu đang gõ" onClick={() => { setCauHoi(""); document.getElementById("tu-van-cau-hoi")?.focus(); }}
+                className="absolute right-0 top-0 grid size-11 place-items-center rounded-xl text-chu-phu active:bg-xanh-nhat cursor-pointer"><X size={16} /></button>
+            )}
+            </div>
             <Nut
               rong={false}
               bieuTuong={Send}
