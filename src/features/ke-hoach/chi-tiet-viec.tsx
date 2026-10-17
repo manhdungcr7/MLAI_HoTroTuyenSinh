@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  BookMarked, CalendarClock, CalendarDays, Check, CheckCircle2, Clock, ExternalLink, Lightbulb, ListChecks, ListOrdered, Pencil, RotateCcw, SearchX, SkipForward, Target,
+  BookMarked, CalendarClock, CalendarDays, Check, CheckCircle2, Clock, ExternalLink, Lightbulb, ListChecks, ListOrdered, Pencil, RotateCcw, Trash2, SearchX, SkipForward, Target,
 } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -47,13 +47,14 @@ function TieuDeKhoi({ icon: Icon, children, phai }: { icon: typeof Target; child
 }
 
 function NoiDungViec({ v }: { v: ViecCanHoc }) {
-  const { s, datTrangThaiViec, ghimKhoi, datViec } = useApp();
+  const { s, datTrangThaiViec, ghimKhoi, datViec, xoaViec } = useApp();
   const nav = useNavigate();
   const doiKhoi = useDoiKhoi();
   const hom = homNay();
   const [daTich, setDaTich] = useLuuCucBo<Record<string, number[]>>("ke-hoach-tieu-chi", {});
   const [moDoi, setMoDoi] = useState(false);
   const [moBoQua, setMoBoQua] = useState(false);
+  const [moXoa, setMoXoa] = useState(false);
   const [moSua, setMoSua] = useState(false);
   const [tieuDeSua, setTieuDeSua] = useState(v.tieuDe);
   const [phutSua, setPhutSua] = useState(v.phut);
@@ -186,6 +187,16 @@ function NoiDungViec({ v }: { v: ViecCanHoc }) {
           </div>
         </div>
       )}
+
+      <Nut kieu="nhe" bieuTuong={Trash2} onClick={() => setMoXoa(true)}>Xóa việc này</Nut>
+
+      <HopTruot mo={moXoa} dong={() => setMoXoa(false)} tieuDe="Xóa việc này?">
+        <p className="text-[14px] text-chu mb-4"><b>{v.tieuDe}</b> sẽ bị xóa hẳn khỏi kế hoạch, kèm các khung giờ đã xếp cho việc này. Không hoàn tác được. Nếu chỉ muốn tạm gác, hãy chọn Bỏ qua.</p>
+        <div className="grid grid-cols-2 gap-2">
+          <Nut kieu="vien" onClick={() => setMoXoa(false)}>Giữ lại</Nut>
+          <Nut kieu="nguyHiem" bieuTuong={Trash2} onClick={() => { xoaViec(v.id); veTuan("Đã xóa việc"); }}>Xóa việc</Nut>
+        </div>
+      </HopTruot>
 
       <HopTruot mo={moDoi} dong={() => setMoDoi(false)} tieuDe="Dời sang giờ khác">
         <p className="text-[14px] text-chu-phu mb-3">Các khung trống gần nhất đủ {thoiLuong(phutDoi)}, không trùng lớp học và giờ ăn nghỉ.</p>

@@ -137,6 +137,10 @@ interface Ctx {
   ghimKhoi: (k: Omit<KhoiHoc, "id" | "khoa">) => void;
   themKhoi: (k: Omit<KhoiHoc, "id">) => void;
   xoaKhoi: (id: string) => void;
+  /** Xóa hẳn một việc cùng các khối giờ đã xếp, trạng thái và vết lịch sử của nó. */
+  xoaViec: (id: string) => void;
+  /** Xóa mọi việc (và khối giờ gắn việc) của một tuần; việc cũ không gắn tuần thì không đụng tới. */
+  xoaViecTuan: (tuan: string) => number;
   themTiet: (t: Omit<TietCoDinh, "id">) => void;
   xoaTiet: (id: string) => void;
   datCoDinh: (t: TietCoDinh[]) => void;
@@ -152,6 +156,18 @@ interface Ctx {
 }
 
 const AppCtx = createContext<Ctx | null>(null);
+
+function xoaCacViec(x: AppState, ids: Set<string>): AppState {
+  const tt = { ...x.trangThaiViec };
+  ids.forEach((id) => { delete tt[id]; });
+  return {
+    ...x,
+    viec: x.viec.filter((v) => !ids.has(v.id)),
+    khoiHoc: x.khoiHoc.filter((k) => !(k.viecId && ids.has(k.viecId))),
+    trangThaiViec: tt,
+    lichSu: x.lichSu.filter((l) => !ids.has(l.viecId)),
+  };
+}
 let dem = 0;
 const idMoi = (t: string) => `${t}-${Date.now().toString(36)}-${dem++}`;
 
@@ -230,6 +246,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })),
     themKhoi: (k) => cap((x) => ({ ...x, khoiHoc: [...x.khoiHoc, { ...k, id: idMoi("tay") }] })),
     xoaKhoi: (id) => cap((x) => ({ ...x, khoiHoc: x.khoiHoc.filter((b) => b.id !== id) })),
+    xoaViec: (id) => cap((x) => xoaCacViec(x, new Set([id]))),
+    xoaViecTuan: (tuan) => {
+      const ids = new Set(sRef.current.viec.filter((v) => v.tuan === tuan).map((v) => v.id));
+      if (ids.size) dat(xoaCacViec(sRef.current, ids));
+      return ids.size;
+    },
     themTiet: (t) => cap((x) => ({ ...x, coDinh: [...x.coDinh, { ...t, id: idMoi("tiet") }] })),
     xoaTiet: (id) => cap((x) => ({ ...x, coDinh: x.coDinh.filter((t) => t.id !== id) })),
     datCoDinh: (t) => cap((x) => ({ ...x, coDinh: t })),

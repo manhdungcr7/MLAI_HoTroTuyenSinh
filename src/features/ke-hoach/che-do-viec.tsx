@@ -1,7 +1,7 @@
 // Chế độ "Việc cần làm": mục tiêu hôm nay, tiến độ trong ngày, việc chia theo Nên làm trước / Tiếp theo / Trong tuần.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, CalendarDays, CalendarPlus, CheckCircle2, ChevronRight, Clock, Flame, Lightbulb, ListChecks, ListPlus, Sparkles, Target, type LucideIcon } from "lucide-react";
+import { BarChart3, CalendarDays, CalendarPlus, CheckCircle2, ChevronRight, Clock, Flame, Lightbulb, ListChecks, ListPlus, Sparkles, Target, Trash2, type LucideIcon } from "lucide-react";
 import { HopTruot, ThanhTienDo, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -27,7 +27,7 @@ const DANG_NHOM: Record<IdNhom, { icon: LucideIcon; tone: ToneTen }> = {
 };
 
 export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: string[]; ngayChon: string; quaKhu: boolean; hienThongBao: (c: string) => void }) {
-  const { s, xepLai } = useApp();
+  const { s, xepLai, xoaViecTuan } = useApp();
   const nav = useNavigate();
   const hom = homNay();
   const tuan = ngays[0];
@@ -36,6 +36,7 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
   /** Tạo việc cho tuần đang xem từ mục tiêu và điểm hiện tại, rồi xếp ngay vào các khung giờ trống (chỉ từ hôm nay trở đi). */
   const [hoiLich, setHoiLich] = useState(false); // hộp xác nhận khi chưa có lịch học trên lớp
   const [moNhanh, setMoNhanh] = useState(false);
+  const [hoiXoaTuan, setHoiXoaTuan] = useState(false);
   const taoVaXep = (daXacNhan = false, nhe = !s.mucTieu) => {
     if (s.coDinh.length === 0 && !daXacNhan) { setHoiLich(true); return; }
     setHoiLich(false);
@@ -136,6 +137,16 @@ export function CheDoViec({ ngays, ngayChon, quaKhu, hienThongBao }: { ngays: st
           <Nut kieu="vien" bieuTuong={ListPlus} onClick={() => taoVaXep()}>Cập nhật việc theo điểm mới</Nut>
         </div>
       )}
+      {!quaKhu && viecTuan.length > 0 && (
+        <Nut kieu="nhe" bieuTuong={Trash2} onClick={() => setHoiXoaTuan(true)}>Xóa tất cả việc tuần này</Nut>
+      )}
+      <HopTruot mo={hoiXoaTuan} dong={() => setHoiXoaTuan(false)} tieuDe="Xóa tất cả việc tuần này?">
+        <p className="text-[14px] text-chu mb-4">{viecTuan.length} việc của tuần này sẽ bị xóa hẳn cùng các khung giờ đã xếp. Lịch học cố định và khối bạn tự thêm không gắn việc vẫn giữ. Không hoàn tác được.</p>
+        <div className="grid grid-cols-2 gap-2">
+          <Nut kieu="vien" onClick={() => setHoiXoaTuan(false)}>Giữ lại</Nut>
+          <Nut kieu="nguyHiem" bieuTuong={Trash2} onClick={() => { const n = xoaViecTuan(tuan); setHoiXoaTuan(false); hienThongBao(`Đã xóa ${n} việc`); }}>Xóa hết</Nut>
+        </div>
+      </HopTruot>
       {hopCanLich}
     </>
   );
