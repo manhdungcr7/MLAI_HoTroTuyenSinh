@@ -11,14 +11,14 @@ export function BieuDoLichSu({ diem, d, diemEm, mau = MAU_CHUA_CO_DIEM }: { diem
   if (diem.length === 0) return null;
   const nam0 = Math.min(diem[0][0], d?.namCuoi ?? diem[0][0]);
   const nam1 = d ? d.namDuBao : diem[diem.length - 1][0];
-  const cacGiaTri = [...diem.map(([, v]) => v), ...(d ? [d.thap, d.cao] : []), ...(diemEm != null ? [diemEm] : [])];
+  const cacGiaTri = [...diem.map(([, v]) => v), ...(d ? [d.kyVong] : []), ...(diemEm != null ? [diemEm] : [])];
   const tu = Math.max(10, Math.floor(Math.min(...cacGiaTri) - 1)), den = Math.min(30, Math.ceil(Math.max(...cacGiaTri) + 1));
   const x = (n: number) => LE_TRAI + (nam1 === nam0 ? (R - LE_TRAI - LE_PHAI) / 2 : ((n - nam0) / (nam1 - nam0)) * (R - LE_TRAI - LE_PHAI));
   const y = (v: number) => TREN + (1 - (v - tu) / (den - tu)) * (C - TREN - DUOI);
   const duong = diem.map(([n, v], i) => `${i ? "L" : "M"}${x(n).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
   const [nc, dc] = diem[diem.length - 1];
   const nhanNam = [...new Set([...diem.map(([n]) => n), ...(d ? [d.namDuBao] : [])])];
-  const moTa = `Điểm chuẩn các năm: ${diem.map(([n, v]) => `${n}: ${dinhDangDiem(v)}`).join(", ")}${d ? `. Dự báo ${d.namDuBao}: từ ${dinhDangDiem(d.thap)} đến ${dinhDangDiem(d.cao)}, trung tâm ${dinhDangDiem(d.kyVong)}` : ""}.`;
+  const moTa = `Điểm chuẩn các năm: ${diem.map(([n, v]) => `${n}: ${dinhDangDiem(v)}`).join(", ")}${d ? `. Dự báo ${d.namDuBao}: ${dinhDangDiem(d.kyVong)} điểm` : ""}.`;
   return (
     <figure className="m-0">
       <svg viewBox={`0 0 ${R} ${C}`} className="block w-full h-auto" role="img" aria-labelledby={`${id}-t`}>
@@ -29,13 +29,13 @@ export function BieuDoLichSu({ diem, d, diemEm, mau = MAU_CHUA_CO_DIEM }: { diem
             <text x={LE_TRAI - 5} y={y(g) + 4} textAnchor="end" fontSize={13} className="fill-chu-phu">{g}</text>
           </g>
         ))}
-        {d && <polygon points={`${x(d.namCuoi)},${y(dc)} ${x(d.namDuBao)},${y(d.cao)} ${x(d.namDuBao)},${y(d.thap)}`} className={mau.svgFill} />}
         {diemEm != null && <line x1={LE_TRAI} x2={R - LE_PHAI} y1={y(diemEm)} y2={y(diemEm)} className={mau.svgStroke} strokeWidth={2} strokeDasharray="2 3" />}
         {d && <line x1={x(nc)} y1={y(dc)} x2={x(d.namDuBao)} y2={y(d.kyVong)} className="stroke-xanh" strokeWidth={2} strokeDasharray="5 4" />}
         {diem.length > 1 && <path d={duong} fill="none" className="stroke-xanh" strokeWidth={2.5} strokeLinejoin="round" />}
         {diem.map(([n, v]) => <circle key={n} cx={x(n)} cy={y(v)} r={6} className="fill-xanh stroke-trang" strokeWidth={2.5} />)}
         {diem.map(([n, v]) => <text key={`v${n}`} x={x(n)} y={y(v) - 11} textAnchor={n === nam0 && nam0 !== nam1 ? "start" : n === nam1 && nam0 !== nam1 ? "end" : "middle"} fontSize={13} className="fill-muc font-bold">{dinhDangDiem(v)}</text>)}
         {d && <circle cx={x(d.namDuBao)} cy={y(d.kyVong)} r={6} className={`fill-trang ${mau.svgStroke}`} strokeWidth={3} />}
+        {d && <text x={x(d.namDuBao)} y={y(d.kyVong) - 11} textAnchor="middle" fontSize={13} className="fill-xanh font-bold">{dinhDangDiem(d.kyVong)}</text>}
         {nhanNam.map((n) => (
           <text key={n} x={x(n)} y={C - 7} textAnchor={n === nam1 && nhanNam.length > 1 ? "end" : n === nam0 && nhanNam.length > 1 ? "start" : "middle"} fontSize={13} className={n === d?.namDuBao ? "fill-xanh font-bold" : "fill-chu-phu"}>{n}</text>
         ))}
@@ -50,7 +50,7 @@ export function BieuDoLichSu({ diem, d, diemEm, mau = MAU_CHUA_CO_DIEM }: { diem
         <thead><tr><th>Năm</th><th>Điểm</th></tr></thead>
         <tbody>
           {diem.map(([n, v]) => <tr key={n}><td>{n}</td><td>{dinhDangDiem(v)}</td></tr>)}
-          {d && <tr><td>{d.namDuBao} (dự báo)</td><td>{dinhDangDiem(d.thap)} đến {dinhDangDiem(d.cao)}</td></tr>}
+          {d && <tr><td>{d.namDuBao} (dự báo)</td><td>{dinhDangDiem(d.kyVong)}</td></tr>}
         </tbody>
       </table>
     </figure>
