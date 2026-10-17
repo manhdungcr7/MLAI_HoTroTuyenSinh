@@ -1,6 +1,7 @@
 // Điểm chuẩn dự đoán của mô hình học máy (LightGBM hồi quy phân vị), tính sẵn cho từng chương trình bằng ml/huan-luyen-2027.py.
 // Dữ liệu là tệp tĩnh (mỗi chương trình: cận thấp, mức giữa, cận cao, năm điểm làm cơ sở), nạp một lần khi cần, không chạy mô hình trong trình duyệt.
 import fingerprint from "./du-lieu-fingerprint.json";
+import hieuChinh from "./hieu-chinh-diem.json";
 
 export interface DuBaoML { thap: number; giua: number; cao: number; namCoSo: number }
 export interface MetaDuBaoML {
@@ -28,6 +29,8 @@ export function napDuBaoML(): Promise<Kho | null> {
 
 /** Dự báo của một chương trình nếu tệp đã nạp xong và có chương trình đó (chỉ chương trình xét điểm thi THPT có điểm từ 2024). */
 export function duBaoMLCua(id: string): DuBaoML | null {
+  // Chương trình đã bị sửa điểm (src/data/hieu-chinh-diem.json) thì dự báo ML học trên điểm cũ sai: không dùng, để app rơi về khoảng thống kê.
+  if (id in hieuChinh) return null;
   const v = kho?.ds[id];
   return v ? { thap: v[0], giua: v[1], cao: v[2], namCoSo: v[3] } : null;
 }

@@ -16,7 +16,8 @@ type TapDuBao = {
 
 const raw = JSON.parse(readFileSync("src/data/du-bao-2027.json", "utf8")) as TapDuBao;
 const fingerprint = JSON.parse(readFileSync("src/data/du-lieu-fingerprint.json", "utf8")) as { sha256: string };
-const hashThuc = createHash("sha256").update(readFileSync("src/data/du-lieu-that.json")).digest("hex");
+// Băm theo nội dung LF: trên Windows (autocrlf) tệp có thể có đuôi dòng CRLF, nhưng dấu vân tay tính trên bản LF của Git.
+const hashThuc = createHash("sha256").update(Buffer.from(readFileSync("src/data/du-lieu-that.json", "utf8").split(String.fromCharCode(13, 10)).join(String.fromCharCode(10)), "utf8")).digest("hex");
 assert.equal(fingerprint.sha256, hashThuc, "fingerprint phải khớp danh mục điểm hiện hành");
 assert.equal(raw.meta.namDuBao, 2027);
 assert.ok(Object.keys(raw.ds).length > 2000, "tệp dự báo cũ vẫn đọc được để đối chiếu");
@@ -29,6 +30,10 @@ for (const [id, [thap, giua, cao, nam]] of Object.entries(raw.ds)) {
 const khopDuLieu = raw.meta.catalogSha256 === fingerprint.sha256;
 const kho = await napDuBaoML();
 assert.equal(kho !== null, khopDuLieu, "chỉ nạp dự báo được huấn luyện trên đúng dữ liệu hiện hành");
+if (khopDuLieu) {
+  const hc = JSON.parse(readFileSync("src/data/hieu-chinh-diem.json", "utf8")) as Record<string, unknown>;
+  for (const id of Object.keys(hc)) assert.equal(duBaoMLCua(id), null, `chương trình đã sửa điểm không dùng dự báo ML cũ: ${id}`);
+}
 if (!khopDuLieu) {
   assert.equal(metaDuBaoML(), null, "không công bố độ phủ của mô hình cũ");
   assert.equal(duBaoMLCua(Object.keys(raw.ds)[0]), null, "không cấp dự báo sai lệch cho màn hình");

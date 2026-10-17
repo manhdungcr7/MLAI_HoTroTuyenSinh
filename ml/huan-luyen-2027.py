@@ -179,7 +179,9 @@ def main() -> None:
 
     meta = {
         "namDuBao": NAM_DU_BAO, "moHinh": "LightGBM hồi quy phân vị (p10, p50, p90), trung bình 5 hạt giống",
-        "catalogSha256": hashlib.sha256((ROOT / "src" / "data" / "du-lieu-that.json").read_bytes()).hexdigest(),
+        "catalogSha256": hashlib.sha256((ROOT / "src" / "data" / "du-lieu-that.json").read_bytes().replace(b"
+", b"
+")).hexdigest(),
         "mucTinCay": 0.8, "heSoHieuChinh": round(lam, 3), "tranBienDong": [round(tran_all[0], 2), round(tran_all[1], 2)], "taoLuc": ket_qua["tao_luc"][:10],
         "kiemDinh": {"phuGop": round(khoang["gop"]["phu"], 3), "phuNgoaiMau": round(khoang["ngoai_mau_lam_2024_ap_2025"]["phu"], 3), "winkler": round(khoang["gop"]["winkler"], 2),
                      "winklerHeuristicCu": round(doi_chieu["heuristic_cu"]["winkler"], 2)},
