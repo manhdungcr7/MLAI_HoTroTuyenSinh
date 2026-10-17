@@ -123,7 +123,7 @@ function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiD
   return (
     <div className={gop("relative overflow-hidden rounded-2xl border flex items-stretch", m ? `${m.nenNhe} ${m.vien}` : "bg-trang border-vien", vuaDoi && "vao-len")}>
       {m && <span aria-hidden className={gop("absolute inset-y-0 left-0 w-1.5", m.dam)} />}
-      <div className={gop("min-w-0 flex-1 py-3 pr-2", chiDoc ? "pl-4" : "pl-3")}>
+      <div className={gop("min-w-0 flex-1 pt-2 pb-2.5 pr-2", chiDoc ? "pl-4" : "pl-3")}>
         <div className="flex items-center gap-2 min-w-0">
           <span className="so-lon text-[15px] font-bold text-muc shrink-0">{d.viTri + 1}</span>
           <span className="min-w-0">
@@ -134,14 +134,14 @@ function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiD
           <span className="ml-auto text-[13px] font-semibold text-chu-phu shrink-0">Nguyện vọng {d.viTri + 1}</span>
           {!chiDoc && (
             <button type="button" onClick={onXoa} aria-label="Xóa nguyện vọng" title="Xóa nguyện vọng"
-              className="-my-1 -mr-1 size-11 shrink-0 rounded-xl grid place-items-center text-do-chu active:bg-do-nhat cursor-pointer">
-              <Trash2 size={18} aria-hidden />
+              className="size-8 shrink-0 rounded-lg grid place-items-center text-do-chu active:bg-do-nhat cursor-pointer">
+              <Trash2 size={16} aria-hidden />
             </button>
           )}
         </div>
         {lc && model ? (
           <button type="button" onClick={onMo} aria-label={`Mở chi tiết ${model.majorNameDisplay} tại ${model.universityNameDisplay}`}
-            className="mt-1.5 w-full min-w-0 text-left flex items-start gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer">
+            className="mt-1 w-full min-w-0 text-left flex items-start gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer">
             <HuyHieuTruong ten={kyHieu(model.universityCode || lc.truong)} tone={lc.tone} kichThuoc={36} />
             <span className="min-w-0 flex-1">
               <b className="text-[16px] leading-snug text-muc line-clamp-2 break-words">{model.majorNameDisplay}</b>
@@ -266,7 +266,7 @@ export default function DanhSachNguyenVong() {
                   <p className="text-[13px] text-chu-phu">Đã có {soNhomCo}/4 nhóm</p>
                   <div className="mt-1"><PillTrangThai tong={TONG_KET_LUAN[kl.tone]}>{kl.onDinh ? "Cơ cấu đủ nhóm" : coCau.chuaDuCanCu > 0 ? "Chưa đủ căn cứ" : "Cần bổ sung"}</PillTrangThai></div>
                   <p className="mt-1.5 text-[14px] text-chu leading-snug">{kl.hienTrang}</p>
-                  <button type="button" onClick={() => nav(DUONG_DAN.nguyenVongAnToan())} className="mt-1 min-h-11 inline-flex items-center gap-1 text-[14px] font-semibold text-xanh cursor-pointer">
+                  <button type="button" onClick={() => nav(DUONG_DAN.nguyenVongAnToan())} className="mt-1 h-8 inline-flex items-center gap-1 text-[14px] font-semibold text-xanh cursor-pointer">
                     Xem phân tích chi tiết<ChevronRight size={16} aria-hidden />
                   </button>
                 </div>
@@ -322,7 +322,7 @@ export default function DanhSachNguyenVong() {
 
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
-            <div className="mr-6 sm:mr-8">
+            <div className="ml-3.5 sm:ml-4">
               {loc === "tat-ca" ? (
                 <HangKeoTha muc={ds} khoa={(d) => d.id} onDoiCho={chuyen} ten={tenNgan} veMuc={(d, _i, dk) => veThe(d, dk)} />
               ) : (

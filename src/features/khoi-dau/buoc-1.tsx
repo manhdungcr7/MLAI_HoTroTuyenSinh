@@ -175,15 +175,13 @@ export default function Buoc1({ h, sua, loi }: P) {
             {danhSachHien.map((item, i) => {
               const daChon = h.nganhQuanTam.includes(item.gia);
               const ten = TEN_HIEN_THI_NGANH[item.gia] || item.nhan.split("/")[0].trim();
-              const cacPhan = item.nhan.split(" / ");
-              const mo = cacPhan.length > 1 ? cacPhan.slice(1, 3).join(", ") : "";
               const kieu = ICON_NGANH[item.gia] ?? { icon: Layers, tone: "xanh" as ToneTen };
               const Icon = kieu.icon;
               return (
                 <li key={item.gia} className="hien-dan da-hien min-w-0" style={{ "--i": Math.min(i, 8) } as CSSProperties}>
                   <button type="button" onClick={() => toggleNganh(item.gia)} aria-pressed={daChon}
                     className={gop(
-                      "nay-nhe relative w-full h-full min-h-[108px] flex flex-col items-start gap-1.5 p-2.5 rounded-the border text-left transition-colors cursor-pointer",
+                      "nay-nhe relative w-full h-full min-h-[82px] flex flex-col items-start gap-1.5 p-2.5 rounded-the border text-left transition-colors cursor-pointer",
                       daChon ? "bg-xanh-nhat border-xanh border-[1.5px] shadow-the" : "bg-trang border-vien hover:border-xanh/40",
                     )}>
                     <span className="w-full flex items-start justify-between">
@@ -193,7 +191,6 @@ export default function Buoc1({ h, sua, loi }: P) {
                         : <span className="size-5 rounded-full border-[1.5px] border-vien shrink-0" />}
                     </span>
                     <span className={gop("text-[14px] leading-snug line-clamp-2", daChon ? "font-extrabold text-xanh" : "font-bold text-chu")}>{ten}</span>
-                    {mo && <span className="text-[13px] leading-snug text-chu-phu line-clamp-2">{mo}</span>}
                   </button>
                 </li>
               );
