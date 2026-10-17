@@ -2,7 +2,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { History, Settings, Sparkles, WandSparkles } from "lucide-react";
-import { DauTrangChinh, NoiDung, ThanhPhuKeHoach } from "@/components/layout/khung";
+import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
+import { ThanhTabKeHoach } from "@/features/ke-hoach/thanh-tab";
 import { DaiNgay, TieuDeTuan } from "@/components/ui/dai-ngay";
 import { ThanhChuyen } from "@/components/ui/nhap-lieu";
 import { DongThongBao } from "@/components/ui/thong-bao";
@@ -117,7 +118,7 @@ export default function KeHoachTuan() {
           <Settings size={20} />
         </button>
       } />
-      <ThanhPhuKeHoach />
+      <ThanhTabKeHoach />
       <NoiDung>
         <TieuDeTuan thuHai={tuan} onDoi={doiTuan} />
         <DaiNgay cacNgay={ngays} chon={ngayChon} onChon={setNgay} soViec={soTuHocTheoNgay} />
@@ -131,7 +132,7 @@ export default function KeHoachTuan() {
               <DongThongBao tone="muc" icon={History} tieuDe="Tuần đã qua" moTa="Bạn có thể xem lại lịch và việc của tuần này." />
             ) : nenGoiYXep ? (
               <DongThongBao tone="xanh" icon={Sparkles} tieuDe="Tuần này chưa có giờ tự học"
-                moTa={`Hệ thống sẽ phân bổ ${conViec} việc vào các khung trống quanh lịch học của bạn.`} hanhDong="Tự động xếp lịch" onClick={xep} />
+                moTa={`Mình sẽ xếp ${conViec} việc vào các khung trống quanh lịch học của bạn.`} hanhDong="Tự động xếp lịch" onClick={xep} />
             ) : conViec > 0 ? (
               <div className="space-y-2">
                 <Nut kieu="vien" bieuTuong={WandSparkles} onClick={xep}>Tự động xếp lịch</Nut>

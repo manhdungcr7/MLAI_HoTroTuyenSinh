@@ -17,7 +17,9 @@ import { useApp } from "@/state/store";
 import { changCuaEm } from "@/state/chang";
 import type { LuaChon } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, boiCanhTu, coDiemDeSo, soSanhHai, type BenTotHon, type KetQuaPhuHop } from "./phu-hop";
-import { GhiChuDuLieuMau, HopChonLuaChon, NhanPhuHop, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
+import { phanLoaiDuLieu } from "@/engine/trang-thai-du-lieu";
+import { dinhDangDiem } from "@/engine/dinh-dang";
+import { GhiChuDuLieuMau, HopChonLuaChon, NhanPhuHop, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { dinhDang } from "@/engine/dinh-dang";
 
 type Khe = 0 | 1;
@@ -72,6 +74,13 @@ function Hang({ icon: Icon, nhan, phu, tot, a, b }: { icon: LucideIcon; nhan: st
 
 const ChacChan = ({ kq }: { kq: KetQuaPhuHop }) =>
   kq.chacChan ? <b className={TONE_CHU[TONE_CHAC_CHAN[kq.chacChan]]}>{CHU_SO_VOI_DIEM_CHUAN[kq.chacChan]}</b> : <span className="text-[13px] text-chu-phu">{kq.lyDoKhongSo ? "Khác phương thức" : "Cần nhập điểm"}</span>;
+
+/** Ô điểm chuẩn trong bảng so sánh: điểm sàn hoặc điểm phương thức khác không được gọi là điểm chuẩn. */
+function DiemChuanO({ lc, khacNam }: { lc: LuaChon; khacNam: boolean }) {
+  const tt = phanLoaiDuLieu(lc);
+  if (tt.diemCuoi === null) return <span className="text-[13px] text-chu-phu">{tt.loai === "chiDiemSan" ? "Chỉ có điểm sàn" : tt.loai === "phuongThucKhac" ? "Phương thức khác" : "Chưa có"}</span>;
+  return <><b className="text-[15px] text-muc">{dinhDangDiem(tt.diemCuoi)}</b><span className="text-[13px] text-chu-phu">điểm{khacNam && ` (${tt.namCuoi})`}</span></>;
+}
 
 export default function SoSanh() {
   const nav = useNavigate();
@@ -133,8 +142,8 @@ export default function SoSanh() {
           <>
             <section className="rounded-the bg-trang border border-vien shadow-the px-3 py-2" role="table" aria-label="Bảng so sánh">
               <Hang icon={BarChart3} nhan="Điểm đầu vào" phu={a!.namDiem === b!.namDiem ? `tham khảo ${a!.namDiem}` : "tham khảo"} tot={ss.tot.diem}
-                a={<><b className="text-[15px] text-muc">{khoangDiem(a!)}</b><span className="text-[12px] text-chu-phu">điểm{a!.namDiem !== b!.namDiem && ` (${a!.namDiem})`}</span></>}
-                b={<><b className="text-[15px] text-muc">{khoangDiem(b!)}</b><span className="text-[12px] text-chu-phu">điểm{a!.namDiem !== b!.namDiem && ` (${b!.namDiem})`}</span></>} />
+                a={<><DiemChuanO lc={a!} khacNam={a!.namDiem !== b!.namDiem} /></>}
+                b={<><DiemChuanO lc={b!} khacNam={a!.namDiem !== b!.namDiem} /></>} />
               {(coHocPhi(a!) || coHocPhi(b!)) && (
                 <Hang icon={Wallet} nhan="Học phí / năm" phu="dự kiến" tot={ss.tot.hocPhi}
                 a={coHocPhi(a!) ? <><b className="text-[15px] text-muc">{khoangHocPhi(a!)}</b><span className="text-[12px] text-chu-phu">triệu đồng</span></> : <span className="text-[13px] text-chu-phu">Chưa có dữ liệu</span>}

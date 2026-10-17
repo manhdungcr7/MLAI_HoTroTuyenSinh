@@ -1,57 +1,91 @@
+import type { NavigateFunction } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, ChevronRight, FileText, MapPin, Compass, Settings, Sparkles, Users, Target, Trophy, Wallet, type LucideIcon } from "lucide-react";
+import { AlertTriangle, Award, BarChart3, ChevronRight, FileText, GraduationCap, MapPin, Compass, Pencil, Plus, Settings, Sparkles, Users, Target, Trophy, Wallet, BookOpen, Languages, Medal, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
-import { NenHero } from "@/components/ui/hinh-nen";
-import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
-import { ThanhTienDo, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
+import { Nhan, Nut, gop } from "@/components/ui/nut-the";
+import { TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
+import { HienDan, TheNen, VongDiem } from "@/components/ui/thiet-ke";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { diemTheoLoai } from "@/state/diem-hien-tai";
 import { nhanLop } from "@/state/chang";
-import type { ToneTen } from "@/state/types";
+import { CAC_MON, TEN_MON } from "@/state/types";
+import type { AppState } from "@/state/store";
+import { dinhDang } from "@/engine/dinh-dang";
 import { moTaTop } from "@/features/huong-nghiep/cau-hoi";
+import { NhanLoaiDiem, type LoaiDiem } from "@/features/khoi-dau/loai-diem";
 import { ChiSoTheoDoi } from "./chi-so-theo-doi";
 import { TEN_CHO_O, TEN_NGAN_SACH, chuDaiDien, hieuEm } from "./tinh-toan";
 
-/** Mỗi khối nhận xét chỉ hiện 2 ý đầu (ý quan trọng đã xếp lên trước); bấm khối để xem chi tiết ở màn liên quan. */
+/** Mỗi khối nhận xét chỉ hiện 2 ý đầu (ý quan trọng đã xếp lên trước). */
 const SO_DONG_TOI_DA = 2;
-const CHAM: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", do: "bg-do", tim: "bg-tim", muc: "bg-muc" };
-const SO: Record<ToneTen, string> = { xanh: "border-xanh text-xanh", luc: "border-luc text-luc-chu", cam: "border-cam text-cam-chu", do: "border-do text-do-chu", tim: "border-tim text-tim-chu", muc: "border-muc text-muc" };
+type Tone = "xanh" | "luc" | "cam";
+const KHOI: Record<Tone, { nen: string; chu: string; cham: string; so: string; pill: string }> = {
+  xanh: { nen: "the-nen-nhe-xanh", chu: "text-xanh-dam", cham: "bg-xanh", so: "border-xanh text-xanh-dam", pill: "bg-trang text-xanh-dam" },
+  luc: { nen: "the-nen-nhe-luc", chu: "text-luc-chu", cham: "bg-luc", so: "border-luc text-luc-chu", pill: "bg-trang text-luc-chu" },
+  cam: { nen: "the-nen-nhe-cam", chu: "text-cam-chu", cham: "bg-cam", so: "border-cam text-cam-chu", pill: "bg-trang text-cam-chu" },
+};
 
-/** Một khối nhận xét, cả khối bấm được để tới nơi em sửa/xem thêm. */
-function KhoiNhanXet({ tone, icon: Icon, tieuDe, dong, trong, danhSo, onClick }: {
-  tone: ToneTen; icon: LucideIcon; tieuDe: string; dong: string[]; trong: string; danhSo?: boolean; onClick: () => void;
+/** Một khối nhận xét. Mỗi dòng bấm được, dẫn tới đúng nơi em xem/sửa. */
+function KhoiNhanXet({ tone, icon: Icon, tieuDe, nhan, dong, trong, danhSo, dich, nav }: {
+  tone: Tone; icon: LucideIcon; tieuDe: string; nhan: string; dong: string[]; trong: string; danhSo?: boolean; dich: string[]; nav: NavigateFunction;
 }) {
+  const k = KHOI[tone];
+  const hien = dong.slice(0, SO_DONG_TOI_DA);
   return (
-    <button type="button" onClick={onClick} className={gop("w-full text-left rounded-the p-4 flex items-start gap-3 active:brightness-95", TONE_NEN[tone])}>
-      <span className="flex-1 min-w-0">
-        <span className={gop("flex items-center gap-2 text-[16px] font-extrabold", TONE_CHU[tone])}><Icon size={22} className="shrink-0" />{tieuDe}</span>
-        {dong.length ? (
-          <ul className="mt-2 space-y-1.5">
-            {dong.slice(0, SO_DONG_TOI_DA).map((d, i) => (
-              <li key={d} className="flex gap-2 text-[14px] text-chu leading-snug">
+    <TheNen tong={tone} className="!p-3.5">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className={gop("flex items-center gap-2 text-[16px] font-bold", k.chu)}><Icon size={22} className="shrink-0" aria-hidden />{tieuDe}</h2>
+        <span className={gop("rounded-full px-2.5 py-0.5 text-[13px] font-bold whitespace-nowrap", k.pill)}>{nhan}</span>
+      </div>
+      {hien.length ? (
+        <ul className="mt-1.5">
+          {hien.map((d, i) => (
+            <li key={d}>
+              <button type="button" onClick={() => nav(dich[Math.min(i, dich.length - 1)])} className="nay-nhe w-full min-h-11 flex items-center gap-2 text-left text-[14px] text-chu leading-snug">
                 {danhSo
-                  ? <span className={gop("size-5 rounded-full border-[1.5px] grid place-items-center text-[11px] font-extrabold shrink-0 mt-px", SO[tone])}>{i + 1}</span>
-                  : <span className={gop("mt-[7px] size-2 rounded-full shrink-0", CHAM[tone])} />}
-                <span className="min-w-0">{d}</span>
-              </li>
-            ))}
-          </ul>
-        ) : <span className="block mt-2 text-[14px] text-chu-phu">{trong}</span>}
-      </span>
-      <ChevronRight size={18} className="text-chu-phu shrink-0 mt-1" />
-    </button>
+                  ? <span className={gop("size-5 rounded-full border-[1.5px] grid place-items-center text-[13px] font-bold shrink-0", k.so)}>{i + 1}</span>
+                  : <span className={gop("size-2 rounded-full shrink-0 mx-1.5", k.cham)} />}
+                <span className="min-w-0 flex-1 py-1">{d}</span>
+                <ChevronRight size={16} className="text-chu-phu shrink-0" aria-hidden />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : <p className="mt-1.5 text-[14px] text-chu-phu">{trong}</p>}
+    </TheNen>
   );
 }
 
 /** Ô hành động nhanh trong lưới 2×2: tên ngắn + trạng thái một dòng; mục còn thiếu tô cam. */
-function ONhanh({ icon: Icon, tone, ten, trangThai, du, onClick }: { icon: LucideIcon; tone: ToneTen; ten: string; trangThai: string; du: boolean; onClick: () => void }) {
+function ONhanh({ icon: Icon, tone, ten, trangThai, du, onClick }: { icon: LucideIcon; tone: "xanh" | "cam" | "tim"; ten: string; trangThai: string; du: boolean; onClick: () => void }) {
+  const mau = { xanh: "bg-xanh-nhat text-xanh-dam", cam: "bg-cam-nhat text-cam-chu", tim: "bg-tim-nhat text-tim-chu" }[tone];
   return (
-    <button type="button" onClick={onClick} className="min-h-20 min-w-0 text-left rounded-the bg-trang border border-vien shadow-the p-3 active:bg-xanh-nhat">
-      <span className={gop("size-9 rounded-xl grid place-items-center", TONE_NEN[tone], TONE_CHU[tone])}><Icon size={19} /></span>
+    <button type="button" onClick={onClick} className="nay-nhe min-h-20 min-w-0 text-left rounded-2xl o-mem p-3">
+      <span className={gop("size-9 rounded-xl grid place-items-center", mau)}><Icon size={19} aria-hidden /></span>
       <b className="mt-1.5 block text-[14px] text-muc">{ten}</b>
-      <span className={gop("block text-[12px] leading-snug truncate", du ? "text-chu-phu" : "text-cam-chu font-bold")}>{trangThai}</span>
+      <span className={gop("block text-[13px] leading-snug truncate", du ? "text-chu-phu" : "text-cam-chu font-bold")}>{trangThai}</span>
     </button>
   );
+}
+
+/** Trạng thái chữ theo % hồ sơ đã có. Chỉ mô tả mức đầy đủ, không đánh giá em. */
+function trangThaiHoSo(p: number): { nhan: string; phu: string; tong: "xanh" | "luc" | "cam" } {
+  if (p >= 85) return { nhan: "Hồ sơ khá đầy đủ", phu: "Đủ nền để gợi ý ngành sát hơn.", tong: "luc" };
+  if (p >= 50) return { nhan: "Hồ sơ đã có nền", phu: "Thêm vài mục để gợi ý sát hơn.", tong: "xanh" };
+  return { nhan: "Hồ sơ còn thiếu nhiều", phu: "Bổ sung để so điểm chính xác hơn.", tong: "cam" };
+}
+
+/** Tiến độ 4 nhóm, chỉ đếm dữ liệu em thật sự nhập ở app. */
+function nhomTienDo(s: AppState, soMonCoDiem: number) {
+  const h = s.hoSo;
+  const dem = (a: boolean[]) => ({ co: a.filter(Boolean).length, tong: a.length });
+  return [
+    { ten: "Điểm môn", icon: BookOpen, nen: "gd-nhom-luc", chu: "text-luc-chu", co: soMonCoDiem, tong: CAC_MON.length },
+    { ten: "Điểm thi", icon: BarChart3, nen: "gd-nhom-cam", chu: "text-cam-chu", ...dem([s.diemThi.length > 0, !!h.hocBa?.dtb3Nam || !!h.hocBa?.dtbLop12, CAC_MON.some((m) => typeof h.diemThiThat?.[m] === "number")]) },
+    { ten: "Ngoại ngữ", icon: Languages, nen: "gd-nhom-tim", chu: "text-tim-chu", ...dem([!!h.chungChiNgoaiNgu?.diem, !!(h.diemDgnl?.hcm || h.diemDgnl?.hn || h.diemDgnl?.tsa)]) },
+    { ten: "Hoạt động", icon: Medal, nen: "gd-nhom-xanh", chu: "text-xanh-dam", ...dem([!!h.giaiThuongHsg?.cap, !!h.soThich, h.diemManh.length > 0]) },
+  ];
 }
 
 export default function HoSo() {
@@ -59,7 +93,7 @@ export default function HoSo() {
   const nav = useNavigate();
   const h = s.hoSo;
   const nutCaiDat = (
-    <button type="button" aria-label="Cài đặt" onClick={() => nav(DUONG_DAN.hoSoCaiDat())} className="size-12 grid place-items-center rounded-full bg-trang border border-vien shrink-0 active:bg-xanh-nhat">
+    <button type="button" aria-label="Cài đặt" onClick={() => nav(DUONG_DAN.hoSoCaiDat())} className="size-12 grid place-items-center rounded-full o-mem shrink-0 nay-nhe">
       <Settings size={21} className="text-muc" />
     </button>
   );
@@ -85,71 +119,112 @@ export default function HoSo() {
   const thongTin = [nhanLop(h), h.tinh].filter(Boolean).join(" · ") || "Chưa có lớp và tỉnh";
   const mucLuuY = s.mucTieu ? DUONG_DAN.monKeoDiem() : DUONG_DAN.batDau(2);
   const nganSach = [h.nganSach && TEN_NGAN_SACH[h.nganSach], h.choO && TEN_CHO_O[h.choO]].filter(Boolean).join(" · ");
+  const tt = trangThaiHoSo(x.dayDu);
+  const diem = diemTheoLoai(s);
+  const monCoDiem = CAC_MON.filter((m) => diem.hienTai[m] !== null);
+  const nhom = nhomTienDo(s, monCoDiem.length);
+  const coMucTieuMon = CAC_MON.some((m) => diem.mucTieu[m] !== null);
+  const dichUuTien = [s.mucTieu ? DUONG_DAN.mucTieu() : DUONG_DAN.khamPha(), s.mucTieu ? DUONG_DAN.monKeoDiem() : DUONG_DAN.batDau(2)];
+  const xetSom = [
+    { ten: "Chứng chỉ ngoại ngữ", gt: h.chungChiNgoaiNgu?.diem ? `${h.chungChiNgoaiNgu.loai} ${h.chungChiNgoaiNgu.diem}` : "Chưa có", co: !!h.chungChiNgoaiNgu?.diem, icon: GraduationCap },
+    { ten: "Đánh giá năng lực", gt: h.diemDgnl?.hcm ? `HCM ${h.diemDgnl.hcm}/1200` : h.diemDgnl?.hn ? `HSA ${h.diemDgnl.hn}/150` : h.diemDgnl?.tsa ? `TSA ${h.diemDgnl.tsa}/100` : "Chưa thi", co: !!(h.diemDgnl?.hcm || h.diemDgnl?.hn || h.diemDgnl?.tsa), icon: BarChart3 },
+    { ten: "Học bạ THPT", gt: h.hocBa?.dtb3Nam ? `ĐTB 3 năm: ${h.hocBa.dtb3Nam}` : h.hocBa?.dtbLop12 ? `Lớp 12: ${h.hocBa.dtbLop12}` : "Chưa nhập", co: !!(h.hocBa?.dtb3Nam || h.hocBa?.dtbLop12), icon: FileText },
+    { ten: "Giải học sinh giỏi", gt: h.giaiThuongHsg?.cap ? `${h.giaiThuongHsg.giai ? `Giải ${h.giaiThuongHsg.giai}` : "Có giải"} ${h.giaiThuongHsg.mon ?? ""}`.trim() : "Chưa có", co: !!h.giaiThuongHsg?.cap, icon: Award },
+  ];
 
   return (
     <>
       <DauTrangChinh tieuDe="Hồ sơ của bạn" phai={nutCaiDat} />
       <NoiDung>
-        <NenHero tone="xanh" className="p-4">
-          <div className="flex items-center gap-3">
-            <span aria-hidden className="size-14 rounded-full gd-xanh text-white grid place-items-center text-[18px] font-extrabold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
-            <div className="min-w-0 flex-1">
-              <p className="text-[18px] font-extrabold text-muc leading-tight truncate">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
-              <p className="text-[13px] text-chu">{thongTin}</p>
-              {h.laMau && <Nhan tone="cam" className="mt-1 bg-trang/80">Hồ sơ mẫu, không phải người thật</Nhan>}
+        <HienDan className="space-y-3">
+          <TheNen tong="xanh" className="space-y-3">
+            <div className="flex items-center gap-3">
+              <span aria-hidden className="size-14 rounded-full gd-huy-hieu-xanh text-white grid place-items-center text-[18px] font-bold shrink-0 shadow-nut">{chuDaiDien(h.hoTen) || "?"}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[18px] font-bold text-muc leading-tight line-clamp-2">{h.hoTen.trim() || "Bạn chưa điền tên"}</p>
+                <p className="text-[13px] text-chu-phu">{thongTin}</p>
+              </div>
+              <button type="button" onClick={() => nav(DUONG_DAN.batDau(1))} className="nay-nhe shrink-0 min-h-11 px-3 rounded-xl bg-trang text-xanh-dam text-[13px] font-bold inline-flex items-center gap-1.5">
+                <Pencil size={14} aria-hidden />Chỉnh sửa
+              </button>
             </div>
-          </div>
-          <button type="button" onClick={() => nav(x.boSung[0]?.den ?? DUONG_DAN.batDau(1))} className="mt-3 block w-full text-left rounded-xl bg-trang/75 px-3 py-2.5 active:brightness-95">
-            <span className="flex justify-between text-[13px] text-chu mb-1.5"><span>Hồ sơ đã có</span><b className="text-xanh">{x.dayDu}%</b></span>
-            <ThanhTienDo phanTram={x.dayDu} />
-            {x.boSung.length > 0 && (
-              <span className="mt-1.5 flex items-center gap-1 text-[12px] text-chu-phu">
-                <span className="min-w-0 truncate">Nên thêm: {x.boSung.slice(0, 2).map((b) => b.ten).join(", ")}{x.boSung.length > 2 && ` +${x.boSung.length - 2}`}</span>
-                <ChevronRight size={14} className="shrink-0" />
+            {h.laMau && <Nhan tone="cam" className="whitespace-normal">Hồ sơ mẫu, không phải người thật</Nhan>}
+            <button type="button" onClick={() => nav(x.boSung[0]?.den ?? DUONG_DAN.batDau(1))} className="nay-nhe w-full text-left rounded-2xl bg-trang/80 p-3 flex items-center gap-3">
+              <VongDiem value={x.dayDu} max={100} size={92} tong={tt.tong} nhanGiua="đã có" dinhDang={(n) => `${Math.round(n)}%`} aria={`Hồ sơ đã có ${x.dayDu} phần trăm`} />
+              <span className="min-w-0 flex-1">
+                <b className="block text-[16px] text-muc leading-tight">{tt.nhan}</b>
+                <span className="block text-[13px] text-chu-phu mt-0.5">{tt.phu}</span>
+                {x.boSung.length > 0 && (
+                  <span className="mt-1.5 flex items-start gap-1 text-[13px] text-chu">
+                    <span className="min-w-0">Nên thêm: {x.boSung.slice(0, 2).map((b) => b.ten).join(", ")}{x.boSung.length > 2 && ` +${x.boSung.length - 2}`}</span>
+                    <ChevronRight size={16} className="shrink-0 mt-0.5 text-chu-phu" aria-hidden />
+                  </span>
+                )}
               </span>
+            </button>
+          </TheNen>
+
+          <ul className="grid grid-cols-4 gap-2" aria-label="Tiến độ theo nhóm">
+            {nhom.map((n) => (
+              <li key={n.ten} className={gop("rounded-2xl p-2 min-w-0 text-center", n.nen, n.chu)}>
+                <n.icon size={20} className="mx-auto" aria-hidden />
+                <b className="block text-[16px] leading-tight mt-1">{n.co}/{n.tong}</b>
+                <span className="block text-[13px] leading-tight truncate">{n.ten}</span>
+              </li>
+            ))}
+          </ul>
+
+          <KhoiNhanXet tone="xanh" icon={Target} tieuDe="Ưu tiên hiện tại" nhan="Gợi ý" dong={x.uuTien} danhSo dich={dichUuTien} nav={nav}
+            trong="Chọn một mục tiêu để bắt đầu." />
+          <KhoiNhanXet tone="luc" icon={Trophy} tieuDe="Điểm mạnh" nhan="Giữ vững" dong={x.manh} dich={[DUONG_DAN.batDau(2)]} nav={nav}
+            trong="Nhập điểm các môn để thấy điểm mạnh." />
+          <KhoiNhanXet tone="cam" icon={AlertTriangle} tieuDe="Cần lưu ý" nhan="Cần bổ sung" dong={x.luuY} dich={[mucLuuY]} nav={nav}
+            trong="Chưa thấy điều gì đáng lo." />
+
+          <TheNen className="space-y-1" aria-label="Điểm của em">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-[16px] font-bold text-muc">Điểm của em</h2>
+              <button type="button" onClick={() => nav(DUONG_DAN.batDau(2))} className="nay-nhe min-h-11 px-3 -mr-2 text-[13px] font-bold text-xanh-dam">Đổi điểm</button>
+            </div>
+            {monCoDiem.length === 0 ? (
+              <p className="text-[14px] text-chu-phu">Chưa có điểm môn nào. Nhập điểm để so với điểm chuẩn.</p>
+            ) : (
+              <ul className="divide-y divide-vien">
+                {monCoDiem.map((m) => {
+                  const loai: LoaiDiem = diem.nguon[m] === "thiThat" ? "thiThat" : diem.thiThu[m] !== null ? "thiThu" : "hocBa";
+                  return (
+                    <li key={m} className="flex items-center gap-2 min-h-11 text-[14px]">
+                      <span className="flex-1 min-w-0 truncate text-chu">{TEN_MON[m]}</span>
+                      <NhanLoaiDiem loai={loai} />
+                      <b className="so-lon w-9 text-right text-muc">{dinhDang(diem.hienTai[m]!, 1)}</b>
+                      {diem.mucTieu[m] !== null && <span className="text-[13px] text-tim-chu whitespace-nowrap">→ {dinhDang(diem.mucTieu[m]!, 1)}</span>}
+                    </li>
+                  );
+                })}
+              </ul>
             )}
-          </button>
-        </NenHero>
+            <p className="text-[13px] text-chu-phu pt-1">{coMucTieuMon ? "Số sau mũi tên là điểm em muốn đạt, chưa phải điểm đã có." : "Điểm thi thật được ưu tiên hơn thi thử, thi thử hơn điểm hồ sơ."}</p>
+          </TheNen>
 
-        <KhoiNhanXet tone="xanh" icon={Target} tieuDe="Ưu tiên hiện tại" dong={x.uuTien} danhSo onClick={() => nav(s.mucTieu ? DUONG_DAN.mucTieu() : DUONG_DAN.khamPha())}
-          trong="Chọn một mục tiêu để bắt đầu." />
-        <KhoiNhanXet tone="luc" icon={Trophy} tieuDe="Điểm mạnh" dong={x.manh} onClick={() => nav(DUONG_DAN.batDau(2))}
-          trong="Nhập điểm các môn để thấy điểm mạnh." />
-        <KhoiNhanXet tone="cam" icon={AlertTriangle} tieuDe="Cần lưu ý" dong={x.luuY} onClick={() => nav(mucLuuY)}
-          trong="Chưa thấy điều gì đáng lo." />
-
-        <TieuDeMuc>Xét tuyển sớm & Ngoại ngữ</TieuDeMuc>
-        <div className="rounded-the border border-vien bg-trang p-3.5 shadow-the space-y-3">
-          <div className="grid grid-cols-2 gap-2 text-[13px]">
-            <div className="rounded-xl bg-nen p-2.5">
-              <span className="block text-[11px] font-bold text-chu-phu">Chứng chỉ ngoại ngữ</span>
-              <b className="block text-[14px] text-muc mt-0.5 truncate">
-                {h.chungChiNgoaiNgu?.diem ? `${h.chungChiNgoaiNgu.loai} ${h.chungChiNgoaiNgu.diem}` : "Chưa có"}
-              </b>
-            </div>
-            <div className="rounded-xl bg-nen p-2.5">
-              <span className="block text-[11px] font-bold text-chu-phu">Đánh giá năng lực</span>
-              <b className="block text-[14px] text-muc mt-0.5 truncate">
-                {h.diemDgnl?.hcm ? `HCM ${h.diemDgnl.hcm}/1200` : h.diemDgnl?.hn ? `HSA ${h.diemDgnl.hn}/150` : "Chưa thi"}
-              </b>
-            </div>
-            <div className="rounded-xl bg-nen p-2.5">
-              <span className="block text-[11px] font-bold text-chu-phu">Học bạ THPT</span>
-              <b className="block text-[14px] text-muc mt-0.5 truncate">
-                {h.hocBa?.dtb3Nam ? `ĐTB 3 năm: ${h.hocBa.dtb3Nam}` : h.hocBa?.dtbLop12 ? `Lớp 12: ${h.hocBa.dtbLop12}` : "Chưa nhập"}
-              </b>
-            </div>
-            <div className="rounded-xl bg-nen p-2.5">
-              <span className="block text-[11px] font-bold text-chu-phu">Giải học sinh giỏi</span>
-              <b className="block text-[14px] text-muc mt-0.5 truncate">
-                {h.giaiThuongHsg?.cap ? `${h.giaiThuongHsg.giai ? `Giải ${h.giaiThuongHsg.giai}` : "Có giải"} ${h.giaiThuongHsg.mon ?? ""}` : "Chưa có"}
-              </b>
-            </div>
+          <div className="space-y-2">
+            <TieuDeMuc>Xét tuyển sớm & Ngoại ngữ</TieuDeMuc>
+            <ul className="grid grid-cols-2 gap-2">
+              {xetSom.map((o) => (
+                <li key={o.ten}>
+                  <button type="button" onClick={() => nav(DUONG_DAN.batDau(2))} aria-label={`${o.ten}: ${o.gt}. ${o.co ? "Sửa" : "Thêm"}`}
+                    className="nay-nhe w-full min-h-14 rounded-2xl o-mem p-2.5 flex items-center gap-2 text-left">
+                    <span className={gop("size-9 rounded-xl grid place-items-center shrink-0", o.co ? "bg-luc-nhat text-luc-chu" : "bg-tim-nhat text-tim-chu")}><o.icon size={18} aria-hidden /></span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[13px] text-chu-phu leading-tight">{o.ten}</span>
+                      <b className="block text-[14px] text-muc leading-tight break-words">{o.gt}</b>
+                    </span>
+                    <Plus size={16} className="text-xanh-dam shrink-0" aria-hidden />
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <Nut kieu="vien" onClick={() => nav(DUONG_DAN.batDau(2))}>
-            Cập nhật xét tuyển sớm
-          </Nut>
-        </div>
+        </HienDan>
 
         <TieuDeMuc>Tiến bộ của bạn</TieuDeMuc>
         <ChiSoTheoDoi s={s} gon />

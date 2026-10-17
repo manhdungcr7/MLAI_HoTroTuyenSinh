@@ -14,6 +14,7 @@ import { DuongXuHuong } from "@/components/ui/xu-huong";
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { bayNgayCuaTuan, isoNgay, thuHaiCuaTuan } from "@/engine/xep-lich";
 import type { ToneTen } from "@/state/types";
+import { Mau2027 } from "./mau-2027";
 
 const TONES: ToneTen[] = ["xanh", "luc", "cam", "tim", "do", "muc"];
 
@@ -28,6 +29,7 @@ export default function TrangThietKe() {
     <>
       <DauTrangChinh tieuDe="Trang mẫu thiết kế" moTa="Chỉ có khi chạy dev. Dùng để đối chiếu giao diện." />
       <NoiDung className="space-y-5">
+        <Mau2027 />
         <section className="space-y-2"><TieuDeMuc>Vở ô ly · mực xanh</TieuDeMuc>
           <NenHero className="p-4">
             <p className="text-[13px] text-chu-phu">Tờ giấy ô ly: tối đa một tờ mỗi màn, chứa con số để quyết định</p>

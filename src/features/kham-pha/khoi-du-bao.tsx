@@ -1,43 +1,84 @@
-// Khối "Điểm chuẩn năm tới có thể ở đâu?" ở trang ngành: khoảng dự kiến có mức bất định rõ ràng và vị trí điểm của em.
-// Không phải xác suất đậu; cách tính, giới hạn và kết quả kiểm định đều nói thẳng ngay tại đây.
-import { useMemo } from "react";
-import { TrendingUp } from "lucide-react";
-import { dinhDang } from "@/engine/dinh-dang";
-import { MO_TA_VI_TRI, viTriSoVoiDuBao } from "@/engine/du-bao-diem-chuan";
+// Khối "Điểm chuẩn năm tới có thể ở đâu?" ở trang ngành: khoảng dự báo, vị trí điểm của em, đổi điểm xem thử, lịch sử các năm.
+// Không phải xác suất đậu. Loại dữ liệu không dự báo được thì hiện đúng trạng thái thay vì vẽ thanh so sánh.
+import { useState } from "react";
+import { SlidersHorizontal, TrendingUp } from "lucide-react";
+import { BieuDoLichSu, BoDoiDiem, GiaiThichNgan, KhoiTrangThaiDuLieu, MAU_CHUA_CO_DIEM, MAU_KET_LUAN, NhanTrangThaiDuLieu, ThanhDuBao, ketLuanDuBao, useTrangThaiDuLieu } from "@/components/ui/du-bao";
+import { Nut, gop } from "@/components/ui/nut-the";
+import { dinhDangDiem } from "@/engine/dinh-dang";
+import { cacDiemHopLe } from "@/engine/trang-thai-du-lieu";
+import { NHAN_DU_BAO, NHAN_LOI_THOI, NHAN_THAM_CHIEU, NHAN_THAM_CHIEU_HAN_CHE } from "@/noi-dung/du-bao";
 import type { LuaChon } from "@/state/types";
-import { duBaoCua } from "./du-bao";
 
 export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }) {
-  const d = useMemo(() => duBaoCua(lc), [lc]);
-  if (!d) return null;
-  const viTri = diemEm !== null ? viTriSoVoiDuBao(diemEm, d) : null;
+  const tt = useTrangThaiDuLieu(lc);
+  const [xemThu, setXemThu] = useState<number | null>(null); // null = đang dùng điểm thật của em
+  const [moDoi, setMoDoi] = useState(false);
+  if (tt.loai === "khongDu" || tt.loai === "chiDiemSan" || tt.loai === "phuongThucKhac") return <KhoiTrangThaiDuLieu lc={lc} tt={tt} />;
 
-  // Trục hẹp quanh khoảng dự kiến để nhìn rõ; điểm của em nằm ngoài trục thì dính vào mép.
-  const tu = Math.floor(Math.min(d.thap, diemEm ?? d.thap) - 1), den = Math.ceil(Math.max(d.cao, diemEm ?? d.cao) + 1);
-  const vt = (x: number) => `${Math.min(100, Math.max(0, ((x - tu) / (den - tu)) * 100))}%`;
+  const d = tt.duBao;
+  const diem = xemThu ?? diemEm;
+  const kl = d && diem !== null ? ketLuanDuBao(diem, d, xemThu !== null) : null;
+  const mau = kl ? MAU_KET_LUAN[kl.viTri] : MAU_CHUA_CO_DIEM;
+  const chenhChu = kl ? (kl.chenh === 0 ? "0" : `${kl.chenh > 0 ? "+" : "−"}${dinhDangDiem(Math.abs(kl.chenh))}`) : "";
+  const nho = d ? Math.max(10, Math.floor(Math.min(d.thap, diemEm ?? d.thap) - 3)) : 10;
+  const lon = d ? Math.min(30, Math.ceil(Math.max(d.cao, diemEm ?? d.cao) + 3)) : 30;
+  const luuY = [...(d?.luuY ?? []), ...(tt.loiThoi && !d ? [NHAN_LOI_THOI] : []), ...(tt.laThamChieu || tt.nguonThuCap ? [NHAN_THAM_CHIEU] : [])];
+  const batDoi = () => {
+    if (moDoi) setXemThu(null);
+    else if (diemEm === null && d) setXemThu(Math.round(d.kyVong * 4) / 4);
+    setMoDoi(!moDoi);
+  };
+  const veDiemEm = (v: number) => setXemThu(diemEm !== null && v === diemEm ? null : v);
 
   return (
-    <section className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-3" aria-label="Dự báo điểm chuẩn">
-      <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-muc"><TrendingUp size={20} className="text-xanh" />Điểm chuẩn năm {d.namDuBao} có thể ở đâu?</h2>
-      <p className="text-[14px] text-chu leading-snug">
-        Khoảng <b>{dinhDang(d.thap, 1)} đến {dinhDang(d.cao, 1)} điểm</b>, mức giữa {dinhDang(d.kyVong, 1)} (bằng điểm năm {d.namCuoi}).
-      </p>
+    <section className="rounded-lon bg-trang border border-vien shadow-the overflow-hidden" aria-label="Dự báo điểm chuẩn">
+      {d && (
+        <div className={gop("p-4", mau.nen)} aria-live="polite">
+          <p className="flex items-center gap-1.5 text-[13px] font-semibold text-chu-phu">
+            <TrendingUp size={16} className="shrink-0" aria-hidden />Điểm chuẩn năm {d.namDuBao} có thể ở đâu?
+            {tt.loai === "motNam" && <NhanTrangThaiDuLieu tt={tt} className="ml-auto" />}
+          </p>
+          {kl ? (
+            <div className="mt-2.5 flex items-start gap-3">
+              <span className={gop("size-12 shrink-0 grid place-items-center rounded-xl text-trang", mau.dam)}><mau.icon size={26} strokeWidth={2.2} aria-hidden /></span>
+              <div className="min-w-0 flex-1">
+                <p className={gop("text-[19px] font-extrabold leading-tight", mau.chu)}>{kl.nhan}</p>
+                <p className="mt-0.5 text-[13px] text-chu-phu"><b className={gop("so-lon text-[24px] tabular-nums align-middle", mau.chu)}>{chenhChu}</b> điểm so với mức giữa</p>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-2.5 flex items-start gap-3">
+              <span className={gop("size-12 shrink-0 grid place-items-center rounded-xl text-trang", mau.dam)}><SlidersHorizontal size={24} aria-hidden /></span>
+              <p className="text-[15px] font-bold text-muc leading-snug">Nhập điểm để xem em đang ở đâu so với khoảng này.</p>
+            </div>
+          )}
+          {kl && <p className="mt-2.5 text-[14px] text-chu leading-snug">{kl.cau}</p>}
+        </div>
+      )}
 
-      <div role="img" aria-label={`Khoảng dự kiến từ ${dinhDang(d.thap, 1)} đến ${dinhDang(d.cao, 1)} điểm${diemEm !== null ? `, điểm của bạn ${dinhDang(diemEm, 1)}` : ""}`} className="relative h-12 mt-1">
-        <div className="absolute inset-x-0 top-5 h-2 rounded-full bg-vien" />
-        <div className="absolute top-5 h-2 rounded-full bg-xanh/35" style={{ left: vt(d.thap), width: `calc(${vt(d.cao)} - ${vt(d.thap)})` }} />
-        <div className="absolute top-3.5 h-5 w-0.5 bg-xanh" style={{ left: vt(d.kyVong) }} />
-        {diemEm !== null && (
-          <div className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: vt(diemEm), top: 0 }}>
-            <span className="text-[12px] font-extrabold text-do-chu leading-none whitespace-nowrap">Bạn {dinhDang(diemEm, 1)}</span>
-            <span className="mt-0.5 size-3 rounded-full bg-do border-2 border-trang" />
-          </div>
+      <div className="p-4 space-y-3">
+        {!d && <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-muc"><TrendingUp size={20} className="shrink-0 text-xanh" />Điểm chuẩn các năm</h2>}
+        {d ? (
+          <>
+            <h2 className="text-[14px] font-normal text-chu leading-snug">
+              Khoảng <b className="text-muc">{dinhDangDiem(d.thap)} đến {dinhDangDiem(d.cao)} điểm</b> <GiaiThichNgan khoa="khoangDuBao" />, trung tâm {dinhDangDiem(d.kyVong)} (bằng điểm năm {d.namCuoi}).
+            </h2>
+            <p className="text-[13px] text-chu-phu leading-snug">{NHAN_DU_BAO(d.namDuBao)}{tt.loai === "motNam" ? ` ${NHAN_THAM_CHIEU_HAN_CHE}` : ""}</p>
+            <ThanhDuBao d={d} diem={diem} xemThu={xemThu !== null} mau={mau} />
+            <Nut kieu={moDoi ? "nhe" : "vien"} bieuTuong={SlidersHorizontal} aria-expanded={moDoi} onClick={batDoi}>{moDoi ? "Đóng Đổi điểm" : "Đổi điểm"}</Nut>
+            {moDoi && diem !== null && (
+              <BoDoiDiem gia={diem} nho={nho} lon={lon} goc={diemEm} onDoi={veDiemEm}
+                moTaVT={`${dinhDangDiem(diem)} điểm${kl ? `, ${kl.nhan.toLowerCase()}, ${kl.chenh >= 0 ? "cao" : "thấp"} hơn mức trung tâm ${dinhDangDiem(Math.abs(kl.chenh))} điểm` : ""}`} />
+            )}
+          </>
+        ) : (
+          <p className="text-[14px] text-chu leading-snug">Điểm chuẩn mới nhất đã cũ nên chưa dự báo được khoảng cho năm tới. Em xem lịch sử bên dưới để tham khảo.</p>
         )}
-        <span className="absolute bottom-0 left-0 text-[12px] text-chu-phu">{tu}</span>
-        <span className="absolute bottom-0 right-0 text-[12px] text-chu-phu">{den}</span>
-      </div>
 
-      {viTri && <p className="text-[14px] text-chu leading-snug rounded-xl bg-nen p-3">{MO_TA_VI_TRI[viTri]}</p>}
+        <BieuDoLichSu diem={cacDiemHopLe(lc)} d={d} diemEm={diem} mau={mau} />
+        {d && d.cao >= 30 && <p className="text-[13px] text-chu-phu leading-snug">Khoảng dự báo đã chạm trần 30 điểm của thang thi, nên cận trên bị chặn ở 30.</p>}
+        {luuY.length > 0 && <ul className="space-y-1">{luuY.map((c) => <li key={c} className="text-[13px] text-chu-phu leading-snug">{c}</li>)}</ul>}
+      </div>
     </section>
   );
 }

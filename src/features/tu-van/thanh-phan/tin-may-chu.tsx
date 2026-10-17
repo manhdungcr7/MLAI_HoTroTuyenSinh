@@ -173,7 +173,7 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
       )}
       {t.thuLai && laCuoi && !dang && cauTruoc && (
         <div className="mt-1 flex flex-wrap items-center gap-x-2">
-          <span className="text-[12px] text-chu-phu">Dịch vụ AI chưa phản hồi.</span>
+          <span className="text-[12px] text-chu-phu">Chưa nhận được trả lời từ AI, có thể do mạng chậm. Câu hỏi của em vẫn còn.</span>
           <button type="button" onClick={onThuLai} className="inline-flex min-h-11 items-center gap-1.5 px-1 text-[13px] font-bold text-xanh"><RotateCcw size={15} />Thử lại</button>
         </div>
       )}

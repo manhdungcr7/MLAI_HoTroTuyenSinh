@@ -126,7 +126,7 @@ export function HopMucLich({ muc, dong, quaKhu, hienThongBao }: { muc: MucLich |
   if (!muc) return null;
   const k = muc.khoi;
   const moTa = muc.nguon === "coDinh"
-    ? "Giờ học cố định bạn đã nhập. Hệ thống luôn chừa 10 phút trước và sau để bạn di chuyển, chuẩn bị."
+    ? "Giờ học cố định bạn đã nhập. Mình luôn chừa 10 phút trước và sau để bạn di chuyển, chuẩn bị."
     : k && !k.id.startsWith("auto-") ? "Khối bạn tự thêm. Tự động xếp lịch sẽ giữ nguyên giờ này."
       : "Khối do hệ thống xếp. Bấm Tự động xếp lịch để sắp xếp lại khi lịch của bạn thay đổi.";
   return (

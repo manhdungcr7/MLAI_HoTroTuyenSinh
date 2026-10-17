@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { CalendarClock, CalendarDays, Check, ChevronDown, ChevronRight, ChevronUp, Compass, Lightbulb, ListTodo, PartyPopper, Target, TrendingUp, Wallet } from "lucide-react";
+import { Search, ListChecks, CalendarClock, CalendarDays, Check, ChevronDown, ChevronRight, ChevronUp, Compass, Lightbulb, ListTodo, PartyPopper, Target, TrendingUp, Wallet } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { HangBam, Nut, The, gop } from "@/components/ui/nut-the";
 import { ThanhTienDo } from "@/components/ui/hien-thi";
+import { HienDan, TheNen, VongDiem } from "@/components/ui/thiet-ke";
+import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
+import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { boCongDuLieu } from "@/components/layout/cong-du-lieu";
@@ -37,6 +40,9 @@ function HomNayDayDu() {
     <>
       <DauTrangChinh tieuDe={`Chào ${ten}!`} moTa={loiChaoTheoChang(s, chang)} />
       <NoiDung>
+        <HienDan className="space-y-3">
+          <HeroEmDangODau onNhapDiem={() => nav(DUONG_DAN.batDau(2))} />
+        </HienDan>
         {m ? (
           <>
             <TheMucTieu m={m} thieuMon={thieuMon} ngayThi={s.mucTieu?.ngayThi} onClick={() => nav(DUONG_DAN.mucTieu())} />
@@ -61,6 +67,15 @@ function HomNayDayDu() {
           />
         )}
 
+        <div className="grid grid-cols-2 gap-2">
+          <button type="button" onClick={() => nav(DUONG_DAN.khamPha())} className="nay-nhe min-h-14 rounded-2xl o-mem px-3 flex items-center gap-2 text-left text-[14px] font-bold text-muc">
+            <span className="size-9 rounded-xl bg-xanh-nhat text-xanh-dam grid place-items-center shrink-0"><Search size={18} aria-hidden /></span>Khám phá ngành
+          </button>
+          <button type="button" onClick={() => nav(DUONG_DAN.nguyenVong())} className="nay-nhe min-h-14 rounded-2xl o-mem px-3 flex items-center gap-2 text-left text-[14px] font-bold text-muc">
+            <span className="size-9 rounded-xl bg-tim-nhat text-tim-chu grid place-items-center shrink-0"><ListChecks size={18} aria-hidden /></span>Nguyện vọng
+          </button>
+        </div>
+
         <TamTrangHomNay />
 
         {coKeHoach && <LichVaTienDo />}
@@ -71,6 +86,33 @@ function HomNayDayDu() {
         {goiY.nhacHocPhi && <DongThongBao tone="cam" icon={Wallet} tieuDe="Lọc theo học phí" moTa={goiY.nhacHocPhi} onClick={() => nav(DUONG_DAN.khamPha())} />}
       </NoiDung>
     </>
+  );
+}
+
+/** "Em đang ở đâu": điểm tổ hợp tốt nhất /30 và số ngành so được. Chưa đủ điểm thì chỉ một bước: nhập điểm. */
+function HeroEmDangODau({ onNhapDiem }: { onNhapDiem: () => void }) {
+  const { s } = useApp();
+  const ch = tinhCoHoi(diemDayDu(s));
+  if (!ch) {
+    return (
+      <TheNen tong="xanh" className="flex items-center gap-3">
+        <VongDiem value={null} size={84} nhanGiua="/30" aria="Chưa có điểm tổ hợp" />
+        <div className="min-w-0 flex-1">
+          <b className="block text-[16px] text-muc leading-tight">Em đang ở đâu?</b>
+          <p className="text-[13px] text-chu-phu mt-0.5">Nhập điểm ba môn để thấy mình đứng đâu so với điểm chuẩn.</p>
+          <button type="button" onClick={onNhapDiem} className="nay-nhe mt-2 min-h-11 px-4 rounded-xl gd-huy-hieu-xanh text-white text-[14px] font-bold">Nhập điểm</button>
+        </div>
+      </TheNen>
+    );
+  }
+  return (
+    <TheNen tong="xanh" className="flex items-center gap-3">
+      <VongDiem value={ch.tong} max={30} size={96} tong="xanh" nhanGiua="/30 điểm" aria={`Tổ hợp ${ch.toHop} tốt nhất, ${dinhDangDiem(ch.tong)} trên 30`} />
+      <div className="min-w-0 flex-1">
+        <b className="block text-[16px] text-muc leading-tight">Em đang ở đâu?</b>
+        <p className="text-[13px] text-chu mt-0.5">Tổ hợp {ch.toHop} cho điểm cao nhất. So được {ch.soNganh} ngành: {ch.soDuDiem} ngành đủ điểm chuẩn năm trước, {ch.soThuSuc} ngành gần mức đó.</p>
+      </div>
+    </TheNen>
   );
 }
 
@@ -90,7 +132,7 @@ function TheMucTieu({ m, thieuMon, ngayThi, onClick }: { m: MucTieuDayDu; thieuM
           <BieuTuongTron icon={Target} tone="xanh" kichThuoc={44} />
           <span className="flex-1 min-w-0">
             <span className="block text-[12px] font-semibold text-xanh">Mục tiêu</span>
-            <b className="so-lon block text-[20px] leading-tight text-muc">{m.lc.nganh} <span className="whitespace-nowrap">– {m.lc.truong}</span></b>
+            <b className="so-lon block text-[20px] leading-tight text-muc">{m.lc.nganh} <span>– {m.lc.truong}</span></b>
           </span>
           <ChevronRight size={20} className="text-xanh shrink-0" />
         </span>

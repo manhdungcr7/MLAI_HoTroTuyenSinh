@@ -2,9 +2,10 @@
 import { locTimKiem } from "@/engine/tim-kiem";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { BarChart3, ChevronRight, GraduationCap, Heart, MapPin, Search, Wallet } from "lucide-react";
+import { ChevronRight, GraduationCap, Heart, MapPin, Search, Wallet } from "lucide-react";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
+import { DongDiemThe } from "@/components/ui/du-bao";
 import { OInput } from "@/components/ui/nhap-lieu";
 import { Nhan, gop } from "@/components/ui/nut-the";
 import { coHocPhi, phuongThucNgan } from "@/data/lua-chon-phu";
@@ -15,6 +16,7 @@ import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
 import { TONE_MUC, type KetQuaPhuHop } from "./phu-hop";
 import { dinhDang } from "@/engine/dinh-dang";
+import { cacDiemHopLe, lyDoKhongSoDuoc } from "@/engine/trang-thai-du-lieu";
 import { toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
 import { MajorLabel, ProgramVariant, UniversityLabel } from "@/components/ui/academic-display";
 
@@ -28,7 +30,13 @@ export function kyHieu(truong: string): string {
   return /^HCM[A-Z]{2,}$/.test(truong) ? truong.slice(3) : truong;
 }
 
-export const khoangDiem = (l: LuaChon) => (dinhDang(l.diemMin, 1) === dinhDang(l.diemMax, 1) ? dinhDang(l.diemMin, 1) : `${dinhDang(l.diemMin, 1)} – ${dinhDang(l.diemMax, 1)}`);
+/** Khoảng điểm chuẩn hợp lệ các năm (không tính điểm sàn, phương thức khác). Chưa có thì trả "chưa có". */
+export const khoangDiem = (l: LuaChon) => {
+  const ds = lyDoKhongSoDuoc(l) === null ? cacDiemHopLe(l).map(([, d]) => d) : [];
+  if (!ds.length) return "chưa có";
+  const a = dinhDang(Math.min(...ds), 1), b = dinhDang(Math.max(...ds), 1);
+  return a === b ? a : `${a} – ${b}`;
+};
 export const khoangHocPhi = (l: LuaChon) => hocPhiChu(l);
 
 /** Nhãn mức phù hợp tính từ hồ sơ. Chưa có điểm thì nói rõ là chưa so được. */
@@ -81,14 +89,16 @@ export function TheKhamPha({ l, kq, onClick }: { l: LuaChon; kq: KetQuaPhuHop; o
             </span>
           </span>
         </span>
-        <span className="mt-3 flex items-center gap-2 border-t border-vien pt-2.5">
-          <span className="flex-1 min-w-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-[13px] text-chu">
-            <span className="inline-flex items-center gap-1.5 min-w-0"><BarChart3 size={15} className="text-xanh shrink-0" /><span className="truncate"><b>{khoangDiem(l).replace(" – ", "–")}</b> <span className="text-chu-phu">({l.namDiem})</span></span></span>
-            <span className="inline-flex items-center gap-1.5 min-w-0"><Wallet size={15} className="text-cam shrink-0" /><span className="truncate">{coHocPhi(l) ? `${khoangHocPhi(l)} tr/năm` : "Chưa có học phí"}</span></span>
-            <span className="inline-flex items-center gap-1.5 min-w-0"><MapPin size={15} className="text-do shrink-0" /><span className="truncate">{l.khuVuc}</span></span>
-            <span className="inline-flex items-center gap-1.5 min-w-0"><GraduationCap size={15} className="text-tim shrink-0" /><span className="truncate">{l.bac}{phuongThucNgan(l) ? ` · ${phuongThucNgan(l)}` : ""}</span></span>
+        <span className="mt-3 block border-t border-vien pt-2.5">
+          <DongDiemThe lc={l} diemEm={kq.tong} />
+          <span className="mt-2 flex items-center gap-2">
+            <span className="flex-1 min-w-0 grid grid-cols-2 gap-x-3 gap-y-1.5 text-[13px] text-chu">
+              <span className="inline-flex items-center gap-1.5 min-w-0"><Wallet size={15} className="text-cam shrink-0" /><span className="truncate">{coHocPhi(l) ? `${khoangHocPhi(l)} tr/năm` : "Chưa có học phí"}</span></span>
+              <span className="inline-flex items-center gap-1.5 min-w-0"><MapPin size={15} className="text-do shrink-0" /><span className="truncate">{l.khuVuc}</span></span>
+              <span className="inline-flex items-center gap-1.5 min-w-0 col-span-2"><GraduationCap size={15} className="text-tim shrink-0" /><span className="truncate">{l.bac}{phuongThucNgan(l) ? ` · ${phuongThucNgan(l)}` : ""}</span></span>
+            </span>
+            <ChevronRight size={18} className="text-chu-phu shrink-0" aria-hidden />
           </span>
-          <ChevronRight size={18} className="text-chu-phu shrink-0" aria-hidden />
         </span>
       </button>
       <NutTim id={l.id} ten={`${l.nganh} – ${l.truong}`} className="absolute top-1.5 right-1.5" />

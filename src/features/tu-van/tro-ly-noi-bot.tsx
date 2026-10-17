@@ -112,7 +112,7 @@ function KhungChatMini({ dong }: { dong: () => void }) {
             <Bot size={20} />
           </span>
           <div className="min-w-0">
-            <h3 className="text-[14px] font-bold text-white leading-tight truncate">Chatbot AI Tuyển sinh</h3>
+            <h3 className="text-[14px] font-bold text-white leading-tight truncate">Trợ lý tuyển sinh AI</h3>
             <span className="text-[11px] text-white/90 font-medium flex items-center gap-1.5 mt-0.5">
               Tra cứu số liệu tuyển sinh
             </span>
@@ -292,6 +292,9 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
     pathname.startsWith("/tu-van") ||
     pathname.startsWith("/chao") ||
     pathname.startsWith("/bat-dau") ||
+    pathname.startsWith("/diem-thi-thu") ||
+    pathname.startsWith("/ho-so/cai-dat") ||
+    pathname.startsWith("/ke-hoach/cai-dat") ||
     pathname.startsWith("/ho-so/chia-se") ||
     pathname.startsWith("/dong-hanh") ||
     pathname.startsWith("/loi-nhan")
@@ -308,7 +311,7 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
           <Bot size={17} aria-hidden />Hỏi trợ lý tuyển sinh
         </button>
         {mo && (
-          <div role="dialog" aria-label="Chatbot AI Tuyển sinh" className="fixed inset-x-2 bottom-[calc(4.5rem+env(safe-area-inset-bottom)+0.5rem)] z-50 mx-auto h-[min(520px,calc(100dvh-9rem))] max-w-[360px] overflow-hidden rounded-2xl border border-vien bg-trang shadow-2xl">
+          <div role="dialog" aria-label="Trợ lý tuyển sinh AI" className="fixed inset-x-2 bottom-[calc(4.5rem+env(safe-area-inset-bottom)+0.5rem)] z-50 mx-auto h-[min(520px,calc(100dvh-9rem))] max-w-[360px] overflow-hidden rounded-2xl border border-vien bg-trang shadow-2xl">
             <KhungChatMini dong={() => setMo(false)} />
           </div>
         )}
@@ -332,7 +335,7 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
           {mo && (
             <div
               role="dialog"
-              aria-label="Chatbot AI Tuyển sinh"
+              aria-label="Trợ lý tuyển sinh AI"
               className="mb-3 w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100dvh-130px)] bg-white rounded-2xl shadow-2xl border border-vien overflow-hidden flex flex-col hien-len"
             >
               <KhungChatMini dong={() => setMo(false)} />
@@ -343,11 +346,11 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
           <button
             type="button"
             onClick={() => setMo((m) => !m)}
-            aria-label={mo ? "Đóng Chatbot AI" : "Mở Chatbot AI"}
-            title={mo ? "Đóng chat" : "Chatbot AI Tuyển sinh"}
-            className="size-13 rounded-full gd-xanh text-white shadow-lg shadow-xanh/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer border-2 border-white relative"
+            aria-label={mo ? "Đóng trợ lý AI" : "Mở trợ lý AI"}
+            title={mo ? "Đóng chat" : "Trợ lý tuyển sinh AI"}
+            className="size-11 rounded-full gd-nut-chinh text-white shadow-lg shadow-xanh/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer border-2 border-white relative"
           >
-            {mo ? <X size={22} className="text-white" /> : <Bot size={24} className="text-white" />}
+            {mo ? <X size={20} className="text-white" /> : <Bot size={22} className="text-white" />}
           </button>
         </div>
       </div>
