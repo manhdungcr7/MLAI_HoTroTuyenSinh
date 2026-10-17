@@ -19,8 +19,21 @@ ROOT = Path(__file__).resolve().parents[1]
 SAN = 15.0
 
 
+# Khớp quy tắc của ứng dụng (src/engine/trang-thai-du-lieu.ts, cacDiemHopLe): điểm THPT đúng bằng mức sàn 15,0 không được coi là điểm chuẩn của ngành,
+# nên không đưa vào huấn luyện (cả điểm gốc lẫn điểm đích) và ngành chỉ có mức sàn không được dự báo. Nguồn dữ liệu không có trường nào
+# phân biệt điểm sàn với điểm chuẩn (các dòng đúng 15 giống hệt cấu trúc các dòng khác), nên đây là quy tắc thận trọng, không phải khẳng định về nguồn.
+LOC_SAN = True
+
+
 def doc_du_lieu() -> list[dict]:
-    return [x for x in json.loads((ROOT / "src" / "data" / "du-lieu-that.json").read_text(encoding="utf-8")) if x["pt"] == "THPT" and x["diem"]]
+    ra = []
+    for x in json.loads((ROOT / "src" / "data" / "du-lieu-that.json").read_text(encoding="utf-8")):
+        if x["pt"] != "THPT" or not x["diem"]:
+            continue
+        diem = {n: d for n, d in x["diem"].items() if not (LOC_SAN and abs(d - SAN) < 1e-9)}
+        if diem:
+            ra.append({**x, "diem": diem})
+    return ra
 
 
 def bang_cap(ds: list[dict], toi_da_cach: int = 3) -> pd.DataFrame:

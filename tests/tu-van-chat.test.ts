@@ -171,17 +171,25 @@ assert.equal(phanTichCau("Ngành này có cơ hội việc làm không?").kieu, 
   assert.ok(e.hoiLai && (e.luaChon?.length ?? 0) >= 2 && !e.hanhDong);
 }
 
-// F. Học phí: hiểu "thấp" là xếp hạng, không khớp chữ trong tên ngành; ước tính phải ghi là ước tính
+// F. Học phí: hiểu "thấp" là xếp hạng, không khớp chữ trong tên ngành. Chỉ học phí đã kiểm chứng mới có trong danh mục
+// (src/data/hoc-phi-kiem-chung.ts); chưa có chương trình nào thì phải nói thẳng là chưa có dữ liệu, không xếp hạng từ số ước tính.
 {
+  const coHp = LUA_CHON_MAU.filter((l) => l.hocPhiMin !== undefined);
   const r = tra("Trường nào học phí thấp?");
-  assert.equal(r.nguon.length, 3);
-  const hp = r.nguon.map((id) => ct(id).hocPhiMin!);
-  assert.deepEqual([...hp].sort((x, y) => x - y), hp, "tăng dần");
   assert.ok(!/tầm thấp/.test(r.traLoi));
-  if (r.nguon.some((id) => ct(id).hocPhiUocTinh)) assert.ok(/ước tính/.test(r.traLoi) && r.trangThaiDuLieu === "uoc-tinh");
+  if (coHp.length >= 3) {
+    assert.equal(r.nguon.length, 3);
+    const hp = r.nguon.map((id) => ct(id).hocPhiMin!);
+    assert.deepEqual([...hp].sort((x, y) => x - y), hp, "tăng dần");
+    assert.ok(r.nguon.every((id) => !ct(id).hocPhiUocTinh), "không xếp hạng từ học phí ước tính");
+  } else {
+    assert.equal(r.nguon.length, 0, "chưa có học phí đã kiểm chứng thì không có kết quả xếp hạng");
+    assert.match(r.traLoi, /chưa có dữ liệu học phí/i);
+    assert.equal(r.trangThaiDuLieu, "chua-co");
+  }
   const t = tra("Ở Hà Nội học phí thấp ngành CNTT");
-  assert.ok(t.nguon.length > 0);
-  for (const id of t.nguon) assert.ok(/công nghệ thông tin/i.test(ct(id).nganh) && ct(id).khuVuc === "Hà Nội");
+  for (const id of t.nguon) assert.ok(/công nghệ thông tin/i.test(ct(id).nganh) && ct(id).khuVuc === "Hà Nội" && ct(id).hocPhiMin !== undefined);
+  if (coHp.length === 0) assert.equal(t.nguon.length, 0);
 }
 
 // G. Không số cứng, không khối lặp, không từ cấm, trả lời ngắn

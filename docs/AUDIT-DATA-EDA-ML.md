@@ -91,7 +91,7 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
   - Nhóm ngành, Tỉnh thành, Phân hạng trường (Tier).
 - **Kiểm định Backtesting theo thời gian (Không rò rỉ tương lai):**
   - Huấn luyện trên các năm $< T$, dự báo khoảng $[P_{10}, P_{90}]$ cho năm $T$.
-  - Kết quả kiểm định lăn theo thời gian trên 1.025 cặp (2024 và 2025): độ phủ khoảng 80% sau hiệu chỉnh (75,5% ngoài mẫu), điểm Winkler 7,52 so với 8,32 của heuristic cũ; sai số tuyệt đối trung bình của điểm giữa 1,20 (2024) và 1,89 (2025), không thấp hơn cách giữ nguyên điểm năm trước. Chi tiết và cách tái lập: `docs/ML-DU-BAO-DIEM-CHUAN-2027.md`.
+  - Kết quả kiểm định lăn theo thời gian trên 846 cặp (2024: 500, 2025: 346), sau khi loại điểm sàn 15 khỏi điểm chuẩn: độ phủ khoảng 80% sau hiệu chỉnh (73,1% ngoài mẫu), điểm Winkler 7,65 so với 7,99 của heuristic cũ (cùng độ phủ 80%); sai số tuyệt đối của điểm giữa 1,25 (2024) và 1,73 (2025) so với 1,21 và 1,78 của cách giữ nguyên điểm năm trước. Chi tiết và cách tái lập: `docs/ML-DU-BAO-DIEM-CHUAN-2027.md`.
 
 ### 2. Mô hình Xác suất Trúng tuyển Hiệu chuẩn (Calibrated Probability)
 - Điểm xét tuyển được tính chính xác theo quy chế Bộ GD&ĐT:

@@ -61,7 +61,7 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
         {d ? (
           <>
             <h2 className="text-[14px] font-normal text-chu leading-snug">
-              Khoảng <b className="text-muc">{dinhDangDiem(d.thap)} đến {dinhDangDiem(d.cao)} điểm</b> <GiaiThichNgan khoa="khoangDuBao" />, trung tâm {dinhDangDiem(d.kyVong)} (bằng điểm năm {d.namCuoi}).
+              Khoảng <b className="text-muc">{dinhDangDiem(d.thap)} đến {dinhDangDiem(d.cao)} điểm</b> <GiaiThichNgan khoa="khoangDuBao" />, trung tâm {dinhDangDiem(d.kyVong)} ({d.moHinh === "hoc-may" ? `mô hình học máy dự đoán từ điểm năm ${d.namCuoi}` : `bằng điểm năm ${d.namCuoi}`}).
             </h2>
             <p className="text-[13px] text-chu-phu leading-snug">{NHAN_DU_BAO(d.namDuBao)}{tt.loai === "motNam" ? ` ${NHAN_THAM_CHIEU_HAN_CHE}` : ""}</p>
             <ThanhDuBao d={d} diem={diem} xemThu={xemThu !== null} mau={mau} />

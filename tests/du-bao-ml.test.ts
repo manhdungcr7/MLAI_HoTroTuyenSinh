@@ -5,6 +5,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { LUA_CHON_MAU, tim } from "../src/data/lua-chon-mau";
 import { duBaoMLCua, metaDuBaoML, napDuBaoML } from "../src/data/du-bao-ml";
+import { apDungDuBaoML } from "../src/engine/du-bao-ml-ap-dung";
+import { phanLoaiDuLieu } from "../src/engine/trang-thai-du-lieu";
+import { namTuyenSinhToi } from "../src/engine/du-bao-diem-chuan";
+import { thongKeChung } from "../src/features/kham-pha/du-bao";
 
 const kho = await napDuBaoML();
 assert.ok(kho, "nạp được tệp dự báo");
@@ -15,7 +19,7 @@ assert.ok(meta.moHinh.includes("LightGBM"));
 assert.ok(meta.heSoHieuChinh > 1 && meta.heSoHieuChinh < 4, "hệ số hiệu chỉnh trong khoảng hợp lý");
 
 const ids = Object.keys(kho!.ds);
-assert.ok(ids.length > 2500, `đủ độ phủ chương trình: ${ids.length}`);
+assert.ok(ids.length > 2000, `đủ độ phủ chương trình: ${ids.length}`);
 
 let khongTrongDanhMuc = 0;
 for (const id of ids) {
@@ -50,5 +54,27 @@ assert.ok(Math.abs(bc.kiem_dinh.khoang.gop.phu - meta.kiemDinh.phuGop) < 0.005, 
 assert.ok(Math.abs(bc.kiem_dinh.khoang.gop.winkler - meta.kiemDinh.winkler) < 0.01, "Winkler khớp báo cáo");
 // Mô hình phải tốt hơn cách cũ ở cùng độ phủ 80% (kết luận dùng trong pitch, không được tự ý sửa số)
 assert.ok(meta.kiemDinh.winkler < meta.kiemDinh.winklerHeuristicCu, "Winkler của mô hình thấp hơn heuristic cũ");
+
+// Quy tắc dữ liệu của ứng dụng: chương trình chỉ có mức sàn 15 không bao giờ có dự báo (không có điểm chuẩn để dự báo từ đó)
+let soChiSan = 0;
+for (const lc of LUA_CHON_MAU) {
+  const tt = phanLoaiDuLieu(lc, thongKeChung(), 2027);
+  if (tt.loai === "chiDiemSan") { soChiSan++; assert.equal(duBaoMLCua(lc.id), null, `ngành chỉ có điểm sàn không có dự báo ML: ${lc.id}`); }
+}
+assert.ok(soChiSan > 300, `có nhiều ngành chỉ có mức sàn: ${soChiSan}`);
+
+// apDungDuBaoML: chỉ thay khoảng khi cùng năm đích và năm cơ sở; không thì giữ nguyên trạng thái
+let daAp = 0, giuNguyen = 0;
+for (const lc of LUA_CHON_MAU.slice(0, 1500)) {
+  const tt = phanLoaiDuLieu(lc, thongKeChung(), namTuyenSinhToi());
+  const sau = apDungDuBaoML(tt, lc.id);
+  if (tt.duBao && sau.duBao && sau.duBao.moHinh === "hoc-may") {
+    daAp++;
+    const ml = duBaoMLCua(lc.id)!;
+    assert.deepEqual([sau.duBao.thap, sau.duBao.kyVong, sau.duBao.cao], [ml.thap, ml.giua, ml.cao], "khoảng lấy từ mô hình học máy");
+    assert.equal(sau.duBao.namCuoi, ml.namCoSo, "cùng năm cơ sở");
+  } else { giuNguyen++; assert.equal(sau, tt, "không áp thì giữ nguyên trạng thái"); }
+}
+assert.ok(daAp > 100 && giuNguyen > 100, `áp ${daAp}, giữ nguyên ${giuNguyen}`);
 
 console.log(`du-bao-ml: tất cả kiểm tra đều qua (${ids.length} chương trình, ${LUA_CHON_MAU.length} trong danh mục)`);

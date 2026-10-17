@@ -91,12 +91,14 @@ def main() -> None:
     ket_qua: dict = {"tao_luc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
     # ---- 1. Thống kê dữ liệu ----
+    tho_thpt = [x for x in json.loads((ROOT / "src" / "data" / "du-lieu-that.json").read_text(encoding="utf-8")) if x["pt"] == "THPT" and x["diem"]]
     nam_moi = pd.Series([max(int(y) for y in x["diem"]) for x in ds])
     ket_qua["du_lieu"] = {
         "so_chuong_trinh_thpt": len(ds), "so_co_tu_2_nam": int(sum(1 for x in ds if len(x["diem"]) >= 2)),
         "so_cap_huan_luyen": int(len(df)), "so_cap_theo_nam_dich": {int(k): int(v) for k, v in df.groupby("nam").size().items()},
         "nam_moi_nhat": {int(k): int(v) for k, v in nam_moi.value_counts().sort_index().items()},
-        "so_chuong_trinh_o_san_15": int(sum(1 for x in ds if abs(x["diem"][max(x["diem"])] - 15) < 1e-9)),
+        "so_chuong_trinh_thpt_tho": len(tho_thpt), "so_chuong_trinh_chi_co_muc_san_15": sum(1 for x in tho_thpt if all(abs(d - tn.SAN) < 1e-9 for d in x["diem"].values())),
+        "so_diem_muc_san_15_bi_loai": sum(1 for x in tho_thpt for d in x["diem"].values() if abs(d - tn.SAN) < 1e-9),
         "thay_doi_theo_nam": {int(n): {"tb": round(float(g["dich"].mean()), 3), "do_lech": round(float(g["dich"].std()), 3), "n": int(len(g))} for n, g in df.groupby("nam")},
     }
     print("Dữ liệu:", json.dumps(ket_qua["du_lieu"], ensure_ascii=False))
