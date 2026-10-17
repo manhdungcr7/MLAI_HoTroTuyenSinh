@@ -16,8 +16,7 @@ export function truc(d: DuBaoDiemChuan, diem: number | null, le = 1) {
 export function ThanhDuBao({ d, diem, xemThu, mau = MAU_CHUA_CO_DIEM }: { d: DuBaoDiemChuan; diem: number | null; xemThu?: boolean; mau?: MauKetLuan }) {
   const { tu, den, vt } = truc(d, diem);
   const viTriChu = diem === null ? 0 : Math.min(86, Math.max(14, vt(diem)));
-  const mo = `Khoảng dự báo từ ${dinhDangDiem(d.thap)} đến ${dinhDangDiem(d.cao)} điểm, mức trung tâm ${dinhDangDiem(d.kyVong)}${diem !== null ? `, điểm ${xemThu ? "xem thử" : "của bạn"} ${dinhDangDiem(diem)}` : ""}`;
-  const chamTran = d.cao >= 30;
+  const mo = `Điểm dự đoán ${dinhDangDiem(d.kyVong)}${diem !== null ? `, điểm ${xemThu ? "xem thử" : "của bạn"} ${dinhDangDiem(diem)}` : ""}`;
   return (
     <div>
       <div role="img" aria-label={mo} className="relative h-[4.25rem]">
@@ -27,21 +26,17 @@ export function ThanhDuBao({ d, diem, xemThu, mau = MAU_CHUA_CO_DIEM }: { d: DuB
           </span>
         )}
         <div className="absolute inset-x-0 top-[34px] h-4 rounded-full bg-vien" />
-        <div className="vao-cho absolute top-[34px] h-4 rounded-full" style={{ left: `${vt(d.thap)}%`, width: `${vt(d.cao) - vt(d.thap)}%` }}>
-          <span className={gop("absolute inset-0 rounded-full", mau.vung)} />
-        </div>
-        <div className="absolute top-[30px] h-6 w-1 -translate-x-1/2 rounded-full bg-muc" style={{ left: `${vt(d.kyVong)}%` }} />
+        <div className="absolute top-[28px] h-7 w-1.5 -translate-x-1/2 rounded-full bg-xanh shadow-sm" style={{ left: `${vt(d.kyVong)}%` }} title={`Điểm dự đoán: ${dinhDangDiem(d.kyVong)}`} />
         {diem !== null && (
           <span className={gop("absolute top-[29px] size-[26px] -translate-x-1/2 rounded-full border-4 border-trang shadow-md transition-[left] duration-200 motion-reduce:transition-none", mau.dam)} style={{ left: `${vt(diem)}%` }} />
         )}
         <span className="absolute bottom-0 left-0 text-[13px] text-chu-phu tabular-nums">{tu}</span>
         <span className="absolute bottom-0 right-0 text-[13px] text-chu-phu tabular-nums">{den}</span>
       </div>
-      <dl className="mt-1 grid grid-cols-3 gap-2 text-center text-[13px]">
-        <div><dt className="text-chu-phu">Thấp</dt><dd className="font-bold text-muc tabular-nums">{dinhDangDiem(d.thap)}</dd></div>
-        <div><dt className="text-chu-phu">Trung tâm</dt><dd className="font-bold text-muc tabular-nums">{dinhDangDiem(d.kyVong)}</dd></div>
-        <div><dt className="text-chu-phu">Cao</dt><dd className="font-bold text-muc tabular-nums">{dinhDangDiem(d.cao)}{chamTran && <span className="block text-[13px] font-normal text-chu-phu">đã chạm trần 30</span>}</dd></div>
-      </dl>
+      <div className="mt-1 flex items-center justify-between text-[13px]">
+        <span className="text-chu-phu">Điểm của bạn: <b className="text-muc">{diem !== null ? dinhDangDiem(diem) : "Chưa có"}</b></span>
+        <span className="text-chu-phu">Điểm dự đoán: <b className="text-xanh font-extrabold">{dinhDangDiem(d.kyVong)}</b></span>
+      </div>
     </div>
   );
 }
@@ -51,8 +46,7 @@ export function MiniDuBao({ d, diem, className, mau = MAU_CHUA_CO_DIEM }: { d: D
   const { vt } = truc(d, diem, 0.5);
   return (
     <span aria-hidden className={gop("relative block h-2.5 rounded-full bg-vien", className)}>
-      <span className={gop("absolute inset-y-0 rounded-full", mau.vung)} style={{ left: `${vt(d.thap)}%`, width: `${Math.max(3, vt(d.cao) - vt(d.thap))}%` }} />
-      <span className="absolute -top-0.5 h-3.5 w-0.5 bg-muc" style={{ left: `${vt(d.kyVong)}%` }} />
+      <span className="absolute -top-0.5 h-3.5 w-1 rounded-full bg-xanh" style={{ left: `${vt(d.kyVong)}%` }} />
       {diem !== null && <span className={gop("absolute -top-[3px] size-4 -translate-x-1/2 rounded-full border-2 border-trang", mau.dam)} style={{ left: `${vt(diem)}%` }} />}
     </span>
   );

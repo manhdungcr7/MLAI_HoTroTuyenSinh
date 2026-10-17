@@ -12,8 +12,8 @@ export function ketLuanDuBao(diem: number, d: DuBaoDiemChuan, laDiemXemThu = fal
   const chenh = lam2(diem - d.kyVong);
   const chu = laDiemXemThu ? "Với điểm này" : "Điểm của bạn";
   const dau = chenh === 0
-    ? `${chu} đang bằng mức dự báo trung tâm.`
-    : `${chu} đang ${chenh > 0 ? "cao" : "thấp"} hơn mức dự báo trung tâm ${dinhDangDiem(Math.abs(chenh))} điểm.`;
+    ? `${chu} đang bằng mức dự đoán.`
+    : `${chu} đang ${chenh > 0 ? "cao" : "thấp"} hơn mức dự đoán ${dinhDangDiem(Math.abs(chenh))} điểm.`;
   return { viTri, nhan: NHAN_KET_LUAN[viTri], cau: `${dau} ${CAU_LUU_Y_DU_BAO}`, chenh };
 }
 

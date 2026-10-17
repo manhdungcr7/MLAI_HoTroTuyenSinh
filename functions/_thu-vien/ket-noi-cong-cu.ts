@@ -107,9 +107,8 @@ export const CONG_CU: CongCu[] = [
     chay: async (_a, cc) => ({
       ok: true,
       data: {
-        capNhat: cc.ban.capNhat,
         // Dùng cho update_study_progress (get_study_plan là bí danh của công cụ này): đề xuất phải kèm đúng phiên bản kế hoạch đã đọc.
-        snapshotUpdatedAt: cc.ban.capNhat,
+        capNhat: cc.ban.capNhat, snapshotUpdatedAt: cc.ban.capNhat,
         suKien: cc.ban.keHoachTuan.map((e) => ({ ...e, linkGoogleCalendar: linkGoogleCalendar(e), ...(cc.ma ? { icsUrl: `${cc.origin}/api/gpt/${cc.ma}/lich.ics` } : {}) })),
       },
     }),

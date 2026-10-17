@@ -91,8 +91,26 @@ export default function TuVan() {
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     cuonSau.current = true;
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
+
+    const onChunk = (chuoiStream: string) => {
+      setTin((cu) => {
+        const last = cu[cu.length - 1];
+        if (last && last.vai === "mayChu") {
+          return [...cu.slice(0, -1), { ...last, chu: chuoiStream }];
+        }
+        return [...cu, { vai: "mayChu", chu: chuoiStream, cheDo: "ai" } as TinNhan].slice(-TOI_DA_TIN);
+      });
+      cuonSau.current = true;
+    };
+
     // Chạy ở mức module: rời màn giữa chừng vẫn nhận và ghi được câu trả lời.
-    await guiNen(localStorage, cau, truoc, () => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage) }));
+    await guiNen(
+      localStorage,
+      cau,
+      truoc,
+      (chunkCb) => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage), onChunk: chunkCb }),
+      onChunk
+    );
   };
 
   const goiY = goiYBanDau({ soNguyenVong: s.nguyenVong.length, nganhQuanTam: s.hoSo.nganhQuanTam });
@@ -171,7 +189,7 @@ export default function TuVan() {
             </div>
           ))}
 
-          {dang && (
+          {dang && !tin.some((t) => t.vai === "mayChu" && t.chu.length > 0 && tin[tin.length - 1] === t) && (
             <div className="flex justify-start" role="status">
               <div className="rounded-2xl border border-vien bg-trang px-3.5 py-2.5 text-[13px] text-chu-phu">
                 <span className="mr-1.5 inline-flex gap-1 align-middle" aria-hidden><span className="size-1.5 animate-pulse rounded-full bg-xanh" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:200ms]" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:400ms]" /></span>

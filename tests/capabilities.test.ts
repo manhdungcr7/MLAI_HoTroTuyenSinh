@@ -46,7 +46,8 @@ for (const diemMon of [{ toan: -1 }, { toan: 11 }, { toan: NaN }, { toan: Infini
 error(await executeCapability("calculate_admission_score", { maToHop: "V00", diemMon: {} }), "INVALID_ARGUMENT");
 error(await executeCapability("calculate_admission_score", { maToHop: "A01", diemMon: {}, khuVuc: "KV9" }), "INVALID_ARGUMENT");
 
-const catalog = await loadCatalog();
+const [catalog, catalogCungLuc] = await Promise.all([loadCatalog(), loadCatalog()]);
+assert.strictEqual(catalogCungLuc, catalog, "catalog bất biến phải dùng chung một promise trong isolate");
 const sample = catalog.records.find((r) => r.pt === "THPT" && r.toHop.includes("A01") && r.tinh === "Hà Nội")!;
 assert.ok(sample);
 const profile = data(await executeCapability("get_university", { maTruong: sample.ma }));

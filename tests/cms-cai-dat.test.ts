@@ -280,4 +280,12 @@ const caiDatMoiQtv: CaiDatHeThong = {
   assert.equal(tongLog, 3, "Cả 3 lần cập nhật/khôi phục đều phải được ghi vào nhat_ky");
 }
 
+// HEAD kiểm tra được metadata cache mà không tải lại cấu hình công khai.
+{
+  const headCongKhai = await xuLyCauHinhCongKhai(new Request("http://localhost/api/cau-hinh-cong-khai", { method: "HEAD" }), { DB: d1 });
+  assert.equal(headCongKhai.status, 200);
+  assert.equal(await headCongKhai.text(), "");
+  assert.match(headCongKhai.headers.get("Cache-Control") ?? "", /max-age=120/);
+}
+
 console.log("OK cms-cai-dat");

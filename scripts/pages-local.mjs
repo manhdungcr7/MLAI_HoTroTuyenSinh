@@ -39,9 +39,13 @@ export function chayPages(cms = false) {
   writeFileSync(join(cwd, "wrangler.jsonc"), JSON.stringify(config));
   rmSync(join(cwd, "wrangler.json"), { force: true });
   let vars = existsSync(join(source, ".dev.vars")) ? readFileSync(join(source, ".dev.vars"), "utf8") : "";
-  if (process.env.NV_QA_SNAPSHOT === "1" || process.env.NV_AI_REMOTE === "0") {
-    // Local QA must not inherit provider credentials or other developer secrets.
+  if (process.env.NV_QA_SNAPSHOT === "1") {
+    // Snapshot QA must not inherit provider credentials or other developer secrets.
     vars = "";
+  } else if (process.env.NV_AI_REMOTE !== "1") {
+    // Local Pages is offline by default. Keep unrelated local bindings (for example
+    // CMS session configuration), but never pass a provider credential by accident.
+    vars = vars.split(/\r?\n/).filter((line) => !/^(?:ANTHROPIC_API_KEY|OPENAI_API_KEY|OPENROUTER_API_KEY)\s*=/.test(line)).join("\n");
   }
   if (cms && !/^SESSION_SECRET\s*=/m.test(vars)) vars += `\nSESSION_SECRET=${randomBytes(32).toString("hex")}\n`;
   writeFileSync(join(cwd, ".dev.vars"), vars);

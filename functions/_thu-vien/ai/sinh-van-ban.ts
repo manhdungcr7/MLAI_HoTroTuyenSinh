@@ -39,7 +39,7 @@ export async function goiMoHinh(env: EnvLLM, noiDung: string, f: typeof fetch = 
       headers: {
         "content-type": "application/json",
         authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://nguyenvongai.vn",
+        "HTTP-Referer": "https://nguyenvongai.pages.dev",
         "X-Title": "Nguyen Vong AI",
       },
       signal: AbortSignal.timeout(han),

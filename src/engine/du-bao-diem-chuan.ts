@@ -147,13 +147,13 @@ export function duBaoDiemChuan(lc: LuaChon, tk: ThongKeBienDong, namDuBao: numbe
   const cao = kep(diemCuoi + phanVi(tk.tatCa, 0.9) * nopRong);
 
   const luuY: string[] = [];
-  if (k > 1) luuY.push(`Điểm mới nhất của ngành là năm ${namCuoi}, cách ${k} năm nên khoảng dự kiến rộng hơn.`);
-  if (c.length === 1) luuY.push("Ngành này mới có điểm của một năm, nên khoảng dựa vào biến động chung của các ngành khác.");
+  if (k > 1) luuY.push(`Điểm mới nhất của ngành là năm ${namCuoi}, cách ${k} năm nên dự đoán chỉ mang tính tham khảo.`);
+  if (c.length === 1) luuY.push("Ngành này mới có điểm của một năm, nên dự đoán dựa vào biến động chung của các ngành khác.");
   const thuCap = lc.nguonCap === "aggregator_verified";
   if (thuCap && c.length === 1) luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường, nên dự báo chỉ để tham khảo.");
   const doTinCay: DuBaoDiemChuan["doTinCay"] = thuCap && c.length === 1 ? "thap" : c.length >= 2 && k === 1 && !thuCap ? "cao" : "vua";
   const chamTran = cao >= DIEM_TOI_DA;
-  if (chamTran) luuY.push(`Khoảng đã chạm trần ${DIEM_TOI_DA} điểm, nên mức cao nhất thật có thể không thấp hơn.`);
+  if (chamTran) luuY.push(`Điểm dự đoán đã chạm trần ${DIEM_TOI_DA} điểm, nên mức điểm thật có thể không thấp hơn.`);
 
   return { namDuBao, namCuoi, diemCuoi, kyVong: lam2(diemCuoi), thap: lam2(thap), cao: lam2(cao), mucTinCay: 0.8, soMau: tk.tatCa.length, luuY, doTinCay, chamTran };
 }

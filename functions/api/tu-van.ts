@@ -8,6 +8,8 @@ import { traLoiBacThang, type EnvBacThang } from "../_thu-vien/ai/bac-thang";
 import { coKhoaLLM } from "../_thu-vien/ai/sinh-van-ban";
 import { chotLuot, docHanMuc, giuLuot, laUuid, luotConLai, traLaiLuot, type GiuCho, type KhoD1HanMuc } from "../_thu-vien/han-muc-ai";
 
+import { xacThucTurnstile } from "../_thu-vien/turnstile";
+
 // Trần toàn hệ thống theo ngày (mọi hồ sơ cộng lại), để việc đổi mã hồ sơ không làm vượt chi phí.
 const KHOA_TONG_HE_THONG = "he-thong";
 export const TONG_NGAY_MAC_DINH = 500;
@@ -21,7 +23,7 @@ export const IP_NGAY_MAC_DINH = 40;
 const KHOA_IP_KHONG_RO = "khong-ro";
 
 export { goiMoHinh } from "../_thu-vien/ai/sinh-van-ban";
-export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string; AI_IP_NGAY?: string }
+export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string; AI_IP_NGAY?: string; TURNSTILE_SECRET_KEY?: string }
 interface Ctx { request: Request; env: Env }
 
 const json = (v: unknown, status = 200) =>
@@ -66,6 +68,10 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   try {
     if (!await choPhepTanSuat(env.RATE_KV, ip, Date.now())) return json({ loi: "Bạn hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
   } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
+  // Xác thực bot Turnstile (Fail-open: không ảnh hưởng người dùng thật nếu chưa cấu hình key hoặc Cloudflare trục trặc)
+  const turnstileToken = request.headers.get("cf-turnstile-response") || (typeof o.turnstileToken === "string" ? o.turnstileToken : undefined);
+  const ts = await xacThucTurnstile(env.TURNSTILE_SECRET_KEY, turnstileToken, ip, f);
+  if (!ts.hopLe) return json({ loi: "Xác minh bot không thành công, vui lòng thử lại" }, 403);
   // Hạn mức theo ngày: giữ chỗ nguyên tử trước khi gọi AI, chốt khi thành công, trả lại khi lỗi hạ tầng (không trả khi 422/400/429).
   if (!env.DB) return json({ loi: "chua-cau-hinh-han-muc" }, 503);
   const db = env.DB;
@@ -123,7 +129,36 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
       await Promise.all([...traCacGiu.map((g) => chotLuot(db, g)), chotWeb]).catch(() => {});
     }
     const luot = await luotConLai(db, hoSo, toiDa).catch(() => undefined);
-    return json(luot ? { ...r.kq, luot } : r.kq);
+    const traVe = luot ? { ...r.kq, luot } : r.kq;
+
+    if (kt.v.stream === true || request.headers.get("accept")?.includes("text/event-stream")) {
+      const { readable, writable } = new TransformStream();
+      const writer = writable.getWriter();
+      const encoder = new TextEncoder();
+
+      (async () => {
+        try {
+          const doan = r.kq.traLoi.match(/.{1,16}/g) || [r.kq.traLoi];
+          for (const token of doan) {
+            await writer.write(encoder.encode(`data: ${JSON.stringify({ token })}\n\n`));
+          }
+          await writer.write(encoder.encode(`data: ${JSON.stringify({ xong: true, ...traVe })}\n\n`));
+          await writer.close();
+        } catch {
+          await writer.abort().catch(() => {});
+        }
+      })();
+
+      return new Response(readable, {
+        headers: {
+          "content-type": "text/event-stream; charset=utf-8",
+          "cache-control": "no-cache",
+          "connection": "keep-alive",
+        },
+      });
+    }
+
+    return json(traVe);
   } catch (e) {
     await tra();
     // Mã chẩn đoán (ví dụ "openrouter 401") chỉ ghi log máy chủ, không trả cho trình duyệt.
