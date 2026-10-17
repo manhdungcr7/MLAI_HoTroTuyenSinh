@@ -5,6 +5,8 @@
 **File PDF trình chiếu**: [`slides/thuyet-trinh.pdf`](file:///d:/07-Competitions-Hackathons/mlai/nguyenvongai/slides/thuyet-trinh.pdf)  
 **Tổng thời lượng**: 10 phút (600 giây) | **Số lượng slide**: 14 slide  
 **Người trình bày**: Đại diện RTC Team (Đội thi Nguyện Vọng AI)  
+**Số liệu được phép nói**: chỉ dùng `docs/SO-LIEU-CHOT-NOP-BAI.md` (đo 17/10/2026), kể cả mục "Những điều KHÔNG được nói". Chạy lại `npx tsx scripts/so-lieu-nop-bai.mts` trước buổi thuyết trình; số đổi thì sửa theo.  
+**Lưu ý**: bản `.docx` cùng tên chưa được xuất lại từ bản `.md` này.  
 
 ---
 
@@ -18,7 +20,7 @@
 | **04** | **Giải pháp**: 4 câu hỏi, một hành trình khép kín | 40s | 2:25 | Tiêu chí 1: Hành trình người học từ điểm số đến hành động |
 | **05** | **Demo thật**: Từ hồ sơ đến kế hoạch tuần cụ thể | 40s | 3:05 | Tiêu chí 5: Sản phẩm chạy thật, UX Mobile 390px mượt mà |
 | **06** | **Lớp dữ liệu**: Nguồn gốc 3 tầng, phiên bản, nhãn tin cậy | 55s | 4:00 | Tiêu chí 4: Chiến lược dữ liệu có kiểm chứng, trích PDF |
-| **07** | **Động cơ quyết định**: Thuật toán tất định & Backtesting | 55s | 4:55 | Tiêu chí 4: Không phải hộp đen; đo kiểm phủ 89%–95% |
+| **07** | **Động cơ quyết định**: Thuật toán tất định & Backtesting | 55s | 4:55 | Tiêu chí 4: Không phải hộp đen; kiểm định phủ 77%–93% |
 | **08** | **AI ở đâu**: Quy tắc trước, dữ liệu sau, AI diễn giải | 45s | 5:40 | Tiêu chí 4: Rào chắn AI, lọc số bịa, hạn mức an toàn |
 | **09** | **ChatGPT & Claude**: Họ là kênh tiếp cận, ta là sự thật | 55s | 6:35 | Tiêu chí 3 & 5: Giao thức Agent-Native MCP, xuất Google Cal |
 | **10** | **Tự cải tiến**: Vòng lặp đóng góp từ người trong trường | 45s | 7:20 | Tiêu chí 5: Khả năng vận hành và tự hoàn thiện dữ liệu |
@@ -108,10 +110,10 @@
 **Lời thoại người thuyết trình**:
 > *"Kính mời Ban giám khảo nhìn vào luồng trải nghiệm thực tế trên bản Web đang chạy trực tiếp tại `nguyenvongai.pages.dev`:  
 > 
-> Bắt đầu từ **Hồ sơ**: Nhập điểm thi thử Toán 8.2, Lý 7.8, Anh 8.0, hệ thống tính chuẩn điểm ưu tiên KV2 đạt 24,25 điểm.  
-> Chuyển sang **Khám phá**: Học sinh thấy ngay ngành nào đủ điểm, ngành nào thiếu điểm kèm số trang PDF đề án của trường.  
+> Bắt đầu từ **Hồ sơ mẫu Minh Anh** (tổ hợp A01, điểm thi thử gần nhất từng môn): hệ thống tính điểm theo tổ hợp, cộng điểm ưu tiên nếu em khai khu vực.  
+> Chuyển sang **Khám phá**: **Bản đồ cơ hội** cho biết có bao nhiêu ngành ở từng nhãn; **Phòng thử điểm** cho kéo điểm một môn xem ngành nào đổi nhãn; mở một ngành thấy điểm từng năm kèm nguồn, chỉ tiêu và điểm dự đoán 2027.  
 > Sang **Nguyện vọng**: Danh mục tự động gắn nhãn 4 tầng rủi ro, cảnh báo nếu danh mục bị lệch cấu trúc.  
-> Và cuối cùng là **Kế hoạch tuần**: Hệ thống nhận diện môn Lý là môn nghẽn điểm, tự động xếp 3 buổi tự học Lý vào các khung giờ trống buổi tối trong tuần, bấm một chạm là đưa ngay vào Google Calendar trên điện thoại."*
+> Và cuối cùng là **Kế hoạch tuần**: Hệ thống nhận ra môn còn thiếu điểm nhiều nhất, xếp các buổi tự học vào khung giờ trống trong thời khóa biểu của em, và có thể đưa vào Google Calendar. Số buổi và môn cụ thể do hồ sơ quyết định; đọc đúng thứ đang hiện trên màn hình."*
 
 📌 **Chỉ dẫn sân khấu**: Chỉ vào 4 khung mockup điện thoại nối tiếp nhau trên slide để chứng minh tính mượt mà của hành trình ra quyết định.
 
@@ -126,12 +128,12 @@
 > 
 > Dữ liệu của chúng em được phân thành **ba tầng nguồn minh bạch**:  
 > - **Tầng 1**: Đề án tuyển sinh chính thức của trường — kiểm chứng được tới từng số trang PDF.  
-> - **Tầng 2**: Cổng thông tin tuyển sinh tổng hợp có đối chiếu chéo.  
+> - **Tầng 2**: Trang tổng hợp và VnExpress, nguồn thứ cấp, đối chiếu chéo (khớp 92,9% ở các cặp năm 2026), luôn gắn nhãn "chưa đối chiếu đề án". 1.492 trong 3.648 chương trình gắn đề án PDF, 2.156 gắn nguồn trang tổng hợp.  
 > - **Tầng 3**: Ghi chú cộng đồng về ký túc xá, chi phí sinh hoạt — luôn bắt buộc gắn nhãn 'chưa chính thức'.  
 > 
 > Toàn bộ dữ liệu được chuẩn hóa, duyệt qua hệ thống CMS nội bộ, rồi đóng gói thành các **Snapshot có mã băm SHA-256** bất biến. Mọi kênh từ Web app, API cho đến trợ lý ngoài đều dùng chung một nguồn sự thật duy nhất.  
 > 
-> Quan trọng nhất: Mọi con số hiển thị đều mang một nhãn trạng thái: **đã xác minh**, **lịch sử**, **ước tính**, hoặc **chưa có**. Nếu thiếu dữ liệu, hệ thống nói thẳng là thiếu, tuyệt đối không tự bịa đặt."*
+> Quan trọng nhất: mỗi con số mang nhãn nguồn và trạng thái (đề án, nguồn thứ cấp, dự báo tham khảo, hoặc chưa có), và khối **Độ tin cậy dữ liệu** ở trang Về dữ liệu đếm thật từ danh mục. Chúng em đã kiểm mẫu: điểm có phần lẻ khớp PDF ở 201/201 dòng đã kiểm; điểm số nguyên chưa kiểm hết và đã sửa 146 mục có bằng chứng. Nếu thiếu dữ liệu, hệ thống nói thẳng là thiếu, không tự điền số."*
 
 📌 **Chỉ dẫn sân khấu**: Nhấn giọng mạnh mẽ ở đoạn *"thiếu thì nói thiếu, tuyệt đối không tự bịa đặt"* — đây là tiêu chí đạo đức AI mà giám khảo kỹ thuật đánh giá rất cao.
 
@@ -145,11 +147,11 @@
 > *"Động cơ tính toán của Nguyện Vọng AI bao gồm 4 thuật toán tất định, hoàn toàn minh bạch và có thể giải thích được:  
 > 
 > 1. **Thuật toán tính điểm xét tuyển**: Áp dụng đúng công thức tổ hợp của từng ngành và cơ chế giảm điểm ưu tiên trên 22,5 điểm.  
-> 2. **Ước lượng khoảng biến động điểm chuẩn**: Dựa trên độ lệch lịch sử của chính ngành đó qua các năm, đưa ra khoảng tin cậy chứ không bao giờ cam kết 'chắc chắn đậu 100%'.  
+> 2. **Dự báo khoảng điểm chuẩn 2027 (thống kê)**: điểm năm gần nhất kèm khoảng từ phân bố biến động giữa hai năm liền kề của 2.526 cặp thực tế, không bao giờ cam kết 'chắc chắn đậu'. Mọi dự báo hiện ở mức tin cậy thấp vì điểm mới nhất là 2026 từ trang tổng hợp. Mô hình học máy đã huấn luyện nhưng đang tắt, nên chúng em không gọi đây là học máy.  
 > 3. **Tối ưu danh mục nguyện vọng**: Tự động phát hiện và chặn lỗi 'nghịch đảo thứ tự' — ngăn học sinh đặt ngành dễ trúng tuyển lên trước ngành mơ ước.  
 > 4. **Chia giờ tự học theo hiệu quả biên**: mỗi giờ đi vào môn mà em này tăng được nhiều điểm nhất, mỗi môn một cách ôn riêng, và nói thật khi mục tiêu khó đạt với quỹ giờ này.  
 > 
-> Đặc biệt, chúng em đã thực hiện **Kiểm định ngược (Leave-one-year-out backtesting)** trên dữ liệu thật: Khoảng dự báo 80% phủ trúng **89%** điểm chuẩn năm 2023, **95%** năm 2024, và **64%** năm 2025 khi đề thi biến động bất thường. Chúng em minh bạch toàn bộ các con số này trong tài liệu kiểm thử."*
+> Đặc biệt, chúng em đã thực hiện **Kiểm định ngược (Leave-one-year-out backtesting)** trên dữ liệu thật: Khoảng danh nghĩa 80% phủ **91,1%** điểm chuẩn năm 2023, **93,2%** năm 2024, và **76,6%** năm 2025 khi đề thi biến động bất thường (đo 17/10, kiểm định trong mẫu, chưa phải ngoài mẫu). Chúng em công khai các con số này trong `tests/du-bao-diem-chuan.test.ts`."*
 
 📌 **Chỉ dẫn sân khấu**: Chỉ vào dòng thông báo màu xanh ở đáy slide về kết quả kiểm định bỏ-một-năm để chứng minh chiều sâu nghiên cứu thuật toán.
 
@@ -163,7 +165,7 @@
 > *"Nguyên tắc thiết kế bất khả xâm phạm của chúng em: **AI không quyết định sự thật**.  
 > 
 > - **Phần cần chính xác tuyệt đối — Không dùng AI**: Tính điểm, cộng ưu tiên, xếp lịch và chẩn đoán danh mục đều do engine TypeScript thuần xử lý.  
-> - **Phần ước lượng — Dùng Thống kê**: Dự báo biên độ điểm chuẩn có kiểm định khoa học.  
+> - **Phần ước lượng — Dùng Thống kê**: Dự báo khoảng điểm chuẩn có kiểm định bỏ-một-năm.  
 > - **Mô hình ngôn ngữ (LLM) — Chỉ dùng để Diễn giải**: Hỗ trợ trả lời thắc mắc, so sánh học phí và giải thích sự đánh đổi bằng ngôn ngữ thân thiện.  
 > 
 > Chúng em thiết lập **5 rào chắn bảo vệ**: LLM chỉ nhận đúng số liệu app gửi kèm; câu trả lời chứa số lạ không có trong dữ liệu sẽ bị chặn ngay lập tức; giới hạn 50 lượt/ngày mỗi hồ sơ; và AI tuyệt đối không có quyền tự ý sửa đổi dữ liệu của học sinh."*
@@ -183,7 +185,7 @@
 > 2. **LLM diễn giải & Rào chắn hậu kiểm**: Mô hình chỉ đóng vai trò phân tích và giải thích sự đánh đổi trong tối đa 120 từ. Máy chủ kích hoạt thuật toán hậu kiểm tự động: nếu câu trả lời chứa con số điểm chuẩn hay học phí lạ ngoài dữ liệu, lập tức chặn ngay (422) và rơi về thuật toán quy tắc.  
 > 3. **Thẻ hành động có xác nhận chủ động**: AI không chỉ trả lời bằng chữ mà sinh ra các Thẻ hành động như [Thêm nguyện vọng], [So sánh ngành]. Nguyên tắc an toàn cốt lõi: AI chỉ đề xuất, học sinh phải tự tay bấm 'Xác nhận' thì danh sách mới cập nhật.  
 > 
-> Nhờ đó, 100% câu trả lời đều có nguồn gốc rõ ràng, không ảo giác, và học sinh có thể bật chế độ Tiết kiệm để tra cứu hoàn toàn bằng thuật toán mà không tốn một lượt gọi AI nào."*
+> Nhờ đó câu trả lời đều kèm nguồn để học sinh mở kiểm tra, rủi ro bịa số được giảm mạnh nhưng không bằng không (vẫn có thể diễn đạt sai), và học sinh có thể bật chế độ Tiết kiệm để tra cứu hoàn toàn bằng thuật toán mà không tốn một lượt gọi AI nào."*
 
 📌 **Chỉ dẫn sân khấu**: Chỉ theo thứ tự 3 bước từ trái sang phải trên slide: Gom ngữ cảnh → LLM & Hậu kiểm → Thẻ hành động xác nhận.
 
@@ -216,7 +218,7 @@
 > 
 > 1. **Dữ liệu có nguồn kiểm chứng**: Dẫn link tới tận trang PDF của trường, có lịch sử phiên bản và người chịu trách nhiệm duyệt.  
 > 2. **Logic bản địa hóa triệt để**: Tính đúng điểm ưu tiên quy chế Việt Nam, hỗ trợ 73 tổ hợp và 34 tỉnh thành sau sắp xếp lại địa giới hành chính.  
-> 3. **Bộ kiểm chứng tự động**: Hơn 60 bộ kiểm thử tự động chạy liên tục trong CI pipeline, sai sót dữ liệu lộ ra ngay lập tức.  
+> 3. **Bộ kiểm chứng tự động**: hơn 80 bộ kiểm thử, cổng kiểm tra trước commit và push, CI tự kiểm tra rồi deploy khi push `main`; sai sót dữ liệu bị lộ sớm.  
 > 4. **Khả năng phân phối Agent-Native**: Dữ liệu nằm an toàn tại máy học sinh, nhưng sẵn sàng cấp quyền cho mọi trợ lý AI giao tiếp chuẩn mực qua MCP."*
 
 📌 **Chỉ dẫn sân khấu**: Từng ngón tay đếm 4 lợi thế để tạo nhịp điệu dứt khoát, thuyết phục.
@@ -230,9 +232,9 @@
 **Lời thoại người thuyết trình**:
 > *"Chúng em xin báo cáo minh bạch 100% hiện trạng sản phẩm với 3 nhóm rõ ràng:  
 > 
-> - **Đã hoàn thiện & Có test (Xanh)**: 3.648 chương trình, tính điểm ưu tiên quy chế, thuật toán xếp lịch tuần, server MCP 18 công cụ, hỏi đáp AI có hạn mức, và hệ thống CMS vận hành online.  
+> - **Đã hoàn thiện & Có test (Xanh)**: 3.648 chương trình, tính điểm ưu tiên quy chế, thuật toán xếp lịch tuần, server MCP 18 công cụ, hỏi đáp AI có hạn mức, và hệ thống CMS (đã chạy thử trọn vòng nhập, duyệt, xuất bản ở máy).  
 > - **Đang thử nghiệm (Vàng)**: Cổng đóng góp cộng đồng đã có code nhưng chưa tuyển tình nguyện viên thật; việc tích hợp tài khoản ChatGPT thương mại ngoài production đang trong giai đoạn thử nghiệm; trắc nghiệm hướng nghiệp Holland là công cụ gợi ý chưa kiểm định tâm lý.  
-> - **Chưa làm & Đã nhận diện (Cam)**: Điểm năm 2026 hiện mới có ở các đợt công bố sớm; 83,5% ngành hiện dùng học phí ước tính theo khối ngành; chưa có tính năng đồng bộ tự động đa thiết bị không cần mã kết nối.  
+> - **Chưa làm & Đã nhận diện (Cam)**: điểm 2026 (2.082 chương trình) từ trang tổng hợp, chưa đối chiếu đề án; điểm số nguyên chưa kiểm hết, 5 trường nghi sai mã hoặc tên chưa sửa; học phí hiển thị ở 662 chương trình theo VnExpress, chưa có văn bản của trường; dự báo 2027 ở mức tin cậy thấp và mô hình học máy đang tắt; chưa có đồng bộ đa thiết bị, chưa có tình nguyện viên thật.  
 > 
 > Chúng em tự kiểm toán dữ liệu và công khai mọi khiếm khuyết. Đây là danh dự kỹ thuật của đội thi."*
 
@@ -280,7 +282,7 @@
 
 1. **Kiểm tra thiết bị trình chiếu**:
    - Mở sẵn file PDF chuẩn: [`slides/thuyet-trinh.pdf`](file:///d:/07-Competitions-Hackathons/mlai/nguyenvongai/slides/thuyet-trinh.pdf) trên chế độ Toàn màn hình (Full Screen `Ctrl + L`).
-   - Mở sẵn 1 tab phụ chạy web demo local: `http://localhost:3030/#/chao` phòng khi mất mạng Internet.
+   - Mở sẵn 1 tab phụ chạy web demo local: `http://127.0.0.1:8790 (chạy `npm run app:local`)` phòng khi mất mạng Internet.
 2. **Phân vai trong đội thi (nếu có 2–3 người)**:
    - *Người nói chính*: Thuyết trình liền mạch theo kịch bản này (giữ đúng nhịp 40–50 giây/slide).
    - *Người điều khiển máy*: Bấm chuyển slide chuẩn nhịp; khi người nói nhắc đến con số nào thì con trỏ chuột hover nhẹ vào con số đó.
