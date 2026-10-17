@@ -27,6 +27,7 @@ import { apDungDuBaoML } from "@/engine/du-bao-ml-ap-dung";
 import { namTuyenSinhToi } from "@/engine/du-bao-diem-chuan";
 import { thongKeChung } from "./du-bao";
 import { useDuBaoML } from "./dung-du-bao-ml";
+import { duBaoMLCua, metaDuBaoML } from "@/data/du-bao-ml";
 import { TrendingUp } from "lucide-react";
 import { NhanTrangThaiDuLieu } from "@/components/ui/du-bao";
 import { tongChoLuaChon } from "./to-hop";
@@ -220,6 +221,11 @@ export default function ChiTiet() {
   // Dự báo năm tới chỉ có khi quy tắc dữ liệu cho phép (điểm chuẩn hợp lệ, không quá cũ); ưu tiên mô hình học máy khi đã nạp.
   void sanDuBaoML; // chỉ để vẽ lại khi tệp dự báo nạp xong
   const duBao = apDungDuBaoML(phanLoaiDuLieu(lc, thongKeChung(), namTuyenSinhToi()), lc.id).duBao;
+  // Dòng "Điểm chuẩn dự đoán": ưu tiên mô hình học máy (có cả khi điểm cuối đã cũ), nếu chưa có thì dùng dự báo thống kê.
+  const mlRieng = duBaoMLCua(lc.id), metaML = metaDuBaoML();
+  const coDiem = tt.loai === "nhieuNam" || tt.loai === "motNam";
+  const diemDuDoan = !coDiem ? null : mlRieng ? mlRieng.giua : duBao ? duBao.kyVong : null;
+  const namDuDoan = mlRieng && metaML ? metaML.namDuBao : duBao?.namDuBao;
   const hpTruong = nguon?.truong[lc.maTruong ?? ""]?.hocPhi;
   const trongDs = s.nguyenVong.includes(lc.id);
   const tone = kq.muc ? TONE_MUC[kq.muc] : "xanh";
@@ -288,10 +294,8 @@ export default function ChiTiet() {
             {tt.diemCuoi !== null
               ? <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn ${tt.namCuoi} (thang 30)`} giaTri={`${dinhDangDiem(tt.diemCuoi)} điểm`} phu={tt.nguonThuCap ? "Từ trang tổng hợp, chưa đối chiếu đề án." : undefined} />
               : <DongThongTin icon={BarChart3} tone="tim" nhan="Điểm chuẩn" giaTri={<NhanTrangThaiDuLieu tt={tt} />} phu={tt.loai === "chiDiemSan" ? "Mức điểm sàn không phải điểm chuẩn của ngành." : tt.loai === "phuongThucKhac" ? "Không so với điểm thi THPT." : undefined} />}
-            {duBao && (tt.loai === "nhieuNam" || tt.loai === "motNam") && (
-              <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán ${duBao.namDuBao}${duBao.moHinh === "hoc-may" ? " (mô hình học máy)" : ""}`}
-                giaTri={`${dinhDangDiem(duBao.kyVong)} điểm`}
-                phu={`Khoảng ${dinhDangDiem(duBao.thap)} đến ${dinhDangDiem(duBao.cao)} điểm (mục tiêu phủ ${Math.round(duBao.mucTinCay * 100)}%). Dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`} />
+            {diemDuDoan !== null && (
+              <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán năm ${namDuDoan}`} giaTri={`${dinhDangDiem(diemDuDoan)} điểm`} />
             )}
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />

@@ -193,9 +193,17 @@ for (let i = 0; i < dsGoiY.length - 1; i++) {
     // Ca thật: Minh Anh, NV1 = QSC Hệ thống thông tin (26,25). Cả trường QSC không có ngành Vừa sức/An toàn nào mềm hơn.
     const ma = taoHoSoMau("minhAnh");
     const diemMA = diemDayDu(ma);
-    const neo1a = moNeoNV1({ nguyenVong: [], mucTieu: ma.mucTieu })!;
     const nhanMA = (l: (typeof LUA_CHON_MAU)[number]) => { const t = tongChoLuaChon(l, diemMA); return t.tong === null ? null : nhanNguyenVong(l, t.tong); };
     const trongNS60 = (l: (typeof LUA_CHON_MAU)[number]) => (!l.phuongThuc || l.phuongThuc === "THPT") && (l.hocPhiMin === undefined || l.hocPhiMin <= 60);
+    // Neo lấy từ mục tiêu của hồ sơ; nếu dữ liệu đã đổi khiến trường đó có cửa phụ Vừa sức/An toàn thì chọn ngành khác thoả đúng tiền đề.
+    const hopTienDe = (n: (typeof LUA_CHON_MAU)[number]) => {
+      const cu = LUA_CHON_MAU.filter((x) => x.id !== n.id && cungTr(x, n) && trongNS60(x));
+      return nhanMA(n) === "Thử sức" && !cu.some((x) => x.diemMin < n.diemMin && ["Vừa sức", "An toàn"].includes(nhanMA(x) as string))
+        && cu.some((x) => nhanMA(x) === "Thử sức" && n.diemMin - x.diemMin >= 0.25 && x.diemMin - (tongChoLuaChon(x, diemMA).tong as number) <= 1.5);
+    };
+    const neoMucTieu = moNeoNV1({ nguyenVong: [], mucTieu: ma.mucTieu })!;
+    const neo1a = hopTienDe(neoMucTieu) ? neoMucTieu : LUA_CHON_MAU.find((x) => trongNS60(x) && hopTienDe(x) && coLop2(x))!;
+    assert.ok(neo1a, "dữ liệu phải có ca tầng 1a");
     const cungMA = LUA_CHON_MAU.filter((x) => x.id !== neo1a.id && cungTr(x, neo1a) && trongNS60(x));
     assert.equal(cungMA.some((x) => x.diemMin < neo1a.diemMin && ["Vừa sức", "An toàn"].includes(nhanMA(x) as string)), false, "tiền đề: không có cửa phụ Vừa sức/An toàn");
     const dieuKien = cungMA.filter((x) => nhanMA(x) === "Thử sức" && neo1a.diemMin - x.diemMin >= 0.25 && x.diemMin - (tongChoLuaChon(x, diemMA).tong as number) <= 1.5);
