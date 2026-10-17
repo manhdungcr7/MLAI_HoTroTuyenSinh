@@ -1,8 +1,9 @@
 // BẢNG MÀU-NGHĨA DUY NHẤT của nền thiết kế 2027. Màu luôn đi kèm biểu tượng + chữ (không chỉ màu).
 // Chữ trên nền nhạt dùng token *-chu (>= 4,5:1). Không có xác suất: chỉ nhãn định tính, vị trí so với khoảng dự báo, chênh điểm.
-import { CircleDashed, Flame, Shield, ShieldCheck, Target, type LucideIcon } from "lucide-react";
+import { CircleDashed, type LucideIcon } from "lucide-react";
 import type { NhanNguyenVong, ToneTen } from "@/state/types";
 import { MAU_KET_LUAN } from "../du-bao/mau-ket-luan";
+import { StatusBackup, StatusBalanced, StatusReach, StatusSafe } from "../bieu-tuong-nguyen-vong";
 import type { ViTriSoVoiDuBao } from "@/engine/du-bao-diem-chuan";
 
 export type TongMau = ToneTen | "ngoc" | "sanHo";
@@ -24,10 +25,10 @@ export const mauTheoTong = (t: TongPill): Omit<MauNghia, "icon" | "nhan"> => nho
 
 /** 4 nhãn nguyện vọng cố định: An toàn lục · Vừa sức lam · Thử sức tím · Dự phòng cam. */
 export const MAU_NHAN_NV: Record<NhanNguyenVong, MauNghia & { tong: ToneTen }> = {
-  "An toàn": { ...nhomMau.luc, icon: ShieldCheck, nhan: "An toàn", tong: "luc" },
-  "Vừa sức": { ...nhomMau.xanh, icon: Target, nhan: "Vừa sức", tong: "xanh" },
-  "Thử sức": { ...nhomMau.tim, icon: Flame, nhan: "Thử sức", tong: "tim" },
-  "Dự phòng": { ...nhomMau.cam, icon: Shield, nhan: "Dự phòng", tong: "cam" },
+  "An toàn": { ...nhomMau.luc, icon: StatusSafe, nhan: "An toàn", tong: "luc" },
+  "Vừa sức": { ...nhomMau.xanh, icon: StatusBalanced, nhan: "Vừa sức", tong: "xanh" },
+  "Thử sức": { ...nhomMau.tim, icon: StatusReach, nhan: "Thử sức", tong: "tim" },
+  "Dự phòng": { ...nhomMau.cam, icon: StatusBackup, nhan: "Dự phòng", tong: "cam" },
 };
 export const THU_TU_NHAN_NV: NhanNguyenVong[] = ["An toàn", "Vừa sức", "Thử sức", "Dự phòng"];
 

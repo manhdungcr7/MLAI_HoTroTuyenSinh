@@ -7,6 +7,7 @@ import { Nut, gop } from "@/components/ui/nut-the";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
+import { FeaturePreferenceRanking } from "@/components/ui/bieu-tuong-nguyen-vong";
 import {
   ChipLoc, HangChipLoc, HangKeoTha, MAU_NHAN_NV, PillTrangThai, THU_TU_NHAN_NV, TheNen, TieuDeMan, VongDiem,
 } from "@/components/ui/thiet-ke";
@@ -39,7 +40,7 @@ function TrangNguyenVongTrong({ coDiem, onThem, onGoiY, onNhapDiem }: { coDiem: 
   return (
     <>
       <TheNen tong="xanh" className="text-center py-6">
-        <span className="mx-auto size-14 rounded-full gd-huy-hieu-xanh text-white grid place-items-center"><Heart size={26} aria-hidden /></span>
+        <span className="mx-auto size-14 rounded-full gd-huy-hieu-xanh text-white grid place-items-center"><FeaturePreferenceRanking size={28} aria-hidden /></span>
         <b className="mt-3 block text-[18px] text-muc">Chưa có nguyện vọng nào</b>
         <p className="mt-1.5 text-[14px] text-chu leading-relaxed">
           Danh sách giúp bạn thấy mình có đủ chỗ thử sức, vừa sức và an toàn chưa. Thêm vài ngành, mình xếp nhãn theo điểm của bạn.

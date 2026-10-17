@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, CalendarDays, ChevronRight, Hammer, LineChart, ListChecks, MapPin, Pencil, Sparkles, Target, Trophy, UserPen } from "lucide-react";
+import { FeatureStudyGoal } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { ThanhTabKeHoach } from "@/features/ke-hoach/thanh-tab";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
@@ -44,7 +45,7 @@ export default function MucTieu() {
         <DauTrangChinh tieuDe="Mục tiêu chính" />
         <ThanhTabKeHoach />
         <NoiDung>
-          <TrangThaiTrong bieuTuong={<Target size={28} />}
+          <TrangThaiTrong bieuTuong={<FeatureStudyGoal size={28} />}
             tieuDe={mucTieuCu ? "Không tìm thấy mục tiêu cũ" : "Bạn chưa chọn mục tiêu chính"}
             moTa={mucTieuCu ? "Ngành bạn chọn trước đây không còn trong danh sách. Bạn chọn lại một mục tiêu nhé." : "Chọn ngành, trường bạn hướng tới để tính khoảng cách điểm và gợi ý môn cần tập trung."}>
             <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá ngành học</Nut>

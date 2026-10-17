@@ -3,17 +3,65 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 
+import { randomUUID } from "node:crypto";
 import { fileURLToPath, URL } from "node:url";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 
-function tuVanDevPlugin() {
+function taoManifestDevRong() {
+  const rong = (ten: string) => ({
+    version: "0",
+    hash: "",
+    url: `/snapshots/${ten}.json`,
+    size: 0,
+    recordCount: 0,
+    updatedAt: "",
+  });
+  return {
+    schemaVersion: 1,
+    dataVersion: "2026.10.07.01",
+    generatedAt: new Date().toISOString(),
+    datasets: {
+      schools: rong("schools"),
+      tuition: rong("tuition"),
+      scholarships: rong("scholarships"),
+      admissions: rong("admissions"),
+      announcements: rong("announcements"),
+      cutoffScores: rong("cutoff-scores"),
+    },
+    recentChanges: [],
+  };
+}
+
+function apiDevPlugin() {
   return {
     name: "tu-van-dev-plugin",
     configureServer(server: any) {
       server.middlewares.use(async (req: any, res: any, next: any) => {
+        if (req.url?.split("?", 1)[0] === "/api/manifest" && req.method === "GET") {
+          try {
+            const upstream = await fetch("http://127.0.0.1:8790/api/manifest", {
+              headers: { Accept: "application/json" },
+              signal: AbortSignal.timeout(750),
+            });
+            if (!upstream.ok) throw new Error(`HTTP ${upstream.status}`);
+            const body = Buffer.from(await upstream.arrayBuffer());
+            res.writeHead(upstream.status, {
+              "Content-Type": upstream.headers.get("content-type") || "application/json; charset=utf-8",
+              "Cache-Control": "no-store",
+            });
+            res.end(body);
+          } catch {
+            res.writeHead(200, {
+              "Content-Type": "application/json; charset=utf-8",
+              "Cache-Control": "no-store",
+            });
+            res.end(JSON.stringify(taoManifestDevRong()));
+          }
+          return;
+        }
         if (req.url === "/api/tu-van" && req.method === "POST") {
           let body = "";
           req.on("data", (chunk: any) => { body += chunk; });
@@ -90,9 +138,13 @@ function tuVanDevPlugin() {
   };
 }
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   base: "./",
-  plugins: [tuVanDevPlugin(), react(), tailwindcss()],
+  // Mỗi lần chạy dev có cache riêng để tiến trình Vite khác không khóa file đang được tối ưu lại trên Windows.
+  cacheDir: command === "serve"
+    ? resolve(__dir, ".agent-runtime", "vite-cache", randomUUID())
+    : resolve(__dir, ".agent-runtime", "vite-cache-build"),
+  plugins: [apiDevPlugin(), react(), tailwindcss()],
   server: { proxy: { "/api": "http://127.0.0.1:8790", "/snapshots": "http://127.0.0.1:8790" } },
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
-});
+}));

@@ -1,10 +1,11 @@
 // Primitive nền thiết kế 2027. Tài liệu: docs/THIET-KE-2027.md. Chỉ dùng token + class gd-*/the-*; không hex, không gradient tay.
 import { useEffect, useState, type ElementType, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Bell, GraduationCap, type LucideIcon } from "lucide-react";
+import { Bell, type LucideIcon } from "lucide-react";
 import { DUONG_DAN } from "@/duong-dan";
 import type { ToneTen } from "@/state/types";
 import { gop } from "../nut-the";
+import { BieuTuongThuongHieuMau } from "../bieu-tuong-nguyen-vong";
 import { mauTheoTong, type TongPill } from "./mau-nghia";
 import { giamChuyenDong, useHienKhiVaoMan } from "./chuyen-dong";
 
@@ -124,7 +125,7 @@ export function TieuDeMan({ tieuDe, phuDe, phai, onChuong, chamChuong }: { tieuD
     <header className="px-4 pt-3 pb-2">
       <div className="flex items-center justify-between">
         <Link to={DUONG_DAN.gioiThieu()} className="inline-flex items-center gap-2 min-h-11 text-muc">
-          <span className="size-8 rounded-[10px] gd-huy-hieu-xanh text-white grid place-items-center"><GraduationCap size={18} aria-hidden /></span>
+          <BieuTuongThuongHieuMau className="size-8 shrink-0" aria-hidden="true" />
           <span className="so-lon text-[15px] font-bold">Nguyện Vọng AI</span>
         </Link>
         {onChuong && (

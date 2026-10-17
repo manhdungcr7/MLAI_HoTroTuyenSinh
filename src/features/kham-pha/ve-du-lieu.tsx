@@ -1,7 +1,8 @@
 // "Số liệu này từ đâu ra?": mọi con số ở đây tính trực tiếp từ dữ liệu trong app, không gõ tay.
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BadgeCheck, FileSearch, FileText, GraduationCap, ShieldAlert, AlertCircle, Users } from "lucide-react";
+import { BadgeCheck, FileText, GraduationCap, ShieldAlert, AlertCircle } from "lucide-react";
+import { FeatureCompanion, FeatureDataSource } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut } from "@/components/ui/nut-the";
@@ -67,7 +68,7 @@ export default function VeDuLieu() {
           <h2 className="text-[16px] font-extrabold text-muc">Khác gì hỏi một chatbot?</h2>
           <div className="space-y-3">
             {[
-              [FileSearch, "Có thể kiểm tra", "Chatbot nói kết quả nhưng không chỉ được trang nào. Ở đây bạn bấm vào là thấy đúng dòng trong file đề án của trường."],
+              [FeatureDataSource, "Có thể kiểm tra", "Chatbot nói kết quả nhưng không chỉ được trang nào. Ở đây bạn bấm vào là thấy đúng dòng trong file đề án của trường."],
               [GraduationCap, "Tính đúng tổ hợp", "Mỗi ngành xét tổ hợp khác nhau. Mình cộng đúng 3 môn của tổ hợp đó từ điểm bạn nhập, không dùng một tổng chung cho mọi ngành."],
               [BadgeCheck, "Không bịa chỗ trống", "Thiếu học phí hay việc làm thì ghi rõ là chưa có, kèm trang đề án để bạn tự xem."],
               [FileText, "Đồng hành cùng bạn đến cùng", "Hồ sơ, danh sách nguyện vọng, mục tiêu và kế hoạch học được lưu trên máy của bạn, cập nhật khi điểm đổi."],
@@ -102,7 +103,7 @@ export default function VeDuLieu() {
         </section>
 
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Cùng cập nhật dữ liệu">
-          <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-luc-nhat text-luc"><Users size={20} /></span>
+          <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-luc-nhat text-luc"><FeatureCompanion size={22} /></span>
           <div className="flex-1 min-w-0">
             <b className="block text-[14px] text-muc">Bạn là sinh viên, thầy cô hay cán bộ tuyển sinh?</b>
             <p className="text-[13px] text-chu-phu leading-snug mt-0.5">Dữ liệu đổi mỗi năm và người trong trường nắm rõ nhất. Bạn giúp cập nhật cho trường mình, mọi thông tin đều qua duyệt và có nguồn.</p>
