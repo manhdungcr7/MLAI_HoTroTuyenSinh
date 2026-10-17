@@ -5,6 +5,12 @@ import { CONG_TUYEN_SINH_CHINH_THUC } from "../engine/link-chinh-thuc";
 export interface AdmissionRecord {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
   toHop: string[]; diem: Record<string, number | null>; nguon: string | null; tier: string | null;
+  scoreEvidence?: Record<string, {
+    kind: "diem_chuan" | "diem_san" | "du_kien" | "chua_ro";
+    score: number;
+    scale: number | null; sourceUrl: string; checkedAt: string; checkedBy: string;
+    independentReviewer: string | null; includesPriority: boolean | null;
+  }>;
 }
 export async function loadCatalog() {
   const [raw, sources] = await Promise.all([import("../data/du-lieu-that.json"), taiNguon(), napLuaChon()]);
@@ -42,13 +48,14 @@ export function programDetails(record: AdmissionRecord, catalog: Catalog) {
   return {
     id: record.id, maTruong: record.ma, tenTruong: record.truong, nganh: record.nganh, nhomNganh: record.nhom, tinh: record.tinh,
     phuongThuc: record.pt, toHop: [...record.toHop], diemTheoNam: { ...record.diem },
+    scoreEvidence: record.scoreEvidence ?? null,
     diemChuan: latest && typeof latest[1] === "number" && Number.isFinite(latest[1]) ? latest[1] : null, namDiem: latest ? Number(latest[0]) : null,
     hocPhiTrieuNam: choice?.hocPhiMin ?? null, hocPhiUocTinh: choice?.hocPhiUocTinh ?? false,
     nguonHocPhi: choice?.nguonHocPhi ?? null,
     provenance: {
       sourceTier: record.tier, sourceUrl: record.nguon, verificationStatus: "not_independently_verified" as const,
       lastVerifiedAt: null, lastUpdatedAt: null,
-      yearlySources: yearly.slice(-3).map((s) => ({ year: s.nam, url: s.url, page: s.trang ?? null, documentYear: s.tai ?? null })),
+      yearlySources: [...yearly].sort((a, b) => b.nam.localeCompare(a.nam)).slice(0, 3).map((s) => ({ year: s.nam, url: s.url, page: s.trang ?? null, documentYear: s.tai ?? null })),
     },
   };
 }

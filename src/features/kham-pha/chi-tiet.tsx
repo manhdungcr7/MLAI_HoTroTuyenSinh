@@ -187,7 +187,7 @@ export default function ChiTiet() {
   const lc = useMemo(() => {
     if (!lcGoc) return undefined;
     const theoNam = nguon?.nam[lcGoc.id];
-    return { ...lcGoc, nguonTheoNam: theoNam };
+    return { ...lcGoc, nguonTheoNam: [...(lcGoc.nguonTheoNam ?? []), ...(theoNam ?? []).filter((s) => !lcGoc.nguonTheoNam?.some((cms) => cms.nam === s.nam))] };
   }, [lcGoc, nguon]);
   const thongTinTruong = lcGoc ? kho.layChiTietTruong(lcGoc.maTruong ?? lcGoc.truong) : null;
   const bc = useMemo(() => boiCanhTu(s), [s]);

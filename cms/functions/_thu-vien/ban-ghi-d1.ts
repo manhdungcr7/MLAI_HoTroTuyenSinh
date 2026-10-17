@@ -2,6 +2,7 @@
 import type { BanGhiCms, LoaiThucTheCms, MucDoQuanTrong, NguonKiemChung, TrangThaiCms } from "../../../src/engine/du-lieu-tuyen-sinh/kieu";
 import type { KhoD1, KhoD1Cau } from "./kieu";
 import { sai } from "./phan-hoi";
+import { nguonChiNoiDiemSan } from "../../../src/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
 
 export const LOAI_THUC_THE: readonly LoaiThucTheCms[] = ["school", "tuition", "scholarship", "admission", "cutoff_score", "announcement", "deadline", "contact", "noi_luu_tru", "review", "luu_y"];
 export const MUC_DO: readonly MucDoQuanTrong[] = ["normal", "important", "critical"];
@@ -93,7 +94,24 @@ export function kiemTraData(data: unknown, entityId: string, entityType?: string
   const d = data as Record<string, unknown>;
   if (d.maTruong !== undefined && (typeof d.maTruong !== "string" || d.maTruong.toUpperCase() !== maTruongCua(entityId))) throw sai("data.maTruong không khớp mã trường trong entityId", "data.maTruong");
   if (entityType === "noi_luu_tru" || entityType === "luu_y") kiemTraNoiDungTheoLoai(entityType, d);
+  if (entityType === "cutoff_score") {
+    if (d.loaiDiem !== "diem_chuan") throw sai("Chỉ nhập điểm trúng tuyển đã công bố; điểm sàn, dự kiến hoặc chưa rõ loại không phải điểm chuẩn", "data.loaiDiem");
+    if (typeof d.id !== "string" || maTruongCua(d.id) !== maTruongCua(entityId)) throw sai("Chương trình không thuộc trường trong entityId", "data.id");
+    if (typeof d.nam !== "number" || !Number.isInteger(d.nam) || d.nam < 2000 || d.nam > 2100) throw sai("Năm điểm chuẩn phải là số nguyên từ 2000 đến 2100", "data.nam");
+    if (typeof d.phuongThuc !== "string" || !d.phuongThuc.trim()) throw sai("Thiếu phương thức xét tuyển", "data.phuongThuc");
+    if (typeof d.toHop !== "string" || !/^[A-Z0-9]{1,20}$/.test(d.toHop)) throw sai("Tổ hợp phải là mã, TATCA hoặc KHONG", "data.toHop");
+    if (d.phuongThuc === "THPT" && d.thangDiem !== 30) throw sai("Chỉ hỗ trợ điểm thi THPT thang 30; thang khác cần quy tắc riêng", "data.thangDiem");
+    if (d.thangDiem !== undefined && (typeof d.thangDiem !== "number" || !Number.isFinite(d.thangDiem) || d.thangDiem <= 0)) throw sai("Thang điểm phải là số dương", "data.thangDiem");
+    if (typeof d.diemChuan !== "number" || !Number.isFinite(d.diemChuan) || d.diemChuan < 0 || (typeof d.thangDiem === "number" && d.diemChuan > d.thangDiem)) throw sai("Điểm chuẩn phải là số hữu hạn trong thang điểm công bố", "data.diemChuan");
+  }
   return d;
+}
+
+/** Chặn nhầm nguồn điểm sàn ở cả tạo, sửa, duyệt và xuất bản; URL không tự chứng minh số liệu. */
+export function kiemTraNguonDiemChuan(entityType: string, source: NguonKiemChung): void {
+  if (entityType === "cutoff_score" && nguonChiNoiDiemSan(source.tieuDe)) {
+    throw sai("Nguồn này mô tả điểm sàn nhận hồ sơ. Cần thông báo điểm trúng tuyển đúng năm và phương thức", "source.tieuDe");
+  }
 }
 
 const chuToiDa = (d: Record<string, unknown>, k: string, toiDa: number, batBuoc: boolean, nhan: string) => {

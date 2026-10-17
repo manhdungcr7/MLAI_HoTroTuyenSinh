@@ -254,8 +254,8 @@ export function phamViCanThiet(ten: string): string[] {
 }
 
 export const tenCongCu = (ten: string): CongCu | undefined => {
-  const t = BIEN_THE[ten] ?? ten;
-  return CONG_CU.find((c) => c.ten === t);
+  // Công cụ đã đăng ký có schema/implementation riêng phải thắng alias tương thích cũ.
+  return CONG_CU.find((c) => c.ten === ten) ?? CONG_CU.find((c) => c.ten === BIEN_THE[ten]);
 };
 
 /** Chạy công cụ theo tên. Tên lạ trả lỗi thường (không ném). */

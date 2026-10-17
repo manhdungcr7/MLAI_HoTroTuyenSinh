@@ -151,6 +151,9 @@ export interface SnapshotDiemChuanHieuChinh {
   phuongThuc: string;
   toHop: string;
   diemChuan: number;
+  /** Bản cũ không có trường này: chưa xác định loại điểm, không suy từ trị số. */
+  loaiDiem?: "diem_chuan" | "diem_san" | "du_kien" | "chua_ro";
+  thangDiem?: number;
   tieuChiPhu?: string;
   nguon: NguonKiemChung;
   capNhatLuc: string;

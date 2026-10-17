@@ -574,8 +574,8 @@ console.log("=== BẮT ĐẦU KIỂM THỬ HÀNH TRÌNH ĐẦU-CUỐI (E2E JOURN
   const lcGoc = LUA_CHON[0];
   const snap = await taoSnapshotVaManifest(
     [
-      banGhiCms("cutoff_score", `DC-THPT-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "THPT", toHop: "A00", diemChuan: 28.25, maNganh: "" }),
-      banGhiCms("cutoff_score", `DC-DGNL-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "DGNL", toHop: "KHONG", diemChuan: 950, maNganh: "" }),
+      banGhiCms("cutoff_score", `${lcGoc.maTruong}-DC-THPT-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "THPT", toHop: "TATCA", diemChuan: 28.25, maNganh: "", loaiDiem: "diem_chuan", thangDiem: 30 }),
+      banGhiCms("cutoff_score", `${lcGoc.maTruong}-DC-DGNL-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "DGNL", toHop: "KHONG", diemChuan: 950, maNganh: "" }),
     ],
     "2026.10.12.01",
   );

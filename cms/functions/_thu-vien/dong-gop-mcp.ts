@@ -166,6 +166,7 @@ async function deXuatDiemChuan(c: NguCanhDongGop, a: Record<string, unknown>) {
     const duLieu = kiemTraData({
       id: h.idChuongTrinh, tenNganh: chuongTrinhCua(ma).find((x) => x.id === h.idChuongTrinh)?.nganh ?? "", maTruong: ma, maNganh: "",
       nam: h.nam, phuongThuc: h.phuongThuc, toHop: h.toHop, diemChuan: h.diem,
+      loaiDiem: "diem_chuan", ...(h.phuongThuc === "THPT" ? { thangDiem: 30 } : {}),
     }, maBan, "cutoff_score");
     const nguon = nguonCmsTuMcp(nguonMcp, c.email, luc, ten);
     const changeNote = `Nhập qua AI (MCP): ${nguonMcp.loai}, trang ${nguonMcp.trang}`.slice(0, 500);

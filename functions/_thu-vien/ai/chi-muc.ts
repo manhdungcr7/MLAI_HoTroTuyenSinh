@@ -5,6 +5,7 @@ import { chuanHoaChoSnapshot, lamSachDuLieuPublic } from "../../../src/engine/du
 import type { EnvAI, VectorGhi, VectorMeta } from "./kieu";
 import { nhungVanBan } from "./nhung";
 import { tinhCuaTruong, tinhGanKe } from "./tinh-lan-can";
+import { nguonChiNoiDiemSan } from "../../../src/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
 
 const LO_UPSERT = 100;
 const DAI_TOI_DA = 600;
@@ -68,6 +69,7 @@ export function vanBanCuaMuc(m: MucChiMuc): string | null {
       s = ghep(`Tuyển sinh ${ma}${nganh ? ` ngành ${nganh}` : ""} năm ${chu(d.nam)}, phương thức ${chu(d.phuongThuc)}.`, d.chiTieu && `Chỉ tiêu ${chu(d.chiTieu)}.`, Array.isArray(d.toHop) && d.toHop.length > 0 && `Tổ hợp: ${d.toHop.join(", ")}.`, d.dieuKienNhanHoSo && `Điều kiện nhận hồ sơ: ${chu(d.dieuKienNhanHoSo)}.`);
       break;
     case "cutoff_score":
+      if (d.loaiDiem !== "diem_chuan" || nguonChiNoiDiemSan((d.nguon as { tieuDe?: string } | undefined)?.tieuDe ?? "")) return null;
       s = ghep(`Điểm chuẩn ${ma}${nganh ? ` ngành ${nganh}` : ""} năm ${chu(d.nam)}: ${chu(d.diemChuan)} điểm, tổ hợp ${chu(d.toHop)}, phương thức ${chu(d.phuongThuc)}.`, d.tieuChiPhu && `Tiêu chí phụ: ${chu(d.tieuChiPhu)}.`);
       break;
     case "announcement":

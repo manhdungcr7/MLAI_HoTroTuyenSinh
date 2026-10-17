@@ -10,6 +10,7 @@ import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
   toHop: string[]; diem: Record<string, number>; dk: number | null; viec: number | null; nguon: string | null; tier: string | null;
+  scoreEvidence?: Record<string, { kind: string; includesPriority: boolean | null }>;
 }
 
 const TONES: ToneTen[] = ["xanh", "luc", "cam", "tim", "do"];
@@ -57,16 +58,10 @@ function chuyen(d: Dong): LuaChon {
   if (d.tier === "aggregator_verified") luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường.");
   if (d.pt !== "THPT") {
     luuY.push(`Điểm chuẩn này thuộc phương thức "${TEN_PT[d.pt] ?? d.pt}", không phải điểm thi tốt nghiệp.`);
-    if (diemMoiNhat <= 30) {
-      luuY.push("Điểm chuẩn hiển thị theo thang 30 (đã quy đổi từ điểm ĐGNL/ĐGTD theo công thức của trường).");
-    }
+    luuY.push("Cần đối chiếu thang điểm và quy tắc quy đổi trong thông báo của trường; không so trực tiếp với tổng điểm thi tốt nghiệp.");
   }
-  if (d.pt === "THPT" && diemMoiNhat === 15) {
-    luuY.push("Mức 15,0 điểm là điểm sàn xét tuyển chuẩn của trường đối với phương thức này.");
-  }
-  if (moiNhat === "2026" && d.tier === "aggregator_verified") {
-    luuY.push("Điểm 2026 từ trang tổng hợp mang tính tham chiếu / dự kiến công bố.");
-  }
+  luuY.push("Cần đối chiếu thông báo điểm trúng tuyển đúng năm và phương thức; không dùng điểm sàn nhận hồ sơ thay điểm chuẩn.");
+  if (d.scoreEvidence?.[moiNhat]?.includesPriority === true) luuY.push("Điểm trúng tuyển công bố đã bao gồm điểm ưu tiên; không cộng ưu tiên lần nữa vào ngưỡng này.");
   return {
     id: d.id,
     truong: d.ma,
@@ -85,7 +80,7 @@ function chuyen(d: Dong): LuaChon {
     tone: toneCua(d.ma),
     lyDoPhuHop: [],
     canLuuY: luuY,
-    nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
+    nguon: d.scoreEvidence?.[moiNhat]?.kind === "diem_chuan" ? "Thông báo điểm trúng tuyển của trường (chưa thẩm định độc lập)" : d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: false,
     linkNguon: d.nguon ?? undefined,
     ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam } : {}),

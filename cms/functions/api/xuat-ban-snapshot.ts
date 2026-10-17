@@ -7,7 +7,7 @@
 // Thứ tự an toàn: dựng snapshot trong bộ nhớ -> một batch D1 (bản ghi, manifest, tệp snapshot, nhật ký) -> KV (manifest:active ghi cuối cùng).
 import { taoSnapshotVaManifest } from "../../../src/engine/du-lieu-tuyen-sinh/snapshot-builder";
 import type { BanGhiCms } from "../../../src/engine/du-lieu-tuyen-sinh/kieu";
-import { cauKiemToan, mapTuD1, type HangBanGhiD1 } from "../_thu-vien/ban-ghi-d1";
+import { cauKiemToan, kiemTraData, kiemTraNguonDiemChuan, mapTuD1, type HangBanGhiD1 } from "../_thu-vien/ban-ghi-d1";
 import { docHetTheoKhoa } from "../_thu-vien/d1";
 import type { BoiCanh, Env, KhoD1, KhoD1Cau, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, docThan, docTrang, json, sai } from "../_thu-vien/phan-hoi";
@@ -140,6 +140,12 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
     try {
       const choDuyet = (await c.d1.prepare("SELECT * FROM ban_ghi_cms WHERE status = 'APPROVED' ORDER BY entity_type, entity_id, version DESC, id LIMIT ?").bind(TOI_DA_MOI_LAN).all<HangBanGhiD1>()).results;
       if (choDuyet.length === 0) throw new LoiHttp(409, "khong-co-gi-de-xuat-ban", "Không có bản ghi APPROVED nào để xuất bản.");
+      for (const h of choDuyet) {
+        if (h.entity_type !== "cutoff_score") continue;
+        const b = mapTuD1(h);
+        kiemTraData(b.data, b.entityId, b.entityType);
+        kiemTraNguonDiemChuan(b.entityType, b.source);
+      }
 
       // Mỗi thực thể chỉ một bản thắng (version cao nhất); các bản APPROVED còn lại thành SUPERSEDED.
       const thang = new Map<string, HangBanGhiD1>();

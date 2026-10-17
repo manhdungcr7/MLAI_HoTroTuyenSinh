@@ -2,7 +2,10 @@
 // Người nhập điểm chuẩn CHỌN chương trình từ danh sách này thay vì gõ mã ngành, nên bản ghi điểm chuẩn gắn đúng chương trình trong dữ liệu gốc.
 // Mỗi dòng: [id, tên ngành, năm điểm chuẩn mới nhất đang có, điểm đó, phương thức]. Chạy lại khi dữ liệu gốc đổi: npx tsx scripts/sinh-chuong-trinh-cms.ts
 import { writeFileSync } from "node:fs";
-import { LUA_CHON } from "../src/data/lua-chon-that";
+import { LUA_CHON, napLuaChon } from "../src/data/lua-chon-that";
+
+await napLuaChon();
+if (LUA_CHON.length === 0) throw new Error("Danh mục chưa có dữ liệu; không ghi đè chỉ mục CMS");
 
 const ra: Record<string, [string, string, number | null, number | null, string][]> = {};
 for (const l of LUA_CHON) {

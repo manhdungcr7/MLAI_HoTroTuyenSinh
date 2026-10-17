@@ -32624,12 +32624,25 @@
     ],
     "diem": {
       "2023": 26.3,
-      "2024": 26.77
+      "2024": 26.77,
+      "2025": 26.27
     },
-    "dk": 26.77,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 26.27
+      }
+    }
   },
   {
     "id": "qsc-2064f6c3",
@@ -32647,12 +32660,25 @@
     ],
     "diem": {
       "2023": 26.9,
-      "2024": 27.1
+      "2024": 27.1,
+      "2025": 26.6
     },
-    "dk": 27.1,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 26.6
+      }
+    }
   },
   {
     "id": "qsc-d3b4cfb0",
@@ -32670,12 +32696,25 @@
     ],
     "diem": {
       "2023": 25.9,
-      "2024": 25.55
+      "2024": 25.55,
+      "2025": 24.2
     },
-    "dk": 25.55,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 24.2
+      }
+    }
   },
   {
     "id": "qsc-24737475",
@@ -32693,12 +32732,25 @@
     ],
     "diem": {
       "2023": 26.1,
-      "2024": 26.25
+      "2024": 26.25,
+      "2025": 24.7
     },
-    "dk": 26.25,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 24.7
+      }
+    }
   },
   {
     "id": "qsc-aebf762b",
@@ -32716,12 +32768,25 @@
     ],
     "diem": {
       "2023": 25.4,
-      "2024": 25.55
+      "2024": 25.55,
+      "2025": 24.2
     },
-    "dk": 25.55,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 24.2
+      }
+    }
   },
   {
     "id": "qsc-e5c81a10",
@@ -32739,12 +32804,25 @@
     ],
     "diem": {
       "2023": 27.1,
-      "2024": 27.5
+      "2024": 27.5,
+      "2025": 27.7
     },
-    "dk": 27.5,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 27.7
+      }
+    }
   },
   {
     "id": "qsc-77d4a3a1",
@@ -32762,12 +32840,25 @@
     ],
     "diem": {
       "2023": 26.9,
-      "2024": 27.3
+      "2024": 27.3,
+      "2025": 27.2
     },
-    "dk": 27.3,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 27.2
+      }
+    }
   },
   {
     "id": "qsc-a65bd00b",
@@ -32785,12 +32876,25 @@
     ],
     "diem": {
       "2023": 25.6,
-      "2024": 26.25
+      "2024": 26.25,
+      "2025": 25.3
     },
-    "dk": 26.25,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 25.3
+      }
+    }
   },
   {
     "id": "qsc-81e88be7",
@@ -32808,12 +32912,25 @@
     ],
     "diem": {
       "2023": 26.9,
-      "2024": 26.85
+      "2024": 26.85,
+      "2025": 26
     },
-    "dk": 26.85,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 26
+      }
+    }
   },
   {
     "id": "qsc-255c8fcc",
@@ -32831,12 +32948,25 @@
     ],
     "diem": {
       "2023": 25.4,
-      "2024": 25.7
+      "2024": 25.7,
+      "2025": 24
     },
-    "dk": 25.7,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 24
+      }
+    }
   },
   {
     "id": "qsc-89da7ac2",
@@ -32853,12 +32983,25 @@
       "C01"
     ],
     "diem": {
-      "2024": 26.5
+      "2024": 26.5,
+      "2025": 27
     },
-    "dk": 26.5,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 27
+      }
+    }
   },
   {
     "id": "qsc-cab2344d",
@@ -32876,12 +33019,25 @@
     ],
     "diem": {
       "2023": 25.8,
-      "2024": 26.12
+      "2024": 26.12,
+      "2025": 24.57
     },
-    "dk": 26.12,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 24.57
+      }
+    }
   },
   {
     "id": "qsc-670037f1",
@@ -32899,12 +33055,25 @@
     ],
     "diem": {
       "2023": 27.8,
-      "2024": 28.3
+      "2024": 28.3,
+      "2025": 29.6
     },
-    "dk": 28.3,
+    "dk": null,
     "viec": null,
-    "nguon": "https://images.tuyensinh247.com/picture/2025/0611/thong-tin-tuyen-sinh-dai-hoc-cong-nghe-thong-tin-dhqghcm-2025.pdf",
-    "tier": "official_pdf"
+    "nguon": "https://tuyensinh.uit.edu.vn/node/4147",
+    "tier": "official_pdf",
+    "scoreEvidence": {
+      "2025": {
+        "kind": "diem_chuan",
+        "scale": 30,
+        "sourceUrl": "https://tuyensinh.uit.edu.vn/node/4147",
+        "checkedAt": "2026-10-17",
+        "checkedBy": "Codex: visual transcription of official UIT 2025 THPT table",
+        "independentReviewer": null,
+        "includesPriority": true,
+        "score": 29.6
+      }
+    }
   },
   {
     "id": "qst-e79b6882",

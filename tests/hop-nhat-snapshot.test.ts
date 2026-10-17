@@ -36,7 +36,7 @@ assert.equal(coNguon?.fanpageUrl, "https://facebook.com/ABC");
 const hpNganh = layChiTietTruongHopNhat("ABC", [lc], { tuition: [{ id: "abc-1", maTruong: "ABC", nam: 2025, mucThap: 30, mucCao: 36, donVi: "trieu_nam", nguon, capNhatLuc: "x" }] });
 assert.equal(hpNganh?.hocPhiMoiNhat, undefined);
 // 5) Dữ liệu thật: tên ngắn của trường KHÁC mã trường (ĐH Bách Khoa Hà Nội / BKA). CMS gọi trường bằng mã.
-const that = { id: "bka-1", truong: "ĐH Bách Khoa Hà Nội", maTruong: "BKA", tenTruong: "Đại học Bách khoa Hà Nội", nganh: "CNTT" } as unknown as LuaChon;
+const that = { id: "bka-1", truong: "ĐH Bách Khoa Hà Nội", maTruong: "BKA", tenTruong: "Đại học Bách khoa Hà Nội", nganh: "CNTT", phuongThuc: "THPT", toHopXet: ["A00"] } as unknown as LuaChon;
 const ctThat = layChiTietTruongHopNhat("BKA", [that], {
   scholarships: [{ id: "h1", maTruong: "BKA", tenHocBong: "Tài năng", giaTri: "100%", dieuKien: "Thủ khoa", nguon, capNhatLuc: "x" }],
   community: [
@@ -67,7 +67,7 @@ assert.equal(tb.maTruong, undefined, "thông báo chung không bị gán mã tr�
 const dc = chuanHoaChoSnapshot(bg("cutoff_score", "BKA-DC2025-bka-47a6194c-thpt-a00", { id: "bka-47a6194c", maNganh: "", nam: 2025, phuongThuc: "THPT", toHop: "A00", diemChuan: 26.5 }), { id: "bka-47a6194c", maNganh: "", nam: 2025, phuongThuc: "THPT", toHop: "A00", diemChuan: 26.5 });
 assert.equal(dc.id, "bka-47a6194c", "điểm chuẩn giữ mã chương trình để ghép đúng ngành");
 // Cả chuỗi: dựng snapshot rồi hợp nhất → ngành thật nhận điểm chuẩn mới; điểm DGNL thang 1200 không đè điểm THPT
-const kq = await taoSnapshotVaManifest([bg("cutoff_score", "BKA-DC2025-bka-1-thpt-a00", { id: "bka-1", nam: 2026, phuongThuc: "THPT", toHop: "A00", diemChuan: 27.5, maNganh: "" }), bg("cutoff_score", "BKA-DC2025-bka-1-dgnl", { id: "bka-1", nam: 2026, phuongThuc: "DGNL", toHop: "KHONG", diemChuan: 900, maNganh: "" })], "2026.10.09.01");
+const kq = await taoSnapshotVaManifest([bg("cutoff_score", "BKA-DC2025-bka-1-thpt-a00", { id: "bka-1", nam: 2026, phuongThuc: "THPT", toHop: "A00", diemChuan: 27.5, maNganh: "", loaiDiem: "diem_chuan", thangDiem: 30 }), bg("cutoff_score", "BKA-DC2025-bka-1-dgnl", { id: "bka-1", nam: 2026, phuongThuc: "DGNL", toHop: "KHONG", diemChuan: 900, maNganh: "" })], "2026.10.09.01");
 const hn = hopNhatLuaChonVaCms([that], { cutoffScores: kq.datasets.cutoffScores.duLieu });
 assert.equal(hn[0].diemMin, 27.5, "THPT ghi đè; DGNL 900 không được đè");
 assert.equal(hn[0].namDiem, 2026);
