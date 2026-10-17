@@ -18,7 +18,11 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Hỏi tư vấn AI có căn cứ | `src/features/tu-van`, `functions/api/tu-van.ts` |
 | Hiểu sở thích (hướng nghiệp) | `src/features/huong-nghiep` (trắc nghiệm Holland 12 tình huống + 1 câu giá trị → nhóm ngành gợi ý, lưu `HoSo.soThich`) |
 | Phụ huynh/thầy cô đồng hành | `src/features/hanh-trinh/chia-se.tsx` (tóm tắt + tạo liên kết), `src/features/dong-hanh` (người đồng hành xem, viết lời nhắn; em nhận lời nhắn) |
-| Dự báo khoảng điểm chuẩn năm tới | `src/engine/du-bao-diem-chuan.ts`, `src/features/kham-pha/khoi-du-bao.tsx` (có kiểm định ngược) |
+| Dự báo điểm chuẩn năm tới (khoảng thống kê + LightGBM, ML chỉ cải thiện nhẹ) | `src/engine/du-bao-diem-chuan.ts`, `src/features/kham-pha/khoi-du-bao.tsx` (có kiểm định ngược, độ tin cậy từng dự báo) |
+| Bản đồ cơ hội, Phòng thử điểm, Thẻ hành trình | `src/features/co-hoi` (`/co-hoi`, `/co-hoi/thu-diem`), `src/engine/ban-do-co-hoi.ts`, `src/features/hanh-trinh/the-hanh-trinh.tsx` (ở Hôm nay) |
+| Độ tin cậy dữ liệu, chỉ tiêu ngành | `src/features/kham-pha/khoi-do-tin-cay.tsx` (trang Về dữ liệu), `src/engine/do-tin-cay-du-lieu.ts`, dòng Chỉ tiêu ở `chi-tiet.tsx` |
+| Sửa điểm có bằng chứng | `src/data/hieu-chinh-diem.json` + `.ts`, báo cáo ở `docs/audits/` |
+| Số chốt nộp bài | `docs/SO-LIEU-CHOT-NOP-BAI.md`, `scripts/so-lieu-nop-bai.mts` |
 | Điểm ưu tiên khu vực/đối tượng | `src/engine/diem-uu-tien.ts`, `src/features/khoi-dau/diem-uu-tien.tsx` |
 | Cập nhật dữ liệu bởi người trong trường | `cms/` (CMS quản trị), `functions/snapshots`, `functions/api/{bao-sai,tinh-nguyen,manifest}.ts`, `src/features/dong-gop`; vận hành: `docs/QUAN-TRI.md` |
 | Đối chiếu tiêu chí chấm của Ban Tổ chức | `docs/DOI-CHIEU-TIEU-CHI.md`, `docs/HOI-DAP-BAN-GIAM-KHAO.md`, `docs/KICH-BAN-DEMO.md` |
@@ -35,14 +39,17 @@ npm install
 npm run dev          # chạy thử
 npx tsc --noEmit     # kiểm tra kiểu (gồm cả thư mục functions)
 npm run kiem-tra     # kiểm tra route, màu, từ cấm
-npm test             # toàn bộ test (24 bộ: logic, dữ liệu, CMS/API, dự báo, ưu tiên, hộp thư, kiểm tra đồng nhất)
+npm test             # toàn bộ test (hơn 80 bộ: logic, dữ liệu, CMS/API, dự báo, MCP, AI, hộp thư, kiểm tra đồng nhất)
+npm run cong:commit  # cổng trước commit (tự chạy bằng hook): tsc + kiem-tra + test phần đổi
+npm run cong:push    # cổng trước push: tsc + kiem-tra + vite build (thêm -- --day-du để chạy mọi test)
+npx tsx scripts/so-lieu-nop-bai.mts   # số chốt cho slide và tài liệu nộp bài
 npm run cms:build    # build CMS quản trị (CI cũng chạy)
 npm run cms:api      # CMS + API cục bộ (D1/KV cục bộ), xem docs/QUAN-TRI.md
 npm run app:local    # app học sinh + Functions cục bộ, dùng chung dữ liệu với cms:api
 npm run build
 ```
 
-Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `build` phải qua.
+Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `build` phải qua. Làm việc song song: mỗi việc một worktree (`npm run viec-moi -- ten-viec`), chỉ `git add` đường dẫn cụ thể, không `--no-verify` (`AGENTS.md` mục 9). Push `main` thì CI tự deploy lên Cloudflare Pages (mục 6).
 
 ## 3. Kiến trúc
 
@@ -56,9 +63,12 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 
 ## 4. Dữ liệu
 
-- 3.648 chương trình thật ở `src/data/du-lieu-that.json`, chuyển sang kiểu `LuaChon` bởi `src/data/lua-chon-that.ts`.
+- 3.648 chương trình thật ở `src/data/du-lieu-that.json`, chuyển sang kiểu `LuaChon` bởi `src/data/lua-chon-that.ts`. Số chốt (17/10/2026, lệnh `npx tsx scripts/so-lieu-nop-bai.mts`): 118 trường, 3.320 chương trình xét điểm thi THPT, 1.492 gắn nguồn đề án PDF và 2.156 gắn nguồn trang tổng hợp. Mọi số khi trình bày lấy từ `docs/SO-LIEU-CHOT-NOP-BAI.md`.
 - Các file nạp lười (lazy): điểm theo năm, đề án trường, chương trình, trang ngành-trường.
-- Học phí: 0 chương trình có học phí đã kiểm chứng (đo 17/10/2026, `src/data/hoc-phi-kiem-chung.ts`); `src/data/hoc-phi.json` có 601 mục, đều dẫn tới trang tổng hợp tuyensinh247, chưa mục nào đánh dấu đối chiếu văn bản gốc (xem `scripts/lam-day-hoc-phi.py`, BO_QUA) và tỷ lệ việc làm trích từ đề án bằng script trong `scripts/`.
+- Điểm năm 2026 (2.082 chương trình) chủ yếu từ trang tổng hợp (tuyensinh247) và bổ sung từ VnExpress (`scripts/crawl-vnexpress.py`, `doi-chieu-vnexpress.py`), **chưa đối chiếu đề án**; app ghi nhãn "chưa đối chiếu đề án".
+- Học phí: 662 chương trình hiển thị, **toàn bộ theo VnExpress** (nguồn thứ cấp, `hoc-phi-vnexpress.json`). Học phí trích từ văn bản trường (`hoc-phi.json`) bị ẩn vì chưa có dấu đối chiếu tài liệu gốc (`hoc-phi-kiem-chung.ts`); học phí ước tính không bao giờ hiển thị. Các số cũ "602 chương trình ở 18 trường", "721 ở 20 trường" không còn đúng. Việc làm: 121 chương trình; chỉ tiêu theo ngành: 421 bản ghi của 10 trường (`chi-tieu.json`).
+- Sửa điểm có bằng chứng: `src/data/hieu-chinh-diem.json` (146 mục năm của 70 chương trình), nạp ở `napLuaChon()`. Không sửa tay `du-lieu-that.json`.
+- Độ chính xác đã đo (`docs/audits/do-chinh-xac-du-lieu.md`): điểm có phần lẻ khớp PDF ở 201/201 dòng đã kiểm; **điểm số nguyên chưa kiểm hết** (mẫu con: 5 sai trên 28). 5 trường nghi sai mã hoặc tên (DQH, TTN, DTV, TYS, DDP). Không được nói "chính xác 100%".
 - 73 tổ hợp xét tuyển chính thức: `src/data/to-hop-chinh-thuc.ts`.
 - Script sinh lại dữ liệu cần thư mục anh em `nguyen-vong` (nguồn thô). Hướng dẫn và giới hạn: `docs/DU-LIEU.md`.
 - Dữ liệu nào chưa có thì hiển thị "chưa có", không điền thay.
@@ -112,21 +122,29 @@ Giai đoạn 5 — kéo code mới của nhóm, đối chiếu đề bài Ban T�
 - Chạy thử cả vòng ở máy, không cần tài khoản Cloudflare: `npm run cms:api` rồi `npm run app:local` (`scripts/chay-app-local.mjs`, dùng chung D1/KV với CMS). Đã kiểm bằng trình duyệt: nhập điểm chuẩn ở CMS, duyệt, xuất bản, học sinh thấy số mới trên cả thẻ danh sách, nhãn và trang chi tiết.
 - CMS: "Nhập điểm chuẩn cả trường một lượt" (bảng ngành, một nguồn chung), form từng ngành chọn chương trình thay vì gõ mã.
 - Kênh cộng đồng công khai: `/api/bao-sai` (học sinh báo số liệu sai, thay cho mailto), `/api/tinh-nguyen` + trang `/dong-gop` (đăng ký làm tình nguyện viên), migration `0005`, hộp thư trong CMS (Phê duyệt > Hộp thư) với nút "Cấp quyền cộng tác viên" tự thêm email và giao đúng trường. Giới hạn tần suất theo IP bằng KV. Test: `tests/hop-thu.test.ts` (SQLite thật).
-- **Dự báo khoảng điểm chuẩn năm tới** (`engine/du-bao-diem-chuan.ts`, khối trên trang ngành, dòng "Dự kiến" ở danh sách nguyện vọng, và trong dữ liệu gửi AI tư vấn). Hệ số nở khoảng chọn bằng kiểm định bỏ-một-năm trên dữ liệu thật; phát hiện bản đầu (cộng trung vị, tách theo nhóm ngành) phủ chỉ 55% nên bỏ. Kết quả (đo 15/10): phủ 89% (2023), 95% (2024), 64% (2025). Test in và kiểm mức phủ mỗi lần chạy.
+- **Dự báo khoảng điểm chuẩn năm tới** (`engine/du-bao-diem-chuan.ts`, khối trên trang ngành, dòng "Dự kiến" ở danh sách nguyện vọng, và trong dữ liệu gửi AI tư vấn). Hệ số nở khoảng chọn bằng kiểm định bỏ-một-năm trên dữ liệu thật; phát hiện bản đầu (cộng trung vị, tách theo nhóm ngành) phủ chỉ 55% nên bỏ. Số đo mới nhất (17/10, `tests/du-bao-diem-chuan.test.ts`): phủ 91,1% (2023), 93,2% (2024), 76,6% (2025); số đo 15/10 (89/95/64) đã cũ. Test in và kiểm mức phủ mỗi lần chạy.
 - **Điểm ưu tiên khu vực/đối tượng** (`engine/diem-uu-tien.ts`, khai ở Bước 2): đi vào mọi phép so điểm chuẩn và phần "còn thiếu" của mục tiêu.
 - Sửa dấu thập phân còn sót ("1.3 điểm"), CI build CMS, tài liệu vận hành `docs/QUAN-TRI.md`.
-- Việc cần chủ tài khoản Cloudflare (không làm thay được): tạo D1 (tài khoản đang chạm giới hạn số D1), Access, biến môi trường; xem `docs/QUAN-TRI.md` mục 3.
+- Việc cần chủ tài khoản Cloudflare (không làm thay được): tạo D1 (tài khoản từng chạm giới hạn số D1), biến môi trường; CMS đăng nhập bằng email và mật khẩu tự quản, không dùng Cloudflare Access; xem `docs/QUAN-TRI.md` mục 3.
+
+Giai đoạn 6 — làm đúng dữ liệu, thêm lớp "Cơ hội" và chốt nộp bài (2026-10-15 đến 17):
+- **Màn mới:** Bản đồ cơ hội (`/co-hoi`: số ngành ở từng nhãn theo nhóm ngành, `engine/ban-do-co-hoi.ts`), Phòng thử điểm (`/co-hoi/thu-diem`: kéo điểm từng môn xem ngành đổi nhãn, không ghi vào hồ sơ), Thẻ hành trình ở Hôm nay (bốn dòng kể chuyện từ dữ liệu của em), Tạo hồ sơ 3 bước thiết kế lại (`khoi-dau/buoc-1..3`), mục "Dữ liệu của em" ở Cài đặt (tải sao lưu, khôi phục, xóa).
+- **Trang ngành:** dòng Chỉ tiêu (đọc từ đề án, có link và trang), học phí kèm nhãn nguồn; trang Về dữ liệu có khối Độ tin cậy dữ liệu đếm từ danh mục (`engine/trang-thai-du-lieu.ts` phân loại nhiều năm / một năm / phương thức khác; `do-tin-cay-du-lieu.ts`).
+- **Dữ liệu:** bổ sung điểm 2025 và 2026 từ VnExpress, đối chiếu hai nguồn; phân biệt điểm sàn, điểm chuẩn, dự kiến (không đoán loại điểm từ trị số); kiểm mẫu độ chính xác; cơ chế ghi đè điểm có bằng chứng (146 mục). Báo cáo ở `docs/audits/`. Dự báo: điểm dự đoán 2027 kèm độ tin cậy từng dự báo; mô hình ML LightGBM huấn luyện lại 17/10 trên điểm đã sửa, áp dụng cho 2.580 chương trình khi mã băm danh mục khớp (`du-bao-ml.ts`); ngoài mẫu phủ 63,8%, Winkler 8,21 so với 8,19 của thống kê, nên không được nói là vượt trội.
+- **AI:** bậc thang trả lời (cache, Clef, RAG cộng đồng, LLM), hậu kiểm số liệu, hạn mức theo hồ sơ/IP/toàn hệ thống; kết nối trợ lý ngoài qua MCP (18 công cụ).
+- **Quy trình:** cổng kiểm tra trên bản chụp của thứ sắp commit/push (`scripts/cong-kiem-tra.mjs`, hook `.githooks`, `npm run cong:commit`/`cong:push`), mỗi việc một worktree, test đỏ có chủ ở `tests/baseline-do.json`. CI `.github/workflows/deploy.yml` tự deploy Cloudflare Pages khi push `main`.
+- **Tài liệu nộp bài đã đồng bộ:** `docs/SO-LIEU-CHOT-NOP-BAI.md` (một bộ số, kèm điều không được nói), kịch bản demo 3 phút, hỏi đáp, đối chiếu tiêu chí, nội dung slide, kịch bản 7 và 10 phút. Bản `.docx` của kịch bản 10 phút chưa xuất lại.
 
 **Quy ước giao diện (nhóm chốt 2026-10-09):** app dành cho học sinh dùng thật, giữ gọn. Giải thích dành cho ban giám khảo (giả định, kiểm định, kiến trúc, mô hình mở rộng) để ở **slide**, không nhồi vào app. Nội dung sẵn cho slide: `docs/NOI-DUNG-CHO-SLIDE.md`. Màn mới chỉ giữ một dòng giới hạn ngắn (ví dụ "không phải xác suất đậu").
 
 ## 7. Giới hạn đã biết và việc còn lại
 
-- Điểm chuẩn là số năm trước; điểm năm nay có thể khác. Học phí và việc làm mới có cho một phần chương trình. Danh sách đầy đủ ở `docs/DU-LIEU.md` và `docs/BACKLOG.md`.
+- Điểm chuẩn là số năm trước; điểm năm nay có thể khác. Điểm 2026 là tham chiếu từ trang tổng hợp. Học phí (662, theo VnExpress) và việc làm (121) mới có cho một phần chương trình; chưa có khung chương trình học. Điểm số nguyên chưa kiểm hết; 5 trường nghi sai mã hoặc tên chưa sửa. Danh sách đầy đủ ở `docs/DU-LIEU.md` và `docs/BACKLOG.md`.
 - Trắc nghiệm hướng nghiệp là công cụ gợi ý để tìm hiểu, chưa được kiểm định tâm lý; kết quả chỉ nên dùng cùng điểm số và trao đổi với người lớn.
 - Chưa có tài khoản, đăng nhập hay đồng bộ nhiều thiết bị (đúng với hướng local-first của MVP); chuyển máy dùng tệp sao lưu.
 - Phụ huynh/thầy cô không có tài khoản riêng, đồng hành bằng liên kết hai chiều (xem mục 6, giai đoạn 4). Muốn có tài khoản, thông báo đẩy và đồng bộ thật cần đăng nhập cho học sinh và máy chủ lưu dữ liệu của em, chưa làm (D1 đã có cho dữ liệu trường).
-- Dự báo điểm chuẩn không bù được thay đổi quy chế/đề thi/chỉ tiêu (năm 2025 chỉ phủ 68%). Điểm ưu tiên: học sinh tự khai khu vực, chưa tự map từ tỉnh/huyện. Mức cộng ưu tiên cần đối chiếu quy chế mỗi năm.
-- Hạ tầng thật của CMS (D1, Access) chưa dựng; chạy thử đầy đủ bằng `npm run cms:api` + `npm run app:local`.
+- Dự báo điểm chuẩn không bù được thay đổi quy chế/đề thi/chỉ tiêu (năm 2025 phủ 76,6%; cả 2.812 dự báo ở mức tin cậy thấp vì điểm mới nhất là 2026 từ nguồn thứ cấp; ML phủ ngoài mẫu 63,8%). Điểm ưu tiên: học sinh tự khai khu vực, chưa tự map từ tỉnh/huyện. Mức cộng ưu tiên cần đối chiếu quy chế mỗi năm.
+- Hạ tầng thật của CMS (D1, biến môi trường) cần chủ tài khoản dựng; chạy thử đầy đủ bằng `npm run cms:api` + `npm run app:local`.
 - Chưa bật AI thật cho đến khi có khóa API trên Cloudflare.
 - Thông báo đẩy khi tắt app phụ thuộc trình duyệt; nhắc trong app luôn hoạt động.
 

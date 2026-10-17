@@ -131,10 +131,10 @@
 - ⏳ **Trạng thái:** `Ghi nhận (cần nguồn dữ liệu)`
 - Chưa có dữ liệu môn từng học kỳ. Hiện có link trang ngành của trường cho khoảng một phần tư số chương trình (`chuong-trinh.json`). Cần quyết định nguồn (website từng trường, hay nhập tay các ngành lớn) trước khi làm.
 
-## 📌 Issue #09: Nâng cấp nguồn cho 962 chương trình chỉ có trang tổng hợp
+## 📌 Issue #09: Nâng cấp nguồn cho 2.156 chương trình chỉ có nguồn trang tổng hợp
 - 👤 **Phụ trách (Owner):** Dũng (`kham-pha`)
 - ⏳ **Trạng thái:** `Ghi nhận (Backlog)`
-- Các chương trình lấy từ `tuyensinh247` chưa có đề án PDF chính thức. Cần tìm đề án của từng trường (xem `docs/DU-LIEU.md`).
+- 2.156 chương trình (số đo 17/10) mang nhãn nguồn trang tổng hợp (`tuyensinh247`, bổ sung VnExpress), chưa đối chiếu đề án PDF chính thức; điểm 2026 phần lớn thuộc nhóm này. Cần tìm đề án của từng trường (xem `docs/DU-LIEU.md`).
 
 ## 📌 Issue #10: Chia nhỏ gói dữ liệu khi lên bản có máy chủ
 - 👤 **Phụ trách (Owner):** cả nhóm, khi làm phần máy chủ
@@ -171,7 +171,7 @@
 | 11 | Ảnh `public/og.png` 1200x630 và icon PNG 192/512 + apple-touch-icon | Thiết kế | P0 | ✅ **Đã hoàn thành**: Đã tạo trọn bộ ảnh nhận diện thương hiệu độ phân giải cao và PWA icons |
 | 12 | Đổi `EMAIL_BAO_SAI` trong `src/duong-dan.ts` sang email chung nhóm | Hưng | P0 | ⚠️ **Chưa xong** (kiểm 12/10): `src/duong-dan.ts` vẫn là email cá nhân `daomanhdungtvt@…`; cần một email chung của nhóm rồi đổi một dòng |
 | 13 | Kiểm tra bundle size chunk `chuan-hoa` (~980KB) | Dũng | P1 | Tách lazy-load danh mục dữ liệu trường để giảm tải lần đầu |
-| 14 | Xác minh điểm "2026" (đếm lại 12/10: 1.716 chương trình có điểm 2026, phần lớn từ trang tổng hợp); đồng thời sửa câu "Điểm chuẩn năm nay chưa công bố" ở `ve-du-lieu.tsx` cho khớp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
+| 14 | Xác minh điểm "2026" (đếm lại 17/10: 2.082 chương trình có điểm 2026, phần lớn từ trang tổng hợp và VnExpress; kiểm 20 chương trình: 0/20 đối chiếu được với bảng chính thức, xem `docs/audits/kiem-tra-nhan-nam-2026.md`); đồng thời sửa câu "Điểm chuẩn năm nay chưa công bố" ở `ve-du-lieu.tsx` cho khớp | Dũng | P0 | Rà soát và cập nhật nhãn nguồn trong `docs/DU-LIEU.md` |
 | 15 | Kết nối giao diện người dùng với CMS Backend thật trên Cloudflare | Cả nhóm | P1 | Tạo D1 instance trên Cloudflare, áp migration `0001_cong_dong.sql` và cấu hình Pages Access |
 | 16 | Mở rộng tổ hợp mục tiêu sang C00, D07, D14, X70 | Kiệt | P1 | Bổ sung các môn KHXH vào ma trận tổ hợp và phân tích Gap điểm |
 | 17 | Rate-limit thật cho `/api/tu-van` trên Cloudflare Workers | Tuấn / Hưng | P0 | **Một phần:** API đã từ chối gọi mô hình khi thiếu KV hoặc KV lỗi; cần tạo/gắn namespace `RATE_KV` trên Cloudflare và bật WAF rule để hoàn tất vận hành. |
@@ -215,3 +215,19 @@ Chi tiết: [báo cáo](audits/data-quality-2026-10-17.md), [danh sách 118 trư
 | Sửa pipeline legacy đoán năm/phương thức và median nguồn mâu thuẫn; giữ metadata đối chiếu khi tái xuất | Dũng / `data`, pipeline | Mở; chưa chạy lại legacy; không tái xuất đè bằng chứng đã bổ sung |
 | Mô hình điểm/điều kiện theo năm, tổ hợp và đợt tuyển sinh; thẩm định độc lập trước phát hành | Dũng + Kiệt / `data`, `engine` | Mở; `npm run data:audit -- --strict` hiện trả mã 1 đúng với các khoảng trống, chưa đủ cơ sở công bố toàn danh mục đã kiểm chứng |
 
+
+## Việc còn mở sau đợt đồng bộ tài liệu nộp bài (17/10/2026)
+
+Nguồn số: `docs/SO-LIEU-CHOT-NOP-BAI.md`. Việc nào xong thì xóa dòng và sửa số chốt.
+
+| Việc | Ưu tiên | Ghi chú |
+|---|---|---|
+| Kiểm điểm số nguyên chưa kiểm (khoảng 45% ô điểm 2022 đến 2025), quét lỗi chỉ tiêu bị đọc thành điểm theo cột | P0 | `docs/audits/do-chinh-xac-du-lieu.md` mục 5; cần người thứ hai đối chiếu |
+| Sửa tên hoặc tỉnh của 5 trường nghi sai (DQH, TTN, DTV, TYS, DDP) và quyết định cho HCS | P0 | `lien-ket-pdf-sai-truong.csv`, `xung-dot-con-lai-ket-qua.md`; sửa trong `du-lieu-that.json` qua script, người điều phối dữ liệu |
+| Đối chiếu điểm 2026 với đề án chính thức khi trường công bố | P0 | `kiem-tra-nhan-nam-2026.md` đề xuất tải trang năm 2025 để bắt lệch năm |
+| Cập nhật `docs/ML-DU-BAO-DIEM-CHUAN-2027.md` theo lần huấn luyện 17/10 (lời mở đầu còn nói ML đang tắt; số 66,6% và 8,45 so với 8,76 là của lần trước). Cải thiện ML: ngoài mẫu mới phủ 63,8% | P1 | `ml/ket-qua-du-bao-2027.json` |
+| Cập nhật hằng số `KET_QUA_BACKTESTING_3_NAM` (`src/engine/du-bao-diem-chuan.ts`) theo số đo mới (91,1 / 93,2 / 76,6) | P1 | Hiện hiển thị số cũ 89 / 95 / 64 ở màn Chẩn đoán danh mục |
+| Nối `nam-diem-bo-sung.json` (19 chương trình, 31 cặp năm) vào app sau khi xem xung đột | P2 | `nang-do-phu-nam-diem.md` |
+| Học phí: đối chiếu văn bản đúng trường rồi đặt dấu `nguonSoCap` + `kiemChungLuc` cho từng dòng; hiện 0 dòng đạt, 662 dòng hiển thị theo VnExpress | P1 | `src/data/hoc-phi-kiem-chung.ts` |
+| Xuất lại `docs/KICH-BAN-THUYET-TRINH-10-PHUT.docx` từ bản `.md` | P1 | Bản `.docx` còn số cũ |
+| Chụp lại ảnh slide cho Bản đồ cơ hội, Phòng thử điểm | P2 | Kịch bản 7 phút tham chiếu ảnh cũ |
