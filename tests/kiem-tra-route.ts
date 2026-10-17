@@ -42,6 +42,12 @@ for (const [ten, fn] of Object.entries(DUONG_DAN) as [string, (...a: unknown[]) 
 
 // 3 + 4 + 5) Quét mã nguồn slice và thành phần
 const TU_CAM = ["dashboard", "kịch bản", "giả lập", "tác động", "rủi ro", "chống trượt", "tối ưu", "CTA", "widget", "onboarding", "profile", "chắc chắn", "chắc chân", "an toàn không", "yên tâm", "cơ hội tốt"];
+/** Thay mọi `${...}` (kể cả lồng nhau) bằng một ký tự giữ chỗ để regex từ cấm vẫn quét được chữ trong template literal. */
+const boNoiSuy = (d: string) => { let t = d; for (let i = 0; i < 5; i++) t = t.replace(/\$\{[^{}]*\}/g, "\u0001"); return t; };
+const reTuCam = (tu: string) => new RegExp("[\"'`>][^\"'`<{}]*\\b" + tu + "\\b[^\"'`<{}]*[\"'`<]", "i");
+// Tự kiểm cổng: chuỗi có `${...}` chen giữa phải vẫn bị bắt, chuỗi sạch không bị bắt nhầm.
+if (!reTuCam("chắc chắn").test(boNoiSuy("const x = `dư ${a} điểm, chắc chắn có ${b} chỗ`;"))) loi.push("[cong] cổng từ cấm không bắt từ nằm sau ${...} trong template literal");
+if (reTuCam("chắc chắn").test(boNoiSuy("const x = `dư ${a} điểm, còn ${b} chỗ`;"))) loi.push("[cong] cổng từ cấm báo nhầm template literal không có từ cấm");
 for (const f of tatCa) {
   const ten = tenFile(f);
   const trongFeature = /src\/(features|components)\//.test(ten);
@@ -59,8 +65,8 @@ for (const f of tatCa) {
   }
   for (const tu of TU_CAM) {
     // từ nằm trong chuỗi chữ hoặc trong nội dung JSX
-    const re = new RegExp("[\"'`>][^\"'`<{}]*\\b" + tu + "\\b[^\"'`<{}]*[\"'`<]", "i");
-    code.split("\n").forEach((d, i) => { if (re.test(d)) loi.push(`[tu-ngu] ${ten}:${i + 1} có từ khó hiểu "${tu}"`); });
+    const re = reTuCam(tu);
+    code.split("\n").forEach((d, i) => { if (re.test(boNoiSuy(d))) loi.push(`[tu-ngu] ${ten}:${i + 1} có từ khó hiểu "${tu}"`); });
   }
 }
 

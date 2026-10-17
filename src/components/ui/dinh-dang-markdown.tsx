@@ -1,6 +1,15 @@
 import React from "react";
 import { gop } from "@/components/ui/nut-the";
 
+/** Chỉ cho http:, https:, mailto: làm đích liên kết (chặn javascript:, data:, vbscript:...); khác thì null và hiện chữ thường. */
+export function hrefAnToan(url: string): string | null {
+  const u = url.trim();
+  // Trình duyệt bỏ ký tự điều khiển/khoảng trắng trong scheme, nên gỡ trước khi kiểm.
+  // eslint-disable-next-line no-control-regex
+  const goc = u.replace(/[\u0000-\u0020]/g, "");
+  return /^(https?:|mailto:)/i.test(goc) ? u : null;
+}
+
 interface DinhDangMarkdownProps {
   noiDung: string;
   className?: string;
@@ -206,8 +215,10 @@ function parseInline(text: string): React.ReactNode {
 
     const matchLink = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (matchLink) {
+      const href = hrefAnToan(matchLink[2]);
+      if (!href) return matchLink[1];
       return (
-        <a key={index} href={matchLink[2]} target="_blank" rel="noreferrer" className="text-xanh font-semibold hover:underline">
+        <a key={index} href={href} target="_blank" rel="noreferrer" className="text-xanh font-semibold hover:underline">
           {matchLink[1]}
         </a>
       );
