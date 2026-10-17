@@ -30,7 +30,7 @@ Dữ liệu người dùng: điểm từng môn, thi thử theo thời gian, th�
 
 ## 5. AI và dự báo (tiêu chí 4, ý 3, trọng tâm 10 điểm)
 Các vai trò của AI, chỉ một là mô hình ngôn ngữ:
-- **Dự báo (thống kê):** điểm dự đoán 2027 và khoảng. Cách làm: điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau, từ 2.526 cặp năm thật, nhân hệ số 1,3. Mô hình học máy đã huấn luyện nhưng đang tắt vì không khớp danh mục điểm hiện tại: không đưa lên slide như đang chạy.
+- **Dự báo (thống kê và học máy):** điểm dự đoán 2027 và khoảng. Khoảng thống kê: điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau, từ 2.526 cặp năm thật, nhân hệ số 1,3. Mô hình LightGBM (p10/p50/p90) áp dụng cho 2.580 chương trình có điểm từ 2024. Nói thật: học máy chỉ cải thiện nhẹ (MAE 1,16 so với 1,20 năm 2024; 1,81 so với 1,84 năm 2025), phủ ngoài mẫu 63,8%, Winkler 8,21 so với 8,19 của thống kê (không tốt hơn).
 - **Phân tích:** nhãn nguyện vọng và nhận xét danh sách (công thức công khai).
 - **Tối ưu:** xếp lịch tự học theo ràng buộc, sinh việc theo môn còn thiếu.
 - **Hỏi đáp có căn cứ:** chỉ dùng số liệu có nguồn gửi kèm, lọc mã nguồn bịa, hậu kiểm số trong câu trả lời, không nói "khả năng đậu x%".
@@ -45,7 +45,7 @@ Các vai trò của AI, chỉ một là mô hình ngôn ngữ:
 | 2025 | 589 | 76,6% | 1,74 điểm |
 
 Trung bình 86,9%. Điểm nhấn kể chuyện: bản đầu (cộng trung vị, tách theo nhóm ngành) chỉ phủ 55%, kiểm định cho thấy nó kém nên đã bỏ. Năm 2025 biến động mạnh bất thường nên phủ thấp hơn; app nói thẳng "không phải xác suất đậu". Kiểm định này nằm trong mẫu của cùng dữ liệu, chưa phải kiểm định ngoài mẫu độc lập.
-**Giới hạn nêu ra:** cả 2.812 dự báo hiện ở mức tin cậy "thấp" (điểm mới nhất là 2026 từ trang tổng hợp, chưa đối chiếu đề án); không bù được thay đổi quy chế, đề thi, chỉ tiêu; điểm do học sinh tự nhập; trắc nghiệm hướng nghiệp (Holland, 12 tình huống) chỉ là gợi ý.
+**Giới hạn nêu ra:** cả 2.812 dự báo hiện ở mức tin cậy "thấp" (điểm mới nhất là 2026 từ trang tổng hợp, chưa đối chiếu đề án); không bù được thay đổi quy chế, đề thi, chỉ tiêu; khoảng của ML phủ 63,8% ngoài mẫu vì biến động 2025 lớn hơn mọi năm trước; điểm do học sinh tự nhập; trắc nghiệm hướng nghiệp (Holland, 12 tình huống) chỉ là gợi ý.
 
 ## 6. Mở rộng và vận hành (tiêu chí 5, ý 2, 10 điểm)
 Sơ đồ một dòng cho slide:

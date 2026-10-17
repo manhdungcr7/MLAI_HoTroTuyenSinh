@@ -147,7 +147,7 @@
 > *"Động cơ tính toán của Nguyện Vọng AI bao gồm 4 thuật toán tất định, hoàn toàn minh bạch và có thể giải thích được:  
 > 
 > 1. **Thuật toán tính điểm xét tuyển**: Áp dụng đúng công thức tổ hợp của từng ngành và cơ chế giảm điểm ưu tiên trên 22,5 điểm.  
-> 2. **Dự báo khoảng điểm chuẩn 2027 (thống kê)**: điểm năm gần nhất kèm khoảng từ phân bố biến động giữa hai năm liền kề của 2.526 cặp thực tế, không bao giờ cam kết 'chắc chắn đậu'. Mọi dự báo hiện ở mức tin cậy thấp vì điểm mới nhất là 2026 từ trang tổng hợp. Mô hình học máy đã huấn luyện nhưng đang tắt, nên chúng em không gọi đây là học máy.  
+> 2. **Dự báo khoảng điểm chuẩn 2027 (thống kê)**: điểm năm gần nhất kèm khoảng từ phân bố biến động giữa hai năm liền kề của 2.526 cặp thực tế, không bao giờ cam kết 'chắc chắn đậu'. Mọi dự báo hiện ở mức tin cậy thấp vì điểm mới nhất là 2026 từ trang tổng hợp. Mô hình học máy LightGBM bổ sung cho 2.580 chương trình, nhưng chỉ cải thiện nhẹ (thử ngoài mẫu phủ 63,8%, Winkler 8,21 so với 8,19), nên chúng em không nói nó vượt trội.  
 > 3. **Tối ưu danh mục nguyện vọng**: Tự động phát hiện và chặn lỗi 'nghịch đảo thứ tự' — ngăn học sinh đặt ngành dễ trúng tuyển lên trước ngành mơ ước.  
 > 4. **Chia giờ tự học theo hiệu quả biên**: mỗi giờ đi vào môn mà em này tăng được nhiều điểm nhất, mỗi môn một cách ôn riêng, và nói thật khi mục tiêu khó đạt với quỹ giờ này.  
 > 
@@ -234,7 +234,7 @@
 > 
 > - **Đã hoàn thiện & Có test (Xanh)**: 3.648 chương trình, tính điểm ưu tiên quy chế, thuật toán xếp lịch tuần, server MCP 18 công cụ, hỏi đáp AI có hạn mức, và hệ thống CMS (đã chạy thử trọn vòng nhập, duyệt, xuất bản ở máy).  
 > - **Đang thử nghiệm (Vàng)**: Cổng đóng góp cộng đồng đã có code nhưng chưa tuyển tình nguyện viên thật; việc tích hợp tài khoản ChatGPT thương mại ngoài production đang trong giai đoạn thử nghiệm; trắc nghiệm hướng nghiệp Holland là công cụ gợi ý chưa kiểm định tâm lý.  
-> - **Chưa làm & Đã nhận diện (Cam)**: điểm 2026 (2.082 chương trình) từ trang tổng hợp, chưa đối chiếu đề án; điểm số nguyên chưa kiểm hết, 5 trường nghi sai mã hoặc tên chưa sửa; học phí hiển thị ở 662 chương trình theo VnExpress, chưa có văn bản của trường; dự báo 2027 ở mức tin cậy thấp và mô hình học máy đang tắt; chưa có đồng bộ đa thiết bị, chưa có tình nguyện viên thật.  
+> - **Chưa làm & Đã nhận diện (Cam)**: điểm 2026 (2.082 chương trình) từ trang tổng hợp, chưa đối chiếu đề án; điểm số nguyên chưa kiểm hết, 5 trường nghi sai mã hoặc tên chưa sửa; học phí hiển thị ở 662 chương trình theo VnExpress, chưa có văn bản của trường; dự báo 2027 ở mức tin cậy thấp, học máy chỉ cải thiện nhẹ và phủ ngoài mẫu 63,8%; chưa có đồng bộ đa thiết bị, chưa có tình nguyện viên thật.  
 > 
 > Chúng em tự kiểm toán dữ liệu và công khai mọi khiếm khuyết. Đây là danh dự kỹ thuật của đội thi."*
 

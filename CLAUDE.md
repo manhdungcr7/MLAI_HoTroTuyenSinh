@@ -18,7 +18,7 @@ Hành trình ba bước theo slide: **Hiểu bản thân → Chọn con đườn
 | Hỏi tư vấn AI có căn cứ | `src/features/tu-van`, `functions/api/tu-van.ts` |
 | Hiểu sở thích (hướng nghiệp) | `src/features/huong-nghiep` (trắc nghiệm Holland 12 tình huống + 1 câu giá trị → nhóm ngành gợi ý, lưu `HoSo.soThich`) |
 | Phụ huynh/thầy cô đồng hành | `src/features/hanh-trinh/chia-se.tsx` (tóm tắt + tạo liên kết), `src/features/dong-hanh` (người đồng hành xem, viết lời nhắn; em nhận lời nhắn) |
-| Dự báo điểm chuẩn năm tới (thống kê; ML đang tắt) | `src/engine/du-bao-diem-chuan.ts`, `src/features/kham-pha/khoi-du-bao.tsx` (có kiểm định ngược, độ tin cậy từng dự báo) |
+| Dự báo điểm chuẩn năm tới (khoảng thống kê + LightGBM, ML chỉ cải thiện nhẹ) | `src/engine/du-bao-diem-chuan.ts`, `src/features/kham-pha/khoi-du-bao.tsx` (có kiểm định ngược, độ tin cậy từng dự báo) |
 | Bản đồ cơ hội, Phòng thử điểm, Thẻ hành trình | `src/features/co-hoi` (`/co-hoi`, `/co-hoi/thu-diem`), `src/engine/ban-do-co-hoi.ts`, `src/features/hanh-trinh/the-hanh-trinh.tsx` (ở Hôm nay) |
 | Độ tin cậy dữ liệu, chỉ tiêu ngành | `src/features/kham-pha/khoi-do-tin-cay.tsx` (trang Về dữ liệu), `src/engine/do-tin-cay-du-lieu.ts`, dòng Chỉ tiêu ở `chi-tiet.tsx` |
 | Sửa điểm có bằng chứng | `src/data/hieu-chinh-diem.json` + `.ts`, báo cáo ở `docs/audits/` |
@@ -130,7 +130,7 @@ Giai đoạn 5 — kéo code mới của nhóm, đối chiếu đề bài Ban T�
 Giai đoạn 6 — làm đúng dữ liệu, thêm lớp "Cơ hội" và chốt nộp bài (2026-10-15 đến 17):
 - **Màn mới:** Bản đồ cơ hội (`/co-hoi`: số ngành ở từng nhãn theo nhóm ngành, `engine/ban-do-co-hoi.ts`), Phòng thử điểm (`/co-hoi/thu-diem`: kéo điểm từng môn xem ngành đổi nhãn, không ghi vào hồ sơ), Thẻ hành trình ở Hôm nay (bốn dòng kể chuyện từ dữ liệu của em), Tạo hồ sơ 3 bước thiết kế lại (`khoi-dau/buoc-1..3`), mục "Dữ liệu của em" ở Cài đặt (tải sao lưu, khôi phục, xóa).
 - **Trang ngành:** dòng Chỉ tiêu (đọc từ đề án, có link và trang), học phí kèm nhãn nguồn; trang Về dữ liệu có khối Độ tin cậy dữ liệu đếm từ danh mục (`engine/trang-thai-du-lieu.ts` phân loại nhiều năm / một năm / phương thức khác; `do-tin-cay-du-lieu.ts`).
-- **Dữ liệu:** bổ sung điểm 2025 và 2026 từ VnExpress, đối chiếu hai nguồn; phân biệt điểm sàn, điểm chuẩn, dự kiến (không đoán loại điểm từ trị số); kiểm mẫu độ chính xác; cơ chế ghi đè điểm có bằng chứng (146 mục). Báo cáo ở `docs/audits/`. Dự báo: điểm dự đoán 2027 kèm độ tin cậy từng dự báo; mô hình ML đã huấn luyện nhưng tắt vì mã băm danh mục không khớp (`du-bao-ml.ts`).
+- **Dữ liệu:** bổ sung điểm 2025 và 2026 từ VnExpress, đối chiếu hai nguồn; phân biệt điểm sàn, điểm chuẩn, dự kiến (không đoán loại điểm từ trị số); kiểm mẫu độ chính xác; cơ chế ghi đè điểm có bằng chứng (146 mục). Báo cáo ở `docs/audits/`. Dự báo: điểm dự đoán 2027 kèm độ tin cậy từng dự báo; mô hình ML LightGBM huấn luyện lại 17/10 trên điểm đã sửa, áp dụng cho 2.580 chương trình khi mã băm danh mục khớp (`du-bao-ml.ts`); ngoài mẫu phủ 63,8%, Winkler 8,21 so với 8,19 của thống kê, nên không được nói là vượt trội.
 - **AI:** bậc thang trả lời (cache, Clef, RAG cộng đồng, LLM), hậu kiểm số liệu, hạn mức theo hồ sơ/IP/toàn hệ thống; kết nối trợ lý ngoài qua MCP (18 công cụ).
 - **Quy trình:** cổng kiểm tra trên bản chụp của thứ sắp commit/push (`scripts/cong-kiem-tra.mjs`, hook `.githooks`, `npm run cong:commit`/`cong:push`), mỗi việc một worktree, test đỏ có chủ ở `tests/baseline-do.json`. CI `.github/workflows/deploy.yml` tự deploy Cloudflare Pages khi push `main`.
 - **Tài liệu nộp bài đã đồng bộ:** `docs/SO-LIEU-CHOT-NOP-BAI.md` (một bộ số, kèm điều không được nói), kịch bản demo 3 phút, hỏi đáp, đối chiếu tiêu chí, nội dung slide, kịch bản 7 và 10 phút. Bản `.docx` của kịch bản 10 phút chưa xuất lại.
@@ -143,7 +143,7 @@ Giai đoạn 6 — làm đúng dữ liệu, thêm lớp "Cơ hội" và chốt n
 - Trắc nghiệm hướng nghiệp là công cụ gợi ý để tìm hiểu, chưa được kiểm định tâm lý; kết quả chỉ nên dùng cùng điểm số và trao đổi với người lớn.
 - Chưa có tài khoản, đăng nhập hay đồng bộ nhiều thiết bị (đúng với hướng local-first của MVP); chuyển máy dùng tệp sao lưu.
 - Phụ huynh/thầy cô không có tài khoản riêng, đồng hành bằng liên kết hai chiều (xem mục 6, giai đoạn 4). Muốn có tài khoản, thông báo đẩy và đồng bộ thật cần đăng nhập cho học sinh và máy chủ lưu dữ liệu của em, chưa làm (D1 đã có cho dữ liệu trường).
-- Dự báo điểm chuẩn không bù được thay đổi quy chế/đề thi/chỉ tiêu (năm 2025 phủ 76,6%; cả 2.812 dự báo ở mức tin cậy thấp vì điểm mới nhất là 2026 từ nguồn thứ cấp; mô hình ML đang tắt). Điểm ưu tiên: học sinh tự khai khu vực, chưa tự map từ tỉnh/huyện. Mức cộng ưu tiên cần đối chiếu quy chế mỗi năm.
+- Dự báo điểm chuẩn không bù được thay đổi quy chế/đề thi/chỉ tiêu (năm 2025 phủ 76,6%; cả 2.812 dự báo ở mức tin cậy thấp vì điểm mới nhất là 2026 từ nguồn thứ cấp; ML phủ ngoài mẫu 63,8%). Điểm ưu tiên: học sinh tự khai khu vực, chưa tự map từ tỉnh/huyện. Mức cộng ưu tiên cần đối chiếu quy chế mỗi năm.
 - Hạ tầng thật của CMS (D1, biến môi trường) cần chủ tài khoản dựng; chạy thử đầy đủ bằng `npm run cms:api` + `npm run app:local`.
 - Chưa bật AI thật cho đến khi có khóa API trên Cloudflare.
 - Thông báo đẩy khi tắt app phụ thuộc trình duyệt; nhắc trong app luôn hoạt động.

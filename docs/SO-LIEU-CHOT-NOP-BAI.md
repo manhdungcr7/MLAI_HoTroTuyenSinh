@@ -43,15 +43,19 @@ npx tsx tests/du-bao-diem-chuan.test.ts      # mức phủ kiểm định bỏ-m
 | Năm dự báo | 2027 | script |
 | Số chương trình có dự báo thống kê | 2.812, **tất cả độ tin cậy "thấp"** | script: điểm mới nhất của các chương trình này là 2026 từ trang tổng hợp, chưa đối chiếu đề án |
 | Dự báo có cận trên chạm trần 30 điểm | 272 | script |
-| Mô hình học máy (ML) | **Không áp dụng** | script: "fingerprint lệch"; tệp ML đã huấn luyện trên danh mục cũ nên app tự tắt |
-| Phương pháp đang chạy | Khoảng thống kê: điểm năm gần nhất cộng phân vị 10 và 90 của biến động, nhân hệ số 1,3 | `src/engine/du-bao-diem-chuan.ts` |
+| Mô hình học máy (ML) | **Đang áp dụng** (LightGBM hồi quy phân vị p10/p50/p90, trung bình 5 hạt giống) cho 2.580 chương trình có điểm từ 2024; huấn luyện lại 17/10 trên điểm đã gồm bản sửa, mã băm danh mục khớp | script (`duBaoML`), `ml/ket-qua-du-bao-2027.json`, `src/data/du-bao-2027.json` |
+| ML: độ phủ khoảng 80% | 80,0% gộp 2024 và 2025 (hệ số co giãn 2,02 chọn trên chính các năm này, nên là số **trong mẫu**); 87,1% (2024), 73,3% (2025) | `ml/ket-qua-du-bao-2027.json` |
+| ML: **độ phủ ngoài mẫu** (hệ số chọn từ 2024, áp cho 2025) | **63,8%** | script (`phuNgoaiMau`) |
+| ML: điểm Winkler ở cùng độ phủ 80% (thấp hơn là tốt hơn) | 8,21 so với 8,19 của khoảng thống kê cũ: **không tốt hơn khoảng thống kê** | script (`winkler`, `winklerHeuristicCu`) |
+| ML: sai số điểm dự đoán so với giữ nguyên điểm năm trước | MAE 1,16 so với 1,20 (2024); 1,81 so với 1,84 (2025). Cải thiện nhỏ | `ml/ket-qua-du-bao-2027.json` |
+| Chương trình ngoài ML | Dùng khoảng thống kê: điểm năm gần nhất cộng phân vị 10 và 90 của biến động, nhân hệ số 1,3 | `src/engine/du-bao-diem-chuan.ts` |
 | Số cặp năm liền kề làm cơ sở | 2.526 | đo bổ sung bằng `thongKeBienDong` |
 | Kiểm định bỏ-một-năm, khoảng "80%" phủ điểm thật | 2023: 91,1% (393 chương trình); 2024: 93,2% (601); 2025: 76,6% (589); trung bình 86,9% | `tests/du-bao-diem-chuan.test.ts`, 17/10 |
 | Sai số trung bình | 1,04 / 1,15 / 1,74 điểm | như trên |
 
 Lưu ý nội bộ: bảng "Backtesting 3 năm" trong `src/engine/du-bao-diem-chuan.ts` (`KET_QUA_BACKTESTING_3_NAM`, hiện ở màn Chẩn đoán danh mục) còn số cũ 89% / 95% / 64% (đo 15/10). Dữ liệu đã đổi, số đúng là bảng trên. Cần sửa hằng số trong mã (không thuộc phạm vi tài liệu).
 
-Khi ML được huấn luyện lại và khớp danh mục: chạy lại script, dùng số `duBaoML` (độ phủ ngoài mẫu, Winkler) in ra. Trước khi có số đó không được nói "mô hình học máy dự báo điểm chuẩn".
+Cách nói đúng về ML: "chúng em có mô hình học máy LightGBM dự báo khoảng điểm chuẩn 2027, nhưng kiểm định cho thấy nó chỉ cải thiện nhẹ so với giữ nguyên điểm năm trước và khoảng của nó phủ 63,8% ngoài mẫu". Chạy lại script trước buổi nói; nếu `phuNgoaiMau` hoặc `winkler` đổi thì đổi số theo. Tài liệu `docs/ML-DU-BAO-DIEM-CHUAN-2027.md` còn lời mở đầu "ML đang tắt" và số của lần huấn luyện trước (66,6%; 8,45 so với 8,76): số trên bảng này mới hơn.
 
 ## 5. Sản phẩm và kỹ thuật
 
@@ -68,10 +72,10 @@ Khi ML được huấn luyện lại và khớp danh mục: chạy lại script,
 1. "Xác suất đậu", "khả năng đậu x%", "chắc chắn đậu". Nhãn Thử sức/Vừa sức/An toàn/Dự phòng là chênh điểm so với điểm chuẩn năm gần nhất, không phải xác suất.
 2. "Dữ liệu chính xác 100%" hay "toàn bộ đã kiểm chứng". Chỉ nói câu ở mục 2 kèm giới hạn.
 3. "Học phí đã kiểm chứng toàn bộ" hay "học phí có văn bản của trường". Thực tế: 662 chương trình hiện học phí theo nguồn thứ cấp VnExpress, 0 chương trình đạt mức đã đối chiếu văn bản trường.
-4. "AI/mô hình học máy dự báo điểm chuẩn", "LightGBM đang chạy". Hiện chạy khoảng thống kê; ML không áp dụng cho danh mục hiện tại.
+4. "Mô hình học máy dự báo chính xác điểm chuẩn", "vượt trội" hay "tốt hơn thống kê". ML đang chạy nhưng Winkler 8,21 so với 8,19 (không tốt hơn), phủ ngoài mẫu 63,8%.
 5. "Điểm 2026 là điểm chuẩn chính thức". Là tham chiếu từ trang tổng hợp.
-6. "Dự báo phủ 64% năm 2025" hay "89/95/64": số cũ. Dùng 91,1 / 93,2 / 76,6.
-7. "Dự báo có độ tin cậy cao". Cả 2.812 dự báo đang ở mức thấp.
+6. "Dự báo phủ 64% năm 2025" hay "89/95/64": số cũ của khoảng thống kê. Dùng 91,1 / 93,2 / 76,6 (thống kê) và 63,8% ngoài mẫu (ML). Hai nhóm số này khác phương pháp, không trộn.
+7. "Dự báo có độ tin cậy cao". Cả 2.812 dự báo trong phân loại dữ liệu đang ở mức thấp (điểm mới nhất là 2026 từ trang tổng hợp).
 8. "3.652 chương trình", "602 học phí", "24 bộ test", "33 route", "1.300 cặp năm": số cũ.
 9. "Có hàng nghìn tình nguyện viên", "đã triển khai trên nhiều trường", "người dùng thật đã dùng": chưa có số liệu người dùng thật.
 10. "CMS đã đăng nhập bằng Cloudflare Access": CMS dùng email + mật khẩu tự quản.

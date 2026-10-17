@@ -88,7 +88,7 @@
 
 ### 🎙️ [04:30 - 05:30] SLIDE 7: ĐỔI MỚI AI & KIỂM ĐỊNH DỰ BÁO NGƯỢC (BACKTESTING)
 > *"Tại Nguyện Vọng AI, chúng em định nghĩa AI theo nghĩa rộng của Decision Intelligence với 4 vai trò cụ thể:  
-> 1. **Dự báo thống kê điểm chuẩn 2027**: điểm năm gần nhất kèm khoảng từ phân vị $P_{10}$ và $P_{90}$ của biến động giữa hai năm liền kề (2.526 cặp thực tế). Đây là phương pháp thống kê; mô hình học máy đã huấn luyện nhưng đang tắt vì không khớp dữ liệu hiện tại, nên chúng em không nói đó là AI học máy. Mọi dự báo hiện ở mức tin cậy thấp vì điểm mới nhất là 2026 từ trang tổng hợp, và app hiện rõ điều đó.  
+> 1. **Dự báo thống kê điểm chuẩn 2027**: điểm năm gần nhất kèm khoảng từ phân vị $P_{10}$ và $P_{90}$ của biến động giữa hai năm liền kề (2.526 cặp thực tế). Chúng em có thêm mô hình học máy LightGBM cho 2.580 chương trình, nhưng nói thật: nó chỉ cải thiện nhẹ so với thống kê (thử ngoài mẫu phủ 63,8%, không tốt hơn ở cùng độ phủ). Mọi dự báo hiện ở mức tin cậy thấp vì điểm mới nhất là 2026 từ trang tổng hợp, và app hiện rõ điều đó.  
 > 2. **Kiểm định Backtesting Bỏ-một-năm (Leave-one-year-out)**: Chúng em tự viết unit test chạy thực tế:  
 >    - Năm 2023: Khoảng danh nghĩa 80% phủ **91,1%** điểm chuẩn thật (sai số trung bình 1,04 điểm).  
 >    - Năm 2024: Phủ **93,2%** (sai số 1,15 điểm).  

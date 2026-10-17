@@ -225,7 +225,7 @@ Nguồn số: `docs/SO-LIEU-CHOT-NOP-BAI.md`. Việc nào xong thì xóa dòng v
 | Kiểm điểm số nguyên chưa kiểm (khoảng 45% ô điểm 2022 đến 2025), quét lỗi chỉ tiêu bị đọc thành điểm theo cột | P0 | `docs/audits/do-chinh-xac-du-lieu.md` mục 5; cần người thứ hai đối chiếu |
 | Sửa tên hoặc tỉnh của 5 trường nghi sai (DQH, TTN, DTV, TYS, DDP) và quyết định cho HCS | P0 | `lien-ket-pdf-sai-truong.csv`, `xung-dot-con-lai-ket-qua.md`; sửa trong `du-lieu-that.json` qua script, người điều phối dữ liệu |
 | Đối chiếu điểm 2026 với đề án chính thức khi trường công bố | P0 | `kiem-tra-nhan-nam-2026.md` đề xuất tải trang năm 2025 để bắt lệch năm |
-| Huấn luyện lại mô hình ML trên danh mục hiện tại để mã băm khớp; chỉ khi đó mới dùng số ML trên slide | P1 | `docs/ML-DU-BAO-DIEM-CHUAN-2027.md`, `src/data/du-lieu-fingerprint.json` |
+| Cập nhật `docs/ML-DU-BAO-DIEM-CHUAN-2027.md` theo lần huấn luyện 17/10 (lời mở đầu còn nói ML đang tắt; số 66,6% và 8,45 so với 8,76 là của lần trước). Cải thiện ML: ngoài mẫu mới phủ 63,8% | P1 | `ml/ket-qua-du-bao-2027.json` |
 | Cập nhật hằng số `KET_QUA_BACKTESTING_3_NAM` (`src/engine/du-bao-diem-chuan.ts`) theo số đo mới (91,1 / 93,2 / 76,6) | P1 | Hiện hiển thị số cũ 89 / 95 / 64 ở màn Chẩn đoán danh mục |
 | Nối `nam-diem-bo-sung.json` (19 chương trình, 31 cặp năm) vào app sau khi xem xung đột | P2 | `nang-do-phu-nam-diem.md` |
 | Học phí: đối chiếu văn bản đúng trường rồi đặt dấu `nguonSoCap` + `kiemChungLuc` cho từng dòng; hiện 0 dòng đạt, 662 dòng hiển thị theo VnExpress | P1 | `src/data/hoc-phi-kiem-chung.ts` |

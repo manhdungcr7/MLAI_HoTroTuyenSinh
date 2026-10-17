@@ -14,7 +14,7 @@ Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.648
 | `hoc-phi-vnexpress.json` | Học phí theo ngành lấy từ VnExpress (nguồn thứ cấp). Đây là nguồn của **toàn bộ 662 học phí đang hiển thị**, nhãn "Theo VnExpress" kèm link | `scripts/hoc-phi-vnexpress.py` |
 | `hieu-chinh-diem.json` | Ghi đè điểm chuẩn đã đối chiếu PDF nguồn, mỗi mục có trang và hai lần đọc (146 mục năm, 70 chương trình, 8 mục gỡ năm); nạp ở `napLuaChon()` qua `hieu-chinh-diem.ts`; chương trình đã sửa không dùng dự báo ML cũ | `scripts/gop-hieu-chinh.py`, báo cáo `docs/audits/` |
 | `chi-tieu.json` | Chỉ tiêu theo ngành của 10 trường, đọc đúng ô "Chỉ tiêu" trong đề án, kèm năm, URL, trang (421 bản ghi). Chỉ tiêu cả ngành, thường gộp mọi phương thức; hiện ở dòng Chỉ tiêu trên trang ngành | `scripts/trich-chi-tieu.py`, `docs/audits/chi-tieu-10-truong.md` |
-| `du-bao-2027.json`, `du-bao-ml.ts` | Dự báo học máy (LightGBM) đã huấn luyện, **đang tắt**: app chỉ nạp khi `catalogSha256` khớp `du-lieu-fingerprint.json`, hiện không khớp | `ml/huan-luyen-2027.py` |
+| `du-bao-2027.json`, `du-bao-ml.ts` | Dự báo học máy (LightGBM p10/p50/p90) cho 2.580 chương trình, **đang áp dụng** (huấn luyện lại 17/10 trên điểm đã gồm bản sửa); app chỉ nạp khi `catalogSha256` khớp `du-lieu-fingerprint.json`, nên đổi điểm là phải huấn luyện lại | `ml/huan-luyen-2027.py` |
 | `viec-lam.json` | Tỷ lệ có việc làm bổ sung (hàng có đúng một số %), chỉ dùng cho ngành chưa có số liệu cũ | `scripts/trich-viec-lam.py` |
 | `trang-nganh-truong.json` | Trang danh sách ngành/chương trình đào tạo của từng trường (đã mở thử), dùng khi chưa có trang riêng của ngành | `scripts/trang-nganh-truong.py` (danh sách ứng viên tìm bằng tìm kiếm giới hạn tên miền trường) |
 | `to-hop-chinh-thuc.ts` | 73 tổ hợp xét tuyển chính thức (ba môn mỗi tổ hợp) từ `legacy/common/data/shared_rules.json` | tạo từ tệp trên |
@@ -69,7 +69,7 @@ npm test
 ## Dự báo điểm chuẩn năm tới
 `src/engine/du-bao-diem-chuan.ts`. Điểm dự đoán 2027 giữ điểm năm gần nhất; khoảng = điểm đó cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 2.526 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Số đo 17/10/2026 (kiểm định bỏ-một-năm, trong mẫu của cùng dữ liệu): khoảng "80%" phủ 91,1% (2023, 393 chương trình), 93,2% (2024, 601), 76,6% (2025, 589); trung bình 86,9%; sai số trung bình 1,04 / 1,15 / 1,74 điểm. Chạy lại: `npx tsx tests/du-bao-diem-chuan.test.ts`.
 - Có 2.812 dự báo, **tất cả độ tin cậy "thấp"** vì điểm mới nhất của chúng là 2026 từ trang tổng hợp chưa đối chiếu đề án; 272 dự báo chạm trần 30 điểm.
-- Mô hình học máy (LightGBM, `ml/`, `docs/ML-DU-BAO-DIEM-CHUAN-2027.md`) **không áp dụng**: tệp dự báo tính trên danh mục điểm cũ nên mã băm không khớp, app tự bỏ qua. Chỉ dùng số đo ML khi huấn luyện lại và khớp danh mục.
+- Mô hình học máy (LightGBM, `ml/`) **đang áp dụng** cho 2.580 chương trình. Số đo (`ml/ket-qua-du-bao-2027.json`, 17/10): MAE 1,16 so với 1,20 (giữ nguyên điểm, 2024) và 1,81 so với 1,84 (2025); khoảng 80% phủ 80,0% gộp (trong mẫu), 87,1% (2024), 73,3% (2025); **ngoài mẫu (hệ số chọn từ 2024, áp 2025) 63,8%**; Winkler 8,21 so với 8,19 của khoảng thống kê cũ ở cùng độ phủ, tức không tốt hơn. `docs/ML-DU-BAO-DIEM-CHUAN-2027.md` còn lời mở đầu và số của lần huấn luyện trước.
 - Hằng số `KET_QUA_BACKTESTING_3_NAM` trong mã (hiện ở màn Chẩn đoán danh mục) còn số đo 15/10 (89% / 95% / 64%), cũ so với số trên: cần cập nhật trong mã.
 
 ## Số đo chất lượng (17/10/2026)

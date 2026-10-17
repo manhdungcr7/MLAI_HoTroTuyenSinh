@@ -25,7 +25,7 @@ Số liệu lấy từ đề án tuyển sinh của các trường và bảng đ
 - **Học phí:** 662 chương trình có học phí, toàn bộ theo VnExpress (nguồn thứ cấp, có link). Chương trình khác ghi "Chưa có học phí riêng ngành"; không hiển thị số ước tính.
 - **Tỷ lệ có việc làm:** **121** chương trình có số từ đề án; còn lại ghi "chưa có dữ liệu". **Chỉ tiêu theo ngành:** 421 bản ghi của 10 trường.
 - **Ngành Sư phạm:** được hỗ trợ học phí và sinh hoạt phí theo Nghị định 116/2020/NĐ-CP nếu cam kết làm việc trong ngành (không thực hiện thì phải bồi hoàn).
-- **Dự báo điểm chuẩn 2027:** khoảng thống kê (mô hình học máy đã huấn luyện nhưng đang tắt vì không khớp danh mục điểm hiện tại). Kiểm định bỏ-một-năm (17/10): phủ 91,1% (2023), 93,2% (2024), 76,6% (2025); cả 2.812 dự báo ở mức tin cậy thấp. Chạy lại: `npx tsx tests/du-bao-diem-chuan.test.ts`.
+- **Dự báo điểm chuẩn 2027:** khoảng thống kê cho mọi chương trình và mô hình học máy LightGBM cho 2.580 chương trình có điểm từ 2024 (chỉ cải thiện nhẹ; thử ngoài mẫu phủ 63,8%). Kiểm định bỏ-một-năm của khoảng thống kê (17/10): phủ 91,1% (2023), 93,2% (2024), 76,6% (2025); cả 2.812 dự báo ở mức tin cậy thấp. Chạy lại: `npx tsx tests/du-bao-diem-chuan.test.ts`.
 - **Quy tắc:** không chạy script sinh số. Mọi bổ sung đi qua CMS (bắt buộc link nguồn) hoặc script trích từ PDF. Link hỏng ghi ở `scripts/link-hong.txt`; `scripts/danh-dau-uoc-tinh.py` tách số có nguồn khỏi số ước tính.
 
 ---
