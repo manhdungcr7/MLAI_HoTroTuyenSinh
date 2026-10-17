@@ -5,6 +5,8 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { LUA_CHON } from "../src/data/lua-chon-that";
+import { LUA_CHON_MAU, datDanhMuc } from "../src/data/lua-chon-mau";
+import { loaiDiemCuaNam } from "../src/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
 import { duBaoDiemChuan, namTuyenSinhToi, thongKeBienDong } from "../src/engine/du-bao-diem-chuan";
 import { lyDoKhacPhuongThuc, nhanChoLuaChon } from "../src/engine/phan-tich";
 import { tomTatDiemChoNganh } from "../src/engine/tom-tat-nganh";
@@ -30,6 +32,9 @@ const fake = (o: Partial<LuaChon>): LuaChon => {
   return { ...goc, id: "fake", maTruong: "FAK", truong: "FAK", phuongThuc: "THPT", toHopXet: ["A00"], nguonCap: "official_pdf", diemMin: cuoi ? diemTheoNam[String(cuoi)] : 0, diemMax: cuoi ? diemTheoNam[String(cuoi)] : 0, namDiem: cuoi, ...o, diemTheoNam };
 };
 const diemEm = (o: Partial<DiemDayDu> = {}): DiemDayDu => ({ toan: 9, vatLy: 9, hoaHoc: 9, sinh: null, nguVan: null, tiengAnh: null, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...o });
+const sanTheoNam = (ds: Record<string, number>): LuaChon["scoreEvidence"] => Object.fromEntries(Object.entries(ds).map(([nam, score]) => [nam, {
+  kind: "diem_san" as const, score, scale: 30, sourceUrl: "https://fixture.edu.vn/diem-san", checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: null, includesPriority: null,
+}]));
 
 // ---- A: nhiều năm ----
 {
@@ -45,7 +50,7 @@ const diemEm = (o: Partial<DiemDayDu> = {}): DiemDayDu => ({ toan: 9, vatLy: 9, 
 }
 // ---- C: chỉ điểm sàn 15,0 (một hay nhiều năm) ----
 {
-  const l = fake({ diemTheoNam: { "2023": 15, "2024": 15, "2025": 15 } });
+  const l = fake({ diemTheoNam: { "2023": 15, "2024": 15, "2025": 15 }, scoreEvidence: sanTheoNam({ "2023": 15, "2024": 15, "2025": 15 }) });
   const t = phanLoaiDuLieu(l, tk, NAM);
   assert.equal(t.loai, "chiDiemSan"); assert.equal(t.diemCuoi, null); assert.equal(t.duocDuBao, false); assert.equal(diemChuanDeSo(l), null);
   assert.deepEqual(t.cacNamSan, [2023, 2024, 2025]);
@@ -64,7 +69,7 @@ const diemEm = (o: Partial<DiemDayDu> = {}): DiemDayDu => ({ toan: 9, vatLy: 9, 
 }
 // Có cả năm sàn lẫn năm điểm chuẩn thật: năm sàn bị loại khỏi lịch sử, điểm chuẩn gần nhất là năm thật
 {
-  const l = fake({ diemTheoNam: { "2023": 15, "2024": 24, "2025": 15 } });
+  const l = fake({ diemTheoNam: { "2023": 15, "2024": 24, "2025": 15 }, scoreEvidence: sanTheoNam({ "2023": 15, "2025": 15 }) });
   const t = phanLoaiDuLieu(l, tk, NAM);
   assert.equal(t.loai, "motNam"); assert.equal(t.diemCuoi, 24); assert.equal(t.namCuoi, 2024); assert.deepEqual(t.cacNamSan, [2023, 2025]);
   assert.deepEqual(cacDiemHopLe(l), [[2024, 24]]);
@@ -73,7 +78,11 @@ const diemEm = (o: Partial<DiemDayDu> = {}): DiemDayDu => ({ toan: 9, vatLy: 9, 
 // 15,0 ở chương trình KHÔNG phải THPT cũng không bị coi là điểm chuẩn THPT (thuộc phương thức khác)
 assert.equal(phanLoaiDuLieu(fake({ phuongThuc: "HOC_BA", diemTheoNam: { "2025": 15 } })).loai, "phuongThucKhac");
 // Điểm sàn không làm sai thống kê biến động: cặp 15 -> 24 không tạo "+9"
-assert.deepEqual(thongKeBienDong([fake({ diemTheoNam: { "2023": 15, "2024": 24 } })]).tatCa, []);
+assert.deepEqual(thongKeBienDong([fake({ diemTheoNam: { "2023": 15, "2024": 24 }, scoreEvidence: sanTheoNam({ "2023": 15 }) })]).tatCa, []);
+// 15 không tự là sàn; sàn có thể là 18. Bằng chứng sai trị số không được tái sử dụng.
+assert.equal(phanLoaiDuLieu(fake({ diemTheoNam: { "2025": 15 } })).loai, "motNam");
+assert.equal(phanLoaiDuLieu(fake({ diemTheoNam: { "2025": 18 }, scoreEvidence: sanTheoNam({ "2025": 18 }) })).loai, "chiDiemSan");
+assert.equal(phanLoaiDuLieu(fake({ diemTheoNam: { "2025": 18 }, scoreEvidence: sanTheoNam({ "2025": 15 }) })).loai, "motNam");
 
 // ---- D: không có điểm hợp lệ ----
 for (const dt of [{}, { "2025": 0 }, { "2025": 5 }, { "2025": 99 }, { "2025": Number.NaN }]) {
@@ -129,14 +138,16 @@ for (const pt of ["HOC_BA", "DGNL_HCM", "DGNL_HN", "DGTD", "NANG_KHIEU", "KET_HO
     dem[t.loai] = (dem[t.loai] ?? 0) + 1;
     const lyDo = lyDoKhongSoDuoc(l);
     if (t.loai === "nhieuNam" || t.loai === "motNam") {
-      assert.equal(lyDo, null); assert.ok(t.diemCuoi !== null && t.diemCuoi !== 15 && t.diemCuoi >= 10, l.id);
+      assert.equal(lyDo, null); assert.ok(t.diemCuoi !== null && t.diemCuoi >= 10, l.id);
+      assert.notEqual(loaiDiemCuaNam(l, t.namCuoi!), "diem_san", l.id);
       assert.equal(l.phuongThuc, "THPT", l.id); assert.equal(l.diemMin, t.diemCuoi, `diemMin phải bằng điểm chuẩn gần nhất hợp lệ: ${l.id}`);
       assert.equal(l.namDiem, t.namCuoi, l.id);
     } else assert.ok(lyDo, l.id);
   }
   assert.equal(Object.values(dem).reduce((a, b) => a + b, 0), LUA_CHON.length);
   console.log("phân bố LoaiDuLieu (dữ liệu thật):", JSON.stringify(dem), "tổng", LUA_CHON.length);
-  assert.ok(dem.chiDiemSan > 0 && dem.nhieuNam > 0, "dữ liệu thật phải có cả hai nhóm để bài kiểm này có nghĩa");
+  assert.ok(dem.nhieuNam > 0);
+  assert.equal(dem.chiDiemSan ?? 0, LUA_CHON.filter((l) => l.phuongThuc === "THPT" && Object.keys(l.diemTheoNam ?? {}).length > 0 && Object.keys(l.diemTheoNam ?? {}).every((n) => loaiDiemCuaNam(l, Number(n)) === "diem_san")).length, "không tạo bản ghi sàn nếu chưa có bằng chứng");
 }
 
 // ---- tomTatDiemChoNganh: một nguồn ----
@@ -144,7 +155,7 @@ for (const pt of ["HOC_BA", "DGNL_HCM", "DGNL_HN", "DGTD", "NANG_KHIEU", "KET_HO
   const l = fake({ diemTheoNam: { "2025": 25, "2026": 26 } });
   const ts = tomTatDiemChoNganh(l, diemEm({ toan: 9, vatLy: 9, hoaHoc: 9 }), tk, NAM);
   assert.equal(ts.soSanhDuoc, true); assert.equal(ts.tongEm, 27); assert.equal(ts.toHopEm, "A00");
-  assert.deepEqual(ts.diemChuan, { diem: 26, nam: 2026, nguonThuCap: false, laThamChieu: false });
+  assert.deepEqual(ts.diemChuan, { diem: 26, nam: 2026, nguonThuCap: false, laThamChieu: true });
   assert.equal(ts.chenh, 1); assert.equal(ts.nhan, "Vừa sức"); assert.ok(ts.duBao); assert.ok(ts.viTriDuBao);
   assert.match(ts.moTa, /cao hơn 1,0 điểm so với điểm chuẩn năm 2026/); assert.match(ts.moTa, /Dự báo tham khảo 2027/);
   assert.ok(!/%|xác suất|chắc chắn|đảm bảo/.test(ts.moTa), ts.moTa);
@@ -172,7 +183,7 @@ for (const pt of ["HOC_BA", "DGNL_HCM", "DGNL_HN", "DGTD", "NANG_KHIEU", "KET_HO
 
 // ---- Tư vấn AI: cùng trạng thái, máy chủ chặn số điểm sàn ----
 {
-  const l = fake({ diemTheoNam: { "2023": 15, "2024": 15, "2025": 15 } });
+  const l = fake({ diemTheoNam: { "2023": 15, "2024": 15, "2025": 15 }, scoreEvidence: sanTheoNam({ "2023": 15, "2024": 15, "2025": 15 }) });
   const sk = dungSuKien(l, diemEm(), null);
   const g = gonSuKien(sk, true);
   assert.equal(g.dl, "chiDiemSan"); assert.deepEqual(g.diem, {}); assert.equal(g.nhan, undefined); assert.equal(g.chenh, undefined);
@@ -189,11 +200,15 @@ for (const pt of ["HOC_BA", "DGNL_HCM", "DGNL_HN", "DGTD", "NANG_KHIEU", "KET_HO
   // lời nhắc hệ thống có ràng buộc cấm bịa và không hứa đỗ
   assert.match(NHAC_HE_THONG, /chiDiemSan/); assert.match(NHAC_HE_THONG, /Không hứa đỗ/); assert.match(NHAC_HE_THONG, /Không tự nêu điểm chuẩn/);
   // trả lời tự động cũng không nêu điểm sàn như điểm chuẩn
-  const dbl = LUA_CHON.find((x) => phanLoaiDuLieu(x).loai === "chiDiemSan" && x.maTruong)!;
+  const dbl = { ...goc, diemTheoNam: l.diemTheoNam, scoreEvidence: l.scoreEvidence, diemMin: 15, diemMax: 15, namDiem: 2025 };
+  const luu = [...LUA_CHON_MAU];
+  datDanhMuc(luu.map((x) => x.id === dbl.id ? dbl : x));
+  try {
   const app = taoHoSoMau();
   const tra = traLoiTuDong(`Em được 23 điểm, ngành ${dbl.nganh} của ${dbl.tenTruong} thì sao?`, app, null);
   assert.ok(!/điểm chuẩn \d{4} là 15,0/.test(tra.traLoi), tra.traLoi);
   for (const dong of tra.traLoi.split("\n").filter((d) => d.includes(dbl.nganh) && d.includes(dbl.tenTruong))) assert.ok(!/(Thử sức|Vừa sức|An toàn|Dự phòng)/.test(dong), dong);
+  } finally { datDanhMuc(luu); }
 }
 
 // ---- Điểm theo loại: không trộn, bản cũ không mất gì ----

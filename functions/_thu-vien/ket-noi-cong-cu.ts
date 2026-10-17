@@ -108,7 +108,7 @@ export const CONG_CU: CongCu[] = [
       ok: true,
       data: {
         // Dùng cho update_study_progress (get_study_plan là bí danh của công cụ này): đề xuất phải kèm đúng phiên bản kế hoạch đã đọc.
-        snapshotUpdatedAt: cc.ban.capNhat,
+        capNhat: cc.ban.capNhat, snapshotUpdatedAt: cc.ban.capNhat,
         suKien: cc.ban.keHoachTuan.map((e) => ({ ...e, linkGoogleCalendar: linkGoogleCalendar(e), ...(cc.ma ? { icsUrl: `${cc.origin}/api/gpt/${cc.ma}/lich.ics` } : {}) })),
       },
     }),
@@ -252,8 +252,8 @@ export function phamViCanThiet(ten: string): string[] {
 }
 
 export const tenCongCu = (ten: string): CongCu | undefined => {
-  const t = BIEN_THE[ten] ?? ten;
-  return CONG_CU.find((c) => c.ten === t);
+  // Công cụ đã đăng ký có schema/implementation riêng phải thắng alias tương thích cũ.
+  return CONG_CU.find((c) => c.ten === ten) ?? CONG_CU.find((c) => c.ten === BIEN_THE[ten]);
 };
 
 /** Chạy công cụ theo tên. Tên lạ trả lỗi thường (không ném). */

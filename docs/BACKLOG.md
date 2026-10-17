@@ -202,3 +202,16 @@
 | **#14** | **[Kiệt] Động cơ chẩn đoán danh mục, bắt lỗi ngược vị thế/dồn rủi ro & Dữ liệu Backtesting** | Kiệt (`nguyen-vong`, `thu-tinh-huong`) | Algorithmic Rigor & Innovation (25%) | ✅ **Đã hoàn thành**: Phân loại 4 nhóm vị thế, bắt 2 lỗi chiến lược tuyển sinh, công khai Backtesting 3 năm, test xanh 100% ([#14](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/14)) |
 | **#15** | **[Hưng] Minh bạch nguồn dữ liệu 3 tầng, phân định mã tuyển sinh & Đồng bộ lịch Google Calendar/.ICS** | Hưng (`ke-hoach`, `tu-hoc`, `cms`) | Completeness & Data Provenance (20%) | [#15](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/15) |
 
+## Audit dữ liệu 2026-10-17 — chưa đạt cổng chất lượng thương mại
+
+Chi tiết: [báo cáo](audits/data-quality-2026-10-17.md), [danh sách 118 trường](audits/data-quality-schools.csv). Đây là backlog cục bộ, chưa tạo issue GitHub mới.
+
+| Việc | Owner / Slice | Trạng thái / nghiệm thu |
+| --- | --- | --- |
+| Phân biệt sàn/chuẩn/dự kiến, giữ năm-phương thức-tổ hợp, nguồn hiệu chỉnh CMS, alias tính điểm MCP | Dũng + Hưng / `data`, `engine`, `cms`, `tu-van` | Đã sửa local, có regression; chưa triển khai production |
+| Đối chiếu 2.422 ô điểm thiếu nguồn theo năm; 703 chương trình có mức 15 cần kiểm văn bản | Dũng / `data`, `kham-pha` | Mở; đối chiếu từng dòng, ghi bằng chứng và người thẩm định độc lập, không đoán loại điểm từ trị số |
+| Đối chiếu 3.047 học phí ước tính và đơn vị tính | Hưng / `data`, `cms` | Mở; cần nguồn đúng chương trình/cơ sở/năm học và tín chỉ/năm/toàn khóa |
+| Bổ sung UIT Truyền thông đa phương tiện 2025 (7320104), phương thức tổng hợp 2026 tách riêng | Dũng / `data`, `kham-pha` | Mở; đã có nguồn bảng điểm nhưng cần đủ thông tin chương trình/tổ hợp, không sao chép sang THPT |
+| Sửa pipeline legacy đoán năm/phương thức và median nguồn mâu thuẫn; giữ metadata đối chiếu khi tái xuất | Dũng / `data`, pipeline | Mở; chưa chạy lại legacy; không tái xuất đè bằng chứng đã bổ sung |
+| Mô hình điểm/điều kiện theo năm, tổ hợp và đợt tuyển sinh; thẩm định độc lập trước phát hành | Dũng + Kiệt / `data`, `engine` | Mở; `npm run data:audit -- --strict` hiện trả mã 1 đúng với các khoảng trống, chưa đủ cơ sở công bố toàn danh mục đã kiểm chứng |
+

@@ -190,17 +190,19 @@ for (let i = 0; i < dsGoiY.length - 1; i++) {
   const memNhatCungTruong = (l: (typeof LUA_CHON_MAU)[number]) => thuong.filter((x) => x.id !== l.id && nhanCua(x) === "Thử sức" && cungTr(x, l) && l.diemMin - x.diemMin >= 0.25 && tongCua(x) !== null && x.diemMin - (tongCua(x) as number) <= 1.5);
   const coLop2 = (l: (typeof LUA_CHON_MAU)[number]) => thuong.some((x) => !cungTr(x, l) && x.nhomNganh === l.nhomNganh && ["Vừa sức", "An toàn"].includes(nhanCua(x) as string));
   {
-    // Ca thật: Minh Anh, NV1 = QSC Hệ thống thông tin (26,25). Cả trường QSC không có ngành Vừa sức/An toàn nào mềm hơn.
+    // Ca lịch sử 2024: giữ fixture này ổn định khi bổ sung điểm 2025 thấp hơn của UIT.
+    const lichSu2024 = LUA_CHON_MAU.map((l) => l.maTruong === "QSC" && l.diemTheoNam?.["2024"] !== undefined
+      ? { ...l, diemMin: l.diemTheoNam["2024"], diemMax: l.diemTheoNam["2024"], namDiem: 2024 } : l);
     const ma = taoHoSoMau("minhAnh");
     const diemMA = diemDayDu(ma);
-    const neo1a = moNeoNV1({ nguyenVong: [], mucTieu: ma.mucTieu })!;
+    const neo1a = lichSu2024.find((l) => l.id === "qsc-24737475")!;
     const nhanMA = (l: (typeof LUA_CHON_MAU)[number]) => { const t = tongChoLuaChon(l, diemMA); return t.tong === null ? null : nhanNguyenVong(l, t.tong); };
     const trongNS60 = (l: (typeof LUA_CHON_MAU)[number]) => (!l.phuongThuc || l.phuongThuc === "THPT") && (l.hocPhiMin === undefined || l.hocPhiMin <= 60);
-    const cungMA = LUA_CHON_MAU.filter((x) => x.id !== neo1a.id && cungTr(x, neo1a) && trongNS60(x));
+    const cungMA = lichSu2024.filter((x) => x.id !== neo1a.id && cungTr(x, neo1a) && trongNS60(x));
     assert.equal(cungMA.some((x) => x.diemMin < neo1a.diemMin && ["Vừa sức", "An toàn"].includes(nhanMA(x) as string)), false, "tiền đề: không có cửa phụ Vừa sức/An toàn");
     const dieuKien = cungMA.filter((x) => nhanMA(x) === "Thử sức" && neo1a.diemMin - x.diemMin >= 0.25 && x.diemMin - (tongChoLuaChon(x, diemMA).tong as number) <= 1.5);
     assert.ok(dieuKien.length > 0, "tiền đề: có ngành Thử sức mềm hơn trong ngưỡng");
-    const kq1a = goiYDanhSach(diemMA, ma.hoSo, [], undefined, neo1a);
+    const kq1a = goiYDanhSach(diemMA, ma.hoSo, [], lichSu2024, neo1a);
     const cp = kq1a.filter((d) => d.tang === "cung-truong");
     assert.equal(cp.length, 1, "tầng 1a lấy đúng 1 ngành");
     assert.ok(cungTr(cp[0].lc, neo1a) && cp[0].nhan === "Thử sức" && neo1a.diemMin - cp[0].lc.diemMin >= 0.25 && cp[0].lc.diemMin - cp[0].tong <= 1.5);

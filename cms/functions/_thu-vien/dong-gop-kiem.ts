@@ -2,6 +2,7 @@
 // Dữ liệu từ AI coi là không tin cậy: mọi chuỗi đều lọc thẻ HTML và ký tự điều khiển, cắt độ dài trước khi dùng.
 import { kiemTraNguon } from "./ban-ghi-d1";
 import type { NguonKiemChung } from "../../../src/engine/du-lieu-tuyen-sinh/kieu";
+import { nguonChiNoiDiemSan } from "../../../src/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
 
 export const SO_HANG_TOI_DA = 100;
 export const NGAM_CHENH_LON = 4;
@@ -29,6 +30,7 @@ export function kiemNguonMcp(raw: unknown): { ok: true; nguon: NguonMcp } | { ok
   if (trang.length < 1 || trang.length > 40) return { ok: false, loi: "nguon.trang là số trang hoặc mô tả ngắn (1 đến 40 ký tự)" };
   const trichDan = typeof n.trichDan === "string" ? lamSachChuMcp(n.trichDan) : "";
   if (trichDan.length < 5 || trichDan.length > 300) return { ok: false, loi: "nguon.trichDan cần 5 đến 300 ký tự: chép nguyên văn dòng trong tài liệu" };
+  if (nguonChiNoiDiemSan(`${loai} ${trichDan}`)) return { ok: false, loi: "Nguồn đang mô tả điểm sàn nhận hồ sơ, không phải điểm chuẩn trúng tuyển" };
   return { ok: true, nguon: { loai, url: u.href, trang, trichDan } };
 }
 

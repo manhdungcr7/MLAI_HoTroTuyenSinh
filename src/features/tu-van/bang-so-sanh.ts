@@ -8,31 +8,34 @@ import { duBaoCua } from "@/features/kham-pha/du-bao";
 import { duBaoMLCua, metaDuBaoML } from "@/data/du-bao-ml";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import type { DiemDayDu, LuaChon } from "@/state/types";
+import { loaiDiemCuaNam } from "@/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
+import { cacDiemHopLe, diemChuanDeSo, phanLoaiDuLieu } from "@/engine/trang-thai-du-lieu";
 
 export interface CotSoSanh { id: string; nganh: string; truong: string; tinh: string }
 /** `o` là chữ đã định dạng cho từng cột. `tot` là chỉ số cột có lợi thế rõ ràng ở tiêu chí đó (chỉ khi khách quan: học phí thấp hơn). */
 export interface HangSoSanh { khoa: string; nhan: string; o: string[]; tot?: number }
 export interface BangSoSanh { cot: CotSoSanh[]; hang: HangSoSanh[]; luuY: string[] }
 
-/** Điểm sàn của Bộ cho nhóm ngành thường: trường công bố đúng mức này nghĩa là gần như nhận mọi hồ sơ đủ ngưỡng, không đo được độ cạnh tranh. */
+/** Giá trị giữ cho client cũ; không dùng hằng số này để phân loại điểm. */
 export const DIEM_SAN = 15;
 const PT_TEN: Record<string, string> = { THPT: "điểm thi THPT", HOC_BA: "học bạ", DGNL_HCM: "ĐGNL ĐHQG-HCM", DGNL_HN: "ĐGNL ĐHQG-HN", DGNL_KHAC: "ĐGNL", DGTD: "đánh giá tư duy", KET_HOP: "xét kết hợp", NANG_KHIEU: "năng khiếu" };
 const ptCua = (l: LuaChon) => l.phuongThuc ?? "THPT";
 const laTHPT = (l: LuaChon) => ptCua(l) === "THPT";
-/** Điểm chuẩn ở mức sàn: chỉ coi là sàn với phương thức THPT và đúng bằng 15. */
-export const laDiemSan = (l: LuaChon) => laTHPT(l) && Math.abs(l.diemMin - DIEM_SAN) < 1e-9;
+/** Điểm sàn cần chứng cứ đúng năm và trị số; không suy từ việc bằng 15. */
+export const laDiemSan = (l: LuaChon) => laTHPT(l) && loaiDiemCuaNam(l, l.namDiem) === "diem_san";
 
 const soDiem = (n: number) => dinhDangDiem(n);
-const namMoiNhat = (l: LuaChon) => String(l.namDiem);
+const namMoiNhat = (l: LuaChon) => String(phanLoaiDuLieu(l).namCuoi ?? l.namDiem);
 
 function oDiemChuan(l: LuaChon): string {
   if (!laTHPT(l)) return `${PT_TEN[ptCua(l)] ?? ptCua(l)}: thang khác, không so với điểm thi THPT`;
   const nam = namMoiNhat(l);
-  return laDiemSan(l) ? `${soDiem(l.diemMin)} (${nam}), mức sàn` : `${soDiem(l.diemMin)} (${nam})`;
+  const diem = diemChuanDeSo(l);
+  return diem !== null ? `${soDiem(diem)} (${nam})` : laDiemSan(l) ? `${soDiem(l.diemMin)} (${nam}), mức sàn` : "Chưa có điểm chuẩn để so";
 }
 
 function oXuHuong(l: LuaChon): string | null {
-  const t = Object.entries(l.diemTheoNam ?? {}).filter(([, v]) => Number.isFinite(v)).sort(([a], [b]) => Number(a) - Number(b)).slice(-4);
+  const t = cacDiemHopLe(l).slice(-4);
   if (t.length < 2) return null;
   const di = t[t.length - 1][1] - t[0][1];
   const chu = Math.abs(di) < 0.5 ? "ổn định" : di > 0 ? "tăng" : "giảm";
@@ -51,7 +54,7 @@ function oVoiDiemCuaEm(l: LuaChon, diem: DiemDayDu): { chu: string; coDiem: bool
   if (lyDoKhacPhuongThuc(l)) return { chu: "Chưa có điểm chuẩn riêng để so (mới có điểm sàn)", coDiem: false };
   const t = tongChoLuaChon(l, diem);
   if (t.tong === null) return { chu: "Chưa đủ điểm để so", coDiem: false };
-  const chenh = Math.round((t.tong - l.diemMin) * 100) / 100;
+  const chenh = Math.round((t.tong - diemChuanDeSo(l)!) * 100) / 100;
   const nhan = nhanNguyenVong(l, t.tong);
   return { chu: `${nhan}: ${soDiem(t.tong)} điểm, ${chenh >= 0 ? "hơn" : "thiếu"} ${soDiem(Math.abs(chenh))}`, coDiem: true };
 }
@@ -89,8 +92,8 @@ export function dungBangSoSanh(ls: LuaChon[], diem: DiemDayDu): BangSoSanh {
   if (san.length) {
     const ten = san.map((l) => `${l.truong}`).join(", ");
     luuY.push(san.length === ls.length
-      ? `Cả ${san.length > 2 ? "ba" : "hai"} lựa chọn đều ở mức sàn ${DIEM_SAN} (điểm tối thiểu Bộ quy định), nên điểm chuẩn không cho thấy trường nào khó vào hơn. Hãy so theo học phí, địa điểm và nội dung đào tạo.`
-      : `${ten} ở mức sàn ${DIEM_SAN} (điểm tối thiểu Bộ quy định), nên con số này không phản ánh độ cạnh tranh thật. Đối chiếu với đề án của trường.`);
+      ? "Các lựa chọn này mới có điểm sàn nhận hồ sơ, chưa có điểm chuẩn để so mức độ cạnh tranh. Hãy so theo học phí, địa điểm và nội dung đào tạo."
+      : `${ten} mới có điểm sàn nhận hồ sơ, chưa có điểm chuẩn để so mức độ cạnh tranh. Đối chiếu với thông báo trúng tuyển của trường.`);
   }
   const nam = new Set(ls.filter(laTHPT).map(namMoiNhat));
   if (nam.size > 1) luuY.push(`Điểm chuẩn lấy của các năm khác nhau (${ls.filter(laTHPT).map((l) => `${l.truong} ${namMoiNhat(l)}`).join(", ")}), đừng so trực tiếp.`);

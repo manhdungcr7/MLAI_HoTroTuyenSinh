@@ -7,6 +7,7 @@ import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
 import { LoiHttp, cam, docThan, docTrang, json, khongTimThay, locEnum, sai } from "../_thu-vien/phan-hoi";
 import { chay, khongHoTro, TAP_TRUONG, type NguCanh, MOI_VAI } from "../_thu-vien/quyen";
 import { thongBaoSuKien } from "../_thu-vien/telegram";
+import { kiemTraNguonDiemChuan } from "../_thu-vien/ban-ghi-d1";
 
 const lech = () => new LoiHttp(409, "lech-trang-thai", "Bản ghi vừa được người khác thay đổi. Hãy tải lại rồi thao tác tiếp.");
 
@@ -82,6 +83,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
         await kiemQuyenTruong(c, entityType, entityId);
         const data = kiemTraData(body.data, entityId, entityType);
         const source = kiemTraNguon(body.source, c.email, c.luc);
+        kiemTraNguonDiemChuan(entityType, source);
         const importance = kiemTraMucDo(body.importance);
         const changeNote = kiemTraGhiChu(body.changeNote, "Tạo mới bản ghi");
         const mo = await c.d1.prepare("SELECT id, status FROM ban_ghi_cms WHERE entity_type = ? AND entity_id = ? AND status IN ('DRAFT','SUBMITTED','IN_REVIEW','APPROVED','REJECTED','PUBLISHED') LIMIT 1").bind(entityType, entityId).first<{ id: string; status: string }>();
@@ -100,6 +102,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
         const mo = await c.d1.prepare("SELECT id FROM ban_ghi_cms WHERE entity_type = ? AND entity_id = ? AND status IN ('DRAFT','SUBMITTED','IN_REVIEW','APPROVED','REJECTED') LIMIT 1").bind(cur.entity_type, cur.entity_id).first<{ id: string }>();
         if (mo) throw new LoiHttp(409, "da-co-ban-nhap", `Thực thể này đã có một bản đang xử lý (id ${mo.id}). Hoàn tất hoặc lưu trữ bản đó trước.`);
         const hienTai = mapTuD1(cur);
+        kiemTraNguonDiemChuan(cur.entity_type, kiemTraNguon(body.sourceMoi ?? hienTai.source, c.email, c.luc));
         const kq = taoPhienBanSuaDoi({
           newId: (c.o.taoId ?? (() => crypto.randomUUID()))(), banGhiHienTai: hienTai,
           duLieuMoi: kiemTraData(body.duLieuMoi ?? hienTai.data, cur.entity_id, cur.entity_type),
@@ -125,6 +128,7 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       const hienTai = mapTuD1(cur);
       const data = body.data === undefined ? hienTai.data : kiemTraData(body.data, cur.entity_id, cur.entity_type);
       const nguon = body.source === undefined ? hienTai.source : kiemTraNguon(body.source, c.email, c.luc);
+      kiemTraNguonDiemChuan(cur.entity_type, nguon);
       const importance = kiemTraMucDo(body.importance, hienTai.importance);
       const ghiChu = kiemTraGhiChu(body.changeNote, cur.change_note);
       const [kq] = await c.d1.batch([
@@ -153,6 +157,10 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
       await kiemQuyenTruong(c, cur.entity_type, cur.entity_id);
       const lyDo = typeof body.rejectionReason === "string" ? body.rejectionReason.trim().slice(0, 1000) : undefined;
       const hienTai = mapTuD1(cur);
+      if (dich === "SUBMITTED" || dich === "APPROVED") {
+        kiemTraData(hienTai.data, cur.entity_id, cur.entity_type);
+        kiemTraNguonDiemChuan(cur.entity_type, hienTai.source);
+      }
       let b: BanGhiCms;
       let hanhDong: string;
       let ghiChu: string | undefined;

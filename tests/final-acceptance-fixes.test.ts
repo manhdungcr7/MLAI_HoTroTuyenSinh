@@ -140,7 +140,7 @@ const baseDiem = (overrides: Partial<DiemDayDu>): DiemDayDu => ({
 {
   assert.equal(hocPhiChu({ hocPhiMin: 28.5, hocPhiMax: 28.5, nguonHocPhi: { nam: "2025", url: "https://example.edu.vn", trang: 1 } }), "28,5");
   assert.equal(tenCongCu("get_student_profile")?.ten, "lay_ho_so");
-  assert.equal(tenCongCu("get_study_plan")?.ten, "ke_hoach_tuan");
+  assert.equal(tenCongCu("get_study_plan")?.ten, "get_study_plan", "Dùng schema công cụ mới khi đã đăng ký trực tiếp");
   assert.equal(tenCongCu("ke_hoach_tuan")?.ten, "ke_hoach_tuan", "Giữ công cụ lịch cũ để không làm hỏng kết nối trước đây");
 }
 

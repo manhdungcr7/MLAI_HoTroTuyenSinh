@@ -12,6 +12,7 @@ Quy trình (mỗi bước có số liệu in ra và ghi vào ml/ket-qua-du-bao-2
   6. Huấn luyện lại trên toàn bộ cặp, dự báo 2027 cho mọi chương trình có điểm từ 2024 trở lại đây (cách tối đa 3 năm).
 """
 import json
+import hashlib
 import sys
 from datetime import datetime, timezone
 from importlib import import_module
@@ -178,11 +179,15 @@ def main() -> None:
 
     meta = {
         "namDuBao": NAM_DU_BAO, "moHinh": "LightGBM hồi quy phân vị (p10, p50, p90), trung bình 5 hạt giống",
+        "catalogSha256": hashlib.sha256((ROOT / "src" / "data" / "du-lieu-that.json").read_bytes().replace(b"
+", b"
+")).hexdigest(),
         "mucTinCay": 0.8, "heSoHieuChinh": round(lam, 3), "tranBienDong": [round(tran_all[0], 2), round(tran_all[1], 2)], "taoLuc": ket_qua["tao_luc"][:10],
         "kiemDinh": {"phuGop": round(khoang["gop"]["phu"], 3), "phuNgoaiMau": round(khoang["ngoai_mau_lam_2024_ap_2025"]["phu"], 3), "winkler": round(khoang["gop"]["winkler"], 2),
                      "winklerHeuristicCu": round(doi_chieu["heuristic_cu"]["winkler"], 2)},
     }
     (ROOT / "src" / "data" / "du-bao-2027.json").write_text(json.dumps({"meta": meta, "ds": out}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    (ROOT / "src" / "data" / "du-lieu-fingerprint.json").write_text(json.dumps({"sha256": meta["catalogSha256"]}, separators=(",", ":")), encoding="utf-8")
     (ROOT / "ml" / "ket-qua-du-bao-2027.json").write_text(json.dumps(ket_qua, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Đã ghi src/data/du-bao-2027.json ({len(out)} chương trình) và ml/ket-qua-du-bao-2027.json")
 

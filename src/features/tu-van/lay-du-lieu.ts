@@ -107,7 +107,7 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
 
 
 export const moTaNguon = (l: LuaChon, nguon: NguonTaiSau | null): string => {
-  const x = nguon?.nam[l.id]?.find((n) => n.nam === String(l.namDiem)) ?? nguon?.nam[l.id]?.[0];
+  const x = l.nguonTheoNam?.find((n) => n.nam === String(l.namDiem)) ?? nguon?.nam[l.id]?.find((n) => n.nam === String(l.namDiem));
   if (x) return `Đề án ${x.tai ?? x.nam}${x.trang ? `, trang ${x.trang}` : ""}`;
   return l.nguonCap === "official_pdf" ? "Đề án của trường" : "Trang tổng hợp, chưa đối chiếu với đề án";
 };

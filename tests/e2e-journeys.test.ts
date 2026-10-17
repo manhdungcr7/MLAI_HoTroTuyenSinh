@@ -249,10 +249,12 @@ console.log("=== BẮT ĐẦU KIỂM THỬ HÀNH TRÌNH ĐẦU-CUỐI (E2E JOURN
   assert.equal(nhanDinh.datRoi, false);
 
   // 2.4. Đánh dấu chuyên đề cần ôn tập (canOnTap) & Sinh việc cần học trong tuần
-  const chuyenDeCanOn = NOI_DUNG_ON.tiengAnh[2]; // "Luyện ngữ pháp và từ vựng theo chủ đề"
+  const chuyenDeCanOn = NOI_DUNG_ON.tiengAnh[2]; // Unit 3. Green living
   state = chuanHoa({
     ...state,
-    trangThaiViec: {}, // hồ sơ mẫu đã đánh dấu vài việc xong: bài này kiểm cách sinh việc theo chuyên đề, không phụ thuộc tiến độ mẫu
+    // Bắt đầu tuần mới; việc mẫu đã hoàn thành có thể trùng ID và che việc vừa sinh.
+    viec: [],
+    trangThaiViec: {},
     hoSo: {
       ...state.hoSo,
       tienDoKienThuc: {
@@ -575,8 +577,8 @@ console.log("=== BẮT ĐẦU KIỂM THỬ HÀNH TRÌNH ĐẦU-CUỐI (E2E JOURN
   const lcGoc = LUA_CHON[0];
   const snap = await taoSnapshotVaManifest(
     [
-      banGhiCms("cutoff_score", `DC-THPT-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "THPT", toHop: "A00", diemChuan: 28.25, maNganh: "" }),
-      banGhiCms("cutoff_score", `DC-DGNL-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "DGNL", toHop: "KHONG", diemChuan: 950, maNganh: "" }),
+      banGhiCms("cutoff_score", `${lcGoc.maTruong}-DC-THPT-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "THPT", toHop: "TATCA", diemChuan: 28.25, maNganh: "", loaiDiem: "diem_chuan", thangDiem: 30 }),
+      banGhiCms("cutoff_score", `${lcGoc.maTruong}-DC-DGNL-${lcGoc.id}`, { id: lcGoc.id, nam: 2026, phuongThuc: "DGNL", toHop: "KHONG", diemChuan: 950, maNganh: "" }),
     ],
     "2026.10.12.01",
   );

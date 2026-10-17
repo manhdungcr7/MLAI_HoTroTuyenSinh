@@ -1,7 +1,8 @@
 // Lịch học của em: tiết cố định (chính khóa, học thêm, hoạt động khác). Giờ tự học được xếp vào khoảng trống còn lại.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, CalendarDays, CalendarPlus, Clock, Plus, Sparkles, Trash2, Wand2 } from "lucide-react";
+import { AlertTriangle, CalendarPlus, Clock, Plus, Sparkles, Trash2, Wand2 } from "lucide-react";
+import { FeatureWeeklyPlan } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { NenHero } from "@/components/ui/hinh-nen";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -70,7 +71,7 @@ export default function LichHoc() {
         )}
 
         {!coDinh.length ? (
-          <TrangThaiTrong bieuTuong={<CalendarDays size={26} />} tieuDe="Chưa có lịch học"
+          <TrangThaiTrong bieuTuong={<FeatureWeeklyPlan size={28} />} tieuDe="Chưa có lịch học"
             moTa="Nhập giờ học ở trường và học thêm. Mình sẽ xếp giờ tự học vào khoảng trống, không bị trùng.">
             <div className="space-y-2">
               <Nut bieuTuong={CalendarPlus} onClick={() => setMoNhanh(true)}>Nhập nhanh buổi học</Nut>

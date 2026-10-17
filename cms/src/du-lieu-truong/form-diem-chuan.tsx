@@ -77,6 +77,7 @@ export function HopFormDiemChuan({ maTruong, tenTruong, ban, laQtv, dong, onXong
       const entityId = ban?.entityId ?? entityIdDiemChuan(maTruong, nam, f.chuongTrinhId, f.phuongThuc, f.toHop.trim().toUpperCase());
       // `id` là mã chương trình trong dữ liệu gốc: nhờ đó điểm chuẩn này ghép đúng vào ngành học sinh đang xem.
       const data: Record<string, unknown> = {
+        loaiDiem: "diem_chuan", ...(f.phuongThuc === "THPT" ? { thangDiem: 30 } : {}),
         id: f.chuongTrinhId, tenNganh: dsCt?.find((c) => c.id === f.chuongTrinhId)?.nganh ?? (ban?.data as Record<string, unknown> | undefined)?.tenNganh, maTruong, maNganh, nam, phuongThuc: f.phuongThuc, toHop: f.toHop.trim().toUpperCase(), diemChuan: so(f.diemChuan),
         ...(f.tieuChiPhu.trim() && { tieuChiPhu: f.tieuChiPhu.trim() }),
       };

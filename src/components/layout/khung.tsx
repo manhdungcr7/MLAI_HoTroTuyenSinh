@@ -1,9 +1,22 @@
 // BỘ KHUNG DUY NHẤT. Slice không tự vẽ thanh dưới hay đầu trang, chỉ dùng các thành phần ở đây.
 import { type CSSProperties, type ReactNode } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, CalendarDays, GraduationCap, Heart, Home, Search, UserRound, type LucideIcon } from "lucide-react";
+import { ArrowLeft, type LucideIcon } from "lucide-react";
 import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
 import { gop } from "@/components/ui/nut-the";
+import {
+  BieuTuongThuongHieuMau,
+  NavExplore,
+  NavExploreActive,
+  NavPlan,
+  NavPlanActive,
+  NavPreferences,
+  NavPreferencesActive,
+  NavHoSo,
+  NavHoSoActive,
+  NavToday,
+  NavTodayActive,
+} from "@/components/ui/bieu-tuong-nguyen-vong";
 import { BannerNgoaiTuyen } from "@/components/ui/du-bao/banner-ngoai-tuyen";
 import { BannerKhongLuu } from "./banner-khong-luu";
 import { ThongBaoYeuThich } from "./thong-bao-yeu-thich";
@@ -11,8 +24,12 @@ import { NutTroLyAI } from "@/features/tu-van/tro-ly-noi-bot";
 import { ChuyenTrang, NenTrangTroi, TheoDoiLanNhan, TieuDeMan, type BienTheNen } from "@/components/ui/thiet-ke";
 import { KetNoiNen } from "@/features/ket-noi/the-de-xuat";
 
-const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
-  homNay: Home, khamPha: Search, nguyenVong: Heart, keHoach: CalendarDays, hoSo: UserRound,
+const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], { thuong: LucideIcon; dang: LucideIcon }> = {
+  homNay: { thuong: NavToday, dang: NavTodayActive },
+  khamPha: { thuong: NavExplore, dang: NavExploreActive },
+  nguyenVong: { thuong: NavPreferences, dang: NavPreferencesActive },
+  keHoach: { thuong: NavPlan, dang: NavPlanActive },
+  hoSo: { thuong: NavHoSo, dang: NavHoSoActive },
 };
 
 /** Khung có thanh 5 tab ở dưới. Dùng cho mọi trang trừ Chào mừng và các bước Bắt đầu. */
@@ -37,13 +54,13 @@ export function KhungCoThanhDuoi() {
           <ul className="grid grid-cols-5 px-1 pt-1">
             {CAC_TAB.map((t) => {
               const dang = t.khop(pathname);
-              const Icon = ICON_TAB[t.id];
+              const Icon = dang ? ICON_TAB[t.id].dang : ICON_TAB[t.id].thuong;
               return (
                 <li key={t.id}>
                   <Link to={t.den} aria-current={dang ? "page" : undefined}
                     className={gop("nay-nhe relative min-h-16 flex flex-col items-center justify-start pt-2 gap-0.5 text-[11px] whitespace-nowrap cursor-pointer", dang ? "text-xanh-dam font-extrabold" : "text-chu-phu font-semibold hover:text-chu")}>
                     <span className={gop("nav-bieu-tuong grid place-items-center h-8 w-14 rounded-full", dang && "dang")}>
-                      <Icon size={22} strokeWidth={dang ? 2.4 : 1.8} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} aria-hidden />
+                      <Icon size={22} strokeWidth={dang ? 2.1 : 1.8} aria-hidden />
                     </span>
                     {t.nhan}
                   </Link>
@@ -73,7 +90,7 @@ export function KhungKhongThanh() {
 export function Logo({ nho }: { nho?: boolean }) {
   return (
     <Link to={DUONG_DAN.gioiThieu()} className="inline-flex items-center gap-1.5 min-h-11 font-extrabold text-muc hover:opacity-90 transition-opacity">
-      <span className="size-8 rounded-lg gd-xanh text-white grid place-items-center"><GraduationCap size={18} /></span>
+      <BieuTuongThuongHieuMau className="size-8 shrink-0" aria-hidden="true" />
       <span className={gop("so-lon", nho ? "text-[14px]" : "text-[15px]")}>Nguyện Vọng AI</span>
     </Link>
   );

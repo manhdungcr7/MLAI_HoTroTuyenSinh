@@ -70,7 +70,7 @@ export function HopFormDiemChuanCaTruong({ maTruong, tenTruong, laQtv, dong, onX
         try {
           let b = await taoBanGhi({
             entityType: "cutoff_score", entityId,
-            data: { id: d.chuongTrinhId, tenNganh: (ds ?? []).find((c) => c.id === d.chuongTrinhId)?.nganh, maTruong, maNganh: "", nam: namSo, phuongThuc: "THPT", toHop: "TATCA", diemChuan: d.diem },
+            data: { id: d.chuongTrinhId, tenNganh: (ds ?? []).find((c) => c.id === d.chuongTrinhId)?.nganh, maTruong, maNganh: "", nam: namSo, phuongThuc: "THPT", toHop: "TATCA", diemChuan: d.diem, loaiDiem: "diem_chuan", thangDiem: 30 },
             source: { url: nguon.link.trim(), tieuDe: nguon.tieuDe.trim(), donViCongBo: nguon.donVi.trim() }, changeNote: ghiChu.trim(),
           });
           if (muc !== "nhap") b = await doiTrangThai(b.id, "SUBMITTED");

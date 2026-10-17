@@ -1,4 +1,6 @@
 # BÁO CÁO TOÀN DIỆN VỀ DỮ LIỆU, EDA, MACHINE LEARNING VÀ HỆ THỐNG RA QUYẾT ĐỊNH (DECISION INTELLIGENCE)
+
+> **Báo cáo lịch sử (16/10/2026), không mô tả trạng thái phát hành hiện tại.** Bản kiểm kê mới ở `docs/audits/data-quality-2026-10-17.md` còn nhiều ô điểm thiếu chứng cứ độc lập. Tệp dự báo ML 2027 được huấn luyện trên danh mục cũ và ứng dụng đang chặn sử dụng cho đến khi huấn luyện lại trên đúng phiên bản dữ liệu. Không dùng các tuyên bố “100% sạch” hoặc “production-ready” bên dưới làm bằng chứng pitch/deploy.
 **Dự án:** Nguyện Vọng AI — **Cuộc thi:** MLAI Hackathon 2026 (Track 6: TMA Decision Intelligence Challenge)  
 **Ngày kiểm định:** 16/10/2026 | **Trạng thái:** Sẵn sàng Triển khai Thương mại (Production-Ready)
 
@@ -137,4 +139,3 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
 1. **Về Dữ liệu:** 100% sạch, 3.648 ngành đào tạo của 118 trường đại học có đầy đủ tổ hợp, điểm chuẩn và liên kết đề án gốc.
 2. **Về AI & Machine Learning:** Kết hợp hoàn chỉnh giữa LightGBM Quantile Regression và Calibrated Logistic Probability, giải quyết đúng bài toán thực tế của học sinh Việt Nam.
 3. **Về Vận hành:** 65 test suites đạt 100% PASS, 0 lỗi runtime, phản hồi $< 50\text{ms}$ trên Cloudflare Edge, đảm bảo trải nghiệm người dùng hoàn hảo và gây ấn tượng tối đa trước Ban Giám Khảo TMA.
-

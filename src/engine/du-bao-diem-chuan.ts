@@ -13,6 +13,7 @@
 // Năm 2025 biến động mạnh hơn hẳn các năm khác (độ lệch chuẩn 2,6 so với 1,8) nên khoảng phủ thấp hơn; khi có thay đổi quy chế,
 // đề thi hay chỉ tiêu, khoảng thực tế còn rộng hơn khoảng này.
 import type { LuaChon } from "@/state/types";
+import { loaiDiemCuaNam } from "./du-lieu-tuyen-sinh/kiem-tra-diem";
 
 export interface ThongKeBienDong {
   /** Mọi biến động (điểm năm sau trừ điểm năm trước), sắp tăng dần. */
@@ -94,14 +95,12 @@ export const NAM_BIEN_DONG_SOM_NHAT = 2023;
 export const TOI_DA_NAM_XA = 2;
 const DIEM_TOI_THIEU = 10, DIEM_TOI_DA = 30;
 
-/** Điểm đúng 15,0 là điểm sàn xét tuyển, không phải điểm chuẩn: không đưa vào biến động hay dự báo. */
-const DIEM_SAN = 15;
-const hopLe = (d: number) => Number.isFinite(d) && d >= DIEM_TOI_THIEU && d <= DIEM_TOI_DA && d !== DIEM_SAN;
+const hopLe = (d: number) => Number.isFinite(d) && d >= DIEM_TOI_THIEU && d <= DIEM_TOI_DA;
 
 /** Các năm điểm THPT hợp lệ của một chương trình, tăng dần. Chỉ chương trình xét điểm thi THPT (hoặc chưa ghi phương thức nhưng có điểm thang 30). */
 function chuoiNam(lc: LuaChon): [number, number][] {
   if (lc.phuongThuc && lc.phuongThuc !== "THPT") return [];
-  return Object.entries(lc.diemTheoNam ?? {}).map(([n, d]) => [Number(n), d] as [number, number]).filter(([n, d]) => Number.isInteger(n) && hopLe(d)).sort((a, b) => a[0] - b[0]);
+  return Object.entries(lc.diemTheoNam ?? {}).map(([n, d]) => [Number(n), d] as [number, number]).filter(([n, d]) => Number.isInteger(n) && hopLe(d) && !["diem_san", "du_kien", "chua_ro"].includes(loaiDiemCuaNam(lc, n) ?? "")).sort((a, b) => a[0] - b[0]);
 }
 
 /**
@@ -151,7 +150,12 @@ export function duBaoDiemChuan(lc: LuaChon, tk: ThongKeBienDong, namDuBao: numbe
   if (c.length === 1) luuY.push("Ngành này mới có điểm của một năm, nên dự đoán dựa vào biến động chung của các ngành khác.");
   const thuCap = lc.nguonCap === "aggregator_verified";
   if (thuCap && c.length === 1) luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường, nên dự báo chỉ để tham khảo.");
-  const doTinCay: DuBaoDiemChuan["doTinCay"] = thuCap && c.length === 1 ? "thap" : c.length >= 2 && k === 1 && !thuCap ? "cao" : "vua";
+  const daThamDinh = c.every(([nam]) => {
+    const e = lc.scoreEvidence?.[String(nam)];
+    return loaiDiemCuaNam(lc, nam) === "diem_chuan" && !!e?.independentReviewer && e.independentReviewer !== e.checkedBy;
+  });
+  if (!daThamDinh) luuY.push("Nguồn chưa được thẩm định độc lập; khoảng dự kiến chỉ để tham khảo.");
+  const doTinCay: DuBaoDiemChuan["doTinCay"] = !daThamDinh || thuCap && c.length === 1 ? "thap" : c.length >= 2 && k === 1 && !thuCap ? "cao" : "vua";
   const chamTran = cao >= DIEM_TOI_DA;
   if (chamTran) luuY.push(`Điểm dự đoán đã chạm trần ${DIEM_TOI_DA} điểm, nên mức điểm thật có thể không thấp hơn.`);
 

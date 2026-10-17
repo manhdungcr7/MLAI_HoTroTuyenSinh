@@ -1,4 +1,5 @@
 import type { LuaChon } from "@/state/types";
+import { nguonChiNoiDiemSan } from "./kiem-tra-diem";
 import type {
   SnapshotCongDong,
   SnapshotDiemChuanHieuChinh,
@@ -69,12 +70,15 @@ export function hopNhatLuaChonVaCms(
   const idChuongTrinh = new Set(coreLuaChon.map((l) => l.id));
   for (const hp of hocPhiCapTruongMoiNhat(cmsData.tuition || [], (h) => h.donVi === "trieu_nam" && !idChuongTrinh.has(h.id))) hocPhiCapTruong.set(hp.maTruong.toUpperCase(), hp);
 
-  // Điểm chuẩn CMS chỉ ghi đè điểm THPT (thang 30). Mỗi chương trình lấy năm mới nhất; cùng năm có nhiều tổ hợp thì lấy điểm cao nhất (không làm học sinh tưởng dễ hơn thực tế).
-  const mapDiemChuanHieuChinh = new Map<string, SnapshotDiemChuanHieuChinh>();
+  // Giữ từng năm và tổ hợp. Không lấy max/median của các tổ hợp thành một điểm chung.
+  const mapDiemChuanHieuChinh = new Map<string, SnapshotDiemChuanHieuChinh[]>();
   for (const dc of cmsData.cutoffScores || []) {
-    if (dc.phuongThuc !== "THPT" || !(dc.diemChuan >= 0 && dc.diemChuan <= 30)) continue;
-    const cu = mapDiemChuanHieuChinh.get(dc.id);
-    if (!cu || dc.nam > cu.nam || (dc.nam === cu.nam && dc.diemChuan > cu.diemChuan)) mapDiemChuanHieuChinh.set(dc.id, dc);
+    if (dc.loaiDiem !== "diem_chuan" || dc.phuongThuc !== "THPT" || dc.thangDiem !== 30 ||
+      typeof dc.diemChuan !== "number" || !Number.isFinite(dc.diemChuan) || dc.diemChuan < 0 || dc.diemChuan > 30 ||
+      !Number.isInteger(dc.nam) || dc.nam < 2000 || !dc.nguon?.url || !dc.nguon.ngayKiemChung || nguonChiNoiDiemSan(dc.nguon.tieuDe ?? "")) continue;
+    const ds = mapDiemChuanHieuChinh.get(dc.id) ?? [];
+    ds.push(dc);
+    mapDiemChuanHieuChinh.set(dc.id, ds);
   }
 
   return coreLuaChon.map((item) => {
@@ -99,16 +103,30 @@ export function hopNhatLuaChonVaCms(
     }
 
     // 2. Hiệu chỉnh điểm chuẩn nếu CMS có bản ghi hiệu chỉnh đã duyệt
-    const dcCms = mapDiemChuanHieuChinh.get(item.id);
-    if (dcCms) {
-      const diemTheoNamMoi = { ...(ketQua.diemTheoNam || {}), [String(dcCms.nam)]: dcCms.diemChuan };
-      ketQua = {
-        ...ketQua,
-        diemTheoNam: diemTheoNamMoi,
-        diemMin: dcCms.diemChuan,
-        diemMax: dcCms.diemChuan,
-        namDiem: dcCms.nam,
-      };
+    const dsDiem = (mapDiemChuanHieuChinh.get(item.id) ?? []).filter((dc) =>
+      item.phuongThuc === dc.phuongThuc && dc.maTruong.toUpperCase() === (item.maTruong ?? item.truong).toUpperCase());
+    for (const nam of [...new Set(dsDiem.map((dc) => dc.nam))].sort((a, b) => a - b)) {
+      const ds = dsDiem.filter((dc) => dc.nam === nam);
+      const toHop = item.toHopXet ?? [];
+      const chung = ds.filter((dc) => dc.toHop === "TATCA");
+      // Dữ liệu LuaChon chưa biểu diễn điểm riêng theo tổ hợp: chỉ nhận khi mọi tổ hợp có cùng điểm.
+      const theoToHop = toHop.map((ma) => ds.filter((dc) => dc.toHop === ma));
+      const dayDu = toHop.length > 0 && theoToHop.every((nhom) => nhom.length > 0);
+      const ungVien = chung.length ? [...chung, ...ds.filter((dc) => toHop.includes(dc.toHop))] : dayDu ? theoToHop.flat() : [];
+      const giaTri = new Set(ungVien.map((dc) => dc.diemChuan));
+      if (!ungVien.length || giaTri.size !== 1) continue;
+      const dcCms = [...ungVien].sort((a, b) => b.capNhatLuc.localeCompare(a.capNhatLuc))[0];
+      ketQua = { ...ketQua, diemTheoNam: { ...(ketQua.diemTheoNam || {}), [String(nam)]: dcCms.diemChuan },
+        scoreEvidence: { ...ketQua.scoreEvidence, [String(nam)]: {
+          kind: "diem_chuan", score: dcCms.diemChuan, scale: dcCms.thangDiem ?? null,
+          sourceUrl: dcCms.nguon.url, checkedAt: dcCms.nguon.ngayKiemChung,
+          checkedBy: dcCms.nguon.nguoiKiemChung ?? "", independentReviewer: null, includesPriority: null,
+        } },
+        nguonTheoNam: [{ nam: String(nam), loai: "diemChuan", url: dcCms.nguon.url }, ...(ketQua.nguonTheoNam ?? []).filter((s) => s.nam !== String(nam))] };
+      if (nam >= (ketQua.namDiem ?? 0)) {
+        ketQua = { ...ketQua, diemMin: dcCms.diemChuan, diemMax: dcCms.diemChuan, namDiem: nam,
+          linkNguon: dcCms.nguon.url, nguon: dcCms.nguon.tieuDe };
+      }
     }
 
     return ketQua;

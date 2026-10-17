@@ -2,7 +2,7 @@
 // Nguyên tắc: thiếu thì ghi "chưa có", không suy ra số; điểm khác thang không đặt chung một thang.
 import type { LuaChon } from "@/state/types";
 import { coHocPhi, hocPhiChu } from "@/data/lua-chon-phu";
-import { DIEM_SAN_XET_TUYEN } from "@/engine/trang-thai-du-lieu";
+import { loaiDiemCuaNam } from "@/engine/du-lieu-tuyen-sinh/kiem-tra-diem";
 import { coSoCuaChuongTrinh, coTruong, tenTruong, tinhCuaTruong } from "@/engine/truong";
 
 export const CHUA_CO = "Chưa có dữ liệu xác minh";
@@ -27,8 +27,8 @@ export interface DongChuongTrinh {
   thang: string | null;
   nam: string | null; // năm mới nhất có điểm
   diem: number | null;
-  theoNam: [string, number][]; // mới nhất trước; điểm THPT đúng mức sàn 15,0 không nằm ở đây
-  /** Chỉ có mức sàn xét tuyển (15,0), không phải điểm chuẩn: năm mới nhất ở mức sàn. */
+  theoNam: [string, number][]; // mới nhất trước; điểm sàn có bằng chứng không nằm ở đây
+  /** Chỉ có mức sàn xét tuyển đã kiểm chứng, không phải điểm chuẩn. */
   diemSan: { nam: string; diem: number } | null;
   nguonDiem: "chinh-thuc" | "tong-hop";
   nhanNguon: string;
@@ -59,15 +59,15 @@ export const nhanNguonDiem = (cap?: LuaChon["nguonCap"]): { loai: DongChuongTrin
 export function hocPhiDayDu(l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "hocPhiUocTinh" | "nguonHocPhi">): string | null {
   if (!coHocPhi(l)) return null;
   const so = hocPhiChu(l).replace(/\./g, ",");
-  return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (đề án ${l.nguonHocPhi.nam})` : l.hocPhiUocTinh ? " (ước tính)" : ""}`;
+  return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (${l.nguonHocPhi.thuCap ? "theo VnExpress" : "đề án"} ${l.nguonHocPhi.nam})` : l.hocPhiUocTinh ? " (ước tính)" : ""}`;
 }
 
 function dongTu(l: LuaChon): DongChuongTrinh {
   const tho = Object.entries(l.diemTheoNam ?? {}).filter(([, d]) => typeof d === "number" && Number.isFinite(d)).sort((a, b) => b[0].localeCompare(a[0]));
-  // Điểm THPT đúng bằng mức sàn 15,0 không phải điểm chuẩn (cùng luật với engine/trang-thai-du-lieu). Phương thức khác giữ thang riêng.
+  // Chỉ loại điểm sàn/dự kiến khi chứng cứ khớp đúng năm và trị số. Phương thức khác giữ thang riêng.
   const laThpt = !l.phuongThuc || l.phuongThuc === "THPT";
-  const theoNam = laThpt ? tho.filter(([, d]) => d !== DIEM_SAN_XET_TUYEN) : tho;
-  const san = laThpt ? tho.find(([, d]) => d === DIEM_SAN_XET_TUYEN) : undefined;
+  const theoNam = laThpt ? tho.filter(([nam]) => !["diem_san", "du_kien", "chua_ro"].includes(loaiDiemCuaNam(l, Number(nam)) ?? "")) : tho;
+  const san = laThpt ? tho.find(([nam]) => loaiDiemCuaNam(l, Number(nam)) === "diem_san") : undefined;
   const ng = nhanNguonDiem(l.nguonCap);
   const pt = l.phuongThuc ?? "";
   const hp = hocPhiDayDu(l);
