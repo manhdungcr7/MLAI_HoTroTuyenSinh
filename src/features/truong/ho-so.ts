@@ -56,11 +56,10 @@ export interface HoSoTruong {
 export const nhanNguonDiem = (cap?: LuaChon["nguonCap"]): { loai: DongChuongTrinh["nguonDiem"]; nhan: string } =>
   cap === "official_pdf" ? { loai: "chinh-thuc", nhan: "Đề án chính thức của trường" } : { loai: "tong-hop", nhan: "Từ trang tổng hợp, chưa phải văn bản của trường" };
 
-/** Học phí có chứng cứ sơ cấp, hoặc null khi chưa có. */
 export function hocPhiDayDu(l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "hocPhiUocTinh" | "nguonHocPhi">): string | null {
   if (!coHocPhi(l)) return null;
   const so = hocPhiChu(l).replace(/\./g, ",");
-  return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (đề án ${l.nguonHocPhi.nam})` : ""}`;
+  return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (đề án ${l.nguonHocPhi.nam})` : l.hocPhiUocTinh ? " (ước tính)" : ""}`;
 }
 
 function dongTu(l: LuaChon): DongChuongTrinh {

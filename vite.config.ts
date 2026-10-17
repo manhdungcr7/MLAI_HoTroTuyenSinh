@@ -62,7 +62,7 @@ function apiDevPlugin() {
           }
           return;
         }
-        if (req.url === "/api/tu-van" && req.method === "POST") {
+        if (process.env.NV_AI_REMOTE === "1" && req.url === "/api/tu-van" && req.method === "POST") {
           let body = "";
           req.on("data", (chunk: any) => { body += chunk; });
           req.on("end", async () => {
@@ -84,36 +84,85 @@ function apiDevPlugin() {
               }
               const data = JSON.parse(body || "{}");
               const cauHoi = data.cauHoi || "";
+              const isStream = data.stream === true || (req.headers.accept && req.headers.accept.includes("text/event-stream"));
+
+              const systemPrompt = 'Bạn là Trợ lý tư vấn tuyển sinh đại học Nguyện Vọng AI thông minh, thân thiện. Xưng "mình", gọi học sinh là "bạn" hoặc "em". Trả lời súc tích, tự nhiên, chính xác dựa trên câu hỏi của học sinh. Khi học sinh hỏi về KẾ HOẠCH HỌC TẬP, PHƯƠNG PHÁP ÔN THI, TĂNG ĐIỂM, PHÂN BỔ THỜI GIAN: Hãy dựa vào mục tiêu, môn trọng tâm kéo điểm và tiến độ tuần trong ngữ cảnh/hồ sơ để tư vấn thiết thực, chỉ rõ môn cần bứt phá, phương pháp phân bổ thời gian (60-35-5) và gợi ý lịch ôn tập cụ thể. Nếu hỏi về phương thức xét tuyển (như học bạ, ĐGNL, tuyển thẳng), giải thích rõ ràng và khuyên đối chiếu thêm đề án chính thức của trường.';
+
+              const userContent = [
+                data.nguCanh ? `[NGỮ CẢNH VÀ KẾ HOẠCH HỌC TẬP]\n${data.nguCanh}` : "",
+                data.hoSo ? `[HỒ SƠ HỌC SINH]\n${JSON.stringify(data.hoSo)}` : "",
+                `[CÂU HỎI CỦA HỌC SINH]\n${cauHoi}`,
+              ].filter(Boolean).join("\n\n");
+
               const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${apiKey}`,
-                  "HTTP-Referer": "https://nguyenvongai.vn",
+                  "HTTP-Referer": "https://nguyenvongai.pages.dev",
                   "X-Title": "Nguyen Vong AI",
                 },
                 body: JSON.stringify({
                   model: model || "deepseek/deepseek-chat",
                   temperature: 0.3,
                   max_tokens: 600,
+                  stream: isStream,
                   messages: [
-                    {
-                      role: "system",
-                      content: 'Bạn là Trợ lý tư vấn tuyển sinh đại học Nguyện Vọng AI thông minh, thân thiện. Xưng "mình", gọi học sinh là "bạn" hoặc "em". Trả lời súc tích, tự nhiên, chính xác dựa trên câu hỏi của học sinh. Nếu hỏi về phương thức xét tuyển (như học bạ, ĐGNL, tuyển thẳng), giải thích rõ ràng và khuyên đối chiếu thêm đề án chính thức của trường.',
-                    },
-                    {
-                      role: "user",
-                      content: cauHoi,
-                    },
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userContent },
                   ],
                 }),
               });
+
               if (!response.ok) {
                 const errText = await response.text();
                 res.writeHead(response.status, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ loi: "mang", chiTiet: errText }));
                 return;
               }
+
+              if (isStream && response.body) {
+                res.writeHead(200, {
+                  "Content-Type": "text/event-stream; charset=utf-8",
+                  "Cache-Control": "no-cache",
+                  Connection: "keep-alive",
+                });
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullTraLoi = "";
+                let buffer = "";
+
+                while (true) {
+                  const { done, value } = await reader.read();
+                  if (done) break;
+                  buffer += decoder.decode(value, { stream: true });
+                  const lines = buffer.split("\n\n");
+                  buffer = lines.pop() ?? "";
+
+                  for (const block of lines) {
+                    for (const line of block.split("\n")) {
+                      const tr = line.trim();
+                      if (!tr.startsWith("data:")) continue;
+                      const jsonStr = tr.slice(5).trim();
+                      if (jsonStr === "[DONE]") continue;
+                      try {
+                        const parsed = JSON.parse(jsonStr);
+                        const token = parsed.choices?.[0]?.delta?.content || "";
+                        if (token) {
+                          fullTraLoi += token;
+                          res.write(`data: ${JSON.stringify({ token })}\n\n`);
+                        }
+                      } catch {}
+                    }
+                  }
+                }
+
+                res.write(`data: ${JSON.stringify({ xong: true, traLoi: fullTraLoi, nguon: [], tang: "llm", luot: { con: 49, toiDa: 50 } })}\n\n`);
+                res.end();
+                return;
+              }
+
               const result = (await response.json()) as any;
               const traLoi = result.choices?.[0]?.message?.content || "";
               res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
@@ -144,6 +193,7 @@ export default defineConfig(({ command }) => ({
   cacheDir: command === "serve"
     ? resolve(__dir, ".agent-runtime", "vite-cache", randomUUID())
     : resolve(__dir, ".agent-runtime", "vite-cache-build"),
+  // Manifest có dữ liệu rỗng khi chưa chạy Pages; AI trả phí chỉ dùng khi bật NV_AI_REMOTE.
   plugins: [apiDevPlugin(), react(), tailwindcss()],
   server: { proxy: { "/api": "http://127.0.0.1:8790", "/snapshots": "http://127.0.0.1:8790" } },
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },

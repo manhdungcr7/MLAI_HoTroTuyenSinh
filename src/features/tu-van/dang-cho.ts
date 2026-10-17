@@ -15,13 +15,23 @@ export const cauDangCho = (): string | null => treo;
 export function huyCho(): void { doi++; treo = null; }
 if (typeof window !== "undefined") window.addEventListener("nvai-lam-lai", huyCho);
 
-/** Ghi câu hỏi vào lịch sử, chạy `lay` ở nền, rồi ghi đáp và báo cho màn đang mở (nếu có). */
-export async function guiNen(kho: KhoChat, cau: string, truoc: TinNhan[], lay: () => Promise<TinNhan>): Promise<void> {
+/** Ghi câu hỏi vào lịch sử, chạy `lay` ở nền kèm stream onChunk, rồi ghi đáp và báo cho màn đang mở (nếu có). */
+export async function guiNen(
+  kho: KhoChat,
+  cau: string,
+  truoc: TinNhan[],
+  lay: (onChunk?: (doan: string) => void) => Promise<TinNhan>,
+  onChunk?: (doan: string) => void
+): Promise<void> {
   const dau = doi;
   treo = cau;
   ghiLichSu(kho, [...truoc, { vai: "em", chu: cau }]);
   let tin: TinNhan | null = null;
-  try { tin = await lay(); } catch { /* lay không được ném; nếu ném thì chỉ nhả khóa chờ */ }
+  try {
+    tin = await lay((doan) => {
+      if (dau === doi) onChunk?.(doan);
+    });
+  } catch { /* lay không được ném; nếu ném thì chỉ nhả khóa chờ */ }
   if (dau !== doi) return;
   treo = null;
   if (!tin) return;

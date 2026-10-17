@@ -51,10 +51,13 @@ export interface HoSoTomTat { // không có tên, không có thông tin liên h�
   diemDgnl?: string | null;
   hocBa?: string | null;
   giaiThuongHsg?: string | null;
+  mucTieu?: string | null;
+  monCanKeo?: string | null;
+  keHoachTuan?: string | null;
 }
 
 /** `bangSoSanh`: bảng so sánh app đã tính sẵn từ dữ liệu thật (xem features/tu-van/bang-so-sanh.ts). Có trường này thì mô hình chỉ diễn giải bảng, mọi số phải nằm trong bảng. */
-export interface YeuCauTuVan { cauHoi: string; nguCanh?: string; hoSo?: HoSoTomTat | null; duLieu: SuKien[]; bangSoSanh?: string }
+export interface YeuCauTuVan { cauHoi: string; nguCanh?: string; hoSo?: HoSoTomTat | null; duLieu: SuKien[]; bangSoSanh?: string; stream?: boolean }
 export interface NguonWeb { url: string; tieuDe: string }
 export interface TraLoiTuVan extends PhanHoiCauTruc {
   traLoi: string;
@@ -100,6 +103,9 @@ export function lamSachHoSo(x: unknown): HoSoTomTat | null {
   if (typeof o.diemDgnl === "string") r.diemDgnl = o.diemDgnl.slice(0, 60);
   if (typeof o.hocBa === "string") r.hocBa = o.hocBa.slice(0, 30);
   if (typeof o.giaiThuongHsg === "string") r.giaiThuongHsg = o.giaiThuongHsg.slice(0, 50);
+  if (typeof o.mucTieu === "string") r.mucTieu = o.mucTieu.slice(0, 150);
+  if (typeof o.monCanKeo === "string") r.monCanKeo = o.monCanKeo.slice(0, 100);
+  if (typeof o.keHoachTuan === "string") r.keHoachTuan = o.keHoachTuan.slice(0, 150);
   return r;
 }
 
@@ -159,7 +165,7 @@ export function kiemTraYeuCau(x: unknown): { ok: true; v: YeuCauTuVan } | { ok: 
   const hoSo = lamSachHoSo(o.hoSo);
   // eslint-disable-next-line no-control-regex
   const bang = typeof o.bangSoSanh === "string" ? o.bangSoSanh.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, GIOI_HAN.bangSoSanh) : "";
-  return { ok: true, v: { cauHoi, nguCanh: typeof o.nguCanh === "string" && o.nguCanh.trim() ? o.nguCanh.trim().slice(0, GIOI_HAN.nguCanh) : undefined, hoSo, duLieu: sach, ...(bang ? { bangSoSanh: bang } : {}) } };
+  return { ok: true, v: { cauHoi, nguCanh: typeof o.nguCanh === "string" && o.nguCanh.trim() ? o.nguCanh.trim().slice(0, GIOI_HAN.nguCanh) : undefined, hoSo, duLieu: sach, ...(bang ? { bangSoSanh: bang } : {}), ...(o.stream === true ? { stream: true } : {}) } };
 }
 
 /** Nội dung do người dùng hoặc cộng đồng gõ (câu hỏi, ngữ cảnh, ghi chú) luôn nằm trong thẻ này; lời nhắc dặn mô hình coi đó là dữ liệu. */
@@ -174,6 +180,7 @@ export const NHAC_HE_THONG = [
   "2. Chỉ dùng số liệu trong DỮ LIỆU, HỒ SƠ, TƯ LIỆU. Không tự nêu điểm chuẩn, học phí, chỉ tiêu, việc làm từ trí nhớ; thiếu thì nói \"mình chưa có dữ liệu này\". hp~ là học phí ước tính, phải nói \"ước tính\". Ghi chú cộng đồng là chưa chính thức.",
   "3. Số kèm ngành, trường, năm; cuối câu ghi [nguồn: id1, id2]. Điểm chuẩn là năm trước, không nói xác suất đậu. Dùng nhãn nhan kèm chenh; điểm của bạn ở một ngành chỉ lấy tongCuaEm của ngành đó. Có dòng NV1 thì nêu khoảng cách tới NV1 đúng số đã cho.",
   "3b. dl=chiDiemSan|khongDu: ngành không có điểm chuẩn, nói \"chưa có điểm chuẩn riêng, mình chưa so được\", không nêu số nào và không đưa nhãn. dl=phuongThucKhac: điểm học bạ/ĐGNL, không so với điểm thi THPT. dl=motNam hoặc tc=1: nói điểm chỉ để tham khảo. duBao là khoảng dự kiến, không phải điểm chuẩn chính thức. Không hứa đỗ, không nói phần trăm khả năng.",
+  "3c. Khi hỏi về KẾ HOẠCH HỌC TẬP, LỊCH HỌC, ÔN THI, TĂNG ĐIỂM: hãy tận dụng mục tiêu, môn trọng tâm kéo điểm và tiến độ tuần trong HỒ SƠ/NGỮ CẢNH để tư vấn thiết thực, chỉ rõ môn cần bứt phá, phương pháp phân bổ thời gian (60-35-5) và gợi ý lịch ôn tập.",
   "4. Câu mơ hồ: hỏi lại MỘT câu ở hoiLai, không hỏi điều đã có trong HỒ SƠ. Ngoài chọn ngành, trường, ôn thi, kế hoạch thì từ chối nhẹ.",
   "5. Không tự nêu nội dung chương trình học phổ thông (tên chương, bài, kiến thức từng môn) từ trí nhớ. Được hỏi thì nói mình chỉ có chương trình lớp 12 bộ Kết nối tri thức ở mục lập kế hoạch theo tiến độ, và gợi ý bạn hỏi \"lập kế hoạch học theo tiến độ\".",
   'Chỉ trả JSON: {"intent":"tra-cuu|so-sanh|goi-y|giai-thich|lam-ro|ngoai-pham-vi","traLoi":"...[nguồn: ...]","thucThe":[{"loai":"truong|nganh","maTruong":"","idChuongTrinh":""}],"hanhDong":[{"loai":"xem-truong|xem-nganh|xem-diem-chuan|so-sanh|them-nguyen-vong","maTruong":"","idChuongTrinh":"","ids":[],"nhan":""}],"hoiLai":"","trangThaiDuLieu":"da-xac-minh|chua-xac-minh|lich-su|uoc-tinh|du-bao|chua-co"}. Chỉ traLoi bắt buộc; mã, id lấy từ DỮ LIỆU; hanhDong tối đa 3, nhan 2-4 chữ, them-nguyen-vong chỉ là đề xuất.',

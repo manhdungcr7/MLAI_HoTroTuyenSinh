@@ -291,7 +291,9 @@ export default function ChiTiet() {
             {duBao && (tt.loai === "nhieuNam" || tt.loai === "motNam") && (
               <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán ${duBao.namDuBao}${duBao.moHinh === "hoc-may" ? " (mô hình học máy)" : ""}`}
                 giaTri={`${dinhDangDiem(duBao.kyVong)} điểm`}
-                phu={`Khoảng ${dinhDangDiem(duBao.thap)} đến ${dinhDangDiem(duBao.cao)} điểm (mục tiêu phủ ${Math.round(duBao.mucTinCay * 100)}%). Dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`} />
+                phu={duBao.moHinh === "hoc-may"
+                  ? `Mô hình học máy LightGBM dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`
+                  : `Dự đoán từ điểm năm ${duBao.namCuoi} dựa trên biến động chung, không phải xác suất đậu.`} />
             )}
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />

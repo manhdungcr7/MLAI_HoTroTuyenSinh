@@ -1,7 +1,7 @@
 // Màn 16 · Môn nào kéo điểm nhanh nhất? (trang con của Mục tiêu)
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight, CircleCheck, ClipboardList, Info, Plus, Target, Trophy, UserPen } from "lucide-react";
+import { ChevronRight, CircleCheck, ClipboardList, Info, Plus, Sparkles, Target, Trophy, UserPen } from "lucide-react";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HopTruot, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { Nhan, Nut, TONE_CHU, TONE_NEN, gop } from "@/components/ui/nut-the";
@@ -12,7 +12,21 @@ import { useApp } from "@/state/store";
 import { TEN_MON, type MonId, type ToneTen } from "@/state/types";
 import { docMucTieu, type DuLieuMucTieu } from "./du-lieu";
 import { BieuTuongMon, TONE_NHAN, ThangCongSuc } from "./thanh-phan";
-import { TEN_CONG_SUC, TEN_XU_HUONG, diem1, goiYTuanNay, tenToHop, tongPhanBu, type MonKeoDiem } from "./tinh-toan";
+import {
+  ChienLuocBuDiem,
+  MO_TA_CHIEN_LUOC,
+  TEN_CHIEN_LUOC,
+  TEN_CONG_SUC,
+  TEN_XU_HUONG,
+  diem1,
+  goiYTuanNay,
+  phanLoaiMon,
+  quyDoiSoCau,
+  tenToHop,
+  tinhPhanBoChienLuoc,
+  tongPhanBu,
+  type MonKeoDiem,
+} from "./tinh-toan";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 
 const MAU_THANH: Record<ToneTen, string> = { xanh: "bg-xanh", luc: "bg-luc", cam: "bg-cam", do: "bg-do", tim: "bg-tim", muc: "bg-muc" };
@@ -35,8 +49,8 @@ export default function MonKeoDiem() {
       <DauTrangCoQuayLai tieuDe="Môn kéo điểm nhanh nhất" quayLai={DUONG_DAN.mucTieu()} phai={d ? nutCachTinh : undefined} />
       <NoiDung>
         {!d ? (
-          <TrangThaiTrong bieuTuong={<Target size={28} />} tieuDe="Bạn chưa chọn mục tiêu chính"
-            moTa="Cần biết ngành và trường bạn hướng tới để tính toán môn ưu tiên.">
+          <TrangThaiTrong bieuTuong={<Target size={28} />} tieuDe="Em chưa chọn mục tiêu chính"
+            moTa="Cần biết ngành và trường em hướng tới để tính toán môn ưu tiên.">
             <Nut muiTen onClick={() => nav(DUONG_DAN.khamPha())}>Khám phá ngành học</Nut>
           </TrangThaiTrong>
         ) : d.thieuDiem.length > 0 ? (
@@ -62,13 +76,21 @@ export default function MonKeoDiem() {
 }
 
 function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: MonId) => void }) {
+  const { s } = useApp();
   const nav = useNavigate();
-  const canBu = d.cacMon.filter((m) => m.thieu > 0);
-  const bu = tongPhanBu(d.cacMon, d.conThieu);
-  const goiY = goiYTuanNay(d.cacMon);
+  const [chienLuoc, setChienLuoc] = useState<ChienLuocBuDiem>("duDia");
+  const [monSoTruong, setMonSoTruong] = useState<MonId>(d.toHop[0]);
+
+  // Tính lại phân bổ theo chiến lược người dùng lựa chọn
+  const khoangCachMoi = tinhPhanBoChienLuoc(d.khoangCach, d.conThieu, chienLuoc, monSoTruong);
+  const cacMon = phanLoaiMon(khoangCachMoi, s.diemThi);
+  const canBu = cacMon.filter((m) => m.thieu > 0);
+  const bu = tongPhanBu(cacMon, d.conThieu);
+  const goiY = goiYTuanNay(cacMon);
+  const monChinh = canBu[0]?.mon;
 
   return (
-    <>
+    <div className="space-y-4 pb-28">
       <div className="text-center px-2">
         <h2 className="text-[17px] font-extrabold text-muc">Môn nào kéo điểm nhanh nhất?</h2>
       </div>
@@ -82,38 +104,108 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
         <p className="text-[13px] text-chu-phu text-center mt-2 pt-2 border-t border-vien">Tổ hợp {d.goc.maToHop}: {tenToHop(d.toHop)}</p>
       </div>
 
-      {d.cacMon.map((m) => <TheMon key={m.mon} m={m} moGiaiThich={() => moGiaiThich(m.mon)} />)}
+      {cacMon.map((m) => (
+        <TheMon key={m.mon} m={m} laMonChinh={m.mon === monChinh && canBu.length > 1} moGiaiThich={() => moGiaiThich(m.mon)} />
+      ))}
 
       {canBu.length > 0 ? (
-        <div className="rounded-the bg-trang border border-vien shadow-the p-4">
-          <h2 className="flex items-center gap-2 text-[17px] font-extrabold text-muc"><Target size={22} className="text-do" />Đề xuất bù {diem1(d.conThieu)} điểm</h2>
-          <div className="mt-3 flex items-stretch gap-1">
-            {canBu.map((m, i) => (
-              <Fragment key={m.mon}>
-                {i > 0 && <Plus size={16} className="self-center shrink-0 text-chu-phu" aria-hidden />}
-                <div className={gop("flex-1 min-w-0 rounded-xl py-2 px-1 text-center", TONE_NEN[TONE_NHAN[m.nhan]])}>
-                  <span className="block text-[13px] text-chu truncate">{m.ten}</span>
-                  <b className={gop("block text-[20px] leading-tight", TONE_CHU[TONE_NHAN[m.nhan]])}>+{diem1(m.thieu)}</b>
-                </div>
-              </Fragment>
-            ))}
+        <div className="rounded-the bg-trang border border-vien shadow-the p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="flex items-center gap-2 text-[17px] font-extrabold text-muc">
+              <Target size={22} className="text-do" />Đề xuất bù {diem1(d.conThieu)} điểm
+            </h2>
           </div>
+
+          {/* Chọn 3 cách chia điểm */}
+          <div>
+            <span className="block text-[12px] font-medium text-chu-phu mb-1.5">Cách phân bổ điểm cần bù:</span>
+            <div className="grid grid-cols-3 gap-1 rounded-xl bg-nen p-1 text-[13px] font-medium">
+              {(["duDia", "canBang", "soTruong"] as const).map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setChienLuoc(k)}
+                  className={gop(
+                    "py-1.5 px-1 rounded-lg text-center truncate transition-colors",
+                    chienLuoc === k ? "bg-trang text-xanh shadow-sm font-bold" : "text-chu-phu hover:text-chu"
+                  )}
+                >
+                  {TEN_CHIEN_LUOC[k]}
+                </button>
+              ))}
+            </div>
+
+            {chienLuoc === "soTruong" && (
+              <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                <span className="text-[12px] text-chu-phu">Môn gánh chính:</span>
+                {d.toHop.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setMonSoTruong(m)}
+                    className={gop(
+                      "px-2.5 py-1 rounded-full text-[12px] transition-colors border",
+                      monSoTruong === m
+                        ? "bg-xanh text-trang border-xanh font-bold shadow-sm"
+                        : "bg-trang text-chu border-vien active:bg-nen"
+                    )}
+                  >
+                    {TEN_MON[m]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 3 ô môn phân bổ điểm và số câu trắc nghiệm quy đổi */}
+          <div className="mt-3 flex items-stretch gap-1">
+            {canBu.map((m, i) => {
+              const laChinh = m.mon === monChinh && canBu.length > 1;
+              return (
+                <Fragment key={m.mon}>
+                  {i > 0 && <Plus size={16} className="self-center shrink-0 text-chu-phu" aria-hidden />}
+                  <div className={gop(
+                    "flex-1 min-w-0 rounded-xl py-2 px-1 text-center relative transition-all",
+                    TONE_NEN[TONE_NHAN[m.nhan]],
+                    laChinh && "ring-2 ring-do/30"
+                  )}>
+                    {laChinh && (
+                      <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-do text-trang shadow-xs">
+                        Ưu tiên
+                      </span>
+                    )}
+                    <span className="block text-[13px] text-chu truncate font-medium">{m.ten}</span>
+                    <b className={gop("block text-[20px] leading-tight", TONE_CHU[TONE_NHAN[m.nhan]])}>+{diem1(m.thieu)}</b>
+                    <span className="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-trang/80 text-chu-phu">
+                      ~{quyDoiSoCau(m.mon, m.thieu)} câu
+                    </span>
+                  </div>
+                </Fragment>
+              );
+            })}
+          </div>
+
           {bu.lech !== 0 && <p className="text-[13px] text-chu-phu mt-1.5">Tổng các môn là {diem1(bu.tong)} điểm, lệch {diem1(Math.abs(bu.lech))} do làm tròn.</p>}
+
           <div className="mt-3 rounded-xl bg-luc-nhat p-3 flex items-start gap-2.5">
             <CircleCheck size={20} className="text-luc shrink-0 mt-0.5" />
             <span>
-              <b className="block text-[14px] text-luc-chu leading-snug">Cách bù điểm ít tốn sức nhất theo số liệu hiện có</b>
-              <span className="block text-[13px] text-chu mt-0.5">Môn còn nhiều dư địa và môn bạn muốn cải thiện nhận phần lớn hơn.</span>
+              <b className="block text-[14px] text-luc-chu leading-snug">{TEN_CHIEN_LUOC[chienLuoc]}</b>
+              <span className="block text-[13px] text-chu mt-0.5">{MO_TA_CHIEN_LUOC[chienLuoc]}</span>
             </span>
           </div>
         </div>
       ) : (
-        <DongThongBao tone="luc" icon={Trophy} tieuDe="Bạn đã đạt mục tiêu, không cần bù thêm điểm"
+        <DongThongBao tone="luc" icon={Trophy} tieuDe="Em đã đạt mục tiêu, không cần bù thêm điểm"
           moTa="Giữ vững cả 3 môn: mỗi tuần làm một đề và chữa kỹ câu sai để không bị tụt điểm." />
       )}
 
       <button type="button" onClick={() => nav(DUONG_DAN.tuan())} className="w-full text-left rounded-the bg-xanh-nhat p-4 active:brightness-95">
-        <span className="flex items-center gap-2"><ClipboardList size={20} className="text-xanh" /><b className="flex-1 text-[16px] text-xanh">Điểm cần tập trung tuần này</b><ChevronRight size={18} className="text-chu-phu" /></span>
+        <span className="flex items-center gap-2">
+          <ClipboardList size={20} className="text-xanh" />
+          <b className="flex-1 text-[16px] text-xanh">Điểm cần tập trung tuần này</b>
+          <ChevronRight size={18} className="text-chu-phu" />
+        </span>
         <span className="block mt-2 space-y-1.5">
           {goiY.map((g) => (
             <span key={g.noiDung} className="flex items-start gap-2 text-[14px] text-chu">
@@ -125,17 +217,26 @@ function NoiDungChinh({ d, moGiaiThich }: { d: DuLieuMucTieu; moGiaiThich: (m: M
       </button>
 
       <Nut muiTen onClick={() => nav(DUONG_DAN.tuan())}>Lập kế hoạch học</Nut>
-    </>
+    </div>
   );
 }
 
-function TheMon({ m, moGiaiThich }: { m: MonKeoDiem; moGiaiThich: () => void }) {
+function TheMon({ m, laMonChinh, moGiaiThich }: { m: MonKeoDiem; laMonChinh?: boolean; moGiaiThich: () => void }) {
   const tone = TONE_NHAN[m.nhan];
   return (
-    <div className="rounded-the bg-trang border border-vien shadow-the p-4">
+    <div className={gop("rounded-the bg-trang border shadow-the p-4 transition-all", laMonChinh ? "border-cam/50 ring-1 ring-cam/20" : "border-vien")}>
       <div className="flex items-center gap-3">
         <BieuTuongMon mon={m.mon} />
-        <b className="flex-1 min-w-0 text-[17px] text-muc truncate">{m.ten}</b>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5">
+            <b className="text-[17px] text-muc truncate">{m.ten}</b>
+            {laMonChinh && (
+              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-cam-nhat text-cam-chu">
+                <Sparkles size={11} /> Kéo nhanh
+              </span>
+            )}
+          </div>
+        </div>
         <Nhan tone={tone} className="!text-[13px] !py-1">{m.nhan}</Nhan>
       </div>
 
@@ -143,8 +244,12 @@ function TheMon({ m, moGiaiThich }: { m: MonKeoDiem; moGiaiThich: () => void }) 
         <span><span className="block text-[13px] text-chu-phu">Điểm hiện tại</span><b className="text-[20px] text-muc">{diem1(m.hienTai)}</b></span>
         <ChevronRight size={18} className="text-chu-phu mb-1.5" aria-hidden />
         <span className="pl-1"><span className="block text-[13px] text-chu-phu">Cần đạt</span><b className="text-[20px] text-muc">{diem1(m.mucTieu)}</b></span>
-        <span className="text-right"><span className="block text-[13px] text-chu-phu">Còn thiếu</span>
-          <b className={gop("text-[20px]", m.thieu > 0 ? TONE_CHU[tone] : "text-luc-chu")}>{m.thieu > 0 ? `+${diem1(m.thieu)}` : "Đủ"}</b></span>
+        <span className="text-right">
+          <span className="block text-[13px] text-chu-phu">Còn thiếu</span>
+          <b className={gop("text-[20px]", m.thieu > 0 ? TONE_CHU[tone] : "text-luc-chu")}>
+            {m.thieu > 0 ? `+${diem1(m.thieu)}` : "Đủ"}
+          </b>
+        </span>
       </div>
 
       {/* Thanh thang 10: phần đậm là điểm hiện tại, phần nhạt là phần còn thiếu tới mức cần đạt. */}

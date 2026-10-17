@@ -65,6 +65,14 @@ const TIEU_DE_CONG_KHAI = {
   "Access-Control-Allow-Origin": "*",
 };
 
+/** HEAD phải giữ đúng metadata cache của GET nhưng không tuần tự hoá hay gửi lại cấu hình. */
+function traCauHinhCongKhai(request: Request, cauHinh: CauHinhCongKhai): Response {
+  return new Response(request.method === "HEAD" ? null : JSON.stringify(cauHinh), {
+    status: 200,
+    headers: TIEU_DE_CONG_KHAI,
+  });
+}
+
 export async function xuLyCauHinhCongKhai(request: Request, env: EnvCauHinhCongKhai = {}): Promise<Response> {
   if (request.method !== "GET" && request.method !== "HEAD") {
     return new Response(JSON.stringify({ loi: "Chỉ hỗ trợ phương thức GET" }), {
@@ -79,10 +87,7 @@ export async function xuLyCauHinhCongKhai(request: Request, env: EnvCauHinhCongK
       const kvRaw = await env.KV_CONG_DONG.get("cau_hinh_cong_khai:active");
       if (kvRaw) {
         const parsed = JSON.parse(kvRaw) as Partial<CauHinhCongKhai>;
-        return new Response(JSON.stringify(chonCauHinhCongKhai(parsed)), {
-          status: 200,
-          headers: TIEU_DE_CONG_KHAI,
-        });
+        return traCauHinhCongKhai(request, chonCauHinhCongKhai(parsed));
       }
     } catch {
       /* KV lỗi hoặc chưa có thì đọc tiếp từ D1 */
@@ -100,10 +105,7 @@ export async function xuLyCauHinhCongKhai(request: Request, env: EnvCauHinhCongK
 
       if (dong?.gia_tri_json) {
         const parsed = JSON.parse(dong.gia_tri_json) as Partial<CauHinhCongKhai>;
-        return new Response(JSON.stringify(chonCauHinhCongKhai(parsed)), {
-          status: 200,
-          headers: TIEU_DE_CONG_KHAI,
-        });
+        return traCauHinhCongKhai(request, chonCauHinhCongKhai(parsed));
       }
     } catch {
       /* Bảng chưa tạo hoặc truy vấn lỗi thì trả về mặc định an toàn */
@@ -111,10 +113,7 @@ export async function xuLyCauHinhCongKhai(request: Request, env: EnvCauHinhCongK
   }
 
   // 3. Fallback mặc định an toàn
-  return new Response(JSON.stringify(chonCauHinhCongKhai()), {
-    status: 200,
-    headers: TIEU_DE_CONG_KHAI,
-  });
+  return traCauHinhCongKhai(request, chonCauHinhCongKhai());
 }
 
 export const onRequestGet = async (context: { request?: Request; env?: EnvCauHinhCongKhai }) =>

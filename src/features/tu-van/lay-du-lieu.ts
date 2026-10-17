@@ -18,7 +18,8 @@ import { goiYDanhSach, moNeoNV1 } from "@/features/nguyen-vong/goi-y-danh-sach";
 import { cauKhoangCachNV1, phanTichMoNeo } from "@/features/nguyen-vong/mo-neo";
 import type { AppState } from "@/state/store";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
-import type { DiemDayDu, LuaChon } from "@/state/types";
+import { TEN_MON, type DiemDayDu, type LuaChon } from "@/state/types";
+import { mucTieuDayDu, khoangCachCuaToi, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { danhGiaDanhMucToanDien } from "@/engine/toi-uu-nguyen-vong";
 import { dungBangSoSanh, tomTatKhongAI } from "./bang-so-sanh";
 
@@ -147,10 +148,33 @@ const cumDiemChuan = (l: LuaChon): string => {
   return "chưa có điểm chuẩn";
 };
 
+/** Tóm tắt kế hoạch học tập và khoảng cách điểm gửi kèm cho AI. */
+export function tomTatKeHoachChoAI(s: AppState): string {
+  const m = mucTieuDayDu(s);
+  if (!m) return "";
+  const kc = khoangCachCuaToi(s);
+  const monThieu = kc.filter((x) => x.thieu > 0).sort((a, b) => b.thieu - a.thieu);
+  const monStr = monThieu.length > 0
+    ? monThieu.map((x) => `${TEN_MON[x.mon] ?? x.mon}: hiện ${x.hienTai !== null ? so1(x.hienTai) : "?"}đ, cần ${so1(x.mucTieu)}đ, thiếu ${so1(x.thieu)}đ`).join("; ")
+    : "Các môn đều đã đạt hoặc tiệm cận điểm mục tiêu";
+  const vt = viecCuaTuan(s.viec, tuanHienTai());
+  const daXong = vt.filter((v) => s.trangThaiViec[v.id] === "xong").length;
+  const tienDo = vt.length > 0 ? ` Lịch tuần hiện tại: ${vt.length} buổi học (${daXong}/${vt.length} việc đã xong).` : "";
+  const monTrongTam = monThieu[0] ? ` Trọng tâm bứt phá: môn ${TEN_MON[monThieu[0].mon] ?? monThieu[0].mon} (còn thiếu ${so1(monThieu[0].thieu)}đ).` : "";
+  const toHopStr = s.mucTieu?.maToHop ? `khối ${s.mucTieu.maToHop}, ` : "";
+  return `Kế hoạch học tập mục tiêu: Ngành ${m.lc.nganh} - ${m.lc.truong} (${toHopStr}mục tiêu ${so1(m.mucTieuTho)}đ, hiện ${m.hienTai !== null ? so1(m.hienTai) : "?"}đ, còn thiếu ${so1(m.conThieu)}đ).${monTrongTam} Chi tiết môn: [${monStr}].${tienDo}`;
+}
+
 export function tomTatHoSo(s: AppState): HoSoTomTat {
   const h = s.hoSo;
   const diem = diemDayDu(s);
   const t = tongChoLuaChon({ toHopXet: [] }, diem);
+  const m = mucTieuDayDu(s);
+  const kc = khoangCachCuaToi(s);
+  const monThieu = kc.filter((x) => x.thieu > 0).sort((a, b) => b.thieu - a.thieu);
+  const vt = viecCuaTuan(s.viec, tuanHienTai());
+  const daXong = vt.filter((v) => s.trangThaiViec[v.id] === "xong").length;
+  const toHopStr = s.mucTieu?.maToHop ? `${s.mucTieu.maToHop}, ` : "";
   return {
     lop: h.khoi, tinh: h.tinh || undefined, nganhQuanTam: h.nganhQuanTam, nganSachToiDaTrieu: h.nganSach ? NGAN_SACH_TOI_DA[h.nganSach] : null, khuVuc: h.khuVuc,
     toHopCaoNhat: t.tong !== null && t.toHop ? { ma: t.toHop, tong: t.tong } : null,
@@ -158,6 +182,9 @@ export function tomTatHoSo(s: AppState): HoSoTomTat {
     diemDgnl: h.diemDgnl?.hcm ? `ĐHQG-HCM ${h.diemDgnl.hcm}/1200` : h.diemDgnl?.hn ? `HSA ${h.diemDgnl.hn}/150` : null,
     hocBa: h.hocBa?.dtb3Nam ? `ĐTB 3 năm ${h.hocBa.dtb3Nam}` : null,
     giaiThuongHsg: h.giaiThuongHsg?.cap ? `Giải ${h.giaiThuongHsg.giai ?? ""} môn ${h.giaiThuongHsg.mon ?? ""} cấp ${h.giaiThuongHsg.cap}` : null,
+    mucTieu: m ? `${m.lc.nganh} ${m.lc.truong} (${toHopStr}cần ${so1(m.mucTieuTho)}đ)` : null,
+    monCanKeo: monThieu[0] ? `${TEN_MON[monThieu[0].mon] ?? monThieu[0].mon} (thiếu ${so1(monThieu[0].thieu)}đ)` : null,
+    keHoachTuan: vt.length ? `Tuần này có ${vt.length} buổi học (đã xong ${daXong}/${vt.length})` : null,
   };
 }
 

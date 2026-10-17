@@ -2,7 +2,7 @@
 // Không phải xác suất đậu. Loại dữ liệu không dự báo được thì hiện đúng trạng thái thay vì vẽ thanh so sánh.
 import { useState } from "react";
 import { SlidersHorizontal, TrendingUp } from "lucide-react";
-import { BieuDoLichSu, BoDoiDiem, GiaiThichNgan, KhoiTrangThaiDuLieu, MAU_CHUA_CO_DIEM, MAU_KET_LUAN, NhanTrangThaiDuLieu, ThanhDuBao, ketLuanDuBao, useTrangThaiDuLieu } from "@/components/ui/du-bao";
+import { BieuDoLichSu, BoDoiDiem, KhoiTrangThaiDuLieu, MAU_CHUA_CO_DIEM, MAU_KET_LUAN, NhanTrangThaiDuLieu, ThanhDuBao, ketLuanDuBao, useTrangThaiDuLieu } from "@/components/ui/du-bao";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 import { cacDiemHopLe } from "@/engine/trang-thai-du-lieu";
@@ -35,7 +35,7 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
       {d && (
         <div className={gop("p-4", mau.nen)} aria-live="polite">
           <p className="flex items-center gap-1.5 text-[13px] font-semibold text-chu-phu">
-            <TrendingUp size={16} className="shrink-0" aria-hidden />Điểm chuẩn năm {d.namDuBao} có thể ở đâu?
+            <TrendingUp size={16} className="shrink-0" aria-hidden />Dự đoán điểm chuẩn năm {d.namDuBao}
             {tt.loai === "motNam" && <NhanTrangThaiDuLieu tt={tt} className="ml-auto" />}
           </p>
           {kl ? (
@@ -43,13 +43,13 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
               <span className={gop("size-12 shrink-0 grid place-items-center rounded-xl text-trang", mau.dam)}><mau.icon size={26} strokeWidth={2.2} aria-hidden /></span>
               <div className="min-w-0 flex-1">
                 <p className={gop("text-[19px] font-extrabold leading-tight", mau.chu)}>{kl.nhan}</p>
-                <p className="mt-0.5 text-[13px] text-chu-phu"><b className={gop("so-lon text-[24px] tabular-nums align-middle", mau.chu)}>{chenhChu}</b> điểm so với mức giữa</p>
+                <p className="mt-0.5 text-[13px] text-chu-phu"><b className={gop("so-lon text-[24px] tabular-nums align-middle", mau.chu)}>{chenhChu}</b> điểm so với điểm dự đoán</p>
               </div>
             </div>
           ) : (
             <div className="mt-2.5 flex items-start gap-3">
               <span className={gop("size-12 shrink-0 grid place-items-center rounded-xl text-trang", mau.dam)}><SlidersHorizontal size={24} aria-hidden /></span>
-              <p className="text-[15px] font-bold text-muc leading-snug">Nhập điểm để xem em đang ở đâu so với khoảng này.</p>
+              <p className="text-[15px] font-bold text-muc leading-snug">Nhập điểm để so sánh với điểm dự đoán.</p>
             </div>
           )}
           {kl && <p className="mt-2.5 text-[14px] text-chu leading-snug">{kl.cau}</p>}
@@ -61,22 +61,22 @@ export function KhoiDuBao({ lc, diemEm }: { lc: LuaChon; diemEm: number | null }
         {d ? (
           <>
             <h2 className="text-[14px] font-normal text-chu leading-snug">
-              Khoảng <b className="text-muc">{dinhDangDiem(d.thap)} đến {dinhDangDiem(d.cao)} điểm</b> <GiaiThichNgan khoa="khoangDuBao" />, trung tâm {dinhDangDiem(d.kyVong)} ({d.moHinh === "hoc-may" ? `mô hình học máy dự đoán từ điểm năm ${d.namCuoi}` : `bằng điểm năm ${d.namCuoi}`}).
+              Điểm dự đoán: <b className="text-muc font-extrabold">{dinhDangDiem(d.kyVong)} điểm</b> ({d.moHinh === "hoc-may" ? `mô hình học máy LightGBM dự đoán từ điểm năm ${d.namCuoi}` : `dự đoán từ điểm năm ${d.namCuoi}`}).
             </h2>
             <p className="text-[13px] text-chu-phu leading-snug">{NHAN_DU_BAO(d.namDuBao)}{tt.loai === "motNam" ? ` ${NHAN_THAM_CHIEU_HAN_CHE}` : ""}</p>
             <ThanhDuBao d={d} diem={diem} xemThu={xemThu !== null} mau={mau} />
             <Nut kieu={moDoi ? "nhe" : "vien"} bieuTuong={SlidersHorizontal} aria-expanded={moDoi} onClick={batDoi}>{moDoi ? "Đóng Đổi điểm" : "Đổi điểm"}</Nut>
             {moDoi && diem !== null && (
               <BoDoiDiem gia={diem} nho={nho} lon={lon} goc={diemEm} onDoi={veDiemEm}
-                moTaVT={`${dinhDangDiem(diem)} điểm${kl ? `, ${kl.nhan.toLowerCase()}, ${kl.chenh >= 0 ? "cao" : "thấp"} hơn mức trung tâm ${dinhDangDiem(Math.abs(kl.chenh))} điểm` : ""}`} />
+                moTaVT={`${dinhDangDiem(diem)} điểm${kl ? `, ${kl.nhan.toLowerCase()}, ${kl.chenh >= 0 ? "cao" : "thấp"} hơn điểm dự đoán ${dinhDangDiem(Math.abs(kl.chenh))} điểm` : ""}`} />
             )}
           </>
         ) : (
-          <p className="text-[14px] text-chu leading-snug">Điểm chuẩn mới nhất đã cũ nên chưa dự báo được khoảng cho năm tới. Em xem lịch sử bên dưới để tham khảo.</p>
+          <p className="text-[14px] text-chu leading-snug">Điểm chuẩn mới nhất đã cũ nên chưa dự báo được cho năm tới. Bạn xem lịch sử bên dưới để tham khảo.</p>
         )}
 
         <BieuDoLichSu diem={cacDiemHopLe(lc)} d={d} diemEm={diem} mau={mau} />
-        {d && d.cao >= 30 && <p className="text-[13px] text-chu-phu leading-snug">Khoảng dự báo đã chạm trần 30 điểm của thang thi, nên cận trên bị chặn ở 30.</p>}
+        {d && d.kyVong >= 30 && <p className="text-[13px] text-chu-phu leading-snug">Điểm dự đoán đã chạm trần 30 điểm của thang thi.</p>}
         {luuY.length > 0 && <ul className="space-y-1">{luuY.map((c) => <li key={c} className="text-[13px] text-chu-phu leading-snug">{c}</li>)}</ul>}
       </div>
     </section>

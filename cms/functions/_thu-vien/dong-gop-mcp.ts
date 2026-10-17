@@ -9,7 +9,7 @@ import { cauKiemToan, kiemTraData, mapTuD1, maTruongCua, type HangBanGhiD1, type
 import { coPhanCong, truongDuocGiao } from "./d1";
 import { gioiHanHang } from "./khoa-ket-noi";
 import { gonKetQua, kiemHangDiemChuan, kiemNguonMcp, laChenhLon, maBanGhiDiemChuan, nguonCmsTuMcp, SO_HANG_TOI_DA, type HangDeXuat } from "./dong-gop-kiem";
-import type { Env, KhoD1 } from "./kieu";
+import type { Env, KhoD1, KhoD1Cau } from "./kieu";
 import { LoiHttp } from "./phan-hoi";
 import { TAP_TRUONG, TEN_TRUONG } from "./quyen";
 
@@ -144,6 +144,7 @@ async function deXuatDiemChuan(c: NguCanhDongGop, a: Record<string, unknown>) {
   const boQua: { viTri: number; idChuongTrinh?: string; lyDo: string }[] = [];
   const daVao: { viTri: number; idChuongTrinh: string; nam: number; diem: number; phuongThuc: string; toHop: string; chenhLon: boolean; loai: "moi" | "sua_ban_da_cong_bo" }[] = [];
   const daThay = new Set<string>();
+  const hopLe: { viTri: number; hang: HangDeXuat; maBan: string }[] = [];
 
   for (let i = 0; i < hang.length; i++) {
     const viTri = i + 1;
@@ -153,10 +154,20 @@ async function deXuatDiemChuan(c: NguCanhDongGop, a: Record<string, unknown>) {
     const maBan = maBanGhiDiemChuan(ma, h.nam, h.idChuongTrinh, h.phuongThuc, h.toHop);
     if (daThay.has(maBan)) { boQua.push({ viTri, idChuongTrinh: h.idChuongTrinh, lyDo: "Trùng hàng khác trong cùng lần gửi" }); continue; }
     daThay.add(maBan);
+    hopLe.push({ viTri, hang: h, maBan });
+  }
 
+  // Đọc theo lô hữu hạn (tối đa 100 mã) rồi ghi trong một giao dịch: tránh N lần chờ D1
+  // khi MCP gửi nhiều hàng. Mỗi mã vẫn giới hạn 10 phiên bản như trước để không quét lịch sử vô hạn.
+  const hangHienCo = hopLe.length
+    ? await c.d1.batch(hopLe.map(({ maBan }) => c.d1.prepare("SELECT * FROM ban_ghi_cms WHERE entity_type = 'cutoff_score' AND entity_id = ? ORDER BY version DESC LIMIT 10").bind(maBan))) as unknown as { results: HangBanGhiD1[] }[]
+    : [];
+  const cauGhi: KhoD1Cau[] = [];
+
+  for (const [i, ungVien] of hopLe.entries()) {
+    const { viTri, hang: h, maBan } = ungVien;
     // Trạng thái hiện có của đúng mục này (mọi phiên bản). Không gửi chồng lên bản đang xử lý.
-    const dsRaw = await c.d1.prepare("SELECT * FROM ban_ghi_cms WHERE entity_type = 'cutoff_score' AND entity_id = ? ORDER BY version DESC LIMIT 10").bind(maBan).all<HangBanGhiD1>();
-    const ds = dsRaw.results.map(mapTuD1);
+    const ds = (hangHienCo[i]?.results ?? []).map(mapTuD1);
     const dangMo = ds.find((b) => b.status === "DRAFT" || b.status === "SUBMITTED" || b.status === "IN_REVIEW" || b.status === "APPROVED" || b.status === "REJECTED");
     if (dangMo) { boQua.push({ viTri, idChuongTrinh: h.idChuongTrinh, lyDo: `Mục này đã có bản đang ở trạng thái ${TRANG_THAI_HIEN(dangMo.status)}, không gửi trùng` }); continue; }
     const cong = ds.find((b) => b.status === "PUBLISHED");
@@ -183,22 +194,23 @@ async function deXuatDiemChuan(c: NguCanhDongGop, a: Record<string, unknown>) {
       nhapQuaAI: true, via: "mcp", khoaId: c.khoaId, email: c.email, nguon: nguonMcp, chenhLon: chenh,
       ...(diemCu !== null && { diemCu }),
     };
-    await c.d1.prepare(
+    cauGhi.push(c.d1.prepare(
       `INSERT INTO ban_ghi_cms (id, entity_type, entity_id, version, status, data_json, source_url, source_title, source_publisher, source_published_at, source_verified_at,
          importance, change_note, previous_version_id, created_by, created_at, updated_by, updated_at, submitted_by, submitted_at, nhap_qua_ai)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     ).bind(
       b.id, b.entityType, b.entityId, b.version, b.status, JSON.stringify(b.data), b.source.url, b.source.tieuDe, b.source.donViCongBo, b.source.ngayCongBo ?? null, b.source.ngayKiemChung,
       b.importance, b.changeNote, b.previousVersionId ?? null, b.createdBy, b.createdAt, b.updatedBy, b.updatedAt, b.submittedBy ?? null, b.submittedAt ?? null, JSON.stringify(dau),
-    ).run();
+    ));
     daVao.push({ viTri, idChuongTrinh: h.idChuongTrinh, nam: h.nam, diem: h.diem, phuongThuc: h.phuongThuc, toHop: h.toHop, chenhLon: chenh, loai: cong ? "sua_ban_da_cong_bo" : "moi" });
   }
 
-  // Nhật ký kiểm toán: một dòng mỗi lần gọi, không ghi trích dẫn.
-  await cauKiemToan(c.d1, {
+  // Nhật ký đi cùng batch ghi: lỗi ghi không thể tạo một phần hàng đợi mà vẫn báo thành công.
+  cauGhi.push(cauKiemToan(c.d1, {
     email: c.email, hanhDong: "MCP_DE_XUAT", entityType: "school", entityId: ma, version: 0,
     ghiChu: `via=mcp; cong_cu=de_xuat_diem_chuan; khoa=${c.khoaId}; so_hang=${hang.length}; nhan=${daVao.length}`, luc,
-  }).run();
+  }));
+  await c.d1.batch(cauGhi);
 
   return {
     maTruong: ma,

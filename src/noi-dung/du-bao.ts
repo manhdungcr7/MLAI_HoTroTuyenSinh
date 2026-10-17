@@ -40,11 +40,11 @@ export const THUAT_NGU: Record<string, { ten: string; nghia: string }> = {
 
 // ---- Thêm cho khối dự báo tương tác (Agent 2). Không sửa các câu phía trên. ----
 export const NHAN_KET_LUAN: Record<"caoHonCa" | "tren" | "trongKhoang" | "duoi" | "thapHonCa", string> = {
-  caoHonCa: "Đang ở phía trên khoảng dự báo",
-  tren: "Có cơ hội, nhưng còn biến động",
-  trongKhoang: "Sát ngưỡng, cần cân nhắc",
-  duoi: "Hơi thấp hơn khoảng dự báo",
-  thapHonCa: "Còn cách xa khoảng dự báo",
+  caoHonCa: "Cao hơn nhiều so với điểm dự đoán",
+  tren: "Có cơ hội, cao hơn điểm dự đoán",
+  trongKhoang: "Sát ngưỡng điểm dự đoán",
+  duoi: "Hơi thấp hơn điểm dự đoán",
+  thapHonCa: "Còn cách xa điểm dự đoán",
 };
 
 export const CAU_LUU_Y_DU_BAO = "Tuy nhiên điểm chuẩn thực tế vẫn có thể thay đổi.";

@@ -8,11 +8,29 @@ export interface AdmissionRecord {
   toHop: string[]; diem: Record<string, number | null>; nguon: string | null; tier: string | null;
   scoreEvidence?: Record<string, BangChungDiem>;
 }
-export async function loadCatalog() {
-  const [raw, sources] = await Promise.all([import("../data/du-lieu-that.json"), taiNguon(), napLuaChon()]);
-  return { records: raw.default as unknown as AdmissionRecord[], sources, choices: new Map(LUA_CHON.map((l) => [l.id, l])) };
+export interface Catalog {
+  records: AdmissionRecord[];
+  sources: Awaited<ReturnType<typeof taiNguon>>;
+  choices: Map<string, (typeof LUA_CHON)[number]>;
 }
-export type Catalog = Awaited<ReturnType<typeof loadCatalog>>;
+
+// Catalog đi kèm bản phát hành là bất biến trong một Worker isolate. Giữ đúng một promise
+// để nhiều HTTP/MCP request đồng thời không lặp lại parse JSON, merge nguồn và dựng Map.
+// Lỗi luôn được bỏ khỏi cache để request sau còn có thể nạp lại.
+let dangNapCatalog: Promise<Catalog> | null = null;
+export function loadCatalog(): Promise<Catalog> {
+  dangNapCatalog ??= Promise.all([import("../data/du-lieu-that.json"), taiNguon(), napLuaChon()])
+    .then(([raw, sources]) => ({
+      records: raw.default as unknown as AdmissionRecord[],
+      sources,
+      choices: new Map(LUA_CHON.map((l) => [l.id, l])),
+    }))
+    .catch((error) => {
+      dangNapCatalog = null;
+      throw error;
+    });
+  return dangNapCatalog;
+}
 
 export function universityCode(input: string): string | null {
   const found = resolveTruong(input);
