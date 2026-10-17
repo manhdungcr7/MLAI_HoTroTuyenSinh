@@ -8,9 +8,11 @@ export function apDungHieuChinh<T extends { id: string; diem: Record<string, num
   if (!hc) return dong;
   const diem = { ...dong.diem };
   let dk = dong.dk;
+  const namMoiNhat = Object.keys(dong.diem).sort().pop(); // điểm dự kiến chỉ đi theo năm mới nhất (dk là bản sao điểm năm đó)
+  const dkGoc = dong.dk;
   for (const [nam, h] of Object.entries(hc)) {
     if (!(nam in diem)) continue; // năm không có trong dữ liệu thì bỏ qua
-    if (dk !== undefined && dk !== null && dk === diem[nam]) dk = h.diem; // điểm dự kiến sao chép từ năm này thì đi theo
+    if (nam === namMoiNhat && dkGoc !== undefined && dkGoc !== null && dkGoc === dong.diem[nam]) dk = h.diem; // điểm dự kiến sao chép từ năm này thì đi theo
     if (h.diem === null) delete diem[nam];
     else diem[nam] = h.diem;
   }
