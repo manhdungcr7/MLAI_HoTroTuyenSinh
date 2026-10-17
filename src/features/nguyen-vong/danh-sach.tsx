@@ -9,7 +9,7 @@ import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { FeaturePreferenceRanking } from "@/components/ui/bieu-tuong-nguyen-vong";
 import {
-  ChipLoc, HangKeoTha, MAU_NHAN_NV, PillTrangThai, THU_TU_NHAN_NV, TheNen, TieuDeMan, VongDiem,
+  ChipLoc, HangKeoTha, MAU_NHAN_NV, PillTrangThai, THU_TU_NHAN_NV, NenTrangTroi, TheNen, TieuDeMan, VongDiem,
 } from "@/components/ui/thiet-ke";
 import { tim } from "@/data/lua-chon-mau";
 import { DUONG_DAN } from "@/duong-dan";
@@ -95,20 +95,6 @@ function BonONhom({ dem, tong, loc, onChon }: { dem: Record<NhanNguyenVong, numb
           </button>
         );
       })}
-    </div>
-  );
-}
-
-/** Thanh nhỏ: khoảng dự báo (dải màu) và vị trí điểm của em (chấm). */
-function ThanhKhoang({ ts }: { ts: TomTatDiemNganh }) {
-  const d = ts.duBao;
-  if (!d) return null;
-  const lo = Math.min(d.thap, ts.tongEm ?? d.thap) - 1, hi = Math.max(d.cao, ts.tongEm ?? d.cao) + 1;
-  const pc = (x: number) => `${((x - lo) / (hi - lo)) * 100}%`;
-  return (
-    <div className="relative mt-1.5 h-2 rounded-full bg-vien/60" aria-hidden>
-      <span className="absolute inset-y-0 rounded-full bg-xanh/50" style={{ left: pc(d.thap), width: `calc(${pc(d.cao)} - ${pc(d.thap)})` }} />
-      {ts.tongEm !== null && <span className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muc ring-2 ring-trang" style={{ left: pc(ts.tongEm) }} />}
     </div>
   );
 }
@@ -233,10 +219,7 @@ function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiD
                   {d.chenh !== null && <> · <span className={d.chenh < 0 ? "text-cam-chu font-semibold" : "text-luc-chu font-semibold"}>Bạn {d.chenh < 0 ? "thiếu" : "hơn"} {dinhDang(Math.abs(d.chenh), 1)} điểm</span></>}</p>
               : <p className="text-chu-phu leading-snug">{d.lyDoKhongNhan ?? ts?.lyDoKhongSo ?? `Điểm tham khảo ${khoangDiem(lc)}`}</p>}
             {ts?.duBao && (
-              <>
-                <p>Dự kiến {ts.duBao.namDuBao}: <b>{dinhDang(ts.duBao.thap, 1)}–{dinhDang(ts.duBao.cao, 1)}</b></p>
-                <ThanhKhoang ts={ts} />
-              </>
+              <p>Dự kiến {ts.duBao.namDuBao}: <b>{dinhDang(ts.duBao.thap, 1)}–{dinhDang(ts.duBao.cao, 1)}</b></p>
             )}
           </div>
         )}
@@ -319,6 +302,7 @@ export default function DanhSachNguyenVong() {
 
   return (
     <>
+      <NenTrangTroi bienThe="tim" />
       <TieuDeMan tieuDe="Danh sách nguyện vọng" phuDe="Xem cơ cấu, sắp xếp và cân bằng danh sách của bạn." />
       <div className="px-4 pb-6 space-y-3">
         {ds.length === 0 ? (
