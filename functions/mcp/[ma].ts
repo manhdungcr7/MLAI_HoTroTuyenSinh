@@ -6,7 +6,6 @@ import {
   ListPromptsRequestSchema, GetPromptRequestSchema, McpError, ErrorCode, SUPPORTED_PROTOCOL_VERSIONS,
   type CallToolResult, type Tool,
 } from "@modelcontextprotocol/sdk/types.js";
-import { docChuGioiHan, ThanQuaLon } from "../_thu-vien/doc-body";
 import { CONG_CU, chayCongCu, tenCongCu, phamViCanThiet } from "../_thu-vien/ket-noi-cong-cu";
 import type { BanChup } from "../../src/engine/ket-noi-kieu";
 import { xacThuc, type EnvKetNoi, type KhoD1Ket } from "../_thu-vien/ket-noi";

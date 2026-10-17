@@ -37,5 +37,20 @@ assert.equal(keHoach.lichTuan.length, 14); // 7 ngày * 2 ca
 const buoiT2 = keHoach.lichTuan.filter((b) => b.thu === "T2");
 assert.equal(buoiT2.length, 2);
 
+// Kiểm thử biên (Tester Persona):
+// 1. Tổ hợp rỗng [] -> không được crash
+const keHoachRong = toiUuPhanBoLichHoc([], diemEm, 25.0);
+assert.equal(keHoachRong.phanBoTungMon.length, 0);
+assert.equal(keHoachRong.lichTuan.length, 0);
+assert.ok(keHoachRong.loiKhuyenChienLuoc.length > 0);
+
+// 2. Điểm đã đạt hoặc vượt NV1 (Gap = 0)
+const keHoachVuot = toiUuPhanBoLichHoc(["toan", "vatLy", "hoaHoc"], diemEm, 20.0);
+assert.equal(keHoachVuot.khoangCachGap, 0);
+assert.ok(keHoachVuot.loiKhuyenChienLuoc.some((k) => k.includes("đạt mốc điểm chuẩn kỳ vọng")));
+for (const m of keHoachVuot.phanBoTungMon) {
+  assert.equal(m.diemCanTang, 0, "không cần tăng điểm khi gap = 0");
+}
+
 console.log("toi-uu-lich-hoc.test.ts: tất cả kiểm tra đều qua");
 

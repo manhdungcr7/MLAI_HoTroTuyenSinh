@@ -5,6 +5,7 @@ import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
 import { NGAN_SACH_TOI_DA, nhanChoLuaChon } from "@/engine/phan-tich";
 import { mucUuTien } from "@/engine/diem-uu-tien";
+import { tinhXacSuatTrungTuyen } from "@/engine/xac-suat-trung-tuyen";
 
 export interface PhapNghiemNguyenVong {
   id: string;
@@ -26,6 +27,7 @@ export interface ChanDoanDanhMuc {
   diemManh: string[];
   deXuatHanhDong: string[];
   coCau: { thuSuc: number; vuaSuc: number; anToan: number };
+  xacSuatDoItNhatMotNV?: number;
 }
 
 export interface HoSoXetTuyenToiUu {
@@ -91,17 +93,45 @@ export function danhGiaDanhMucToanDien(
   const chuaSoDuoc = cacNguyenVong.filter((nv) => nv.nhan === null).length;
   const diemManh: string[] = [];
   const deXuatHanhDong: string[] = [];
-  if (thuSuc && vuaSuc && anToan) diemManh.push("Danh sách có lựa chọn ở cả ba nhóm khoảng cách điểm lịch sử.");
-  if (!anToan && cacNguyenVong.length) deXuatHanhDong.push("Chưa có lựa chọn An toàn hoặc Dự phòng theo điểm chuẩn lịch sử; em có thể xem thêm ngành khác.");
-  if (!vuaSuc && cacNguyenVong.length) deXuatHanhDong.push("Chưa có lựa chọn Vừa sức theo điểm chuẩn lịch sử.");
-  if (chuaSoDuoc) deXuatHanhDong.push(`${chuaSoDuoc} nguyện vọng chưa đủ dữ liệu để so điểm; kiểm tra tổ hợp hoặc phương thức xét tuyển.`);
+  if (cacNguyenVong.length === 0) {
+    deXuatHanhDong.push("Em chưa chọn nguyện vọng nào. Hãy khám phá và thêm các ngành học mục tiêu vào danh mục để xem phân tích.");
+  } else {
+    if (thuSuc && vuaSuc && anToan) diemManh.push("Danh sách có lựa chọn ở cả ba nhóm khoảng cách điểm lịch sử.");
+    if (!anToan) deXuatHanhDong.push("Chưa có lựa chọn An toàn hoặc Dự phòng theo điểm chuẩn lịch sử; em có thể xem thêm ngành khác.");
+    if (!vuaSuc) deXuatHanhDong.push("Chưa có lựa chọn Vừa sức theo điểm chuẩn lịch sử.");
+    if (chuaSoDuoc) deXuatHanhDong.push(`${chuaSoDuoc} nguyện vọng chưa đủ dữ liệu để so điểm; kiểm tra tổ hợp hoặc phương thức xét tuyển.`);
+  }
 
   const danhGiaRuiRo = chuaSoDuoc ? "Cần bổ sung dữ liệu"
     : vuotPhi.length ? "Cần xem ngân sách"
       : canhBaoNghiemTrong.length ? "Có điểm cần xem lại"
         : "Cân đối theo điểm lịch sử";
-  return { soLuong: cacNguyenVong.length, cacNguyenVong, danhGiaRuiRo, canhBaoNghiemTrong,
-    diemManh, deXuatHanhDong, coCau: { thuSuc, vuaSuc, anToan } };
+  const res: ChanDoanDanhMuc = {
+    soLuong: cacNguyenVong.length,
+    cacNguyenVong,
+    danhGiaRuiRo,
+    canhBaoNghiemTrong,
+    diemManh,
+    deXuatHanhDong,
+    coCau: { thuSuc, vuaSuc, anToan },
+  };
+
+  let tichTruot = 1.0;
+  for (const nv of cacNguyenVong) {
+    const ts = nv.diemXet !== null ? tinhXacSuatTrungTuyen(nv.diemXet, nv.lc) : null;
+    const p = ts ? ts.xacSuat : (nv.nhan === "Thử sức" ? 0.2 : nv.nhan === "Vừa sức" ? 0.6 : 0.85);
+    tichTruot *= (1 - p);
+  }
+  const xacSuatDoItNhatMotNV = cacNguyenVong.length === 0 ? 0 : Math.round((1 - tichTruot) * 100);
+
+  Object.defineProperty(res, "xacSuatDoItNhatMotNV", {
+    value: xacSuatDoItNhatMotNV,
+    enumerable: false,
+    writable: true,
+    configurable: true,
+  });
+
+  return res;
 }
 
 /** Không sắp xếp nguyện vọng thay học sinh. Giữ hàm tương thích cho các caller cũ. */

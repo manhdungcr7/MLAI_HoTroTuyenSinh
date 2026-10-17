@@ -70,6 +70,18 @@ export function toiUuPhanBoLichHoc(
   diemUuTien = 0,
   quyGioTuan = 16 // Mặc định 16 giờ tự học/tuần
 ): KeHoachHocTapToiUu {
+  if (!cacMonXet || cacMonXet.length === 0) {
+    return {
+      tongGioTuan: Math.max(0, quyGioTuan),
+      diemHienTaiTong: 0,
+      diemMucTieuTong: LAM_TRON_1(diemChuanMucTieu),
+      khoangCachGap: LAM_TRON_1(Math.max(0, diemChuanMucTieu)),
+      phanBoTungMon: [],
+      lichTuan: [],
+      loiKhuyenChienLuoc: ["Vui lòng chọn tổ hợp môn xét tuyển để hệ thống tối ưu hóa thời khóa biểu học tập."],
+    };
+  }
+
   // Lấy điểm hiện tại của các môn trong tổ hợp
   const danhSachMon = cacMonXet.map((m) => {
     const raw = (diemHienTai[m] as number | null | undefined) ?? 6.0;
@@ -190,7 +202,9 @@ export function toiUuPhanBoLichHoc(
     loiKhuyenChienLuoc.push("Điểm hiện tại của bạn đã đạt mốc điểm chuẩn kỳ vọng. Trọng tâm lúc này là duy trì sự ổn định tâm lý và tốc độ làm bài.");
   } else {
     const monKeoDiem = [...phanBoTungMon].sort((a, b) => b.diemCanTang - a.diemCanTang)[0];
-    loiKhuyenChienLuoc.push(`Để san bằng khoảng cách ${gap} điểm tới NV1, môn "${monKeoDiem.tenMon}" là trọng tâm cần bứt phá (mục tiêu tăng +${monKeoDiem.diemCanTang} điểm).`);
+    if (monKeoDiem) {
+      loiKhuyenChienLuoc.push(`Để san bằng khoảng cách ${gap} điểm tới NV1, môn "${monKeoDiem.tenMon}" là trọng tâm cần bứt phá (mục tiêu tăng +${monKeoDiem.diemCanTang} điểm).`);
+    }
     loiKhuyenChienLuoc.push(`Quỹ thời gian ${quyGioTuan} giờ/tuần đã được tối ưu hóa toán học theo hàm biên, tập trung vào môn có khả năng bứt phá nhanh nhất.`);
   }
 

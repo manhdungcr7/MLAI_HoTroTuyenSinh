@@ -9,8 +9,8 @@
 
 | Phân hệ / Màn hình | Tên miền trực tiếp | Trạng thái |
 |---|---|---|
-| **App Học sinh** | [https://nguyen-vong-ai.pages.dev](https://nguyen-vong-ai.pages.dev) | 🟢 Đang hoạt động (Online) |
-| **Landing Page** | [https://nguyen-vong-ai.pages.dev/#/gioi-thieu](https://nguyen-vong-ai.pages.dev/#/gioi-thieu) | 🟢 Đang hoạt động (Online) |
+| **App Học sinh** | [https://nguyenvongai.pages.dev](https://nguyenvongai.pages.dev) | 🟢 Đang hoạt động (Online) |
+| **Landing Page** | [https://nguyenvongai.pages.dev/#/gioi-thieu](https://nguyenvongai.pages.dev/#/gioi-thieu) | 🟢 Đang hoạt động (Online) |
 | **CMS Quản trị Tuyển sinh** | [https://nguyenvongai-cms.pages.dev](https://nguyenvongai-cms.pages.dev) | 🟢 Đang hoạt động (Online) |
 
 ---
@@ -63,7 +63,7 @@ Dự án được xây dựng trên nền tảng **Cloudflare Serverless Ecosyst
 
 ```mermaid
 graph TD
-    A[Học sinh & Phụ huynh] -->|HTTPS| B[App Web & Landing Page\nCloudflare Pages: nguyen-vong-ai]
+    A[Học sinh & Phụ huynh] -->|HTTPS| B[App Web & Landing Page\nCloudflare Pages: nguyenvongai]
     C[Admin & CTV Tuyển sinh] -->|HTTPS| D[CMS Quản trị & Nhập liệu\nCloudflare Pages: nguyenvongai-cms]
     
     B -->|API Functions| E[Cloudflare Workers / Pages Functions]
@@ -132,7 +132,7 @@ npm run cms:build
 Dự án được triển khai lên **Cloudflare Pages** thông qua **Wrangler CLI**.
 
 ### 1. Triển khai Ứng dụng Học sinh (Web App & Landing Page)
-- **Tên project Cloudflare Pages:** `nguyen-vong-ai`
+- **Tên project Cloudflare Pages:** `nguyenvongai`
 - **Tệp cấu hình:** `wrangler.jsonc`
 
 ```bash
