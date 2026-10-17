@@ -28,8 +28,8 @@ const kts = dungHoSoTruong("KTS", LUA_CHON)!;
 assert.ok(kts.coSo.length >= 2, "KTS có nhiều cơ sở");
 assert.ok(kts.tinh.length >= 2);
 
-// Học phí: ước tính có chữ "ước tính" và dấu ≈; có nguồn thì ghi năm
-// Học phí ước tính (hocPhiUocTinh) đã bị bỏ khỏi LuaChon: chỉ học phí có nguồn sơ cấp đã kiểm chứng mới tới được màn hình (xem hoc-phi-kiem-chung.ts).
+// Học phí: ước tính không bao giờ được hiển thị; có nguồn thì ghi năm
+assert.equal(hocPhiDayDu({ hocPhiMin: 28.5, hocPhiMax: 28.5, hocPhiUocTinh: true }), null, "học phí ước tính không được hiển thị");
 assert.equal(hocPhiDayDu({ hocPhiMin: 35, hocPhiMax: 45, nguonHocPhi: { nam: "2025", url: "https://x", trang: 1 } }), "35 – 45 triệu đồng/năm (đề án 2025)");
 assert.equal(hocPhiDayDu({}), null);
 
