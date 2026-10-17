@@ -1,3 +1,4 @@
+import { laHocPhiDaKiemChung, type HocPhiNguon } from "../src/data/hoc-phi-kiem-chung";
 import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Kiểm thử dữ liệu thật và logic Khám phá / Nguyện vọng (hàm thuần). Chạy: npx tsx tests/du-lieu.test.ts
 import assert from "node:assert/strict";
@@ -60,10 +61,18 @@ for (const ma of Object.keys(deAnTruongTC)) assert.ok(LUA_CHON.some((l) => l.maT
 // Dòng có nguồn phải có link + trang; dòng ước tính (uocTinh) KHÔNG được có link (không gắn nguồn giả) và hiện "≈".
 const LINK_HONG = new Set(readFileSync(new URL("../scripts/link-hong.txt", import.meta.url), "utf-8").split(/\r?\n/).filter((d) => d && !d.startsWith("#")));
 for (const l of LUA_CHON) assert.ok(!/^\(\d+\)/.test(l.nganh), `tên ngành còn số thứ tự: ${l.id} ${l.nganh}`);
+// Chính sách học phí (src/data/hoc-phi-kiem-chung.ts): chỉ học phí đã đối chiếu văn bản sơ cấp (nguonSoCap + kiemChungLuc) mới vào LuaChon.
+// Dòng chưa kiểm chứng KHÔNG được hiện ra màn học sinh; dòng đã kiểm chứng phải hiện đúng và có link + trang nguồn.
 let soCoNguon = 0;
-for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number; trang?: number; url?: string; uocTinh?: boolean }>)) {
+for (const [id, v] of Object.entries(hocPhi as Record<string, HocPhiNguon>)) {
   assert.ok(ids.has(id) && v.trieuNam >= 5 && v.trieuNam <= 400, id);
-  const l = timLuaChon(id)!; assert.equal(l.hocPhiMin, v.trieuNam);
+  const l = timLuaChon(id)!;
+  if (!laHocPhiDaKiemChung(v)) {
+    assert.equal(l.hocPhiMin, undefined, `học phí chưa kiểm chứng không được hiện: ${id}`);
+    assert.ok(!l.nguonHocPhi && !l.hocPhiUocTinh, `học phí chưa kiểm chứng không được gắn nguồn: ${id}`);
+    continue;
+  }
+  assert.equal(l.hocPhiMin, v.trieuNam);
   if (v.uocTinh) {
     assert.ok(!v.url && !l.nguonHocPhi && l.hocPhiUocTinh, `học phí ước tính không được có link: ${id}`);
     assert.ok(hocPhiChu(l).startsWith("≈"), `học phí ước tính phải hiện ≈: ${id}`);
@@ -73,7 +82,7 @@ for (const [id, v] of Object.entries(hocPhi as Record<string, { trieuNam: number
     assert.ok(!LINK_HONG.has(v.url!.split("#")[0]), `học phí trỏ link hỏng: ${id}`);
   }
 }
-assert.ok(soCoNguon >= 600, `số học phí có nguồn giảm bất thường: ${soCoNguon}`);
+assert.equal(LUA_CHON.filter((l) => l.hocPhiMin !== undefined).length, soCoNguon + Object.values(hocPhi as Record<string, HocPhiNguon>).filter((v) => laHocPhiDaKiemChung(v) && v.uocTinh).length, "mọi học phí hiển thị đều phải từ dòng đã kiểm chứng");
 for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number; url: string }>)) {
   assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
   assert.ok(!LINK_HONG.has(v.url.split("#")[0]), `việc làm trỏ link hỏng: ${id}`);

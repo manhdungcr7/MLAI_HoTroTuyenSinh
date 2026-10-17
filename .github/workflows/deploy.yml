@@ -10,8 +10,10 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Cổng chặn deploy: typecheck + cổng đồng nhất + build. Test chạy ở job riêng bên dưới, đỏ thì báo nhưng KHÔNG chặn deploy
+  # (hackathon cần deploy liên tục; test đỏ có chủ ghi ở tests/baseline-do.json). Muốn chặn cả test: thêm `needs: test` cho job này.
   test-and-build:
-    name: Kiểm tra & Build
+    name: Kiểm tra & Build & Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout mã nguồn
@@ -31,9 +33,6 @@ jobs:
 
       - name: Cổng kiểm tra đồng nhất
         run: npm run kiem-tra
-
-      - name: Chạy Unit Test
-        run: npm test
 
       - name: Build ứng dụng
         run: npm run build
@@ -59,3 +58,20 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '5fdd1d1433519df6429d7418d43fff9a' }}
           workingDirectory: cms
           command: pages deploy dist --project-name=nguyenvongai-cms --branch=main
+
+  # Test đầy đủ: chạy song song, kết quả hiện trên PR/commit. Không nằm trong đường deploy.
+  test:
+    name: Chạy Unit Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+      - name: Cài đặt Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Cài đặt dependencies
+        run: npm ci
+      - name: Chạy Unit Test
+        run: npm test

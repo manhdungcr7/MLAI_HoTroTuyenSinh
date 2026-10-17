@@ -83,7 +83,7 @@ Trước khi gộp vào `main`, cả bốn lệnh `tsc`, `kiem-tra`, `test`, `bu
 Giai đoạn 1 — nạp dữ liệu thật và đưa lên main:
 - Thay dữ liệu mẫu bằng 3.652 chương trình thật của 118 trường, có nguồn, năm, tổ hợp, phương thức.
 - Trang "Về dữ liệu" nói rõ nguồn và giới hạn; lọc, so sánh, gợi ý danh sách nguyện vọng theo điểm và ngân sách.
-- Cloudflare Pages deploy từ `main` (https://nguyenvongai.pages.dev). `public/_headers` đặt no-cache cho HTML, `sw.js`, manifest để người dùng không kẹt bản cũ.
+- Cloudflare Pages (https://nguyenvongai.pages.dev) deploy bằng GitHub Actions khi push `main` (`.github/workflows/deploy.yml`: tsc + kiem-tra + build rồi `wrangler pages deploy`; test chạy job riêng, không chặn). Trước 17/10/2026 workflow này đỏ ở bước test nên không bao giờ tới bước deploy và bản trên site đều do `npm run deploy` thủ công; nếu CI đỏ thì deploy tay: `npm run build && npx wrangler pages deploy dist --project-name=nguyenvongai --branch=main`. `public/_headers` đặt no-cache cho HTML, `sw.js`, manifest để người dùng không kẹt bản cũ.
 
 Giai đoạn 2 — rà soát logic toàn bộ (mục tiêu: "chạy đúng thật, không chỉ hiển thị"):
 - Thử tình huống và điểm thi thử: tính theo từng chương trình thay vì một tổ hợp cố định.
