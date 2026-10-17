@@ -1,6 +1,6 @@
 // Bậc thang tư vấn, rẻ -> đắt: cache KV -> Clef (chọn sự kiện) -> RAG cộng đồng (Vectorize) -> LLM.
 // Mỗi bậc thiếu binding hoặc lỗi thì bị bỏ qua, bậc sau vẫn chạy; chỉ bậc LLM mới có thể làm cả lượt thất bại.
-import { NHAC_SO_SANH, bocDuLieuNguoiDung, NHAC_TU_VAN, docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type NguonWeb, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
+import { NHAC_SO_SANH, NHAC_HOI_THOAI_CHUNG, bocDuLieuNguoiDung, NHAC_TU_VAN, docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type NguonWeb, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
 import { docCache, ghiCache, khoaCache } from "./cache";
 import { HANH_DONG, quyetDinhNguyenVong, type HanhDong, type NhanEn, type UngVienEn } from "./clef";
 import { truyVanNhieuBoLoc, type BoLoc, type MangChiMuc } from "./chi-muc";
@@ -122,8 +122,9 @@ export function cauNhacDiemChuan(t: string): string {
 export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof fetch = fetch, tuyChon: { web?: boolean } = {}): Promise<KhoiBacThang> {
   const kv = env.CACHE_KV ?? env.RATE_KV;
   const laSoSanh = !!y.bangSoSanh;
-  const web = !!tuyChon.web && !laSoSanh && !!env.OPENROUTER_API_KEY;
-  const nhac = laSoSanh ? NHAC_SO_SANH : NHAC_TU_VAN;
+  const laHoiThoaiChung = y.duLieu.length === 0 && !laSoSanh;
+  const web = !!tuyChon.web && !laSoSanh && !laHoiThoaiChung && !!env.OPENROUTER_API_KEY;
+  const nhac = laSoSanh ? NHAC_SO_SANH : laHoiThoaiChung ? NHAC_HOI_THOAI_CHUNG : NHAC_TU_VAN;
   const khoa = await khoaCache(y.cauHoi, y.duLieu, y.hoSo, env.DATA_VERSION, y.nguCanh, `${nhac}|${y.bangSoSanh ?? ""}|${web ? "web" : ""}`).catch(() => "");
   const trung = khoa ? await docCache(kv, khoa) : null;
   if (trung) {
@@ -134,12 +135,12 @@ export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof
   // Bậc 2 và 3 chạy song song; mỗi bậc lỗi thì giữ nguyên dữ liệu của client.
   const ungVien = dungUngVien(y);
   const t0 = Date.now();
-  const clefP = !laSoSanh && env.AI && ungVien.length >= 2
+  const clefP = !laSoSanh && !laHoiThoaiChung && env.AI && ungVien.length >= 2
     ? quyetDinhNguyenVong(env.AI, { totalScore: y.hoSo?.toHopCaoNhat?.tong, budgetMillion: y.hoSo?.nganSachToiDaTrieu ?? undefined, province: y.hoSo?.tinh, interests: y.hoSo?.nganhQuanTam, grade: y.hoSo?.lop ?? undefined }, ungVien, { hanMs: NGAN_SACH.clef })
         .then((r) => ({ r, ms: Date.now() - t0 })).catch(() => ({ r: null, ms: Date.now() - t0 }))
     : Promise.resolve({ r: null, ms: 0 });
-  // So sánh đã có bảng tính sẵn từ dữ liệu thật: không cần tìm ghi chú cộng đồng, bớt một bước chờ.
-  const ragP = laSoSanh
+  // So sánh hoặc hội thoại chung không cần tìm ghi chú cộng đồng, bớt một bước chờ.
+  const ragP = laSoSanh || laHoiThoaiChung
     ? Promise.resolve({ manh: [] as MangChiMuc[], diemToanKho: [] as number[], ms: 0 })
     : sau(layManhCongDong(env, y).catch(() => ({ manh: [] as MangChiMuc[], diemToanKho: [] as number[] })), NGAN_SACH.rag, { manh: [] as MangChiMuc[], diemToanKho: [] as number[] }).then((r) => ({ ...r, ms: Date.now() - t0 }));
   const [{ r: qd, ms: msClef }, { manh, diemToanKho, ms: msRag }] = await Promise.all([clefP, ragP]);
@@ -176,7 +177,7 @@ export async function traLoiBacThang(env: EnvBacThang, y: YeuCauTuVan, f: typeof
   // Mọi số phải nằm trong dữ liệu gửi kèm (hoặc bảng so sánh). Câu trả lời có tìm web được phép dùng số có trong đoạn trích web,
   // nhưng riêng con số "điểm chuẩn" vẫn phải khớp dữ liệu của ứng dụng: web không phải nguồn của điểm chuẩn.
   const tuLieuCm = manh.map((m) => m.noiDung).join("\n");
-  const lech = [
+  const lech = laHoiThoaiChung ? [] : [
     ...soLieuLech(traLoi, y2, trichWeb ? `${tuLieuCm}\n${trichWeb}` : tuLieuCm),
     ...(trichWeb ? soLieuLech(cauNhacDiemChuan(traLoi), y2, tuLieuCm) : []),
   ];

@@ -34,25 +34,40 @@ export async function goiMoHinh(env: EnvLLM, noiDung: string, f: typeof fetch = 
   const nhac = tuyChon.nhac ?? NHAC_HE_THONG;
   const tokenRa = tuyChon.tokenRa ?? TOKEN_RA;
   if (env.OPENROUTER_API_KEY) {
-    const r = await f("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://nguyenvongai.pages.dev",
-        "X-Title": "Nguyen Vong AI",
-      },
-      signal: AbortSignal.timeout(han),
-      body: JSON.stringify({
-        model: modelNgoai(env) ?? "anthropic/claude-haiku-5.5",
-        temperature: 0.2,
-        max_tokens: tokenRa,
-        // Mô hình suy luận nếu không tắt sẽ đốt hết max_tokens vào "reasoning" và trả content rỗng, chậm 15–20 giây.
-        reasoning: { enabled: false },
-        provider: { sort: "latency" },
-        messages: [{ role: "system", content: nhac }, { role: "user", content: noiDung }],
-      }),
-    });
+    const primaryModel = modelNgoai(env) ?? "anthropic/claude-haiku-5.5";
+    const backupModel = "google/gemini-2.5-flash";
+    const guiReq = async (modelToUse: string, timeoutMs: number) => {
+      return f("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://nguyenvongai.pages.dev",
+          "X-Title": "Nguyen Vong AI",
+        },
+        signal: AbortSignal.timeout(timeoutMs),
+        body: JSON.stringify({
+          model: modelToUse,
+          temperature: 0.2,
+          max_tokens: tokenRa,
+          reasoning: { enabled: false },
+          provider: { sort: "latency" },
+          messages: [{ role: "system", content: nhac }, { role: "user", content: noiDung }],
+        }),
+      });
+    };
+
+    let r = await guiReq(primaryModel, han);
+    // Bounded retry cho 429 hoặc 5xx nếu còn thời gian
+    if (!r.ok && (r.status === 429 || r.status >= 500) && han > 3000) {
+      await new Promise((res) => setTimeout(res, 250));
+      r = await guiReq(primaryModel, Math.max(1000, han - 1000));
+    }
+    // Failover sang backup model nếu primary model báo 404 hoặc tiếp tục 502/503
+    if (!r.ok && (r.status === 404 || r.status === 502 || r.status === 503) && primaryModel !== backupModel && han > 3000) {
+      r = await guiReq(backupModel, Math.max(1000, han - 1500));
+    }
+
     if (!r.ok) throw new Error(`openrouter ${r.status}`);
     const d = (await r.json()) as { choices?: { message?: { content?: string } }[] };
     return (d.choices?.[0]?.message?.content ?? "").trim();

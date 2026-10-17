@@ -96,7 +96,8 @@ export function traLoiTienDoChat(cauGoc: string, s: AppState): KetQuaTienDoChat 
   // Câu nêu mức học: "lý em học xong từ trường, toán giỏi hình học": hiểu, nói lại, chờ bấm Lưu. Không xử lý câu về tuyển sinh.
   if (!MAU_TUYEN_SINH.test(q)) {
     const h = hieuTienDoTuCau(cauGoc);
-    if (h.khop.length || h.ngoaiPhamVi.length || h.khongKhop.length) {
+    const coNguCanhHoc = h.khop.length > 0 || (h.mon.length > 0 && (h.ngoaiPhamVi.length > 0 || h.khongKhop.length > 0));
+    if (coNguCanhHoc) {
       const dong: string[] = [];
       if (h.khop.length) dong.push(`Mình hiểu là:\n${nhieu(h.khop.map((k) => `${tenMon(k.chuDe.mon)} · ${k.chuDe.ten}: ${NHAN_MUC_DO[k.mucDo]}`))}\nBạn bấm Lưu nếu đúng.`);
       if (h.ngoaiPhamVi.length) dong.push(`Chưa có dữ liệu cho: ${h.ngoaiPhamVi.map((n) => `${n.ten} (thuộc lớp ${n.lop})`).join(", ")}. Mình chỉ có chương trình lớp 12 nên chưa ghi được phần này, bạn tự ôn theo sách.`);

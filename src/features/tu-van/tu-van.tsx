@@ -44,6 +44,7 @@ export default function TuVan() {
   const dangRef = useRef(khoiDau.cho); // chặn gửi trùng khi bấm đúp (state chưa kịp cập nhật)
   const cuonSau = useRef(true); // có cuộn xuống tin mới không: chỉ khi bạn vừa gửi hoặc đang ở gần cuối
   const lanDau = useRef(true);
+  const huyRef = useRef<AbortController | null>(null);
   const viTriCu = useRef<number | null | undefined>(undefined);
 
   useEffect(() => { let con = true; taiNguon().then((m) => con && setNguon(m)).catch(() => {}); return () => { con = false; }; }, []);
@@ -88,6 +89,7 @@ export default function TuVan() {
     const cau = q.trim();
     if (cau.length < 2 || dangRef.current) return;
     dangRef.current = true; setDang(true);
+    const ac = new AbortController(); huyRef.current = ac;
     const truoc = thay === undefined ? tin : tin.slice(0, thay);
     cuonSau.current = true;
     setTin([...truoc, { vai: "em", chu: cau } as TinNhan].slice(-TOI_DA_TIN));
@@ -108,7 +110,7 @@ export default function TuVan() {
       localStorage,
       cau,
       truoc,
-      (chunkCb) => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage), onChunk: chunkCb }),
+      (chunkCb) => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage), onChunk: chunkCb, signal: ac.signal }),
       onChunk
     );
   };
@@ -192,11 +194,12 @@ export default function TuVan() {
             </div>
           ))}
 
-          {dang && !tin.some((t) => t.vai === "mayChu" && t.chu.length > 0 && tin[tin.length - 1] === t) && (
+          {dang && (
             <div className="flex justify-start" role="status">
-              <div className="rounded-2xl border border-vien bg-trang px-3.5 py-2.5 text-[13px] text-chu-phu">
-                <span className="mr-1.5 inline-flex gap-1 align-middle" aria-hidden><span className="size-1.5 animate-pulse rounded-full bg-xanh" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:200ms]" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:400ms]" /></span>
-                {lau ? "Mất hơi lâu, mình vẫn đang tra số liệu…" : "Mình đang soạn câu trả lời…"}
+              <div className="flex items-center gap-2 rounded-2xl border border-vien bg-trang px-3.5 py-1 text-[13px] text-chu-phu">
+                <span className="inline-flex gap-1 align-middle" aria-hidden><span className="size-1.5 animate-pulse rounded-full bg-xanh" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:200ms]" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:400ms]" /></span>
+                <span>{lau ? "AI trả lời hơi lâu, đợi thêm hoặc dừng" : "Đang chuẩn bị câu trả lời..."}</span>
+                <button type="button" onClick={() => huyRef.current?.abort()} className="min-h-11 px-2 text-[13px] font-bold text-xanh cursor-pointer">Dừng</button>
               </div>
             </div>
           )}

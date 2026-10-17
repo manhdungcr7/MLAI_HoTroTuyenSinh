@@ -143,8 +143,15 @@ export interface TruongNeu { chuoi: string; kq: KetQuaTruong }
 const LIEN_TU_SO_SANH = new Set(["va", "voi", "hay", "hoac", "vs", "giua", "cua", "so", "sanh"]);
 
 /** Chỉ bắt tên trường được nêu rõ, không bắt "trường nào" hay câu khám phá theo tỉnh. */
+/** Trường quen thuộc (viết tắt) mà kho dữ liệu chưa có: nói thẳng "chưa có" thay vì trả trường khác. */
+const VIET_TAT_TRUONG_CHUA_CO: Record<string, string> = { ueh: "ĐH Kinh tế TP.HCM (UEH)", uel: "ĐH Kinh tế - Luật (UEL)", hufi: "ĐH Công thương TP.HCM (HUFI)" };
+
 export function tenTruongChuaCo(cau: string): string | null {
   const q = chuanHoa(cau);
+  for (const t of q.split(" ")) {
+    const ten = VIET_TAT_TRUONG_CHUA_CO[t];
+    if (ten && resolveTruong(t).kieu === "khong-thay") return ten;
+  }
   const m = q.match(/\b(?:truong|dai hoc|dh|hoc vien)\s+(.+?)(?=\s+(?:nganh|nam|diem chuan|hoc phi|la gi|la truong gi|bao nhieu|the nao|ra sao|co|xet|tuyen|thi|hoc ba|phuong thuc|chi tieu|dao tao|k|khong|chua)\b|$)/);
   if (!m || /^(?:nao|gi|co|o|tai|de|do|nay|kia|ay|vua roi|phu hop|tot|re|gan|day|dao tao)\b/.test(m[1])) return null;
   const name = m[1].split(/\s+(?:va|voi|hay|so voi)\s+/)[0].trim();
@@ -190,6 +197,10 @@ export function timTruongTrongCau(cau: string, boQuaCum: (string | null)[] = [])
       const cum = tu.slice(i, i + n).join(" ");
       // Một từ đơn chỉ được coi là trường khi nó là mã hoặc viết tắt riêng của đúng một trường (uit, dtl), không phải từ thường như "viet".
       if (n === 1 && (TU_DEM.has(cum) || VIET_TAT_NGANH[cum] || maTuVietTat(cum).length !== 1)) continue;
+      // Cụm nhiều từ: nếu toàn bộ các từ đều là từ đệm/hư từ thì bỏ qua
+      const tuThucSu = cum.split(" ").filter((x) => !TU_DEM.has(x));
+      if (tuThucSu.length === 0) continue;
+      if (tuThucSu.length === 1 && tuThucSu[0].length <= 3 && maTuVietTat(tuThucSu[0]).length !== 1) continue;
       // "công nghệ thông tin" (hoặc cụm con "nghệ thông tin") đứng một mình/sau "ngành/đào tạo" là tên ngành, chỉ coi là ĐH CNTT (QSC) khi ngay trước đó là "trường/đh/đại học" hoặc người dùng gõ "uit/qsc".
       if (cum !== "uit" && cum !== "qsc" && "cong nghe thong tin".includes(cum) && !/\b(truong|dh|dai hoc)\s+(?:dai hoc\s+)?cong nghe thong tin\b/.test(chuanHoa(cau))) continue;
       const kq = resolveTruong(cum);

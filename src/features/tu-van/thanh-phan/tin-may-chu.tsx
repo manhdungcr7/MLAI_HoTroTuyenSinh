@@ -181,6 +181,11 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
       {t.viecTiep && <p className="mt-1.5 text-[13px] text-muc">Việc nên làm tiếp: <span className="text-chu">{trinhBayPhanHoi(t.viecTiep)}</span></p>}
       <DataSourceLabel trangThai={t.trangThaiDuLieu} congDong={!!t.congDong?.length} cheDo={t.cheDo || cheDo} />
       {t.ghiChu && <p className="mt-1.5 text-[12px] text-chu-phu">{t.ghiChu}</p>}
+      {t.cheDo === "ai" && t.tang && (
+        <p className="mt-1.5 text-[12px] leading-snug text-chu-phu">
+          {t.tang === "cache" ? "Trả lời AI đã lưu từ câu hỏi tương tự." : "Trả lời bởi AI."} Dữ liệu điểm chuẩn là số các năm trước, không phải kết quả năm 2027.
+        </p>
+      )}
       {t.batAI && laCuoi && !dang && cheDo === "tietKiem" && (
         <div className="mt-1.5">
           <button type="button" onClick={() => { doiCheDo("ai"); if (cauTruoc) onThuLai(); }} className={gop(NUT_PHU, "border border-xanh/40 bg-trang text-xanh")}><Sparkles size={14} />Bật AI, hỏi lại</button>

@@ -204,7 +204,8 @@ assert.equal(phanTichCau("Ngành này có cơ hội việc làm không?").kieu, 
     for (const cam of TU_CAM_UI) assert.ok(!new RegExp(`\\b${cam}\\b`, "i").test(r.traLoi), `từ cấm "${cam}" trong câu trả lời cho "${c}"`);
     assert.ok(!/⭐|🎯|🔥|🛡️|📋/u.test(r.traLoi), `biểu tượng cảm xúc trong câu trả lời cho "${c}"`);
     assert.ok(r.nguon.length <= 8);
-    assert.ok(r.traLoi.length <= 1100, `trả lời quá dài (${r.traLoi.length}) cho "${c}"`);
+    // Câu luật cứng giờ chỉ là dự phòng khi AI lỗi; bản dự phòng có thêm 3 chương trình kèm nguồn nên dài hơn bản cũ.
+    assert.ok(r.traLoi.length <= 1600, `trả lời quá dài (${r.traLoi.length}) cho "${c}"`);
   }
   const ktx = traLoiTuDong("Ký túc xá UIT thế nào?", mauHs, null, [], []);
   assert.ok(/chưa có dữ liệu/.test(ktx.traLoi) && !/\d\s*(triệu|nghìn)/.test(ktx.traLoi), "chỗ ở: nói chưa có dữ liệu, không nêu giá");
@@ -242,10 +243,17 @@ assert.equal(phanTichCau("Ngành này có cơ hội việc làm không?").kieu, 
     assert.deepEqual(tin.the?.map((x) => x.ma), ["QSC"], "mã trường bịa bị bỏ");
     assert.deepEqual(tin.hanhDong?.map((h) => h.maTruong ?? h.idChuongTrinh), ["QSC", idThat], "hành động bịa bị bỏ");
     assert.equal(tin.hoiLai, "Bạn muốn xem điểm chuẩn năm nào?"); assert.equal(tin.trangThaiDuLieu, "lich-su");
-    // Ý định rõ không hỏi AI
+    // Hành vi mới: tra cứu cũng hỏi AI trước; luật cứng chỉ là dự phòng có nhãn.
     soLanGoi = 0;
+    const ai = await layTinTraLoi({ cau: "DTL là trường gì?", truoc: [], s: trong, nguon: null, dungHoSo: true, manHinh: "Tư vấn chung" });
+    assert.equal(soLanGoi, 1); assert.equal(ai.cheDo, "ai");
+    globalThis.fetch = (async () => { soLanGoi++; return { ok: false, status: 503, json: async () => ({ loi: "chua-cau-hinh" }) }; }) as unknown as typeof fetch;
     const noi = await layTinTraLoi({ cau: "DTL là trường gì?", truoc: [], s: trong, nguon: null, dungHoSo: true, manHinh: "Tư vấn chung" });
-    assert.equal(soLanGoi, 0); assert.equal(noi.cheDo, "tuDong"); assert.equal(noi.the?.[0].ma, "DTL");
+    assert.equal(noi.cheDo, "tuDong"); assert.equal(noi.the?.[0].ma, "DTL");
+    assert.ok(noi.ghiChu?.startsWith("Câu trả lời dự phòng từ dữ liệu có sẵn, không phải AI"), "nhãn dự phòng");
+    globalThis.fetch = (async () => ({ ok: false, status: 429, json: async () => ({ loi: "het-luot-ngay", luot: { con: 0, toiDa: 50 } }) })) as unknown as typeof fetch;
+    const het = await layTinTraLoi({ cau: "DTL là trường gì?", truoc: [], s: trong, nguon: null, dungHoSo: true, manHinh: "Tư vấn chung" });
+    assert.ok(het.ghiChu?.includes("hết lượt"));
   } finally { globalThis.fetch = that; }
 }
 console.log("OK tu-van-chat: ý định, trường, tỉnh, điểm, hành động");
