@@ -110,7 +110,8 @@ export function hieuTienDoTuCau(cau: string): KetQuaTienDo {
   const goc = cau.split(/[,;.\n]|\bnhung\b|\bcon\b|\bnhưng\b|\bcòn\b/i).map((x) => x.trim()).filter(Boolean);
   let monNgu: MonId | null = null;
   for (const raw of goc) {
-    const seg = chuanHoa(raw);
+    // "cuộc sống", "đời sống" không phải bài Sóng (từ khóa "song" khớp nhầm sau khi bỏ dấu).
+    const seg = chuanHoa(raw).split(" cuoc song ").join(" ").split(" doi song ").join(" ").trim();
     if (!seg) continue;
     const monTrongDoan = TU_MON.filter((m) => m.mau.some((r) => r.test(seg))).map((m) => m.mon);
     for (const m of monTrongDoan) if (!kq.mon.includes(m)) kq.mon.push(m);

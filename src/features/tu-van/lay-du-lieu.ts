@@ -22,6 +22,7 @@ import { TEN_MON, type DiemDayDu, type LuaChon } from "@/state/types";
 import { mucTieuDayDu, khoangCachCuaToi, tuanHienTai, viecCuaTuan } from "@/state/chon";
 import { danhGiaDanhMucToanDien } from "@/engine/toi-uu-nguyen-vong";
 import { dungBangSoSanh, tomTatKhongAI } from "./bang-so-sanh";
+import { phanLoaiYdinh } from "./bo-dieu-phoi";
 
 const khongDau = chuanHoaChung;
 const BO_QUA = new Set(["nganh", "truong", "hoc", "dai", "diem", "chuan", "em", "la", "co", "khong", "nao", "gi", "the", "can", "muon", "cua", "va", "voi", "cho", "nen", "o", "tai", "nhu", "bao", "nhieu", "hay", "duoc", "thi", "mot", "cac", "nhung", "minh", "toi", "xin", "hoi", "ve", "tu", "den", "thay", "khac", "tot", "so", "sanh", "dau", "ra", "sao", "lam", "chinh", "quy", "con", "kia", "tren", "vay", "truoc", "tuong", "phi", "thap", "nhat", "cao", "dat", "uoc", "chon", "them", "nguyen", "vong"]);
@@ -84,19 +85,34 @@ export function timNganhKhop(cauHoi: string, toiDa = 8, ds: LuaChon[] = LUA_CHON
   }
   for (const t of timTruongTrongCau(cauHoi)) if (t.kq.ma) maTruongUuTien.add(t.kq.ma);
 
+  // Từ thuộc tên trường không tính vào từ khóa ngành; viết tắt ngành (CNTT, KTPM...) mở thành cụm đầy đủ.
+  const tuTenTruong = new Set(timTruongTrongCau(cauHoi).flatMap((t) => t.chuoi.split(" ")));
+  const tuTinh = new Set((phanTichCau(cauHoi).tinhGoc ?? "").split(" "));
+  const tuNganh = tk.map((t) => khongDau(t)).filter((t) => !tuTenTruong.has(t) && !tuTinh.has(t) && maTuVietTat(t).length === 0 && !/^\d+$/.test(t) && !["duoi", "tren", "trieu", "khoang"].includes(t));
+  const cumNganh = tuNganh.map((t) => VIET_TAT_NGANH[t] ?? t);
+  const soTuNganh = cumNganh.reduce((n, c) => n + c.split(" ").length, 0);
   const diem = (l: LuaChon) => {
     const nganh = ` ${chuanHoa(l.nganh, coDau)} `;
+    const nganhKd = ` ${khongDau(l.nganh)} `;
     const truong = ` ${chuanHoa(l.tenTruong, coDau)} ${chuanHoa(l.truong, coDau)} `;
-    let nganhTrung = 0, truongTrung = 0;
+    let nganhTrung = 0, truongTrung = 0, tuKhop = 0;
     if (maTruongUuTien.size > 0 && l.maTruong && maTruongUuTien.has(l.maTruong)) {
       truongTrung += 6;
     }
     for (const t of tk) {
       const maVietTat = maTuVietTat(t);
       if (maVietTat.length > 0) { if (l.maTruong && maVietTat.includes(l.maTruong)) truongTrung += 2; continue; }
+      if (VIET_TAT_NGANH[khongDau(t)]) continue;
       if (nganh.includes(` ${t} `) || (t.length >= 5 && nganh.includes(t))) nganhTrung++;
       else if (truong.includes(` ${t} `) || (t.length >= 5 && truong.includes(t))) truongTrung++;
     }
+    for (const c of cumNganh) {
+      const n = c.split(" ").length;
+      if (nganhKd.includes(` ${c} `) || (c.length >= 5 && nganhKd.includes(c))) { tuKhop += n; nganhTrung += VIET_TAT_NGANH[c] || n > 1 ? n + 2 : 0; }
+      else if (n > 1 && !Object.values(VIET_TAT_NGANH).includes(c)) tuKhop += c.split(" ").filter((w) => nganhKd.includes(` ${w} `)).length;
+    }
+    // Ngưỡng khớp: phải trùng quá nửa số từ của cụm ngành em hỏi; không trả ngành "gần giống" ngẫu nhiên.
+    if (soTuNganh > 0 && tuKhop * 2 <= soTuNganh) return 0;
     return nganhTrung * 2 + truongTrung;
   };
   return ds.filter((l) => maTruongUuTien.size === 0 || !!l.maTruong && maTruongUuTien.has(l.maTruong))
@@ -130,8 +146,10 @@ export function dungSuKien(l: LuaChon, diem: DiemDayDu, nguon: NguonTaiSau | nul
       ...(l.hocPhiUocTinh ? { hocPhiUocTinh: true } : {}),
       ...(l.hocPhiMax !== undefined && l.hocPhiMax !== l.hocPhiMin ? { hocPhiMaxTrieu: l.hocPhiMax } : {})
     } : {}),
+    ...(l.hocPhiMin !== undefined ? { hocPhiNguon: l.nguonHocPhi?.thuCap ? "thuCap" as const : l.nguonHocPhi?.url ? "deAn" as const : undefined } : {}),
+    ...(l.chiTieu ? { chiTieu: { so: l.chiTieu.so, nam: l.chiTieu.nam } } : {}),
     ...(l.tiLeViecLam !== undefined ? { tiLeViecLam: l.tiLeViecLam } : {}),
-    ...(ts.duBao ? { duBao: { nam: ts.duBao.namDuBao, thap: ts.duBao.thap, cao: ts.duBao.cao } } : {}),
+    ...(ts.duBao ? { duBao: { nam: ts.duBao.namDuBao, thap: ts.duBao.thap, cao: ts.duBao.cao }, duBaoTinCay: ts.duBao.doTinCay } : {}),
     nguon: moTaNguon(l, nguon),
     loaiDuLieu: loai,
     ...(ts.diemChuan?.laThamChieu || ts.diemChuan?.nguonThuCap ? { thamChieu: true } : {}),
@@ -190,8 +208,12 @@ export function tomTatHoSo(s: AppState): HoSoTomTat {
 
 /** Chọn các ngành đưa kèm câu hỏi: ngành khớp từ khóa, và (nếu hỏi về danh sách) các nguyện vọng của em. */
 export function chonDuLieuKemTheo(cauHoi: string, s: AppState, nguon: NguonTaiSau | null, toiDa = 8, giuId: string[] = []): SuKienKemTong[] {
-  const diem = diemDayDu(s);
+  const dp = phanLoaiYdinh(cauHoi);
   const hoiDanhSach = /nguyen vong|danh sach|can bang|an toan|thu suc/.test(khongDau(cauHoi));
+  if (!dp.requires_retrieval && !hoiDanhSach) {
+    return [];
+  }
+  const diem = diemDayDu(s);
   const chon: LuaChon[] = [];
   const them = (l?: LuaChon) => { if (l && !chon.some((c) => c.id === l.id) && chon.length < toiDa) chon.push(l); };
   // Câu hỏi nêu mức học phí ("dưới 40 triệu"): không gửi ngành có học phí (kể cả ước tính) cao hơn mức đó cho AI.
@@ -204,13 +226,56 @@ export function chonDuLieuKemTheo(cauHoi: string, s: AppState, nguon: NguonTaiSa
     ? (() => { const r = timTruongTheoYDinh(y); return [...r.chinhXac, ...r.lienQuan].flatMap((x) => (x.ct ? [x.ct] : [])).filter(trongTran).slice(0, toiDa); })()
     : timNganhKhop(cauHoi, toiDa * 3).filter(trongTran).slice(0, toiDa);
   if (khamPha) { khop.forEach(them); return chon.map((l) => dungSuKien(l, diem, nguon)); }
+
+  // Nhận diện trường mới trong câu hỏi (kể cả tên mơ hồ như "Bách khoa", "Kinh tế")
+  const truongNeu = timTruongTrongCau(cauHoi);
+  const moHo = timTruongMoHo(cauHoi);
+  const maTruongMoi = new Set<string>();
+  for (const t of truongNeu) if (t.kq.ma) maTruongMoi.add(t.kq.ma);
+  if (moHo && moHo.kq.ung_vien) {
+    for (const uv of moHo.kq.ung_vien) maTruongMoi.add(uv);
+  }
+
+  // Nhận diện xem câu hỏi có chuyển sang trường mới không
+  const lcCu = giuId.map((id) => LUA_CHON_MAU.find((l) => l.id === id)).filter(Boolean) as LuaChon[];
+  const chuyenTruong = (maTruongMoi.size > 0 || moHo !== null) && lcCu.length > 0 && lcCu.every((l) => !maTruongMoi.has(l.maTruong || l.truong) && !(moHo && l.tenTruong.toLowerCase().includes(moHo.chuoi)));
+
   // Câu nối tiếp ("ngành đó", "còn trường kia thì sao", hoặc không nêu ngành nào): giữ các ngành đã nói ở lượt trước.
-  // Nếu câu còn nêu ngành mới thì chỉ giữ tối đa 4 để ngành mới vẫn có chỗ.
-  const noiTiep = giuId.length > 0 && !hoiDanhSach && (coDaiTu(cauHoi) || khop.length === 0);
+  // Nhưng nếu đã chuyển trường thì KHÔNG giữ lại ngành của trường cũ!
+  const noiTiep = giuId.length > 0 && !hoiDanhSach && !chuyenTruong && (coDaiTu(cauHoi) || khop.length === 0);
   if (noiTiep) giuId.slice(0, khop.length ? 4 : toiDa).forEach((id) => them(LUA_CHON_MAU.find((l) => l.id === id)));
+
+  // Nếu chuyển trường: tìm ngành tương ứng từ lượt trước ở trường mới, hoặc lấy các ngành nổi bật của trường mới
+  if (chuyenTruong) {
+    const tuKhoaNganhCu = lcCu.flatMap((l) => tachTuKhoa(l.nganh)).filter((t) => t.length >= 3);
+    const dsUngVienMoi = LUA_CHON_MAU.filter((l) => maTruongMoi.has(l.maTruong || l.truong) || (moHo && l.tenTruong.toLowerCase().includes(moHo.chuoi)));
+    
+    if (tuKhoaNganhCu.length > 0) {
+      const khopNganhMoi = dsUngVienMoi.filter((l) => {
+        const ten = l.nganh.toLowerCase();
+        return tuKhoaNganhCu.some((tk) => ten.includes(tk));
+      });
+      khopNganhMoi.slice(0, toiDa).forEach(them);
+    }
+    if (chon.length < toiDa) {
+      dsUngVienMoi.slice(0, toiDa - chon.length).forEach(them);
+    }
+  }
+
   if (hoiDanhSach) s.nguyenVong.forEach((id) => them(LUA_CHON_MAU.find((l) => l.id === id)));
   khop.forEach(them);
-  if (chon.length === 0) goiYDanhSach(diem, s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)).filter((d) => trongTran(d.lc)).slice(0, 5).forEach((d) => them(d.lc));
+
+  if (chon.length === 0 && (maTruongMoi.size > 0 || moHo !== null)) {
+    const dsUngVien = LUA_CHON_MAU.filter((l) => maTruongMoi.has(l.maTruong || l.truong) || (moHo && l.tenTruong.toLowerCase().includes(moHo.chuoi)));
+    dsUngVien.slice(0, toiDa).forEach(them);
+  }
+
+  if (chon.length === 0) {
+    const dp = phanLoaiYdinh(cauHoi);
+    if (dp.requires_retrieval || hoiDanhSach) {
+      goiYDanhSach(diem, s.hoSo, s.nguyenVong, undefined, moNeoNV1(s)).filter((d) => trongTran(d.lc)).slice(0, 5).forEach((d) => them(d.lc));
+    }
+  }
   return chon.map((l) => dungSuKien(l, diem, nguon));
 }
 
@@ -708,7 +773,7 @@ function traLoiXepHangHocPhi(y: YDinhCau): KetQuaTuDong {
   const dong = (l: LuaChon) => `• ${l.nganh}, ${ten(l.maTruong!)}: khoảng ${so1(l.hocPhiMin!)}${l.hocPhiMax !== undefined && l.hocPhiMax !== l.hocPhiMin ? `–${so1(l.hocPhiMax)}` : ""} triệu/năm${l.hocPhiUocTinh ? " (ước tính)" : ""}`;
   const uoc = top.some((l) => l.hocPhiUocTinh);
   return {
-    traLoi: `Học phí ${thap ? "thấp" : "cao"} nhất trong dữ liệu${pham ? ` (${pham})` : ""}:\n${top.map(dong).join("\n")}\n${uoc ? "Mục ghi ước tính là suy theo khối ngành, chưa có văn bản học phí của trường; bạn đối chiếu với đề án trước khi quyết định." : "Học phí lấy từ đề án của trường."}${moiTruong.length > TOI_DA_HIEN ? ` Còn ${moiTruong.length - TOI_DA_HIEN} lựa chọn khác, bạn muốn xem tiếp không?` : ""}`,
+    traLoi: `Học phí ${thap ? "thấp" : "cao"} nhất trong dữ liệu${pham ? ` (${pham})` : ""}:\n${top.map(dong).join("\n")}\n${uoc ? "Mục ghi ước tính là suy theo khối ngành, chưa có văn bản học phí của trường; bạn đối chiếu với đề án trước khi quyết định." : top.every((l) => l.nguonHocPhi?.thuCap) ? "Học phí lấy từ VnExpress (nguồn tổng hợp), bạn đối chiếu với đề án của trường trước khi quyết định." : top.some((l) => l.nguonHocPhi?.thuCap) ? "Một phần học phí lấy từ VnExpress (nguồn tổng hợp), bạn đối chiếu với đề án của trường." : "Học phí theo nguồn đã ghi ở từng ngành; bạn đối chiếu đề án của trường trước khi quyết định."}${moiTruong.length > TOI_DA_HIEN ? ` Còn ${moiTruong.length - TOI_DA_HIEN} lựa chọn khác, bạn muốn xem tiếp không?` : ""}`,
       nguon: top.map((l) => l.id), trangThaiDuLieu: uoc ? "uoc-tinh" : trangThaiTu(top),
   };
 }

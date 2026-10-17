@@ -133,7 +133,7 @@ const HO = "11111111-1111-4111-8111-111111111111";
   // Hết lượt (máy chủ 429 het-luot-ngay): rơi về tự động, ghi chú gọn, không phải lỗi
   let ghi2: { con: number; toiDa: number } | null = null;
   const het = await hoi({ cheDo: "ai", ghiLuot: (l) => { ghi2 = l; }, fetch: (async () => ({ ok: false, status: 429, json: async () => ({ loi: "het-luot-ngay", luot: { con: 0, toiDa: 50 } }) })) as unknown as typeof fetch });
-  assert.equal(het.ghiChu, "Hôm nay đã dùng hết 50 lượt AI", "thông báo gọn khi hết lượt");
+  assert.equal(het.ghiChu, "Câu trả lời dự phòng từ dữ liệu có sẵn, không phải AI (hôm nay đã hết lượt hỏi AI).", "thông báo gọn khi hết lượt, nói rõ không phải AI");
   assert.equal(het.thuLai, undefined, "hết lượt không phải lỗi mạng");
   assert.deepEqual(ghi2, { con: 0, toiDa: 50 });
 
@@ -144,7 +144,7 @@ const HO = "11111111-1111-4111-8111-111111111111";
 
   // Lỗi mạng: có thuLai, không ghi chú hết lượt
   const mang = await hoi({ cheDo: "ai", fetch: (async () => { throw new Error("mất mạng"); }) as unknown as typeof fetch });
-  assert.equal(mang.ghiChu, undefined, "lỗi mạng không báo hết lượt");
+  assert.ok(!/hết lượt/.test(mang.ghiChu ?? ""), "lỗi mạng không báo hết lượt (có thể ghi nhãn dự phòng 'AI đang bận')");
 }
 
 // 8) Lưu trữ phía trình duyệt: mặc định là AI, mã hồ sơ là UUID và giữ nguyên, Xóa hết cấp mã mới
@@ -199,7 +199,7 @@ const HO = "11111111-1111-4111-8111-111111111111";
   const b = await hoi(429, { loi: "het-luot-he-thong" });
   assert.equal(b.thuLai, undefined, "429 chung không phải lỗi mạng"); assert.ok((b.ghiChu ?? b.chu).includes("hết lượt hỏi AI"));
   const c = await hoi(502, { loi: "Dịch vụ tư vấn đang bận" });
-  assert.equal(c.ghiChu, undefined);
+  assert.ok(/không phải AI/.test(c.ghiChu ?? ""), "lỗi 502 phải ghi nhãn dự phòng, không trình bày như AI");
 }
 
 console.log("tu-van-han-muc: tất cả kiểm tra đều qua");

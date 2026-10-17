@@ -164,8 +164,23 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
     // Mã chẩn đoán (ví dụ "openrouter 401") chỉ ghi log máy chủ, không trả cho trình duyệt.
     const ma = (e instanceof Error ? `${e.name}: ${e.message}` : "loi-la").replace(/[^\w .:/-]/g, "").slice(0, 80);
     console.error(JSON.stringify({ tang: "tu-van", loi: "502", ma }));
+    const loai = phanLoaiLoiNhaCungCap(e);
+    console.error(JSON.stringify({ tang: "tu-van", loai }));
+    // Chỉ mã client hiểu: het-luot-chung (nhà cung cấp giới hạn tần suất), mạng/quá giờ (504), còn lại 502. Không lộ tên nhà cung cấp.
+    if (loai === "rate-limit") return json({ loi: "het-luot-chung" }, 429);
+    if (loai === "timeout") return json({ loi: "Dịch vụ tư vấn phản hồi chậm, bạn thử lại sau ít phút" }, 504);
     return json({ loi: "Dịch vụ tư vấn đang bận, bạn thử lại sau ít phút" }, 502);
   }
+}
+
+/** Phân loại lỗi nhà cung cấp AI từ thông điệp nội bộ ("openrouter 429", "cf-ai-timeout"...): auth | rate-limit | timeout | provider | schema. */
+function phanLoaiLoiNhaCungCap(e: unknown): "auth" | "rate-limit" | "timeout" | "provider" | "schema" {
+  const m = e instanceof Error ? `${e.name} ${e.message}` : "";
+  if (/429/.test(m)) return "rate-limit";
+  if (/(401|403)/.test(m)) return "auth";
+  if (/timeout|het-thoi-gian|AbortError/i.test(m)) return "timeout";
+  if (/SyntaxError|schema|json/i.test(m)) return "schema";
+  return "provider";
 }
 
 export const onRequest = ({ request, env }: Ctx) => xuLy(request, env);
