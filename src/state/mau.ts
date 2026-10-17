@@ -71,10 +71,12 @@ export function taoHoSoMau(kieu: KieuMau = "minhAnh"): AppState {
   const diemMoiNhat = Object.fromEntries(diemThi.map((d) => [d.mon, d.diem])) as Record<MonId, number>;
   const maToHop: MaToHop = giaBao ? "D01" : "A01";
   const ids = giaBao ? chonNguyenVongMau("Kinh tế", "D01", diemMoiNhat, 60, { it: 0.3, nhieu: 0.8 }) : idHoSoMau(diemMoiNhat, 60);
+  // Điểm ở Hồ sơ = điểm lần thi thử mới nhất từng môn, để hai nơi không mâu thuẫn nhau.
+  const diemHoSo: HoSo["diem"] = { ...diemMoiNhat };
   const hoSoMau: HoSo = giaBao
     ? {
       laMau: true, hoTen: "Trần Gia Bảo", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "", nganhQuanTam: ["Kinh tế"],
-      diem: { toan: 7.3, vatLy: 6.8, hoaHoc: 6.8, sinh: 7.2, nguVan: 7.6, tiengAnh: 8.2 },
+      diem: diemHoSo,
       soThich: { diem: { R: 1, I: 2, A: 2, S: 2, E: 5, C: 4 }, top: ["E", "C", "I"], giaTri: ["thuNhap", "onDinh"], luc: new Date().toISOString() },
       diemManh: ["Giao tiếp", "Tiếng Anh", "Thuyết trình"], canCaiThien: ["Toán", "Quản lý thời gian"],
       nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"],
@@ -82,7 +84,7 @@ export function taoHoSoMau(kieu: KieuMau = "minhAnh"): AppState {
     }
     : {
       laMau: true, hoTen: "Nguyễn Minh Anh", khoi: 12, tinh: "TP. Hồ Chí Minh", giaiDoan: "", nganhQuanTam: ["CNTT"],
-      diem: { toan: 7.8, vatLy: 6.9, hoaHoc: 7.2, sinh: 8.3, nguVan: 7.6, tiengAnh: 8.1 },
+      diem: diemHoSo,
       soThich: { diem: { R: 1, I: 5, A: 1, S: 1, E: 2, C: 2 }, top: ["I", "C", "E"], giaTri: ["thuNhap", "sangTao"], luc: new Date().toISOString() },
       diemManh: ["Tư duy logic", "Giải quyết vấn đề", "Tiếng Anh"], canCaiThien: ["Vật lý", "Diễn đạt", "Quản lý thời gian"],
       nganSach: "30-60", choO: "oNha", khuVuc: ["TP.HCM"],
@@ -101,12 +103,6 @@ export function taoHoSoMau(kieu: KieuMau = "minhAnh"): AppState {
     yeuThich: ids.slice(0, 1), soSanh: ids.slice(0, 2),
     diemThi,
     coDinh: LICH_CO_DINH_MAU,
-    lichSu: [
-      { viecId: "v-x1", ten: "Hoàn thành bài tập Toán (Chương 3)", luc: new Date(hom.getTime() - 3_600_000).toISOString(), trangThai: "xong" },
-      { viecId: "v-x2", ten: "Ôn lại công thức Vật lý", luc: new Date(hom.getTime() - 7_200_000).toISOString(), trangThai: "xong" },
-      { viecId: "v-x3", ten: "Đọc 1 bài báo tiếng Anh", luc: new Date(hom.getTime() - 86_400_000).toISOString(), trangThai: "doi" },
-      { viecId: "v-x4", ten: "Hoàn thành đề Hóa học", luc: new Date(hom.getTime() - 90_000_000).toISOString(), trangThai: "xong" },
-    ],
   };
   // Việc của tuần này do chính bộ sinh việc tạo từ mục tiêu và điểm của hồ sơ mẫu (không phải danh sách viết sẵn), rồi xếp sẵn vào lịch.
   const tuan = thuHaiCuaTuan(isoNgay(hom));
@@ -114,5 +110,9 @@ export function taoHoSoMau(kieu: KieuMau = "minhAnh"): AppState {
   const kq = kqThu.ok ? kqThu : viecChoTuan(nen, tuan);
   const viec = kq.ok ? kq.viec : [];
   const r = xepLichTuan({ tuanBatDau: tuan, tuNgay: kqThu.ok ? isoNgay(hom) : undefined, coDinh: nen.coDinh, viec, cfg: nen.cauHinh }); // nếu còn ngày thì chỉ xếp từ hôm nay, nếu cuối tuần thì xếp cả tuần
-  return { ...nen, viec, khoiHoc: r.khoi };
+  // Lịch sử và trạng thái việc cùng một nguồn: hai việc đầu của tuần đã xong hôm nay, nên tiến độ (2 việc xong) và chuỗi ngày (1 ngày) khớp nhau.
+  const daXong = viec.slice(0, 2);
+  const lichSu = daXong.map((v, i) => ({ viecId: v.id, ten: v.tieuDe, luc: new Date(hom.getTime() - (i + 1) * 3_600_000).toISOString(), trangThai: "xong" as const }));
+  const trangThaiViec = Object.fromEntries(daXong.map((v) => [v.id, "xong" as const]));
+  return { ...nen, viec, khoiHoc: r.khoi, lichSu, trangThaiViec };
 }

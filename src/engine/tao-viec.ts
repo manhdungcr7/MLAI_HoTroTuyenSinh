@@ -1,19 +1,14 @@
 // Sinh "việc cần học" của một tuần từ mục tiêu thật của em: môn nào còn thiếu điểm, xu hướng thi thử, thời gian tự học còn trống.
 // TypeScript thuần, không React. Không có việc nào viết sẵn cho mọi người: mọi con số trong lý do đều tính từ điểm của em.
 import { khoangCachTheoMon } from "@/engine/phan-tich";
+import { chuDeCuaMon, timChuDeTheoTen } from "@/data/chuong-trinh-lop12";
 import { HO_SO_MON, khungBuoi } from "@/engine/ho-so-mon";
+import { chuDeConHoc, coTienDoMon } from "@/engine/tien-do-chu-de";
 import { phanBoGioHoc } from "@/engine/phan-bo-gio-hoc";
-import { TEN_MON, type MonId, type TamTrang, type ViecCanHoc } from "@/state/types";
+import { CAC_MON, TEN_MON, type MonId, type TamTrang, type ViecCanHoc } from "@/state/types";
 
 /** Nội dung ôn phổ biến theo chương trình THPT, dùng để gợi ý chủ đề (không phải lịch học bắt buộc). Xoay vòng theo tuần. */
-export const NOI_DUNG_ON: Record<MonId, string[]> = {
-  toan: ["Ôn chuyên đề hàm số và đồ thị", "Luyện xác suất và thống kê", "Ôn mũ, logarit và bất phương trình", "Luyện hình học không gian", "Ôn tích phân và ứng dụng", "Ôn số phức và tổ hợp"],
-  vatLy: ["Luyện bài tập vật lí nhiệt, khí lí tưởng", "Ôn từ trường và dòng điện", "Ôn dao động và sóng", "Luyện điện xoay chiều", "Ôn vật lí hạt nhân và sóng ánh sáng"],
-  hoaHoc: ["Ôn este và lipit", "Luyện bài tập kim loại", "Ôn cacbohiđrat, amin, amino axit", "Luyện hóa vô cơ và điện phân", "Ôn polime và vật liệu"],
-  sinh: ["Ôn di truyền học", "Ôn tiến hóa và sinh thái", "Luyện bài tập quy luật di truyền", "Ôn cơ chế di truyền cấp phân tử"],
-  nguVan: ["Luyện đọc hiểu văn bản", "Lập dàn ý nghị luận xã hội", "Viết bài nghị luận văn học", "Ôn các tác phẩm thơ trọng tâm", "Ôn các tác phẩm văn xuôi trọng tâm"],
-  tiengAnh: ["Luyện đọc hiểu và ghi từ mới", "Ôn câu điều kiện, mệnh đề quan hệ", "Luyện ngữ pháp và từ vựng theo chủ đề", "Luyện viết lại câu và tìm lỗi sai"],
-};
+export const NOI_DUNG_ON: Record<MonId, string[]> = Object.fromEntries(CAC_MON.map((m) => [m, chuDeCuaMon(m).map((c) => c.ten)])) as Record<MonId, string[]>;
 
 export interface DauVaoViecTuan {
   toHop: MonId[];
@@ -100,10 +95,17 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
         : undefined;
       const kieu = HO_SO_MON[k.mon].kieu;
       // Toán/Lý: buổi đầu là bài tính giờ, các buổi sau theo chuyên đề. Môn khác: mọi buổi đều theo chuyên đề (ôn nhớ, viết bài, từ vựng).
-      const chuDe = ((!deTinhGio || kieu !== "giaiBai") && chuDeCanOn)
-        ? chuDeCanOn
-        : NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
-      const khung = khungBuoi(kieu, phut, { chuDe: deTinhGio && kieu === "giaiBai" ? undefined : chuDe, dauTuan: deTinhGio, suaLoi: x.dangXuong && deTinhGio });
+      // Đã có tiến độ của môn này: học theo thứ tự ưu tiên (chủ đề chưa vững, tiên quyết trước). Chưa có thì xoay theo tuần như cũ.
+      const theoTienDo = coTienDoMon(k.mon, dv.tienDoKienThuc) ? chuDeConHoc(k.mon, dv.tienDoKienThuc) : null;
+      const chiSoBuoiChuDe = theoTienDo ? i : Math.max(0, i - (kieu === "giaiBai" ? 1 : 0)); // có tiến độ: buổi đầu của Toán/Lý cũng ôn đúng chủ đề ưu tiên số 1
+      const uuTienBuoi = theoTienDo ? theoTienDo[chiSoBuoiChuDe % theoTienDo.length] : null;
+      const chuDe = uuTienBuoi
+        ? uuTienBuoi.chuDe.ten
+        : ((!deTinhGio || kieu !== "giaiBai") && chuDeCanOn)
+          ? chuDeCanOn
+          : NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
+      const canNam = timChuDeTheoTen(chuDe)?.canNam;
+      const khung = khungBuoi(kieu, phut, { chuDe: deTinhGio && kieu === "giaiBai" && !uuTienBuoi ? undefined : chuDe, dauTuan: deTinhGio, suaLoi: x.dangXuong && deTinhGio });
       const tieuDe = deTinhGio && kieu === "giaiBai" ? `${TEN_MON[k.mon]} – ${tenPhanDe(khung.cacBuoc[1]?.phut ?? lam15(phut * 0.55))}` : `${TEN_MON[k.mon]} – ${khung.tieuDe}`;
       const lyDo = x.chuaCoDiem
         ? `Bạn chưa có điểm ${TEN_MON[k.mon]}, nên mình chưa biết bạn thiếu bao nhiêu. Làm đề tính giờ (đủ cả đề càng tốt) để có điểm đầu vào cho môn này.`
@@ -112,10 +114,11 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
         : k.thieu > 0
           ? `${TEN_MON[k.mon]} đang ${so(k.hienTai)} điểm, cần khoảng ${so(k.mucTieu)} để tổ hợp đạt ${so(dv.diemMucTieu)} điểm${dv.mucTieuNganh && dv.mucTieuTruong ? ` (xét ${dv.mucTieuNganh} – ${dv.mucTieuTruong})` : ""} (còn thiếu ${so(k.thieu)}).${x.dangXuong ? " Điểm thi thử gần đây của môn này đang giảm, nên cần ôn đều hơn." : ""}${dv.ngayConDenThi !== undefined && dv.ngayConDenThi > 0 ? ` Còn ${dv.ngayConDenThi} ngày đến kỳ thi.` : ""}`
           : `${TEN_MON[k.mon]} đã đủ mức cần cho mục tiêu (${so(k.hienTai)} điểm)${dv.mucTieuNganh && dv.mucTieuTruong ? ` (xét ${dv.mucTieuNganh} – ${dv.mucTieuTruong})` : ""}. Giữ nhịp để điểm không tụt.`;
+      const lyDoCuoi = uuTienBuoi ? `${lyDo} Chủ đề "${chuDe}": ${uuTienBuoi.lyDo}.` : lyDo;
       ra.push({
         id: `v-${dv.tuan}-${k.mon}-${i}`, tuan: dv.tuan, mon: k.mon, tieuDe,
-        chiTiet: khung.chiTiet,
-        phut, mucUuTien: dv.nhe ? "thap" : i === 0 ? mucUuTien : mucUuTien === "cao" ? "vua" : "thap", lyDo,
+        chiTiet: `${khung.chiTiet}${canNam && (uuTienBuoi || !(deTinhGio && kieu === "giaiBai")) ? ` Cần nắm: ${canNam.join("; ")}.` : ""}`,
+        phut, mucUuTien: dv.nhe ? "thap" : i === 0 ? mucUuTien : mucUuTien === "cao" ? "vua" : "thap", lyDo: lyDoCuoi,
         mucTieuBuoi: khung.mucTieuBuoi,
         cacBuoc: khung.cacBuoc,
         tieuChi: khung.tieuChi,

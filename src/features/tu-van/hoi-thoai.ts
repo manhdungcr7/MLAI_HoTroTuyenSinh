@@ -4,6 +4,9 @@
 // lamSachLichSu kiểm khi khôi phục). Khóa `nvai:*` nên "Xóa hết", "Hồ sơ mẫu", "Khôi phục" đều xóa nó rồi (nếu tệp có)
 // nạp lại lịch sử từ tệp, vì vậy hội thoại của hồ sơ mẫu không lẫn sang hồ sơ thật.
 import { GIOI_HAN, LOAI_HANH_DONG, TRANG_THAI_DU_LIEU, type HanhDongDeXuat, type TrangThaiDuLieu } from "@/engine/tu-van";
+import { timChuDeTheoTen } from "@/data/chuong-trinh-lop12";
+import { CAC_MON } from "@/state/types";
+import type { TienDoTin } from "./tien-do-chat";
 
 export const KHOA_CHAT = "nvai:tu-van-chat";
 export const TOI_DA_TIN = 30;
@@ -44,6 +47,8 @@ export interface TinNhan {
   soSanh?: { ids: string[] };
   /** Nguồn web (chưa kiểm chứng) mà câu trả lời dựa vào: hiện đường dẫn để học sinh tự đối chiếu. */
   nguonWeb?: { url: string; tieuDe: string }[];
+  /** Hỏi tiến độ học theo chương trình lớp 12: thẻ chọn mức, chủ đề chờ lưu, nút mở lịch. Chỉ chứa tên chủ đề có thật trong dữ liệu. */
+  tienDo?: TienDoTin;
 }
 
 const ds = (x: unknown, n: number, dai: number): string[] | undefined =>
@@ -94,6 +99,16 @@ export function lamSachLichSu(x: unknown): TinNhan[] {
       if (ssIds.length >= 2) t.soSanh = { ids: ssIds };
       const nw = mangDoiTuong(o.nguonWeb).slice(0, 3).flatMap((e) => (typeof e.url === "string" && /^https?:\/\//.test(e.url) ? [{ url: e.url.slice(0, 300), tieuDe: typeof e.tieuDe === "string" ? e.tieuDe.slice(0, 120) : "" }] : []));
       if (nw.length) t.nguonWeb = nw;
+      const td = o.tienDo as Record<string, unknown> | undefined;
+      if (td && typeof td === "object") {
+        const tienDo: TienDoTin = {};
+        if (typeof td.the === "string" && (CAC_MON as string[]).includes(td.the)) tienDo.the = td.the as TienDoTin["the"];
+        const muc = ["chuaHoc", "dangHoc", "namVung", "canOnTap"];
+        const dx = mangDoiTuong(td.deXuat).slice(0, 12).flatMap((e) => (typeof e.ten === "string" && timChuDeTheoTen(e.ten) && typeof e.mucDo === "string" && muc.includes(e.mucDo) ? [{ ten: e.ten, mucDo: e.mucDo as "chuaHoc" | "dangHoc" | "namVung" | "canOnTap" }] : []));
+        if (dx.length) tienDo.deXuat = dx;
+        if (td.moLich === true) tienDo.moLich = true;
+        if (tienDo.the || tienDo.deXuat || tienDo.moLich) t.tienDo = tienDo;
+      }
       if ((TRANG_THAI_DU_LIEU as readonly unknown[]).includes(o.trangThaiDuLieu)) t.trangThaiDuLieu = o.trangThaiDuLieu as TrangThaiDuLieu;
       const ch = o.cho as Record<string, unknown> | undefined;
       if (ch && ch.y === "co-hoi-diem" && typeof ch.id === "string") t.cho = { y: "co-hoi-diem", id: ch.id.slice(0, 40) };

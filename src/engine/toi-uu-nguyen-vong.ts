@@ -3,7 +3,7 @@
 import type { DiemDayDu, HoSo, LuaChon, NhanNguyenVong } from "@/state/types";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 import { dungKhuVuc } from "@/features/kham-pha/phu-hop";
-import { NGAN_SACH_TOI_DA, nhanChoLuaChon } from "@/engine/phan-tich";
+import { NGAN_SACH_TOI_DA, nhanChoLuaChon, nhanTheoChenhDiem } from "@/engine/phan-tich";
 import { mucUuTien } from "@/engine/diem-uu-tien";
 import { tinhXacSuatTrungTuyen } from "@/engine/xac-suat-trung-tuyen";
 
@@ -37,19 +37,9 @@ export interface HoSoXetTuyenToiUu {
   uuTienTuyenSinh?: HoSo["uuTienTuyenSinh"] | null;
 }
 
-/**
- * Phân loại chính xác 4 nhóm vị thế nguyện vọng chuẩn quy chế tuyển sinh:
- * - Thử sức: Chênh lệch điểm xét tuyển Δ ∈ [-2.0, -0.5) điểm (hoặc Δ < -0.5)
- * - Vừa sức: Chênh lệch điểm xét tuyển Δ ∈ [-0.5, +1.0] điểm
- * - An toàn: Chênh lệch điểm xét tuyển Δ ∈ (+1.0, +2.5] điểm
- * - Dự phòng: Chênh lệch điểm xét tuyển Δ > +2.5 điểm
- */
+/** Cùng một bộ ngưỡng với `nhanNguyenVong` (xem `NGUONG_NHAN` ở phan-tich.ts); không giữ hằng số riêng. */
 export function phanLoaiViThe(chenhDiem: number): NhanNguyenVong {
-  const x = Math.round(chenhDiem * 100) / 100;
-  if (x < -0.5) return "Thử sức";
-  if (x <= 1.0) return "Vừa sức";
-  if (x <= 2.5) return "An toàn";
-  return "Dự phòng";
+  return nhanTheoChenhDiem(chenhDiem);
 }
 
 function diemCoUuTien(diemThi: DiemDayDu, uuTien?: HoSo["uuTienTuyenSinh"] | null): DiemDayDu {
@@ -114,7 +104,7 @@ export function danhGiaDanhMucToanDien(
   const coDonRuiRo = cacNguyenVong.length >= 2 && thuSuc >= 2 && tongAnToan === 0;
   if (coDonRuiRo) {
     canhBaoNghiemTrong.push(
-      `Dồn rủi ro: Danh mục có ${thuSuc}/${cacNguyenVong.length} nguyện vọng Thử sức và thiếu hoàn toàn nguyện vọng An toàn hoặc Dự phòng. Cảnh báo nguy cơ trượt trắng cả mùa tuyển sinh!`
+      `Dồn rủi ro: Danh mục có ${thuSuc}/${cacNguyenVong.length} nguyện vọng Thử sức và thiếu hoàn toàn nguyện vọng An toàn hoặc Dự phòng. Danh sách còn thiếu phương án An toàn.`
     );
   }
 
@@ -128,7 +118,7 @@ export function danhGiaDanhMucToanDien(
   } else {
     if (thuSuc && vuaSuc && tongAnToan) diemManh.push("Danh sách cân bằng: có đủ lựa chọn ở cả ba nhóm vị thế (Thử sức, Vừa sức, An toàn/Dự phòng).");
     if (tongAnToan === 0) {
-      deXuatHanhDong.push("Thiếu nguyện vọng dự phòng: Em cần bổ sung ít nhất 1–2 nguyện vọng An toàn hoặc Dự phòng (điểm chuẩn thấp hơn điểm của em từ 1.5 điểm trở lên) để đảm bảo không bị trượt đại học.");
+      deXuatHanhDong.push("Thiếu nguyện vọng dự phòng: nên có ít nhất một nguyện vọng An toàn hoặc Dự phòng (điểm chuẩn thấp hơn điểm của em từ 1,5 điểm trở lên). Điểm chuẩn là số các năm trước, năm nay có thể khác.");
     }
     if (!vuaSuc) deXuatHanhDong.push("Chưa có lựa chọn Vừa sức theo điểm chuẩn lịch sử.");
     if (chuaSoDuoc) deXuatHanhDong.push(`${chuaSoDuoc} nguyện vọng chưa đủ dữ liệu để so điểm; kiểm tra tổ hợp hoặc phương thức xét tuyển.`);

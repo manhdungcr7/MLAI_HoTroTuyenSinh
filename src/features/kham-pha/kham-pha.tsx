@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowDownWideNarrow, ArrowUpDown, ArrowUpNarrowWide, Check, ChevronDown, ChevronRight, CircleDollarSign, Heart, LayoutGrid, MapPin, Search, SearchX, SlidersHorizontal, X, type LucideIcon } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowUpDown, ArrowUpNarrowWide, Check, ChevronDown, ChevronRight, CircleDollarSign, Heart, LayoutGrid, Map as IconBanDo, MapPin, Search, SearchX, SlidersHorizontal, X, type LucideIcon } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -148,6 +148,13 @@ export default function KhamPha() {
         </div>
 
         {!dangTim && <TheDiemCuaBan onChonNhom={(n) => { setChiHienYeuThich(false); sua({ nhom: n }); }} />}
+        {!dangTim && (
+          <button type="button" onClick={() => nav(DUONG_DAN.banDoCoHoi())} className="nay-nhe w-full min-h-14 rounded-2xl o-mem px-3 flex items-center gap-3 text-left text-[14px] font-bold text-muc">
+            <span className="size-9 rounded-xl bg-tim-nhat text-tim-chu grid place-items-center shrink-0"><IconBanDo size={18} aria-hidden /></span>
+            <span className="flex-1 min-w-0">Bản đồ cơ hội của em<span className="block text-[13px] font-normal text-chu-phu">Số ngành ở từng nhãn, theo nhóm ngành</span></span>
+            <ChevronRight size={18} className="text-chu-phu shrink-0" aria-hidden />
+          </button>
+        )}
 
         {!dangTim && !s.hoSo.soThich && (
           <div className="-mx-4 px-4 overflow-x-auto an-thanh-cuon">

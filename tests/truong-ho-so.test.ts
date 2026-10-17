@@ -1,6 +1,7 @@
 import "./nap-du-lieu"; // danh mục gốc nạp lười: phải xong trước các import còn lại
 // Dựng hồ sơ trường (src/features/truong/ho-so.ts). Chạy: npx tsx tests/truong-ho-so.test.ts
 import assert from "node:assert/strict";
+import type { LuaChon } from "../src/state/types";
 import { LUA_CHON } from "../src/data/lua-chon-that";
 import { DANH_MUC_TRUONG } from "../src/data/truong-danh-muc";
 import { CHUA_CO, diemGhiThang, dungHoSoTruong, hocPhiDayDu, thangDiem } from "../src/features/truong/ho-so";
@@ -45,5 +46,20 @@ assert.ok(trong && trong.soChuongTrinh === 0 && trong.nganh.length === 0 && tron
 // Link đề án: chỉ nhận http(s)
 const h = dungHoSoTruong("BKA", LUA_CHON, [{ nam: "2024", url: "javascript:alert(1)" }, { nam: "2025", url: "https://ts.hust.edu.vn/a.pdf" }])!;
 assert.deepEqual(h.linkDeAn.map((d) => d.url), ["https://ts.hust.edu.vn/a.pdf"]);
+
+// Điểm sàn 15,0 không hiện như điểm chuẩn: chương trình chỉ có mức sàn có diem = null và diemSan; có cả năm sàn lẫn năm thật thì lấy năm thật
+{
+  const mau = LUA_CHON.find((l) => l.maTruong === "BKA")!;
+  const ds: LuaChon[] = [
+    { ...mau, id: "t-san", phuongThuc: "THPT", diemTheoNam: { "2025": 15 } },
+    { ...mau, id: "t-lan", phuongThuc: "THPT", diemTheoNam: { "2025": 15, "2024": 26.5 } },
+    { ...mau, id: "t-dgnl", phuongThuc: "DGNL_HN", diemTheoNam: { "2025": 15 } },
+  ];
+  const dong = dungHoSoTruong("BKA", ds)!.nganh.flatMap((n) => n.dong);
+  const san = dong.find((d) => d.id === "t-san")!, lan = dong.find((d) => d.id === "t-lan")!, dg = dong.find((d) => d.id === "t-dgnl")!;
+  assert.equal(san.diem, null); assert.deepEqual(san.diemSan, { nam: "2025", diem: 15 }); assert.equal(diemGhiThang(san, String), CHUA_CO);
+  assert.equal(lan.diem, 26.5); assert.equal(lan.nam, "2024"); assert.equal(lan.diemSan, null); assert.deepEqual(lan.theoNam, [["2024", 26.5]]);
+  assert.equal(dg.diem, 15, "phương thức khác có thang riêng, không áp luật điểm sàn THPT"); assert.equal(dg.diemSan, null);
+}
 
 console.log("truong-ho-so: OK");

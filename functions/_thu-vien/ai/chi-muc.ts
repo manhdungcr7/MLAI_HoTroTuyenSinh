@@ -2,6 +2,7 @@
 // Mọi hàm ghi đều "an toàn": thiếu binding hoặc lỗi thì trả kết quả báo lại, không ném (xuất bản không được hỏng vì vector).
 import type { BanGhiCms } from "../../../src/engine/du-lieu-tuyen-sinh/kieu";
 import { chuanHoaChoSnapshot, lamSachDuLieuPublic } from "../../../src/engine/du-lieu-tuyen-sinh/snapshot-builder";
+import { locChoSnapshotCongKhai } from "../../../src/engine/du-lieu-tuyen-sinh/khoa-cho-phep";
 import type { EnvAI, VectorGhi, VectorMeta } from "./kieu";
 import { nhungVanBan } from "./nhung";
 import { tinhCuaTruong, tinhGanKe } from "./tinh-lan-can";
@@ -28,7 +29,7 @@ function idVector(loai: string, d: Record<string, unknown>, idNgoai?: string): s
 }
 
 export function mucTuBanGhi(bg: BanGhiCms, phienBan: string): MucChiMuc {
-  const d = chuanHoaChoSnapshot(bg, lamSachDuLieuPublic((bg.data ?? {}) as Record<string, unknown>));
+  const d = chuanHoaChoSnapshot(bg, locChoSnapshotCongKhai(bg.entityType, lamSachDuLieuPublic((bg.data ?? {}) as Record<string, unknown>)));
   return { loai: bg.entityType, id: idVector(bg.entityType, d, LOAI_CONG_DONG.includes(bg.entityType) ? bg.entityId : undefined), data: d, phienBan };
 }
 

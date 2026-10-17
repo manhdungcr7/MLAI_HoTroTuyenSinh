@@ -1,3 +1,4 @@
+import { locChoSnapshotCongKhai } from "./khoa-cho-phep";
 import type {
   BanGhiCms,
   DatasetMeta,
@@ -111,7 +112,7 @@ export async function taoSnapshotVaManifest(
   for (const bg of danhSachBanGhiPublished) {
     if (bg.status !== "PUBLISHED") continue;
 
-    const dataClean = chuanHoaChoSnapshot(bg, lamSachDuLieuPublic((bg.data ?? {}) as Record<string, unknown>));
+    const dataClean = chuanHoaChoSnapshot(bg, locChoSnapshotCongKhai(bg.entityType, lamSachDuLieuPublic((bg.data ?? {}) as Record<string, unknown>)));
 
     switch (bg.entityType) {
       case "school":
