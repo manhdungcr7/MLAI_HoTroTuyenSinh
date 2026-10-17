@@ -53,11 +53,10 @@ export interface HoSoTruong {
 export const nhanNguonDiem = (cap?: LuaChon["nguonCap"]): { loai: DongChuongTrinh["nguonDiem"]; nhan: string } =>
   cap === "official_pdf" ? { loai: "chinh-thuc", nhan: "Đề án chính thức của trường" } : { loai: "tong-hop", nhan: "Từ trang tổng hợp, chưa phải văn bản của trường" };
 
-/** "≈ 28,5 triệu đồng/năm (ước tính)" hoặc "35 – 45 triệu đồng/năm (đề án 2025)"; null khi chưa có. */
+/** Học phí có chứng cứ sơ cấp, hoặc null khi chưa có. */
 export function hocPhiDayDu(l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "hocPhiUocTinh" | "nguonHocPhi">): string | null {
   if (!coHocPhi(l)) return null;
   const so = hocPhiChu(l).replace(/\./g, ",");
-  if (l.hocPhiUocTinh) return `${so} triệu đồng/năm (ước tính)`;
   return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (đề án ${l.nguonHocPhi.nam})` : ""}`;
 }
 
@@ -78,7 +77,7 @@ function dongTu(l: LuaChon): DongChuongTrinh {
     nhanNguon: ng.nhan,
     toHop: l.toHopXet && l.toHopXet.length > 0 ? l.toHopXet : null,
     hocPhi: hp,
-    hocPhiGhiChu: hp ? (l.hocPhiUocTinh ? "Ước tính theo trường và khối ngành, chưa có văn bản của trường để đối chiếu." : l.nguonHocPhi ? null : "Chưa rõ năm học áp dụng.") : null,
+    hocPhiGhiChu: hp ? null : null,
   };
 }
 

@@ -174,9 +174,6 @@ export const PHAM_VI_CONG_CU: Record<string, string> = {
 const BIEN_THE: Record<string, string> = {
   get_student_profile: "lay_ho_so",
   get_study_plan: "ke_hoach_tuan",
-  calculate_admission_score: "diem_chuan",
-  estimate_admission_chance: "goi_y_nganh",
-  rank_preferences: "lay_nguyen_vong",
 };
 
 // Canonical tools share the exact deterministic capability implementation used by HTTP adapters.
