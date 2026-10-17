@@ -37,9 +37,13 @@ if (che_do === "commit") {
   const r = chay("git", ["checkout-index", "-a", "-f", `--prefix=${tg.replace(/\\/g, "/")}/`], goc);
   if (r.status !== 0) { console.error(r.stderr); process.exit(1); }
 } else {
-  const ar = spawnSync("git", ["archive", "--format=tar", "HEAD"], { cwd: goc, maxBuffer: 1024 * 1024 * 1024 });
-  const x = spawnSync("tar", ["-x", "-C", tg], { input: ar.stdout, maxBuffer: 1024 * 1024 * 1024 });
-  if (ar.status !== 0 || x.status !== 0) { console.error("[cổng] không xuất được HEAD"); process.exit(1); }
+  // HEAD: nạp HEAD vào một chỉ mục tạm rồi xuất như chế độ commit (không dùng tar: tar của Git Bash hiểu nhầm "C:\\" là máy khác)
+  const chiMucTam = join(tg + "-idx");
+  const env = { ...process.env, GIT_INDEX_FILE: chiMucTam, NODE_NO_WARNINGS: "1" };
+  const a = chay("git", ["read-tree", "HEAD"], goc, { env });
+  const b = chay("git", ["checkout-index", "-a", "-f", `--prefix=${tg.replace(/\\/g, "/")}/`], goc, { env });
+  rmSync(chiMucTam, { force: true });
+  if (a.status !== 0 || b.status !== 0) { console.error("[cổng] không xuất được HEAD", a.stderr, b.stderr); process.exit(1); }
 }
 symlinkSync(join(goc, "node_modules"), noiNodeModules, "junction");
 
