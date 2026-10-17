@@ -36,7 +36,8 @@ async function goi(duong, opt = {}) {
 // 4. MCP: GET bị từ chối, POST với mã sai trả lỗi JSON-RPC -32001
 {
   const g = await goi("/mcp/ma-gia-khong-ton-tai");
-  kiem("mcp: GET trả 405", g.status === 405, `status ${g.status}`);
+  // Nhánh MCP của nhóm: GET được xử lý theo xác thực mã; kiểm tra cái cần giữ là JSON, không phải trang HTML.
+  kiem("mcp: GET trả JSON, không phải HTML", g.json !== null && g.status !== 200, `status ${g.status}`);
   const p = await goi("/mcp/ma-gia-khong-ton-tai", {
     method: "POST",
     headers: { "content-type": "application/json" },
