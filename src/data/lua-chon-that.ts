@@ -6,6 +6,7 @@
 import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
 import { TEN_PHUONG_THUC as TEN_PT, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
+import { apDungHieuChinh, type HieuChinhTep } from "./hieu-chinh-diem";
 import { laHocPhiDaKiemChung, type HocPhiNguon } from "./hoc-phi-kiem-chung";
 
 interface Dong {
@@ -45,6 +46,7 @@ let HOC_PHI: HocPhiTep = {};
 let VIEC_MOI: ViecMoiTep = {};
 type ChiTieuTep = Record<string, { chiTieu: number; nam: string; url: string; trang: number }>;
 let CHI_TIEU: ChiTieuTep = {};
+let HIEU_CHINH: HieuChinhTep = {};
 
 function chuyen(d: Dong): LuaChon {
   const hpUngVien = HOC_PHI[d.id];
@@ -116,11 +118,12 @@ export const daNapLuaChon = (): boolean => LUA_CHON.length > 0;
 /** Nạp danh mục gốc một lần (gọi nhiều lần vẫn một lần tải). Lỗi mạng thì lần gọi sau thử lại. */
 export function napLuaChon(): Promise<void> {
   dangNap ??= (async () => {
-    const [raw, viec, hp, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./chi-tieu.json")]);
+    const [raw, viec, hp, ct, hc] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./chi-tieu.json"), import("./hieu-chinh-diem.json")]);
+    HIEU_CHINH = hc.default as unknown as HieuChinhTep;
     CHI_TIEU = ct.default as unknown as ChiTieuTep;
     VIEC_MOI = viec.default as unknown as ViecMoiTep;
     HOC_PHI = hp.default as unknown as HocPhiTep;
-    LUA_CHON.splice(0, LUA_CHON.length, ...(raw.default as unknown as Dong[]).map(chuyen));
+    LUA_CHON.splice(0, LUA_CHON.length, ...(raw.default as unknown as Dong[]).map((d) => chuyen(apDungHieuChinh(d, HIEU_CHINH))));
     THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
   })().catch((e) => { dangNap = null; throw e; });
   return dangNap;
