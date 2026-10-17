@@ -38,7 +38,7 @@
   .slide > * { position: relative; z-index: 1; }
 
   /* ===== typography ===== */
-  .eyebrow { font-size: 22px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pri); }
+  .eyebrow { font-size: 24px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pri); }
   .navy .eyebrow, .blue .eyebrow { color: var(--sky); }
   h1, h2, .row b { text-wrap: balance; }
   h1, h2 { font-weight: 800; letter-spacing: -.02em; line-height: 1.08; }
@@ -49,7 +49,7 @@
   .grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .cap { font-size: 24px; line-height: 1.4; color: var(--mute); }
   .navy .cap, .blue .cap { color: rgba(255,255,255,.7); }
-  .chip { display: inline-flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; padding: 8px 18px; border-radius: 99px; background: var(--pri-soft); color: var(--pri); white-space: nowrap; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; font-size: 24px; font-weight: 700; padding: 8px 18px; border-radius: 99px; background: var(--pri-soft); color: var(--pri); white-space: nowrap; }
   .chip.ok { background: var(--ok-soft); color: var(--ok); } .chip.warn { background: var(--warn-soft); color: var(--warn); }
   .chip.sky { background: rgba(96,197,250,.18); color: var(--sky); } .chip.ghost { background: rgba(255,255,255,.12); color: #fff; }
 
@@ -88,6 +88,7 @@
   .strip.warn { background: var(--warn-soft); color: #5b3b00; } .strip.warn i { background: #E39A1B; }
   .light .strip, .white .strip { box-shadow: 0 20px 40px -24px rgba(16,27,60,.5); }
 
+
   /* S1 */
   #s1 .txt { position: absolute; left: 96px; top: 0; bottom: 0; width: 900px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
   #s1 .sub { font-size: 38px; max-width: 800px; }
@@ -103,7 +104,7 @@
   #s2 .num { font-size: 56px; font-weight: 800; color: var(--sky); letter-spacing: -.03em; }
   #s2 .card b { font-size: 36px; font-weight: 800; line-height: 1.2; display: block; }
   #s2 .stat { position: absolute; left: 96px; bottom: 70px; display: flex; gap: 90px; }
-  #s2 .stat div { font-size: 22px; color: rgba(255,255,255,.7); }
+  #s2 .stat div { font-size: 24px; color: rgba(255,255,255,.7); }
   #s2 .stat b { display: block; font-size: 72px; font-weight: 800; color: #fff; letter-spacing: -.03em; line-height: 1.05; }
 
   /* S3 */
@@ -116,97 +117,93 @@
   #s3 .bridge span { position: relative; display: inline-block; background: #fff; padding: 10px 16px; font-size: 24px; font-weight: 700; color: var(--pri); line-height: 1.3; }
   #s3 .cmp { position: absolute; left: 96px; right: 96px; bottom: 88px; display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 28px; }
   #s3 .cmp .c { border-radius: 28px; padding: 38px 40px; background: var(--bg); border: 1px solid var(--line); }
-  #s3 .cmp .c small { display: block; font-size: 20px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
+  #s3 .cmp .c small { display: block; font-size: 24px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin-bottom: 12px; }
   #s3 .cmp .c b { font-size: 32px; font-weight: 700; line-height: 1.3; display: block; }
   #s3 .cmp .c.us { background: var(--grad); border: 0; color: #fff; box-shadow: 0 24px 50px -22px rgba(37,84,217,.7); }
   #s3 .cmp .c.us small { color: rgba(255,255,255,.85); }
 
   /* S4 */
   #s4 .q { display: flex; flex-direction: column; gap: 12px; padding: 36px 34px; }
-  #s4 .q .n { font-size: 20px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); }
+  #s4 .q .n { font-size: 24px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); }
+  #s4 .wrap { bottom: 210px; }
   #s4 .q h3 { font-size: 40px; }
-  #s4 .q .chip { align-self: flex-start; margin-top: auto; font-size: 19px; white-space: normal; }
+  #s4 .q .chip { align-self: flex-start; margin-top: auto; font-size: 24px; white-space: normal; }
 
-  /* S5 demo */
+
+
+  /* S5 demo: 4 màn hình */
   #s5 .cta { position: absolute; right: 96px; top: 76px; }
-  #s5 .flow { position: absolute; left: 96px; right: 96px; top: 270px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 52px; }
+  #s5 .flow { position: absolute; left: 96px; right: 96px; top: 250px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 52px; }
   #s5 .fs { position: relative; text-align: center; }
   #s5 .fs .phone { --w: 300px; margin: 0 auto; }
-  #s5 .fs b { display: block; margin-top: 24px; font-size: 32px; font-weight: 800; }
-  #s5 .fs span { display: block; margin-top: 6px; font-size: 22px; color: rgba(255,255,255,.72); }
-  #s5 .fs:not(:last-child)::after { content: ""; position: absolute; right: -44px; top: 300px; width: 36px; height: 36px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360C5FA' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"); }
+  #s5 .fs b { display: block; margin-top: 22px; font-size: 32px; font-weight: 800; }
+  #s5 .fs span { display: block; margin-top: 4px; font-size: 26px; color: rgba(255,255,255,.78); line-height: 1.3; }
+  #s5 .fs:not(:last-child)::after { content: ""; position: absolute; right: -44px; top: 300px; width: 36px; height: 36px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360C5FA' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h16M14 6l6 6-6 6'/%3E%3C/svg%3E"); }
+  #s5 .note { position: absolute; left: 96px; bottom: 40px; font-size: 24px; color: rgba(255,255,255,.7); }
 
-  /* S6 data layer */
-  #s6 .pipe { position: absolute; left: 96px; right: 96px; top: 330px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 56px; }
-  #s6 .pipe .st { position: relative; border-radius: 26px; background: var(--bg); border: 2px solid var(--line); padding: 28px 28px 26px; height: 224px; }
-  #s6 .pipe .st:not(:last-child)::after { content: ""; position: absolute; right: -46px; top: 50%; width: 36px; height: 36px; margin-top: -18px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232554D9' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"); }
-  #s6 .pipe .st small { font-size: 18px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); }
-  #s6 .pipe .st b { display: block; font-size: 32px; font-weight: 800; margin: 8px 0 8px; line-height: 1.15; }
-  #s6 .pipe .st p { font-size: 22px; line-height: 1.38; color: #3b4766; }
-  #s6 .tiers { position: absolute; left: 96px; right: 96px; top: 610px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  #s6 .tier { border-radius: 24px; padding: 26px 30px; border: 1px solid var(--line); background: #fff; box-shadow: 0 20px 40px -30px rgba(16,27,60,.35); }
-  #s6 .tier b { font-size: 30px; font-weight: 800; display: block; margin: 10px 0 6px; line-height: 1.2; }
-  #s6 .tier p { font-size: 22px; color: #3b4766; line-height: 1.4; }
-  #s6 .states { position: absolute; left: 96px; right: 96px; top: 872px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-  #s6 .states small { font-size: 22px; font-weight: 700; color: var(--mute); margin-right: 8px; }
+  /* khung chung: chữ bên trái, điện thoại bên phải (hoặc ngược lại) */
+  .split .txt { position: absolute; left: 96px; top: 300px; width: 1030px; bottom: 96px; display: flex; flex-direction: column; gap: 22px; }
+  .split.rev .txt { left: auto; right: 96px; }
+  .split .ph { position: absolute; top: 70px; display: flex; gap: 40px; align-items: flex-start; }
+  .split .ph .phone { --w: 360px; }
+  .split .ph .phone.s { --w: 340px; margin-top: 70px; }
+  .split .ph b { display: block; text-align: center; margin-top: 14px; font-size: 26px; font-weight: 800; }
+  .split .ph .it { text-align: center; }
+  .row2 { display: flex; gap: 20px; }
+  .box { flex: 1; border-radius: 26px; padding: 26px 30px; background: #fff; border: 1px solid var(--line); box-shadow: 0 20px 40px -30px rgba(16,27,60,.35); }
+  .box b { display: block; font-size: 32px; font-weight: 800; line-height: 1.2; }
+  .box p, .box li { font-size: 26px; line-height: 1.4; color: #3b4766; margin-top: 8px; }
+  .box .big { display: block; font-size: 64px; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: var(--pri); margin: 0 0 8px; }
+  .navy .box { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.16); box-shadow: none; }
+  .navy .box p, .navy .box li { color: rgba(255,255,255,.82); }
+  .navy .box .big { color: #fff; }
+  .bl { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+  .bl li { font-size: 28px; line-height: 1.38; padding-left: 36px; position: relative; color: #3b4766; margin: 0; }
+  .bl li::before { content: ""; position: absolute; left: 0; top: 10px; width: 18px; height: 18px; border-radius: 50%; background: var(--pri-soft); box-shadow: inset 0 0 0 5px var(--pri); }
+  .navy .bl li { color: rgba(255,255,255,.85); }
+  .navy .bl li::before { background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 5px var(--sky); }
 
-  /* S7 engine */
-  #s7 .wrap { bottom: 218px; }
-  #s7 .col4 { padding: 34px 30px; display: flex; flex-direction: column; gap: 14px; }
-  #s7 .col4 h3 { font-size: 32px; }
-  #s7 .col4 p { font-size: 23px; }
-  #s7 .col4 .chip { align-self: flex-start; margin-top: auto; font-size: 18px; white-space: normal; }
-
-  /* S8 AI */
-  #s8 .wrap { bottom: 220px; }
-  #s8 .lv { padding: 34px 34px; display: flex; flex-direction: column; gap: 10px; }
-  #s8 .lv h3 { font-size: 34px; } #s8 .lv .chip { align-self: flex-start; font-size: 19px; margin-bottom: 6px; }
-  #s8 .lv.hot { background: var(--grad); border: 0; color: #fff; }
-  #s8 .lv.hot h3, #s8 .lv.hot p, #s8 .lv.hot li { color: #fff; }
-  #s8 .lv.hot li::before { background: rgba(255,255,255,.18); box-shadow: inset 0 0 0 5px #fff; }
-  #s8 .lv.hot .chip { background: rgba(255,255,255,.2); color: #fff; }
-  #s8 .guard { position: absolute; left: 96px; right: 96px; bottom: 72px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-  #s8 .guard small { font-size: 22px; font-weight: 800; color: var(--navy); margin-right: 6px; }
-
-  /* S9 AI thực tế trong app */
-  #s9 .arch { position: absolute; left: 96px; right: 96px; top: 290px; display: grid; grid-template-columns: 1fr 170px 1.15fr 170px 1fr; align-items: stretch; }
-  #s9 .node { border-radius: 30px; padding: 34px 34px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.28); display: flex; flex-direction: column; gap: 12px; }
-  #s9 .node.mid { background: #fff; color: var(--navy); border: 0; box-shadow: 0 40px 70px -24px rgba(0,0,0,.5); }
-  #s9 .node small { font-size: 19px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--sky); }
-  #s9 .node.mid small { color: var(--pri); }
-  #s9 .node b { font-size: 36px; font-weight: 800; line-height: 1.15; }
-  #s9 .node p, #s9 .node li { font-size: 23px; line-height: 1.4; color: rgba(255,255,255,.82); }
-  #s9 .node.mid p, #s9 .node.mid li { color: #3b4766; }
-  #s9 .node ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  #s9 .node li { padding-left: 30px; position: relative; } #s9 .node li::before { content: ""; position: absolute; left: 0; top: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--sky); }
-  #s9 .node.mid li::before { background: var(--pri); }
-  #s9 .arr { display: grid; place-items: center; }
-  #s9 .arr svg { width: 64px; height: 64px; stroke: var(--sky); }
-  #s9 .arr span { font-size: 18px; font-weight: 700; color: rgba(255,255,255,.75); text-align: center; line-height: 1.25; margin-top: 6px; }
-  #s9 .do { position: absolute; left: 96px; right: 96px; top: 700px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  #s9 .do div { border-radius: 22px; padding: 22px 28px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); font-size: 24px; line-height: 1.4; color: rgba(255,255,255,.9); }
-  #s9 .do b { display: block; font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-  #s9 .strip { background: rgba(255,255,255,.14); }
-
-  /* S10 flywheel */
-  #s10 .loop { position: absolute; left: 96px; top: 310px; width: 1090px; grid-template-rows: 1fr 1fr; bottom: 130px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 56px; }
-  #s10 .lp { position: relative; border-radius: 24px; background: var(--bg); border: 2px solid var(--line); padding: 24px 28px 24px 100px; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
-  #s10 .lp .n { position: absolute; left: 26px; top: 50%; margin-top: -28px; width: 56px; height: 56px; border-radius: 50%; background: var(--grad); color: #fff; font-weight: 800; font-size: 26px; display: grid; place-items: center; }
-  #s10 .lp b { font-size: 36px; font-weight: 800; line-height: 1.2; display: block; }
-  #s10 .lp p { font-size: 25px; line-height: 1.4; color: #3b4766; margin-top: 6px; }
-  #s10 .rules { position: absolute; right: 96px; top: 310px; width: 570px; bottom: 130px; border-radius: 30px; background: var(--navy); color: #fff; padding: 36px 38px; display: flex; flex-direction: column; gap: 14px; }
-  #s10 .rules h3 { font-size: 32px; font-weight: 800; }
-  #s10 .rules li { font-size: 24px; line-height: 1.4; color: rgba(255,255,255,.85); padding-left: 32px; position: relative; list-style: none; }
-  #s10 .rules li::before { content: ""; position: absolute; left: 0; top: 10px; width: 16px; height: 16px; border-radius: 50%; background: var(--sky); }
-  #s10 .rules ul { display: flex; flex-direction: column; gap: 12px; }
-  #s10 .rules .chip { align-self: flex-start; margin-top: auto; white-space: normal; font-size: 19px; }
-
-  /* S11 moat */
-  #s11 .wrap { bottom: 190px; }
-  #s11 .mo { padding: 34px 30px; display: flex; flex-direction: column; gap: 12px; }
-  #s11 .mo .n { font-size: 20px; font-weight: 800; letter-spacing: .12em; color: var(--sky); }
-  #s11 .mo h3 { font-size: 33px; } #s11 .mo p { font-size: 23px; }
-  #s11 .mo .chip { align-self: flex-start; margin-top: auto; font-size: 18px; white-space: normal; }
+  /* S6 bản đồ + phòng thử */
+  #s6 .ph { right: 96px; }
+  #s6 .txt { width: 900px; }
+  #s6 .bl li { font-size: 27px; }
+  /* S7 dữ liệu */
+  #s7 .ph { left: 96px; top: 330px; }
+  #s7 .ph .phone { --w: 560px; }
+  #s7 .txt { left: 740px; width: auto; right: 96px; top: 300px; }
+  #s7 .box .big { font-size: 72px; } #s7 .box p { font-size: 28px; }
+  #s7 .row2 { flex-wrap: wrap; }
+  #s7 .row2 .box { flex: 1 1 calc(50% - 10px); }
+  /* S8 kiểm chứng */
+  #s8 .wrap { bottom: 340px; }
+  #s8 .card h3 { font-size: 34px; }
+  #s8 .card .big { font-size: 76px; margin: 10px 0 8px; }
+  #s8 .card p { font-size: 28px; }
+  /* S9 dự báo */
+  #s9 .ph { left: 96px; }
+  #s9 .bl li { font-size: 30px; }
+  /* S10 AI */
+  #s10 .wrap { bottom: 350px; }
+  #s10 .lv { padding: 34px 34px; display: flex; flex-direction: column; gap: 10px; }
+  #s10 .lv h3 { font-size: 36px; } #s10 .lv .chip { align-self: flex-start; margin-bottom: 6px; }
+  #s10 .lv li { font-size: 26px; }
+  #s10 .lv.hot { background: var(--grad); border: 0; color: #fff; }
+  #s10 .lv.hot h3, #s10 .lv.hot p, #s10 .lv.hot li { color: #fff; }
+  #s10 .lv.hot li::before { background: rgba(255,255,255,.18); box-shadow: inset 0 0 0 5px #fff; }
+  #s10 .lv.hot .chip { background: rgba(255,255,255,.2); color: #fff; }
+  #s10 .guard { position: absolute; left: 96px; right: 96px; bottom: 200px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  #s10 .guard small { font-size: 26px; font-weight: 800; color: var(--navy); margin-right: 6px; }
+  /* S11 kiến trúc + cộng đồng */
+  #s11 .flow4 { position: absolute; left: 96px; right: 96px; top: 300px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 54px; }
+  #s11 .st { position: relative; border-radius: 26px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); padding: 26px 28px; min-height: 280px; }
+  #s11 .st:not(:last-child)::after { content: ""; position: absolute; right: -46px; top: 50%; width: 36px; height: 36px; margin-top: -18px; background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2360C5FA' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h16M14 6l6 6-6 6'/%3E%3C/svg%3E"); }
+  #s11 .st .n { font-size: 24px; font-weight: 800; color: var(--sky); letter-spacing: .1em; }
+  #s11 .st b { display: block; font-size: 32px; font-weight: 800; margin: 6px 0; line-height: 1.2; }
+  #s11 .st p { font-size: 26px; line-height: 1.38; color: rgba(255,255,255,.82); }
+  #s11 .arch { position: absolute; left: 96px; right: 96px; top: 640px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  #s11 .arch .box { padding: 28px 30px; min-height: 190px; }
+  #s11 .arch .box b { font-size: 34px; }
+  #s11 .arch .box p { font-size: 28px; }
 
   /* S12 status */
   #s12 .wrap { bottom: 196px; }
@@ -214,7 +211,7 @@
   #s12 .c::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: var(--ok); }
   #s12 .c.t::before { background: #E39A1B; } #s12 .c.n::before { background: #C2410C; }
   #s12 .c h3 { font-size: 34px; margin-top: 8px; }
-  #s12 .c li { font-size: 23px; line-height: 1.38; }
+  #s12 .c li { font-size: 24px; line-height: 1.38; }
   #s12 .c ul { gap: 11px; margin-top: 6px; }
   #s12 .t li::before { background: var(--warn-soft); box-shadow: inset 0 0 0 5px #E39A1B; }
   #s12 .n li::before { background: #FDE8DC; box-shadow: inset 0 0 0 5px #C2410C; }
@@ -225,9 +222,9 @@
   #s13 .tl::before { content: ""; position: absolute; left: 30px; right: 30px; top: 21px; height: 4px; background: linear-gradient(90deg, #2554D9, #60C5FA); border-radius: 4px; opacity: .4; }
   #s13 .ms .dot { position: relative; width: 46px; height: 46px; border-radius: 50%; background: var(--grad); box-shadow: 0 10px 24px -6px rgba(37,84,217,.6); margin-left: 12px; }
   #s13 .ms .card { margin-top: 26px; padding: 30px 30px 30px; min-height: 380px; }
-  #s13 .ms small { font-size: 20px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--pri); display: block; margin-bottom: 8px; }
+  #s13 .ms small { font-size: 24px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--pri); display: block; margin-bottom: 8px; }
   #s13 .ms h3 { font-size: 32px; margin-bottom: 10px; }
-  #s13 .ms li { font-size: 23px; line-height: 1.38; }
+  #s13 .ms li { font-size: 24px; line-height: 1.38; }
   #s13 .ms ul { gap: 10px; }
 
   /* S14 closing */
@@ -239,23 +236,6 @@
   #s14 .meta i { width: 6px; height: 6px; border-radius: 50%; background: var(--sky); display: block; }
   #s14 .three { display: flex; gap: 14px; flex-wrap: wrap; }
 
-  /* S15 kiến trúc hệ thống */
-  #s15 .ar { position: absolute; left: 96px; right: 96px; top: 292px; display: flex; flex-direction: column; gap: 18px; }
-  #s15 .rw { display: grid; grid-template-columns: 150px repeat(4, 1fr); gap: 18px; align-items: stretch; }
-  #s15 .lb { display: flex; flex-direction: column; justify-content: center; font-size: 19px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--pri); line-height: 1.3; }
-  #s15 .lb small { display: block; font-size: 16px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--mute); margin-top: 6px; }
-  #s15 .bx { border-radius: 22px; padding: 20px 22px; border: 1px solid var(--line); background: #fff; box-shadow: 0 16px 34px -26px rgba(16,27,60,.4); min-height: 166px; }
-  #s15 .bx b { display: block; font-size: 26px; font-weight: 800; line-height: 1.2; letter-spacing: -.01em; }
-  #s15 .bx p { font-size: 20px; line-height: 1.38; color: #3b4766; margin-top: 8px; }
-  #s15 .ch .bx { background: var(--bg); }
-  #s15 .sv .bx { background: var(--pri-soft); border-color: #cfdcff; }
-  #s15 .dt .bx { background: var(--navy); border-color: var(--navy); }
-  #s15 .dt .bx b { color: #fff; } #s15 .dt .bx p { color: rgba(255,255,255,.76); }
-  #s15 .dt .bx.out { background: #fff; border: 2px dashed #9db4ee; } #s15 .dt .bx.out b { color: var(--navy); } #s15 .dt .bx.out p { color: #3b4766; }
-  #s15 .fl { display: grid; grid-template-columns: 150px repeat(4, 1fr); gap: 18px; margin: -4px 0; }
-  #s15 .fl span { grid-column: 2 / span 4; text-align: center; font-size: 19px; font-weight: 700; color: var(--pri); letter-spacing: .02em; display: flex; justify-content: center; align-items: center; gap: 14px; }
-  #s15 .fl span::before, #s15 .fl span::after { content: ""; flex: 1; border-top: 2px dashed #b9c6e4; }
-  #s15 .strip { background: var(--navy); }
 
   /* ===== HUD, ghi chú người nói ===== */
   #hud { position: absolute; right: 36px; bottom: 26px; z-index: 50; font-size: 18px; font-weight: 600; color: #94A3B8; letter-spacing: .08em; opacity: .9; }
@@ -267,8 +247,9 @@
   #notes .late { color: #FFB454; } #notes .ok { color: #6EE7B7; }
 
   .lst { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-top: 6px; }
-  .lst li { font-size: 23px; line-height: 1.38; padding-left: 34px; position: relative; color: #3b4766; }
+  .lst li { font-size: 24px; line-height: 1.38; padding-left: 34px; position: relative; color: #3b4766; }
   .lst li::before { content: ""; position: absolute; left: 0; top: 9px; width: 18px; height: 18px; border-radius: 50%; }
+
 </style>
 </head>
 <body>
@@ -300,205 +281,210 @@
 
 <div id="stage">
 
+
 <!-- 01 BÌA · 0:30 -->
 <section class="slide light glow on" id="s1">
   <div class="txt">
     <div data-r style="--i:0" class="logo"><svg><use href="#i-logo"/></svg>Nguyện Vọng AI</div>
     <h1 data-r style="--i:1">Từ dữ liệu tuyển sinh <span class="grad-text">đến quyết định.</span></h1>
-    <p data-r style="--i:2" class="sub">Hỗ trợ học sinh chọn đúng ngành, đúng trường và tự tin sắp xếp nguyện vọng.</p>
+    <p data-r style="--i:2" class="sub">Giúp học sinh so điểm của mình với điểm chuẩn thật, rồi xếp nguyện vọng có căn cứ.</p>
     <div data-r style="--i:3"><span class="chip">Bài toán 6 · Chọn trường và chương trình học</span></div>
   </div>
   <div class="phones">
-    <div class="phone" data-r style="--i:2;--w:330px;left:20px;top:210px;transform:rotate(-7deg)"><img src="assets/hom-nay.png" alt="Màn Hôm nay"></div>
-    <div class="phone" data-r style="--i:4;--w:330px;right:20px;top:170px;transform:rotate(7deg)"><img src="assets/kham-pha.png" alt="Màn Khám phá"></div>
-    <div class="phone" data-r style="--i:3;--w:390px;left:290px;top:120px;z-index:3"><img src="assets/nguyen-vong.png" alt="Màn Nguyện vọng"></div>
+    <div class="phone" data-r style="--i:2;--w:330px;left:20px;top:210px;transform:rotate(-7deg)"><img src="assets/hom-nay.webp" alt="Màn Hôm nay với thẻ Hành trình"></div>
+    <div class="phone" data-r style="--i:4;--w:330px;right:20px;top:170px;transform:rotate(7deg)"><img src="assets/kham-pha.webp" alt="Màn Khám phá"></div>
+    <div class="phone" data-r style="--i:3;--w:390px;left:290px;top:120px;z-index:3"><img src="assets/nguyen-vong.webp" alt="Màn Nguyện vọng"></div>
   </div>
   <div class="foot"><i></i>RTC Team · MLAI Hackathon 2026</div>
-  <aside class="nt" hidden data-t="30">Kính chào Ban giám khảo. Mỗi mùa tuyển sinh có hơn một triệu thí sinh phải đặt nguyện vọng đại học. Nhóm em là RTC Team, phát triển Nguyện Vọng AI: giải pháp giúp học sinh trả lời hai câu hỏi lớn "em nên chọn gì, và từ hôm nay cần làm gì". Trong 10 phút tới, em xin trình bày bốn nội dung: sản phẩm giải quyết vấn đề thế nào, dữ liệu và AI được ứng dụng ở đâu, những giới hạn nhóm thẳng thắn nhìn nhận, và hướng phát triển bền vững của dự án.</aside>
+  <aside class="nt" hidden data-t="30">Kính chào Ban giám khảo. Mỗi mùa tuyển sinh có hơn một triệu thí sinh phải đặt nguyện vọng đại học. Nhóm em là RTC Team, làm Nguyện Vọng AI để giúp học sinh trả lời hai câu hỏi: em đang ở đâu so với điểm chuẩn thật, và từ hôm nay cần làm gì. Trong 10 phút, em trình bày sản phẩm, dữ liệu và cách nhóm kiểm chứng nó, vai trò của AI, và những giới hạn nhóm nói thẳng.</aside>
 </section>
 
-<!-- 02 VẤN ĐỀ · 0:40 -->
+<!-- 02 VẤN ĐỀ · 0:35 -->
 <section class="slide navy glow" id="s2">
   <div class="head2"><div data-r style="--i:0" class="eyebrow">Vấn đề</div><h2 data-r style="--i:1">Một quyết định quan trọng, <span class="grad-text">trên dữ liệu rời rạc.</span></h2></div>
   <div class="wrap"><div class="g3">
-    <div class="card" data-r style="--i:2"><div class="num">01</div><b>Thông tin phân tán</b><p>Hàng trăm đề án tuyển sinh PDF dài, mỗi trường trình bày một kiểu, khó tra cứu và đối chiếu.</p></div>
-    <div class="card" data-r style="--i:3"><div class="num">02</div><b>Tính điểm dễ nhầm</b><p>Điểm ưu tiên giảm dần từ mức 22,5 điểm và 73 tổ hợp môn khiến nhiều học sinh tự tính sai.</p></div>
-    <div class="card" data-r style="--i:4"><div class="num">03</div><b>Dễ mất cơ hội</b><p>Đỗ nguyện vọng trên sẽ dừng xét toàn bộ phía sau. Đặt ngành dễ lên đầu dễ lỡ ngành mơ ước.</p></div>
+    <div class="card" data-r style="--i:2"><div class="num">01</div><b>Thông tin phân tán</b><p>Mỗi trường một đề án PDF dài, mỗi nơi trình bày một kiểu. Rất khó tra cứu và đối chiếu.</p></div>
+    <div class="card" data-r style="--i:3"><div class="num">02</div><b>Tính điểm dễ nhầm</b><p>Mỗi ngành xét tổ hợp môn khác nhau, điểm ưu tiên giảm dần từ mức 22,5 điểm. Nhiều em tự tính sai.</p></div>
+    <div class="card" data-r style="--i:4"><div class="num">03</div><b>Thứ tự có hậu quả</b><p>Đã đủ điểm nguyện vọng trên thì các nguyện vọng sau không được xét. Đặt ngành dễ lên đầu có thể lỡ ngành mình muốn.</p></div>
   </div></div>
-  <div class="stat" data-r style="--i:5"><div><b>3.648</b>chương trình đào tạo</div><div><b>118</b>trường đại học</div><div><b>73</b>tổ hợp xét tuyển</div></div>
-  <aside class="nt" hidden data-t="40">Vấn đề của học sinh gồm ba tầng. Thứ nhất, thông tin nằm rải rác trong hàng trăm đề án PDF của từng trường. Thứ hai, quy chế điểm ưu tiên giảm dần từ 22,5 điểm và 73 tổ hợp môn khiến các em rất dễ tính nhầm điểm xét tuyển. Thứ ba, và là lỗi đáng tiếc nhất: nếu đã đủ điểm một nguyện vọng, hệ thống tuyển sinh sẽ dừng xét toàn bộ nguyện vọng phía sau; nhiều bạn đặt ngành dễ lên đầu và lỡ mất ngành mơ ước. Dữ liệu thì rất lớn: 3.648 chương trình, 118 trường. Các em thiếu một công cụ hỗ trợ ra quyết định đúng.</aside>
+  <div class="stat" data-r style="--i:5"><div><b>3.648</b>chương trình đào tạo</div><div><b>118</b>trường đại học</div><div><b>24</b>tỉnh, thành phố</div></div>
+  <aside class="nt" hidden data-t="35">Vấn đề có ba tầng. Một: thông tin nằm trong hàng trăm đề án PDF. Hai: mỗi ngành xét tổ hợp khác nhau, và điểm ưu tiên giảm dần từ 22,5 điểm nên rất dễ tính nhầm. Ba: thứ tự nguyện vọng có hậu quả, vì đã đủ điểm một nguyện vọng thì các nguyện vọng sau không được xét. Dữ liệu nhóm gom được là 3.648 chương trình của 118 trường, ở 24 tỉnh thành.</aside>
 </section>
 
-<!-- 03 KHOẢNG TRỐNG · 0:35 -->
+<!-- 03 KHOẢNG TRỐNG · 0:30 -->
 <section class="slide white" id="s3">
   <div data-r style="--i:0" class="eyebrow">Khoảng trống</div>
-  <h2 data-r style="--i:1;margin-top:20px;font-size:64px;width:1720px">Không thiếu thông tin. <span class="grad-text">Thiếu công cụ giúp ra quyết định đúng.</span></h2>
+  <h2 data-r style="--i:1;margin-top:20px;font-size:64px;width:1720px">Không thiếu thông tin. <span class="grad-text">Thiếu công cụ giúp ra quyết định có căn cứ.</span></h2>
   <div class="gap">
     <div data-r style="--i:2" class="box"><span class="chip">Đầu vào</span><b>Điểm số + thông tin tuyển sinh</b></div>
     <div data-r style="--i:3" class="bridge"><span>Khoảng trống cần giải quyết</span></div>
     <div data-r style="--i:4" class="box end"><span class="chip ghost">Đầu ra</span><b>Danh sách nguyện vọng và việc cần làm</b></div>
   </div>
   <div class="cmp">
-    <div data-r style="--i:5" class="c"><small>Cổng tra cứu</small><b>Chỉ liệt kê điểm chuẩn cũ, không phân tích theo hồ sơ của em</b></div>
-    <div data-r style="--i:6" class="c"><small>Chatbot thông thường</small><b>Không gắn với hồ sơ, dễ bịa số liệu, không có nguồn trích dẫn</b></div>
-    <div data-r style="--i:7" class="c us"><small>Nguyện Vọng AI</small><b>Hồ sơ cá nhân → phân loại nguyện vọng có căn cứ → gợi ý kế hoạch học tập mỗi tuần</b></div>
+    <div data-r style="--i:5" class="c"><small>Cổng tra cứu</small><b>Liệt kê điểm chuẩn cũ, chưa so với điểm của riêng em</b></div>
+    <div data-r style="--i:6" class="c"><small>Chatbot thông thường</small><b>Không biết hồ sơ của em, dễ nói số không có nguồn</b></div>
+    <div data-r style="--i:7" class="c us"><small>Nguyện Vọng AI</small><b>Hồ sơ của em, so với điểm chuẩn có nguồn, thành danh sách nguyện vọng và kế hoạch học mỗi tuần</b></div>
   </div>
-  <aside class="nt" hidden data-t="30">Các trang tra cứu hiện tại chỉ liệt kê lại điểm số của các năm trước. Chatbot thông thường trả lời trôi chảy nhưng không biết hồ sơ cá nhân và dễ bịa ra điểm chuẩn. Chúng em lấp vào khoảng trống ở giữa: nhận hồ sơ riêng của học sinh, đối chiếu dữ liệu có nguồn, phân loại danh sách nguyện vọng có giải thích rõ ràng, và chuyển hóa thành kế hoạch học tập từng tuần.</aside>
+  <aside class="nt" hidden data-t="30">Các cổng tra cứu liệt kê điểm chuẩn năm cũ nhưng không so với điểm của riêng em. Chatbot chung thì trả lời trôi chảy nhưng không biết hồ sơ và có thể nói số không có nguồn. Nhóm em làm phần ở giữa: nhận hồ sơ của em, so với điểm chuẩn có nguồn, rồi biến thành danh sách nguyện vọng và việc cần làm mỗi tuần.</aside>
 </section>
 
 <!-- 04 BỐN CÂU HỎI · 0:40 -->
 <section class="slide light" id="s4">
   <div class="head2"><div data-r style="--i:0" class="eyebrow">Giải pháp</div><h2 data-r style="--i:1">Bốn câu hỏi, <span class="grad-text">một hành trình.</span></h2></div>
   <div class="wrap"><div class="g4">
-    <div class="card q" data-r style="--i:2"><div class="ico"><svg><use href="#i-user"/></svg></div><div class="n">Câu hỏi 1</div><h3>Mình đang ở đâu?</h3><p>Điểm từng môn theo từng tổ hợp, tự động tính điểm ưu tiên theo quy chế.</p><span class="chip">Hồ sơ cá nhân</span></div>
-    <div class="card q" data-r style="--i:3"><div class="ico"><svg><use href="#i-compass"/></svg></div><div class="n">Câu hỏi 2</div><h3>Muốn đi tới đâu?</h3><p>Tìm kiếm trong 3.648 chương trình theo ngành, khu vực, học phí và sở thích.</p><span class="chip">Khám phá có nguồn</span></div>
-    <div class="card q" data-r style="--i:4"><div class="ico"><svg><use href="#i-layers"/></svg></div><div class="n">Câu hỏi 3</div><h3>Còn cách bao xa?</h3><p>Phân loại Thử sức, Vừa sức, An toàn, Dự phòng và cảnh báo thứ tự.</p><span class="chip">Danh sách nguyện vọng</span></div>
-    <div class="card q" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><div class="n">Câu hỏi 4</div><h3>Hôm nay làm gì?</h3><p>Phân bổ việc học theo tuần vào giờ rảnh, đồng bộ ra Google Calendar.</p><span class="chip">Kế hoạch học tập</span></div>
+    <div class="card q" data-r style="--i:2"><div class="ico"><svg><use href="#i-user"/></svg></div><div class="n">Câu hỏi 1</div><h3>Mình đang ở đâu?</h3><p>Tạo hồ sơ ba bước: thông tin, điểm các môn, mục tiêu và ưu tiên. Điểm tính theo từng tổ hợp.</p><span class="chip">Hồ sơ cá nhân</span></div>
+    <div class="card q" data-r style="--i:3"><div class="ico"><svg><use href="#i-compass"/></svg></div><div class="n">Câu hỏi 2</div><h3>Muốn đi tới đâu?</h3><p>Khám phá 3.648 chương trình, lọc và so sánh. Mỗi số kèm nguồn.</p><span class="chip">Khám phá có nguồn</span></div>
+    <div class="card q" data-r style="--i:4"><div class="ico"><svg><use href="#i-layers"/></svg></div><div class="n">Câu hỏi 3</div><h3>Còn cách bao xa?</h3><p>Nhãn Thử sức, Vừa sức, An toàn, Dự phòng so với điểm chuẩn năm gần nhất.</p><span class="chip">Nguyện vọng</span></div>
+    <div class="card q" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><div class="n">Câu hỏi 4</div><h3>Hôm nay làm gì?</h3><p>Việc học từng tuần xếp vào giờ rảnh của em, xuất được file lịch.</p><span class="chip">Kế hoạch tuần</span></div>
   </div></div>
-  <aside class="nt" hidden data-t="35">Sản phẩm đồng hành cùng học sinh qua bốn câu hỏi lớn. Mình đang ở đâu: hồ sơ điểm theo từng tổ hợp. Muốn đi tới đâu: tìm kiếm trong 3.648 chương trình đào tạo. Còn cách bao xa: phân loại nguyện vọng thành 4 nhóm rõ ràng và cảnh báo thứ tự xếp. Hôm nay làm gì: việc học từng tuần được xếp vào đúng giờ trống của em. Không bắt buộc đăng ký tài khoản: dữ liệu được lưu an toàn ngay trên máy của học sinh.</aside>
+  <div class="strip" data-r style="--i:6"><i></i>Không cần tài khoản. Hồ sơ lưu ngay trên máy của em.</div>
+  <aside class="nt" hidden data-t="40">Sản phẩm đi theo bốn câu hỏi. Em đang ở đâu: hồ sơ ba bước, điểm tính đúng theo từng tổ hợp. Em muốn đi tới đâu: khám phá, lọc, so sánh chương trình, mỗi số có nguồn. Còn cách bao xa: bốn nhãn so với điểm chuẩn năm gần nhất. Hôm nay làm gì: kế hoạch tuần xếp vào giờ rảnh và xuất file lịch. Không cần tài khoản, hồ sơ nằm trên máy của em.</aside>
 </section>
 
-<!-- 05 DEMO · 0:40 -->
+<!-- 05 DEMO · 0:45 -->
 <section class="slide navy glow" id="s5">
-  <div data-r style="--i:0" class="eyebrow">Demo thật</div>
-  <h2 data-r style="--i:1;margin-top:20px;font-size:62px;white-space:nowrap">Từ một hồ sơ đến <span class="grad-text">một kế hoạch cụ thể.</span></h2>
+  <div data-r style="--i:0" class="eyebrow">Demo trên hồ sơ mẫu</div>
+  <h2 data-r style="--i:1;margin-top:20px;font-size:62px;white-space:nowrap">Từ một hồ sơ đến <span class="grad-text">một danh sách có căn cứ.</span></h2>
   <div class="cta" data-r style="--i:2"><a class="btn" href="https://nguyenvongai.pages.dev" target="_blank" rel="noopener">Mở demo trực tiếp</a></div>
   <div class="flow">
-    <div class="fs" data-r style="--i:3"><div class="phone"><img src="assets/ho-so.png" alt="Hồ sơ"></div><b>1 · Hồ sơ</b><span>Điểm, tổ hợp, ưu tiên</span></div>
-    <div class="fs" data-r style="--i:4"><div class="phone"><img src="assets/kham-pha.png" alt="Khám phá"></div><b>2 · Khám phá</b><span>Tra cứu điểm chuẩn, học phí</span></div>
-    <div class="fs" data-r style="--i:5"><div class="phone"><img src="assets/nguyen-vong.png" alt="Nguyện vọng"></div><b>3 · Nguyện vọng</b><span>Nhãn, căn cứ, độ cân bằng</span></div>
-    <div class="fs" data-r style="--i:6"><div class="phone"><img src="assets/ke-hoach-tuan.png" alt="Kế hoạch tuần"></div><b>4 · Kế hoạch</b><span>Việc tuần này, vào lịch</span></div>
+    <div class="fs" data-r style="--i:3"><div class="phone"><img src="assets/hom-nay.webp" alt="Hôm nay"></div><b>1 · Hôm nay</b><span>Thẻ Hành trình của em</span></div>
+    <div class="fs" data-r style="--i:4"><div class="phone"><img src="assets/kham-pha.webp" alt="Khám phá"></div><b>2 · Khám phá</b><span>Lọc theo điểm và ngân sách</span></div>
+    <div class="fs" data-r style="--i:5"><div class="phone"><img src="assets/chi-tiet-dubao.webp" alt="Chi tiết ngành"></div><b>3 · Chi tiết ngành</b><span>Điểm chuẩn, dự đoán, nguồn</span></div>
+    <div class="fs" data-r style="--i:6"><div class="phone"><img src="assets/nguyen-vong.webp" alt="Nguyện vọng"></div><b>4 · Nguyện vọng</b><span>Nhãn và độ cân bằng</span></div>
   </div>
-  <aside class="nt" hidden data-t="40">Chuyển sang máy điện thoại: mở hồ sơ mẫu, vào Khám phá, bấm một ngành để xem điểm chuẩn kèm trang PDF nguồn, vào Nguyện vọng xem nhãn và nhận xét cân bằng, cuối cùng vào Kế hoạch tuần, bấm Thêm vào lịch. Nếu mạng lỗi, dùng các ảnh và video quay trước của chúng em.</aside>
+  <div class="note" data-r style="--i:7">Hồ sơ mẫu Minh Anh là nhân vật giả định, không phải học sinh thật.</div>
+  <aside class="nt" hidden data-t="45">Chuyển sang điện thoại, mở hồ sơ mẫu. Màn Hôm nay có thẻ Hành trình: em đang ở đâu, môn nào đáng học trước, nếu thêm một điểm thì ngành nào đổi nhãn. Vào Khám phá lọc theo điểm và ngân sách. Bấm một ngành để xem điểm chuẩn, điểm dự đoán 2027 và nguồn. Cuối cùng là danh sách nguyện vọng với bốn nhóm. Nếu mạng lỗi, em dùng ảnh trên slide này. Hồ sơ Minh Anh là nhân vật giả định.</aside>
 </section>
 
-<!-- 06 KIẾN TRÚC & LỚP DỮ LIỆU · 0:55 -->
-<section class="slide white" id="s6">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Dữ liệu tuyển sinh tin cậy</div><h2 data-r style="--i:1">Mỗi con số có nguồn đối chiếu, <span class="grad-text">có nhãn kiểm chứng rõ ràng.</span></h2></div>
-  <div class="pipe">
-    <div class="st" data-r style="--i:2"><small>Thu thập</small><b>Nguồn tin cậy</b><p>Đề án chính thức từ trường, trang tổng hợp và phản ánh cộng đồng.</p></div>
-    <div class="st" data-r style="--i:3"><small>Chuẩn hóa dữ liệu</small><b>Đúng mã tuyển sinh</b><p>Khớp mã trường, mã ngành, 73 tổ hợp và tên tỉnh sau sáp nhập; kèm bí danh tìm nhanh.</p></div>
-    <div class="st" data-r style="--i:4"><small>Lưu trữ phiên bản</small><b>Duyệt trước khi công bố</b><p>Lưu từng bản cập nhật kèm trích dẫn số trang PDF, kiểm tra tính toàn vẹn.</p></div>
-    <div class="st" data-r style="--i:5"><small>Đồng bộ ứng dụng</small><b>Một nguồn thống nhất</b><p>Dùng chung cho toàn bộ tính năng tra cứu, tính điểm và trợ lý tư vấn.</p></div>
+<!-- 06 BẢN ĐỒ CƠ HỘI + PHÒNG THỬ ĐIỂM · 0:50 -->
+<section class="slide light split" id="s6">
+  <div class="txt" style="top:88px">
+    <div data-r style="--i:0" class="eyebrow">Cách em dùng điểm</div>
+    <h2 data-r style="--i:1;font-size:64px">Kéo điểm, <span class="grad-text">thấy ngành đổi nhãn.</span></h2>
+    <ul class="bl" data-r style="--i:2" >
+      <li><b>Bản đồ cơ hội:</b> số ngành ở từng nhãn, chia theo nhóm ngành.</li>
+      <li><b>Phòng thử điểm:</b> kéo cộng, trừ từng môn (tối đa 2 điểm), thấy ngay số ngành đổi nhãn. Chỉ xem thử, không lưu vào hồ sơ.</li>
+      <li>Ví dụ hồ sơ mẫu: thêm 1 điểm Toán, 754 ngành lên nhãn cao hơn.</li>
+      <li>Vừa sức nghĩa là điểm em cao hơn điểm chuẩn dưới 1,5 điểm.</li>
+    </ul>
+    <div class="strip warn" data-r style="--i:3;position:static;left:auto;right:auto;margin-top:auto"><i></i>So với điểm chuẩn năm gần nhất của từng ngành. Không phải xác suất đậu.</div>
   </div>
-  <div class="tiers">
-    <div class="tier" data-r style="--i:6"><span class="chip ok">Tầng 1</span><b>Đề án tuyển sinh chính thức</b><p>Dẫn nguồn trực tiếp tới từng trang tài liệu PDF của trường.</p></div>
-    <div class="tier" data-r style="--i:7"><span class="chip">Tầng 2</span><b>Trang tổng hợp có đối chiếu</b><p>Sử dụng khi trường chưa ra đề án mới, ghi rõ trạng thái đối chiếu.</p></div>
-    <div class="tier" data-r style="--i:8"><span class="chip warn">Tầng 3</span><b>Ghi chú thực tế</b><p>Ký túc xá, lưu ý xét tuyển bổ sung. Luôn gắn nhãn chưa chính thức.</p></div>
+  <div class="ph" style="right:96px">
+    <div class="it" data-r style="--i:2"><div class="phone"><img src="assets/co-hoi.webp" alt="Bản đồ cơ hội"></div><b>Bản đồ cơ hội</b></div>
+    <div class="it" data-r style="--i:3"><div class="phone s"><img src="assets/thu-diem.webp" alt="Phòng thử điểm"></div><b>Phòng thử điểm</b></div>
   </div>
-  <div class="states" data-r style="--i:9"><small>Mỗi thông tin hiển thị trạng thái rõ ràng:</small><span class="chip ok">đã xác minh</span><span class="chip">lịch sử</span><span class="chip warn">ước tính</span><span class="chip sky" style="background:#E3F4FE;color:#0A6FA8">dự báo</span><span class="chip" style="background:#F1F3F8;color:#64748B">chưa có dữ liệu</span></div>
-  <aside class="nt" hidden data-t="50">Đây là lớp dữ liệu nền tảng của hệ thống. Chúng em phân chia nguồn tin thành 3 tầng tin cậy: Tầng một là đề án chính thức, kiểm chứng được tới từng trang PDF. Tầng hai là trang tổng hợp đã đối chiếu. Tầng ba là ghi chú thực tế, luôn gắn nhãn chưa chính thức. Đặc biệt, hệ thống chuẩn hóa chính xác mã trường và mã ngành đào tạo để học sinh không bị nộp nhầm — còn tên viết tắt quen thuộc chỉ đóng vai trò bí danh tìm kiếm. Dữ liệu được kiểm duyệt trước khi xuất bản thành từng bản snapshot. Mọi câu trả lời đều mang nhãn trạng thái rõ ràng; thiếu dữ liệu thì hệ thống nói rõ là chưa có, tuyệt đối không tự điền thay.</aside>
+  <aside class="nt" hidden data-t="50">Đây là phần giúp em hiểu điểm của mình. Bản đồ cơ hội cho biết có bao nhiêu ngành ở từng nhãn. Phòng thử điểm cho em kéo điểm từng môn, tối đa hai điểm, và thấy số ngành đổi nhãn. Trong hồ sơ mẫu, thêm một điểm Toán thì 754 ngành lên nhãn cao hơn. Nhãn chỉ so với điểm chuẩn năm gần nhất của từng ngành, không phải xác suất đậu, và điểm thử không được lưu vào hồ sơ.</aside>
 </section>
 
-<!-- 07 ENGINE · 0:55 -->
-<section class="slide navy glow" id="s7">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Thuật toán hỗ trợ quyết định</div><h2 data-r style="--i:1">Thuật toán <span class="grad-text">giải thích được,</span> không phải hộp đen.</h2></div>
-  <div class="wrap"><div class="g4">
-    <div class="card col4" data-r style="--i:2"><div class="ico"><svg><use href="#i-chart"/></svg></div><h3>Điểm chuẩn xác theo tổ hợp</h3><p>Tự động tính đúng tổ hợp từng ngành và điểm ưu tiên giảm dần. Thiếu môn sẽ báo rõ, không tự điền 0.</p><span class="chip ok">Tính toán chính xác</span></div>
-    <div class="card col4" data-r style="--i:3"><div class="ico"><svg><use href="#i-target"/></svg></div><h3>Phân loại 4 nhóm nguyện vọng</h3><p>Dựa trên khoảng cách điểm và biến động lịch sử để xếp: Thử sức, Vừa sức, An toàn, Dự phòng.</p><span class="chip sky">Thống kê có bất định</span></div>
-    <div class="card col4" data-r style="--i:4"><div class="ico"><svg><use href="#i-layers"/></svg></div><h3>Cảnh báo nghịch đảo thứ tự</h3><p>Phát hiện khi ngành dễ được xếp trước ngành khó, tránh nguy cơ mất cơ hội xét tuyển sau.</p><span class="chip sky">Tối ưu danh mục</span></div>
-    <div class="card col4" data-r style="--i:5"><div class="ico"><svg><use href="#i-cal"/></svg></div><h3>Gợi ý kế hoạch học tập</h3><p>Chia giờ theo hiệu quả của từng môn: mỗi giờ môn nào tăng được nhiều điểm nhất thì nhận nhiều giờ hơn. Cách ôn khác nhau theo môn, xếp vào giờ trống của em.</p><span class="chip sky">Phân bổ theo lợi suất</span></div>
-  </div></div>
-  <div class="strip" data-r style="--i:6"><i></i>Biên độ điểm chuẩn được kiểm chứng ngược bằng phương pháp bỏ-một-năm: tỷ lệ bao phủ đạt 89% (2023), 95% (2024) và 64% (2025 - năm đề thi biến động). Nhóm minh bạch toàn bộ các con số này.</div>
-  <aside class="nt" hidden data-t="50">Động cơ tính toán gồm bốn phần, tất cả đều giải thích được bằng công thức rõ ràng. Một, điểm đúng từng tổ hợp và điểm ưu tiên giảm dần. Hai, phân loại 4 nhóm nguyện vọng từ độ lệch điểm và độ biến động lịch sử của chính ngành đó; luôn có khoảng bất định chứ không khẳng định đỗ trượt. Ba, cảnh báo lỗi nghịch đảo thứ tự để tránh mất cơ hội. Bốn, chia giờ học theo hiệu quả biên của từng môn (giờ sau ít hiệu quả hơn giờ trước), mỗi môn một cách ôn riêng, xếp vào giờ trống thật. Các tham số ôn tập là giả định chưa hiệu chỉnh bằng dữ liệu học sinh, và app nói rõ điều đó. Chúng em kiểm chứng mô hình bằng phương pháp bỏ-một-năm: tỷ lệ bao phủ đạt 89, 95 và 64% trên các năm 2023, 2024, 2025. Năm 2025 thấp hơn vì đề thi thay đổi, và chúng em hoàn toàn minh bạch điều này.</aside>
+<!-- 07 DỮ LIỆU: NGUỒN VÀ ĐỘ TIN CẬY · 0:50 -->
+<section class="slide white split" id="s7">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Dữ liệu</div><h2 data-r style="--i:1">Mỗi con số có nguồn, <span class="grad-text">và có nhãn độ tin cậy.</span></h2></div>
+  <div class="ph"><div class="it" data-r style="--i:2"><div class="phone"><img src="assets/ve-du-lieu.webp" alt="Khối Độ tin cậy dữ liệu"></div><b>Trang Về dữ liệu</b></div></div>
+  <div class="txt">
+    <div class="row2" data-r style="--i:3"><div class="box"><span class="big">1.721</span><p>chương trình có điểm chuẩn THPT từ 2 năm</p></div><div class="box"><span class="big">1.599</span><p>chương trình mới có một năm, chỉ để tham khảo</p></div></div>
+    <div class="row2" data-r style="--i:4"><div class="box"><span class="big">328</span><p>xét bằng học bạ, ĐGNL...: không so với điểm THPT</p></div><div class="box"><span class="big">0</span><p>chương trình chỉ có điểm sàn. Điểm sàn không gọi là điểm chuẩn</p></div></div>
+    <div class="strip warn" data-r style="--i:5;position:static;left:auto;right:auto;margin-top:auto;font-size:26px"><i></i>Nguồn: 1.492 chương trình từ đề án PDF (kèm số trang), 2.156 từ trang tổng hợp. Điểm 2026 (2.082 dòng) lấy từ trang tổng hợp, chưa đối chiếu điểm chính thức của trường.</div>
+  </div>
+  <aside class="nt" hidden data-t="50">Trang Về dữ liệu đếm thẳng từ dữ liệu đang dùng. Có 1.721 chương trình có điểm chuẩn THPT từ hai năm, 1.599 chương trình mới có một năm nên chỉ để tham khảo, và 328 chương trình xét bằng phương thức khác, không so với điểm THPT. Về nguồn: 1.492 chương trình có đề án PDF kèm số trang, 2.156 chương trình lấy từ trang tổng hợp. Điểm năm 2026 có 2.082 dòng, đều từ trang tổng hợp, chưa đối chiếu với điểm chính thức của trường. Điểm sàn không bao giờ được gọi là điểm chuẩn.</aside>
 </section>
 
-<!-- 08 AI Ở ĐÂU · 0:45 -->
+<!-- 08 KIỂM CHỨNG DỮ LIỆU · 0:55 -->
 <section class="slide light" id="s8">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Phân định vai trò AI</div><h2 data-r style="--i:1">Quy tắc làm gốc, dữ liệu kiểm chứng, <span class="grad-text">AI dùng để diễn giải.</span></h2></div>
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Kiểm chứng dữ liệu</div><h2 data-r style="--i:1">Điểm bị sửa phải có <span class="grad-text">hai bằng chứng.</span></h2></div>
   <div class="wrap"><div class="g3">
-    <div class="card lv" data-r style="--i:2"><span class="chip ok">Không dùng AI</span><h3>Phần cần chính xác</h3><ul><li>Tính điểm xét tuyển, điểm ưu tiên</li><li>Tra cứu mã trường, mã ngành, tổ hợp</li><li>Xếp thời khóa biểu, rà soát thứ tự</li></ul></div>
-    <div class="card lv" data-r style="--i:3"><span class="chip sky" style="background:#E3F4FE;color:#0A6FA8">Thống kê</span><h3>Phần cần ước lượng</h3><ul><li>Biên độ điểm chuẩn năm tới</li><li>Đánh giá độ biến động lịch sử</li><li>Kiểm nghiệm ngược độ tin cậy</li></ul></div>
-    <div class="card lv hot" data-r style="--i:4"><span class="chip">Mô hình ngôn ngữ</span><h3>Phần cần diễn giải</h3><ul><li>Trả lời câu hỏi, so sánh ngành học</li><li>Phân tích sự đánh đổi bằng lời dễ hiểu</li><li>Chỉ nhận dữ liệu do ứng dụng cung cấp</li></ul></div>
+    <div class="card" data-r style="--i:2"><h3>Kiểm mẫu theo PDF</h3><div class="big">201/201</div><p>dòng điểm có phần lẻ khớp PDF nguồn: 93 dòng ngẫu nhiên và 108 dòng điểm nhảy mạnh.</p></div>
+    <div class="card" data-r style="--i:3"><h3>Soi kỹ số nguyên</h3><div class="big">13 sai</div><p>trong 52 ô số nguyên nghi sai: 36 đúng, 3 chưa xác định. Lỗi thường là cột chỉ tiêu bị đọc thành điểm.</p></div>
+    <div class="card" data-r style="--i:4"><h3>Ghi đè có bằng chứng</h3><div class="big">146 bản sửa</div><p>của 70 chương trình. Chỉ nhận khi bộ đọc tự động và mắt người cùng ra một số.</p></div>
   </div></div>
-  <div class="guard" data-r style="--i:5"><small>5 rào chắn bảo vệ:</small><span class="chip ok">chặn số lạ ngoài dữ liệu</span><span class="chip ok">lọc mã tuyển sinh bịa</span><span class="chip ok">giới hạn 50 lượt/ngày</span><span class="chip ok">chế độ Tiết kiệm không gọi AI</span><span class="chip ok">AI không tự sửa dữ liệu</span></div>
-  <aside class="nt" hidden data-t="45">Nguyên tắc thiết kế bất khả xâm phạm của chúng em: AI không quyết định sự thật. Phần cần chính xác tuyệt đối như tính điểm, mã tuyển sinh, xếp lịch thì dùng thuật toán thuần, không tốn AI. Phần ước lượng dùng phương pháp thống kê có kiểm định. Mô hình ngôn ngữ chỉ nằm ở tầng diễn giải, và chỉ nhận đúng số liệu ứng dụng gửi kèm. Đồng thời có hệ thống 5 rào chắn: chặn ngay câu trả lời chứa số lạ ngoài dữ liệu, lọc mã tuyển sinh bịa, giới hạn 50 lượt/ngày mỗi hồ sơ, và người dùng có thể bật chế độ Tiết kiệm để tra cứu hoàn toàn bằng thuật toán.</aside>
+  <div class="strip warn" data-r style="--i:5;min-height:150px;font-size:26px"><i></i>Giới hạn: đây là kiểm mẫu, không phải "chính xác bao nhiêu phần trăm toàn bộ". Số nguyên chiếm 45,5% số ô điểm và chưa kiểm hết. Điểm 2026: mẫu 20 dòng, 17 khớp trang nguồn, chưa dòng nào đối chiếu được với văn bản chính thức của trường.</div>
+  <aside class="nt" hidden data-t="55">Nhóm không tin dữ liệu chỉ vì nó có nguồn, nên tự kiểm. Ở điểm có phần lẻ, 201 trên 201 dòng đã kiểm khớp PDF nguồn: 93 dòng ngẫu nhiên và 108 dòng điểm nhảy mạnh. Điểm số nguyên khó hơn: trong 52 ô nghi sai, 13 sai, thường do cột chỉ tiêu bị đọc thành điểm. Mọi bản sửa, 146 bản của 70 chương trình, đều cần hai bằng chứng: bộ đọc tự động và mắt người. Nhóm nói rõ giới hạn: đây là kiểm mẫu, số nguyên còn nhiều chưa kiểm, và điểm 2026 mới kiểm mẫu 20 dòng, 17 khớp trang nguồn.</aside>
 </section>
 
-<!-- 09 AI THỰC TẾ TRONG APP · 0:55 -->
-<section class="slide blue glow" id="s9">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Ứng dụng AI thực tế</div><h2 data-r style="--i:1">Từ ngôn ngữ tự nhiên đến <span class="grad-text" style="background:linear-gradient(135deg,#fff,#BFE3FF);-webkit-background-clip:text;background-clip:text">hành động an toàn,</span> không ảo giác.</h2></div>
-  <div class="arch">
-    <div class="node" data-r style="--i:2"><small>1. Tự gom ngữ cảnh</small><b>Câu hỏi &amp; Hồ sơ thật</b><p>App tự gom điểm tổ hợp (ẩn danh), trích 4–6 ngành phù hợp và đề án PDF chính thức.</p></div>
-    <div class="arr" data-r style="--i:3"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>Gửi kèm<br>Dữ liệu thật</span></div></div>
-    <div class="node mid" data-r style="--i:4"><small>2. LLM &amp; Hậu kiểm</small><b>Diễn giải &amp; Rào chắn</b><ul><li>So sánh ngành, giải thích đánh đổi</li><li>Hậu kiểm số liệu: chặn số ngoài dữ liệu</li><li>Trả lời súc tích &lt;120 từ, trích dẫn nguồn</li></ul></div>
-    <div class="arr" data-r style="--i:5"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>Thẻ gợi ý<br>Có cấu trúc</span></div></div>
-    <div class="node" data-r style="--i:6"><small>3. Quyết định an toàn</small><b>Học sinh tự xác nhận</b><p>AI trả về thẻ hành động (Thêm/So sánh). Chỉ cập nhật khi em tự bấm Xác nhận.</p></div>
+<!-- 09 NHÃN, DỰ BÁO, CHỈ TIÊU · 1:10 -->
+<section class="slide white split rev" id="s9">
+  <div class="txt" style="top:88px;left:96px;right:auto;width:900px">
+    <div data-r style="--i:0" class="eyebrow">Thuật toán giải thích được</div>
+    <h2 data-r style="--i:1;font-size:60px">Dự báo là <span class="grad-text">khoảng tham khảo,</span> có kiểm định.</h2>
+    <ul class="bl" data-r style="--i:2">
+      <li>Dự đoán 2027 lấy điểm năm gần nhất, kèm biên độ đo từ biến động thật giữa các năm.</li>
+      <li>Kiểm định bỏ-một-năm: khoảng 80% phủ điểm thật <b>91%</b> (2023), <b>93%</b> (2024), <b>77%</b> (2025, năm biến động mạnh).</li>
+      <li>Chỉ tiêu đọc từ đề án của 10 trường: 421 chương trình, kèm trang PDF.</li>
+    </ul>
+    <div class="strip warn" data-r style="--i:3;position:static;left:auto;right:auto;margin-top:auto;font-size:26px"><i></i>Cả 2.812 dự báo hiện ở độ tin cậy thấp vì nguồn chưa thẩm định độc lập. Không phải xác suất đậu.</div>
   </div>
-  <div class="do">
-    <div data-r style="--i:7"><b>Tra cứu &amp; So sánh</b>"So sánh ngành CNTT của Bách Khoa và KHTN": phân tích điểm chuẩn và học phí kèm trích dẫn đề án.</div>
-    <div data-r style="--i:8"><b>Đề xuất hành động</b>"Tìm cho em ngành an toàn khối A00": AI tạo thẻ ngành gợi ý, em bấm "Thêm" mới vào danh sách.</div>
-    <div data-r style="--i:9"><b>Tiết kiệm &amp; Bảo mật</b>Chế độ Tiết kiệm không gọi AI; hồ sơ lưu tại máy học sinh, không gửi họ tên hay thông tin cá nhân.</div>
+  <div class="ph" style="left:auto;right:96px">
+    <div class="it" data-r style="--i:2"><div class="phone"><img src="assets/chi-tiet-dubao.webp" alt="Khối dự đoán 2027"></div><b>Dự đoán 2027</b></div>
+    <div class="it" data-r style="--i:3"><div class="phone s"><img src="assets/chi-tiet-chitieu.webp" alt="Chỉ tiêu và học phí"></div><b>Chỉ tiêu, học phí, nguồn</b></div>
   </div>
-  <div class="strip" data-r style="--i:10"><i style="background:#fff"></i>Trạng thái: Đã triển khai trực tiếp trên ứng dụng web; 100% phản hồi được hậu kiểm đối chiếu số liệu và yêu cầu học sinh chủ động bấm xác nhận.</div>
-  <aside class="nt" hidden data-t="50">Thay vì để AI làm chatbot chung chung dễ bịa đặt hay vẽ viễn cảnh xa xôi, chúng em ứng dụng AI thành Trợ lý tư vấn có căn cứ theo quy trình ba bước khép kín. Bước một: Khi học sinh hỏi, ứng dụng tự động gom dữ liệu thật làm ngữ cảnh — gồm điểm thi ẩn danh và tối đa 6 ngành liên quan từ đề án gốc — gửi kèm vào lời nhắc. Bước hai: Mô hình ngôn ngữ chỉ đóng vai trò diễn giải và so sánh sự đánh đổi; máy chủ có thuật toán hậu kiểm tự động chặn ngay nếu phát hiện con số điểm chuẩn hay học phí nào không có trong dữ liệu gửi kèm. Bước ba: AI không chỉ trả lời bằng chữ mà sinh ra các thẻ hành động có cấu trúc; và nguyên tắc an toàn tuyệt đối là AI chỉ đề xuất, học sinh phải tự tay bấm Xác nhận thì nguyện vọng mới được cập nhật. Ngoài ra, học sinh có thể bật chế độ Tiết kiệm để tra cứu hoàn toàn bằng thuật toán mà không tốn một lượt gọi AI nào.</aside>
+  <aside class="nt" hidden data-t="70">Phần dự báo nhóm làm rất đơn giản và nói thẳng. Điểm dự đoán 2027 lấy điểm năm gần nhất, kèm một biên độ đo từ biến động thật giữa các năm. Nhóm kiểm bằng cách bỏ một năm rồi dự báo lại: khoảng 80% phủ điểm thật 91% năm 2023, 93% năm 2024 và 77% năm 2025, năm biến động mạnh. Hiện cả 2.812 dự báo đều ở độ tin cậy thấp vì nguồn chưa được thẩm định độc lập. Trang ngành còn có chỉ tiêu đọc từ đề án của 10 trường, 421 chương trình, kèm trang PDF. Nhóm chưa dùng mô hình học máy trong bản nộp này.</aside>
 </section>
 
-<!-- 10 CỘNG ĐỒNG · 0:45 -->
-<section class="slide white" id="s10">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Cộng đồng cùng hoàn thiện</div><h2 data-r style="--i:1">Dữ liệu ngày càng đầy đủ, <span class="grad-text">nhờ sự tham gia từ chính các trường.</span></h2></div>
-  <div class="loop">
-    <div class="lp" data-r style="--i:2"><div class="n">1</div><b>Học sinh báo sai</b><p>Nút báo sai ngay trên từng số liệu để gửi phản hồi về ban quản trị.</p></div>
-    <div class="lp" data-r style="--i:3"><div class="n">2</div><b>AI hỗ trợ trích xuất</b><p>Hỗ trợ người nhập đọc đề án PDF, trích xuất điểm kèm trang và câu gốc.</p></div>
-    <div class="lp" data-r style="--i:4"><div class="n">3</div><b>Kiểm duyệt thông tin</b><p>Đối chiếu câu trích nguyên văn, tự động cảnh báo nếu chênh lệch lớn.</p></div>
-    <div class="lp" data-r style="--i:5"><div class="n">4</div><b>Xuất bản dữ liệu</b><p>Học sinh nhận số mới; hệ thống tự chạy lại kiểm định độ chính xác.</p></div>
-  </div>
-  <div class="rules" data-r style="--i:6">
-    <h3>Đóng góp mở, kiểm soát chặt chẽ</h3>
-    <ul><li>Chỉ thành viên được cấp quyền mới tham gia duyệt dữ liệu</li><li>Mọi số liệu bắt buộc có đường dẫn và số trang trích dẫn</li><li>AI chỉ tạo bản nháp, con người thẩm định mới công bố</li><li>Lưu vết đầy đủ người cập nhật và thời điểm chỉnh sửa</li></ul>
-    <span class="chip warn">Đang thử nghiệm quy trình nội bộ</span>
-  </div>
-  <aside class="nt" hidden data-t="45">Dự án tự hoàn thiện nhờ vòng lặp khép kín này. Khi học sinh thấy số liệu chưa khớp, các em bấm nút Báo sai. Cộng tác viên trong trường sử dụng công cụ AI hỗ trợ đọc đề án PDF để trích xuất điểm chuẩn kèm câu trích nguyên văn và số trang. Dữ liệu được đưa vào hàng chờ kiểm duyệt; hệ thống tự động gắn cờ nếu phát hiện chênh lệch bất thường. Quản trị viên duyệt xong thì xuất bản snapshot mới, học sinh thấy ngay số liệu chuẩn xác, và các mô hình dự báo tự động chạy lại bài kiểm định. AI không bao giờ tự ý xuất bản dữ liệu.</aside>
+<!-- 10 AI Ở ĐÂU · 0:50 -->
+<section class="slide light" id="s10">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Phân định vai trò AI</div><h2 data-r style="--i:1">Quy tắc làm gốc, <span class="grad-text">AI chỉ để diễn giải.</span></h2></div>
+  <div class="wrap"><div class="g3">
+    <div class="card lv" data-r style="--i:2"><span class="chip ok">Không dùng AI</span><h3>Phần cần chính xác</h3><ul><li>Tính điểm, điểm ưu tiên</li><li>Nhãn nguyện vọng, cảnh báo thứ tự</li><li>Mã trường, mã ngành, xếp lịch</li></ul></div>
+    <div class="card lv" data-r style="--i:3"><span class="chip sky" style="background:#E3F4FE;color:#0A6FA8">Thống kê</span><h3>Phần cần ước lượng</h3><ul><li>Điểm dự đoán và biên độ</li><li>Kiểm định bỏ-một-năm</li><li>Nhãn độ tin cậy</li></ul></div>
+    <div class="card lv hot" data-r style="--i:4"><span class="chip">Mô hình ngôn ngữ</span><h3>Phần cần diễn giải</h3><ul><li>Trả lời, so sánh ngành bằng lời dễ hiểu</li><li>Chỉ nhận số liệu do app gửi kèm</li><li>Bị cấm nói "khả năng đậu x%"</li></ul></div>
+  </div></div>
+  <div class="guard" data-r style="--i:5"><small>Rào chắn:</small><span class="chip ok">mã trường, ngành bịa bị loại</span><span class="chip ok">chỉ trích nguồn có thật</span><span class="chip ok">thêm vào danh sách khi em bấm Xác nhận</span><span class="chip ok">50 lượt mỗi ngày</span><span class="chip ok">chế độ Tiết kiệm không gọi AI</span></div>
+  <div class="strip warn" data-r style="--i:6;min-height:80px"><i></i>AI thật chỉ chạy khi máy chủ có khóa API. Không có khóa, app trả lời từ dữ liệu có sẵn.</div>
+  <aside class="nt" hidden data-t="50">Nguyên tắc của nhóm: AI không quyết định sự thật. Tính điểm, nhãn, mã trường, xếp lịch đều là thuật toán thuần, có test. Phần ước lượng dùng thống kê có kiểm định. Mô hình ngôn ngữ chỉ diễn giải và so sánh, chỉ nhận số liệu app gửi kèm. Có các rào chắn: mã trường và ngành bịa bị loại, chỉ trích nguồn có thật, mọi hành động thêm vào danh sách cần em bấm Xác nhận, hạn mức 50 lượt mỗi ngày, và chế độ Tiết kiệm không gọi AI. AI thật chỉ chạy khi máy chủ có khóa API; không có thì app tự trả lời từ dữ liệu.</aside>
 </section>
 
-<!-- 11 MOAT · 0:45 -->
+<!-- 11 KIẾN TRÚC VÀ CỘNG ĐỒNG · 0:40 -->
 <section class="slide navy glow" id="s11">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Lợi thế khác biệt</div><h2 data-r style="--i:1">Khó sao chép không nằm ở <span class="grad-text">chatbot, mà ở dữ liệu và quy trình kiểm chứng.</span></h2></div>
-  <div class="wrap"><div class="g4">
-    <div class="card mo" data-r style="--i:2"><div class="n">01</div><h3>Dữ liệu có nguồn trích dẫn</h3><p>Dẫn chứng tới từng trang đề án PDF, có người kiểm duyệt, có lịch sử phiên bản.</p><span class="chip ghost">Nguồn tin cậy</span></div>
-    <div class="card mo" data-r style="--i:3"><div class="n">02</div><h3>Đúng quy chế Việt Nam</h3><p>Tính đúng điểm ưu tiên giảm dần, 73 tổ hợp môn, chuẩn hóa mã ngành và tỉnh sau sáp nhập.</p><span class="chip ghost">Bản địa hóa</span></div>
-    <div class="card mo" data-r style="--i:4"><div class="n">03</div><h3>Kiểm thử logic tự động</h3><p>Hệ thống bài test tự động, kiểm định ngược bỏ-một-năm, rà soát dữ liệu định kỳ để phát hiện sai sót.</p><span class="chip ghost">Minh bạch</span></div>
-    <div class="card mo" data-r style="--i:5"><div class="n">04</div><h3>Bảo vệ quyền riêng tư</h3><p>Dữ liệu lưu tại máy học sinh; chỉ chia sẻ khi bật AI; không lưu thông tin định danh cá nhân.</p><span class="chip ghost">Bảo mật</span></div>
-  </div></div>
-  <div class="strip" data-r style="--i:6"><i></i>Minh bạch: Dự án đang trong giai đoạn thử nghiệm tiền phát hành, các lợi thế bền vững sẽ tiếp tục được đo lường cùng người dùng thật.</div>
-  <aside class="nt" hidden data-t="40">Lợi thế cốt lõi của chúng em không nằm ở giao diện chatbot, vì chatbot ai cũng có thể dựng được trong vài ngày. Giá trị thực sự nằm ở bốn yếu tố: Thứ nhất, dữ liệu có nguồn trích dẫn đến từng trang PDF và được cập nhật liên tục. Thứ hai, thuật toán được bản địa hóa chuẩn theo quy chế tuyển sinh Việt Nam. Thứ ba, 64 bộ kiểm chứng tự động giúp phát hiện lỗi sai ngay khi có biến động. Thứ tư, thiết kế tôn trọng quyền riêng tư: dữ liệu điểm số thuộc về học sinh, không thu thập danh tính cá nhân.</aside>
-</section>
-
-<!-- 12 TRẠNG THÁI · 0:50 -->
-<section class="slide light" id="s12">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Trạng thái thực tế</div><h2 data-r style="--i:1">Minh bạch những gì đã xong, <span class="grad-text">đang thử nghiệm và chưa làm.</span></h2></div>
-  <div class="wrap"><div class="g3">
-    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span><h3>Chạy được và có kiểm thử</h3><ul class="lst"><li>3.648 chương trình, 118 trường có nguồn đối chiếu</li><li>Phân loại 4 nhóm nguyện vọng, điểm ưu tiên, cảnh báo xếp ngược</li><li>Kế hoạch học tập theo tuần, xuất lịch Google Calendar</li><li>Trợ lý tư vấn có căn cứ: 100% câu trả lời có kiểm duyệt số liệu</li><li>Hạn mức 50 lượt/ngày, chế độ Tiết kiệm không tốn AI</li><li>Hệ thống CMS quản trị: kiểm duyệt và xuất bản dữ liệu</li></ul></div>
-    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span><h3>Có mã nguồn, cần kiểm thực tế</h3><ul class="lst"><li>Mở rộng kết nối trợ lý học tập đa nền tảng</li><li>Cổng tiếp nhận đóng góp qua AI (chưa có cộng tác viên diện rộng)</li><li>Ước lượng cơ hội (%): dựa trên dữ liệu lịch sử, chưa có điểm thi thật</li><li>Trắc nghiệm gợi ý ngành: mang tính tham khảo hướng nghiệp</li></ul></div>
-    <div class="c n" data-r style="--i:4"><span class="chip" style="align-self:flex-start;background:#FDE8DC;color:#C2410C">Chưa làm, đã biết</span><h3>Giới hạn nhóm tự tìm ra</h3><ul class="lst"><li>Dữ liệu 2025 là mốc tham khảo cho mùa 2026 (chờ đề án mới)</li><li>602 chương trình có học phí từ văn bản chính thức (còn lại ước tính theo khối)</li><li>Chưa hỗ trợ tài khoản đồng bộ tự động giữa nhiều thiết bị</li><li>Chưa đo lường tác động trên tập người dùng quy mô lớn</li></ul></div>
-  </div></div>
-  <div class="strip" data-r style="--i:5"><i></i>Nhóm tự chủ động kiểm toán dữ liệu và công khai các điểm hạn chế. Mọi con số đều có thể kiểm chứng độc lập.</div>
-  <aside class="nt" hidden data-t="45">Em xin thẳng thắn báo cáo trạng thái thực tế của sản phẩm. Những gì đã chạy thật và có kiểm thử tự động: dữ liệu 3.648 chương trình, phân loại nguyện vọng, điểm ưu tiên, kế hoạch học tập, trợ lý AI có rào chắn số liệu và hệ thống CMS duyệt bài. Những gì đang thử nghiệm: mở rộng giao thức trợ lý ngoài, cổng đóng góp cộng đồng và công thức ước lượng cơ hội. Những hạn chế nhóm tự nhận thấy: dữ liệu 2025 hiện là mốc tham khảo cho mùa 2026, học phí chính thức có ở 602 chương trình, và chưa có hệ thống tài khoản đám mây.</aside>
-</section>
-
-<!-- 13 LỘ TRÌNH · 0:40 -->
-<section class="slide white" id="s13">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Phương hướng phát triển</div><h2 data-r style="--i:1">Từ công cụ chạy được đến <span class="grad-text">nền tảng đồng hành tin cậy cùng học sinh.</span></h2></div>
-  <div class="tl">
-    <div class="ms" data-r style="--i:2"><div class="dot"></div><div class="card"><small>Ngay bây giờ</small><h3>Chuẩn hóa dữ liệu 2026</h3><ul><li>Đối chiếu đề án 2026 khi các trường đại học công bố</li><li>Tối ưu trải nghiệm tư vấn thực tế trên thiết bị di động</li></ul></div></div>
-    <div class="ms" data-r style="--i:3"><div class="dot"></div><div class="card"><small>1 đến 3 tháng</small><h3>Mở cho người dùng thật</h3><ul><li>Bổ sung đồng bộ đám mây tùy chọn cho học sinh</li><li>Tuyển cộng tác viên đối chiếu đề án từ 10 trường đầu tiên</li></ul></div></div>
-    <div class="ms" data-r style="--i:4"><div class="dot"></div><div class="card"><small>Mùa tuyển sinh 2027</small><h3>Vòng lặp tự hoàn thiện</h3><ul><li>Cập nhật điểm chuẩn mới qua quy trình đóng góp có kiểm duyệt</li><li>Đối chiếu kết quả trúng tuyển thực tế để hiệu chỉnh thuật toán</li></ul></div></div>
-    <div class="ms" data-r style="--i:5"><div class="dot"></div><div class="card"><small>6 đến 12 tháng</small><h3>Mở rộng hỗ trợ</h3><ul><li>Bổ sung dữ liệu trường cao đẳng, chương trình nghề và du học</li><li>Hợp tác với các trường THPT để đo lường hiệu quả thực tế</li></ul></div></div>
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Kiến trúc và cộng đồng</div><h2 data-r style="--i:1">Dữ liệu đổi mỗi mùa, <span class="grad-text">nên có đường cập nhật có duyệt.</span></h2></div>
+  <div class="flow4">
+    <div class="st" data-r style="--i:2"><div class="n">1</div><b>Báo sai, đăng ký</b><p>Em báo số sai ngay trên trang ngành. Người trong trường đăng ký làm tình nguyện viên.</p></div>
+    <div class="st" data-r style="--i:3"><div class="n">2</div><b>Nhập trong CMS</b><p>Mỗi số kèm nguồn và số trang, chỉ đúng trường được giao.</p></div>
+    <div class="st" data-r style="--i:4"><div class="n">3</div><b>Quản trị viên duyệt</b><p>Có nhật ký, quay về bản cũ được.</p></div>
+    <div class="st" data-r style="--i:5"><div class="n">4</div><b>Xuất bản bản mới</b><p>Kiểm mã băm, app tải số mới.</p></div>
   </div>
-  <div class="strip" data-r style="--i:6"><i></i>Nguyên tắc: Mỗi bước đi đều dựa trên dữ liệu đã kiểm chứng và phản hồi thực tế từ học sinh.</div>
-  <aside class="nt" hidden data-t="40">Phương hướng phát triển gồm bốn giai đoạn. Ngay bây giờ: cập nhật dữ liệu đề án 2026 ngay khi các trường công bố và hoàn thiện trải nghiệm tư vấn. Một đến ba tháng: ra mắt tính năng đồng bộ đám mây tùy chọn và tuyển cộng tác viên sinh viên đối chiếu dữ liệu. Mùa tuyển sinh 2027: tiếp nhận dữ liệu mới qua cổng đóng góp và dùng kết quả đỗ thực tế để hiệu chỉnh mô hình. Sáu đến mười hai tháng: mở rộng sang khối cao đẳng, học nghề, và hợp tác trực tiếp với các trường THPT để đo lường tác động.</aside>
+  <div class="arch">
+    <div class="box" data-r style="--i:6"><b>Local-first</b><p>Hồ sơ nằm trên máy em, không tài khoản.</p></div>
+    <div class="box" data-r style="--i:7"><b>Lớp quyết định</b><p>Thuật toán TypeScript thuần, hơn 90 tệp kiểm thử.</p></div>
+    <div class="box" data-r style="--i:8"><b>CMS cộng đồng</b><p>Phân quyền theo trường, duyệt trước khi công bố.</p></div>
+  </div>
+  <div class="strip warn" data-r style="--i:9;min-height:100px;font-size:26px"><i></i>Đã chạy thử trọn vòng ở máy. Hạ tầng thật (D1, Access) chưa dựng, chưa có tình nguyện viên thật.</div>
+  <aside class="nt" hidden data-t="40">Điểm chuẩn đổi mỗi mùa nên nhóm làm đường cập nhật có duyệt. Em báo sai hoặc người trong trường đăng ký làm tình nguyện viên. Họ nhập trong CMS, mỗi số kèm nguồn và số trang, chỉ đúng trường được giao. Quản trị viên duyệt, có nhật ký, quay về bản cũ được. Xuất bản thì app tải bản mới, có kiểm mã băm. Kiến trúc có ba ý: hồ sơ nằm trên máy em, lớp quyết định là thuật toán thuần có test, và CMS có phân quyền. Nói thẳng: nhóm đã chạy trọn vòng ở máy, nhưng hạ tầng thật chưa dựng và chưa có tình nguyện viên thật.</aside>
+</section>
+
+<!-- 12 GIỚI HẠN TRUNG THỰC · 0:50 -->
+<section class="slide light" id="s12">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Giới hạn trung thực</div><h2 data-r style="--i:1">Đã làm gì, còn hạn chế gì, <span class="grad-text">chưa làm gì.</span></h2></div>
+  <div class="wrap"><div class="g3">
+    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã chạy, có kiểm thử</span><h3>Phần lõi</h3><ul class="lst"><li>3.648 chương trình của 118 trường, kèm nguồn</li><li>Hồ sơ ba bước, bốn nhãn, Bản đồ cơ hội, Phòng thử điểm</li><li>Kế hoạch tuần, xuất file lịch</li><li>CMS và đường cập nhật chạy được ở máy</li></ul></div>
+    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Còn hạn chế</span><h3>Dữ liệu chưa kiểm hết</h3><ul class="lst"><li>Điểm số nguyên chưa kiểm hết</li><li>Điểm 2026 lấy từ trang tổng hợp, chưa có văn bản chính thức đối chiếu</li><li>Học phí: 662 ngành, nguồn VnExpress, chưa đối chiếu văn bản trường. Còn lại ghi "chưa có"</li></ul></div>
+    <div class="c n" data-r style="--i:4"><span class="chip" style="align-self:flex-start;background:#FDE8DC;color:#C2410C">Chưa làm</span><h3>Điều nhóm biết còn thiếu</h3><ul class="lst"><li>Chưa thử với học sinh thật, chưa có số người dùng</li><li>Chưa có tài khoản, đồng bộ nhiều máy</li><li>Chưa áp dụng mô hình học máy; dự báo hiện là phép thống kê đơn giản</li></ul></div>
+  </div></div>
+  <div class="strip" data-r style="--i:5"><i></i>Không số người dùng, không lời chứng thực. Chỉ có số đo từ dữ liệu và kiểm thử.</div>
+  <aside class="nt" hidden data-t="50">Em xin nói thẳng trạng thái. Đã chạy và có kiểm thử: dữ liệu 3.648 chương trình, hồ sơ ba bước, bốn nhãn, Bản đồ cơ hội, Phòng thử điểm, kế hoạch tuần và CMS chạy ở máy. Còn hạn chế: điểm số nguyên chưa kiểm hết, điểm 2026 lấy từ trang tổng hợp, học phí có ở 662 ngành nhưng từ VnExpress, chưa đối chiếu văn bản của trường. Chưa làm: chưa thử với học sinh thật nên không có số người dùng, chưa có tài khoản, chưa áp dụng mô hình học máy.</aside>
+</section>
+
+<!-- 13 LỘ TRÌNH · 0:35 -->
+<section class="slide white" id="s13">
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Bước tiếp theo</div><h2 data-r style="--i:1">Từ công cụ chạy được đến <span class="grad-text">công cụ học sinh dùng thật.</span></h2></div>
+  <div class="tl">
+    <div class="ms" data-r style="--i:2"><div class="dot"></div><div class="card"><small>Ngay bây giờ</small><h3>Kiểm nốt dữ liệu</h3><ul><li>Đối chiếu điểm 2026 với thông báo chính thức của trường</li><li>Kiểm tiếp điểm số nguyên</li></ul></div></div>
+    <div class="ms" data-r style="--i:3"><div class="dot"></div><div class="card"><small>1 đến 3 tháng</small><h3>Có người dùng thật</h3><ul><li>Thử với học sinh THPT và thầy cô</li><li>Tìm tình nguyện viên ở vài trường</li></ul></div></div>
+    <div class="ms" data-r style="--i:4"><div class="dot"></div><div class="card"><small>Mùa tuyển sinh 2027</small><h3>Vòng lặp cập nhật</h3><ul><li>Nhập điểm chuẩn mới qua CMS có duyệt</li><li>So dự báo với điểm thật để chỉnh</li></ul></div></div>
+    <div class="ms" data-r style="--i:5"><div class="dot"></div><div class="card"><small>Sau đó</small><h3>Dựng hạ tầng thật</h3><ul><li>D1, Access cho CMS</li><li>Đồng bộ nhiều máy, nếu em muốn</li></ul></div></div>
+  </div>
+  <div class="strip" data-r style="--i:6"><i></i>Mỗi bước dựa trên dữ liệu đã kiểm và phản hồi thật từ học sinh.</div>
+  <aside class="nt" hidden data-t="35">Bước tiếp theo rất cụ thể. Ngay bây giờ: đối chiếu điểm 2026 với thông báo chính thức và kiểm nốt điểm số nguyên. Một đến ba tháng: thử với học sinh và thầy cô thật, tìm tình nguyện viên ở vài trường. Mùa 2027: nhập điểm chuẩn mới qua CMS có duyệt và so dự báo với điểm thật. Sau đó dựng hạ tầng thật cho CMS và đồng bộ nhiều máy nếu em muốn.</aside>
 </section>
 
 <!-- 14 KẾT · 0:20 -->
 <section class="slide navy glow" id="s14" style="background: linear-gradient(150deg, #0B1330 0%, #162A6E 60%, #2554D9 130%)">
   <div class="txt">
     <div data-r style="--i:0" class="logo"><svg><use href="#i-logo"/></svg>Nguyện Vọng AI</div>
-    <h2 data-r style="--i:1">Không thay học sinh quyết định. <span class="grad-text">Giúp em đưa ra lựa chọn có căn cứ.</span></h2>
-    <div data-r style="--i:2" class="three"><span class="chip ghost">Dữ liệu có nguồn gốc</span><span class="chip ghost">AI có rào chắn kiểm soát</span><span class="chip ghost">Cộng đồng cùng hoàn thiện</span></div>
+    <h2 data-r style="--i:1">Không thay học sinh quyết định. <span class="grad-text">Giúp em chọn có căn cứ.</span></h2>
+    <div data-r style="--i:2" class="three"><span class="chip ghost">Dữ liệu có nguồn</span><span class="chip ghost">AI có rào chắn</span><span class="chip ghost">Nói thẳng giới hạn</span></div>
     <div data-r style="--i:3" class="meta"><span>RTC Team</span><i></i><span>MLAI Hackathon 2026</span><i></i><span>nguyenvongai.pages.dev</span></div>
   </div>
-  <div class="phones"><div class="phone" data-r style="--i:4;--w:410px;left:110px;top:100px"><img src="assets/hom-nay.png" alt="Màn Hôm nay"></div></div>
-  <aside class="nt" hidden data-t="20">Nguyện Vọng AI không thay học sinh quyết định. Chúng em giúp các em đưa ra quyết định dựa trên dữ liệu có nguồn, thuật toán giải thích được, và sự chung tay hoàn thiện của cộng đồng. Xin trân trọng cảm ơn Ban giám khảo và quý thầy cô.</aside>
+  <div class="phones"><div class="phone" data-r style="--i:4;--w:410px;left:110px;top:100px"><img src="assets/hom-nay.webp" alt="Màn Hôm nay"></div></div>
+  <aside class="nt" hidden data-t="20">Nguyện Vọng AI không thay học sinh quyết định. Nhóm giúp các em chọn có căn cứ: dữ liệu có nguồn, AI có rào chắn, và nói thẳng giới hạn. Xin cảm ơn Ban giám khảo, nhóm sẵn sàng trả lời câu hỏi.</aside>
 </section>
 
 <div id="bar"></div>
