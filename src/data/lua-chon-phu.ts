@@ -7,11 +7,12 @@ export const CHUA_CO_HOC_PHI = "Chưa có dữ liệu học phí";
 export const coHocPhi = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi"> & { hocPhiUocTinh?: boolean }): boolean =>
   typeof l.hocPhiMin === "number" && typeof l.hocPhiMax === "number" && l.hocPhiUocTinh !== true && (l.nguonHocPhi === undefined || !!l.nguonHocPhi?.url);
 
-export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi"> & { hocPhiUocTinh?: boolean }): string => {
+/** "35 – 45" (triệu đồng/năm), hoặc "chưa có" khi chưa có chứng cứ sơ cấp. */
+export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi">): string => {
   if (!coHocPhi(l)) return "chưa có";
   const d = (x: number) => String(x).replace(".", ",");
   const so = l.hocPhiMin === l.hocPhiMax ? d(l.hocPhiMin!) : `${d(l.hocPhiMin!)} – ${d(l.hocPhiMax!)}`;
-  return l.hocPhiUocTinh ? `≈ ${so}` : so;
+  return so;
 };
 
 /** Tương thích dữ liệu cũ; học phí ước tính không còn được đưa vào danh mục. */

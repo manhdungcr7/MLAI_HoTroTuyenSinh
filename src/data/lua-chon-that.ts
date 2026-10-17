@@ -6,7 +6,7 @@
 import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
 import { TEN_PHUONG_THUC as TEN_PT, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
-import type { HocPhiNguon } from "./hoc-phi-kiem-chung";
+import { laHocPhiDaKiemChung, type HocPhiNguon } from "./hoc-phi-kiem-chung";
 
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
@@ -43,9 +43,12 @@ type HocPhiTep = Record<string, HocPhiNguon>;
 type ViecMoiTep = Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 let HOC_PHI: HocPhiTep = {};
 let VIEC_MOI: ViecMoiTep = {};
+type ChiTieuTep = Record<string, { chiTieu: number; nam: string; url: string; trang: number }>;
+let CHI_TIEU: ChiTieuTep = {};
 
 function chuyen(d: Dong): LuaChon {
-  const hp = HOC_PHI[d.id];
+  const hpUngVien = HOC_PHI[d.id];
+  const hp = laHocPhiDaKiemChung(hpUngVien) ? hpUngVien : undefined;
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
@@ -91,9 +94,8 @@ function chuyen(d: Dong): LuaChon {
     nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: false,
     linkNguon: d.nguon ?? undefined,
-    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam } : {}),
-    ...(hp && !hp.uocTinh && hp.url ? { nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
-    ...(hp?.uocTinh ? { hocPhiUocTinh: true } : {}),
+    ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
+    ...(CHI_TIEU[d.id] ? { chiTieu: { so: CHI_TIEU[d.id].chiTieu, nam: CHI_TIEU[d.id].nam, url: CHI_TIEU[d.id].url, trang: CHI_TIEU[d.id].trang } } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,
@@ -114,7 +116,8 @@ export const daNapLuaChon = (): boolean => LUA_CHON.length > 0;
 /** Nạp danh mục gốc một lần (gọi nhiều lần vẫn một lần tải). Lỗi mạng thì lần gọi sau thử lại. */
 export function napLuaChon(): Promise<void> {
   dangNap ??= (async () => {
-    const [raw, viec, hp] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json")]);
+    const [raw, viec, hp, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./chi-tieu.json")]);
+    CHI_TIEU = ct.default as unknown as ChiTieuTep;
     VIEC_MOI = viec.default as unknown as ViecMoiTep;
     HOC_PHI = hp.default as unknown as HocPhiTep;
     LUA_CHON.splice(0, LUA_CHON.length, ...(raw.default as unknown as Dong[]).map(chuyen));
@@ -131,23 +134,18 @@ export interface NguonTaiSau {
   nganh: Record<string, TrangNganh>; // id chương trình -> trang của ngành trên website trường
   truongNganh: Record<string, TrangNganh>; // mã trường -> trang danh sách ngành / chương trình đào tạo của trường (khi chưa có trang riêng của ngành)
 }
-let dangTaiNguon: Promise<NguonTaiSau> | null = null;
-/** Tải và hợp nhất nguồn đúng một lần trong mỗi isolate; nếu lỗi thì lần sau được thử lại. */
-export function taiNguon(): Promise<NguonTaiSau> {
-  dangTaiNguon ??= Promise.all([
+export const taiNguon = async (): Promise<NguonTaiSau> => {
+  const [nam, truong, nganh, namTC, truongTC, truongNganh] = await Promise.all([
     import("./nguon-nam.json"), import("./de-an-truong.json"), import("./chuong-trinh.json"),
     import("./nguon-nam-thu-cap.json"), import("./de-an-truong-thu-cap.json"), import("./trang-nganh-truong.json"), // trường chỉ có điểm từ trang tổng hợp: đề án của trường và các điểm khớp được
-  ]).then(([nam, truong, nganh, namTC, truongTC, truongNganh]) => ({
+  ]);
+  return {
     nam: { ...(nam.default as unknown as NguonTaiSau["nam"]), ...(namTC.default as unknown as NguonTaiSau["nam"]) },
     truong: { ...(truong.default as unknown as NguonTaiSau["truong"]), ...(truongTC.default as unknown as NguonTaiSau["truong"]) },
     nganh: nganh.default as unknown as NguonTaiSau["nganh"],
     truongNganh: truongNganh.default as unknown as NguonTaiSau["truongNganh"],
-  })).catch((error) => {
-    dangTaiNguon = null;
-    throw error;
-  });
-  return dangTaiNguon;
-}
+  };
+};
 
 export const timLuaChon = (id: string): LuaChon | undefined => THEO_ID.get(id);
 
