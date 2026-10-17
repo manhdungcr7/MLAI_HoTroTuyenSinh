@@ -326,19 +326,20 @@ body {
 .dau-nen-troi { display: none; }
 /* Cực quang nhạt nhiều lớp đặt trên 420px đầu, mờ dần về nền. Bốn biến thể chỉ khác bộ màu (--nen-a..d). */
 .khung-ung-dung:has(.dau-nen-troi) {
-  --nen-a: color-mix(in srgb, var(--color-xanh) 15%, var(--color-trang));
-  --nen-b: color-mix(in srgb, var(--color-tim) 15%, var(--color-trang));
-  --nen-c: color-mix(in srgb, var(--color-ngoc) 13%, var(--color-trang));
-  --nen-d: color-mix(in srgb, var(--color-san-ho) 13%, var(--color-trang));
+  --nen-a: color-mix(in srgb, var(--color-xanh) 32%, var(--color-trang));
+  --nen-b: color-mix(in srgb, var(--color-tim) 32%, var(--color-trang));
+  --nen-c: color-mix(in srgb, var(--color-ngoc) 27%, var(--color-trang));
+  --nen-d: color-mix(in srgb, var(--color-san-ho) 27%, var(--color-trang));
   position: relative;
   isolation: isolate;
   background-color: var(--color-nen);
   background-image:
-    radial-gradient(ellipse 75% 62% at 0% 0%, color-mix(in srgb, var(--nen-a) 95%, transparent) 0%, transparent 100%),
-    radial-gradient(ellipse 62% 58% at 100% 0%, color-mix(in srgb, var(--nen-b) 90%, transparent) 0%, transparent 100%),
-    radial-gradient(ellipse 85% 48% at 25% 42%, color-mix(in srgb, var(--nen-c) 75%, transparent) 0%, transparent 100%),
-    radial-gradient(ellipse 60% 44% at 100% 38%, color-mix(in srgb, var(--nen-d) 70%, transparent) 0%, transparent 100%);
-  background-size: 100% 420px;
+    linear-gradient(180deg, color-mix(in srgb, var(--nen-a) 55%, transparent) 0%, transparent 100%),
+    radial-gradient(ellipse 75% 62% at 0% 0%, color-mix(in srgb, var(--nen-a) 100%, transparent) 0%, transparent 100%),
+    radial-gradient(ellipse 62% 58% at 100% 0%, color-mix(in srgb, var(--nen-b) 100%, transparent) 0%, transparent 100%),
+    radial-gradient(ellipse 85% 48% at 25% 42%, color-mix(in srgb, var(--nen-c) 95%, transparent) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 44% at 100% 38%, color-mix(in srgb, var(--nen-d) 95%, transparent) 0%, transparent 100%);
+  background-size: 100% 560px;
   background-repeat: no-repeat;
   background-position: top left;
 }
@@ -347,7 +348,7 @@ body {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
-  height: 420px;
+  height: 560px;
   z-index: -1;
   pointer-events: none;
   background-image:
@@ -357,9 +358,9 @@ body {
   -webkit-mask-image: linear-gradient(#000, transparent);
   mask-image: linear-gradient(#000, transparent);
 }
-.khung-ung-dung:has(.nen-trang-troi-am) { --nen-a: color-mix(in srgb, var(--color-cam) 16%, var(--color-trang)); --nen-b: color-mix(in srgb, var(--color-san-ho) 14%, var(--color-trang)); --nen-c: color-mix(in srgb, var(--color-da-quang) 42%, var(--color-trang)); --nen-d: color-mix(in srgb, var(--color-cam) 14%, var(--color-trang)); }
-.khung-ung-dung:has(.nen-trang-troi-luc) { --nen-a: color-mix(in srgb, var(--color-luc) 15%, var(--color-trang)); --nen-b: color-mix(in srgb, var(--color-ngoc) 13%, var(--color-trang)); --nen-c: color-mix(in srgb, var(--color-ngoc) 13%, var(--color-trang)); --nen-d: color-mix(in srgb, var(--color-xanh) 12%, var(--color-trang)); }
-.khung-ung-dung:has(.nen-trang-troi-tim) { --nen-a: color-mix(in srgb, var(--color-tim) 15%, var(--color-trang)); --nen-b: color-mix(in srgb, var(--color-xanh) 13%, var(--color-trang)); --nen-c: color-mix(in srgb, var(--color-tim) 11%, var(--color-trang)); --nen-d: color-mix(in srgb, var(--color-san-ho) 11%, var(--color-trang)); }
+.khung-ung-dung:has(.nen-trang-troi-am) { --nen-a: color-mix(in srgb, var(--color-cam) 34%, var(--color-trang)); --nen-b: color-mix(in srgb, var(--color-san-ho) 29%, var(--color-trang)); --nen-c: color-mix(in srgb, var(--color-da-quang) 48%, var(--color-trang)); --nen-d: color-mix(in srgb, var(--color-cam) 29%, var(--color-trang)); }
+.khung-ung-dung:has(.nen-trang-troi-luc) { --nen-a: color-mix(in srgb, var(--color-luc) 32%, var(--color-trang)); --nen-b: color-mix(in srgb, var(--color-ngoc) 27%, var(--color-trang)); --nen-c: color-mix(in srgb, var(--color-ngoc) 27%, var(--color-trang)); --nen-d: color-mix(in srgb, var(--color-xanh) 25%, var(--color-trang)); }
+.khung-ung-dung:has(.nen-trang-troi-tim) { --nen-a: color-mix(in srgb, var(--color-tim) 32%, var(--color-trang)); --nen-b: color-mix(in srgb, var(--color-xanh) 27%, var(--color-trang)); --nen-c: color-mix(in srgb, var(--color-tim) 23%, var(--color-trang)); --nen-d: color-mix(in srgb, var(--color-san-ho) 23%, var(--color-trang)); }
 .the-mem { background-color: var(--color-trang); border-radius: .5rem; border: 1px solid color-mix(in srgb, var(--color-vien) 55%, transparent); box-shadow: 0 1px 2px rgba(19, 28, 63, .06); }
 .o-mem { background-color: var(--color-trang); box-shadow: 0 1px 2px rgba(19, 28, 63, .06); }
 .nav-noi { border-radius: .625rem .625rem 0 0; box-shadow: 0 -1px 2px rgba(19, 28, 63, .06); border-top: 0; }
