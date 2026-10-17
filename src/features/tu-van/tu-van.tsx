@@ -109,13 +109,18 @@ export default function TuVan() {
     };
 
     // Chạy ở mức module: rời màn giữa chừng vẫn nhận và ghi được câu trả lời.
-    await guiNen(
-      localStorage,
-      cau,
-      truoc,
-      (chunkCb) => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage), onChunk: chunkCb, signal: ac.signal }),
-      onChunk
-    );
+    try {
+      await guiNen(
+        localStorage,
+        cau,
+        truoc,
+        (chunkCb) => layTinTraLoi({ cau, truoc, s, nguon, dungHoSo, manHinh, phien: phienHienTai(localStorage), onChunk: chunkCb, signal: ac.signal }),
+        onChunk
+      );
+    } finally {
+      setDang(false);
+      dangRef.current = false;
+    }
   };
 
   const goiY = goiYBanDau({ soNguyenVong: s.nguyenVong.length, nganhQuanTam: s.hoSo.nganhQuanTam });
@@ -201,7 +206,7 @@ export default function TuVan() {
               <div className="flex items-center gap-2 rounded-2xl border border-vien bg-trang px-3.5 py-1 text-[13px] text-chu-phu">
                 <span className="inline-flex gap-1 align-middle" aria-hidden><span className="size-1.5 animate-pulse rounded-full bg-xanh" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:200ms]" /><span className="size-1.5 animate-pulse rounded-full bg-xanh [animation-delay:400ms]" /></span>
                 <span>{lau ? "AI trả lời hơi lâu, đợi thêm hoặc dừng" : "Đang chuẩn bị câu trả lời..."}</span>
-                <button type="button" onClick={() => huyRef.current?.abort()} className="min-h-11 px-2 text-[13px] font-bold text-xanh cursor-pointer">Dừng</button>
+                <button type="button" onClick={() => { huyRef.current?.abort(); setDang(false); dangRef.current = false; }} className="min-h-11 px-2 text-[13px] font-bold text-xanh cursor-pointer">Dừng</button>
               </div>
             </div>
           )}

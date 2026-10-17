@@ -36,7 +36,14 @@ export async function guiNen(
   treo = null;
   if (!tin) return;
   const h = docLichSu(kho), cuoi = h[h.length - 1];
-  if (cuoi?.vai !== "em" || cuoi.chu !== cau) return; // lịch sử đã đổi (xóa, hỏi lại): bỏ đáp, không ghi trùng
-  ghiLichSu(kho, [...h, tin]);
+  if (cuoi?.vai === "em" && cuoi.chu === cau) {
+    ghiLichSu(kho, [...h, tin]);
+  } else if (cuoi?.vai === "mayChu" && h[h.length - 2]?.vai === "em" && h[h.length - 2]?.chu === cau) {
+    // onChunk đã ghi bản stream tạm vào kho: thay bằng tin đầy đủ cuối cùng
+    ghiLichSu(kho, [...h.slice(0, -1), tin]);
+  } else {
+    // lịch sử đã đổi (xóa, hỏi lại, đoạn chat mới): bỏ đáp, không ghi trùng
+    return;
+  }
   if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent<ChiTietXong>(SU_KIEN_XONG, { detail: { cau, tin } }));
 }
