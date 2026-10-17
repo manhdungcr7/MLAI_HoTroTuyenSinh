@@ -1,5 +1,5 @@
 // Khối nhỏ do slice S8 (Hưng) sở hữu nhưng được trang Hôm nay dùng. GIỮ NGUYÊN tên export và props.
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Frown, Meh, Quote, RefreshCw, Smile, type LucideIcon } from "lucide-react";
 import { The, gop } from "@/components/ui/nut-the";
@@ -23,24 +23,22 @@ const NEN_LOI_NHAN: Record<ToneTen, string> = {
   luc: "bg-luc-nhat text-luc-chu", xanh: "bg-xanh-nhat text-chu", cam: "bg-cam-nhat text-cam-chu", tim: "bg-tim-nhat text-tim-chu", do: "bg-do-nhat text-do-chu", muc: "bg-xanh-nhat text-chu",
 };
 
-/** "Hôm nay em thấy thế nào?" Chọn "Hơi mệt" thì lịch tự học các ngày còn lại của tuần được làm nhẹ đi. */
+/** "Hôm nay em thấy thế nào?" Đổi tâm trạng chỉ lưu tâm trạng; lịch tuần chỉ được xếp lại khi em bấm xác nhận (không tự sửa lịch). */
 export function TamTrangHomNay() {
   const { s, datTamTrang, xepLai } = useApp();
   const nav = useNavigate();
-  // Xếp lại SAU khi tâm trạng mới đã vào state: gọi ngay trong lúc bấm thì xepLai còn đọc tâm trạng cũ.
-  const canXep = useRef(false);
+  const [deXuat, setDeXuat] = useState(false);
   const [vuaDoi, setVuaDoi] = useState(false);
-  useEffect(() => {
-    if (!canXep.current) return;
-    canXep.current = false;
-    if (viecCuaTuan(s.viec, tuanHienTai()).length) { xepLai(tuanHienTai(), homNay()); setVuaDoi(true); }
-  }, [s.tamTrang, s.viec, xepLai]);
+  const coViec = viecCuaTuan(s.viec, tuanHienTai()).length > 0;
 
   const chon = (t: TamTrang) => {
     if (t === s.tamTrang) return;
-    canXep.current = true;
     datTamTrang(t);
+    setVuaDoi(false);
+    setDeXuat(coViec);
   };
+  // Xác nhận chạy khi tâm trạng mới đã nằm trong state (bấm sau, nên xepLai đọc đúng giá trị).
+  const dongY = () => { xepLai(tuanHienTai(), homNay()); setDeXuat(false); setVuaDoi(true); };
   const hienTai = CAC_TAM_TRANG.find((t) => t.gia === s.tamTrang) ?? CAC_TAM_TRANG[1];
 
   return (
@@ -61,7 +59,16 @@ export function TamTrangHomNay() {
       <p aria-live="polite" className={gop("rounded-xl px-3 py-2 text-[13px] font-semibold leading-snug", NEN_LOI_NHAN[hienTai.tone])}>
         {hienTai.loiNhan}
       </p>
-      {vuaDoi && viecCuaTuan(s.viec, tuanHienTai()).length > 0 && (
+      {deXuat && coViec && (
+        <div role="group" aria-label="Xếp lại lịch tuần theo tâm trạng" className="rounded-xl border border-xanh/40 bg-trang p-2.5 space-y-2">
+          <p className="text-[13px] text-chu leading-snug">Bạn muốn mình xếp lại lịch tự học các ngày còn lại của tuần theo tâm trạng này không? Lịch hiện tại giữ nguyên cho tới khi bạn đồng ý.</p>
+          <div className="grid grid-cols-2 gap-2">
+            <button type="button" onClick={() => setDeXuat(false)} className="min-h-11 rounded-xl border border-vien text-[13px] font-bold text-chu active:bg-xanh-nhat">Giữ nguyên</button>
+            <button type="button" onClick={dongY} className="min-h-11 rounded-xl border border-xanh bg-xanh text-[13px] font-bold text-white">Xếp lại lịch</button>
+          </div>
+        </div>
+      )}
+      {vuaDoi && coViec && (
         <button type="button" onClick={() => nav(DUONG_DAN.tuan("lich"))} className="w-full min-h-11 rounded-xl border border-xanh/40 text-[14px] font-bold text-xanh active:bg-xanh-nhat">
           Lịch tuần đã xếp lại · Xem lịch
         </button>
