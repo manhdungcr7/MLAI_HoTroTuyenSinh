@@ -252,6 +252,7 @@ console.log("=== BẮT ĐẦU KIỂM THỬ HÀNH TRÌNH ĐẦU-CUỐI (E2E JOURN
   const chuyenDeCanOn = NOI_DUNG_ON.tiengAnh[2]; // "Luyện ngữ pháp và từ vựng theo chủ đề"
   state = chuanHoa({
     ...state,
+    trangThaiViec: {}, // hồ sơ mẫu đã đánh dấu vài việc xong: bài này kiểm cách sinh việc theo chuyên đề, không phụ thuộc tiến độ mẫu
     hoSo: {
       ...state.hoSo,
       tienDoKienThuc: {

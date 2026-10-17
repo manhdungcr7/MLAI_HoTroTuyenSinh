@@ -8,7 +8,7 @@ import { xuLy as dangXuat } from "../cms/functions/api/dang-xuat";
 import { xuLy as doiMk } from "../cms/functions/api/doi-mat-khau";
 import { xuLy as nguoi } from "../cms/functions/api/nguoi";
 import { xuLy as toi } from "../cms/functions/api/toi";
-import { bamMatKhau, sinhMatKhauTam, xacMinhMatKhau } from "../cms/functions/_thu-vien/mat-khau";
+import { bamMatKhau, canNangCapBam, maHoaB64Url, sinhMatKhauTam, xacMinhMatKhau } from "../cms/functions/_thu-vien/mat-khau";
 import { docThamSo, sqlTaoSa } from "../scripts/tao-sa";
 import type { BoiCanh, Env, KhoD1, KhoD1Cau } from "../cms/functions/_thu-vien/kieu";
 
@@ -61,11 +61,17 @@ const MK_SA = "Mat-khau-sa-1";
 // 0. Hàm thuần và script
 {
   const h = await bamMatKhau("abcdefgh");
-  assert.match(h, /^sha256\$[\w-]+\$[\w-]+$/);
+  assert.match(h, /^pbkdf2_sha256\$100000\$[\w-]+\$[\w-]+$/, "ghi mới bằng PBKDF2");
   assert.notEqual(h, await bamMatKhau("abcdefgh"), "muối ngẫu nhiên");
   assert.ok(await xacMinhMatKhau("abcdefgh", h));
   assert.ok(!(await xacMinhMatKhau("abcdefgH", h)));
   assert.ok(!(await xacMinhMatKhau("abcdefgh", "rac")) && !(await xacMinhMatKhau("x", null)));
+  // Định dạng cũ (SHA-256 một vòng có muối) vẫn xác minh được
+  const muoiCu = crypto.getRandomValues(new Uint8Array(16));
+  const gocCu = new Uint8Array([...muoiCu, ...new TextEncoder().encode("abcdefgh")]);
+  const cu = `sha256$${maHoaB64Url(muoiCu)}$${maHoaB64Url(new Uint8Array(await crypto.subtle.digest("SHA-256", gocCu)))}`;
+  assert.ok(await xacMinhMatKhau("abcdefgh", cu) && !(await xacMinhMatKhau("abcdefgH", cu)), "bản băm cũ vẫn dùng được");
+  assert.ok(canNangCapBam(cu) && !canNangCapBam(h), "chỉ bản cũ cần nâng cấp");
   const t = sinhMatKhauTam();
   assert.match(t, /^[A-Za-z2-9]{14}$/);
   assert.notEqual(t, sinhMatKhauTam());
@@ -210,6 +216,20 @@ const datLai = (ai: string, email: string) => goi(nguoi, "PATCH", `/api/nguoi?em
   assert.equal((await goi(dangXuat, "POST", "/api/dang-xuat", { origin: "https://ke-xau.test" })).status, 403);
   gio += 12 * 3600 * 1000;
   assert.equal((await goi(toi, "GET", "/api/toi", { cookie: moi })).status, 401, "quá 12 giờ");
+}
+
+// 9b. Tài khoản cũ (SHA-256 một vòng): đăng nhập đúng được và tự nâng cấp lên PBKDF2; sai mật khẩu thì không đổi
+{
+  const CU = "cu@test.local", MK_CU = "Mat-khau-cu-12";
+  const muoi = crypto.getRandomValues(new Uint8Array(16));
+  const bamCu = `sha256$${maHoaB64Url(muoi)}$${maHoaB64Url(new Uint8Array(await crypto.subtle.digest("SHA-256", new Uint8Array([...muoi, ...new TextEncoder().encode(MK_CU)]))))}`;
+  db.prepare("INSERT INTO quan_tri (email, vai_tro, tao_luc, mat_khau, phai_doi_mat_khau, mat_khau_luc) VALUES (?, 'qtv', ?, ?, 0, ?)").run(CU, new Date(gio).toISOString(), bamCu, new Date(gio).toISOString());
+  const doc = () => (db.prepare("SELECT mat_khau FROM quan_tri WHERE email = ?").get(CU) as { mat_khau: string }).mat_khau;
+  assert.equal((await vao(CU, "sai-mat-khau-cu", "9.9.9.9")).status, 401);
+  assert.equal(doc(), bamCu, "sai mật khẩu không đổi bản băm");
+  assert.equal((await vao(CU, MK_CU, "9.9.9.9")).status, 200, "định dạng cũ vẫn đăng nhập được");
+  assert.match(doc(), /^pbkdf2_sha256\$100000\$/, "tự nâng cấp lên PBKDF2");
+  assert.equal((await vao(CU, MK_CU, "9.9.9.9")).status, 200, "đăng nhập lại bằng bản băm mới");
 }
 
 // 10. Mật khẩu không lộ: không ở nhật ký, bảng chỉ có băm, phản hồi không lặp lại mật khẩu người dùng đặt

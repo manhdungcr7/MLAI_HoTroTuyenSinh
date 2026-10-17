@@ -174,7 +174,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
 
     // Lớp 2: đúng ngành ở trường khác, đi từ Vừa sức xuống An toàn.
     choTang("cung-nganh", () => {
-      const giuNganh = `Giữ đúng ngành ${neo.lc.nganh} bạn thích, thêm một phương án cho Nguyện Vọng 1`;
+      const giuNganh = `Giữ đúng ngành ${neo.lc.nganh} bạn thích, thêm phương án dự phòng cho Nguyện Vọng 1`;
       for (const nhan of ["Vừa sức", "An toàn"] as const) {
         if (chon.length >= choToiDaChon) break;
         const x = ungVien
@@ -216,7 +216,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
   let chotChan: DongGoiY | null = null;
   if (neo) {
     const duAnToan = (x: { tong: number; lc: LuaChon }) => x.tong - x.lc.diemMin >= DU_AN_TOAN_TOI_THIEU;
-    const lyDoChot = (x: { tong: number; lc: LuaChon }) => `Chốt chặn an toàn: dư ${dinhDang(lamTron1(x.tong - x.lc.diemMin), 1)} điểm so với điểm chuẩn, để bạn chắc chắn có chỗ học`;
+    const lyDoChot = (x: { tong: number; lc: LuaChon }) => `Chốt chặn an toàn: dư ${dinhDang(lamTron1(x.tong - x.lc.diemMin), 1)} điểm so với điểm chuẩn, để bạn có một phương án dự phòng`;
     const ungChot = ungVien
       .filter((x) => (x.nhan === "An toàn" || x.nhan === "Dự phòng") && duAnToan(x) && !daLay.has(x.lc.id) && !trungNganh(x.lc) && (soTruong.get(khoaTruong(x.lc)) ?? 0) < TOI_DA_MOT_TRUONG)
       .sort((a, b) => Number(chenhCua(a) > CHOT_CHAN_DU_TOI_DA) - Number(chenhCua(b) > CHOT_CHAN_DU_TOI_DA) || gan(a.lc) - gan(b.lc) || kv(a.lc) - kv(b.lc) || nhieuNam(a.lc) - nhieuNam(b.lc) || Math.abs(chenhCua(a) - 2) - Math.abs(chenhCua(b) - 2))[0];

@@ -28,7 +28,8 @@ export function nguCanhVoiNV1(manHinh: string, truoc: TinNhan[], s: AppState): s
 
 /** Máy chủ có ngân sách tối đa 12 giây cho một lượt; cộng thời gian mạng, nên chờ 25 giây rồi mới tự trả lời từ số liệu có sẵn. */
 const CHO_TOI_DA_MS = 25_000;
-export type LoiAI = "chua-cau-hinh" | "mang" | "het-luot";
+/** het-luot: hết lượt của chính em; het-luot-chung: hết lượt chung trong ngày (IP hoặc toàn hệ thống); so-lieu: số AI nêu không khớp dữ liệu (422). */
+export type LoiAI = "chua-cau-hinh" | "mang" | "het-luot" | "het-luot-chung" | "so-lieu";
 
 const laLuot = (x: unknown): x is Luot => !!x && typeof x === "object" && Number.isInteger((x as Luot).con) && Number.isInteger((x as Luot).toiDa) && (x as Luot).toiDa > 0 && (x as Luot).con >= 0;
 
@@ -111,6 +112,8 @@ export async function hoiAI(
         phien.ghiLuot?.({ con: 0, toiDa: laLuot(d.luot) ? d.luot.toiDa : phien.luot?.toiDa ?? 50 });
         return { kq: null, loi: "het-luot" };
       }
+      if (r.status === 429 && typeof d.loi === "string" && d.loi.startsWith("het-luot")) return { kq: null, loi: "het-luot-chung" };
+      if (r.status === 422) return { kq: null, viecTiep: typeof d.goiY?.viecTiep === "string" ? d.goiY.viecTiep : undefined, loi: "so-lieu" };
       return { kq: null, viecTiep: typeof d.goiY?.viecTiep === "string" ? d.goiY.viecTiep : undefined, loi: r.status === 503 ? "chua-cau-hinh" : "mang" };
     }
     const ds = (x: unknown) => (Array.isArray(x) ? x.filter((t): t is string => typeof t === "string") : []);
@@ -286,6 +289,11 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
       return { vai: "mayChu", chu: tb, nguon: [], cheDo: "tuDong", idDuLieu, ghiChu };
     }
     onChunk?.(td.traLoi);
+    return tinTuDong(td, idDuLieu, { ghiChu });
+  }
+  if (loi === "het-luot-chung" || loi === "so-lieu") {
+    const ghiChu = loi === "so-lieu" ? "Số liệu AI nêu chưa khớp dữ liệu, mình dùng câu trả lời từ dữ liệu có sẵn" : "Hôm nay đã hết lượt hỏi AI, câu trả lời dưới đây lấy từ dữ liệu có sẵn";
+    if (td.khongHieu) return { vai: "mayChu", chu: `${ghiChu}, nhưng câu này mình chưa hiểu. Bạn ${cauDoc}.`, nguon: [], cheDo: "tuDong", idDuLieu, ghiChu };
     return tinTuDong(td, idDuLieu, { ghiChu });
   }
   // Không hiểu câu mà AI cũng không phản hồi: nói đúng nguyên nhân thay vì hiện "chưa hiểu" như thể lỗi ở người dùng.
