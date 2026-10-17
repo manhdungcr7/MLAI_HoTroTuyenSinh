@@ -77,7 +77,7 @@ assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { OPENAI_API_KEY: "k
 
 // 4) Tìm ngành trong dữ liệu thật
 const khop = timNganhKhop("điểm chuẩn Khoa học máy tính UIT");
-assert.ok(khop.length > 0 && khop.some((x) => /khoa học máy tính/i.test(x.nganh) && x.truong === "QSC"), "phải tìm ra Khoa học máy tính của UIT (QSC)");
+assert.ok(khop.length > 0 && khop.some((x) => /khoa học máy tính/i.test(x.nganh) && (x.maTruong === "QSC" || x.truong === "QSC")), "phải tìm ra Khoa học máy tính của UIT (QSC)");
 assert.deepEqual(timNganhKhop("em muốn hỏi"), [], "câu không có tên ngành thì không khớp bừa");
 assert.ok(timNganhKhop("y khoa").every((x) => /y khoa|khoa y|y hoc/i.test(x.nganh) || true));
 

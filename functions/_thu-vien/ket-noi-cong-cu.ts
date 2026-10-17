@@ -108,6 +108,7 @@ export const CONG_CU: CongCu[] = [
       ok: true,
       data: {
         capNhat: cc.ban.capNhat,
+        snapshotUpdatedAt: cc.ban.capNhat,
         suKien: cc.ban.keHoachTuan.map((e) => ({ ...e, linkGoogleCalendar: linkGoogleCalendar(e), ...(cc.ma ? { icsUrl: `${cc.origin}/api/gpt/${cc.ma}/lich.ics` } : {}) })),
       },
     }),

@@ -37,6 +37,8 @@ scripts/chuong-trinh-bao-cao.sm.*.json
 .agent-runtime/
 screenshots-zalo/
 docs/screenshots/
+evidence/
+slides/screenshots/
 scratch/
 
 .codex/
