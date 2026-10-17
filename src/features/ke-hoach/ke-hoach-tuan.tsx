@@ -1,7 +1,7 @@
 // Màn 17 · Kế hoạch tuần: "Việc cần làm | Lịch" trên cùng một màn, kèm nút "Xếp lịch giúp em".
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { History, Settings, Sparkles, WandSparkles } from "lucide-react";
+import { BookOpen, History, Settings, Sparkles, WandSparkles } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { ThanhTabKeHoach } from "@/features/ke-hoach/thanh-tab";
 import { DaiNgay, TieuDeTuan } from "@/components/ui/dai-ngay";
@@ -10,7 +10,8 @@ import { DongThongBao } from "@/components/ui/thong-bao";
 import { Nut } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
 import { bayNgayCuaTuan, thuHaiCuaTuan } from "@/engine/xep-lich";
-import { homNay, tuanHienTai, viecCuaTuan } from "@/state/chon";
+import { homNay, mucTieuDayDu, tuanHienTai, viecCuaTuan } from "@/state/chon";
+import { chuDeCuaMon } from "@/data/chuong-trinh-lop12";
 import { useApp } from "@/state/store";
 import { CheDoLich } from "./che-do-lich";
 import { CheDoViec } from "./che-do-viec";
@@ -107,6 +108,11 @@ export default function KeHoachTuan() {
     return ra;
   }, [s.khoiHoc, ngays]);
 
+  // Lối vào "hỏi tiến độ học": đếm chủ đề lớp 12 em đã cho biết ở các môn của tổ hợp mục tiêu.
+  const monTienDo = mucTieuDayDu(s)?.toHop ?? ["toan", "vatLy", "hoaHoc"];
+  const tongChuDe = monTienDo.reduce((n, m) => n + chuDeCuaMon(m).length, 0);
+  const daTraLoi = monTienDo.reduce((n, m) => n + chuDeCuaMon(m).filter((c) => s.hoSo.tienDoKienThuc?.[c.ten]).length, 0);
+
   const conViec = viecCuaTuan(s.viec, tuan).filter((v) => !daKetThuc(s.trangThaiViec[v.id])).length;
   const nenGoiYXep = !quaKhu && soBuoiTuHoc(s.khoiHoc, ngays) === 0 && s.coDinh.length > 0 && conViec > 0;
 
@@ -124,6 +130,12 @@ export default function KeHoachTuan() {
         <DaiNgay cacNgay={ngays} chon={ngayChon} onChon={setNgay} soViec={soTuHocTheoNgay} />
         <ThanhChuyen cacMuc={CAC_CHE_DO} giaTri={cheDo} onChange={(v) => setParams(v === "lich" ? { xem: "lich" } : v === "chienLuoc" ? { xem: "chienLuoc" } : {}, { replace: true })} />
 
+        {!quaKhu && (
+          <DongThongBao tone="xanh" icon={BookOpen} tieuDe="Cho mình biết em đã học đến đâu"
+            moTa={daTraLoi > 0 ? `Em đã cho biết ${daTraLoi}/${tongChuDe} chủ đề lớp 12 của tổ hợp. Cập nhật để mình xếp việc đúng chỗ em còn yếu.` : "Mình sẽ hỏi từng môn theo chương trình lớp 12, rồi xếp việc đúng chỗ em chưa vững."}
+            hanhDong={daTraLoi > 0 ? "Cập nhật tiến độ" : "Bắt đầu"}
+            onClick={() => nav(DUONG_DAN.tuVan(), { state: { cauHoiTuDong: "Hỏi tiến độ học các môn của mình", guiNgay: Date.now() } })} />
+        )}
         {cheDo === "chienLuoc" ? (
           <CheDoChienLuoc hienThongBao={hienThongBao} />
         ) : (

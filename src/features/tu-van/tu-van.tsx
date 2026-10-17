@@ -117,9 +117,12 @@ export default function TuVan() {
   const viTriCuoi = tin.length - 1;
 
   useEffect(() => {
-    const st = location.state as { cauHoiTuDong?: string } | null;
-    if (st?.cauHoiTuDong && !dangRef.current && tin.length === 0) {
-      gui(st.cauHoiTuDong);
+    const st = location.state as { cauHoiTuDong?: string; guiNgay?: number } | null;
+    // guiNgay là mã duy nhất của lần bấm: gửi cả khi chat đã có tin, nhưng tải lại trang (cùng mã) thì không gửi lại.
+    const daGui = (() => { try { return sessionStorage.getItem("nvai:da-gui-tu-dong") === String(st?.guiNgay); } catch { return false; } })();
+    if (st?.cauHoiTuDong && !dangRef.current && (tin.length === 0 || (st.guiNgay && !daGui))) {
+      if (st.guiNgay) { try { sessionStorage.setItem("nvai:da-gui-tu-dong", String(st.guiNgay)); } catch { /* bỏ qua */ } }
+      if (!daGui || tin.length === 0) gui(st.cauHoiTuDong);
     }
   }, []);
 
