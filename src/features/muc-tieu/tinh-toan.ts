@@ -260,3 +260,91 @@ export function tongPhanBu(ds: { thieu: number }[], conThieu: number) {
 
 /** "Toán – Vật lý – Tiếng Anh" */
 export const tenToHop = (toHop: MonId[]) => toHop.map((m) => TEN_MON[m]).join(" – ");
+
+// ---------- Chiến lược bù điểm linh hoạt & Quy đổi thực tế ----------
+
+export type ChienLuocBuDiem = "duDia" | "canBang" | "soTruong";
+
+export const TEN_CHIEN_LUOC: Record<ChienLuocBuDiem, string> = {
+  duDia: "Dư địa lớn",
+  canBang: "Chia đều",
+  soTruong: "Môn sở trường",
+};
+
+export const MO_TA_CHIEN_LUOC: Record<ChienLuocBuDiem, string> = {
+  duDia: "Ưu tiên môn điểm còn thấp và còn xa điểm 10 để kéo nhanh nhất.",
+  canBang: "Chia đều khoảng cách cho cả 3 môn để giảm áp lực dồn vào một môn.",
+  soTruong: "Tập trung phần lớn điểm cần bù vào môn em tự tin nhất để tạo bứt phá.",
+};
+
+/** Quy đổi điểm thiếu sang số câu trắc nghiệm THPT cần đúng thêm. */
+export function quyDoiSoCau(mon: MonId, diem: number): number {
+  if (!diem || diem <= 0) return 0;
+  // Toán: 50 câu (0.2đ/câu), các môn trắc nghiệm khác phần lớn 40 câu (0.25đ/câu)
+  const diemMoiCau = mon === "toan" ? 0.2 : 0.25;
+  return Math.max(1, Math.round((diem / diemMoiCau) * 10) / 10 >= 0.5 ? Math.round(diem / diemMoiCau) : 1);
+}
+
+/** Phân bổ lại phần bù điểm theo chiến lược do học sinh lựa chọn */
+export function tinhPhanBoChienLuoc(
+  dsGoc: KhoangCachMon[],
+  tongThieu: number,
+  chienLuoc: ChienLuocBuDiem,
+  monSoTruong?: MonId,
+): KhoangCachMon[] {
+  if (!dsGoc || dsGoc.length === 0 || tongThieu <= 0) return dsGoc;
+  if (chienLuoc === "duDia") return dsGoc;
+
+  const toHop = dsGoc.map((x) => x.mon);
+  const hienTai = Object.fromEntries(dsGoc.map((x) => [x.mon, x.hienTai])) as Record<MonId, number>;
+  const them = Object.fromEntries(toHop.map((m) => [m, 0])) as Record<MonId, number>;
+  let con = Math.max(0, lam1(tongThieu));
+
+  if (chienLuoc === "canBang") {
+    for (let vong = 0; vong < 5 && con > 0.01; vong++) {
+      const duocNhan = toHop.filter((m) => 10 - hienTai[m] - them[m] > 0.05);
+      if (duocNhan.length === 0) break;
+      const moiMon = con / duocNhan.length;
+      let daChia = 0;
+      for (const m of duocNhan) {
+        const chia = Math.min(moiMon, 10 - hienTai[m] - them[m]);
+        them[m] += chia;
+        daChia += chia;
+      }
+      con -= daChia;
+    }
+  } else if (chienLuoc === "soTruong") {
+    const monNhan = monSoTruong && toHop.includes(monSoTruong) ? monSoTruong : toHop[0];
+    const duDiaMonNhan = Math.max(0, 10 - hienTai[monNhan]);
+    // Môn sở trường nhận tới 55% - 60% tổng điểm thiếu nếu còn dư địa
+    const phanMonNhan = Math.min(Math.round(tongThieu * 0.55 * 10) / 10, duDiaMonNhan, tongThieu);
+    them[monNhan] = phanMonNhan;
+    con = Math.max(0, lam1(tongThieu - phanMonNhan));
+
+    const cacMonKhac = toHop.filter((m) => m !== monNhan);
+    for (let vong = 0; vong < 4 && con > 0.01; vong++) {
+      const duocNhan = cacMonKhac.filter((m) => 10 - hienTai[m] - them[m] > 0.05);
+      if (duocNhan.length === 0) break;
+      const moiMon = con / duocNhan.length;
+      let daChia = 0;
+      for (const m of duocNhan) {
+        const chia = Math.min(moiMon, 10 - hienTai[m] - them[m]);
+        them[m] += chia;
+        daChia += chia;
+      }
+      con -= daChia;
+    }
+  }
+
+  return toHop.map((m) => {
+    const thieu = lam1(them[m]);
+    return {
+      mon: m,
+      ten: TEN_MON[m],
+      hienTai: hienTai[m],
+      mucTieu: lam1(hienTai[m] + thieu),
+      thieu,
+      uuTien: thieu >= 0.6 ? "cao" : thieu >= 0.25 ? "vua" : "duyTri",
+    };
+  });
+}

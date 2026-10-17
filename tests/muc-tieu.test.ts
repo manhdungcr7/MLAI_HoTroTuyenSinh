@@ -5,7 +5,7 @@ import { khoangCachTheoMon } from "../src/engine/phan-tich";
 import type { DiemThi, MonId } from "../src/state/types";
 import {
   congSucMon, doDocXuHuong, goiYTuanNay, kiemTraDiemMucTieu, kiemTraNgayThi, loaiXuHuong, monChuaCoDiem,
-  nguonDiemHienTai, nhanDinhMucTieu, phanLoaiMon, tongPhanBu,
+  nguonDiemHienTai, nhanDinhMucTieu, phanLoaiMon, quyDoiSoCau, tinhPhanBoChienLuoc, tongPhanBu,
 } from "../src/features/muc-tieu/tinh-toan";
 
 const thi = (mon: MonId, ds: [string, number][]): DiemThi[] => ds.map(([ngay, diem]) => ({ mon, ngay, diem }));
@@ -89,5 +89,20 @@ assert.ok(g.every((x) => x.mon === "toan"), "chỉ gợi ý môn còn thiếu");
   const d = chonNguyenVongLamMucTieu(s([]), tim);
   assert.ok(!d.ok && d.lyDo.length > 0, "danh sách trống");
 }
+
+// 8) Quy đổi số câu trắc nghiệm & chiến lược bù điểm
+assert.equal(quyDoiSoCau("toan", 2.4), 12); // 2.4 / 0.2 = 12 câu
+assert.equal(quyDoiSoCau("hoaHoc", 4.1), 16); // 4.1 / 0.25 = 16.4 -> 16 câu
+assert.equal(quyDoiSoCau("vatLy", 1.6), 6); // 1.6 / 0.25 = 6.4 -> 6 câu
+assert.equal(quyDoiSoCau("toan", 0), 0);
+
+const pbCanBang = tinhPhanBoChienLuoc(kc, 3.0, "canBang");
+assert.equal(pbCanBang.length, 3);
+// Khi chia đều 3.0đ cho 3 môn còn nhiều dư địa, mỗi môn nhận ~1.0đ
+assert.ok(pbCanBang.every((x) => Math.abs(x.thieu - 1.0) < 0.2));
+
+const pbSoTruong = tinhPhanBoChienLuoc(kc, 3.0, "soTruong", "toan");
+const toanPB = pbSoTruong.find((x) => x.mon === "toan");
+assert.ok(toanPB && toanPB.thieu > 1.5, "môn sở trường nhận phần lớn điểm bù");
 
 console.log("muc-tieu: tất cả kiểm thử đều qua.");
