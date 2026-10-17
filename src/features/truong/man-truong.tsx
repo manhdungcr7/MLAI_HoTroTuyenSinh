@@ -31,10 +31,10 @@ function Dong({ d, luu }: { d: DongChuongTrinh; luu: () => void }) {
       <Link to={DUONG_DAN.chiTiet(d.id)} onClick={luu} className="block min-h-11 rounded-lg active:bg-xanh-nhat -mx-1 px-1 py-0.5">
         <span className="flex items-start justify-between gap-3">
           <span className="min-w-0 text-[13px] text-chu-phu leading-snug">{d.phuongThuc}</span>
-          <b className="shrink-0 text-[14px] text-muc tabular-nums text-right">{d.diem === null ? "Chưa có" : dinhDangDiem(d.diem)}</b>
+          <b className="shrink-0 text-[14px] text-muc tabular-nums text-right">{d.diem === null ? (d.diemSan ? "Mức sàn" : "Chưa có") : dinhDangDiem(d.diem)}</b>
         </span>
         <span className="block text-[12px] text-chu-phu leading-snug">
-          {d.diem === null ? CHUA_CO : diemGhiThang(d, () => "").replace(/^\s*\(|\)\s*$/g, "")} ·<span className={d.nguonDiem === "chinh-thuc" ? "text-luc font-semibold" : "text-cam-chu font-semibold"}>{d.nhanNguon}</span>
+          {d.diem === null ? (d.diemSan ? `Mức sàn xét tuyển ${dinhDangDiem(d.diemSan.diem)} (${d.diemSan.nam}), chưa phải điểm chuẩn` : CHUA_CO) : diemGhiThang(d, () => "").replace(/^\s*\(|\)\s*$/g, "")} ·<span className={d.nguonDiem === "chinh-thuc" ? "text-luc font-semibold" : "text-cam-chu font-semibold"}>{d.nhanNguon}</span>
         </span>
       </Link>
       <p className="text-[12px] text-chu-phu leading-snug mt-0.5">

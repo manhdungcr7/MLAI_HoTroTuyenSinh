@@ -1,4 +1,4 @@
-// Passwords use PBKDF2-HMAC-SHA256 (100,000 rounds, WebCrypto). Legacy salted SHA-256 is accepted for login migration.
+// Passwords are written with PBKDF2-HMAC-SHA256 (100,000 rounds, WebCrypto). Legacy salted SHA-256 (`sha256$salt$hash`) is still accepted and upgraded on successful login.
 export const DO_DAI_TOI_THIEU = 8;
 /** Bảng chữ cho mật khẩu tạm: bỏ ký tự dễ nhầm (0/O, 1/l/I). */
 const BANG_CHU = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -36,11 +36,17 @@ async function keoKhoa(matKhau: string, muoi: Uint8Array, soVong = SO_VONG): Pro
   return new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: muoi as BufferSource, iterations: soVong }, key, 256));
 }
 
+/** Ghi mới luôn bằng PBKDF2-SHA256: `pbkdf2_sha256$<số vòng>$<muối>$<băm>`. */
 export async function bamMatKhau(matKhau: string): Promise<string> {
   const muoi = crypto.getRandomValues(new Uint8Array(16));
-  const b = await bam(matKhau, muoi);
-  return `sha256$${maHoaB64Url(muoi)}$${maHoaB64Url(b)}`;
+  return `pbkdf2_sha256$${SO_VONG}$${maHoaB64Url(muoi)}$${maHoaB64Url(await keoKhoa(matKhau, muoi))}`;
 }
+
+/** Bản băm cũ (SHA-256 một vòng có muối) cần băm lại bằng PBKDF2 khi người dùng đăng nhập đúng. */
+export const canNangCapBam = (daLuu: string | null | undefined): boolean => (daLuu ?? "").startsWith("sha256$");
+
+/** Chuỗi băm giả (PBKDF2) để đăng nhập email không tồn tại tốn thời gian như email thật. */
+export const BAM_GIA = "pbkdf2_sha256$100000$AAAAAAAAAAAAAAAAAAAAAA$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
 /** Đúng/sai. Chuỗi lưu hỏng hoặc rỗng thì sai (không ném lỗi). */
 export async function xacMinhMatKhau(matKhau: string, daLuu: string | null | undefined): Promise<boolean> {

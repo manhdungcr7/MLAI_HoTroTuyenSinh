@@ -143,6 +143,7 @@ export interface LuaChon {
   nguonCap?: "official_pdf" | "aggregator_verified"; // đề án chính thức hay trang tổng hợp
   tiLeViecLam?: number; // phần trăm sinh viên có việc làm theo khảo sát trong đề án của trường
   nguonViecLam?: { nam: string; url: string; trang: number }; // trang đề án nêu tỷ lệ có việc làm (nếu trích được)
+  chiTieu?: { so: number; nam: string; url: string; trang: number }; // chỉ tiêu tuyển sinh của ngành theo đề án (scripts/trich-chi-tieu.py); không có thì không hiện
   nguonHocPhi?: { nam: string; url: string; trang: number }; // trang đề án nêu học phí của ngành này
   /** Học phí là ước tính theo trường/khối ngành, chưa có văn bản của trường để đối chiếu: hiện "≈ … (ước tính)", không có link nguồn. */
   hocPhiUocTinh?: boolean;
