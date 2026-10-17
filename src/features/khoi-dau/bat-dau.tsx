@@ -15,7 +15,7 @@ import Buoc3 from "./buoc-3";
 import { tinhCoHoi } from "@/features/kham-pha/co-hoi";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { ManHinhKetQua } from "./man-hinh-phan-tich";
-import { ThanhBuoc } from "./thanh-phan";
+import { ThanhBuoc, ThanhHanhDong } from "./khung-buoc";
 import { THU_TU_BAT_BUOC, docDiem, ketQuaBanDau, kiemTraBuoc1, vietDiem } from "./tinh-toan";
 
 /** Đưa con trỏ tới ô và cuộn ô đó ra giữa màn hình. */
@@ -122,14 +122,12 @@ export default function BatDau() {
         )}
       </NoiDung>
 
-      <div className="sticky bottom-0 z-20 border-t border-vien bg-nen px-4 py-2.5 vung-an-toan-duoi">
-        <div className="grid grid-cols-[1fr_1.5fr] gap-2.5">
-          {so === 1
-            ? <Nut kieu="vien" onClick={chuyenSangKhamPha}>Bỏ qua điểm</Nut>
-            : <Nut kieu="vien" onClick={() => denBuoc((so - 1) as BuocBatDau)}>Quay lại</Nut>}
-          <Nut muiTen onClick={tiepTuc}>{so === 3 ? "Phân tích cơ hội" : "Tiếp tục"}</Nut>
-        </div>
-      </div>
+      <ThanhHanhDong
+        phu={so === 1
+          ? <Nut kieu="vien" onClick={chuyenSangKhamPha}>Bỏ qua điểm</Nut>
+          : <Nut kieu="vien" onClick={() => denBuoc((so - 1) as BuocBatDau)}>Quay lại</Nut>}
+        chinh={<Nut muiTen onClick={tiepTuc}>{so === 3 ? "Phân tích cơ hội" : "Tiếp tục"}</Nut>}
+      />
     </div>
   );
 }

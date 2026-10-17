@@ -38,18 +38,18 @@ export function ChuThichLoaiDiem({ cacLoai = ["thiThu", "mucTieu", "thiThat", "h
   );
 }
 
-/** Thanh tiến độ nhỏ: "Đã có n/m môn". Không hứa hẹn, chỉ cho thấy còn thiếu gì. Tôn trọng giảm chuyển động. */
+/** Thanh tiến độ: "Đã nhập n/m" và "Hoàn thành x%" (x% chỉ là phần ô đã nhập, không phải khả năng nào cả). Tôn trọng giảm chuyển động. */
 export function TienDoDiem({ co, tong, nhan }: { co: number; tong: number; nhan: string }) {
   const pt = tong === 0 ? 0 : Math.round((co / tong) * 100);
   return (
     <div>
-      <div className="flex items-baseline justify-between text-[13px]">
-        <span className="font-semibold text-chu">{nhan}</span>
-        <span className="font-bold text-muc">{co}/{tong}</span>
+      <div className="flex items-baseline justify-between gap-2 text-[13px]">
+        <span className="font-bold text-muc">{nhan} {co}/{tong}</span>
+        <span className={gop("font-semibold", pt === 100 ? "text-luc-chu" : "text-xanh")}>Hoàn thành {pt}%</span>
       </div>
-      <div role="progressbar" aria-label={nhan} aria-valuemin={0} aria-valuemax={tong} aria-valuenow={co}
-        className="mt-1 h-2 rounded-full bg-vien overflow-hidden">
-        <div className={gop("h-full rounded-full bg-xanh transition-[width] duration-300 motion-reduce:transition-none")} style={{ width: `${pt}%` }} />
+      <div role="progressbar" aria-label={nhan} aria-valuemin={0} aria-valuemax={tong} aria-valuenow={co} aria-valuetext={`${nhan} ${co} trên ${tong} môn`}
+        className="mt-1.5 h-2 rounded-full bg-vien overflow-hidden">
+        <div className={gop("h-full rounded-full transition-[width] duration-500 motion-reduce:transition-none", pt === 100 ? "bg-luc" : "bg-xanh")} style={{ width: `${pt}%` }} />
       </div>
     </div>
   );

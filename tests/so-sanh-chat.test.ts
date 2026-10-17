@@ -92,4 +92,37 @@ assert.equal(canTimWeb("Học phí HUTECH bao nhiêu?"), false);
 assert.equal(goLienKetWeb("Học bổng 25% ([hutech.edu.vn](https://hutech.edu.vn/x)). Hết."), "Học bổng 25%. Hết.");
 assert.equal(cauNhacDiemChuan("Học bổng 25%. Điểm chuẩn 27 năm 2025. Hết."), "Điểm chuẩn 27 năm 2025.");
 
+// 11) Cải tiến so sánh nâng cao: tự phân giải trường mơ hồ theo ngữ cảnh, chuẩn hóa tiền tố ngành và ý định so sánh
+{
+  // 11.1) Phân giải ngữ cảnh Bách Khoa + Kinh tế Quốc dân (Hà Nội) -> BKA & KHA
+  const rBkNeu = traLoiTuDong("So sánh Bách khoa và Kinh tế Quốc dân", s, null, [], []);
+  assert.ok(rBkNeu.soSanh && rBkNeu.soSanh.ids.length === 2, "Bách khoa + KTQD tự nhận diện BKA và KHA");
+  assert.deepEqual(rBkNeu.the?.map((t) => t.ma).sort(), ["BKA", "KHA"].sort());
+
+  // 11.2) Tách ngành giữa hai trường có liên từ "giữa ... và": CNTT giữa UIT và HUTECH
+  const rUitHutech = traLoiTuDong("So sánh ngành CNTT giữa UIT và HUTECH", s, null, [], []);
+  assert.ok(rUitHutech.soSanh && rUitHutech.soSanh.ids.length === 2, "Nhận diện cả UIT và HUTECH khi dùng liên từ giữa ... và");
+  assert.deepEqual(rUitHutech.the?.map((t) => t.ma).sort(), ["DKC", "QSC"].sort());
+  assert.ok(rUitHutech.traLoi.includes("Công nghệ thông tin"), "khớp ngành CNTT");
+
+  // 11.3) Chuẩn hóa tiền tố ngành (FTU CT TC vs NEU)
+  const rFtuNeu = traLoiTuDong("So sánh Ngoại thương và Kinh tế Quốc dân", s, null, [], []);
+  assert.ok(rFtuNeu.soSanh && rFtuNeu.soSanh.ids.length === 2, "Khớp ngành chung giữa Ngoại thương và KTQD bất chấp tiền tố CT TC");
+  assert.deepEqual(rFtuNeu.the?.map((t) => t.ma).sort(), ["KHA", "NTH"].sort());
+
+  // 11.4) Ý định so sánh tự nhiên: "Nên chọn ... hay ...", "Phân vân giữa ... và ..."
+  const rNenChon = traLoiTuDong("Nên chọn UIT hay HUTECH?", s, null, [], []);
+  assert.ok(rNenChon.soSanh && rNenChon.soSanh.ids.length === 2, "Nên chọn A hay B tự động bật bảng so sánh");
+  assert.deepEqual(rNenChon.the?.map((t) => t.ma).sort(), ["DKC", "QSC"].sort());
+
+  const rPhanVan = traLoiTuDong("Phân vân giữa Bách Khoa và Ngoại thương", s, null, [], []);
+  assert.ok(rPhanVan.soSanh && rPhanVan.soSanh.ids.length === 2, "Phân vân giữa A và B tự động bật bảng so sánh");
+  assert.deepEqual(rPhanVan.the?.map((t) => t.ma).sort(), ["BKA", "NTH"].sort());
+
+  // 11.5) So sánh Bách Khoa Hà Nội và ĐH Công nghệ ĐHQGHN
+  const rBkaQhi = traLoiTuDong("So sánh ĐH Bách Khoa Hà Nội và ĐH Công nghệ ĐHQGHN", s, null, [], []);
+  assert.ok(rBkaQhi.soSanh && rBkaQhi.soSanh.ids.length === 2, "Nhận diện BKA và QHI");
+  assert.deepEqual(rBkaQhi.the?.map((t) => t.ma).sort(), ["BKA", "QHI"].sort());
+}
+
 console.log("so-sanh-chat: tất cả kiểm tra đều qua");
