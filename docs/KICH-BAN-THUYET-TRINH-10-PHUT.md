@@ -172,21 +172,20 @@
 
 ---
 
-### 🎬 SLIDE 09: VAI TRÒ CỦA CHATGPT VÀ CLAUDE (05:40 - 06:35)
-**Tiêu đề**: *Họ là kênh tiếp cận. Sự thật nằm ở lớp dữ liệu*  
+### 🎬 SLIDE 09: ỨNG DỤNG AI THỰC TẾ (05:40 - 06:35)
+**Tiêu đề**: *Từ ngôn ngữ tự nhiên đến hành động an toàn, không ảo giác*  
 **Thời lượng**: 55 giây | **Thời gian tích lũy**: 6:35  
 
 **Lời thoại người thuyết trình**:
-> *"Tại sao chúng em xây dựng giao thức kết nối với ChatGPT và Claude?  
-> Bởi vì học sinh đã quen dùng các nền tảng này hằng ngày. Thay vì bắt các em phải cài đặt thêm ứng dụng mới, chúng em biến Nguyện Vọng AI thành **Lớp dữ liệu nguồn sự thật (Ground-truth Data Layer)** phía sau.  
+> *"Thay vì để AI làm một chatbot chung chung dễ bịa đặt hay vẽ viễn cảnh xa xôi, chúng em ứng dụng AI thành **Trợ lý tư vấn có căn cứ** ngay trong ứng dụng, theo quy trình 3 bước khép kín:  
 > 
-> Thông qua chuẩn giao thức **Model Context Protocol (MCP)** và **OAuth 2.1 PKCE**, một học sinh có thể nói với ChatGPT:  
-> - 'Xem danh sách nguyện vọng của em, nhóm nào đang thiếu an toàn?' — Trợ lý đọc dữ liệu thật từ Nguyện Vọng AI để trả lời.  
-> - 'Thêm ngành Khoa học Máy tính vào nguyện vọng 3' — Trợ lý **chỉ tạo đề xuất chờ**, học sinh bấm 'Xác nhận' trong app thì dữ liệu mới đổi.  
+> 1. **Tự động gom ngữ cảnh có kiểm chứng**: Khi học sinh hỏi bằng ngôn ngữ tự nhiên, hệ thống không gửi câu hỏi chay cho LLM chém gió. App tự gom điểm tổ hợp của em (đã ẩn danh hoàn toàn) cùng 4–6 ngành phù hợp từ đề án gốc gửi kèm vào lời nhắc.  
+> 2. **LLM diễn giải & Rào chắn hậu kiểm**: Mô hình chỉ đóng vai trò phân tích và giải thích sự đánh đổi trong tối đa 120 từ. Máy chủ kích hoạt thuật toán hậu kiểm tự động: nếu câu trả lời chứa con số điểm chuẩn hay học phí lạ ngoài dữ liệu, lập tức chặn ngay (422) và rơi về thuật toán quy tắc.  
+> 3. **Thẻ hành động có xác nhận chủ động**: AI không chỉ trả lời bằng chữ mà sinh ra các Thẻ hành động như [Thêm nguyện vọng], [So sánh ngành]. Nguyên tắc an toàn cốt lõi: AI chỉ đề xuất, học sinh phải tự tay bấm 'Xác nhận' thì danh sách mới cập nhật.  
 > 
-> Về trạng thái kỹ thuật: Server MCP Streamable HTTP với 18 công cụ đã vượt qua 100% bài kiểm tra tích hợp nội bộ; chúng em đang chuẩn bị cho bước kết nối trực tiếp trên giao diện thương mại của Claude và ChatGPT."*
+> Nhờ đó, 100% câu trả lời đều có nguồn gốc rõ ràng, không ảo giác, và học sinh có thể bật chế độ Tiết kiệm để tra cứu hoàn toàn bằng thuật toán mà không tốn một lượt gọi AI nào."*
 
-📌 **Chỉ dẫn sân khấu**: Chỉ vào sơ đồ kiến trúc 3 khối trên slide (Học sinh → MCP Streamable → Nguyện Vọng AI → Google Calendar).
+📌 **Chỉ dẫn sân khấu**: Chỉ theo thứ tự 3 bước từ trái sang phải trên slide: Gom ngữ cảnh → LLM & Hậu kiểm → Thẻ hành động xác nhận.
 
 ---
 

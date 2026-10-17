@@ -168,7 +168,7 @@
   #s8 .guard { position: absolute; left: 96px; right: 96px; bottom: 72px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
   #s8 .guard small { font-size: 22px; font-weight: 800; color: var(--navy); margin-right: 6px; }
 
-  /* S9 ChatGPT/Claude */
+  /* S9 AI thực tế trong app */
   #s9 .arch { position: absolute; left: 96px; right: 96px; top: 290px; display: grid; grid-template-columns: 1fr 170px 1.15fr 170px 1fr; align-items: stretch; }
   #s9 .node { border-radius: 30px; padding: 34px 34px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.28); display: flex; flex-direction: column; gap: 12px; }
   #s9 .node.mid { background: #fff; color: var(--navy); border: 0; box-shadow: 0 40px 70px -24px rgba(0,0,0,.5); }
@@ -379,7 +379,7 @@
     <div class="st" data-r style="--i:2"><small>Nguồn</small><b>Đề án, trang tổng hợp, cộng đồng</b><p>Chia ba tầng tin cậy, ghi link và số trang.</p></div>
     <div class="st" data-r style="--i:3"><small>Chuẩn hóa</small><b>Một dạng, một mã trường</b><p>73 tổ hợp, 34 tỉnh sau sáp nhập, bí danh trường.</p></div>
     <div class="st" data-r style="--i:4"><small>Kho có phiên bản</small><b>Duyệt rồi mới xuất bản</b><p>Snapshot có mã băm, tự kiểm khi tải.</p></div>
-    <div class="st" data-r style="--i:5"><small>Phục vụ</small><b>App, chatbot, ChatGPT, Claude</b><p>Cùng một nguồn sự thật cho mọi kênh.</p></div>
+    <div class="st" data-r style="--i:5"><small>Phục vụ</small><b>Web App, Trợ lý AI, Tra cứu</b><p>Cùng một nguồn sự thật cho mọi giao diện.</p></div>
   </div>
   <div class="tiers">
     <div class="tier" data-r style="--i:6"><span class="chip ok">Tầng 1</span><b>Đề án tuyển sinh chính thức</b><p>Kiểm chứng được tới trang PDF của trường.</p></div>
@@ -415,23 +415,23 @@
   <aside class="nt" hidden data-t="45">Nguyên tắc: AI không quyết định sự thật. Phần cần đúng thì dùng thuật toán tất định, không tốn AI: tính điểm, nhãn, xếp lịch, cả lời chào. Phần cần ước lượng dùng thống kê có kiểm định. Mô hình ngôn ngữ chỉ ở phần diễn giải, và chỉ nhận đúng số liệu app gửi kèm. Có hậu kiểm: câu trả lời chứa số không có trong dữ liệu bị chặn, mã và nguồn bịa bị lọc. Mỗi hồ sơ có 50 lượt AI mỗi ngày, người dùng có thể chuyển sang chế độ Tiết kiệm để không dùng AI. Cách này giữ chi phí thấp và giữ AI khỏi việc bịa.</aside>
 </section>
 
-<!-- 09 CHATGPT / CLAUDE · 0:55 -->
+<!-- 09 AI THỰC TẾ TRONG APP · 0:55 -->
 <section class="slide blue glow" id="s9">
-  <div class="head2"><div data-r style="--i:0" class="eyebrow">Vai trò của ChatGPT và Claude</div><h2 data-r style="--i:1">Họ là <span class="grad-text" style="background:linear-gradient(135deg,#fff,#BFE3FF);-webkit-background-clip:text;background-clip:text">kênh tiếp cận.</span> Sự thật nằm ở lớp dữ liệu.</h2></div>
+  <div class="head2"><div data-r style="--i:0" class="eyebrow">Ứng dụng AI thực tế</div><h2 data-r style="--i:1">Từ ngôn ngữ tự nhiên đến <span class="grad-text" style="background:linear-gradient(135deg,#fff,#BFE3FF);-webkit-background-clip:text;background-clip:text">hành động an toàn,</span> không ảo giác.</h2></div>
   <div class="arch">
-    <div class="node" data-r style="--i:2"><small>Học sinh, phụ huynh</small><b>Hỏi ở nơi đã quen</b><p>ChatGPT hoặc Claude trên điện thoại, không cài thêm app.</p></div>
-    <div class="arr" data-r style="--i:3"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>MCP<br>GPT Actions</span></div></div>
-    <div class="node mid" data-r style="--i:4"><small>Nguyện Vọng AI</small><b>Nguồn sự thật và hành động</b><ul><li>Đọc hồ sơ và nguyện vọng thật</li><li>Điểm chuẩn kèm nguồn, kế hoạch tuần</li><li>Chỉ đề xuất, em bấm Xác nhận mới đổi</li></ul></div>
-    <div class="arr" data-r style="--i:5"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>Lịch<br>.ics</span></div></div>
-    <div class="node" data-r style="--i:6"><small>Đầu ra</small><b>Google Calendar</b><p>Một câu nói thành lịch ôn cả tuần, đúng giờ Việt Nam.</p></div>
+    <div class="node" data-r style="--i:2"><small>1. Tự gom ngữ cảnh</small><b>Câu hỏi &amp; Hồ sơ thật</b><p>App tự gom điểm tổ hợp (ẩn danh), trích 4–6 ngành phù hợp và đề án PDF chính thức.</p></div>
+    <div class="arr" data-r style="--i:3"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>Gửi kèm<br>Dữ liệu thật</span></div></div>
+    <div class="node mid" data-r style="--i:4"><small>2. LLM &amp; Hậu kiểm</small><b>Diễn giải &amp; Rào chắn</b><ul><li>So sánh ngành, giải thích đánh đổi</li><li>Hậu kiểm số liệu: chặn số ngoài dữ liệu</li><li>Trả lời súc tích &lt;120 từ, trích dẫn nguồn</li></ul></div>
+    <div class="arr" data-r style="--i:5"><div style="text-align:center"><svg><use href="#i-arrow"/></svg><span>Thẻ gợi ý<br>Có cấu trúc</span></div></div>
+    <div class="node" data-r style="--i:6"><small>3. Quyết định an toàn</small><b>Học sinh tự xác nhận</b><p>AI trả về thẻ hành động (Thêm/So sánh). Chỉ cập nhật khi em tự bấm Xác nhận.</p></div>
   </div>
   <div class="do">
-    <div data-r style="--i:7"><b>Đọc</b>"Xem nguyện vọng của mình, nhóm nào thiếu an toàn?" trả lời bằng số thật.</div>
-    <div data-r style="--i:8"><b>Đề xuất</b>"Thêm UIT vào nguyện vọng 3": thẻ hiện trong app, bấm Xác nhận mới đổi.</div>
-    <div data-r style="--i:9"><b>Lên lịch</b>"Xếp lịch ôn tuần này": sự kiện thật trên Google Calendar.</div>
+    <div data-r style="--i:7"><b>Tra cứu &amp; So sánh</b>"So sánh ngành CNTT của Bách Khoa và KHTN": phân tích điểm chuẩn và học phí kèm trích dẫn đề án.</div>
+    <div data-r style="--i:8"><b>Đề xuất hành động</b>"Tìm cho em ngành an toàn khối A00": AI tạo thẻ ngành gợi ý, em bấm "Thêm" mới vào danh sách.</div>
+    <div data-r style="--i:9"><b>Tiết kiệm &amp; Bảo mật</b>Chế độ Tiết kiệm không gọi AI; hồ sơ lưu tại máy học sinh, không gửi họ tên hay thông tin cá nhân.</div>
   </div>
-  <div class="strip" data-r style="--i:10"><i style="background:#fff"></i>Trạng thái: Giao thức MCP 2025-03-26 &amp; OAuth 2.1 PKCE (S256) đã chạy thật trên production (17/17 E2E pass); chưa gắn vào giao diện thương mại của Claude/ChatGPT.</div>
-  <aside class="nt" hidden data-t="50">Vì sao ChatGPT và Claude? Vì học sinh đã dùng chúng mỗi ngày. Thay vì ép học sinh cài thêm một app, chúng em để họ hỏi ở nơi quen, còn Nguyện Vọng AI làm nguồn sự thật phía sau, qua MCP và GPT Actions. Trợ lý đọc được hồ sơ và nguyện vọng thật, trả lời bằng số có nguồn. Khi muốn đổi nguyện vọng, trợ lý chỉ đề xuất, em bấm Xác nhận trong app mới đổi. Và một câu nói có thể thành lịch ôn cả tuần trên Google Calendar. Nói thật về trạng thái: giao thức MCP và OAuth 2.1 PKCE đã chạy và vượt qua 17 bài kiểm thử đầu-cuối trên máy chủ thật, nhưng chưa thử trực tiếp trên giao diện thương mại của Claude hay ChatGPT.</aside>
+  <div class="strip" data-r style="--i:10"><i style="background:#fff"></i>Trạng thái: Đã triển khai trực tiếp trên ứng dụng web; 100% phản hồi được hậu kiểm đối chiếu số liệu và yêu cầu học sinh chủ động bấm xác nhận.</div>
+  <aside class="nt" hidden data-t="50">Thay vì để AI làm chatbot chung chung dễ bịa đặt hay vẽ viễn cảnh xa xôi, chúng em ứng dụng AI thành Trợ lý tư vấn có căn cứ theo quy trình ba bước khép kín. Bước một: Khi học sinh hỏi, ứng dụng tự động gom dữ liệu thật làm ngữ cảnh — gồm điểm thi ẩn danh và tối đa 6 ngành liên quan từ đề án gốc — gửi kèm vào lời nhắc. Bước hai: Mô hình ngôn ngữ chỉ đóng vai trò diễn giải và so sánh sự đánh đổi; máy chủ có thuật toán hậu kiểm tự động chặn ngay nếu phát hiện con số điểm chuẩn hay học phí nào không có trong dữ liệu gửi kèm. Bước ba: AI không chỉ trả lời bằng chữ mà sinh ra các thẻ hành động có cấu trúc; và nguyên tắc an toàn tuyệt đối là AI chỉ đề xuất, học sinh phải tự tay bấm Xác nhận thì nguyện vọng mới được cập nhật. Ngoài ra, học sinh có thể bật chế độ Tiết kiệm để tra cứu hoàn toàn bằng thuật toán mà không tốn một lượt gọi AI nào.</aside>
 </section>
 
 <!-- 10 CỘNG ĐỒNG · 0:45 -->
@@ -458,35 +458,35 @@
     <div class="card mo" data-r style="--i:2"><div class="n">01</div><h3>Dữ liệu có nguồn, do cộng đồng giữ</h3><p>Tới trang PDF, có người duyệt, có lịch sử phiên bản. Chatbot chung không có.</p><span class="chip ghost">Vòng dữ liệu</span></div>
     <div class="card mo" data-r style="--i:3"><div class="n">02</div><h3>Logic đúng quy chế Việt Nam</h3><p>Điểm ưu tiên giảm dần, 73 tổ hợp, đúng từng ngành, tên tỉnh sau sáp nhập.</p><span class="chip ghost">Bản địa hóa</span></div>
     <div class="card mo" data-r style="--i:4"><div class="n">03</div><h3>Bộ kiểm chứng tự động</h3><p>64 bộ test tự động, kiểm định bỏ-một-năm, audit dữ liệu. Sai thì lộ ra, không lặng lẽ.</p><span class="chip ghost">Đáng tin</span></div>
-    <div class="card mo" data-r style="--i:5"><div class="n">04</div><h3>Riêng tư, mọi kênh AI</h3><p>Dữ liệu ở máy học sinh; chỉ chia sẻ khi bật. Một lớp dữ liệu phục vụ ChatGPT, Claude và app.</p><span class="chip ghost">Phân phối</span></div>
+    <div class="card mo" data-r style="--i:5"><div class="n">04</div><h3>Riêng tư &amp; an toàn dữ liệu</h3><p>Dữ liệu ở máy học sinh; chỉ chia sẻ khi bật. Không lưu thông tin định danh cá nhân.</p><span class="chip ghost">Bảo mật</span></div>
   </div></div>
   <div class="strip" data-r style="--i:6"><i></i>Nói thật: chưa có người dùng thật nên lợi thế bền vững là giả thuyết đang kiểm chứng, chưa phải số đã đo.</div>
-  <aside class="nt" hidden data-t="40">Lợi thế của chúng em không nằm ở chatbot, vì chatbot ai cũng làm được. Nó nằm ở bốn thứ. Một, dữ liệu có nguồn, có người duyệt, do cộng đồng trường giữ, nên mỗi mùa tốt hơn. Hai, logic đúng quy chế Việt Nam: điểm ưu tiên, 73 tổ hợp, tỉnh sau sáp nhập. Ba, 64 bộ kiểm chứng tự động nên sai là lộ ra. Bốn, riêng tư và phân phối: dữ liệu ở máy học sinh, một lớp dữ liệu phục vụ mọi kênh AI. Nhưng em nói thẳng: chưa có người dùng thật, nên đây là giả thuyết đang kiểm chứng.</aside>
+  <aside class="nt" hidden data-t="40">Lợi thế của chúng em không nằm ở chatbot, vì chatbot ai cũng làm được. Nó nằm ở bốn thứ. Một, dữ liệu có nguồn, có người duyệt, do cộng đồng trường giữ, nên mỗi mùa tốt hơn. Hai, logic đúng quy chế Việt Nam: điểm ưu tiên, 73 tổ hợp, tỉnh sau sáp nhập. Ba, 64 bộ kiểm chứng tự động nên sai là lộ ra. Bốn, riêng tư và an toàn: dữ liệu ở máy học sinh, chỉ chia sẻ khi bật, không thu thập thông tin định danh cá nhân. Nhưng em nói thẳng: chưa có người dùng thật, nên đây là giả thuyết đang kiểm chứng.</aside>
 </section>
 
 <!-- 12 TRẠNG THÁI · 0:50 -->
 <section class="slide light" id="s12">
   <div class="head2"><div data-r style="--i:0" class="eyebrow">Trạng thái thật</div><h2 data-r style="--i:1">Cái gì xong, cái gì đang thử, <span class="grad-text">cái gì chưa.</span></h2></div>
   <div class="wrap"><div class="g3">
-    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span><h3>Chạy được và có test</h3><ul class="lst"><li>3.648 chương trình, 118 trường, có nguồn</li><li>Nhãn nguyện vọng, điểm ưu tiên, chặn nghịch đảo</li><li>Kế hoạch tuần, xuất .ics, Google Calendar</li><li>MCP &amp; OAuth 2.1 PKCE: kiểm đầu-cuối 17/17 trên prod</li><li>Hỏi đáp có căn cứ, hạn mức 50 lượt/ngày</li><li>CMS online: đăng nhập, duyệt, xuất bản</li></ul></div>
-    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span><h3>Có mã, chưa kiểm ngoài thực tế</h3><ul class="lst"><li>Gắn trực tiếp lên UI Claude/ChatGPT thương mại</li><li>Cổng đóng góp qua AI: đã chạy, chưa có tình nguyện viên thật</li><li>Ước lượng cơ hội (%): tham khảo lịch sử, chưa hiệu chỉnh bằng dữ liệu trúng tuyển cá nhân</li><li>Trắc nghiệm hướng nghiệp: chưa kiểm định tâm lý</li></ul></div>
+    <div class="c" data-r style="--i:2"><span class="chip ok" style="align-self:flex-start">Đã hoàn thiện</span><h3>Chạy được và có test</h3><ul class="lst"><li>3.648 chương trình, 118 trường, có nguồn</li><li>Nhãn nguyện vọng, điểm ưu tiên, chặn nghịch đảo</li><li>Kế hoạch tuần, xuất .ics, Google Calendar</li><li>Trợ lý AI tư vấn có căn cứ: 100% câu trả lời có kiểm duyệt số liệu</li><li>Hạn mức 50 lượt/ngày, chế độ Tiết kiệm không tốn AI</li><li>CMS online: đăng nhập, duyệt, xuất bản</li></ul></div>
+    <div class="c t" data-r style="--i:3"><span class="chip warn" style="align-self:flex-start">Đang thử nghiệm</span><h3>Có mã, chưa kiểm ngoài thực tế</h3><ul class="lst"><li>Mở rộng giao thức MCP kết nối công cụ bên ngoài</li><li>Cổng đóng góp qua AI: đã chạy, chưa có tình nguyện viên thật</li><li>Ước lượng cơ hội (%): tham khảo lịch sử, chưa hiệu chỉnh bằng dữ liệu trúng tuyển cá nhân</li><li>Trắc nghiệm hướng nghiệp: chưa kiểm định tâm lý</li></ul></div>
     <div class="c n" data-r style="--i:4"><span class="chip" style="align-self:flex-start;background:#FDE8DC;color:#C2410C">Chưa làm, đã biết</span><h3>Giới hạn chúng em tự tìm ra</h3><ul class="lst"><li>Điểm năm 2025 là mốc tham khảo cho mùa 2026; 602 ngành đã có văn bản học phí chính thức</li><li>Tài khoản đăng nhập đồng bộ nhiều thiết bị (hiện dùng mã kết nối/file sao lưu)</li><li>Chưa đo tác động trên tập người dùng thật</li></ul></div>
   </div></div>
   <div class="strip" data-r style="--i:5"><i></i>Chúng em tự kiểm toán dữ liệu và công bố lỗi tìm thấy. Mọi số trên slide này đo được hoặc nói rõ là chưa.</div>
-  <aside class="nt" hidden data-t="45">Em xin nói thẳng trạng thái. Đã hoàn thiện và có test: dữ liệu 3.648 chương trình, nhãn nguyện vọng, kế hoạch tuần và lịch, hỏi đáp có căn cứ với hạn mức, CMS chạy online, và giao thức MCP cùng OAuth 2.1 PKCE đã kiểm đầu-cuối 17/17 trên máy chủ thật. Đang thử nghiệm: gắn trực tiếp lên UI thương mại của Claude, ChatGPT, cổng đóng góp chưa có tình nguyện viên thật, và ước lượng cơ hội trúng tuyển là tham khảo lịch sử. Chưa làm và đã biết: dữ liệu 2025 là tham khảo cho mùa 2026, học phí chính thức hiện có ở 602 chương trình, và chưa có tài khoản đồng bộ tự động đa thiết bị.</aside>
+  <aside class="nt" hidden data-t="45">Em xin nói thẳng trạng thái. Đã hoàn thiện và có test: dữ liệu 3.648 chương trình, nhãn nguyện vọng, kế hoạch tuần và lịch, trợ lý AI tư vấn có căn cứ với rào chắn kiểm duyệt số liệu, CMS chạy online. Đang thử nghiệm: mở rộng giao thức MCP cho các công cụ trợ lý ngoài, cổng đóng góp chưa có tình nguyện viên thật, và ước lượng cơ hội trúng tuyển là tham khảo lịch sử. Chưa làm và đã biết: dữ liệu 2025 là tham khảo cho mùa 2026, học phí chính thức hiện có ở 602 chương trình, và chưa có tài khoản đồng bộ tự động đa thiết bị.</aside>
 </section>
 
 <!-- 13 LỘ TRÌNH · 0:40 -->
 <section class="slide white" id="s13">
   <div class="head2"><div data-r style="--i:0" class="eyebrow">Phương hướng</div><h2 data-r style="--i:1">Từ công cụ chạy được đến <span class="grad-text">hạ tầng quyết định tuyển sinh.</span></h2></div>
   <div class="tl">
-    <div class="ms" data-r style="--i:2"><div class="dot"></div><div class="card"><small>Ngay bây giờ</small><h3>Chuẩn hóa dữ liệu 2026</h3><ul><li>Đối chiếu PDF đề án 2026 khi các trường công bố</li><li>Kết nối thử nghiệm trên Claude Desktop &amp; Custom GPT</li></ul></div></div>
+    <div class="ms" data-r style="--i:2"><div class="dot"></div><div class="card"><small>Ngay bây giờ</small><h3>Chuẩn hóa dữ liệu 2026</h3><ul><li>Đối chiếu PDF đề án 2026 khi các trường công bố</li><li>Thử nghiệm mở rộng kết nối trợ lý học tập đa kênh</li></ul></div></div>
     <div class="ms" data-r style="--i:3"><div class="dot"></div><div class="card"><small>1 đến 3 tháng</small><h3>Mở cho người dùng thật</h3><ul><li>Đồng bộ đám mây tùy chọn trên nền OAuth 2.1 sẵn có</li><li>Tuyển tình nguyện viên từ 10 trường đầu</li></ul></div></div>
     <div class="ms" data-r style="--i:4"><div class="dot"></div><div class="card"><small>Mùa tuyển sinh 2027</small><h3>Vòng lặp tự cải tiến</h3><ul><li>Nhập điểm mới qua cổng đóng góp</li><li>Hiệu chỉnh xác suất bằng kết quả thật, backtest tự chạy</li></ul></div></div>
     <div class="ms" data-r style="--i:5"><div class="dot"></div><div class="card"><small>6 đến 12 tháng</small><h3>Mở rộng</h3><ul><li>Cao đẳng, ngành nghề, du học</li><li>Đối tác trường và Sở GD&amp;ĐT, đo tác động</li></ul></div></div>
   </div>
   <div class="strip" data-r style="--i:6"><i></i>Nguyên tắc: chỉ mở rộng bước sau khi bước trước đã được kiểm chứng bằng dữ liệu và người dùng thật.</div>
-  <aside class="nt" hidden data-t="40">Phương hướng bốn bước. Ngay bây giờ: xử lý các lỗi dữ liệu audit tìm ra và thử kết nối với ChatGPT, Claude thật. Một đến ba tháng: tài khoản, OAuth, đồng bộ nhiều thiết bị và tuyển tình nguyện viên từ mười trường đầu. Mùa tuyển sinh 2027: nhập điểm mới qua cổng đóng góp, hiệu chỉnh mô hình bằng kết quả thật, backtest tự chạy lại. Sáu đến mười hai tháng: mở rộng sang cao đẳng, ngành nghề, và làm việc với trường, Sở để đo tác động thật.</aside>
+  <aside class="nt" hidden data-t="40">Phương hướng bốn bước. Ngay bây giờ: xử lý các lỗi dữ liệu audit tìm ra và hoàn thiện trải nghiệm tư vấn thực tế. Một đến ba tháng: tài khoản, OAuth, đồng bộ nhiều thiết bị và tuyển tình nguyện viên từ mười trường đầu. Mùa tuyển sinh 2027: nhập điểm mới qua cổng đóng góp, hiệu chỉnh mô hình bằng kết quả thật, backtest tự chạy lại. Sáu đến mười hai tháng: mở rộng sang cao đẳng, ngành nghề, và làm việc với trường, Sở để đo tác động thật.</aside>
 </section>
 
 <!-- 14 KẾT · 0:20 -->

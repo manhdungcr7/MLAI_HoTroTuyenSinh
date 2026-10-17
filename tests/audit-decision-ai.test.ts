@@ -67,8 +67,9 @@ console.log("=== BẮT ĐẦU KIỂM THỬ KHẮT KHE DECISION INTELLIGENCE & RE
   for (let k = 1; k <= sampleIds.length; k++) {
     const subList = sampleIds.slice(0, k);
     const diag = danhGiaDanhMucToanDien(subList, tim, diemEm, {});
-    assert.ok(diag.xacSuatDoItNhatMotNV >= prevTotalProb, `thêm NV không bao giờ giảm xác suất gộp: k=${k}, ${diag.xacSuatDoItNhatMotNV} vs ${prevTotalProb}`);
-    prevTotalProb = diag.xacSuatDoItNhatMotNV;
+    const prob = diag.xacSuatDoItNhatMotNV ?? 0;
+    assert.ok(prob >= prevTotalProb, `thêm NV không bao giờ giảm xác suất gộp: k=${k}, ${prob} vs ${prevTotalProb}`);
+    prevTotalProb = prob;
   }
 }
 

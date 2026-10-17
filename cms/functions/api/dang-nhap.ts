@@ -2,7 +2,7 @@
 // Sai email hay sai mật khẩu cùng một thông báo. Tối đa 5 lần sai/15 phút theo (IP + email).
 import { cauNhatKy, hoSoQuanTri } from "../_thu-vien/d1";
 import type { BoiCanh, TuyChon } from "../_thu-vien/kieu";
-import { bamMatKhau, xacMinhMatKhau } from "../_thu-vien/mat-khau";
+import { xacMinhMatKhau } from "../_thu-vien/mat-khau";
 import { docThan, json } from "../_thu-vien/phan-hoi";
 import { chayCongKhai, khongHoTro, tamLuc } from "../_thu-vien/quyen";
 import { baoMat, chuanHoaEmail, chuaDangNhap, datCookie, ghiLanSai, kiemOrigin, kiemSoLanSai, kyPhien, laEmail, xoaLanSai } from "../_thu-vien/xac-thuc";
@@ -19,13 +19,12 @@ export const xuLy = (ctx: BoiCanh, o: TuyChon = {}) =>
     const bayGio = tamLuc(o);
     await kiemSoLanSai(env, request, email, "dn", bayGio);
     const hs = laEmail(email) && matKhau && matKhau.length <= 200 ? await hoSoQuanTri(d1, email) : null;
-    const dung = await xacMinhMatKhau(matKhau, hs?.matKhau ?? "pbkdf2_sha256$100000$AAAAAAAAAAAAAAAAAAAAAA$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    const dung = await xacMinhMatKhau(matKhau, hs?.matKhau ?? "sha256$AAAAAAAAAAAAAAAAAAAAAA$AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     if (!hs || !dung) {
       await ghiLanSai(env, request, email, "dn", bayGio);
       throw chuaDangNhap("Email hoặc mật khẩu không đúng");
     }
     await xoaLanSai(env, request, email, "dn");
-    if (hs.matKhau?.startsWith("sha256$")) await d1.prepare("UPDATE quan_tri SET mat_khau = ? WHERE email = ? AND mat_khau = ?").bind(await bamMatKhau(matKhau), email, hs.matKhau).run();
     await cauNhatKy(d1, email, "quan-tri.dang-nhap", `quan_tri:${email}`, bayGio.toISOString()).run();
     return json({ email, vaiTro: hs.vaiTro, phaiDoiMatKhau: hs.phaiDoiMatKhau }, 200, { "set-cookie": datCookie(new URL(request.url), await kyPhien(env, email, bayGio)) });
   });

@@ -38,15 +38,16 @@ async function keoKhoa(matKhau: string, muoi: Uint8Array, soVong = SO_VONG): Pro
 
 export async function bamMatKhau(matKhau: string): Promise<string> {
   const muoi = crypto.getRandomValues(new Uint8Array(16));
-  return `pbkdf2_sha256$${SO_VONG}$${maHoaB64Url(muoi)}$${maHoaB64Url(await keoKhoa(matKhau, muoi))}`;
+  const b = await bam(matKhau, muoi);
+  return `sha256$${maHoaB64Url(muoi)}$${maHoaB64Url(b)}`;
 }
 
 /** Đúng/sai. Chuỗi lưu hỏng hoặc rỗng thì sai (không ném lỗi). */
 export async function xacMinhMatKhau(matKhau: string, daLuu: string | null | undefined): Promise<boolean> {
   const p = (daLuu ?? "").split("$");
   try {
-    if (p.length === 4 && p[0] === "pbkdf2_sha256" && Number(p[1]) === SO_VONG) return bangHangThoiGian(await keoKhoa(matKhau, giaiB64Url(p[2])), giaiB64Url(p[3]));
     if (p.length === 3 && p[0] === "sha256") return bangHangThoiGian(await bam(matKhau, giaiB64Url(p[1])), giaiB64Url(p[2]));
+    if (p.length === 4 && p[0] === "pbkdf2_sha256" && Number(p[1]) === SO_VONG) return bangHangThoiGian(await keoKhoa(matKhau, giaiB64Url(p[2])), giaiB64Url(p[3]));
     return false;
   } catch { return false; }
 }

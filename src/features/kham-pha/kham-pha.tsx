@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpDown, ChevronDown, Heart, MapPin, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpDown, Check, ChevronDown, Heart, MapPin, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { Nut, gop } from "@/components/ui/nut-the";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -34,9 +34,31 @@ export default function KhamPha() {
   const [b, sua, datLai] = useBoLoc(...boLocBanDau(s.hoSo.khuVuc[0], s.hoSo.nganhQuanTam));
   const [tuKhoa, setTuKhoa] = useState("");
   const [kieu, setKieu] = useState<KieuSapXep>("phuHop");
+  const [moSapXep, setMoSapXep] = useState(false);
+  const refSapXep = useRef<HTMLDivElement>(null);
   const [soHien, setSoHien] = useState(30);
   const [chiHienYeuThich, setChiHienYeuThich] = useState(false);
   const bc = useMemo(() => boiCanhTu(s), [s]);
+
+  useEffect(() => {
+    if (!moSapXep) return;
+    const dongKhiBamNgoai = (e: MouseEvent | TouchEvent) => {
+      if (refSapXep.current && !refSapXep.current.contains(e.target as Node)) {
+        setMoSapXep(false);
+      }
+    };
+    const dongKhiNhanEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMoSapXep(false);
+    };
+    document.addEventListener("mousedown", dongKhiBamNgoai);
+    document.addEventListener("touchstart", dongKhiBamNgoai);
+    document.addEventListener("keydown", dongKhiNhanEsc);
+    return () => {
+      document.removeEventListener("mousedown", dongKhiBamNgoai);
+      document.removeEventListener("touchstart", dongKhiBamNgoai);
+      document.removeEventListener("keydown", dongKhiNhanEsc);
+    };
+  }, [moSapXep]);
 
   const y = useMemo(() => hieuCauTim(tuKhoa, LUA_CHON_MAU), [tuKhoa]); // câu dài kiểu "ngân hàng sài gòn dưới 30 triệu" → bộ lọc + từ khóa còn lại
   const { ds, moRongToanQuoc } = useMemo(() => {
@@ -158,14 +180,53 @@ export default function KhamPha() {
 
         <div className="flex items-center justify-between gap-2 pt-1">
           <p className="text-[14px] text-chu-phu" aria-live="polite">Có <b className="text-muc">{dinhDangSo(ds.length)}</b> ngành</p>
-          <label className="relative inline-flex items-center gap-1 min-h-11 pl-2 pr-1 rounded-xl text-[13px] font-bold text-xanh active:bg-xanh-nhat">
-            <ArrowUpDown size={15} aria-hidden />
-            <span className="sr-only">Sắp xếp theo</span>
-            <select value={kieu} onChange={(e) => setKieu(e.target.value as KieuSapXep)} className="appearance-none bg-transparent min-h-11 pr-5 font-bold text-xanh focus:outline-none">
-              {CAC_KIEU_SAP_XEP.map((k) => <option key={k.gia} value={k.gia}>{k.nhan}</option>)}
-            </select>
-            <ChevronDown size={15} className="absolute right-1 pointer-events-none" aria-hidden />
-          </label>
+          <div className="relative" ref={refSapXep}>
+            <button
+              type="button"
+              onClick={() => setMoSapXep((m) => !m)}
+              aria-expanded={moSapXep}
+              aria-haspopup="listbox"
+              aria-label="Sắp xếp danh sách ngành"
+              className="min-h-10 px-3 rounded-xl border border-vien bg-trang text-[13px] font-bold text-chu inline-flex items-center gap-1.5 shrink-0 active:bg-xanh-nhat hover:border-xanh transition-colors shadow-sm cursor-pointer"
+            >
+              <ArrowUpDown size={14} className="text-xanh shrink-0" aria-hidden />
+              <span>{CAC_KIEU_SAP_XEP.find((k) => k.gia === kieu)?.nhan || "Sắp xếp"}</span>
+              <ChevronDown size={14} className={gop("text-chu-phu shrink-0 transition-transform duration-200", moSapXep && "rotate-180")} aria-hidden />
+            </button>
+
+            {moSapXep && (
+              <div
+                role="listbox"
+                aria-label="Chọn kiểu sắp xếp"
+                className="absolute right-0 top-full mt-1.5 z-30 min-w-[200px] py-1 bg-trang rounded-xl border border-vien shadow-the"
+              >
+                {CAC_KIEU_SAP_XEP.map((k) => {
+                  const chon = kieu === k.gia;
+                  return (
+                    <button
+                      key={k.gia}
+                      type="button"
+                      role="option"
+                      aria-selected={chon}
+                      onClick={() => {
+                        setKieu(k.gia);
+                        setMoSapXep(false);
+                      }}
+                      className={gop(
+                        "w-full px-3.5 py-2.5 text-left text-[13px] flex items-center justify-between transition-colors cursor-pointer",
+                        chon
+                          ? "font-bold text-xanh bg-xanh-nhat"
+                          : "font-semibold text-chu hover:bg-nen hover:text-xanh active:bg-xanh-nhat"
+                      )}
+                    >
+                      <span>{k.nhan}</span>
+                      {chon && <Check size={14} className="text-xanh shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {moRongToanQuoc && (
