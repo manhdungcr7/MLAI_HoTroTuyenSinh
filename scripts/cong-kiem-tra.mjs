@@ -1,7 +1,7 @@
 // Cổng kiểm tra trước khi commit/push. Chạy trên BẢN CHỤP đúng thứ sắp vào lịch sử, không chạy trên cả cây làm việc,
 // nên file dở của người khác (hoặc của agent khác) không làm mình đỏ, và việc dở của mình không lọt vào commit.
 //   node scripts/cong-kiem-tra.mjs commit   → bản chụp của chỉ mục (git add): tsc + kiem-tra + test của phần vừa đổi (nhanh)
-//   node scripts/cong-kiem-tra.mjs push     → bản chụp của HEAD: tsc + kiem-tra + build + MỌI test, so với tests/baseline-do.json
+//   node scripts/cong-kiem-tra.mjs push     → bản chụp của HEAD: tsc + kiem-tra + build (nhẹ); thêm --day-du để chạy MỌI test, so với tests/baseline-do.json
 // Nhánh wip/* được bỏ qua (chỉ để lưu việc dở, không bao giờ merge vào main). Hook cài bằng `npm install` (script prepare).
 import { spawnSync, execSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, lstatSync, unlinkSync } from "node:fs";
@@ -92,9 +92,11 @@ function chayTests(ds) {
 let tot = chayBuoc("tsc --noEmit", "npx", ["tsc", "--noEmit"]);
 tot = chayBuoc("kiem-tra (route, màu, từ cấm)", "npm", ["run", "kiem-tra"]) && tot;
 
-let dsTest = che_do === "push" ? danhSachTest : testChoPhanDoi();
+// push mặc định NHẸ (khớp đường deploy của CI: tsc + kiem-tra + build) để deploy liên tục; test đầy đủ: --day-du hoặc CONG_TEST_DAY_DU=1.
+const dayDu = process.argv.includes("--day-du") || process.env.CONG_TEST_DAY_DU === "1";
+let dsTest = che_do === "push" ? (dayDu ? danhSachTest : []) : testChoPhanDoi();
 if (che_do === "push") tot = chayBuoc("vite build", "npx", ["vite", "build"]) && tot;
-console.log(`[cổng] chạy ${dsTest.length} test ${che_do === "push" ? "(toàn bộ)" : "(phần liên quan tới file vừa đổi)"}`);
+console.log(`[cổng] chạy ${dsTest.length} test ${che_do === "push" ? (dayDu ? "(toàn bộ)" : "(bỏ qua ở push nhẹ, dùng --day-du để chạy hết)") : "(phần liên quan tới file vừa đổi)"}`);
 const loi = chayTests(dsTest);
 const moi = loi.filter((l) => !(l.ten in baseline));
 const daQua = Object.keys(baseline).filter((k) => dsTest.some((t) => t.includes(k)) && !loi.some((l) => l.ten === k));

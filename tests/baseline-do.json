@@ -1,4 +1,3 @@
 {
-  "final-acceptance-fixes": "Tên công cụ capabilities đổi get_study_plan thành ke_hoach_tuan nhưng test chưa cập nhật. Chủ: người làm src/capabilities. Phải sửa rồi xóa dòng này.",
-  "mcp-contracts": "Hợp đồng progress/proposal của capabilities lệch test. Chủ: người làm src/capabilities. Phải sửa rồi xóa dòng này."
+  "mcp-contracts": "Hợp đồng progress/proposal của capabilities lệch test (\"progress is a deduplicated pending proposal\"). Chủ: người làm src/capabilities (đang sửa tests/capabilities.test.ts). Phải sửa rồi xóa dòng này."
 }

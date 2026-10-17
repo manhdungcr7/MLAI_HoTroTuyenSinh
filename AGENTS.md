@@ -38,7 +38,7 @@ Nguyên nhân gốc của "pending changes" lẫn lộn và lỗi `tsc`/test kh�
 3. **Chỉ `git add` đường dẫn cụ thể.** Cấm `git add -A` / `git add .` khi cây có file của người khác. Việc dở cần cất: nhánh `wip/<tên>` (cổng bỏ qua, nhưng KHÔNG bao giờ merge vào main).
 4. **Cổng tự động chạy trên bản chụp của thứ sắp vào lịch sử**, không phải cả cây (`scripts/cong-kiem-tra.mjs`, cài tự động bởi `npm install` qua `prepare`, hoặc `git config core.hooksPath .githooks`):
    - `pre-commit`: `tsc` + `kiem-tra` + test của phần vừa đổi (nhanh, vài chục giây). File dở chưa stage không làm đỏ cổng; lỗi trong thứ đã stage thì chặn.
-   - `pre-push`: bản chụp HEAD, `tsc` + `kiem-tra` + `vite build` + MỌI test.
+   - `pre-push`: bản chụp HEAD, `tsc` + `kiem-tra` + `vite build` (nhẹ, khớp đường deploy của CI, khoảng 40 giây). Test đầy đủ: `npm run cong:push -- --day-du`.
    - Chạy tay bất cứ lúc nào: `npm run cong:commit`, `npm run cong:push`.
 5. **Test đỏ sẵn phải có chủ.** Test đang đỏ mà chưa sửa được ghi vào `tests/baseline-do.json` kèm nguyên nhân và người chịu trách nhiệm; cổng không chặn vì nó, nhưng MỌI test đỏ khác đều chặn. Khi sửa xong, cổng nhắc xóa dòng khỏi baseline. Không thêm vào baseline để "qua cổng" cho test do mình làm hỏng.
 6. **Merge vào main = fast-forward sau khi cổng push xanh.** Trước khi push: `git fetch` rồi `git merge origin/main` vào nhánh của mình, giải xung đột, cổng chạy lại. Đẩy thẳng `main` chỉ khi người phụ trách đồng ý rõ; mặc định đi qua PR.
