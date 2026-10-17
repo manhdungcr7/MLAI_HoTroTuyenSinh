@@ -9,14 +9,14 @@ import { goiMoHinh } from "../functions/_thu-vien/ai/sinh-van-ban";
 let network = 0;
 const answer = (cau: string) => layTinTraLoi({
   cau, truoc: [], s: TRANG_THAI_BAN_DAU, nguon: null, dungHoSo: false, manHinh: "Tư vấn",
-  phien: { cheDo: "ai", idHoSo: "test", luot: null, fetch: async () => { network++; throw new Error("Unexpected AI call"); } },
+  phien: { cheDo: "tietKiem", idHoSo: "test", luot: null, fetch: async () => { network++; throw new Error("Unexpected AI call"); } },
 });
 for (const cau of ["Điểm chuẩn Khoa học máy tính UIT năm 2025?", "Học phí UIT bao nhiêu?", "Lịch học tuần này", "Danh sách nguyện vọng của em"]) {
   const t = await answer(cau);
   assert.equal(t.cheDo, "tuDong", cau);
   assert.ok(!t.thuLai, cau);
 }
-assert.equal(network, 0, "Tra số liệu và kế hoạch không gọi AI dù đã bật chế độ AI");
+assert.equal(network, 0, "Tra số liệu và kế hoạch ở chế độ Tiết kiệm không gọi AI");
 
 for (const name of ["BK", "Bách khoa", "UTC"]) {
   const q = `Điểm chuẩn ${name} năm 2025?`;

@@ -123,13 +123,19 @@ export function phanTichCau(cau: string): YDinhCau {
   const hocPhi = /\bhoc phi\b|\bchi phi\b|\bhoc re\b|\bre nhat\b/.test(q);
   const xepHang = hocPhi && /\b(thap|re|it|thap nhat|re nhat|vua tui)\b/.test(q) ? "hoc-phi-thap" : hocPhi && /\b(cao nhat|dat nhat|dat)\b/.test(q) ? "hoc-phi-cao" : null;
   const daiTu = /\b(truong|nganh|khoa|cai|no|noi) (nay|do|kia|ay)\b|\b(truong|nganh) vua roi\b|\bno\b/.test(q);
-  const laSoSanh = /\b(so sanh|phan van|doi chieu|chon truong nao|truong nao tot hon|truong nao hon|nen hoc truong nao|nen chon truong nao|khac nhau the nao)\b/.test(q)
-    || (truongs.length >= 2 && /\b(hay|va|voi|vs|hon|giua|nen chon|nen hoc)\b/.test(q))
-    || (/\b(nen chon|nen hoc|phan van)\b/.test(q) && /\b(hay|giua)\b/.test(q));
+  const laHoiTruongNao = /\b(truong nao|nhung truong|cac truong|vao duoc truong|hoc truong nao)\b/.test(q)
+    || (/\b(chon truong nao|nen chon truong nao|nen hoc truong nao)\b/.test(q) && !/\b(hay|giua|so voi)\b/.test(q) && truongs.length < 2);
+  const laSoSanh = !laHoiTruongNao && (
+    /\b(so sanh|doi chieu|khac nhau the nao|truong nao tot hon|truong nao hon)\b/.test(q)
+    || (new Set(truongs.filter((t) => t.chuoi !== tinhTim?.goc).map((t) => t.kq.ma)).size >= 2
+      && /\b(hay|va|voi|vs|hon|giua|so voi)\b/.test(q))
+    || (/\b(phan van|nen chon|nen hoc)\b/.test(q) && /\b(hay|giua|so voi)\b/.test(q))
+  );
   let kieu: TheLoaiHoi = "khac";
   if (/\bthem\b.*\bnguyen vong\b|\bdua\b.*\bnguyen vong\b|\bluu\b.*\bnguyen vong\b|\bbo sung\b.*\bnguyen vong\b/.test(q)) kieu = "them-nguyen-vong";
   else if (chuTruongDinhNghia(cau)) kieu = "la-truong-gi";
-  else if (laSoSanh && (new Set(truongs.filter((t) => t.chuoi !== tinhTim?.goc).map((t) => t.kq.ma)).size >= 2 || /\b(so sanh|phan van|doi chieu|giua)\b/.test(q) || (/\btruong\b/.test(q) && !/\bnganh\b/.test(q)))) kieu = "so-sanh-truong";
+  else if (laSoSanh) kieu = "so-sanh-truong";
+  else if (laHoiTruongNao && (tinhTim || cumNganh)) kieu = "kham-pha-truong";
   else if (/\b(co co hoi|co nen|co kha nang|do khong|dau khong|do duoc khong|vao duoc khong|co du diem|nen dang ky|nen chon|co dau|co do)\b/.test(q) && (diem !== null || daiTu || /co hoi|do khong|dau khong/.test(q)) && !/viec lam|nghe nghiep|luong|ra truong/.test(q)) kieu = "co-hoi";
   else if (/\b(ky tuc|ktx|o tro|nha tro|cho o|noi o)\b/.test(q)) kieu = "cho-o";
   else if (xepHang) kieu = "xep-hang-hoc-phi";
@@ -152,9 +158,12 @@ export function tenTruongChuaCo(cau: string): string | null {
     const ten = VIET_TAT_TRUONG_CHUA_CO[t];
     if (ten && resolveTruong(t).kieu === "khong-thay") return ten;
   }
-  const m = q.match(/\b(?:truong|dai hoc|dh|hoc vien)\s+(.+?)(?=\s+(?:nganh|nam|diem chuan|hoc phi|la gi|la truong gi|bao nhieu|the nao|ra sao|co|xet|tuyen|thi|hoc ba|phuong thuc|chi tieu|dao tao|k|khong|chua)\b|$)/);
+  const m = q.match(/\b(?:truong|dai hoc|dh|hoc vien)\s+(.+?)(?=\s+(?:nganh|nam|diem chuan|diem|hoc phi|la gi|la truong gi|la|lay|bao nhieu|the nao|ra sao|co|xet|tuyen|thi|hoc ba|phuong thuc|chi tieu|dao tao|dung|thoi|k|khong|chua)\b|$)/);
   if (!m || /^(?:nao|gi|co|o|tai|de|do|nay|kia|ay|vua roi|phu hop|tot|re|gan|day|dao tao)\b/.test(m[1])) return null;
-  const name = m[1].split(/\s+(?:va|voi|hay|so voi)\s+/)[0].trim();
+  const rawName = m[1].split(/\s+(?:va|voi|hay|so voi|la|lay|dung|thoi)\s+/)[0].trim();
+  if (!rawName) return null;
+  const tu = rawName.split(" ").filter((t) => !TU_DEM.has(t));
+  const name = tu.join(" ");
   if (!name) return null;
   return resolveTruong(name).kieu === "khong-thay" ? name : null;
 }

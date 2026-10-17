@@ -443,7 +443,32 @@ function traLoiKhamPha(y: YDinhCau): KetQuaTuDong {
   }
   const E = r.chinhXac, R = r.lienQuan;
   let traLoi: string;
-  if (!tenNganh) traLoi = `${noiTinh ? `Ở ${noiTinh}` : "Trong dữ liệu"} có ${E.length} trường: ${noiTen(E.map((x) => x.ma))}.`;
+  if (y.diem !== null && E.some((x) => x.ct)) {
+    // Nếu học sinh nêu điểm cụ thể, phân nhóm gợi ý theo nhãn chiến lược (Thử sức / Vừa sức / An toàn / Dự phòng)
+    const coDiem = E.filter((x): x is TruongTimThay & { ct: LuaChon } => !!x.ct && (x.ct.phuongThuc ?? "THPT") === "THPT");
+    const voiNhan = coDiem.map((x) => {
+      const nhan = nhanChoLuaChon(x.ct, y.diem!);
+      const dc = phanLoaiDuLieu(x.ct);
+      const diemChuan = dc.diemCuoi ?? x.ct.diemMin;
+      const chenh = Math.round((y.diem! - diemChuan) * 100) / 100;
+      return { x, nhan, diemChuan, chenh };
+    });
+    const thuSuc = voiNhan.filter((v) => v.nhan === "Thử sức").sort((a, b) => b.diemChuan - a.diemChuan).slice(0, 3);
+    const vuaSucAnToan = voiNhan.filter((v) => v.nhan === "Vừa sức" || v.nhan === "An toàn").sort((a, b) => b.diemChuan - a.diemChuan).slice(0, 4);
+    const duPhong = voiNhan.filter((v) => v.nhan === "Dự phòng").sort((a, b) => b.diemChuan - a.diemChuan).slice(0, 3);
+
+    const dsDong: string[] = [];
+    if (vuaSucAnToan.length) {
+      dsDong.push(`• **Vừa sức / An toàn**: ${vuaSucAnToan.map((v) => `${ten(v.x.ma)} (${so1(v.diemChuan)}đ, ${v.chenh >= 0 ? "hơn" : "kém"} ${so1(Math.abs(v.chenh))}đ)`).join(", ")}`);
+    }
+    if (thuSuc.length) {
+      dsDong.push(`• **Thử sức**: ${thuSuc.map((v) => `${ten(v.x.ma)} (${so1(v.diemChuan)}đ, kém ${so1(Math.abs(v.chenh))}đ)`).join(", ")}`);
+    }
+    if (duPhong.length) {
+      dsDong.push(`• **Dự phòng**: ${duPhong.map((v) => `${ten(v.x.ma)} (${so1(v.diemChuan)}đ)`).join(", ")}`);
+    }
+    traLoi = `Với ${so1(y.diem)} điểm, ngành ${tenNganh}${noiTinh ? ` ở ${noiTinh}` : ""}, các trường được phân theo chiến lược 3 tầng để bạn cân nhắc xếp nguyện vọng:\n${dsDong.join("\n")}\n${NHAC_NGAN}`;
+  } else if (!tenNganh) traLoi = `${noiTinh ? `Ở ${noiTinh}` : "Trong dữ liệu"} có ${E.length} trường: ${noiTen(E.map((x) => x.ma))}.`;
   else if (E.length) traLoi = `${noiTinh ? `Ở ${noiTinh}` : "Trong dữ liệu"} mình thấy ${E.length} trường có đúng ngành ${tenNganh}: ${noiTen(E.map((x) => x.ma))}.${R.length ? ` Có thêm ${R.length} trường có ngành gần nghĩa (ghi là liên quan, không trùng tên ngành).` : ""}`;
   else traLoi = `${noiTinh ? `Ở ${noiTinh}` : "Trong dữ liệu"} mình chưa thấy trường có đúng ngành ${tenNganh}. Có ${R.length} trường có ngành gần nghĩa (liên quan, không trùng tên ngành): ${noiTen(R.map((x) => x.ma))}.`;
   const the = taoThe(hienTat).slice(0, 12);

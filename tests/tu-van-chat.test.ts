@@ -256,4 +256,18 @@ assert.equal(phanTichCau("Ngành này có cơ hội việc làm không?").kieu, 
     assert.ok(het.ghiChu?.includes("hết lượt"));
   } finally { globalThis.fetch = that; }
 }
+
+// J. Gợi ý theo điểm và tỉnh thành, cùng với bộ lọc trường chưa có
+{
+  const rDiem = tra("24 điểm A00 CNTT ở TP.HCM nên chọn trường nào?");
+  assert.ok(rDiem.traLoi.includes("chiến lược 3 tầng") || rDiem.traLoi.includes("Vừa sức / An toàn") || rDiem.traLoi.includes("Thử sức"), "phân nhóm gợi ý theo điểm");
+  assert.ok(rDiem.the && rDiem.the.length > 0, "trả về danh sách thẻ trường phù hợp");
+
+  // Kiểm tra không bắt nhầm trường đã có trong kho dữ liệu (như ĐH Bạc Liêu)
+  const { tenTruongChuaCo } = await import("../src/features/tu-van/hieu-cau");
+  assert.equal(tenTruongChuaCo("ĐH Bạc Liêu là bao nhiêu?"), null, "ĐH Bạc Liêu đã có trong kho dữ liệu");
+  assert.equal(tenTruongChuaCo("ĐH Bạc Liêu lấy 15 điểm thôi đúng không?"), null, "ĐH Bạc Liêu có thật, không báo chưa có");
+  assert.ok(tenTruongChuaCo("ĐH Harvard lấy điểm thế nào?") !== null, "ĐH nước ngoài không có trong kho");
+}
+
 console.log("OK tu-van-chat: ý định, trường, tỉnh, điểm, hành động");
