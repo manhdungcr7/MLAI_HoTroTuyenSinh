@@ -481,6 +481,17 @@ function boTenNganh(cau: string): string {
   return c.slice(0, m.index) + " ".repeat(het - m.index) + c.slice(het);
 }
 
+/** Cụm ngành học sinh nêu sau chữ "ngành" (giữ nguyên chữ để hiển thị), hoặc null. */
+function nganhDaNeu(cau: string): string | null {
+  const c = cau.normalize("NFC");
+  const m = /\b(?:ng\u00e0nh|nganh)\b/i.exec(c);
+  if (!m) return null;
+  const sau = c.slice(m.index + m[0].length);
+  const ket = /\s(?:\u1edf|t\u1ea1i|tai|o|,|v\u00e0|va|v\u1edbi|voi|hay|ho\u1eb7c|hoac)(?=\s|,)/i.exec(sau);
+  const cum = (ket ? sau.slice(0, ket.index) : sau).trim();
+  return cum || null;
+}
+
 function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot, diem: DiemDayDu, nganhQuanTam: string[] = []): KetQuaTuDong {
   // Chỉ tìm trường ở phần trước chữ "ngành": "ngành Thương mại điện tử" không được hiểu là Trường Đại học Thương mại.
   const neu = timTruongTrongCau(boTenNganh(cau));
@@ -528,6 +539,13 @@ function traLoiSoSanhTruong(cau: string, y: YDinhCau, ctx: NguCanhLuot, diem: Di
     .filter((x): x is { ten: string; cacTruong: LuaChon[] } => x.cacTruong.length === truongs.length && x.cacTruong.every((k) => !!k))
     .sort((p, q) => diemUuTien(q.ten) - diemUuTien(p.ten) || (tanSuat.get(q.ten) ?? 0) - (tanSuat.get(p.ten) ?? 0) || p.ten.length - q.ten.length);
   const nauNganh = !!(cum || y.nhom);
+  const nganhHoi = nganhDaNeu(cau);
+  if (nganhHoi && !chung.some((x) => khongDau(x.cacTruong[0].nganh).includes(khongDau(nganhHoi)))) {
+    return {
+      traLoi: `Trong dữ liệu mình chưa thấy ngành "${nganhHoi}" ở cả ${truongs.map(ten).join(" và ")}. Bạn kiểm tra tên ngành trong đề án của trường nhé.`,
+      nguon: [], the: truongs.map((m) => ({ ma: m })), hoiLai: "Bạn muốn so sánh ngành nào khác?",
+    };
+  }
   if (chung.length) {
     const chon = chung[0];
     // Nút gợi ý gửi lại đúng mã trường (luôn nhận diện được), không gửi tên dài có dấu phẩy.
