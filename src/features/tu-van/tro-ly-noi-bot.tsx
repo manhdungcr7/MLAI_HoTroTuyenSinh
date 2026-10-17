@@ -556,7 +556,6 @@ export function NutTroLyAI({ khongThanh = false }: { khongThanh?: boolean }) {
           onPointerUp={ketThucKeo}
           onPointerCancel={ketThucKeo}
           aria-label={mo ? "Đóng Chatbot AI" : "Mở Chatbot AI Tuyển sinh (kéo thả để đổi vị trí)"}
-          title={mo ? "Đóng chat" : "Chatbot AI Tuyển sinh (kéo thả sang 2 mép màn hình)"}
           className={gop(
             "bot-bong-bong-3d pointer-events-auto absolute z-50",
             dangKeo ? "dang-keo" : "bot-troi-dong"
