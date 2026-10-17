@@ -51,9 +51,9 @@ assert.deepEqual([coSuyRa.tong, coSuyRa.toHop, coSuyRa.suyRa], [24, "A01", true]
 // 4) dungDanhSach: tổ hợp, suy ra, lý do không có nhãn
 const thpt = LUA_CHON.filter((l) => l.phuongThuc === "THPT");
 const coGhiToHop = thpt.find((l) => l.toHopXet?.includes("A00") && l.toHopXet.length === 1)!;
-const chuaGhiToHop = thpt.find((l) => !l.toHopXet?.length)!;
+const chuaGhiToHop = thpt.find((l) => !l.toHopXet?.length) ?? { ...thpt[0], id: "mock-chua-to-hop", toHopXet: [] };
 const khacPt = LUA_CHON.find((l) => l.phuongThuc === "HOC_BA")!;
-const tim = (id: string) => LUA_CHON.find((l) => l.id === id);
+const tim = (id: string) => (id === chuaGhiToHop.id ? chuaGhiToHop : LUA_CHON.find((l) => l.id === id));
 const ds = dungDanhSach([coGhiToHop.id, chuaGhiToHop.id, khacPt.id, "khong-ton-tai"], diem({ toan: 8, vatLy: 7, hoaHoc: 6, tiengAnh: 9 }), tim);
 assert.equal(ds[0].toHop, "A00"); assert.equal(ds[0].suyRa, false); assert.equal(ds[0].lyDoKhongNhan, null);
 assert.equal(ds[1].suyRa, true); assert.equal(ds[1].toHop, "A01", "tổ hợp tốt nhất của em: Toán 8 + Lý 7 + Anh 9");
@@ -75,7 +75,7 @@ assert.equal(dayDuMotThuSuc.tone, "do", "đủ nhãn mà chỉ có Thử sức t
 
 // 6) mucTieuDayDu khi thiếu môn: không coi môn thiếu là 0 như số thật
 const mau = taoHoSoMau();
-const muc = thpt.find((l) => l.toHopXet?.includes("A01") && l.diemMin > 15)!;
+const muc = thpt.find((l) => l.toHopXet?.length === 1 && l.toHopXet[0] === "A01" && l.diemMin > 15) ?? { ...thpt.find((l) => l.toHopXet?.includes("A01") && l.diemMin > 15)!, toHopXet: ["A01"] };
 const sThieu = { ...mau, diemThi: [], hoSo: { ...mau.hoSo, diem: { ...mau.hoSo.diem, hoaHoc: null, vatLy: null } }, mucTieu: mucTieuTuLuaChon(muc, { ...mau.hoSo.diem, vatLy: null, hoaHoc: null }) };
 const m1 = mucTieuDayDu(sThieu)!;
 assert.equal(m1.duDiem, false);

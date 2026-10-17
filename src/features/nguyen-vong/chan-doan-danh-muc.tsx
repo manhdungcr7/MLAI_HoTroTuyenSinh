@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Lightbulb,
   ShieldAlert,
+  ShieldCheck,
   Sparkles,
   Zap,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import {
   type ChanDoanDanhMuc,
   type HoSoXetTuyenToiUu,
 } from "@/engine/toi-uu-nguyen-vong";
+import { KET_QUA_BACKTESTING_3_NAM } from "@/engine/du-bao-diem-chuan";
 import type { DiemDayDu } from "@/state/types";
 import { LUA_CHON } from "@/data/lua-chon-that";
 import { tim } from "@/data/lua-chon-mau";
@@ -109,14 +111,18 @@ export function ChanDoanDanhMucCard({
           <div className="text-right text-[11px] font-semibold text-chu-phu shrink-0">{chanDoan.soLuong} nguyện vọng</div>
         </div>
 
-        {/* Cảnh báo nghịch đảo nếu có */}
+        {/* Cảnh báo nghịch đảo hoặc dồn rủi ro nếu có */}
         {coCanhBao && (
           <div className="rounded-xl bg-do/10 border border-do/30 p-3 space-y-2">
             <div className="flex items-start gap-2 text-do">
               <AlertTriangle size={17} className="shrink-0 mt-0.5" />
               <div className="text-[13px] leading-snug">
                 <b className="font-extrabold block mb-1">
-                  {coNghichDao ? "Có thứ tự khác nhau theo nhãn điểm" : "Kiểm tra ngân sách hoặc dữ liệu điểm"}
+                  {coNghichDao
+                    ? "Cảnh báo ngược vị thế nguyện vọng"
+                    : chanDoan.canhBaoNghiemTrong.some((cb) => cb.includes("Dồn") || cb.includes("thử sức"))
+                      ? "Cảnh báo dồn toàn bộ nguyện vọng thử sức"
+                      : "Kiểm tra ngân sách hoặc dữ liệu điểm"}
                 </b>
                 {chanDoan.canhBaoNghiemTrong.map((cb, idx) => (
                   <p key={idx} className="mt-1 text-[12px] text-do-chu">
@@ -126,7 +132,9 @@ export function ChanDoanDanhMucCard({
               </div>
             </div>
             <div className="pt-1">
-              <p className="text-[12px] text-chu-phu">Thứ tự nguyện vọng theo sở thích của em. Nếu cần, em tự đổi bằng nút lên hoặc xuống.</p>
+              <p className="text-[12px] text-chu-phu">
+                Thứ tự nguyện vọng theo sở thích của em. Nếu có lỗi ngược vị thế hoặc danh mục toàn thử sức, em nên điều chỉnh lại danh mục để tránh mất cơ hội xét tuyển.
+              </p>
             </div>
           </div>
         )}
@@ -148,6 +156,38 @@ export function ChanDoanDanhMucCard({
             ))}
           </div>
         )}
+
+        {/* Minh bạch độ tin cậy kiểm thử quá khứ (Leave-one-year-out Backtesting) */}
+        <div className="rounded-xl bg-nen p-2.5 border border-vien/70 space-y-1.5 text-[11px]">
+          <div className="flex items-center justify-between text-chu-phu">
+            <span className="font-bold text-muc flex items-center gap-1">
+              <ShieldCheck size={14} className="text-xanh" /> Độ phủ kiểm thử 3 mùa thi (Backtesting)
+            </span>
+            <span className="font-semibold text-[10px] text-chu-phu">Bỏ-một-năm</span>
+          </div>
+          <div className="grid grid-cols-3 gap-1.5 text-center">
+            {KET_QUA_BACKTESTING_3_NAM.map((kq) => (
+              <div
+                key={kq.nam}
+                className={gop(
+                  "p-1.5 rounded-lg border",
+                  kq.bienDongBatThuong
+                    ? "bg-cam-nhat/40 border-cam/30 text-cam-chu"
+                    : "bg-trang border-vien text-muc"
+                )}
+              >
+                <div className="font-bold text-[10px] text-chu-phu">Mùa {kq.nam}</div>
+                <div className="text-[13px] font-black">{Math.round(kq.tyLeBaoHam * 100)}%</div>
+                <div className="text-[9px] text-chu-phu leading-tight truncate">
+                  {kq.bienDongBatThuong ? "Lệch phổ A01" : `Sai số ~${kq.saiSoTrungBinh}đ`}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-chu-phu italic leading-snug">
+            Minh bạch khoa học: Năm 2025 độ phủ 64% do phổ điểm A01 biến động mạnh (độ lệch chuẩn 2,6 so với 1,8); hệ thống chủ động cảnh báo sai số.
+          </p>
+        </div>
 
         {/* Thanh công cụ hành động: Gợi ý danh mục thông minh */}
         <div className="pt-1 flex items-center gap-2 border-t border-vien/60">

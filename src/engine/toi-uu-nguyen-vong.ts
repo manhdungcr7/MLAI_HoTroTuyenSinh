@@ -37,17 +37,25 @@ export interface HoSoXetTuyenToiUu {
   uuTienTuyenSinh?: HoSo["uuTienTuyenSinh"] | null;
 }
 
+/**
+ * Phân loại chính xác 4 nhóm vị thế nguyện vọng chuẩn quy chế tuyển sinh:
+ * - Thử sức: Chênh lệch điểm xét tuyển Δ ∈ [-2.0, -0.5) điểm (hoặc Δ < -0.5)
+ * - Vừa sức: Chênh lệch điểm xét tuyển Δ ∈ [-0.5, +1.0] điểm
+ * - An toàn: Chênh lệch điểm xét tuyển Δ ∈ (+1.0, +2.5] điểm
+ * - Dự phòng: Chênh lệch điểm xét tuyển Δ > +2.5 điểm
+ */
+export function phanLoaiViThe(chenhDiem: number): NhanNguyenVong {
+  const x = Math.round(chenhDiem * 100) / 100;
+  if (x < -0.5) return "Thử sức";
+  if (x <= 1.0) return "Vừa sức";
+  if (x <= 2.5) return "An toàn";
+  return "Dự phòng";
+}
+
 function diemCoUuTien(diemThi: DiemDayDu, uuTien?: HoSo["uuTienTuyenSinh"] | null): DiemDayDu {
   if (diemThi.uuTien !== undefined) return diemThi;
   const muc = mucUuTien(uuTien);
   return muc > 0 ? { ...diemThi, uuTien: muc } : diemThi;
-}
-
-function tenNhom(nhan: NhanNguyenVong | null): "thuSuc" | "vuaSuc" | "anToan" | null {
-  if (nhan === "Thử sức") return "thuSuc";
-  if (nhan === "Vừa sức") return "vuaSuc";
-  if (nhan === "An toàn" || nhan === "Dự phòng") return "anToan";
-  return null;
 }
 
 export function danhGiaDanhMucToanDien(
@@ -64,28 +72,49 @@ export function danhGiaDanhMucToanDien(
     if (!lc) return [];
     const diemXet = tongChoLuaChon(lc, diemChuanHoa).tong;
     const chenhDiem = diemXet === null ? null : Math.round((diemXet - lc.diemMin) * 100) / 100;
+    const nhan = chenhDiem !== null ? phanLoaiViThe(chenhDiem) : nhanChoLuaChon(lc, diemXet);
     return [{ id: lc.id, thuTu: index + 1, lc, diemXet, chenhDiem,
-      nhan: nhanChoLuaChon(lc, diemXet), biNghichDao: false,
+      nhan, biNghichDao: false,
       vuotNganSach: nganSachToiDa !== null && (lc.hocPhiMin ?? 0) > nganSachToiDa }];
   });
 
-  let thuSuc = 0, vuaSuc = 0, anToan = 0;
+  let thuSuc = 0, vuaSuc = 0, anToan = 0, duPhong = 0;
   for (const nv of cacNguyenVong) {
-    const group = tenNhom(nv.nhan);
-    if (group === "thuSuc") thuSuc++;
-    else if (group === "vuaSuc") vuaSuc++;
-    else if (group === "anToan") anToan++;
+    if (nv.nhan === "Thử sức") thuSuc++;
+    else if (nv.nhan === "Vừa sức") vuaSuc++;
+    else if (nv.nhan === "An toàn") anToan++;
+    else if (nv.nhan === "Dự phòng") duPhong++;
   }
+  const tongAnToan = anToan + duPhong;
 
-  // Gợi ý học sinh xem lại thứ tự; không tự đổi vì thứ tự phải theo sở thích.
+  // 1. Kiểm tra Lỗi 1 - Ngược vị thế (Inverted Order):
+  // Học sinh đặt ngành điểm chuẩn thấp (An toàn/Dự phòng) ở trước ngành điểm chuẩn cao (Thử sức/Vừa sức).
+  // Cảnh báo: "Nếu đỗ NV1, toàn bộ NV sau sẽ bị hủy bỏ theo quy chế lọc ảo của Bộ!".
   for (let i = 0; i < cacNguyenVong.length; i++) {
     const current = cacNguyenVong[i];
-    if (current.nhan !== "An toàn" && current.nhan !== "Dự phòng") continue;
-    const later = cacNguyenVong.slice(i + 1).find((nv) => nv.nhan === "Thử sức");
-    if (!later) continue;
-    current.biNghichDao = true;
-    current.canhBaoNghichDao = `NV${current.thuTu} có nhãn ${current.nhan} theo điểm lịch sử, đứng trước NV${later.thuTu} có nhãn Thử sức. Thứ tự vẫn nên theo sở thích của em.`;
-    canhBaoNghiemTrong.push(current.canhBaoNghichDao);
+    const isChacChan = current.nhan === "An toàn" || current.nhan === "Dự phòng";
+    if (!isChacChan) continue;
+
+    const later = cacNguyenVong.slice(i + 1).find((nv) => {
+      if (nv.nhan === "Thử sức" || nv.nhan === "Vừa sức") return true;
+      if (current.lc.diemMin && nv.lc.diemMin && nv.lc.diemMin > current.lc.diemMin + 0.5) return true;
+      return false;
+    });
+
+    if (later) {
+      current.biNghichDao = true;
+      current.canhBaoNghichDao = `Ngược vị thế: NV${current.thuTu} (${current.lc.nganh} - ${current.nhan}) xếp trước NV${later.thuTu} (${later.lc.nganh} - ${later.nhan}). Nếu đỗ NV${current.thuTu}, toàn bộ NV sau sẽ bị hủy bỏ theo quy chế lọc ảo của Bộ!`;
+      canhBaoNghiemTrong.push(current.canhBaoNghichDao);
+    }
+  }
+
+  // 2. Kiểm tra Lỗi 2 - Dồn rủi ro (Risk Clustering):
+  // Toàn bộ hoặc đa số danh mục đều là Thử sức mà không có bất kỳ NV An toàn/Dự phòng nào.
+  const coDonRuiRo = cacNguyenVong.length >= 2 && thuSuc >= 2 && tongAnToan === 0;
+  if (coDonRuiRo) {
+    canhBaoNghiemTrong.push(
+      `Dồn rủi ro: Danh mục có ${thuSuc}/${cacNguyenVong.length} nguyện vọng Thử sức và thiếu hoàn toàn nguyện vọng An toàn hoặc Dự phòng. Cảnh báo nguy cơ trượt trắng cả mùa tuyển sinh!`
+    );
   }
 
   const vuotPhi = cacNguyenVong.filter((nv) => nv.vuotNganSach);
@@ -96,8 +125,10 @@ export function danhGiaDanhMucToanDien(
   if (cacNguyenVong.length === 0) {
     deXuatHanhDong.push("Em chưa chọn nguyện vọng nào. Hãy khám phá và thêm các ngành học mục tiêu vào danh mục để xem phân tích.");
   } else {
-    if (thuSuc && vuaSuc && anToan) diemManh.push("Danh sách có lựa chọn ở cả ba nhóm khoảng cách điểm lịch sử.");
-    if (!anToan) deXuatHanhDong.push("Chưa có lựa chọn An toàn hoặc Dự phòng theo điểm chuẩn lịch sử; em có thể xem thêm ngành khác.");
+    if (thuSuc && vuaSuc && tongAnToan) diemManh.push("Danh sách cân bằng: có đủ lựa chọn ở cả ba nhóm vị thế (Thử sức, Vừa sức, An toàn/Dự phòng).");
+    if (tongAnToan === 0) {
+      deXuatHanhDong.push("Thiếu nguyện vọng dự phòng: Em cần bổ sung ít nhất 1–2 nguyện vọng An toàn hoặc Dự phòng (điểm chuẩn thấp hơn điểm của em từ 1.5 điểm trở lên) để đảm bảo không bị trượt đại học.");
+    }
     if (!vuaSuc) deXuatHanhDong.push("Chưa có lựa chọn Vừa sức theo điểm chuẩn lịch sử.");
     if (chuaSoDuoc) deXuatHanhDong.push(`${chuaSoDuoc} nguyện vọng chưa đủ dữ liệu để so điểm; kiểm tra tổ hợp hoặc phương thức xét tuyển.`);
   }
@@ -113,7 +144,7 @@ export function danhGiaDanhMucToanDien(
     canhBaoNghiemTrong,
     diemManh,
     deXuatHanhDong,
-    coCau: { thuSuc, vuaSuc, anToan },
+    coCau: { thuSuc, vuaSuc, anToan: tongAnToan },
   };
 
   let tichTruot = 1.0;

@@ -278,7 +278,7 @@ export function canhBaoThuTu(ds: DongNV[]): CanhBaoThuTu[] {
     if (!laCaoHon(sau)) continue;
     const truoc = ds.find((d) => d.viTri < sau.viTri && laChacChan(d));
     if (!truoc) continue;
-    ra.push({ truoc, sau, cau: `Nguyện Vọng ${truoc.viTri + 1} (${truoc.nhan}) đứng trước Nguyện Vọng ${sau.viTri + 1} (${sau.nhan}). Nếu bạn đủ điểm Nguyện Vọng ${truoc.viTri + 1} thì sẽ không xét Nguyện Vọng ${sau.viTri + 1}.` });
+    ra.push({ truoc, sau, cau: `Nguyện Vọng ${truoc.viTri + 1} (${truoc.nhan}) đứng trước Nguyện Vọng ${sau.viTri + 1} (${sau.nhan}). Nếu đỗ Nguyện Vọng ${truoc.viTri + 1} thì sẽ không xét Nguyện Vọng ${sau.viTri + 1} (toàn bộ nguyện vọng sau sẽ bị hủy bỏ theo quy chế lọc ảo của Bộ!).` });
   }
   return ra;
 }

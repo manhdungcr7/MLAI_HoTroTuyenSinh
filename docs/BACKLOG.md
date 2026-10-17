@@ -199,6 +199,6 @@
 |---|---|---|---|---|
 | **#12** | **[Tuấn] Hoàn thiện luồng nhập hồ sơ học sinh, Form trắng & Bảo mật Local-First 100%** | Tuấn (`khoi-dau`, `hanh-trinh`) | UX/UI (25%) & Privacy-by-Design | [#12](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/12) |
 | **#13** | **[Dũng] Chu trình Grounded AI 3 bước, 5 rào chắn an toàn & Thẻ hành động có xác nhận** | Dũng (`kham-pha`, `tu-van`) | AI Reliability & Hallucination Prevention (30%) | [#13](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/13) |
-| **#14** | **[Kiệt] Động cơ chẩn đoán danh mục, bắt lỗi ngược vị thế/dồn rủi ro & Dữ liệu Backtesting** | Kiệt (`nguyen-vong`, `thu-tinh-huong`) | Algorithmic Rigor & Innovation (25%) | [#14](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/14) |
+| **#14** | **[Kiệt] Động cơ chẩn đoán danh mục, bắt lỗi ngược vị thế/dồn rủi ro & Dữ liệu Backtesting** | Kiệt (`nguyen-vong`, `thu-tinh-huong`) | Algorithmic Rigor & Innovation (25%) | ✅ **Đã hoàn thành**: Phân loại 4 nhóm vị thế, bắt 2 lỗi chiến lược tuyển sinh, công khai Backtesting 3 năm, test xanh 100% ([#14](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/14)) |
 | **#15** | **[Hưng] Minh bạch nguồn dữ liệu 3 tầng, phân định mã tuyển sinh & Đồng bộ lịch Google Calendar/.ICS** | Hưng (`ke-hoach`, `tu-hoc`, `cms`) | Completeness & Data Provenance (20%) | [#15](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/15) |
 

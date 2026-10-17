@@ -35,6 +35,47 @@ export interface DuBaoDiemChuan {
   luuY: string[];
 }
 
+export interface KetQuaKiemDinhNam {
+  nam: number;
+  soMau: number;
+  tyLeBaoHam: number;
+  saiSoTrungBinh: number;
+  bienDongBatThuong?: boolean;
+  ghiChu: string;
+}
+
+/**
+ * Số liệu Leave-one-year-out Backtesting kiểm định trên toàn bộ dữ liệu 3 mùa tuyển sinh gần nhất:
+ * - Năm 2023: Độ phủ đạt 89% (396 chương trình, sai số trung bình 1.01 điểm).
+ * - Năm 2024: Độ phủ đạt 95% (603 chương trình, sai số trung bình 1.16 điểm).
+ * - Năm 2025: Độ phủ đạt 64% (413 chương trình, sai số trung bình 1.86 điểm - năm phổ điểm A01 biến động mạnh).
+ * Hệ thống minh bạch toàn bộ các con số này, không giấu giếm sai số.
+ */
+export const KET_QUA_BACKTESTING_3_NAM: readonly KetQuaKiemDinhNam[] = [
+  {
+    nam: 2023,
+    soMau: 396,
+    tyLeBaoHam: 0.894,
+    saiSoTrungBinh: 1.01,
+    ghiChu: "Năm bình thường, độ phủ bao hàm đạt 89% (vượt mức danh nghĩa 80%)",
+  },
+  {
+    nam: 2024,
+    soMau: 603,
+    tyLeBaoHam: 0.949,
+    saiSoTrungBinh: 1.16,
+    ghiChu: "Năm dữ liệu đầy đủ nhất, độ phủ bao hàm đạt 95%",
+  },
+  {
+    nam: 2025,
+    soMau: 413,
+    tyLeBaoHam: 0.649,
+    saiSoTrungBinh: 1.86,
+    bienDongBatThuong: true,
+    ghiChu: "Năm biến động bất thường (phổ điểm khối A01 có biến động lớn), hệ thống minh bạch cảnh báo độ lệch phổ điểm",
+  },
+];
+
 /** Hệ số nở khoảng, chọn bằng kiểm định bỏ-một-năm: phủ trung bình ~84% khi chọn (12/10: 92% năm 2023, 93% năm 2024, 68% năm 2025; đo lại 15/10 sau khi sửa dữ liệu: 89%, 95%, 64% là năm biến động bất thường). */
 export const HE_SO_NO_RONG = 1.3;
 /** Chỉ dùng biến động từ năm này trở đi (các năm trước quá ít mẫu: 22 cặp). */

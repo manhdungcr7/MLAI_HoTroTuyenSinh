@@ -168,4 +168,62 @@ const diemEm: DiemDayDu = {
   assert.equal(cdIdLa.soLuong, 0);
 }
 
+// 5. Kiểm thử phân loại 4 nhóm vị thế (Issue 14 - Task 1)
+{
+  const { phanLoaiViThe } = await import("../src/engine/toi-uu-nguyen-vong");
+  // Thử sức: Δ ∈ [-2.0, -0.5)
+  assert.equal(phanLoaiViThe(-2.0), "Thử sức");
+  assert.equal(phanLoaiViThe(-1.5), "Thử sức");
+  assert.equal(phanLoaiViThe(-0.51), "Thử sức");
+
+  // Vừa sức: Δ ∈ [-0.5, +1.0]
+  assert.equal(phanLoaiViThe(-0.5), "Vừa sức");
+  assert.equal(phanLoaiViThe(0.0), "Vừa sức");
+  assert.equal(phanLoaiViThe(1.0), "Vừa sức");
+
+  // An toàn: Δ ∈ (+1.0, +2.5]
+  assert.equal(phanLoaiViThe(1.01), "An toàn");
+  assert.equal(phanLoaiViThe(2.0), "An toàn");
+  assert.equal(phanLoaiViThe(2.5), "An toàn");
+
+  // Dự phòng: Δ > +2.5
+  assert.equal(phanLoaiViThe(2.51), "Dự phòng");
+  assert.equal(phanLoaiViThe(3.5), "Dự phòng");
+  assert.equal(phanLoaiViThe(5.0), "Dự phòng");
+}
+
+// 6. Kiểm thử 2 lỗi chiến lược tuyển sinh (Issue 14 - Task 2 / Verification 1 & 2)
+{
+  // Nghiệm thu 1: Thử tạo danh mục NV1 (Ngành điểm 22), NV2 (Ngành điểm 28) -> Bật ngay cảnh báo vi phạm "Ngược vị thế"
+  const dsNghiemThu1 = [
+    { ...dsMau[2], id: "nv1-diem-22", diemMin: 22.0 }, // HUTECH 22 điểm (với điểm 25.5 là An toàn / Dự phòng)
+    { ...dsMau[0], id: "nv2-diem-28", diemMin: 28.0 }, // UIT 28 điểm (với điểm 25.5 là Thử sức)
+  ];
+  const mapNT1 = new Map(dsNghiemThu1.map((l) => [l.id, l]));
+  const cdNT1 = danhGiaDanhMucToanDien(["nv1-diem-22", "nv2-diem-28"], (id) => mapNT1.get(id), diemEm, {});
+  
+  assert.ok(cdNT1.canhBaoNghiemTrong.length > 0, "phải có cảnh báo nghiêm trọng");
+  const cbNghichDao = cdNT1.canhBaoNghiemTrong.find((cb) => cb.includes("Ngược vị thế"));
+  assert.ok(cbNghichDao, "phải có cảnh báo Ngược vị thế");
+  assert.ok(cbNghichDao?.includes("hủy bỏ theo quy chế lọc ảo của Bộ"), "phải có thông điệp hủy bỏ theo quy chế lọc ảo");
+  assert.equal(cdNT1.cacNguyenVong[0].biNghichDao, true, "NV1 phải bị đánh dấu biNghichDao");
+
+  // Nghiệm thu 2: Thử tạo danh mục 4 NV đều thiếu 2 điểm -> Bật cảnh báo "Thiếu nguyện vọng dự phòng" / "Dồn rủi ro"
+  const dsNghiemThu2 = [
+    { ...dsMau[0], id: "nv-thu-1", diemMin: 27.5 }, // thiếu 2.0
+    { ...dsMau[0], id: "nv-thu-2", diemMin: 27.5 }, // thiếu 2.0
+    { ...dsMau[0], id: "nv-thu-3", diemMin: 27.5 }, // thiếu 2.0
+    { ...dsMau[0], id: "nv-thu-4", diemMin: 27.5 }, // thiếu 2.0
+  ];
+  const mapNT2 = new Map(dsNghiemThu2.map((l) => [l.id, l]));
+  const cdNT2 = danhGiaDanhMucToanDien(["nv-thu-1", "nv-thu-2", "nv-thu-3", "nv-thu-4"], (id) => mapNT2.get(id), diemEm, {});
+  
+  const cbDonRuiRo = cdNT2.canhBaoNghiemTrong.find((cb) => cb.includes("Dồn rủi ro"));
+  assert.ok(cbDonRuiRo, "phải có cảnh báo Dồn rủi ro khi 4 NV đều là thử sức");
+  assert.ok(cbDonRuiRo?.includes("trượt trắng cả mùa tuyển sinh"), "phải có cảnh báo nguy cơ trượt trắng cả mùa tuyển sinh");
+  
+  const deXuatDuPhong = cdNT2.deXuatHanhDong.find((dx) => dx.includes("Thiếu nguyện vọng dự phòng"));
+  assert.ok(deXuatDuPhong, "phải có đề xuất hành động: Thiếu nguyện vọng dự phòng");
+}
+
 console.log("toi-uu-nguyen-vong.test.ts: tất cả kiểm tra đều qua");
