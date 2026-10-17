@@ -23,11 +23,7 @@ export const IP_NGAY_MAC_DINH = 40;
 const KHOA_IP_KHONG_RO = "khong-ro";
 
 export { goiMoHinh } from "../_thu-vien/ai/sinh-van-ban";
-<<<<<<< HEAD
-export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string; TURNSTILE_SECRET_KEY?: string }
-=======
-export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string; AI_IP_NGAY?: string }
->>>>>>> origin/main
+export interface Env extends EnvBacThang { DB?: KhoD1HanMuc; AI_QUOTA_DAILY?: string; AI_TONG_NGAY?: string; AI_WEB_NGAY?: string; AI_IP_NGAY?: string; TURNSTILE_SECRET_KEY?: string }
 interface Ctx { request: Request; env: Env }
 
 const json = (v: unknown, status = 200) =>
@@ -72,16 +68,11 @@ export async function xuLy(request: Request, env: Env, f: typeof fetch = fetch):
   try {
     if (!await choPhepTanSuat(env.RATE_KV, ip, Date.now())) return json({ loi: "Bạn hỏi hơi nhanh, đợi một phút rồi thử lại nhé" }, 429);
   } catch { return json({ loi: "Dịch vụ tư vấn đang tạm thời không sẵn sàng" }, 503); }
-<<<<<<< HEAD
-
   // Xác thực bot Turnstile (Fail-open: không ảnh hưởng người dùng thật nếu chưa cấu hình key hoặc Cloudflare trục trặc)
   const turnstileToken = request.headers.get("cf-turnstile-response") || (typeof o.turnstileToken === "string" ? o.turnstileToken : undefined);
   const ts = await xacThucTurnstile(env.TURNSTILE_SECRET_KEY, turnstileToken, ip, f);
   if (!ts.hopLe) return json({ loi: "Xác minh bot không thành công, vui lòng thử lại" }, 403);
-  // Hạn mức theo ngày: giữ chỗ nguyên tử trước khi gọi AI, chốt khi thành công, trả lại khi lỗi.
-=======
   // Hạn mức theo ngày: giữ chỗ nguyên tử trước khi gọi AI, chốt khi thành công, trả lại khi lỗi hạ tầng (không trả khi 422/400/429).
->>>>>>> origin/main
   if (!env.DB) return json({ loi: "chua-cau-hinh-han-muc" }, 503);
   const db = env.DB;
   const toiDa = docHanMuc(env.AI_QUOTA_DAILY);
