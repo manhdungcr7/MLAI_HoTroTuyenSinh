@@ -501,3 +501,8 @@ body {
   .phat-sang, .phat-sang:hover { transform: none !important; }
   .shimmer::after { animation: none !important; }
 }
+
+/* ---- Tạo hồ sơ (khoi-dau): dấu tick chọn có phản hồi ---- */
+@keyframes tick-bat { 0% { transform: scale(.4); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: none; opacity: 1; } }
+.tick-bat { animation: tick-bat var(--tg-vua) var(--ease-ra) both; }
+@media (prefers-reduced-motion: reduce) { .tick-bat { animation: none; } }
