@@ -1,7 +1,9 @@
 // Sinh "việc cần học" của một tuần từ mục tiêu thật của em: môn nào còn thiếu điểm, xu hướng thi thử, thời gian tự học còn trống.
 // TypeScript thuần, không React. Không có việc nào viết sẵn cho mọi người: mọi con số trong lý do đều tính từ điểm của em.
 import { khoangCachTheoMon } from "@/engine/phan-tich";
-import { TEN_MON, TEN_MON_NGAN, type MonId, type TamTrang, type ViecCanHoc } from "@/state/types";
+import { HO_SO_MON, khungBuoi } from "@/engine/ho-so-mon";
+import { phanBoGioHoc } from "@/engine/phan-bo-gio-hoc";
+import { TEN_MON, type MonId, type TamTrang, type ViecCanHoc } from "@/state/types";
 
 /** Nội dung ôn phổ biến theo chương trình THPT, dùng để gợi ý chủ đề (không phải lịch học bắt buộc). Xoay vòng theo tuần. */
 export const NOI_DUNG_ON: Record<MonId, string[]> = {
@@ -62,11 +64,13 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
   if (ngan < 45 || kc.length === 0) return [];
 
   // Trọng số: phần còn thiếu + một nền nhỏ để môn đã đủ điểm vẫn được giữ nhịp; môn đang đi xuống được cộng thêm.
+  const pb = phanBoGioHoc({ mon: dv.toHop, diem: dv.diem, mucTieuTong: dv.nhe ? 0 : dv.diemMucTieu, quyPhutTuan: ngan, soNgayConDenThi: dv.ngayConDenThi, doDoc: dv.doDoc, canCaiThien: dv.canCaiThien });
   const trongSo = kc.map((k) => {
     const doc = dv.doDoc?.[k.mon];
     const dangXuong = doc !== null && doc !== undefined && doc <= -0.1;
     const chuaCoDiem = dv.diem[k.mon] === null;
-    return { k, w: k.thieu + 0.3 + (dangXuong ? 0.25 : 0) + (chuaCoDiem ? 0.3 : 0), dangXuong, chuaCoDiem };
+    // Giờ của môn lấy từ bộ chia giờ theo hiệu quả biên (engine/phan-bo-gio-hoc), dùng chung với màn Chiến lược.
+    return { k, w: (pb.phanBo.find((p) => p.mon === k.mon)?.phutMoiTuan ?? 0) + 1, dangXuong, chuaCoDiem };
   });
   const tongW = trongSo.reduce((s, x) => s + x.w, 0);
   if (tongW <= 0) return [];
@@ -88,18 +92,19 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
     // Chia số phút của môn thành các buổi ≤ 90 phút: buổi đầu là đề tính giờ, các buổi sau là chuyên đề (xoay theo tuần).
     let con = x.phut;
     for (let i = 0; con > 0; i++) {
-      const phut = con > 90 + 25 ? 90 : con;
+      const phut = con > Math.max(45, HO_SO_MON[k.mon].buoiToiUuPhut) + 25 ? Math.max(45, HO_SO_MON[k.mon].buoiToiUuPhut) : con;
       con -= phut;
       const deTinhGio = i === 0;
       const chuDeCanOn = dv.tienDoKienThuc
         ? Object.entries(dv.tienDoKienThuc).find(([ten, td]) => td === "canOnTap" && NOI_DUNG_ON[k.mon]?.includes(ten))?.[0]
         : undefined;
-      const chuDe = (!deTinhGio && chuDeCanOn)
+      const kieu = HO_SO_MON[k.mon].kieu;
+      // Toán/Lý: buổi đầu là bài tính giờ, các buổi sau theo chuyên đề. Môn khác: mọi buổi đều theo chuyên đề (ôn nhớ, viết bài, từ vựng).
+      const chuDe = ((!deTinhGio || kieu !== "giaiBai") && chuDeCanOn)
         ? chuDeCanOn
         : NOI_DUNG_ON[k.mon][(dv.chiSoTuan + i) % NOI_DUNG_ON[k.mon].length];
-      const tieuDe = deTinhGio ? `${TEN_MON[k.mon]} – ${tenPhanDe(lam15(phut * 0.6))}` : `${TEN_MON[k.mon]} – ${chuDe[0].toLowerCase()}${chuDe.slice(1)}`;
-      const pLam = deTinhGio ? lam15(phut * 0.6) : lam15(phut * 0.55), pChua = deTinhGio ? lam15(phut * 0.35) : lam15(phut * 0.35);
-      const pCuoi = Math.max(5, phut - pLam - pChua);
+      const khung = khungBuoi(kieu, phut, { chuDe: deTinhGio && kieu === "giaiBai" ? undefined : chuDe, dauTuan: deTinhGio, suaLoi: x.dangXuong && deTinhGio });
+      const tieuDe = deTinhGio && kieu === "giaiBai" ? `${TEN_MON[k.mon]} – ${tenPhanDe(khung.cacBuoc[1]?.phut ?? lam15(phut * 0.55))}` : `${TEN_MON[k.mon]} – ${khung.tieuDe}`;
       const lyDo = x.chuaCoDiem
         ? `Bạn chưa có điểm ${TEN_MON[k.mon]}, nên mình chưa biết bạn thiếu bao nhiêu. Làm đề tính giờ (đủ cả đề càng tốt) để có điểm đầu vào cho môn này.`
         : dv.nhe
@@ -109,13 +114,11 @@ export function taoViecTuan(dv: DauVaoViecTuan): ViecCanHoc[] {
           : `${TEN_MON[k.mon]} đã đủ mức cần cho mục tiêu (${so(k.hienTai)} điểm)${dv.mucTieuNganh && dv.mucTieuTruong ? ` (xét ${dv.mucTieuNganh} – ${dv.mucTieuTruong})` : ""}. Giữ nhịp để điểm không tụt.`;
       ra.push({
         id: `v-${dv.tuan}-${k.mon}-${i}`, tuan: dv.tuan, mon: k.mon, tieuDe,
-        chiTiet: deTinhGio ? `${pLam}' làm đề + ${pChua}' chữa câu sai.` : `${chuDe} · ${pLam}' ôn và làm bài + ${pChua}' chữa lỗi.`,
+        chiTiet: khung.chiTiet,
         phut, mucUuTien: dv.nhe ? "thap" : i === 0 ? mucUuTien : mucUuTien === "cao" ? "vua" : "thap", lyDo,
-        mucTieuBuoi: deTinhGio ? `Biết điểm thật của ${TEN_MON_NGAN[k.mon]} lúc này và các dạng bài hay sai, để biết tuần sau ôn gì.` : `Nắm chắc phần "${chuDe.toLowerCase()}" và làm đúng các câu cơ bản.`,
-        cacBuoc: [{ phut: pLam, ten: deTinhGio ? "Làm đề" : "Ôn và làm bài" }, { phut: pChua, ten: "Chữa câu sai" }, { phut: pCuoi, ten: "Tóm tắt lỗi hay gặp" }],
-        tieuChi: deTinhGio
-          ? ["Làm xong phần đề đã chọn trong đúng thời gian quy định.", "Ghi mỗi câu sai kèm nguyên nhân: chưa nhớ công thức, đọc sai đề hay tính nhầm.", "Đánh dấu 3 dạng bài cần ôn lại."]
-          : ["Nhắc lại được ý chính hoặc công thức mà không nhìn sách.", "Làm đúng ít nhất 80% số câu cơ bản.", "Ghi lại các câu còn sai để ôn lại sau 2 ngày."],
+        mucTieuBuoi: khung.mucTieuBuoi,
+        cacBuoc: khung.cacBuoc,
+        tieuChi: khung.tieuChi,
         taiLieu: [{ ten: lop === 11 ? `Sách giáo khoa ${TEN_MON[k.mon]} (chương trình bạn đang học)` : `Sách giáo khoa ${TEN_MON[k.mon]} 12` }, { ten: "Đề minh họa và đề thi thử gần nhất bạn đã có" }],
       });
     }

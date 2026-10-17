@@ -104,7 +104,7 @@
 - **Câu chuyển tiếp**: *"Vậy AI nằm ở đâu trong hệ thống này?"*
 - **Thuật ngữ cần giải thích nếu bị hỏi**:
   - *Kiểm định bỏ-một-năm (Leave-one-year-out backtesting)*: Giả lập lấy dữ liệu các năm trước đó để dự báo biên độ điểm chuẩn cho năm tiếp theo, rồi so sánh với điểm chuẩn thực tế xem có nằm trong khoảng dự báo 80% không.
-  - *Nguyên lý lợi suất giảm dần (Knapsack logic)*: Điểm số từ 5 lên 7 điểm cần ít thời gian hơn từ 8 lên 9 điểm; thuật toán ưu tiên phân bổ thời gian vào môn đang ở vùng điểm thấp hơn của tổ hợp để tối đa hóa tổng điểm.
+  - *Chia giờ theo hiệu quả biên*: giờ học thứ hai ở một môn tăng ít điểm hơn giờ thứ nhất, nên mỗi 15 phút được đưa vào môn mà em này tăng được nhiều điểm nhất. Mỗi môn có cách ôn riêng (Hóa/Sinh buổi ngắn rải đều, Văn viết bài, Anh đều đặn mỗi ngày, Toán/Lý giải bài và sổ lỗi). Tham số là giả định sư phạm chưa đo trên học sinh thật; kết quả luôn là ước lượng, và app nói thẳng khi mục tiêu khó đạt với quỹ giờ này.
 - **Bằng chứng kỹ thuật**: Thuật toán trong `src/engine/toan-bo-chuong-trinh.ts`, `src/engine/toi-uu-nguyen-vong.ts`, `src/engine/toi-uu-lich-hoc.ts` và test `tests/diem-nghen.test.ts`.
 
 ---
