@@ -74,12 +74,13 @@ for (const [id, v] of Object.entries(hocPhi as Record<string, HocPhiNguon>)) {
     assert.ok(!LINK_HONG.has(v.url!.split("#")[0]), `học phí trỏ link hỏng: ${id}`);
   } else {
     soKhongVao++;
-    assert.equal(l.hocPhiMin, undefined, `học phí chưa kiểm chứng/ước tính không được vào danh mục: ${id}`);
-    assert.ok(!l.nguonHocPhi && !l.hocPhiUocTinh, id);
-    assert.ok(!coHocPhi(l), id);
+    // Ứng viên chưa kiểm chứng trong hoc-phi.json không được vào danh mục; chỉ học phí đối chiếu từ VnExpress (đánh dấu thuCap) mới được có.
+    assert.ok(!l.hocPhiUocTinh, id);
+    assert.ok(l.hocPhiMin === undefined || (l.nguonHocPhi?.thuCap === true), `học phí chưa kiểm chứng/ước tính không được vào danh mục: ${id}`);
   }
 }
-assert.equal(LUA_CHON.filter((l) => l.hocPhiMin !== undefined).length, soDaKiemChung, "số học phí trong danh mục bằng số bản ghi đã kiểm chứng");
+assert.equal(LUA_CHON.filter((l) => l.hocPhiMin !== undefined && !l.nguonHocPhi?.thuCap).length, soDaKiemChung, "số học phí văn bản sơ cấp trong danh mục bằng số bản ghi đã kiểm chứng");
+assert.ok(LUA_CHON.filter((l) => l.nguonHocPhi?.thuCap).every((l) => l.hocPhiMin! <= l.hocPhiMax! && l.nguonHocPhi!.url.startsWith("https://diemthi.vnexpress.net/")), "học phí đối chiếu VnExpress có khoảng hợp lệ và link nguồn");
 assert.ok(soKhongVao > 0, "dữ liệu nguồn còn bản ghi chưa kiểm chứng (nếu hết, bỏ phép đếm này)");
 for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number; url: string }>)) {
   assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
