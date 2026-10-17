@@ -74,12 +74,13 @@ for (const [id, v] of Object.entries(hocPhi as Record<string, HocPhiNguon>)) {
     assert.ok(!LINK_HONG.has(v.url!.split("#")[0]), `học phí trỏ link hỏng: ${id}`);
   } else {
     soKhongVao++;
-    assert.equal(l.hocPhiMin, undefined, `học phí chưa kiểm chứng/ước tính không được vào danh mục: ${id}`);
-    assert.ok(!l.nguonHocPhi && !l.hocPhiUocTinh, id);
-    assert.ok(!coHocPhi(l), id);
+    // Ứng viên chưa kiểm chứng trong hoc-phi.json không được vào danh mục; chỉ học phí đối chiếu từ VnExpress (đánh dấu thuCap) mới được có.
+    assert.ok(!l.hocPhiUocTinh, id);
+    assert.ok(l.hocPhiMin === undefined || (l.nguonHocPhi?.thuCap === true), `học phí chưa kiểm chứng/ước tính không được vào danh mục: ${id}`);
   }
 }
-assert.equal(LUA_CHON.filter((l) => l.hocPhiMin !== undefined).length, soDaKiemChung, "số học phí trong danh mục bằng số bản ghi đã kiểm chứng");
+assert.equal(LUA_CHON.filter((l) => l.hocPhiMin !== undefined && !l.nguonHocPhi?.thuCap).length, soDaKiemChung, "số học phí văn bản sơ cấp trong danh mục bằng số bản ghi đã kiểm chứng");
+assert.ok(LUA_CHON.filter((l) => l.nguonHocPhi?.thuCap).every((l) => l.hocPhiMin! <= l.hocPhiMax! && l.nguonHocPhi!.url.startsWith("https://diemthi.vnexpress.net/")), "học phí đối chiếu VnExpress có khoảng hợp lệ và link nguồn");
 assert.ok(soKhongVao > 0, "dữ liệu nguồn còn bản ghi chưa kiểm chứng (nếu hết, bỏ phép đếm này)");
 for (const [id, v] of Object.entries(viecLam as Record<string, { phanTram: number; url: string }>)) {
   assert.ok(ids.has(id) && v.phanTram >= 50 && v.phanTram <= 100);
@@ -180,12 +181,11 @@ assert.ok(goiYDanhSach(dGioi, hsGoiY, gy.map((x) => x.lc.id)).every((x) => !gy.s
 assert.deepEqual(goiYDanhSach(diem({}), hsGoiY), [], "chưa có điểm thì không gợi ý");
 
 // 9) Điểm dùng để dán nhãn, đặt mục tiêu và hiển thị là điểm của đúng năm `namDiem` (năm mới nhất), không phải mức thấp nhất của hai năm.
-// Riêng phương thức THPT: điểm đúng 15,0 là điểm sàn, không làm "điểm chuẩn gần nhất" khi còn năm có điểm chuẩn thật.
+// Không suy điểm sàn từ trị số 15; dữ liệu gốc giữ đúng năm mới nhất.
 for (const l of LUA_CHON) {
   const nam = Object.keys(l.diemTheoNam ?? {}).sort();
-  const khongSan = l.phuongThuc === "THPT" ? nam.filter((n) => l.diemTheoNam![n] !== 15) : nam;
-  const dung = khongSan.length ? khongSan : nam;
-  assert.equal(l.namDiem, Number(dung[dung.length - 1]), `namDiem phải là năm mới nhất (không tính năm điểm sàn): ${l.id}`);
+  const dung = nam;
+  assert.equal(l.namDiem, Number(nam[nam.length - 1]), `namDiem phải là năm mới nhất: ${l.id}`);
   assert.equal(l.diemMin, l.diemTheoNam![String(l.namDiem)], `điểm dán nhãn phải khớp điểm năm ${l.namDiem}: ${l.id}`);
   assert.equal(l.diemMax, l.diemMin, `diemMax cùng năm với diemMin: ${l.id}`);
   if (l.diemDuKien != null && dung.length === nam.length) assert.equal(l.diemDuKien, l.diemMin, `điểm dự kiến bằng điểm năm gần nhất: ${l.id}`);

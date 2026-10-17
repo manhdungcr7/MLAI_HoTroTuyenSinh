@@ -21,7 +21,10 @@ const tk = thongKeBienDong(LUA_CHON);
 const ds: LuaChon[] = [
   fake("a", { diemTheoNam: { "2023": 20, "2024": 21, "2025": 22 }, hocPhiMin: 20, tiLeViecLam: 90 }), // nhieuNam, có học phí, việc làm
   fake("b", { diemTheoNam: { "2025": 23 }, nguonCap: "aggregator_verified", maTruong: "FA2" }), // motNam, nguồn tổng hợp
-  fake("c", { diemTheoNam: { "2023": 15, "2024": 15 } }), // chiDiemSan
+  fake("c", { diemTheoNam: { "2023": 15, "2024": 15 }, scoreEvidence: Object.fromEntries(["2023", "2024"].map((nam) => [nam, {
+    kind: "diem_san" as const, score: 15, scale: 30, sourceUrl: "https://fixture.edu.vn/diem-san",
+    checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: null, includesPriority: null,
+  }])) }), // có bằng chứng điểm sàn
   fake("d", { diemTheoNam: {} }), // khongDu
   fake("e", { diemTheoNam: { "2024": 24, "2025": 25 }, phuongThuc: "HOC_BA" }), // phuongThucKhac
   fake("f", { diemTheoNam: { "2025": 21 }, nguonCap: undefined, maTruong: undefined, truong: "KHAC" }), // nguồn không rõ, không mã

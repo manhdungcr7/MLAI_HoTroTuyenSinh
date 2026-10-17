@@ -1,7 +1,8 @@
 // Màn 13 (bước 2) · Kết quả sau khi thử: danh sách trường đổi thế nào + so sánh các tình huống đã lưu.
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Bookmark, ChevronRight, FlaskConical, Lightbulb, Search, TrendingUp, Trophy, X } from "lucide-react";
+import { BarChart3, Bookmark, ChevronRight, Lightbulb, Search, TrendingUp, Trophy, X } from "lucide-react";
+import { FeatureScoreSimulator } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HuyHieuTruong, NenHero } from "@/components/ui/hinh-nen";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -43,7 +44,7 @@ export default function KetQuaTinhHuong() {
       <DauTrangCoQuayLai tieuDe="Kết quả thay đổi" quayLai={DUONG_DAN.thuTinhHuong()} />
       <NoiDung>
         {thieu.length > 0 ? <ThieuDiem maToHop={maToHop} thieu={thieu} /> : !kq.coThayDoi ? (
-          <TrangThaiTrong bieuTuong={<FlaskConical size={26} />} tieuDe="Em chưa thử thay đổi gì"
+          <TrangThaiTrong bieuTuong={<FeatureScoreSimulator size={28} />} tieuDe="Em chưa thử thay đổi gì"
             moTa="Chọn một môn và kéo tăng điểm, hoặc đổi ngân sách, khu vực, để xem danh sách trường đổi ra sao.">
             <Nut muiTen onClick={() => nav(DUONG_DAN.thuTinhHuong())}>Thử tình huống</Nut>
           </TrangThaiTrong>

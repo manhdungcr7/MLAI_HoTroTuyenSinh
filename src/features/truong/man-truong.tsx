@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { CheckCircle2, ExternalLink, GitCompareArrows, Heart, MapPin, Plus, School, Search, SearchX } from "lucide-react";
+import { CheckCircle2, ExternalLink, GitCompareArrows, Heart, MapPin, Plus, Search, SearchX } from "lucide-react";
+import { FeatureSchoolProgram } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { DauTrangCoQuayLai, NoiDung } from "@/components/layout/khung";
 import { HuyHieuTruong } from "@/components/ui/hinh-nen";
 import { HopTruot, KhungDangTai, KhungLoi, TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -154,7 +155,7 @@ export default function ManTruong() {
         </section>
 
         {!sanSang ? (
-          <TrangThaiTrong bieuTuong={<School size={28} />} tieuDe="Chưa có chương trình nào của trường" moTa={`${CHUA_CO}. Trường có trong danh mục nhưng ứng dụng chưa có ngành hay điểm chuẩn của trường này.`}>
+          <TrangThaiTrong bieuTuong={<FeatureSchoolProgram size={28} />} tieuDe="Chưa có chương trình nào của trường" moTa={`${CHUA_CO}. Trường có trong danh mục nhưng ứng dụng chưa có ngành hay điểm chuẩn của trường này.`}>
             <Nut kieu="vien" onClick={() => nav(DUONG_DAN.khamPha())}>Về Khám phá</Nut>
           </TrangThaiTrong>
         ) : (

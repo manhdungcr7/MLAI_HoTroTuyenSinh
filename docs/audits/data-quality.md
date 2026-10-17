@@ -1,4 +1,8 @@
-# Chất lượng dữ liệu cho capability tuyển sinh
+# Chất lượng dữ liệu tuyển sinh
+
+**Cập nhật 2026-10-17:** xem [báo cáo hiện tại](data-quality-2026-10-17.md) và [danh sách 118 trường cần đối chiếu](data-quality-schools.csv). Đã sửa phân loại/hợp nhất điểm, bổ sung 13 điểm UIT THPT 2025 có nguồn và metadata; toàn danh mục vẫn chưa đạt cổng chất lượng thương mại (`npm run data:audit -- --strict` trả mã 1). Chưa sửa dữ liệu production.
+
+## Báo cáo lịch sử 2026-10-16
 
 Audit cục bộ ngày 2026-10-16. Tái lập bằng `npx tsx scripts/audit-admissions-data.ts`. Script chỉ đọc dữ liệu trong repository, không gọi mạng, không cập nhật CMS và không tự nâng trạng thái xác minh.
 

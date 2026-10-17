@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChartColumn, Clock, GraduationCap, ShieldCheck, Target, type LucideIcon } from "lucide-react";
+import { Clock, ShieldCheck, type LucideIcon } from "lucide-react";
 import { Logo } from "@/components/layout/khung";
 import { BieuTuongTron, NenHero } from "@/components/ui/hinh-nen";
+import { FeatureCareerFit, FeatureProgress, FeatureSchoolFilter } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { HopTruot } from "@/components/ui/hien-thi";
 import { Nut, The, gop } from "@/components/ui/nut-the";
 import { DUONG_DAN } from "@/duong-dan";
@@ -11,9 +12,9 @@ import { coDuLieuNguoiDung } from "@/state/chon";
 import type { ToneTen } from "@/state/types";
 
 const LOI_ICH: { icon: LucideIcon; tone: ToneTen; tieu: string }[] = [
-  { icon: Target, tone: "do", tieu: "Biết mình hợp ngành nào" },
-  { icon: GraduationCap, tone: "xanh", tieu: "Lọc trường vừa sức, vừa túi tiền" },
-  { icon: ChartColumn, tone: "luc", tieu: "Có lộ trình học để kéo gần mục tiêu" },
+  { icon: FeatureCareerFit, tone: "do", tieu: "Biết mình hợp ngành nào" },
+  { icon: FeatureSchoolFilter, tone: "xanh", tieu: "Lọc trường vừa sức, vừa túi tiền" },
+  { icon: FeatureProgress, tone: "luc", tieu: "Có lộ trình học để kéo gần mục tiêu" },
 ];
 
 /** Ba ô trên phiếu nguyện vọng minh họa: tên nhóm ngành chung, không phải dữ liệu của ai. */

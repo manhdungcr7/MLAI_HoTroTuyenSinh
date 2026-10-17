@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, ClipboardCheck, School, ShieldCheck, ExternalLink, UserCheck, Shield, LayoutDashboard, Settings, UploadCloud, type LucideIcon,
+  ArrowLeft, ClipboardCheck, School, ExternalLink, UserCheck, Shield, LayoutDashboard, Settings, UploadCloud, type LucideIcon,
 } from "lucide-react";
 import { CAC_TAB } from "@cms/duong-dan";
 import { gop } from "@cms/thanh-phan/ui/nut-the";
@@ -135,9 +135,7 @@ export function KhungCoThanhDuoi() {
 export function Logo({ nho }: { nho?: boolean }) {
   return (
     <span className="inline-flex items-center gap-2 font-extrabold text-muc tracking-tight min-w-0">
-      <span className="size-7 rounded-lg bg-xanh text-white grid place-items-center shrink-0">
-        <ShieldCheck size={16} strokeWidth={2.5} />
-      </span>
+      <img src="/icons/brand-symbol-color.svg" alt="" width="28" height="28" className="size-7 shrink-0" />
       <span className={gop("truncate", nho ? "text-[14px]" : "text-[15px]")}>Quản trị Nguyện Vọng</span>
     </span>
   );

@@ -11,6 +11,7 @@ import { laHocPhiDaKiemChung, type HocPhiNguon } from "./hoc-phi-kiem-chung";
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
   toHop: string[]; diem: Record<string, number>; dk: number | null; viec: number | null; nguon: string | null; tier: string | null;
+  scoreEvidence?: LuaChon["scoreEvidence"];
 }
 
 const TONES: ToneTen[] = ["xanh", "luc", "cam", "tim", "do"];
@@ -42,6 +43,8 @@ export function tenGon(goc: string): { ten: string; them?: string } {
 type HocPhiTep = Record<string, HocPhiNguon>;
 type ViecMoiTep = Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 let HOC_PHI: HocPhiTep = {};
+// hoc-phi-vnexpress.json: học phí theo bảng VnExpress (nguồn thứ cấp, scripts/hoc-phi-vnexpress.py): [thấp, cao, năm, đường dẫn]; chỉ dùng khi chưa có học phí từ văn bản sơ cấp.
+let HOC_PHI_VN: Record<string, [number, number, string, string]> = {};
 let VIEC_MOI: ViecMoiTep = {};
 type ChiTieuTep = Record<string, { chiTieu: number; nam: string; url: string; trang: number }>;
 let CHI_TIEU: ChiTieuTep = {};
@@ -49,30 +52,23 @@ let CHI_TIEU: ChiTieuTep = {};
 function chuyen(d: Dong): LuaChon {
   const hpUngVien = HOC_PHI[d.id];
   const hp = laHocPhiDaKiemChung(hpUngVien) ? hpUngVien : undefined;
+  const hv = hp ? undefined : HOC_PHI_VN[d.id];
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
   const laCaoDang = /cao đẳng/i.test(d.nganh) || /cao đẳng/i.test(d.truong);
   const nam = Object.keys(d.diem).sort();
-  // THPT: năm mới nhất mà điểm là điểm chuẩn thật; điểm đúng 15,0 là điểm sàn nên không làm "điểm chuẩn gần nhất" khi còn năm khác.
-  const khongSan = d.pt === "THPT" ? nam.filter((n) => d.diem[n] !== 15) : nam;
-  const moiNhat = (khongSan.length ? khongSan : nam)[(khongSan.length ? khongSan : nam).length - 1];
+  const moiNhat = nam[nam.length - 1];
   const diemMoiNhat = d.diem[moiNhat]; // mọi nhãn, mục tiêu và chữ hiển thị đều dựa vào điểm của đúng năm này (namDiem)
   const luuY: string[] = [];
   if (nam.length === 1) luuY.push(`Mới có điểm chuẩn của một năm (${moiNhat}), độ tin cậy còn thấp.`);
   if (d.tier === "aggregator_verified") luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường.");
   if (d.pt !== "THPT") {
     luuY.push(`Điểm chuẩn này thuộc phương thức "${TEN_PT[d.pt] ?? d.pt}", không phải điểm thi tốt nghiệp.`);
-    if (diemMoiNhat <= 30) {
-      luuY.push("Điểm chuẩn hiển thị theo thang 30 (đã quy đổi từ điểm ĐGNL/ĐGTD theo công thức của trường).");
-    }
+    luuY.push("Cần đối chiếu thang điểm và quy tắc quy đổi trong thông báo của trường; không so trực tiếp với tổng điểm thi tốt nghiệp.");
   }
-  if (d.pt === "THPT" && diemMoiNhat === 15) {
-    luuY.push("Mức 15,0 điểm là điểm sàn xét tuyển chuẩn của trường đối với phương thức này.");
-  }
-  if (moiNhat === "2026" && d.tier === "aggregator_verified") {
-    luuY.push("Điểm 2026 từ trang tổng hợp mang tính tham chiếu / dự kiến công bố.");
-  }
+  luuY.push("Cần đối chiếu thông báo điểm trúng tuyển đúng năm và phương thức; không dùng điểm sàn nhận hồ sơ thay điểm chuẩn.");
+  if (d.scoreEvidence?.[moiNhat]?.includesPriority === true) luuY.push("Điểm trúng tuyển công bố đã bao gồm điểm ưu tiên; không cộng ưu tiên lần nữa vào ngưỡng này.");
   return {
     id: d.id,
     truong: d.truong,
@@ -91,15 +87,17 @@ function chuyen(d: Dong): LuaChon {
     tone: toneCua(d.ma),
     lyDoPhuHop: [],
     canLuuY: luuY,
-    nguon: d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
+    nguon: d.scoreEvidence?.[moiNhat]?.kind === "diem_chuan" ? "Thông báo điểm trúng tuyển của trường (chưa thẩm định độc lập)" : d.tier === "official_pdf" ? "Đề án tuyển sinh chính thức của trường (file PDF)" : "Bảng điểm chuẩn trên trang tổng hợp tuyensinh247 (nguồn thứ cấp)",
     daKiemChung: false,
     linkNguon: d.nguon ?? undefined,
     ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
+    ...(hv ? { hocPhiMin: hv[0], hocPhiMax: hv[1], nguonHocPhi: { nam: hv[2], url: `https://diemthi.vnexpress.net${hv[3]}`, trang: 0, thuCap: true } } : {}),
     ...(CHI_TIEU[d.id] ? { chiTieu: { so: CHI_TIEU[d.id].chiTieu, nam: CHI_TIEU[d.id].nam, url: CHI_TIEU[d.id].url, trang: CHI_TIEU[d.id].trang } } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
     toHopXet: d.toHop,
     diemTheoNam: d.diem,
+    scoreEvidence: d.scoreEvidence,
     diemDuKien: d.dk,
     nguonCap: d.tier === "official_pdf" ? "official_pdf" : "aggregator_verified",
   };
@@ -116,10 +114,11 @@ export const daNapLuaChon = (): boolean => LUA_CHON.length > 0;
 /** Nạp danh mục gốc một lần (gọi nhiều lần vẫn một lần tải). Lỗi mạng thì lần gọi sau thử lại. */
 export function napLuaChon(): Promise<void> {
   dangNap ??= (async () => {
-    const [raw, viec, hp, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./chi-tieu.json")]);
+    const [raw, viec, hp, hpVn, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./hoc-phi-vnexpress.json"), import("./chi-tieu.json")]);
     CHI_TIEU = ct.default as unknown as ChiTieuTep;
     VIEC_MOI = viec.default as unknown as ViecMoiTep;
     HOC_PHI = hp.default as unknown as HocPhiTep;
+    HOC_PHI_VN = hpVn.default as unknown as typeof HOC_PHI_VN;
     LUA_CHON.splice(0, LUA_CHON.length, ...(raw.default as unknown as Dong[]).map(chuyen));
     THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
   })().catch((e) => { dangNap = null; throw e; });

@@ -1,4 +1,5 @@
 // Kiểu dữ liệu dùng chung. Đổi file này phải báo cả nhóm (chỉ người giữ nền được sửa).
+import type { BangChungDiem } from "../engine/du-lieu-tuyen-sinh/kieu";
 
 export type ToneTen = "xanh" | "luc" | "cam" | "tim" | "do" | "muc";
 
@@ -137,12 +138,13 @@ export interface LuaChon {
   phuongThuc?: string; // THPT, HOC_BA, DGNL_HCM...
   toHopXet?: string[]; // tổ hợp đề án ghi cho ngành này; rỗng = đề án chưa ghi rõ
   diemTheoNam?: Record<string, number>; // điểm chuẩn từng năm có thật
+  scoreEvidence?: Record<string, BangChungDiem>;
   diemDuKien?: number | null; // điểm chuẩn dự kiến năm tới (bằng năm gần nhất)
   nguonCap?: "official_pdf" | "aggregator_verified"; // đề án chính thức hay trang tổng hợp
   tiLeViecLam?: number; // phần trăm sinh viên có việc làm theo khảo sát trong đề án của trường
   nguonViecLam?: { nam: string; url: string; trang: number }; // trang đề án nêu tỷ lệ có việc làm (nếu trích được)
   chiTieu?: { so: number; nam: string; url: string; trang: number }; // chỉ tiêu tuyển sinh của ngành theo đề án (scripts/trich-chi-tieu.py); không có thì không hiện
-  nguonHocPhi?: { nam: string; url: string; trang: number }; // trang đề án nêu học phí của ngành này
+  nguonHocPhi?: { nam: string; url: string; trang: number; thuCap?: boolean }; // trang đề án nêu học phí của ngành này
   /** Học phí là ước tính theo trường/khối ngành, chưa có văn bản của trường để đối chiếu: hiện "≈ … (ước tính)", không có link nguồn. */
   hocPhiUocTinh?: boolean;
   nguonTheoNam?: NguonNam[]; // liên kết tới tài liệu gốc của từng năm (đề án PDF, có số trang nếu tìm được)

@@ -40,14 +40,14 @@ export function TheDiemCuaBan({ onChonNhom }: { onChonNhom?: (nhom: string) => v
             </div>
           </div>
           {k.theoNhom.length > 0 && (
-            <ul className="mt-3 grid grid-cols-2 min-[400px]:grid-cols-4 gap-2" aria-label="Nhóm ngành có nhiều ngành vừa sức">
+            <ul className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5" aria-label="Nhóm ngành có nhiều ngành vừa sức">
               {k.theoNhom.slice(0, 4).map((g, i) => {
                 const Icon = iconNhomNganh(g.nhom), m = MAU_NHOM_O[i % MAU_NHOM_O.length];
                 return (
                   <li key={g.nhom}>
-                    <button type="button" onClick={() => onChonNhom ? onChonNhom(g.nhom) : nav(DUONG_DAN.khamPha())} className={gop("w-full min-h-14 rounded-xl p-2 text-left cursor-pointer active:brightness-95", m.nen)}>
+                    <button type="button" onClick={() => onChonNhom ? onChonNhom(g.nhom) : nav(DUONG_DAN.khamPha())} className={gop("w-full min-h-14 rounded-xl p-2.5 text-left cursor-pointer active:brightness-95 transition-colors", m.nen)}>
                       <span className="flex items-center gap-1.5"><Icon size={16} className={gop("shrink-0", m.chu)} aria-hidden /><b className="truncate text-[13px] text-muc">{g.nhom}</b></span>
-                      <span className={gop("mt-0.5 block text-[13px] font-semibold", m.chu)}>{dinhDangSo(g.so)} ngành</span>
+                      <span className={gop("mt-1 block text-[13px] font-semibold", m.chu)}>{dinhDangSo(g.so)} ngành</span>
                     </button>
                   </li>
                 );

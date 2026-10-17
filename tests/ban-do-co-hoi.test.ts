@@ -28,7 +28,10 @@ const ds = [
   fake("vua", { diem: 23 }),       // +1 → Vừa sức
   fake("an", { diem: 21 }),        // +3 → An toàn
   fake("dp", { diem: 18 }),        // +6 → Dự phòng
-  fake("san", { diem: 15 }),       // điểm sàn: không so
+  fake("san", { diem: 15, scoreEvidence: Object.fromEntries(["2024", "2025"].map((nam) => [nam, {
+    kind: "diem_san" as const, score: 15, scale: 30, sourceUrl: "https://fixture.edu.vn/diem-san",
+    checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: null, includesPriority: null,
+  }])) }), // có bằng chứng điểm sàn: không so
   fake("hb", { diem: 20, phuongThuc: "HOC_BA" }),
   fake("khongdiem", {}),
   fake("nk", { diem: 20, toHopXet: ["V00"] }), // tổ hợp năng khiếu, chưa tính được

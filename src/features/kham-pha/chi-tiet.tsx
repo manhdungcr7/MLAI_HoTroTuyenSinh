@@ -27,6 +27,7 @@ import { apDungDuBaoML } from "@/engine/du-bao-ml-ap-dung";
 import { namTuyenSinhToi } from "@/engine/du-bao-diem-chuan";
 import { thongKeChung } from "./du-bao";
 import { useDuBaoML } from "./dung-du-bao-ml";
+import { duBaoMLCua, metaDuBaoML } from "@/data/du-bao-ml";
 import { TrendingUp } from "lucide-react";
 import { NhanTrangThaiDuLieu } from "@/components/ui/du-bao";
 import { tongChoLuaChon } from "./to-hop";
@@ -194,7 +195,7 @@ export default function ChiTiet() {
   const lc = useMemo(() => {
     if (!lcGoc) return undefined;
     const theoNam = nguon?.nam[lcGoc.id];
-    return { ...lcGoc, nguonTheoNam: theoNam };
+    return { ...lcGoc, nguonTheoNam: [...(lcGoc.nguonTheoNam ?? []), ...(theoNam ?? []).filter((s) => !lcGoc.nguonTheoNam?.some((cms) => cms.nam === s.nam))] };
   }, [lcGoc, nguon]);
   const thongTinTruong = lcGoc ? kho.layChiTietTruong(lcGoc.maTruong ?? lcGoc.truong) : null;
   const bc = useMemo(() => boiCanhTu(s), [s]);
@@ -220,6 +221,11 @@ export default function ChiTiet() {
   // Dự báo năm tới chỉ có khi quy tắc dữ liệu cho phép (điểm chuẩn hợp lệ, không quá cũ); ưu tiên mô hình học máy khi đã nạp.
   void sanDuBaoML; // chỉ để vẽ lại khi tệp dự báo nạp xong
   const duBao = apDungDuBaoML(phanLoaiDuLieu(lc, thongKeChung(), namTuyenSinhToi()), lc.id).duBao;
+  // Dòng "Điểm chuẩn dự đoán": ưu tiên mô hình học máy (có cả khi điểm cuối đã cũ), nếu chưa có thì dùng dự báo thống kê.
+  const mlRieng = duBaoMLCua(lc.id), metaML = metaDuBaoML();
+  const coDiem = tt.loai === "nhieuNam" || tt.loai === "motNam";
+  const diemDuDoan = !coDiem ? null : mlRieng ? mlRieng.giua : duBao ? duBao.kyVong : null;
+  const namDuDoan = mlRieng && metaML ? metaML.namDuBao : duBao?.namDuBao;
   const hpTruong = nguon?.truong[lc.maTruong ?? ""]?.hocPhi;
   const trongDs = s.nguyenVong.includes(lc.id);
   const tone = kq.muc ? TONE_MUC[kq.muc] : "xanh";
@@ -288,18 +294,14 @@ export default function ChiTiet() {
             {tt.diemCuoi !== null
               ? <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn ${tt.namCuoi} (thang 30)`} giaTri={`${dinhDangDiem(tt.diemCuoi)} điểm`} phu={tt.nguonThuCap ? "Từ trang tổng hợp, chưa đối chiếu đề án." : undefined} />
               : <DongThongTin icon={BarChart3} tone="tim" nhan="Điểm chuẩn" giaTri={<NhanTrangThaiDuLieu tt={tt} />} phu={tt.loai === "chiDiemSan" ? "Mức điểm sàn không phải điểm chuẩn của ngành." : tt.loai === "phuongThucKhac" ? "Không so với điểm thi THPT." : undefined} />}
-            {duBao && (tt.loai === "nhieuNam" || tt.loai === "motNam") && (
-              <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán ${duBao.namDuBao}${duBao.moHinh === "hoc-may" ? " (mô hình học máy)" : ""}`}
-                giaTri={`${dinhDangDiem(duBao.kyVong)} điểm`}
-                phu={duBao.moHinh === "hoc-may"
-                  ? `Mô hình học máy LightGBM dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`
-                  : `Dự đoán từ điểm năm ${duBao.namCuoi} dựa trên biến động chung, không phải xác suất đậu.`} />
+            {diemDuDoan !== null && (
+              <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán năm ${namDuDoan}`} giaTri={`${dinhDangDiem(diemDuDoan)} điểm`} />
             )}
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
             <DongThongTin icon={Wallet} tone="cam" nhan={lc.hocPhiUocTinh ? "Học phí / năm (ước tính)" : "Học phí / năm (dự kiến)"} giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
-              phu={coHocPhi(lc) ? <>{lc.hocPhiUocTinh && <span className="block">Ước tính theo trường và khối ngành, chưa có văn bản của trường để đối chiếu. Xem đề án trước khi quyết định.</span>}{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Sư phạm được hỗ trợ học phí theo NĐ 116 nếu cam kết làm trong ngành · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr${lc.nguonHocPhi ? " · " : ""}`}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
+              phu={coHocPhi(lc) ? <>{lc.hocPhiUocTinh && <span className="block">Ước tính theo trường và khối ngành, chưa có văn bản của trường để đối chiếu. Xem đề án trước khi quyết định.</span>}{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Sư phạm được hỗ trợ học phí theo NĐ 116 nếu cam kết làm trong ngành · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr${lc.nguonHocPhi ? " · " : ""}`}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={lc.nguonHocPhi.thuCap ? `Theo VnExpress ${lc.nguonHocPhi.nam}` : `Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
             {lc.chiTieu && (
               <DongThongTin icon={Users} tone="xanh" nhan={`Chỉ tiêu ${lc.chiTieu.nam}`} giaTri={`${lc.chiTieu.so} sinh viên`}
                 phu={<>Theo đề án của trường, tính cho cả ngành (mọi phương thức) · <LinkNguon url={lc.chiTieu.url} trang={lc.chiTieu.trang} nhan={`Đề án ${lc.chiTieu.nam}`} /></>} />

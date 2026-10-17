@@ -88,8 +88,10 @@ assert.ok(ketQua.filter((r) => r.nam < 2025).every((r) => r.phu >= 0.78), "năm 
   assert.equal(dt.doTinCay, "thap");
   assert.ok(dt.luuY.some((x) => /trang tổng hợp/.test(x)));
   const chinhThuc = { ...mau({ "2024": 24, "2025": 24.5 }, "x", "THPT"), nguonCap: "official_pdf" as const };
-  assert.equal(duBaoDiemChuan(chinhThuc, tk, 2026)!.doTinCay, "cao");
-  assert.equal(duBaoDiemChuan(chinhThuc, tk, 2027)!.doTinCay, "vua", "cách 2 năm thì chỉ mức vừa");
+  assert.equal(duBaoDiemChuan(chinhThuc, tk, 2026)!.doTinCay, "thap", "nhãn official_pdf không chứng minh dữ liệu đã được kiểm chứng");
+  const daThamDinh = { ...chinhThuc, scoreEvidence: Object.fromEntries(Object.entries(chinhThuc.diemTheoNam!).map(([nam, score]) => [nam, { kind: "diem_chuan" as const, score, scale: 30, sourceUrl: "https://fixture.edu.vn/diem", checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: "independent test fixture", includesPriority: true }])) };
+  assert.equal(duBaoDiemChuan(daThamDinh, tk, 2026)!.doTinCay, "cao");
+  assert.equal(duBaoDiemChuan(daThamDinh, tk, 2027)!.doTinCay, "vua", "cách 2 năm thì chỉ mức vừa");
   const cao = duBaoDiemChuan({ ...chinhThuc, diemTheoNam: { "2024": 29.2, "2025": 29.5 } }, tk, 2026)!;
   assert.equal(cao.cao, 30);
   assert.equal(cao.chamTran, true);

@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowRight, BarChart3, Bell, CalendarClock, CalendarDays, CalendarPlus, CalendarX2, CircleAlert, CircleCheck, Clock,
-  Flame, Lightbulb, ListChecks, NotebookPen, RotateCcw, ShieldCheck, SkipForward, Sparkles, TrendingDown, TrendingUp, type LucideIcon,
+  ArrowRight, Bell, CalendarClock, CalendarDays, CalendarPlus, CalendarX2, CircleAlert, CircleCheck, Clock,
+  Flame, Lightbulb, ListChecks, RotateCcw, ShieldCheck, SkipForward, Sparkles, TrendingDown, TrendingUp, type LucideIcon,
 } from "lucide-react";
+import { FeatureMockScore, FeatureProgress } from "@/components/ui/bieu-tuong-nguyen-vong";
 import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { ThanhTabKeHoach } from "@/features/ke-hoach/thanh-tab";
 import { HopTruot, TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
@@ -52,11 +53,11 @@ export default function TienDo() {
       <ThanhTabKeHoach />
       <NoiDung>
         {trongHet ? (
-          <TrangThaiTrong bieuTuong={<BarChart3 size={26} />} tieuDe="Chưa có gì để theo dõi"
+          <TrangThaiTrong bieuTuong={<FeatureProgress size={28} />} tieuDe="Chưa có gì để theo dõi"
             moTa="Khi bạn có kế hoạch tuần và bắt đầu làm việc, tiến độ và lời nhắc điều chỉnh sẽ hiện ở đây.">
             <div className="space-y-2">
               <Nut muiTen onClick={() => nav(DUONG_DAN.tuan())}>Lập kế hoạch tuần</Nut>
-              <Nut kieu="vien" bieuTuong={NotebookPen} onClick={() => nav(DUONG_DAN.diemThiThu())}>Nhập điểm thi thử</Nut>
+              <Nut kieu="vien" bieuTuong={FeatureMockScore} onClick={() => nav(DUONG_DAN.diemThiThu())}>Nhập điểm thi thử</Nut>
             </div>
           </TrangThaiTrong>
         ) : (
@@ -77,7 +78,7 @@ export default function TienDo() {
               </TieuDeMuc>
               <KetQuaHocTap xuHuong={xuHuong} nhapDiem={() => nav(DUONG_DAN.diemThiThu())} />
               {s.diemThi.length > 0 && (
-                <div className="mt-2.5"><HangBam bieuTuong={NotebookPen} tone="xanh" tieuDe="Nhập điểm thi thử" phu="Cập nhật để theo dõi tiến độ" onClick={() => nav(DUONG_DAN.diemThiThu())} /></div>
+                <div className="mt-2.5"><HangBam bieuTuong={FeatureMockScore} tone="xanh" tieuDe="Nhập điểm thi thử" phu="Cập nhật kết quả để theo dõi tiến độ" onClick={() => nav(DUONG_DAN.diemThiThu())} /></div>
               )}
             </section>
 
@@ -244,7 +245,7 @@ function KetQuaHocTap({ xuHuong, nhapDiem }: { xuHuong: XuHuongMon[]; nhapDiem: 
     return (
       <The className="space-y-3">
         <p className="text-[14px] text-chu">Chưa có điểm thi thử nào. Nhập điểm sau mỗi lần thi để theo dõi tiến độ ôn tập.</p>
-        <Nut kieu="nhe" bieuTuong={NotebookPen} onClick={nhapDiem}>Nhập điểm thi thử</Nut>
+        <Nut kieu="nhe" bieuTuong={FeatureMockScore} onClick={nhapDiem}>Nhập điểm thi thử</Nut>
       </The>
     );
   }

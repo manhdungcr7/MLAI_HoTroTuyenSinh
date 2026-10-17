@@ -5,10 +5,8 @@
 // (học bạ, ĐGNL...) không so trực tiếp với điểm thi THPT; thiếu dữ liệu thì nói thiếu.
 import type { LuaChon } from "@/state/types";
 import { GIAI_THICH_TRANG_THAI } from "@/noi-dung/du-bao";
+import { loaiDiemCuaNam } from "./du-lieu-tuyen-sinh/kiem-tra-diem";
 import { TOI_DA_NAM_XA, duBaoDiemChuan, namTuyenSinhToi, type DuBaoDiemChuan, type ThongKeBienDong } from "./du-bao-diem-chuan";
-
-/** Mức 15,0 là điểm sàn xét tuyển chung (không phải điểm chuẩn riêng của ngành). */
-export const DIEM_SAN_XET_TUYEN = 15;
 
 export type LoaiDuLieu =
   | "nhieuNam" //      A: có điểm chuẩn THPT từ 2 năm trở lên → lịch sử + dự báo
@@ -28,7 +26,7 @@ export interface TrangThaiDuLieu {
   diemCuoi: number | null;
   /** Điểm lấy từ trang tổng hợp, chưa đối chiếu đề án (nguồn thứ cấp). */
   nguonThuCap: boolean;
-  /** Điểm của năm chưa kết thúc / dự kiến công bố sớm: chỉ là tham chiếu. */
+  /** Dữ liệu chưa thẩm định độc lập hoặc nguồn thứ cấp: chỉ là tham chiếu. */
   laThamChieu: boolean;
   /** Có thể hiện dự báo khoảng điểm hay không. */
   duocDuBao: boolean;
@@ -36,7 +34,7 @@ export interface TrangThaiDuLieu {
   loiThoi: boolean;
   /** Dự báo (khi `duocDuBao`). */
   duBao: DuBaoDiemChuan | null;
-  /** Các năm điểm đúng bằng mức sàn 15,0 bị loại khỏi lịch sử (chương trình có cả năm sàn lẫn năm điểm chuẩn thật). */
+  /** Các năm nguồn xác định là điểm sàn, bị loại khỏi lịch sử điểm chuẩn. */
   cacNamSan?: number[];
   /** G: dữ liệu ghi mã trường/ngành khác nhau giữa các năm; chỉ giữ các năm cùng mã với năm mới nhất, không ghép lịch sử khác mã. */
   doiMa?: boolean;
@@ -67,10 +65,10 @@ const maCuaNam = (lc: Pick<LuaChon, "maTheoNam" | "maTruong">, nam: number): str
   return m ? `${m.maTruong ?? lc.maTruong ?? ""}|${m.maNganh ?? ""}` : null;
 };
 
-/** Các cặp (năm, điểm) hợp lệ của chương trình, tăng dần theo năm. Điểm THPT đúng bằng mức sàn 15,0 không phải điểm chuẩn nên bị bỏ. */
+/** Không suy loại điểm từ trị số. Dữ liệu cũ thiếu chứng cứ chỉ là số tham khảo chưa kiểm chứng. */
 export function cacDiemHopLe(lc: LuaChon): [number, number][] {
   const tho = cacDiemTho(lc);
-  return laThpt(lc) ? tho.filter(([, d]) => d !== DIEM_SAN_XET_TUYEN) : tho;
+  return laThpt(lc) ? tho.filter(([n]) => !["diem_san", "du_kien", "chua_ro"].includes(loaiDiemCuaNam(lc, n) ?? "")) : tho;
 }
 
 /** Phân loại dữ liệu của một chương trình. `tk` và `namDuBao` cho phép tính dự báo cùng lúc (tuỳ chọn). */
@@ -81,7 +79,7 @@ export function phanLoaiDuLieu(lc: LuaChon, tk?: ThongKeBienDong, namDuBao?: num
   const mkBase = (dsDiem: [number, number][]) => {
     const cacNam = dsDiem.map(([n]) => n);
     const namCuoi = cacNam.length ? cacNam[cacNam.length - 1] : null;
-    return { cacNam, namCuoi, nguonThuCap, laThamChieu: namCuoi !== null && nguonThuCap && namCuoi >= new Date().getFullYear() };
+    return { cacNam, namCuoi, nguonThuCap, laThamChieu: namCuoi !== null && (nguonThuCap || lc.daKiemChung !== true) };
   };
   const trong = { diemCuoi: null, duocDuBao: false, loiThoi: false, duBao: null };
 
@@ -95,12 +93,11 @@ export function phanLoaiDuLieu(lc: LuaChon, tk?: ThongKeBienDong, namDuBao?: num
   const maMoi = maCuaNam(lc, tho[tho.length - 1][0]);
   const khacMa = maMoi === null ? [] : tho.filter(([n]) => { const m = maCuaNam(lc, n); return m !== null && m !== maMoi; }).map(([n]) => n);
   const cungMa = tho.filter(([n]) => !khacMa.includes(n));
-  const cacNamSan = cungMa.filter(([, d]) => d === DIEM_SAN_XET_TUYEN).map(([n]) => n);
-  const diem = cungMa.filter(([, d]) => d !== DIEM_SAN_XET_TUYEN);
+  const cacNamSan = cungMa.filter(([n]) => loaiDiemCuaNam(lc, n) === "diem_san").map(([n]) => n);
+  const diem = cungMa.filter(([n]) => !["diem_san", "du_kien", "chua_ro"].includes(loaiDiemCuaNam(lc, n) ?? ""));
   const phu = { ...(khacMa.length ? { doiMa: true, cacNamBoQuaDoiMa: khacMa } : {}), ...(cacNamSan.length ? { cacNamSan } : {}) };
 
-  // Mọi điểm đều đúng bằng mức sàn 15,0: đó là điểm sàn của trường, không phải điểm chuẩn của ngành.
-  if (diem.length === 0) return { ...mkBase(cungMa), loai: "chiDiemSan", ...trong, ...phu };
+  if (diem.length === 0) return { ...mkBase(cungMa), loai: cacNamSan.length === cungMa.length ? "chiDiemSan" : "khongDu", ...trong, ...phu };
 
   const base = mkBase(diem);
   const namCuoi = base.namCuoi as number, diemMoi = diem[diem.length - 1][1];

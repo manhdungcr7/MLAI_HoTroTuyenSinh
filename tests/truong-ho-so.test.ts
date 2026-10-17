@@ -47,19 +47,23 @@ assert.ok(trong && trong.soChuongTrinh === 0 && trong.nganh.length === 0 && tron
 const h = dungHoSoTruong("BKA", LUA_CHON, [{ nam: "2024", url: "javascript:alert(1)" }, { nam: "2025", url: "https://ts.hust.edu.vn/a.pdf" }])!;
 assert.deepEqual(h.linkDeAn.map((d) => d.url), ["https://ts.hust.edu.vn/a.pdf"]);
 
-// Điểm sàn 15,0 không hiện như điểm chuẩn: chương trình chỉ có mức sàn có diem = null và diemSan; có cả năm sàn lẫn năm thật thì lấy năm thật
+// Chỉ ô điểm có bằng chứng mới được gọi là điểm sàn; có cả năm sàn lẫn năm thật thì lấy năm thật.
 {
   const mau = LUA_CHON.find((l) => l.maTruong === "BKA")!;
+  const bangChungSan = { "2025": { kind: "diem_san" as const, score: 15, scale: 30, sourceUrl: "https://fixture.edu.vn/diem-san", checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: null, includesPriority: null } };
   const ds: LuaChon[] = [
-    { ...mau, id: "t-san", phuongThuc: "THPT", diemTheoNam: { "2025": 15 } },
-    { ...mau, id: "t-lan", phuongThuc: "THPT", diemTheoNam: { "2025": 15, "2024": 26.5 } },
+    { ...mau, id: "t-san", phuongThuc: "THPT", diemTheoNam: { "2025": 15 }, scoreEvidence: bangChungSan },
+    { ...mau, id: "t-lan", phuongThuc: "THPT", diemTheoNam: { "2025": 15, "2024": 26.5 }, scoreEvidence: bangChungSan },
     { ...mau, id: "t-dgnl", phuongThuc: "DGNL_HN", diemTheoNam: { "2025": 15 } },
+    { ...mau, id: "t-chua-kiem", phuongThuc: "THPT", diemTheoNam: { "2025": 15 }, scoreEvidence: {} },
   ];
   const dong = dungHoSoTruong("BKA", ds)!.nganh.flatMap((n) => n.dong);
   const san = dong.find((d) => d.id === "t-san")!, lan = dong.find((d) => d.id === "t-lan")!, dg = dong.find((d) => d.id === "t-dgnl")!;
   assert.equal(san.diem, null); assert.deepEqual(san.diemSan, { nam: "2025", diem: 15 }); assert.equal(diemGhiThang(san, String), CHUA_CO);
   assert.equal(lan.diem, 26.5); assert.equal(lan.nam, "2024"); assert.equal(lan.diemSan, null); assert.deepEqual(lan.theoNam, [["2024", 26.5]]);
   assert.equal(dg.diem, 15, "phương thức khác có thang riêng, không áp luật điểm sàn THPT"); assert.equal(dg.diemSan, null);
+  const chuaKiem = dong.find((d) => d.id === "t-chua-kiem")!;
+  assert.equal(chuaKiem.diem, 15, "không suy điểm sàn chỉ từ trị số 15"); assert.equal(chuaKiem.diemSan, null);
 }
 
 console.log("truong-ho-so: OK");

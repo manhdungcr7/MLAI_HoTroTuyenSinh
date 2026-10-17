@@ -10,7 +10,7 @@ export const KHOA_CHO_PHEP: Record<string, readonly string[]> = {
   scholarship: [...CHUNG, "ten", "tenHocBong", "giaTri", "dieuKien", "hanNop"],
   admission: [...CHUNG, "maNganh", "tenNganh", "phuongThuc", "chiTieu", "toHop", "dieuKienNhanHoSo"],
   announcement: [...CHUNG, "tieuDe", "tomTat", "linkChiTiet", "mucDo", "ngayHetHan"],
-  cutoff_score: [...CHUNG, "tenNganh", "maNganh", "phuongThuc", "toHop", "diemChuan", "tieuChiPhu"],
+  cutoff_score: [...CHUNG, "tenNganh", "maNganh", "phuongThuc", "toHop", "diemChuan", "loaiDiem", "thangDiem", "nguon", "capNhatLuc", "tieuChiPhu"],
   noi_luu_tru: [...CHUNG, "coKyTucXa", "giaKyTucThang", "khuTroXungQuanh", "giaTroThang", "khoangCachKm", "ghiChu"],
   review: [...CHUNG, "tieuDe", "noiDung", "nguoiVietLa"],
   luu_y: [...CHUNG, "tieuDe", "noiDung"],
