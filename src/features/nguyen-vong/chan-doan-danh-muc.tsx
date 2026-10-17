@@ -1,4 +1,5 @@
 // Thẻ so sánh nguyện vọng với điểm chuẩn lịch sử và nhắc học sinh tự chọn thứ tự ưu tiên.
+import { dinhDangDiem } from "@/engine/dinh-dang";
 import { useMemo, useState } from "react";
 import {
   AlertTriangle,
@@ -281,7 +282,7 @@ export function ChanDoanDanhMucCard({
                       {l.nganh}
                     </b>
                     <span className="block text-[13px] text-chu-phu truncate mt-0.5">
-                      {l.truong} · Điểm chuẩn: {l.diemMin} · {l.khuVuc}
+                      {l.truong} · Điểm chuẩn: {dinhDangDiem(l.diemMin)} · {l.khuVuc}
                     </span>
                   </div>
                 </li>

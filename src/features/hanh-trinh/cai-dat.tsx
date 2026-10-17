@@ -6,6 +6,7 @@ import { HangBam, Nhan, Nut, The } from "@/components/ui/nut-the";
 import { HopTruot, TieuDeMuc } from "@/components/ui/hien-thi";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { coDuLieuNguoiDung } from "@/state/chon";
 import { docLichSu, ghiLichSu } from "@/features/tu-van/hoi-thoai";
 import { LUOT_AI_MOI_NGAY } from "@/features/tu-van/che-do-ai";
 import { useCheDoAI } from "@/features/tu-van/dung-che-do-ai";
@@ -27,7 +28,7 @@ export default function CaiDat() {
   const [hoi, setHoi] = useState<HoiLai>(null);
   const [choKhoiPhuc, setChoKhoiPhuc] = useState<Extract<ReturnType<typeof docBanSaoLuu>, { ok: true }> | null>(null);
   const dong = () => setHoi(null);
-  const coDuLieu = !!s.hoSo.hoTen.trim() || s.hoSo.hoanTat || s.mucTieu !== null || s.nguyenVong.length > 0 || s.yeuThich.length > 0;
+  const coDuLieu = coDuLieuNguoiDung(s);
   const soTiet = s.coDinh.length;
   const c = s.cauHinh;
 
@@ -96,22 +97,20 @@ export default function CaiDat() {
         <KhoiKetNoi />
 
         <section>
-          <TieuDeMuc>Dữ liệu trên máy này</TieuDeMuc>
+          <TieuDeMuc>Dữ liệu của em</TieuDeMuc>
           <The className="space-y-3">
+            <p className="text-[13px] text-chu-phu">Mọi thứ nằm trên máy này, không gửi lên máy chủ. Em tải bản sao lưu để giữ hoặc chuyển sang máy khác.</p>
             <label className="flex items-start gap-3 min-h-11">
               <input type="checkbox" checked={kemChat} onChange={(e) => setKemChat(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--color-xanh)]" />
               <span className="text-[14px] text-chu">Kèm lịch sử trò chuyện trong tệp sao lưu <span className="text-chu-phu">(câu bạn đã hỏi AI cũng nằm trong tệp)</span></span>
             </label>
             <div className="grid grid-cols-2 gap-2">
-              <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Xuất JSON</Nut>
-              <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Nhập JSON</Nut>
+              <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải sao lưu</Nut>
+              <Nut kieu="vien" bieuTuong={Upload} onClick={() => oTep.current?.click()}>Khôi phục</Nut>
             </div>
             <input ref={oTep} type="file" accept="application/json,.json" className="hidden" aria-hidden="true" tabIndex={-1} onChange={(e) => void nhap(e.target.files?.[0])} />
             <p role="status" className={tin ? (tin.ok ? "text-[13px] text-luc-chu" : "text-[13px] text-do-chu") : "sr-only"}>{tin?.chu}</p>
-            <div className="grid grid-cols-2 gap-2">
-              <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Hồ sơ mẫu</Nut>
-              <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết</Nut>
-            </div>
+            <Nut kieu="vien" bieuTuong={Sparkles} onClick={() => (coDuLieu ? setHoi("mau") : dungMau())}>Hồ sơ mẫu</Nut>
           </The>
         </section>
 
@@ -122,6 +121,12 @@ export default function CaiDat() {
             <HeartHandshake size={16} className="shrink-0" />Cùng cập nhật dữ liệu trường
           </button>
         </div>
+
+        <section aria-labelledby="vung-nguy-hiem" className="rounded-xl border border-do/40 p-3.5 space-y-2.5">
+          <h2 id="vung-nguy-hiem" className="text-[15px] font-bold text-do-chu">Vùng nguy hiểm</h2>
+          <p className="text-[13px] text-chu-phu">Xóa hồ sơ, điểm, nguyện vọng, mục tiêu, kế hoạch, lịch sử trò chuyện và liên kết lịch trên máy này. Không hoàn tác được.</p>
+          <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={() => setHoi("xoa")}>Xóa hết và làm lại</Nut>
+        </section>
       </NoiDung>
 
       <HopTruot mo={hoi === "mau"} dong={dong} tieuDe="Dùng hồ sơ mẫu?">
@@ -140,9 +145,18 @@ export default function CaiDat() {
       </HopTruot>
 
       <HopTruot mo={hoi === "xoa"} dong={dong} tieuDe="Xóa hết và làm lại?">
-        <p className="text-[14px] text-chu mb-4">Toàn bộ hồ sơ, điểm, mục tiêu, nguyện vọng và kế hoạch học trên máy này sẽ bị xóa. Việc này không hoàn tác được.</p>
+        <p className="text-[14px] text-chu mb-2">Sẽ mất toàn bộ trên máy này:</p>
+        <ul className="list-disc pl-5 text-[14px] text-chu mb-3 space-y-0.5">
+          <li>Hồ sơ và điểm</li>
+          <li>Nguyện vọng và mục tiêu</li>
+          <li>Kế hoạch học và lịch sử hoàn thành</li>
+          <li>Lịch sử trò chuyện với AI</li>
+          <li>Liên kết lịch đã đăng ký (sẽ bị thu hồi)</li>
+        </ul>
+        <p className="text-[13px] text-chu-phu mb-4">Không hoàn tác được. Em nên tải bản sao lưu trước.</p>
         <div className="space-y-2">
-          <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={xoaHet}>Xóa hết dữ liệu</Nut>
+          <Nut kieu="vien" bieuTuong={Download} onClick={xuat}>Tải bản sao lưu trước</Nut>
+          <Nut kieu="nguyHiem" bieuTuong={RotateCcw} onClick={xoaHet}>Xóa hết và làm lại</Nut>
           <Nut kieu="vien" onClick={dong}>Không, giữ lại</Nut>
         </div>
       </HopTruot>

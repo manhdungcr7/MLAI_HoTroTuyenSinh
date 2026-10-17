@@ -12,6 +12,7 @@ import { phanTichCau, timTruongMoHo } from "./hieu-cau";
 import { lamSachHanhDong, lamSachThe, nganhLuotTruoc, taoNguCanh, type TheTruong, type TinNhan } from "./hoi-thoai";
 import { CHE_DO_MAC_DINH, idHoSoAI, uuidMoi, type Luot, type PhienAI } from "./che-do-ai";
 import { bocLoiChao, nhanYDinhQuyTac, traLoiQuyTac } from "./y-dinh";
+import { traLoiTienDoChat } from "./tien-do-chat";
 import { chonDuLieuKemTheo, nguCanhLuotTruoc, tomTatHoSo, traLoiTuDong, type KetQuaTuDong } from "./lay-du-lieu";
 import { dungBangSoSanh, tomTatChoAI } from "./bang-so-sanh";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
@@ -25,7 +26,8 @@ export function nguCanhVoiNV1(manHinh: string, truoc: TinNhan[], s: AppState): s
 
 /** Máy chủ có ngân sách tối đa 12 giây cho một lượt; cộng thời gian mạng, nên chờ 25 giây rồi mới tự trả lời từ số liệu có sẵn. */
 const CHO_TOI_DA_MS = 25_000;
-export type LoiAI = "chua-cau-hinh" | "mang" | "het-luot";
+/** het-luot: hết lượt của chính em; het-luot-chung: hết lượt chung trong ngày (IP hoặc toàn hệ thống); so-lieu: số AI nêu không khớp dữ liệu (422). */
+export type LoiAI = "chua-cau-hinh" | "mang" | "het-luot" | "het-luot-chung" | "so-lieu";
 
 const laLuot = (x: unknown): x is Luot => !!x && typeof x === "object" && Number.isInteger((x as Luot).con) && Number.isInteger((x as Luot).toiDa) && (x as Luot).toiDa > 0 && (x as Luot).con >= 0;
 
@@ -42,6 +44,8 @@ export async function hoiAI(y: YeuCauTuVan, phien: PhienAI): Promise<{ kq: TraLo
         phien.ghiLuot?.({ con: 0, toiDa: laLuot(d.luot) ? d.luot.toiDa : phien.luot?.toiDa ?? 50 });
         return { kq: null, loi: "het-luot" };
       }
+      if (r.status === 429 && typeof d.loi === "string" && d.loi.startsWith("het-luot")) return { kq: null, loi: "het-luot-chung" };
+      if (r.status === 422) return { kq: null, viecTiep: typeof d.goiY?.viecTiep === "string" ? d.goiY.viecTiep : undefined, loi: "so-lieu" };
       return { kq: null, viecTiep: typeof d.goiY?.viecTiep === "string" ? d.goiY.viecTiep : undefined, loi: r.status === 503 ? "chua-cau-hinh" : "mang" };
     }
     const ds = (x: unknown) => (Array.isArray(x) ? x.filter((t): t is string => typeof t === "string") : []);
@@ -113,6 +117,9 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
   // "Chào, UIT là trường gì": bỏ lời chào, xử lý phần nội dung.
   const cau = bocLoiChao(cauGoc) ?? cauGoc;
   const stateTuVan = dungHoSo ? s : trangThaiKhongKemHoSo(s);
+  // Hỏi tiến độ học theo chương trình lớp 12: chạy bằng quy tắc và dữ liệu đã lấy, không qua AI, nên không thể bịa chương hay bài.
+  const tienDo = traLoiTienDoChat(cau, stateTuVan);
+  if (tienDo) return { vai: "mayChu", chu: tienDo.traLoi, nguon: [], cheDo: "tuDong", idDuLieu: [], ...(tienDo.luaChon?.length ? { luaChon: tienDo.luaChon } : {}), ...(tienDo.tienDo ? { tienDo: tienDo.tienDo } : {}) };
   // Lịch sử có thể đã chứa câu trả lời cá nhân hóa, nên cũng không đưa vào lúc bỏ chọn hồ sơ.
   const truocTuVan = dungHoSo ? truoc : [];
   const giu = nganhLuotTruoc(truocTuVan);
@@ -163,6 +170,11 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
     const toiDa = phien.luot?.toiDa ?? 50;
     const ghiChu = `Hôm nay đã dùng hết ${toiDa} lượt AI`;
     if (td.khongHieu) return { vai: "mayChu", chu: `Câu này cần AI diễn giải, mà hôm nay đã dùng hết ${toiDa} lượt AI (đặt lại lúc 0 giờ). Bạn ${cauDoc}.`, nguon: [], cheDo: "tuDong", idDuLieu, ghiChu };
+    return tinTuDong(td, idDuLieu, { ghiChu });
+  }
+  if (loi === "het-luot-chung" || loi === "so-lieu") {
+    const ghiChu = loi === "so-lieu" ? "Số liệu AI nêu chưa khớp dữ liệu, mình dùng câu trả lời từ dữ liệu có sẵn" : "Hôm nay đã hết lượt hỏi AI, câu trả lời dưới đây lấy từ dữ liệu có sẵn";
+    if (td.khongHieu) return { vai: "mayChu", chu: `${ghiChu}, nhưng câu này mình chưa hiểu. Bạn ${cauDoc}.`, nguon: [], cheDo: "tuDong", idDuLieu, ghiChu };
     return tinTuDong(td, idDuLieu, { ghiChu });
   }
   // Không hiểu câu mà AI cũng không phản hồi: nói đúng nguyên nhân thay vì hiện "chưa hiểu" như thể lỗi ở người dùng.

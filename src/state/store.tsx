@@ -32,7 +32,9 @@ export interface AppState {
 }
 
 const KHOA = "nvai:v2";
+const KHOA_HONG = "nvai:v2-hong"; // bản gần nhất của dữ liệu hỏng, giữ lại để em khôi phục
 const KHOA_FEED_LICH = "nvai:ke-hoach-lich-feed";
+let daGapDuLieuHong = false; // doc() gặp dữ liệu không đọc được lúc mở app
 
 /** Thu hồi URL lịch trước khi xóa khóa quản lý khỏi máy; nếu ngoại tuyến, giữ khóa để em thử lại. */
 function thuHoiFeedTruocKhiXoa(): void {
@@ -57,12 +59,12 @@ function thuHoiFeedTruocKhiXoa(): void {
 }
 
 /** Xóa mọi dữ liệu phụ của các màn (tình huống đang thử, bộ lọc, nhắc đã gửi...) để "làm lại" thật sự là làm lại. */
-function xoaDuLieuPhu() {
-  thuHoiFeedTruocKhiXoa();
+function xoaDuLieuPhu(thuHoiLich = true) {
+  if (thuHoiLich) thuHoiFeedTruocKhiXoa();
   for (const kho of [() => localStorage, () => sessionStorage]) {
     try {
       const k = kho();
-      for (const ten of Object.keys(k)) if (ten.startsWith("nvai:") && ten !== KHOA && ten !== KHOA_FEED_LICH && !(KHOA_AI as readonly string[]).includes(ten)) k.removeItem(ten);
+      for (const ten of Object.keys(k)) if (ten.startsWith("nvai:") && ten !== KHOA && ten !== KHOA_HONG && ten !== KHOA_FEED_LICH && !(KHOA_AI as readonly string[]).includes(ten)) k.removeItem(ten);
     } catch { /* trình duyệt chặn lưu: bỏ qua */ }
   }
   window.dispatchEvent(new Event("nvai-lam-lai")); // các màn đang giữ dữ liệu trong bộ nhớ tự đặt lại
@@ -76,16 +78,27 @@ function doc(): AppState {
       // Tâm trạng chỉ có hiệu lực trong ngày đặt: sang ngày mới trở về bình thường ở mọi màn.
       return n.tamTrang !== "binhThuong" && n.tamTrangNgay !== isoNgay(new Date()) ? { ...n, tamTrang: "binhThuong", tamTrangNgay: undefined } : n;
     }
-  } catch { /* trình duyệt chặn lưu hoặc dữ liệu hỏng: dùng bộ nhớ tạm */ }
+  } catch {
+    // Dữ liệu hỏng: effect lúc mở app sẽ ghi trạng thái trống đè lên khóa chính, nên giữ bản hỏng sang khóa riêng trước.
+    try {
+      const tho = localStorage.getItem(KHOA);
+      if (tho) { localStorage.setItem(KHOA_HONG, tho); daGapDuLieuHong = true; }
+    } catch { /* trình duyệt chặn lưu: dùng bộ nhớ tạm */ }
+  }
   return TRANG_THAI_BAN_DAU;
 }
 
 /** Chuỗi thô đang lưu trên máy (kể cả khi hỏng không đọc được), để cho em tải về trước khi đặt lại. */
 export function docThoDaLuu(): string | null {
-  try { return localStorage.getItem(KHOA); } catch { return null; }
+  try { return localStorage.getItem(KHOA) ?? localStorage.getItem(KHOA_HONG); } catch { return null; }
 }
 
 /** Xóa mọi khóa nvai:* (đặt lại hoàn toàn). Dùng khi dữ liệu hỏng đến mức app không chạy được. */
+/** Chuỗi dữ liệu hỏng đã được giữ lại (null nếu không có). */
+export function docBanHong(): string | null {
+  try { return localStorage.getItem(KHOA_HONG); } catch { return null; }
+}
+
 export function xoaTatCaDuLieu() {
   datLaiHoSoAI({ getItem: () => null, setItem: () => {}, removeItem: () => {} }); // quên mã hồ sơ tạm trong bộ nhớ
   for (const kho of [() => localStorage, () => sessionStorage]) {
@@ -97,6 +110,9 @@ interface Ctx {
   s: AppState;
   /** false khi trình duyệt không cho ghi dữ liệu (đầy bộ nhớ, chế độ riêng tư): dữ liệu chỉ còn trong phiên này. */
   luuDuoc: boolean;
+  /** true khi lúc mở app dữ liệu cũ không đọc được; bản hỏng đã được giữ ở khóa `nvai:v2-hong`. */
+  duLieuCuHong: boolean;
+  boBaoHong: () => void;
   capNhatHoSo: (p: Partial<HoSo>) => void;
   datMucTieu: (m: MucTieuChinh | null) => void;
   themNguyenVong: (id: string) => void;
@@ -142,6 +158,7 @@ const idMoi = (t: string) => `${t}-${Date.now().toString(36)}-${dem++}`;
 export function AppProvider({ children }: { children: ReactNode }) {
   const [s, setS] = useState<AppState>(doc);
   const [luuDuoc, setLuuDuoc] = useState(true);
+  const [duLieuCuHong, setDuLieuCuHong] = useState(daGapDuLieuHong);
   // sRef luôn là trạng thái mới nhất, kể cả khi hai lệnh gọi liên tiếp trong cùng một lượt: lệnh sau xây trên kết quả của lệnh trước.
   const sRef = useRef(s);
   const dat = useCallback((n: AppState) => { sRef.current = n; setS(n); }, []);
@@ -169,8 +186,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [dat]);
 
   const api = useMemo<Ctx>(() => ({
-    s, luuDuoc,
-    capNhatHoSo: (p) => cap((x) => ({ ...x, hoSo: { ...x.hoSo, ...p } })),
+    s, luuDuoc, duLieuCuHong, boBaoHong: () => setDuLieuCuHong(false),
+    // Em sửa hồ sơ mẫu thì từ đó là hồ sơ của em: bỏ cờ laMau (cờ này chặn đồng bộ lịch và làm nhãn "không phải người thật" nói sai).
+    capNhatHoSo: (p) => cap((x) => {
+      const moi: HoSo = { ...x.hoSo, ...p };
+      const that = x.hoSo as unknown as Record<string, unknown>;
+      const doi = (Object.keys(p) as string[]).some((k) => k !== "laMau" && JSON.stringify((p as Record<string, unknown>)[k]) !== JSON.stringify(that[k]));
+      if (x.hoSo.laMau && doi && p.laMau === undefined) delete moi.laMau;
+      return { ...x, hoSo: moi };
+    }),
     datMucTieu: (m) => cap((x) => ({ ...x, mucTieu: m })),
     themNguyenVong: (id) => cap((x) => (x.nguyenVong.includes(id) ? x : { ...x, nguyenVong: [...x.nguyenVong, id] })),
     xoaNguyenVong: (id) => cap((x) => ({ ...x, nguyenVong: x.nguyenVong.filter((i) => i !== id) })),
@@ -189,12 +213,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     themDiemThi: (d) => cap((x) => ({ ...x, diemThi: [...x.diemThi, d] })),
     luuTinhHuong: (th) => cap((x) => ({ ...x, tinhHuong: [...x.tinhHuong, { ...th, id: idMoi("th"), luc: new Date().toISOString() }].slice(-6) })),
     xoaTinhHuong: (id) => cap((x) => ({ ...x, tinhHuong: x.tinhHuong.filter((t) => t.id !== id) })),
-    dungHoSoMau: () => { xoaDuLieuPhu(); dat(taoHoSoMau()); },
-    dungHoSoMauKieu: (kieu) => { xoaDuLieuPhu(); dat(taoHoSoMau(kieu)); },
-    lamLai: () => { xoaDuLieuPhu(); try { datLaiHoSoAI(localStorage); } catch { /* bỏ qua */ } dat({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
+    dungHoSoMau: () => { xoaDuLieuPhu(false); dat(taoHoSoMau()); }, // không thu hồi liên kết lịch: nó thuộc về em, không thuộc hồ sơ mẫu
+    dungHoSoMauKieu: (kieu) => { xoaDuLieuPhu(false); dat(taoHoSoMau(kieu)); },
+    lamLai: () => { xoaDuLieuPhu(); try { datLaiHoSoAI(localStorage); localStorage.removeItem(KHOA_HONG); } catch { /* bỏ qua */ } dat({ ...TRANG_THAI_BAN_DAU, hoSo: HO_SO_TRONG }); },
     themLoiNhan: (l) => cap((x) => (x.loiNhan.some((k) => k.id === l.id) ? x : { ...x, loiNhan: [l, ...x.loiNhan].slice(0, 30) })),
     xoaLoiNhan: (id) => cap((x) => ({ ...x, loiNhan: x.loiNhan.filter((k) => k.id !== id) })),
-    khoiPhuc: (n) => { xoaDuLieuPhu(); dat(chuanHoa(n)); },
+    khoiPhuc: (n) => { xoaDuLieuPhu(false); dat(chuanHoa(n)); },
     datTrangThaiViec: (v, tt) => cap((x) => ({
       ...x,
       trangThaiViec: { ...x.trangThaiViec, [v.id]: tt },
@@ -224,7 +248,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return { chuaXep: r.chuaXep, ghiChu: r.ghiChu };
     },
     xoaDiemThi: (viTri) => cap((x) => (viTri < 0 || viTri >= x.diemThi.length ? x : { ...x, diemThi: x.diemThi.filter((_, i) => i !== viTri) })),
-  }), [s, luuDuoc, cap, dat]);
+  }), [s, luuDuoc, duLieuCuHong, cap, dat]);
 
   return <AppCtx.Provider value={api}>{children}</AppCtx.Provider>;
 }
