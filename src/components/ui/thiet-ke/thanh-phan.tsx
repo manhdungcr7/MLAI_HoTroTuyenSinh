@@ -32,8 +32,8 @@ export function ChipLoc({ chon, onClick, icon: Icon, children, dem }: { chon?: b
   );
 }
 /** Hàng chip cuộn ngang, bắt dính (snap), ẩn thanh cuộn. */
-export function HangChipLoc({ children, nhan }: { children: ReactNode; nhan: string }) {
-  return <div role="group" aria-label={nhan} className="flex gap-2 overflow-x-auto an-thanh-cuon cuon-snap-x -mx-4 px-4 py-1">{children}</div>;
+export function HangChipLoc({ children, nhan, className }: { children: ReactNode; nhan: string; className?: string }) {
+  return <div role="group" aria-label={nhan} className={gop("flex gap-2 overflow-x-auto an-thanh-cuon cuon-snap-x py-1", className)}>{children}</div>;
 }
 
 /* ---------- ONhom ---------- */

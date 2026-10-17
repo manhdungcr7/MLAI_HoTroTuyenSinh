@@ -310,7 +310,7 @@ export default function DanhSachNguyenVong() {
                 <ChipLoc chon={loc === "tat-ca"} onClick={() => setLoc("tat-ca")} dem={ds.length}>Tất cả</ChipLoc>
                 {THU_TU_NHAN_NV.map((n) => <ChipLoc key={n} chon={loc === n} onClick={() => setLoc(n)} icon={MAU_NHAN_NV[n].icon} dem={dem[n]}>{n}</ChipLoc>)}
               </HangChipLoc>
-              <span aria-hidden className="pointer-events-none absolute inset-y-0 -right-4 w-10 bg-linear-to-l from-nen to-transparent" />
+              <span aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-nen to-transparent" />
             </div>
 
             {dsYeuThich.some((l) => !s.nguyenVong.includes(l.id)) && (
