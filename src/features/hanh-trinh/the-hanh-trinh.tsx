@@ -70,8 +70,7 @@ export function TheHanhTrinh() {
       <div>
         <span className={NHAN}>Đổi gì thì khác</span>
         <p className={NOI}>{doi}</p>
-        <p className="text-[13px] text-chu-phu">So với điểm chuẩn năm gần nhất, không phải xác suất đậu.</p>
-        <Nut kieu="nhe" bieuTuong={FlaskConical} muiTen onClick={() => nav(DUONG_DAN.phongThuDiem())} className="mt-1">Thử điểm</Nut>
+        <Nut kieu="nhe" bieuTuong={FlaskConical} muiTen onClick={() => nav(DUONG_DAN.phongThuDiem())} className="mt-2">Thử điểm</Nut>
       </div>
       <div>
         <span className={NHAN}>Hôm nay làm gì</span>
