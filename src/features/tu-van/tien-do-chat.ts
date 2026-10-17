@@ -3,7 +3,7 @@
 // không có dữ liệu phù hợp (chủ đề lớp 11, bộ sách khác, câu không khớp chủ đề nào) thì nói rõ là chưa có. TypeScript thuần.
 import { CHU_DE_LOP12, NGUON_CHUONG_TRINH, chuDeCuaMon } from "@/data/chuong-trinh-lop12";
 import {
-  NHAN_MUC_DO, chuDeConHoc, coTienDoMon, hieuTienDoTuCau, monTuCau, tenMon, type MucDoChuDe,
+  NHAN_MUC_DO, chuDeConHoc, coTienDoMon, hieuTienDoTuCau, monTuCau, tenMon, xepUuTienChuDe, type MucDoChuDe,
 } from "@/engine/tien-do-chu-de";
 import { chuanHoa } from "@/engine/truong";
 import { mucTieuDayDu } from "@/state/chon";
@@ -93,10 +93,38 @@ function nguonKeHoach(s: AppState): KetQuaTienDoChat {
 
 const MAU_NGUON = /\b(nguon|dua vao|dua tren|can cu|lay tu dau|lay o dau|tu dau ra|co so nao)\b/;
 const MAU_VE_KE_HOACH = /\b(ke hoach|chuong trinh hoc|chu de|de xuat|goi y)\b/;
+const MAU_CON_THIEU = /\b(chuong|chu de|bai|phan|kien thuc)\b.*\b(con thieu|dang thieu|thieu|con lai|chua xong)\b|\b(con thieu|dang thieu|thieu)\b.*\b(chuong|chu de|kien thuc)\b|\bchuong nao\b.*\b(chua|can)\b/;
 const MAU_HOI_CT = /\b(chuong trinh|gom nhung gi|gom gi|hoc nhung gi|hoc gi|co nhung chuong|cac chuong)\b/;
-const MAU_LAP_KE_HOACH = /\b(lap|len|goi y|de xuat|xep)\b.*\bke hoach\b|\bke hoach\b.*\b(tien do|theo tien do)\b|\bnen on gi\b|\bnen hoc gi\b|\bon gi\b.*\b(bay gio|tuan nay|truoc)\b/;
+const MAU_LAP_KE_HOACH = /\b(chuong trinh|lo trinh)\b.*\b(hoc|on)\b.*\b(phu hop|de xuat|goi y)\b|\b(de xuat|goi y)\b.*\b(chuong trinh|lo trinh)\b.*\b(hoc|on)\b|\b(lap|len|goi y|de xuat|xep)\b.*\bke hoach\b|\bke hoach\b.*\b(tien do|theo tien do)\b|\bnen on gi\b|\bnen hoc gi\b|\bon gi\b.*\b(bay gio|tuan nay|truoc)\b/;
 const MAU_HOI_TIEN_DO = /\b(hoi tien do|tien do hoc|tien do mon|em da hoc|minh da hoc|da hoc duoc|hoc den dau|hoc toi dau|da hoc nhung gi)\b/;
 const MAU_TUYEN_SINH = /\b(diem chuan|nguyen vong|truong dai hoc|nganh|hoc phi|xet tuyen|ky tuc|viec lam)\b/;
+
+function chuongConThieu(mon: MonId, s: AppState): KetQuaTienDoChat {
+  const td = s.hoSo.tienDoKienThuc;
+  const mons = monCuaEm(s);
+  const luaChon: LuaChonNhanh[] = [{ nhan: "Lập kế hoạch học", cau: "Gợi ý kế hoạch học theo tiến độ của mình" }, ...LUA_CHON_MON(mons, mon)];
+  if (!coTienDoMon(mon, td)) {
+    const ds = chuDeCuaMon(mon);
+    return {
+      traLoi: `Mình chưa biết bạn đã học chương nào của môn ${tenMon(mon)}, nên chưa nói được chương nào còn thiếu và không đoán. Chương trình lớp 12 môn này có ${ds.length} chủ đề:
+${nhieu(ds.map((c) => c.ten))}
+Bạn chọn mức cho từng chủ đề, mình sẽ liệt kê phần còn thiếu và xếp thứ tự nên học. ${GHI_CHU_NGUON}`,
+      tienDo: { the: mon }, luaChon,
+    };
+  }
+  const con = xepUuTienChuDe(mon, td).filter((x) => x.mucDo !== "namVung");
+  if (con.length === 0) {
+    return { traLoi: `Bạn ghi là đã vững cả ${chuDeCuaMon(mon).length} chủ đề môn ${tenMon(mon)}. Mình không thấy chương nào còn thiếu, bạn có thể dành thời gian luyện đề. ${GHI_CHU_NGUON}`, tienDo: { the: mon }, luaChon };
+  }
+  const chuaTraLoi = con.filter((x) => x.mucDo === null).length;
+  return {
+    traLoi: `Môn ${tenMon(mon)} còn ${con.length}/${chuDeCuaMon(mon).length} chủ đề chưa vững, xếp theo thứ tự nên học:
+${nhieu(con.map((x) => `${x.chuDe.ten} (${x.lyDo})`))}${chuaTraLoi ? `
+${chuaTraLoi} chủ đề bạn chưa cho mình biết mức, mình xếp tạm là chưa chắc.` : ""}
+Bấm "Lập kế hoạch học" để mình xếp các chủ đề này vào tuần. ${GHI_CHU_NGUON}`,
+    tienDo: { the: mon }, luaChon,
+  };
+}
 
 /**
  * Trả lời nếu câu hỏi thuộc luồng tiến độ học; null thì để các bộ trả lời khác xử lý.
@@ -113,6 +141,9 @@ export function traLoiTienDoChat(cauGoc: string, s: AppState): KetQuaTienDoChat 
 
   // Hỏi môn nào đó: "Hỏi tiến độ môn Hóa học"
   if (MAU_HOI_TIEN_DO.test(q) || /\bhoi tien do mon\b/.test(q)) return moDauHoiTienDo(mon1 ?? monCuaEm(s)[0], s);
+
+  // Hỏi phần còn thiếu của một môn: "những chương còn thiếu trong môn toán"
+  if (mon1 && MAU_CON_THIEU.test(q) && !MAU_TUYEN_SINH.test(q)) return chuongConThieu(mon1, s);
 
   // Câu nêu mức học: "lý em học xong từ trường, toán giỏi hình học": hiểu, nói lại, chờ bấm Lưu. Không xử lý câu về tuyển sinh.
   if (!MAU_TUYEN_SINH.test(q)) {

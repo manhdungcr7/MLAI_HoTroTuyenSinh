@@ -83,3 +83,13 @@ for (const c of ["nguồn dữ liệu điểm chuẩn ngành CNTT lấy từ đ�
 const tinNguon = await layTinTraLoi({ cau: "Kế hoạch học tập được đề xuất dựa vào nguồn dữ liệu nào?", truoc: [], s: sTrong, nguon: null, dungHoSo: true, manHinh: "/tu-van", phien: { cheDo: "ai", idHoSo: "x", luot: null } });
 assert.equal(tinNguon.cheDo, "tuDong", "câu về nguồn dữ liệu không đi qua AI kể cả khi bật chế độ AI");
 console.log("tien-do-chat.test.ts: tất cả kiểm tra đều qua");
+
+// Chương còn thiếu của một môn: không đoán khi chưa có tiến độ, có tiến độ thì chỉ liệt kê chủ đề chưa vững kèm nút lập kế hoạch
+const thieuTrong = traLoiTienDoChat("những chương còn thiếu trong môn toán", sTrong)!;
+assert.ok(thieuTrong && thieuTrong.tienDo?.the === "toan" && /không đoán/.test(thieuTrong.traLoi), "chưa có tiến độ: nói thẳng, mở thẻ chọn mức");
+const sCoTD = { ...s, hoSo: { ...s.hoSo, tienDoKienThuc: { [CHU_DE_LOP12.find((c) => c.mon === "toan")!.ten]: "namVung" as const, [CHU_DE_LOP12.filter((c) => c.mon === "toan")[1].ten]: "chuaHoc" as const } } };
+const thieuCo = traLoiTienDoChat("em còn thiếu chương nào môn toán", sCoTD)!;
+assert.ok(thieuCo && /chưa vững/.test(thieuCo.traLoi) && !thieuCo.traLoi.includes(`• ${CHU_DE_LOP12.find((c) => c.mon === "toan")!.ten} (`), "bỏ chủ đề đã vững");
+assert.ok(thieuCo.luaChon?.some((l) => /kế hoạch/i.test(l.nhan)), "có nút lập kế hoạch");
+assert.ok(traLoiTienDoChat("Đề xuất chương trình học phù hợp để lập kế hoạch", sCoTD), "đề xuất chương trình học dẫn tới kế hoạch theo tiến độ");
+console.log("tien-do-chat (chương còn thiếu): ok");

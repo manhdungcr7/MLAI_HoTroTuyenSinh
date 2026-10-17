@@ -14,6 +14,8 @@ import { TOI_DA_TIN, docLichSu, ghiLichSu, goiYBanDau, type TinNhan } from "./ho
 import { TinMayChu } from "./thanh-phan/tin-may-chu";
 import { DinhDangMarkdown } from "@/components/ui/dinh-dang-markdown";
 import { trinhBayPhanHoi } from "./trinh-bay-phan-hoi";
+import { LichSuDoanChat } from "./thanh-phan/lich-su-doan-chat";
+import { luuDoanChat } from "./kho-doan-chat";
 
 export function NutTuVan({ nguCanh }: { nguCanh: string }) {
   const nav = useNavigate();
@@ -172,11 +174,10 @@ export default function TuVan() {
           </div>
         )}
 
-        {tin.length > 0 && (
-          <div className="flex justify-end">
-            <button type="button" disabled={dang} onClick={() => { setTin([]); setCauHoi(""); }} className="inline-flex items-center gap-1.5 min-h-11 px-2 text-[13px] font-bold text-xanh disabled:opacity-50"><RotateCcw size={15} />Cuộc trò chuyện mới</button>
-          </div>
-        )}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <LichSuDoanChat tin={tin} dang={dang} onMo={(t) => { setTin(t); setCauHoi(""); }} />
+          {tin.length > 0 && <button type="button" disabled={dang} onClick={() => { luuDoanChat(localStorage, tin); setTin([]); setCauHoi(""); }} className="inline-flex items-center gap-1.5 min-h-11 px-2 text-[13px] font-bold text-xanh disabled:opacity-50"><RotateCcw size={15} />Cuộc trò chuyện mới</button>}
+        </div>
 
         <section aria-label="Cuộc trò chuyện" aria-live="polite" className="space-y-3.5" onClickCapture={(e) => { if ((e.target as HTMLElement).closest("a")) luuViTriCuon(); }}>
           {tin.map((t, i) => (
