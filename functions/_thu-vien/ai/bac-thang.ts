@@ -1,6 +1,6 @@
 // Bậc thang tư vấn, rẻ -> đắt: cache KV -> Clef (chọn sự kiện) -> RAG cộng đồng (Vectorize) -> LLM.
 // Mỗi bậc thiếu binding hoặc lỗi thì bị bỏ qua, bậc sau vẫn chạy; chỉ bậc LLM mới có thể làm cả lượt thất bại.
-import { NHAC_SO_SANH, NHAC_TU_VAN, docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type NguonWeb, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
+import { NHAC_SO_SANH, bocDuLieuNguoiDung, NHAC_TU_VAN, docPhanHoiLLM, dungNoiDung, soLieuLech, type KhoKV, type NguonWeb, type PhanHoiCauTruc, type SuKien, type YeuCauTuVan } from "../../../src/engine/tu-van";
 import { docCache, ghiCache, khoaCache } from "./cache";
 import { HANH_DONG, quyetDinhNguyenVong, type HanhDong, type NhanEn, type UngVienEn } from "./clef";
 import { truyVanNhieuBoLoc, type BoLoc, type MangChiMuc } from "./chi-muc";
@@ -92,7 +92,7 @@ async function layManhCongDong(env: EnvAI, y: YeuCauTuVan): Promise<{ manh: Mang
 
 function phanMoRong(manh: MangChiMuc[], viec?: HanhDong): string {
   const cd = manh.filter((m) => !m.chinhThuc), ct = manh.filter((m) => m.chinhThuc);
-  const dong = (m: MangChiMuc) => `[${m.id}] ${m.noiDung}`;
+  const dong = (m: MangChiMuc) => `[${m.id}] ${bocDuLieuNguoiDung(m.noiDung)}`;
   return [
     viec ? `\n\nTÍN HIỆU THỨ HAI (không đổi nhãn, chỉ để bạn gợi ý): việc nên làm tiếp là "${HANH_DONG[viec]}".` : "",
     ct.length ? `\n\nTƯ LIỆU CHÍNH THỨC BỔ SUNG (mỗi dòng có id để trích nguồn):\n${ct.map(dong).join("\n")}` : "",

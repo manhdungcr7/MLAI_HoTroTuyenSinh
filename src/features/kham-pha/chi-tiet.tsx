@@ -291,13 +291,19 @@ export default function ChiTiet() {
             {duBao && (tt.loai === "nhieuNam" || tt.loai === "motNam") && (
               <DongThongTin icon={TrendingUp} tone="xanh" nhan={`Điểm chuẩn dự đoán ${duBao.namDuBao}${duBao.moHinh === "hoc-may" ? " (mô hình học máy)" : ""}`}
                 giaTri={`${dinhDangDiem(duBao.kyVong)} điểm`}
-                phu={`Khoảng ${dinhDangDiem(duBao.thap)} đến ${dinhDangDiem(duBao.cao)} điểm (mục tiêu phủ ${Math.round(duBao.mucTinCay * 100)}%). Dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`} />
+                phu={duBao.moHinh === "hoc-may"
+                  ? `Mô hình học máy LightGBM dự đoán từ điểm năm ${duBao.namCuoi}, không phải xác suất đậu.`
+                  : `Dự đoán từ điểm năm ${duBao.namCuoi} dựa trên biến động chung, không phải xác suất đậu.`} />
             )}
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
             <DongThongTin icon={Wallet} tone="cam" nhan={lc.hocPhiUocTinh ? "Học phí / năm (ước tính)" : "Học phí / năm (dự kiến)"} giaTri={coHocPhi(lc) ? `${khoangHocPhi(lc)} triệu đồng` : "Chưa có dữ liệu"}
               phu={coHocPhi(lc) ? <>{lc.hocPhiUocTinh && <span className="block">Ước tính theo trường và khối ngành, chưa có văn bản của trường để đối chiếu. Xem đề án trước khi quyết định.</span>}{lc.nhomNganh === "Sư phạm" && <span className="text-luc font-medium">Sư phạm được hỗ trợ học phí theo NĐ 116 nếu cam kết làm trong ngành · </span>}{bc.nganSach !== null && `Ngân sách bạn ≤ ${bc.nganSach} tr${lc.nguonHocPhi ? " · " : ""}`}{lc.nguonHocPhi && <LinkNguon url={lc.nguonHocPhi.url} trang={lc.nguonHocPhi.trang} nhan={`Đề án ${lc.nguonHocPhi.nam}`} />}</> : <>Chưa có học phí riêng ngành.{hpTruong && <> <LinkNguon url={hpTruong.url} trang={hpTruong.trang} nhan="Mức chung của trường" /></>}</>} />
+            {lc.chiTieu && (
+              <DongThongTin icon={Users} tone="xanh" nhan={`Chỉ tiêu ${lc.chiTieu.nam}`} giaTri={`${lc.chiTieu.so} sinh viên`}
+                phu={<>Theo đề án của trường, tính cho cả ngành (mọi phương thức) · <LinkNguon url={lc.chiTieu.url} trang={lc.chiTieu.trang} nhan={`Đề án ${lc.chiTieu.nam}`} /></>} />
+            )}
             <DongThongTin icon={MapPin} tone="do" nhan="Khu vực" giaTri={lc.khuVuc || "Chưa có dữ liệu"} phu={lc.diaChi} />
             {lc.coHoiViecLam ? (
               <DongThongTin icon={Briefcase} tone="luc" nhan="Có việc làm sau tốt nghiệp" giaTri={lc.tiLeViecLam !== undefined ? `${String(lc.tiLeViecLam).replace(".", ",")}% có việc làm` : lc.coHoiViecLam} phu={<>{MO_TA_VIEC_LAM[lc.coHoiViecLam]}{lc.nguonViecLam && <> <LinkNguon url={lc.nguonViecLam.url} trang={lc.nguonViecLam.trang} /></>}</>} />

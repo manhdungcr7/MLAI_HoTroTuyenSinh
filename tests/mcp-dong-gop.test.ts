@@ -142,6 +142,15 @@ async function main() {
   await test("Đề xuất: vào hàng chờ SUBMITTED, bản đã công bố không đổi, chênh > 4 điểm được gắn cờ", async () => {
     let n = 0;
     const taoId = () => `dx-${++n}`;
+    const d1Goc = m.env.DB!;
+    const batchMcp: string[][] = [];
+    m.env.DB = {
+      prepare: (sql) => d1Goc.prepare(sql),
+      batch: async (cau) => {
+        batchMcp.push(cau.map((x) => String((x as unknown as { sql?: unknown }).sql ?? "")));
+        return d1Goc.batch(cau);
+      },
+    };
     const r = await goiCongCu(m, KHOA_CTV, "de_xuat_diem_chuan", {
       maTruong: "BKA",
       hang: [
@@ -153,7 +162,15 @@ async function main() {
       ],
       nguon: NGUON,
     }, luc(10), taoId);
+    m.env.DB = d1Goc;
     assert.equal(r.isError, false, r.text);
+    const batchDoc = batchMcp.filter((sql) => sql.every((q) => q.startsWith("SELECT * FROM ban_ghi_cms WHERE entity_type = 'cutoff_score'")));
+    assert.equal(batchDoc.length, 1, "mọi hàng hợp lệ phải được đọc trong một D1.batch");
+    assert.equal(batchDoc[0].length, 2, "chỉ hai hàng hợp lệ, không đọc từng hàng tuần tự");
+    const batchGhi = batchMcp.find((sql) => sql.some((q) => q.startsWith("INSERT INTO ban_ghi_cms")));
+    assert.ok(batchGhi, "các đề xuất và audit phải ghi trong một D1.batch");
+    assert.equal(batchGhi.filter((q) => q.startsWith("INSERT INTO ban_ghi_cms")).length, 2);
+    assert.equal(batchGhi.filter((q) => q.startsWith("INSERT INTO nhat_ky_kiem_toan")).length, 1);
     const kq = JSON.parse(r.text);
     assert.equal(kq.chapNhan, 2);
     assert.equal(kq.boQua.length, 3);
