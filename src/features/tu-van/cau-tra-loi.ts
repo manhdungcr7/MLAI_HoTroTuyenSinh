@@ -12,6 +12,7 @@ import { phanTichCau, timTruongMoHo } from "./hieu-cau";
 import { lamSachHanhDong, lamSachThe, nganhLuotTruoc, taoNguCanh, type TheTruong, type TinNhan } from "./hoi-thoai";
 import { CHE_DO_MAC_DINH, idHoSoAI, uuidMoi, type Luot, type PhienAI } from "./che-do-ai";
 import { bocLoiChao, nhanYDinhQuyTac, traLoiQuyTac } from "./y-dinh";
+import { traLoiTienDoChat } from "./tien-do-chat";
 import { chonDuLieuKemTheo, nguCanhLuotTruoc, tomTatHoSo, traLoiTuDong, type KetQuaTuDong } from "./lay-du-lieu";
 import { dungBangSoSanh, tomTatChoAI } from "./bang-so-sanh";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
@@ -116,6 +117,9 @@ export async function layTinTraLoi({ cau: cauGoc, truoc, s, nguon, dungHoSo, man
   // "Chào, UIT là trường gì": bỏ lời chào, xử lý phần nội dung.
   const cau = bocLoiChao(cauGoc) ?? cauGoc;
   const stateTuVan = dungHoSo ? s : trangThaiKhongKemHoSo(s);
+  // Hỏi tiến độ học theo chương trình lớp 12: chạy bằng quy tắc và dữ liệu đã lấy, không qua AI, nên không thể bịa chương hay bài.
+  const tienDo = traLoiTienDoChat(cau, stateTuVan);
+  if (tienDo) return { vai: "mayChu", chu: tienDo.traLoi, nguon: [], cheDo: "tuDong", idDuLieu: [], ...(tienDo.luaChon?.length ? { luaChon: tienDo.luaChon } : {}), ...(tienDo.tienDo ? { tienDo: tienDo.tienDo } : {}) };
   // Lịch sử có thể đã chứa câu trả lời cá nhân hóa, nên cũng không đưa vào lúc bỏ chọn hồ sơ.
   const truocTuVan = dungHoSo ? truoc : [];
   const giu = nganhLuotTruoc(truocTuVan);
