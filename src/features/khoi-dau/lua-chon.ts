@@ -1,7 +1,8 @@
 // Danh sách lựa chọn cho các bước tạo hồ sơ. Giá trị lưu vào HoSo giữ nguyên như hồ sơ mẫu đang dùng.
 import {
-  Atom, BedDouble, BookOpen, Building2, Calculator, ChartColumn, FlaskConical, HeartPulse,
-  House, Languages, Laptop, Leaf, Palette, School, Signpost, Wrench, type LucideIcon,
+  Atom, BedDouble, BookOpen, Building2, Calculator, ChartColumn, CircleHelp, Clapperboard, Compass, Dumbbell, FlaskConical, Flame, Gavel, HardHat,
+  HeartPulse, House, Landmark, Languages, Laptop, Leaf, MapPin, Megaphone, Minus, Palette, Plane, Ruler, School, Signpost, Stethoscope, Truck,
+  Umbrella, Users, Wrench, type LucideIcon,
 } from "lucide-react";
 import type { HoSo, MaToHop, MonId, ToneTen } from "@/state/types";
 
@@ -85,7 +86,7 @@ export const ICON_MON: Record<MonId, LucideIcon> = {
   toan: Calculator, vatLy: Atom, hoaHoc: FlaskConical, nguVan: BookOpen, tiengAnh: Languages, sinh: Leaf,
 };
 export const TONE_MON: Record<MonId, ToneTen> = {
-  toan: "xanh", vatLy: "tim", hoaHoc: "luc", nguVan: "do", tiengAnh: "xanh", sinh: "luc",
+  toan: "xanh", vatLy: "tim", hoaHoc: "luc", nguVan: "cam", tiengAnh: "xanh", sinh: "luc",
 };
 export const ICON_TO_HOP: Record<MaToHop, LucideIcon> = { A00: FlaskConical, A01: Atom, D01: BookOpen, B00: Leaf };
 export const TONE_TO_HOP: Record<MaToHop, ToneTen> = { A00: "xanh", A01: "tim", D01: "luc", B00: "cam" };
@@ -113,3 +114,21 @@ export const VIEC_LAM: LuaChonCoIcon<NonNullable<HoSo["quanTamViecLam"]>>[] = [
   { gia: "rat", nhan: "Rất quan tâm" }, { gia: "binhThuong", nhan: "Bình thường" }, { gia: "chuaRo", nhan: "Chưa rõ" },
 ];
 
+
+/** Biểu tượng và tông cho thẻ nhóm ngành ở Bước 1 (khóa trùng `gia` của TAT_CA_NGANH). */
+export const ICON_NGANH: Record<string, { icon: LucideIcon; tone: ToneTen }> = {
+  CNTT: { icon: Laptop, tone: "xanh" }, "Kỹ thuật": { icon: Wrench, tone: "xanh" }, "Xây dựng": { icon: HardHat, tone: "cam" },
+  "Khoa học tự nhiên": { icon: FlaskConical, tone: "tim" }, Logistics: { icon: Truck, tone: "luc" },
+  "Kinh tế": { icon: ChartColumn, tone: "cam" }, "Tài chính": { icon: Landmark, tone: "luc" }, Marketing: { icon: Megaphone, tone: "do" },
+  "Du lịch": { icon: Umbrella, tone: "xanh" }, "Y Dược": { icon: Stethoscope, tone: "do" }, "Điều dưỡng": { icon: HeartPulse, tone: "luc" },
+  "Sư phạm": { icon: School, tone: "tim" }, "Luật": { icon: Gavel, tone: "cam" }, "Ngôn ngữ": { icon: Languages, tone: "xanh" },
+  "Báo chí": { icon: Clapperboard, tone: "do" }, "Xã hội": { icon: Users, tone: "tim" }, "Thiết kế": { icon: Palette, tone: "tim" },
+  "Kiến trúc": { icon: Ruler, tone: "cam" }, "Nông Lâm": { icon: Leaf, tone: "luc" }, "Thể thao": { icon: Dumbbell, tone: "xanh" },
+};
+
+/** Biểu tượng cho các chip ở Bước 3 (giá trị lưu vào HoSo giữ nguyên). */
+export const KHU_VUC_CO_ICON: LuaChonCoIcon<string>[] = KHU_VUC.map((x) => ({ gia: x, nhan: x, icon: x === "Tỉnh khác" ? Compass : MapPin }));
+export const HOC_XA_NHA_CO_ICON: LuaChonCoIcon<boolean>[] = [{ gia: true, nhan: "Có", icon: Plane }, { gia: false, nhan: "Không", icon: House }];
+export const VIEC_LAM_CO_ICON: LuaChonCoIcon<NonNullable<HoSo["quanTamViecLam"]>>[] = [
+  { gia: "rat", nhan: "Rất quan tâm", icon: Flame }, { gia: "binhThuong", nhan: "Bình thường", icon: Minus }, { gia: "chuaRo", nhan: "Chưa rõ", icon: CircleHelp },
+];
