@@ -138,9 +138,9 @@ const baseDiem = (overrides: Partial<DiemDayDu>): DiemDayDu => ({
 
 // 5. Kiểm tra định dạng dấu phẩy học phí và alias công cụ MCP (P2)
 {
-  assert.equal(hocPhiChu({ hocPhiMin: 28.5, hocPhiMax: 28.5, hocPhiUocTinh: true }), "≈ 28,5");
+  assert.equal(hocPhiChu({ hocPhiMin: 28.5, hocPhiMax: 28.5, nguonHocPhi: { nam: "2025", url: "https://example.edu.vn", trang: 1 } }), "28,5");
   assert.equal(tenCongCu("get_student_profile")?.ten, "lay_ho_so");
-  assert.equal(tenCongCu("get_study_plan")?.ten, "get_study_plan");
+  assert.equal(tenCongCu("get_study_plan")?.ten, "ke_hoach_tuan");
   assert.equal(tenCongCu("ke_hoach_tuan")?.ten, "ke_hoach_tuan", "Giữ công cụ lịch cũ để không làm hỏng kết nối trước đây");
 }
 

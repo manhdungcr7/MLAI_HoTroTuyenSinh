@@ -17,7 +17,7 @@ import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, loiChaoTheoChang, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
 import { changCuaEm, type Chang } from "@/state/chang";
-import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
+import { dinhDang, dinhDangDiem, dinhDangSo } from "@/engine/dinh-dang";
 
 const SO_DONG_GON = 3;
 
@@ -106,11 +106,24 @@ function HeroEmDangODau({ onNhapDiem }: { onNhapDiem: () => void }) {
     );
   }
   return (
-    <TheNen tong="xanh" className="flex items-center gap-3">
-      <VongDiem value={ch.tong} max={30} size={96} tong="xanh" nhanGiua="/30 điểm" aria={`Tổ hợp ${ch.toHop} tốt nhất, ${dinhDangDiem(ch.tong)} trên 30`} />
-      <div className="min-w-0 flex-1">
-        <b className="block text-[16px] text-muc leading-tight">Em đang ở đâu?</b>
-        <p className="text-[13px] text-chu mt-0.5">Tổ hợp {ch.toHop} cho điểm cao nhất. So được {ch.soNganh} ngành: {ch.soDuDiem} ngành đủ điểm chuẩn năm trước, {ch.soThuSuc} ngành gần mức đó.</p>
+    <TheNen tong="xanh" className="p-3.5">
+      <div className="flex items-center gap-3.5">
+        <VongDiem value={ch.tong} max={30} size={88} tong="xanh" nhanGiua="/30 điểm" aria={`Tổ hợp ${ch.toHop} tốt nhất, ${dinhDangDiem(ch.tong)} trên 30`} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-1">
+            <b className="text-[15px] font-extrabold text-muc leading-tight">Em đang ở đâu?</b>
+            <span className="text-[12px] font-bold text-xanh-dam bg-xanh-nhat px-2 py-0.5 rounded-full">Tổ hợp {ch.toHop}</span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex items-center rounded-lg bg-luc-nhat px-2 py-0.5 text-[12px] font-bold text-luc-dam">
+              Đủ điểm {dinhDangSo(ch.soDuDiem)} ngành
+            </span>
+            <span className="inline-flex items-center rounded-lg bg-cam-nhat px-2 py-0.5 text-[12px] font-bold text-cam-chu">
+              Thử sức {dinhDangSo(ch.soThuSuc)} ngành
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] text-chu-phu">So với điểm chuẩn năm trước</p>
+        </div>
       </div>
     </TheNen>
   );

@@ -17,10 +17,21 @@ Audit cục bộ ngày 2026-10-16. Tái lập bằng `npx tsx scripts/audit-admi
 | Chương trình thiếu liên kết nguồn theo năm | 2.162 |
 | Chương trình không ghi tổ hợp | 1 |
 | Có tổ hợp nhưng engine chưa hỗ trợ môn | 93 |
+| Chương trình chỉ có 1 năm điểm | 2.359 (64,7%) |
+| Chương trình có từ 2 năm điểm trở lên | 1.289 (35,3%) |
+| Chương trình chỉ có điểm sàn (mức 15,0) | 617 (16,9%) |
+| Trường áp dụng điểm chuẩn phẳng toàn trường (chuẩn = sàn) | 4 trường (DBH: 16đ, DVX: 15đ, LNH: 15đ, FPT: 21đ) |
 | Trùng ID / điểm sai hình dạng / điểm THPT ngoài thang 30 | 0 / 0 / 0 |
 | Học phí có số / trong đó ước tính | 3.648 / 3.047 |
 
-Số bản ghi có điểm theo năm: 2021: 22; 2022: 487; 2023: 1.017; 2024: 1.181; 2025: 1.029; 2026: 1.679. Một chương trình có thể có nhiều năm. Đây là năm của số liệu, không phải ngày xác minh hay bằng chứng số liệu còn hiệu lực.
+Số bản ghi có điểm theo năm: 2021: 22; 2022: 487; 2023: 1.017; 2024: 1.181; 2025: 1.029; 2026: 1.679. Một chương trình có thể có nhiều năm. Điểm 2026 từ nguồn tổng hợp mang tính tham chiếu / dự kiến công bố sớm, không phải điểm trúng tuyển chính thức.
+
+## Điểm pivot dữ liệu: Điểm sàn xét tuyển vs Điểm chuẩn trúng tuyển
+
+1. **Phân định rõ bản chất tuyển sinh**:
+   - **Điểm sàn xét tuyển (Ngưỡng đảm bảo chất lượng)**: Là mức tối thiểu để nộp hồ sơ. Đạt điểm sàn KHÔNG đồng nghĩa trúng tuyển. Hệ thống KHÔNG bao giờ đem điểm sàn so với điểm thi THPT của học sinh để gán nhãn "An toàn" hay "Vừa sức" (`chiDiemSan`).
+   - **Điểm chuẩn phẳng (Điểm chuẩn = Điểm sàn chung toàn trường)**: Ở một số trường tư thục hoặc đại học địa phương (DBH, LNH, DVX, NHP, GTA...), do nguồn tuyển tương đương hoặc lớn hơn chỉ tiêu, trường áp dụng điểm trúng tuyển bằng đúng ngưỡng sàn nhận hồ sơ cho mọi ngành. Hệ thống nhận diện đặc thù này để học sinh an tâm chọn ngành yêu thích mà không lo trượt do cạnh tranh nội bộ.
+   - **Điểm chuẩn chi tiết theo ngành**: Ở các trường lớn (Bách Khoa, Ngoại Thương, Kinh Tế Quốc Dân, ĐHQG...), điểm chuẩn phân hóa mạnh giữa các ngành hot và ngành truyền thống (cao hơn sàn 4–8 điểm). Thiếu dữ liệu điểm chuẩn chi tiết của ngành nào thì giữ `null`, tuyệt đối không lấy điểm sàn của trường đắp vào.
 
 ## Hợp đồng trả dữ liệu
 
