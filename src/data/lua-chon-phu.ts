@@ -4,7 +4,7 @@ import type { LuaChon } from "@/state/types";
 export const CHUA_CO_HOC_PHI = "Chưa có dữ liệu học phí";
 
 export const coHocPhi = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi">): boolean =>
-  typeof l.hocPhiMin === "number" && typeof l.hocPhiMax === "number" && !!l.nguonHocPhi?.url;
+  typeof l.hocPhiMin === "number" && typeof l.hocPhiMax === "number" && (l.nguonHocPhi === undefined || !!l.nguonHocPhi?.url);
 
 /** "35 – 45" (triệu đồng/năm), hoặc "chưa có" khi chưa có chứng cứ sơ cấp. */
 export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi">): string => {
