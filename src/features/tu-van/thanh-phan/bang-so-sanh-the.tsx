@@ -8,6 +8,7 @@ import { rutGonTenTruong } from "@/engine/trinh-bay-hoc-thuat";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { useApp } from "@/state/store";
 import type { LuaChon } from "@/state/types";
+import { useDuBaoML } from "@/features/kham-pha/dung-du-bao-ml";
 import { dungBangSoSanh } from "../bang-so-sanh";
 
 const NUT_PHU = "min-h-11 shrink-0 rounded-lg px-3 text-[13px] font-bold inline-flex items-center justify-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh";
@@ -19,10 +20,12 @@ const NUT_PHU = "min-h-11 shrink-0 rounded-lg px-3 text-[13px] font-bold inline-
 export function BangSoSanhThe({ ids, onDi }: { ids: string[]; onDi?: () => void }) {
   const { s } = useApp();
   const nav = useNavigate();
+  const sanML = useDuBaoML(); // nạp dự báo của mô hình học máy rồi vẽ lại bảng
   const bang = useMemo(() => {
     const ls = ids.map((id) => tim(id)).filter((l): l is LuaChon => !!l);
     return ls.length >= 2 ? dungBangSoSanh(ls, diemDayDu(s)) : null;
-  }, [ids, s]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ids, s, sanML]);
   if (!bang) return null;
   const luoi = bang.cot.length >= 3 ? "grid-cols-3" : "grid-cols-2";
   return (

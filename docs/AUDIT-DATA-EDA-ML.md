@@ -65,7 +65,7 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
 ├────────────────────────────────────────────────────────────────────────┤
 │ 1. Predictive Model (Dự báo bất định điểm chuẩn)                       │
 │    - LightGBM Quantile Regression (alpha = 0.1, 0.5, 0.9)              │
-│    - Backtest bỏ-một-năm: Phủ thực tế 83.2% dải tin cậy                │
+│    - Kiểm định lăn theo năm: phủ 80.0% (đã hiệu chỉnh), xem ML-DU-BAO │
 │                                                                        │
 │ 2. Calibrated Probability Engine (Xác suất trúng tuyển độc lập)        │
 │    - Z-Score chuẩn hóa: z = (DiemXet - DiemKyVong) / Tau               │
@@ -91,7 +91,7 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
   - Nhóm ngành, Tỉnh thành, Phân hạng trường (Tier).
 - **Kiểm định Backtesting theo thời gian (Không rò rỉ tương lai):**
   - Huấn luyện trên các năm $< T$, dự báo khoảng $[P_{10}, P_{90}]$ cho năm $T$.
-  - Kết quả kiểm định ngược trên 1.443 cặp chương trình: Độ phủ trung bình của dải tin cậy đạt **83.2%**, sai số tuyệt đối trung bình $MAE \approx 1.18$ điểm.
+  - Kết quả kiểm định lăn theo thời gian trên 1.025 cặp (2024 và 2025): độ phủ khoảng 80% sau hiệu chỉnh (75,5% ngoài mẫu), điểm Winkler 7,52 so với 8,32 của heuristic cũ; sai số tuyệt đối trung bình của điểm giữa 1,20 (2024) và 1,89 (2025), không thấp hơn cách giữ nguyên điểm năm trước. Chi tiết và cách tái lập: `docs/ML-DU-BAO-DIEM-CHUAN-2027.md`.
 
 ### 2. Mô hình Xác suất Trúng tuyển Hiệu chuẩn (Calibrated Probability)
 - Điểm xét tuyển được tính chính xác theo quy chế Bộ GD&ĐT:
@@ -137,3 +137,4 @@ Khác biệt cốt lõi giữa **Nguyện Vọng AI** và các ứng dụng thô
 1. **Về Dữ liệu:** 100% sạch, 3.648 ngành đào tạo của 118 trường đại học có đầy đủ tổ hợp, điểm chuẩn và liên kết đề án gốc.
 2. **Về AI & Machine Learning:** Kết hợp hoàn chỉnh giữa LightGBM Quantile Regression và Calibrated Logistic Probability, giải quyết đúng bài toán thực tế của học sinh Việt Nam.
 3. **Về Vận hành:** 65 test suites đạt 100% PASS, 0 lỗi runtime, phản hồi $< 50\text{ms}$ trên Cloudflare Edge, đảm bảo trải nghiệm người dùng hoàn hảo và gây ấn tượng tối đa trước Ban Giám Khảo TMA.
+
