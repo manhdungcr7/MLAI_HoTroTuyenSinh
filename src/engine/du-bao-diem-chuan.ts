@@ -13,6 +13,7 @@
 // Năm 2025 biến động mạnh hơn hẳn các năm khác (độ lệch chuẩn 2,6 so với 1,8) nên khoảng phủ thấp hơn; khi có thay đổi quy chế,
 // đề thi hay chỉ tiêu, khoảng thực tế còn rộng hơn khoảng này.
 import type { LuaChon } from "@/state/types";
+import { loaiDiemCuaNam } from "./du-lieu-tuyen-sinh/kiem-tra-diem";
 
 export interface ThongKeBienDong {
   /** Mọi biến động (điểm năm sau trừ điểm năm trước), sắp tăng dần. */
@@ -33,6 +34,14 @@ export interface DuBaoDiemChuan {
   soMau: number;
   /** Câu cảnh báo khi dự báo yếu (dữ liệu cũ, ít mẫu). */
   luuY: string[];
+  /**
+   * Độ tin cậy của CHÍNH dự báo này (khác `mucTinCay` là mức phủ danh nghĩa của khoảng):
+   * cao = từ 2 năm điểm chính thức, cách 1 năm; vừa = một năm chính thức hoặc cách 2 năm;
+   * thấp = chỉ một năm lấy từ trang tổng hợp (chưa đối chiếu đề án, không kiểm định ngược được).
+   */
+  doTinCay: "cao" | "vua" | "thap";
+  /** Cận trên chạm trần 30: khoảng bị cắt, không còn nói được điểm chuẩn có thể cao tới đâu. */
+  chamTran: boolean;
 }
 
 export interface KetQuaKiemDinhNam {
@@ -89,7 +98,7 @@ const hopLe = (d: number) => Number.isFinite(d) && d >= DIEM_TOI_THIEU && d <= D
 /** Các năm điểm THPT hợp lệ của một chương trình, tăng dần. Chỉ chương trình xét điểm thi THPT (hoặc chưa ghi phương thức nhưng có điểm thang 30). */
 function chuoiNam(lc: LuaChon): [number, number][] {
   if (lc.phuongThuc && lc.phuongThuc !== "THPT") return [];
-  return Object.entries(lc.diemTheoNam ?? {}).map(([n, d]) => [Number(n), d] as [number, number]).filter(([n, d]) => Number.isInteger(n) && hopLe(d)).sort((a, b) => a[0] - b[0]);
+  return Object.entries(lc.diemTheoNam ?? {}).map(([n, d]) => [Number(n), d] as [number, number]).filter(([n, d]) => Number.isInteger(n) && hopLe(d) && !["diem_san", "du_kien", "chua_ro"].includes(loaiDiemCuaNam(lc, n) ?? "")).sort((a, b) => a[0] - b[0]);
 }
 
 /**
@@ -137,8 +146,18 @@ export function duBaoDiemChuan(lc: LuaChon, tk: ThongKeBienDong, namDuBao: numbe
   const luuY: string[] = [];
   if (k > 1) luuY.push(`Điểm mới nhất của ngành là năm ${namCuoi}, cách ${k} năm nên khoảng dự kiến rộng hơn.`);
   if (c.length === 1) luuY.push("Ngành này mới có điểm của một năm, nên khoảng dựa vào biến động chung của các ngành khác.");
+  const thuCap = lc.nguonCap === "aggregator_verified";
+  if (thuCap && c.length === 1) luuY.push("Điểm lấy từ trang tổng hợp, chưa đối chiếu với đề án của trường, nên dự báo chỉ để tham khảo.");
+  const daThamDinh = c.every(([nam]) => {
+    const e = lc.scoreEvidence?.[String(nam)];
+    return loaiDiemCuaNam(lc, nam) === "diem_chuan" && !!e?.independentReviewer && e.independentReviewer !== e.checkedBy;
+  });
+  if (!daThamDinh) luuY.push("Nguồn chưa được thẩm định độc lập; khoảng dự kiến chỉ để tham khảo.");
+  const doTinCay: DuBaoDiemChuan["doTinCay"] = !daThamDinh || thuCap && c.length === 1 ? "thap" : c.length >= 2 && k === 1 && !thuCap ? "cao" : "vua";
+  const chamTran = cao >= DIEM_TOI_DA;
+  if (chamTran) luuY.push(`Khoảng đã chạm trần ${DIEM_TOI_DA} điểm, nên mức cao nhất thật có thể không thấp hơn.`);
 
-  return { namDuBao, namCuoi, diemCuoi, kyVong: lam2(diemCuoi), thap: lam2(thap), cao: lam2(cao), mucTinCay: 0.8, soMau: tk.tatCa.length, luuY };
+  return { namDuBao, namCuoi, diemCuoi, kyVong: lam2(diemCuoi), thap: lam2(thap), cao: lam2(cao), mucTinCay: 0.8, soMau: tk.tatCa.length, luuY, doTinCay, chamTran };
 }
 
 export type ViTriSoVoiDuBao = "caoHonCa" | "tren" | "trongKhoang" | "duoi" | "thapHonCa";

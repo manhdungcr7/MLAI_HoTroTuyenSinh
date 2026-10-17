@@ -84,6 +84,8 @@ Bảng còn ngành **Truyền thông đa phương tiện, mã 7320104, điểm 2
 
 ## Bằng chứng kiểm tra local
 
-Base checkout cuối: `2d1270e` (PR phân bổ giờ học đã được cập nhật trong lúc audit). Nhánh sửa: `fix/admissions-data-quality-latest`. Đã giải quyết xung đột `package.json` bằng cách giữ cả test phân bổ giờ học và test dữ liệu.
+Base upstream cuối: `19c1fed` (gồm PR phân bổ giờ học và giao diện 2027 được cập nhật trong lúc audit). Nhánh sửa: `fix/admissions-data-quality-latest`. Đã giữ cả test phân bổ giờ học, dữ liệu và trạng thái điểm từ các nhánh.
+
+Bản 2027 có thêm suy luận 15 là sàn trong engine trạng thái, dự báo và prompt tư vấn. Đã thay bằng `scoreEvidence` đúng trị số/năm/nguồn. Điểm sàn có thể khác 15; điểm chuẩn có thể bằng 15; metadata lệch trị số không được tái sử dụng. Nhãn nguồn PDF không tự tạo mức tin cậy dự báo cao: chưa có thẩm định độc lập thì giữ mức thấp. Phân bố số liệu tham chiếu sau sửa: 1.049 chương trình THPT nhiều năm, 2.271 một năm, 328 phương thức khác; chưa có bằng chứng có cấu trúc để kết luận các bản ghi legacy là điểm sàn.
 
 Đã qua: `npm run typecheck`, `npm run kiem-tra`, `npm test`, `npm run test:mcp`, `npm run test:capabilities`, `npm run build`, `npm run build:functions`, `npm run cms:build`. Vite còn cảnh báo kích thước chunk, không phải lỗi build. `npm run data:audit -- --strict` trả mã 1 có chủ đích vì thiếu chứng cứ như bảng trên. Không push/merge, triển khai hay cập nhật cơ sở dữ liệu từ phiên làm việc này. Các đường dẫn landing được bảo vệ không có diff.

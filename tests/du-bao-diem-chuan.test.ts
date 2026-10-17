@@ -48,7 +48,7 @@ assert.equal(gan.kyVong, 25, "tâm dự báo là điểm năm mới nhất");
 assert.ok(duBaoDiemChuan(mau({ "2026": 29.9 }), tk, 2027)!.cao <= 30, "không vượt thang 30");
 
 // 4) Vị trí của em so với khoảng
-const d = { namDuBao: 2027, namCuoi: 2026, diemCuoi: 25, kyVong: 25.3, thap: 23.8, cao: 28, mucTinCay: 0.8 as const, soMau: 100, luuY: [] };
+const d = { namDuBao: 2027, namCuoi: 2026, diemCuoi: 25, kyVong: 25.3, thap: 23.8, cao: 28, mucTinCay: 0.8 as const, soMau: 100, luuY: [], doTinCay: "vua" as const, chamTran: false };
 assert.equal(viTriSoVoiDuBao(28.5, d), "caoHonCa");
 assert.equal(viTriSoVoiDuBao(26, d), "tren");
 assert.equal(viTriSoVoiDuBao(24.5, d), "trongKhoang");
@@ -79,5 +79,23 @@ assert.ok(ketQua.every((r) => r.n >= 300), "đủ mẫu mỗi năm kiểm địn
 assert.ok(phuTB >= 0.75 && phuTB <= 0.92, `khoảng 80% phải phủ trung bình 75–92% (thực tế ${(phuTB * 100).toFixed(1)}%)`);
 assert.ok(ketQua.every((r) => r.phu >= 0.6), "năm xấu nhất vẫn phủ ít nhất 60%");
 assert.ok(ketQua.filter((r) => r.nam < 2025).every((r) => r.phu >= 0.78), "năm bình thường phủ ít nhất 78%");
+
+// 6) ĐỘ TIN CẬY và TRẦN 30 (phát hiện khi kiểm 2027: ~1.300 dự báo xuất phát từ MỘT năm 2026 của trang tổng hợp, không kiểm định ngược được)
+{
+  const tk = thongKeBienDong(LUA_CHON);
+  const thuCap = { ...mau({ "2026": 22 }, "x", "THPT"), nguonCap: "aggregator_verified" as const };
+  const dt = duBaoDiemChuan(thuCap, tk, 2027)!;
+  assert.equal(dt.doTinCay, "thap");
+  assert.ok(dt.luuY.some((x) => /trang tổng hợp/.test(x)));
+  const chinhThuc = { ...mau({ "2024": 24, "2025": 24.5 }, "x", "THPT"), nguonCap: "official_pdf" as const };
+  assert.equal(duBaoDiemChuan(chinhThuc, tk, 2026)!.doTinCay, "thap", "nhãn official_pdf không chứng minh dữ liệu đã được kiểm chứng");
+  const daThamDinh = { ...chinhThuc, scoreEvidence: Object.fromEntries(Object.entries(chinhThuc.diemTheoNam!).map(([nam, score]) => [nam, { kind: "diem_chuan" as const, score, scale: 30, sourceUrl: "https://fixture.edu.vn/diem", checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: "independent test fixture", includesPriority: true }])) };
+  assert.equal(duBaoDiemChuan(daThamDinh, tk, 2026)!.doTinCay, "cao");
+  assert.equal(duBaoDiemChuan(daThamDinh, tk, 2027)!.doTinCay, "vua", "cách 2 năm thì chỉ mức vừa");
+  const cao = duBaoDiemChuan({ ...chinhThuc, diemTheoNam: { "2024": 29.2, "2025": 29.5 } }, tk, 2026)!;
+  assert.equal(cao.cao, 30);
+  assert.equal(cao.chamTran, true);
+  assert.ok(cao.luuY.some((x) => /trần/.test(x)));
+}
 
 console.log("du-bao-diem-chuan: tất cả kiểm tra đều qua");

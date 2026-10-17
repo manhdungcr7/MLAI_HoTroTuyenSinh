@@ -1,6 +1,7 @@
 // Tính mức phù hợp của một lựa chọn với hồ sơ của em. TypeScript thuần, không React.
 // Mức phù hợp và điểm gợi ý /100 chỉ để em sắp xếp, so sánh. KHÔNG phải xác suất đậu.
 import { NGAN_SACH_TOI_DA, NGUONG_PHU_HOP, diemPhuHop, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
+import { diemChuanDeSo } from "@/engine/trang-thai-du-lieu";
 import { tongA01 } from "@/state/chon";
 import { coHocPhi, ghiUocTinh } from "@/data/lua-chon-phu";
 import { diemDayDu, tongChoLuaChon } from "./to-hop";
@@ -167,8 +168,8 @@ export function sapXep(ds: LuaChon[], kieu: KieuSapXep, bc: BoiCanh): LuaChon[] 
   const kq = new Map(ds.map((l) => [l.id, danhGia(l, bc)]));
   return [...ds].sort((a, b) => {
     if (kieu === "hocPhi") return (a.hocPhiMin ?? Infinity) - (b.hocPhiMin ?? Infinity) || 0;
-    if (kieu === "diemCao") return b.diemMin - a.diemMin;
-    if (kieu === "diem") return a.diemMin - b.diemMin;
+    if (kieu === "diemCao") return (diemChuanDeSo(b) ?? -1) - (diemChuanDeSo(a) ?? -1); // chưa có điểm chuẩn hợp lệ: xếp cuối
+    if (kieu === "diem") return (diemChuanDeSo(a) ?? Infinity) - (diemChuanDeSo(b) ?? Infinity);
     const ka = kq.get(a.id)!, kb = kq.get(b.id)!;
     // 1) Đúng nhóm ngành bạn quan tâm (nếu bạn có chọn). 2) Đúng khu vực ưu tiên.
     const nganh = (l: LuaChon) => (bc.nganhQuanTam.length === 0 || bc.nganhQuanTam.includes(l.nhomNganh) ? 0 : 1);
@@ -180,7 +181,7 @@ export function sapXep(ds: LuaChon[], kieu: KieuSapXep, bc: BoiCanh): LuaChon[] 
     // 3) Mức từ khó vào/thử sức nhất -> phù hợp -> cần cân nhắc.
     // 4) Trong cùng mức: điểm chuẩn cao hơn (khó vào hơn) lên trước, giảm dần đến điểm chuẩn thấp hơn.
     const hang = (k: KetQuaPhuHop) => (k.muc ? THU_TU_MUC[k.muc] : 3);
-    return hang(ka) - hang(kb) || kv(a) - kv(b) || (b.diemMin - a.diemMin);
+    return hang(ka) - hang(kb) || kv(a) - kv(b) || ((diemChuanDeSo(b) ?? -1) - (diemChuanDeSo(a) ?? -1));
   });
 }
 

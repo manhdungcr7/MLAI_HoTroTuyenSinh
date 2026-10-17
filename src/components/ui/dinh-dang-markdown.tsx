@@ -218,7 +218,7 @@ function parseInline(text: string): React.ReactNode {
 }
 
 const NHAN_BANG = /^(thử sức|vừa sức|an toàn|dự phòng)$/i;
-/** Cùng màu với nhãn nguyện vọng ở mọi màn khác (TONE_NHAN: Thử sức tím, Vừa sức cam, An toàn lục, Dự phòng xanh). */
+/** Cùng màu với nhãn nguyện vọng ở mọi màn khác (TONE_NHAN: Thử sức tím, Vừa sức lam, An toàn lục, Dự phòng cam). */
 function toneNhanBang(c: string): string {
   return /thử sức/i.test(c) ? "bg-tim-nhat text-tim-chu" : /vừa sức/i.test(c) ? "bg-cam-nhat text-cam-chu" : /an toàn/i.test(c) ? "bg-luc-nhat text-luc-chu" : "bg-xanh-nhat text-xanh";
 }

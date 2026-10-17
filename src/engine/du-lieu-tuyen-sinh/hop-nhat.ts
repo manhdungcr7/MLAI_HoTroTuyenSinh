@@ -119,6 +119,11 @@ export function hopNhatLuaChonVaCms(
       if (!ungVien.length || giaTri.size !== 1) continue;
       const dcCms = [...ungVien].sort((a, b) => b.capNhatLuc.localeCompare(a.capNhatLuc))[0];
       ketQua = { ...ketQua, diemTheoNam: { ...(ketQua.diemTheoNam || {}), [String(nam)]: dcCms.diemChuan },
+        scoreEvidence: { ...ketQua.scoreEvidence, [String(nam)]: {
+          kind: "diem_chuan", score: dcCms.diemChuan, scale: dcCms.thangDiem ?? null,
+          sourceUrl: dcCms.nguon.url, checkedAt: dcCms.nguon.ngayKiemChung,
+          checkedBy: dcCms.nguon.nguoiKiemChung ?? "", independentReviewer: null, includesPriority: null,
+        } },
         nguonTheoNam: [{ nam: String(nam), loai: "diemChuan", url: dcCms.nguon.url }, ...(ketQua.nguonTheoNam ?? []).filter((s) => s.nam !== String(nam))] };
       if (nam >= (ketQua.namDiem ?? 0)) {
         ketQua = { ...ketQua, diemMin: dcCms.diemChuan, diemMax: dcCms.diemChuan, namDiem: nam,

@@ -172,13 +172,15 @@ assert.ok(gy.filter((x) => x.lc.nhomNganh === "CNTT").length >= gy.length - 2, "
 assert.ok(goiYDanhSach(dGioi, hsGoiY, gy.map((x) => x.lc.id)).every((x) => !gy.some((g) => g.lc.id === x.lc.id)), "không gợi ý lại ngành đã có");
 assert.deepEqual(goiYDanhSach(diem({}), hsGoiY), [], "chưa có điểm thì không gợi ý");
 
-// 9) Điểm dùng để dán nhãn, đặt mục tiêu và hiển thị là điểm của đúng năm `namDiem` (năm mới nhất), không phải mức thấp nhất của hai năm
+// 9) Điểm dùng để dán nhãn, đặt mục tiêu và hiển thị là điểm của đúng năm `namDiem` (năm mới nhất), không phải mức thấp nhất của hai năm.
+// Không suy điểm sàn từ trị số 15; dữ liệu gốc giữ đúng năm mới nhất.
 for (const l of LUA_CHON) {
   const nam = Object.keys(l.diemTheoNam ?? {}).sort();
+  const dung = nam;
   assert.equal(l.namDiem, Number(nam[nam.length - 1]), `namDiem phải là năm mới nhất: ${l.id}`);
   assert.equal(l.diemMin, l.diemTheoNam![String(l.namDiem)], `điểm dán nhãn phải khớp điểm năm ${l.namDiem}: ${l.id}`);
   assert.equal(l.diemMax, l.diemMin, `diemMax cùng năm với diemMin: ${l.id}`);
-  if (l.diemDuKien != null) assert.equal(l.diemDuKien, l.diemMin, `điểm dự kiến bằng điểm năm gần nhất: ${l.id}`);
+  if (l.diemDuKien != null && dung.length === nam.length) assert.equal(l.diemDuKien, l.diemMin, `điểm dự kiến bằng điểm năm gần nhất: ${l.id}`);
 }
 assert.equal(nhanNguyenVong(LUA_CHON[0], LUA_CHON[0].diemMin), "Vừa sức");
 

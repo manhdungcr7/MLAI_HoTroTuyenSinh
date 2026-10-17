@@ -9,6 +9,7 @@ import type { SnapshotDiemChuanHieuChinh } from "../src/engine/du-lieu-tuyen-sin
 import { kiemTraData, kiemTraNguonDiemChuan } from "../cms/functions/_thu-vien/ban-ghi-d1";
 import { kiemNguonMcp } from "../cms/functions/_thu-vien/dong-gop-kiem";
 import { vanBanCuaMuc } from "../functions/_thu-vien/ai/chi-muc";
+import { loadCatalog, programDetails } from "../src/capabilities/catalog";
 
 const nguon = { url: "https://truong.edu.vn/diem-trung-tuyen", tieuDe: "Điểm trúng tuyển", donViCongBo: "Trường", ngayKiemChung: "2026-10-17" };
 const base = { ...LUA_CHON[0], id: "abc-1", maTruong: "ABC", truong: "ABC", phuongThuc: "THPT", toHopXet: ["A00", "A01"], diemMin: 26, diemMax: 26, namDiem: 2025, diemTheoNam: { "2025": 26 } };
@@ -52,6 +53,15 @@ for (const extra of [{ loaiDiem: "diem_san" }, { loaiDiem: undefined }, { id: "x
 assert.equal(kiemNguonMcp({ loai: "thong_bao", url: nguon.url, trang: 1, trichDan: "Điểm sàn nhận hồ sơ THPT 2025: 22 điểm" }).ok, false);
 assert.equal(vanBanCuaMuc({ loai: "cutoff_score", id: "x", phienBan: "x", data: { ...dc(), loaiDiem: "diem_san" } }), null);
 assert.equal(vanBanCuaMuc({ loai: "cutoff_score", id: "x", phienBan: "x", data: { ...dc(), nguon: san } }), null);
+// HTTP/MCP capability cũng không trả điểm sàn dưới tên diemChuan, không lùi về năm cũ để che thiếu điểm mới.
+const catalog = await loadCatalog();
+for (const kind of ["diem_san", "du_kien", "chua_ro"] as const) {
+  const data = programDetails({ ...catalog.records[0], diem: { "2024": 24, "2025": 18 }, scoreEvidence: {
+    "2025": { kind, score: 18, scale: 30, sourceUrl: nguon.url, checkedAt: "2026-10-17", checkedBy: "test fixture", independentReviewer: null, includesPriority: null },
+  } }, catalog);
+  assert.equal(data.diemChuan, null); assert.equal(data.diemTheoNam["2025"], null); assert.equal(data.namDiem, 2025);
+  assert.equal(data.diemTheoNam["2024"], 24);
+}
 
 // Đối chiếu bảng ảnh chính thức UIT 2025: 13 ngành đã có ID; bảng còn ngành Truyền thông đa phương tiện chưa có ID.
 const uit2025 = { "qsc-0dfcc28e": 26.27, "qsc-2064f6c3": 26.6, "qsc-d3b4cfb0": 24.2, "qsc-24737475": 24.7,

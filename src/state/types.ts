@@ -1,4 +1,5 @@
 // Kiểu dữ liệu dùng chung. Đổi file này phải báo cả nhóm (chỉ người giữ nền được sửa).
+import type { BangChungDiem } from "../engine/du-lieu-tuyen-sinh/kieu";
 
 export type ToneTen = "xanh" | "luc" | "cam" | "tim" | "do" | "muc";
 
@@ -49,6 +50,10 @@ export interface HoSo {
   nganhQuanTam: string[]; // chọn 1 hoặc nhiều
   diem: Record<MonId, number | null>;
   diemThem?: Partial<Record<MonThem, number | null>>; // Sử, Địa, GDKT&PL, Tin, Công nghệ (không bắt buộc)
+  /** Điểm thi tốt nghiệp THPT thật từng môn (sau kỳ thi). Khi có, là "điểm hiện tại" ưu tiên cao nhất. Thiếu = chưa có kết quả thật. */
+  diemThiThat?: Partial<Record<MonId, number | null>>;
+  /** Điểm em MUỐN đạt từng môn (khi chưa thi thử). Tách hẳn khỏi `diem`: không bao giờ được dùng như điểm đã có. */
+  diemMucTieuMon?: Partial<Record<MonId, number | null>>;
   uuTienTuyenSinh?: { khuVuc: "KV1" | "KV2-NT" | "KV2" | "KV3" | null; doiTuong: "khong" | "UT1" | "UT2" | null }; // điểm ưu tiên khu vực/đối tượng theo quy chế, không bắt buộc
   laMau?: boolean; // hồ sơ trình diễn (người giả), không phải học sinh thật
   soThich?: KetQuaSoThich | null; // trắc nghiệm hướng nghiệp, chưa làm thì để trống
@@ -133,6 +138,7 @@ export interface LuaChon {
   phuongThuc?: string; // THPT, HOC_BA, DGNL_HCM...
   toHopXet?: string[]; // tổ hợp đề án ghi cho ngành này; rỗng = đề án chưa ghi rõ
   diemTheoNam?: Record<string, number>; // điểm chuẩn từng năm có thật
+  scoreEvidence?: Record<string, BangChungDiem>;
   diemDuKien?: number | null; // điểm chuẩn dự kiến năm tới (bằng năm gần nhất)
   nguonCap?: "official_pdf" | "aggregator_verified"; // đề án chính thức hay trang tổng hợp
   tiLeViecLam?: number; // phần trăm sinh viên có việc làm theo khảo sát trong đề án của trường
@@ -141,6 +147,10 @@ export interface LuaChon {
   /** Học phí là ước tính theo trường/khối ngành, chưa có văn bản của trường để đối chiếu: hiện "≈ … (ước tính)", không có link nguồn. */
   hocPhiUocTinh?: boolean;
   nguonTheoNam?: NguonNam[]; // liên kết tới tài liệu gốc của từng năm (đề án PDF, có số trang nếu tìm được)
+  /** Mã trường/ngành ghi theo từng năm, khi dữ liệu có (để phát hiện đổi mã, không ghép lịch sử khác mã). Dữ liệu hiện tại chưa có. */
+  maTheoNam?: Record<string, { maTruong?: string; maNganh?: string }>;
+  /** Năm bắt đầu tuyển sinh của chương trình, chỉ khi nguồn ghi rõ (để nhận ra chương trình mới). Dữ liệu hiện tại chưa có. */
+  namBatDauTuyenSinh?: number;
 }
 
 export interface MucTieuChinh {
@@ -219,6 +229,15 @@ export interface NhacNho {
   nhacChuanBiBai: boolean;
   gioChuanBiBai: string;
 }
+
+/**
+ * Các loại điểm không bao giờ được trộn, mỗi loại một chỗ lưu riêng:
+ * thiThu = `AppState.diemThi` (chuỗi theo ngày) và `HoSo.diem` (điểm em tự nhập lúc khởi đầu);
+ * thiThat = `HoSo.diemThiThat` (kết quả kỳ thi tốt nghiệp chính thức, ưu tiên cao nhất);
+ * mucTieu = `HoSo.diemMucTieuMon` (từng môn) và `AppState.mucTieu.diemMucTieu` (tổng cho một ngành), KHÔNG bao giờ là điểm hiện tại;
+ * hocBa = `HoSo.hocBa` (chỉ cho phương thức xét học bạ). Hàm dẫn xuất: `diemTheoLoai` ở `state/diem-hien-tai.ts`.
+ */
+export type LoaiDiem = "thiThu" | "mucTieu" | "thiThat" | "hocBa";
 
 export interface DiemThi {
   mon: MonId;

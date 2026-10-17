@@ -4,6 +4,7 @@ import "./nap-du-lieu";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { LUA_CHON_MAU } from "../src/data/lua-chon-mau";
+import { lyDoKhacPhuongThuc } from "../src/engine/phan-tich";
 import { locTheoTinh } from "../src/engine/truong";
 import { chuTruongDinhNghia, phanTichCau, timDiemTrongCau, timTinhTrongCau } from "../src/features/tu-van/hieu-cau";
 import { lamSachLichSu, type TinNhan } from "../src/features/tu-van/hoi-thoai";
@@ -90,15 +91,25 @@ assert.equal(phanTichCau("Ngành này có cơ hội việc làm không?").kieu, 
   const b = hoi("Em có cơ hội đỗ không?", h);
   assert.ok(b.cho?.y === "co-hoi-diem" && /tổng điểm/i.test(b.hoiLai ?? ""), "có ngành nhưng chưa có điểm: hỏi điểm");
   const c = hoi("23", h);
-  assert.ok(NHAN.test(c.traLoi) && /không phải khả năng đỗ/.test(c.traLoi) && !/%/.test(c.traLoi), c.traLoi);
-  assert.ok(c.hanhDong?.[0]?.canXacNhan);
+  const lcC = ct(c.nguon[0]);
+  if (lyDoKhacPhuongThuc(lcC)) {
+    // Ngành chỉ có điểm sàn 15,0 (hoặc chưa có điểm chuẩn): không gắn nhãn, không nêu 15,0 như điểm chuẩn.
+    assert.ok(/chưa so/.test(c.traLoi) && !NHAN.test(c.traLoi) && !/15[,.]0/.test(c.traLoi) && !/%/.test(c.traLoi), c.traLoi);
+  } else {
+    assert.ok(NHAN.test(c.traLoi) && /không phải khả năng đỗ/.test(c.traLoi) && !/%/.test(c.traLoi), c.traLoi);
+    assert.ok(c.hanhDong?.[0]?.canXacNhan);
+  }
   const h2: TinNhan[] = [];
   hoi("Ở Vĩnh Long có trường nào dạy CNTT?", h2);
   const d = hoi("Em được 23 điểm, có nên đăng ký trường này?", h2);
   const l = ct(d.nguon[0]);
   const chenh = Math.round((23 - l.diemMin) * 100) / 100;
-  assert.ok(d.traLoi.includes(l.nganh) && d.traLoi.includes("23,0") && NHAN.test(d.traLoi));
-  assert.ok(d.traLoi.includes(`${chenh >= 0 ? "hơn" : "kém"} ${Math.abs(chenh).toFixed(1).replace(".", ",")} điểm`), d.traLoi);
+  if (lyDoKhacPhuongThuc(l)) {
+    assert.ok(d.traLoi.includes(l.nganh) && /chưa so/.test(d.traLoi) && !NHAN.test(d.traLoi), d.traLoi);
+  } else {
+    assert.ok(d.traLoi.includes(l.nganh) && d.traLoi.includes("23,0") && NHAN.test(d.traLoi));
+    assert.ok(d.traLoi.includes(`${chenh >= 0 ? "hơn" : "kém"} ${Math.abs(chenh).toFixed(1).replace(".", ",")} điểm`), d.traLoi);
+  }
   assert.ok(!/chắc chắn|đảm bảo|100%/.test(d.traLoi));
   // Ngành xét phương thức khác (không phải THPT): không so điểm bừa
   const khac = LUA_CHON_MAU.find((x) => x.phuongThuc && x.phuongThuc !== "THPT" && x.maTruong);

@@ -1,12 +1,14 @@
 // BỘ KHUNG DUY NHẤT. Slice không tự vẽ thanh dưới hay đầu trang, chỉ dùng các thành phần ở đây.
 import { type CSSProperties, type ReactNode } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Bell, CalendarDays, GraduationCap, Heart, Home, Search, UserRound, type LucideIcon } from "lucide-react";
+import { ArrowLeft, CalendarDays, GraduationCap, Heart, Home, Search, UserRound, type LucideIcon } from "lucide-react";
 import { CAC_MUC_KE_HOACH, CAC_TAB, DUONG_DAN } from "@/duong-dan";
 import { gop } from "@/components/ui/nut-the";
+import { BannerNgoaiTuyen } from "@/components/ui/du-bao/banner-ngoai-tuyen";
 import { BannerKhongLuu } from "./banner-khong-luu";
 import { ThongBaoYeuThich } from "./thong-bao-yeu-thich";
 import { NutTroLyAI } from "@/features/tu-van/tro-ly-noi-bot";
+import { TieuDeMan } from "@/components/ui/thiet-ke";
 import { KetNoiNen } from "@/features/ket-noi/the-de-xuat";
 
 const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
@@ -17,24 +19,25 @@ const ICON_TAB: Record<(typeof CAC_TAB)[number]["id"], LucideIcon> = {
 export function KhungCoThanhDuoi() {
   const { pathname } = useLocation();
   return (
-    <div className="khung-ung-dung pb-[calc(var(--cao-nav)+1rem)]" style={{ "--cao-nav": "calc(4.5rem + env(safe-area-inset-bottom))" } as CSSProperties}>
+    <div className="khung-ung-dung pb-[calc(var(--cao-nav)+4.25rem)]" style={{ "--cao-nav": "calc(4.5rem + env(safe-area-inset-bottom))" } as CSSProperties}>
+      <BannerNgoaiTuyen />
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
       <KetNoiNen />
       <NutTroLyAI />
-      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang border-t border-vien vung-an-toan-duoi">
-        <ul className="grid grid-cols-5">
+      <nav aria-label="Điều hướng chính" className="fixed bottom-0 inset-x-0 z-40 mx-auto max-w-[430px] bg-trang nav-noi vung-an-toan-duoi">
+        <ul className="grid grid-cols-5 px-1 pt-1">
           {CAC_TAB.map((t) => {
             const dang = t.khop(pathname);
             const Icon = ICON_TAB[t.id];
             return (
               <li key={t.id}>
                 <Link to={t.den} aria-current={dang ? "page" : undefined}
-                  className={gop("relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[10px] min-[375px]:text-[11px] font-semibold whitespace-nowrap transition-colors cursor-pointer", dang ? "text-xanh" : "text-chu-phu hover:text-chu")}>
-                  {/* Tab đang mở: một nét mực ngắn ở mép trên, như gạch chân bằng bút. */}
-                  {dang && <span aria-hidden className="absolute top-0 inset-x-5 h-[3px] rounded-b-full bg-xanh" />}
-                  <Icon size={22} strokeWidth={dang ? 2.4 : 1.8} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} />
+                  className={gop("nay-nhe relative min-h-16 flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold whitespace-nowrap cursor-pointer", dang ? "text-xanh-dam" : "text-chu-phu hover:text-chu")}>
+                  <span className={gop("grid place-items-center h-8 w-14 rounded-full transition-colors", dang && "nav-chip-dang")}>
+                    <Icon size={22} strokeWidth={dang ? 2.4 : 1.8} fill={dang && t.id === "nguyenVong" ? "currentColor" : "none"} aria-hidden />
+                  </span>
                   {t.nhan}
                 </Link>
               </li>
@@ -49,6 +52,7 @@ export function KhungCoThanhDuoi() {
 export function KhungKhongThanh() {
   return (
     <div className="khung-ung-dung">
+      <BannerNgoaiTuyen />
       <BannerKhongLuu />
       <Outlet />
       <ThongBaoYeuThich />
@@ -66,26 +70,10 @@ export function Logo({ nho }: { nho?: boolean }) {
   );
 }
 
-/** Đầu trang CỦA TAB (trang gốc): logo + chuông nhắc nhở + tiêu đề lớn. */
+/** Đầu trang CỦA TAB (trang gốc): logo + chuông nhắc nhở + tiêu đề lớn. Dùng TieuDeMan của nền thiết kế. */
 export function DauTrangChinh({ tieuDe, moTa, phai }: { tieuDe: ReactNode; moTa?: string; phai?: ReactNode }) {
   const nav = useNavigate();
-  return (
-    <header className="px-4 pt-3 pb-2">
-      <div className="flex items-center justify-between">
-        <Logo nho />
-        <button type="button" aria-label="Nhắc nhở" onClick={() => nav(DUONG_DAN.nhacNho())} className="size-11 grid place-items-center rounded-full bg-trang border border-vien cursor-pointer active:bg-xanh-nhat transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh">
-          <Bell size={20} />
-        </button>
-      </div>
-      <div className="mt-3 flex items-end justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-[28px] leading-[1.15] font-bold tracking-tight text-muc">{tieuDe}</h1>
-          {moTa && <p className="text-[14px] text-chu-phu mt-1">{moTa}</p>}
-        </div>
-        {phai}
-      </div>
-    </header>
-  );
+  return <TieuDeMan tieuDe={tieuDe} phuDe={moTa} phai={phai} onChuong={() => nav(DUONG_DAN.nhacNho())} />;
 }
 
 /** Đầu trang CON: nút quay lại, tiêu đề giữa, ghi chú nhỏ (ví dụ "Bước 2/3") hoặc nút ở bên phải. */

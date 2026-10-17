@@ -121,7 +121,7 @@ export default function TuVan() {
               <Sparkles size={16} />
             </span>
             <div className="min-w-0">
-              <span className="text-[13.5px] font-bold text-muc">Trợ lý Tuyển sinh AI</span>
+              <span className="text-[13.5px] font-bold text-muc">Trợ lý tuyển sinh AI</span>
             </div>
           </div>
           <label className="flex items-center gap-1.5 min-h-11 text-[12.5px] font-semibold text-chu cursor-pointer shrink-0 ml-2">
@@ -140,7 +140,7 @@ export default function TuVan() {
               <Sparkles size={24} />
             </div>
             <div>
-              <h3 className="text-[16px] font-bold text-muc">Trợ lý Tuyển sinh AI</h3>
+              <h3 className="text-[16px] font-bold text-muc">Trợ lý tuyển sinh AI</h3>
               <p className="text-[13px] text-chu-phu mt-1 leading-relaxed">
                 Hỏi về điểm chuẩn, so sánh trường và ngành, hoặc nhờ mình xem danh sách nguyện vọng của em.
               </p>

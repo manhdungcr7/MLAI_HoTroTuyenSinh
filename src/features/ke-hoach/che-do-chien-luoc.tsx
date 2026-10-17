@@ -109,7 +109,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
     const tatCaViec = [...cacViecKhac, ...viecMoi];
     datViec(tatCaViec);
     xepLai(tuan, undefined, tatCaViec);
-    hienThongBao(`Đã tạo ${viecMoi.length} nhiệm vụ và phân bổ đều vào lịch tự học tuần của bạn!`);
+    hienThongBao(`Đã tạo ${viecMoi.length} nhiệm vụ và xếp đều vào lịch tự học tuần của bạn.`);
   };
 
   // Cập nhật trạng thái chuyên đề và tự động sinh việc học gấp
@@ -204,7 +204,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
             onClick={apDungPhanBoVaoLich}
             className="w-full !py-2.5 text-[13.5px] shadow-sm"
           >
-            Áp dụng phân bổ thông minh vào Lịch tuần
+            Xếp vào lịch tuần
           </Nut>
         </div>
       </section>
@@ -224,7 +224,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
           <div className="rounded-xl border border-xanh/30 bg-xanh-nhat/20 p-2.5 flex items-center justify-between gap-3 text-[13px]">
             <div>
               <b className="block text-[13.5px] text-muc">ĐGNL & Xét tuyển sớm</b>
-              <span className="text-[12px] text-chu-phu">{coDgnl ? "Đã có điểm ĐGNL, dùng nộp sớm các trường lớn." : "Đăng ký đợt 1 ĐGNL / HSA / TSA để mở thêm chỉ tiêu."}</span>
+              <span className="text-[12px] text-chu-phu">{coDgnl ? "Đã có điểm ĐGNL (đánh giá năng lực). Xem trường em chọn có nhận không." : "Nếu trường em chọn xét ĐGNL (HSA, TSA), xem lịch đăng ký đợt 1."}</span>
             </div>
             <Nhan tone="xanh" className="text-[11px] py-0 px-2 shrink-0">T1 – T4</Nhan>
           </div>
@@ -233,7 +233,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
           <div className="rounded-xl border border-cam/30 bg-cam-nhat/20 p-2.5 flex items-center justify-between gap-3 text-[13px]">
             <div>
               <b className="block text-[13.5px] text-muc">Ngoại ngữ & Học bạ kết hợp</b>
-              <span className="text-[12px] text-chu-phu">{coChungChi ? "Đã có chứng chỉ, đủ điều kiện quy đổi điểm 10 kết hợp." : "Tập trung kéo điểm tiếng Anh THPT để tối đa tổng 3 môn."}</span>
+              <span className="text-[12px] text-chu-phu">{coChungChi ? "Đã có chứng chỉ. Hỏi từng trường xem có quy đổi thành điểm không." : "Ưu tiên nâng điểm tiếng Anh để kéo tổng 3 môn."}</span>
             </div>
             <Nhan tone="cam" className="text-[11px] py-0 px-2 shrink-0">T4 – T5</Nhan>
           </div>

@@ -26,6 +26,18 @@ export type LoaiThucTheCms =
 
 export type MucDoQuanTrong = "normal" | "important" | "critical";
 
+/** Bằng chứng gắn với một ô điểm, không tự nâng thành xác minh độc lập. */
+export interface BangChungDiem {
+  kind: "diem_chuan" | "diem_san" | "du_kien" | "chua_ro";
+  score: number;
+  scale: number | null;
+  sourceUrl: string;
+  checkedAt: string;
+  checkedBy: string;
+  independentReviewer: string | null;
+  includesPriority: boolean | null;
+}
+
 export type VaiTroCms = "contributor" | "editor" | "reviewer" | "admin";
 
 /** Nguồn kiểm chứng bắt buộc để đảm bảo tính xác thực */

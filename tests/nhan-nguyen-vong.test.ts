@@ -9,7 +9,11 @@ import { mucTieuDayDu, mucTieuTuLuaChon } from "../src/state/chon";
 import { taoHoSoMau } from "../src/state/mau";
 import type { LuaChon, MonKhoi } from "../src/state/types";
 
-const lc = (o: Partial<LuaChon> = {}): LuaChon => ({ ...LUA_CHON.find((l) => l.phuongThuc === "THPT")!, diemMin: 25, diemMax: 25, phuongThuc: "THPT", ...o });
+// Điểm theo năm luôn khớp diemMin (dữ liệu thật cũng vậy): nhãn chỉ so khi điểm hợp lệ, không phải điểm sàn 15,0.
+const lc = (o: Partial<LuaChon> = {}): LuaChon => {
+  const goc = { ...LUA_CHON.find((l) => l.phuongThuc === "THPT")!, diemMin: 25, diemMax: 25, phuongThuc: "THPT", ...o };
+  return { ...goc, namDiem: o.namDiem ?? 2025, diemTheoNam: o.diemTheoNam ?? { [String(o.namDiem ?? 2025)]: goc.diemMin } };
+};
 const diem = (o: Partial<Record<MonKhoi, number>>) =>
   ({ toan: null, vatLy: null, hoaHoc: null, sinh: null, nguVan: null, tiengAnh: null, lichSu: null, diaLy: null, gdktpl: null, tinHoc: null, congNghe: null, ...o });
 
@@ -50,10 +54,11 @@ assert.deepEqual([coSuyRa.tong, coSuyRa.toHop, coSuyRa.suyRa], [24, "A01", true]
 
 // 4) dungDanhSach: tổ hợp, suy ra, lý do không có nhãn
 const thpt = LUA_CHON.filter((l) => l.phuongThuc === "THPT");
-const coGhiToHop = thpt.find((l) => l.toHopXet?.includes("A00") && l.toHopXet.length === 1)!;
-const chuaGhiToHop = thpt.find((l) => !l.toHopXet?.length) ?? { ...thpt[0], id: "mock-chua-to-hop", toHopXet: [] };
+// Dữ liệu thật thay đổi theo thời gian: dựng chương trình từ một dòng thật, ép tổ hợp để kiểm đúng nhánh tính.
+const coGhiToHop = lc({ id: "gia-a00", toHopXet: ["A00"], diemMin: 24 });
+const chuaGhiToHop = lc({ id: "gia-chua-ghi", toHopXet: [], diemMin: 24 });
 const khacPt = LUA_CHON.find((l) => l.phuongThuc === "HOC_BA")!;
-const tim = (id: string) => (id === chuaGhiToHop.id ? chuaGhiToHop : LUA_CHON.find((l) => l.id === id));
+const tim = (id: string) => [coGhiToHop, chuaGhiToHop].find((l) => l.id === id) ?? LUA_CHON.find((l) => l.id === id);
 const ds = dungDanhSach([coGhiToHop.id, chuaGhiToHop.id, khacPt.id, "khong-ton-tai"], diem({ toan: 8, vatLy: 7, hoaHoc: 6, tiengAnh: 9 }), tim);
 assert.equal(ds[0].toHop, "A00"); assert.equal(ds[0].suyRa, false); assert.equal(ds[0].lyDoKhongNhan, null);
 assert.equal(ds[1].suyRa, true); assert.equal(ds[1].toHop, "A01", "tổ hợp tốt nhất của em: Toán 8 + Lý 7 + Anh 9");
@@ -75,7 +80,8 @@ assert.equal(dayDuMotThuSuc.tone, "do", "đủ nhãn mà chỉ có Thử sức t
 
 // 6) mucTieuDayDu khi thiếu môn: không coi môn thiếu là 0 như số thật
 const mau = taoHoSoMau();
-const muc = thpt.find((l) => l.toHopXet?.length === 1 && l.toHopXet[0] === "A01" && l.diemMin > 15) ?? { ...thpt.find((l) => l.toHopXet?.includes("A01") && l.diemMin > 15)!, toHopXet: ["A01"] };
+// Tổ hợp nào của chương trình này cũng cần Lý hoặc Hóa: bỏ hai môn đó thì chắc chắn thiếu môn (không phụ thuộc dữ liệu thật đổi theo thời gian).
+const muc = thpt.find((l) => !!l.toHopXet?.length && l.toHopXet.every((c) => ["A00", "A01", "B00"].includes(c)) && l.diemMin > 15 && !lyDoKhacPhuongThuc(l))!;
 const sThieu = { ...mau, diemThi: [], hoSo: { ...mau.hoSo, diem: { ...mau.hoSo.diem, hoaHoc: null, vatLy: null } }, mucTieu: mucTieuTuLuaChon(muc, { ...mau.hoSo.diem, vatLy: null, hoaHoc: null }) };
 const m1 = mucTieuDayDu(sThieu)!;
 assert.equal(m1.duDiem, false);

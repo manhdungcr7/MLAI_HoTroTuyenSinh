@@ -109,6 +109,13 @@ export function tinhKyVongVaBienDong(diemTheoNam: Record<string, number> | undef
 }
 
 /**
+ * Mô hình dưới đây CHƯA được kiểm định hiệu chỉnh trên dữ liệu thật (khác với `du-bao-diem-chuan.ts` đã có kiểm định bỏ-một-năm).
+ * Vì vậy không màn hình nào được hiển thị `xacSuat`/`phanTram` như "xác suất đậu". Chỉ đổi thành true khi có báo cáo hiệu chỉnh kèm theo;
+ * `tests/trang-thai-du-lieu.test.ts` kiểm không có mã giao diện hay máy chủ nào gọi hàm này.
+ */
+export const XAC_SUAT_DA_HIEU_CHINH = false;
+
+/**
  * Tính xác suất trúng tuyển được hiệu chuẩn (Calibrated Probability)
  * @param diemThiRaw Điểm thi tổng 3 môn của tổ hợp (chưa cộng ưu tiên)
  * @param lc Chương trình đào tạo / ngành tuyển sinh

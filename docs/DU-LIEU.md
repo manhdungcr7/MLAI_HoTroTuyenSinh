@@ -43,7 +43,7 @@ npm test
 - Khung chương trình học chi tiết (môn từng học kỳ) **chưa có dữ liệu**; trang chi tiết dẫn tới trang ngành của trường nếu có, không thì nói thẳng và cho đường tìm kiếm.
 - Hồ sơ có 6 môn chính + 5 môn thêm không bắt buộc (Sử, Địa, GDKT&PL, Tin, Công nghệ; `HoSo.diemThem`). Tổ hợp có môn năng khiếu / vẽ (V00, T00, M01...) và ngoại ngữ khác (D02-D06...) không tính được từ điểm hồ sơ nên app ghi 'chưa so được'.
 - Học phí: chỉ khoảng 30 ngành có số theo năm; các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
-- Điểm chuẩn năm nay chưa có; app dùng năm gần nhất và luôn ghi "điểm chuẩn các năm trước". Với 1.680 chương trình từ nguồn tổng hợp có ghi điểm 2026, app coi đây là điểm tham chiếu / dự kiến công bố sớm và ghi rõ nguồn tổng hợp. Mức điểm 15,0 ở các trường tư thục/địa phương là mức điểm sàn xét tuyển trúng tuyển chung theo quy định của trường.
+- Điểm luôn gắn đúng năm và phương thức. Không suy 15 là điểm sàn hoặc số liệu 2026 là dự kiến chỉ từ trị số/năm/nhãn nguồn. `scoreEvidence` phải khớp ô điểm và có nguồn/thời điểm/người kiểm mới phân loại điểm sàn, chuẩn hoặc dự kiến. Điểm sàn/dự kiến đã có bằng chứng bị loại khỏi lịch sử dùng dự báo; số liệu cũ thiếu chứng cứ vẫn là tham chiếu chưa kiểm chứng và chặn phát hành qua audit strict. Nhãn `official_pdf` không tự tạo độ tin cậy cao. Xem [audit 2026-10-17](audits/data-quality-2026-10-17.md).
 
 ## Lớp dữ liệu từ CMS (bản xuất bản)
 - Ứng dụng nạp nền `/api/manifest` (nếu chưa có bản xuất bản thì dùng `/data/manifest.json` đi kèm bản dựng), tải đúng bộ dữ liệu đổi hash, kiểm tra SHA-256, lưu IndexedDB, rồi hợp nhất lên dữ liệu gốc bằng `src/engine/du-lieu-tuyen-sinh/hop-nhat.ts`. Chưa có bản nào thì app chạy bằng dữ liệu gốc.

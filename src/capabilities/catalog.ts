@@ -1,16 +1,12 @@
 import { LUA_CHON, napLuaChon, taiNguon } from "../data/lua-chon-that";
 import { DS_TRUONG, bietDanhCua, chuanHoa, chuanHoaTinh, resolveTruong } from "../engine/truong";
 import { CONG_TUYEN_SINH_CHINH_THUC } from "../engine/link-chinh-thuc";
+import type { BangChungDiem } from "../engine/du-lieu-tuyen-sinh/kieu";
 
 export interface AdmissionRecord {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
   toHop: string[]; diem: Record<string, number | null>; nguon: string | null; tier: string | null;
-  scoreEvidence?: Record<string, {
-    kind: "diem_chuan" | "diem_san" | "du_kien" | "chua_ro";
-    score: number;
-    scale: number | null; sourceUrl: string; checkedAt: string; checkedBy: string;
-    independentReviewer: string | null; includesPriority: boolean | null;
-  }>;
+  scoreEvidence?: Record<string, BangChungDiem>;
 }
 export async function loadCatalog() {
   const [raw, sources] = await Promise.all([import("../data/du-lieu-that.json"), taiNguon(), napLuaChon()]);
@@ -42,12 +38,16 @@ export function filterPrograms(records: AdmissionRecord[], args: Record<string, 
 }
 
 export function programDetails(record: AdmissionRecord, catalog: Catalog) {
-  const history = Object.entries(record.diem).sort(([a], [b]) => b.localeCompare(a));
+  const cutoffHistory = Object.fromEntries(Object.entries(record.diem).map(([year, score]) => {
+    const e = record.scoreEvidence?.[year];
+    return [year, e && e.score === score && ["diem_san", "du_kien", "chua_ro"].includes(e.kind) ? null : score];
+  }));
+  const history = Object.entries(cutoffHistory).sort(([a], [b]) => b.localeCompare(a));
   const latest = history[0], choice = catalog.choices.get(record.id);
   const yearly = catalog.sources.nam[record.id] ?? [];
   return {
     id: record.id, maTruong: record.ma, tenTruong: record.truong, nganh: record.nganh, nhomNganh: record.nhom, tinh: record.tinh,
-    phuongThuc: record.pt, toHop: [...record.toHop], diemTheoNam: { ...record.diem },
+    phuongThuc: record.pt, toHop: [...record.toHop], diemTheoNam: cutoffHistory,
     scoreEvidence: record.scoreEvidence ?? null,
     diemChuan: latest && typeof latest[1] === "number" && Number.isFinite(latest[1]) ? latest[1] : null, namDiem: latest ? Number(latest[0]) : null,
     hocPhiTrieuNam: choice?.hocPhiMin ?? null, hocPhiUocTinh: choice?.hocPhiUocTinh ?? false,

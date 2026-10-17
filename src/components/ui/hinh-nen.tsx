@@ -9,16 +9,8 @@ export function NenHero({ tone = "xanh", className, children }: { tone?: ToneTen
   return <div className={gop("relative overflow-hidden rounded-lon", TONE_NEN_HERO[tone], className)}>{children}</div>;
 }
 
-/** Huy hiệu trường: ô màu đặc + chữ viết tắt. Không dùng logo thật khi chưa được phép. */
-export function HuyHieuTruong({ ten, tone = "xanh", kichThuoc = 44 }: { ten: string; tone?: ToneTen; kichThuoc?: number }) {
-  const chu = ten.replace(/[^A-Za-zÀ-ỹ]/g, "").slice(0, 4).toUpperCase();
-  return (
-    <span aria-hidden className={gop("rounded-[10px] grid place-items-center text-white font-bold tracking-tight shrink-0", TONE_GD[tone])}
-      style={{ width: kichThuoc, height: kichThuoc, fontSize: Math.max(10, kichThuoc * (chu.length > 3 ? 0.24 : 0.3)) }}>
-      {chu}
-    </span>
-  );
-}
+/** Huy hiệu trường: ô gradient + chữ viết tắt (cài ở thiet-ke/thanh-phan.tsx, giữ nguyên API). */
+export { HuyHieuTruong } from "./thiet-ke/thanh-phan";
 
 /** Ô biểu tượng nền nhạt, nét theo tông: dùng cho đầu mục, nhãn môn học. Không còn vòng tròn màu đặc. */
 export function BieuTuongTron({ icon: Icon, tone = "xanh", kichThuoc = 44 }: { icon: LucideIcon; tone?: ToneTen; kichThuoc?: number }) {

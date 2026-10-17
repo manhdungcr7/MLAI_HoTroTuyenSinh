@@ -108,7 +108,7 @@ export default function CaiDatTuHoc() {
         </TheCaiDat>
 
         <DongThongBao tone="xanh" icon={Utensils} tieuDe="Giờ ăn luôn được giữ trống"
-          moTa="Hệ thống luôn giữ trống 11:45 – 13:00 và 18:00 – 19:00 để bạn ăn uống, nghỉ ngơi." />
+          moTa="Mình luôn giữ trống 11:45 – 13:00 và 18:00 – 19:00 để bạn ăn uống, nghỉ ngơi." />
         <DongThongBao tone="tim" icon={HeartHandshake} tieuDe="Học vừa sức quan trọng hơn học nhiều"
           moTa="Nếu thấy mệt, bạn giảm số giờ tối đa hoặc chọn “Hơi mệt” ở trang Hôm nay, lịch sẽ tự động giảm tải." />
 

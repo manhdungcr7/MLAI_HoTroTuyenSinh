@@ -2,7 +2,7 @@ import type { NhanNguyenVong, ToneTen } from "@/state/types";
 import { Nhan, TONE_GD, gop } from "./nut-the";
 
 /** Màu cố định cho 4 nhãn nguyện vọng trên toàn ứng dụng. */
-export const TONE_NHAN: Record<NhanNguyenVong, ToneTen> = { "Thử sức": "tim", "Vừa sức": "cam", "An toàn": "luc", "Dự phòng": "xanh" };
+export const TONE_NHAN: Record<NhanNguyenVong, ToneTen> = { "Thử sức": "tim", "Vừa sức": "xanh", "An toàn": "luc", "Dự phòng": "cam" };
 export const CAC_NHAN: NhanNguyenVong[] = ["Thử sức", "Vừa sức", "An toàn", "Dự phòng"];
 
 export function NhanNguyenVongTag({ nhan }: { nhan: NhanNguyenVong }) {

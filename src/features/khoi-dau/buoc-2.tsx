@@ -6,6 +6,7 @@ import { CAN_CAI_THIEN, DIEM_MANH, ICON_MON, ICON_TO_HOP, TONE_MON, TONE_TO_HOP 
 import DiemMonThem from "./diem-mon-them";
 import DiemUuTien from "./diem-uu-tien";
 import DiemXetTuyenSom from "./diem-xet-tuyen-som";
+import { ChuThichLoaiDiem, NhanLoaiDiem, TienDoDiem } from "./loai-diem";
 import { CauHoi, ChonO, LoiNho, TieuDeBuoc } from "./thanh-phan";
 import { LOI_DIEM, docDiem, tenMonCuaToHop, tinhCacToHop, toHopCaoNhatDayDu } from "./tinh-toan";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
@@ -34,12 +35,15 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
   // Con số Khám phá thật sự dùng (73 tổ hợp + ưu tiên); chỉ nhắc khi khác với 4 thẻ ở trên.
   const dayDu = toHopCaoNhatDayDu(diemDung, h.diemThem, h.uuTienTuyenSinh);
   const loiDiem = ketQua.filter(({ kq }) => kq.loai === "khongPhaiSo" || kq.loai === "ngoaiKhoang");
+  const soMonCo = CAC_MON.filter((m) => diemDung[m] !== null).length;
   const coThem = h.diemManh.length + h.canCaiThien.length > 0;
   const [moThem, setMoThem] = useState(coThem);
 
   return (
     <>
-      <TieuDeBuoc tieuDe="Điểm các môn" />
+      <TieuDeBuoc tieuDe="Điểm các môn" phai={<NhanLoaiDiem loai="thiThu" className="mt-1.5" />}
+        moTa="Điểm em đang có, ví dụ từ bài thi thử. Chưa có thì bấm Tiếp tục, nhập sau cũng được." />
+      <TienDoDiem co={soMonCo} tong={CAC_MON.length} nhan="Đã nhập" />
 
       <fieldset className="min-w-0">
         <legend className="sr-only">Điểm các môn</legend>
@@ -90,10 +94,6 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
         )}
       </fieldset>
 
-      <DiemMonThem h={h} sua={sua} />
-      <DiemUuTien h={h} sua={sua} />
-      <DiemXetTuyenSom h={h} sua={sua} />
-
       <section aria-labelledby="tieu-de-to-hop">
         <div className="flex items-center justify-between gap-2 mb-2">
           <h3 id="tieu-de-to-hop" className="flex items-center gap-1.5 text-[15px] font-bold text-chu"><Sparkles size={18} className="text-xanh" />Tổ hợp xét tuyển tự tính</h3>
@@ -119,8 +119,7 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
                   </p>
                 ) : (
                   <p className="mt-2 text-[13px] leading-snug">
-                    <b className="block text-chu-phu">Chưa đủ điểm</b>
-                    <span className="text-chu-phu">Thiếu {t.thieu.map((m) => TEN_MON_NGAN[m]).join(", ")}</span>
+                    <span className="text-chu-phu">Còn thiếu {t.thieu.map((m) => TEN_MON_NGAN[m]).join(", ")}</span>
                   </p>
                 )}
               </li>
@@ -145,6 +144,12 @@ export default function Buoc2({ h, sua, chuDiem, goDiem }: P) {
           </div>
         )}
       </section>
+
+      <DiemMonThem h={h} sua={sua} />
+      <DiemUuTien h={h} sua={sua} />
+      <DiemXetTuyenSom h={h} sua={sua} />
+      <ChuThichLoaiDiem cacLoai={["thiThu", "mucTieu", "hocBa"]} />
+
 
       <section className="rounded-the border border-vien bg-trang">
         <button type="button" onClick={() => setMoThem(!moThem)} aria-expanded={moThem} aria-controls="bd-them"

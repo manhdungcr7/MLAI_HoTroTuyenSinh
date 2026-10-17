@@ -17,11 +17,13 @@ import { useApp } from "@/state/store";
 import { changCuaEm } from "@/state/chang";
 import type { LuaChon, ToneTen } from "@/state/types";
 import { CHU_SO_VOI_DIEM_CHUAN, TONE_CHAC_CHAN, TONE_MUC, boiCanhTu, danhGia } from "./phu-hop";
-import { HopChonLuaChon, NhanPhuHop, NutTim, khoangDiem, khoangHocPhi, kyHieu } from "./thanh-phan";
+import { HopChonLuaChon, NhanPhuHop, NutTim, khoangHocPhi, kyHieu } from "./thanh-phan";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 import { useKhoDuLieu } from "@/state/dung-kho-du-lieu";
 import { NutBaoSai } from "./bao-sai-sheet";
 import { KhoiDuBao } from "./khoi-du-bao";
+import { phanLoaiDuLieu, type TrangThaiDuLieu } from "@/engine/trang-thai-du-lieu";
+import { NhanTrangThaiDuLieu } from "@/components/ui/du-bao";
 import { tongChoLuaChon } from "./to-hop";
 import { ThongTinTruong } from "./thong-tin-truong";
 import { giaiQuyetLink } from "@/engine/link-chinh-thuc";
@@ -89,12 +91,12 @@ const TEN_PHUONG_THUC: Record<string, string> = {
 };
 
 /** Điểm chuẩn từng năm có thật, kèm điểm của bạn để so ngay. Không nội suy năm thiếu. */
-function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number | null; uuTienCong?: number }) {
+function BangDiemChuan({ lc, tt, diemEm, uuTienCong }: { lc: LuaChon; tt: TrangThaiDuLieu; diemEm: number | null; uuTienCong?: number }) {
   const nam = Object.entries(lc.diemTheoNam ?? {}).sort((a, b) => b[0].localeCompare(a[0]));
   if (nam.length === 0) return null;
   return (
     <section className="rounded-the bg-trang border border-vien shadow-the p-4" aria-label="Điểm chuẩn các năm">
-      <h2 className="text-[16px] font-extrabold text-muc">Điểm chuẩn các năm</h2>
+      <h2 className="text-[16px] font-extrabold text-muc">{tt.loai === "chiDiemSan" ? "Điểm sàn các năm" : tt.loai === "phuongThucKhac" ? "Điểm các năm (phương thức khác)" : "Điểm chuẩn các năm"}</h2>
       <ul className="mt-2 divide-y divide-vien">
         {nam.map(([n, d]) => {
           const link = lc.nguonTheoNam?.find((x) => x.nam === n);
@@ -109,7 +111,7 @@ function BangDiemChuan({ lc, diemEm, uuTienCong }: { lc: LuaChon; diemEm: number
           );
         })}
       </ul>
-      {diemEm !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của bạn: <b className="text-chu">{dinhDangDiem(diemEm)}</b>{uuTienCong ? ` (gồm +${dinhDangDiem(uuTienCong)} ưu tiên)` : ""}</p>}
+      {diemEm !== null && tt.diemCuoi !== null && <p className="mt-2 text-[13px] text-chu-phu">Điểm của bạn: <b className="text-chu">{dinhDangDiem(diemEm)}</b>{uuTienCong ? ` (gồm +${dinhDangDiem(uuTienCong)} ưu tiên)` : ""}</p>}
     </section>
   );
 }
@@ -208,6 +210,7 @@ export default function ChiTiet() {
   }
 
   const kq = danhGia(lc, bc);
+  const tt = phanLoaiDuLieu(lc);
   const hpTruong = nguon?.truong[lc.maTruong ?? ""]?.hocPhi;
   const trongDs = s.nguyenVong.includes(lc.id);
   const tone = kq.muc ? TONE_MUC[kq.muc] : "xanh";
@@ -276,7 +279,9 @@ export default function ChiTiet() {
         {/* Thông tin chính */}
         <section className="rounded-the bg-trang border border-vien shadow-the p-4" aria-label="Thông tin chính">
           <ul className="divide-y divide-vien">
-            <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn ${lc.namDiem} (thang 30)`} giaTri={`${khoangDiem(lc)} điểm`} />
+            {tt.diemCuoi !== null
+              ? <DongThongTin icon={BarChart3} tone="tim" nhan={`Điểm chuẩn ${tt.namCuoi} (thang 30)`} giaTri={`${dinhDangDiem(tt.diemCuoi)} điểm`} phu={tt.nguonThuCap ? "Từ trang tổng hợp, chưa đối chiếu đề án." : undefined} />
+              : <DongThongTin icon={BarChart3} tone="tim" nhan="Điểm chuẩn" giaTri={<NhanTrangThaiDuLieu tt={tt} />} phu={tt.loai === "chiDiemSan" ? "Mức điểm sàn không phải điểm chuẩn của ngành." : tt.loai === "phuongThucKhac" ? "Không so với điểm thi THPT." : undefined} />}
             {lc.toHopXet !== undefined && (
               <DongThongTin icon={GraduationCap} tone="xanh" nhan="Tổ hợp xét tuyển" giaTri={lc.toHopXet.length > 0 ? lc.toHopXet.join(", ") : "Đề án chưa ghi rõ"} phu={lc.phuongThuc ? `Phương thức: ${TEN_PHUONG_THUC[lc.phuongThuc] ?? lc.phuongThuc}` : undefined} />
             )}
@@ -292,7 +297,7 @@ export default function ChiTiet() {
           </ul>
         </section>
 
-        <BangDiemChuan lc={lc} diemEm={kq.tong} uuTienCong={tongChoLuaChon(lc, bc.diem).uuTienCong} />
+        <BangDiemChuan lc={lc} tt={tt} diemEm={kq.tong} uuTienCong={tongChoLuaChon(lc, bc.diem).uuTienCong} />
 
 
         <KhoiDuBao lc={lc} diemEm={kq.tong} />
@@ -308,10 +313,10 @@ export default function ChiTiet() {
         <section className="rounded-the bg-trang border border-vien p-3.5 flex items-start gap-3" aria-label="Nguồn dữ liệu">
           <span className="size-10 rounded-xl grid place-items-center shrink-0 bg-xanh-nhat text-xanh"><FileText size={20} /></span>
           <div className="flex-1 min-w-0 space-y-2">
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
               <b className="text-[14px] text-muc">Nguồn dữ liệu</b>
               <Nhan tone={lc.nguonCap === "official_pdf" ? "luc" : "cam"}>
-                {lc.nguonCap === "official_pdf" ? "Có nguồn chính thức" : "Nguồn thứ cấp"} · chưa xác minh độc lập
+                {lc.nguonCap === "official_pdf" ? "Có nguồn chính thức" : "Nguồn thứ cấp"}
               </Nhan>
             </div>
             <details className="group">

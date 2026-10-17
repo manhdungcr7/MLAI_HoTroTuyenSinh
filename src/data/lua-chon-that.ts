@@ -4,13 +4,13 @@
 // du-lieu-that.json: danh mục; viec-lam.json: tỷ lệ có việc làm trích thêm từ đề án (scripts/trich-viec-lam.py), chỉ bổ sung ngành chưa có;
 // hoc-phi.json: học phí theo năm trích từ đề án (scripts/trich-hoc-phi.py), chỉ vài chục ngành.
 import type { LuaChon, MonKhoi, NguonNam, ToneTen } from "@/state/types";
-import { TEN_PHUONG_THUC as TEN_PT, nhanNguyenVong } from "@/engine/phan-tich";
+import { TEN_PHUONG_THUC as TEN_PT, lyDoKhacPhuongThuc, nhanNguyenVong } from "@/engine/phan-tich";
 import { tongChoLuaChon } from "@/features/kham-pha/to-hop";
 
 interface Dong {
   id: string; ma: string; truong: string; nganh: string; nhom: string; tinh: string; pt: string;
   toHop: string[]; diem: Record<string, number>; dk: number | null; viec: number | null; nguon: string | null; tier: string | null;
-  scoreEvidence?: Record<string, { kind: string; includesPriority: boolean | null }>;
+  scoreEvidence?: LuaChon["scoreEvidence"];
 }
 
 const TONES: ToneTen[] = ["xanh", "luc", "cam", "tim", "do"];
@@ -90,6 +90,7 @@ function chuyen(d: Dong): LuaChon {
     phuongThuc: d.pt,
     toHopXet: d.toHop,
     diemTheoNam: d.diem,
+    scoreEvidence: d.scoreEvidence,
     diemDuKien: d.dk,
     nguonCap: d.tier === "official_pdf" ? "official_pdf" : "aggregator_verified",
   };
@@ -149,7 +150,7 @@ export const THIEU_MUC_TIEU_MAU = { it: 1, nhieu: 2.5 };
  * `diem` phải là điểm app thực sự dùng (lần thi thử mới nhất), không phải điểm hồ sơ ban đầu.
  */
 export function idHoSoMau(diem: Partial<Record<MonKhoi, number | null>>, nganSachToiDa = Infinity): string[] {
-  const goi = (loc: (l: LuaChon) => boolean) => LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.phuongThuc === "THPT" && loc(l))
+  const goi = (loc: (l: LuaChon) => boolean) => LUA_CHON.filter((l) => l.nhomNganh === "CNTT" && l.phuongThuc === "THPT" && !lyDoKhacPhuongThuc(l) && loc(l))
     .map((l) => ({ l, tong: tongChoLuaChon(l, diem).tong }))
     .filter((x): x is { l: LuaChon; tong: number } => x.tong !== null)
     .map((x) => ({ ...x, nhan: nhanNguyenVong(x.l, x.tong) }))

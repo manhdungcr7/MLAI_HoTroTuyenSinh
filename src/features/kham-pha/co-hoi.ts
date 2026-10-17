@@ -2,6 +2,7 @@
 // Tính từ điểm chuẩn năm gần nhất của phương thức thi tốt nghiệp THPT, theo đúng tổ hợp của từng ngành. TypeScript thuần.
 import { LUA_CHON_MAU } from "@/data/lua-chon-mau";
 import { tongChoLuaChon, type TongToHop } from "./to-hop";
+import { diemChuanDeSo, lyDoKhongSoDuoc } from "@/engine/trang-thai-du-lieu";
 import type { DiemDayDu, LuaChon } from "@/state/types";
 
 export interface CoHoi {
@@ -19,11 +20,13 @@ export function tinhCoHoi(diem: DiemDayDu, ds: LuaChon[] = LUA_CHON_MAU): CoHoi 
   let soNganh = 0, soDuDiem = 0, soThuSuc = 0;
   const nhom = new Map<string, { duDiem: number; thuSuc: number }>();
   for (const l of ds) {
-    if (l.phuongThuc && l.phuongThuc !== "THPT") continue; // điểm học bạ, ĐGNL không cùng thang với điểm thi tốt nghiệp
+    if (lyDoKhongSoDuoc(l)) continue; // điểm sàn, học bạ, ĐGNL không so được với điểm thi tốt nghiệp
+    const diemChuan = diemChuanDeSo(l);
+    if (diemChuan === null) continue;
     const t: TongToHop = tongChoLuaChon(l, diem);
     if (t.tong === null) continue;
     soNganh++;
-    const chenh = t.tong - l.diemMin;
+    const chenh = t.tong - diemChuan;
     const g = nhom.get(l.nhomNganh) ?? { duDiem: 0, thuSuc: 0 };
     if (chenh >= 0) { soDuDiem++; g.duDiem++; } else if (chenh >= -2) { soThuSuc++; g.thuSuc++; }
     nhom.set(l.nhomNganh, g);
