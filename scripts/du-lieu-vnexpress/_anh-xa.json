@@ -1,0 +1,3778 @@
+{
+ "BKA": {
+  "ten_ta": "ĐH Bách Khoa Hà Nội",
+  "id_vnexpress": 349,
+  "ten_vnexpress": "Đại học Bách khoa Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 349,
+    "ten": "Đại học Bách khoa Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-bach-khoa-ha-noi-349",
+    "diem": 1.0
+   },
+   {
+    "id": 391,
+    "ten": "Đại học Khoa Học Và Công Nghệ Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-va-cong-nghe-ha-noi-391",
+    "diem": 0.5
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.5
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 0.5
+   }
+  ]
+ },
+ "BVH": {
+  "ten_ta": "Học viện Công nghệ Bưu chính Viễn thông",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 252,
+    "ten": "Học viện Công nghệ Bưu chính Viễn thông (phía Nam)",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-nam-252",
+    "diem": 0.5
+   },
+   {
+    "id": 351,
+    "ten": "Học viện Công nghệ Bưu chính Viễn thông (phía Bắc)",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-cong-nghe-buu-chinh-vien-thong-phia-bac-351",
+    "diem": 0.5
+   },
+   {
+    "id": 380,
+    "ten": "Đại học Công nghệ Giao thông vận tải",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-giao-thong-van-tai-380",
+    "diem": 0.375
+   },
+   {
+    "id": 284,
+    "ten": "Đại học Công nghệ Thông tin - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-thong-tin-dai-hoc-quoc-gia-tp-hcm-284",
+    "diem": 0.333
+   }
+  ]
+ },
+ "BVU": {
+  "ten_ta": "ĐH Bà Rịa - Vũng Tàu",
+  "id_vnexpress": 435,
+  "ten_vnexpress": "Đại học Bà Rịa Vũng Tàu",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 435,
+    "ten": "Đại học Bà Rịa Vũng Tàu",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ba-ria-vung-tau-435",
+    "diem": 1.0
+   },
+   {
+    "id": 477,
+    "ten": "Đại học Hùng Vương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hung-vuong-tp-hcm-477",
+    "diem": 0.0
+   },
+   {
+    "id": 460,
+    "ten": "Đại Học Thể Dục Thể Thao Bắc Ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-the-duc-the-thao-bac-ninh-460",
+    "diem": 0.0
+   },
+   {
+    "id": 410,
+    "ten": "Học viện Phòng cháy chữa cháy và Cứu nạn cứu hộ ( Hệ Dân sự Phía Bắc )",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-phong-chay-chua-chay-va-cuu-nan-cuu-ho-lpar-he-dan-su-phia-bac-rpar-410",
+    "diem": 0.0
+   }
+  ]
+ },
+ "C19": {
+  "ten_ta": "Trường Cao đẳng Sư phạm Bắc Ninh",
+  "id_vnexpress": 187,
+  "ten_vnexpress": "Cao Đẳng Sư Phạm Bắc Ninh",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 187,
+    "ten": "Cao Đẳng Sư Phạm Bắc Ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-bac-ninh-187",
+    "diem": 1.0
+   },
+   {
+    "id": 47,
+    "ten": "Cao Đẳng Sư Phạm Tây Ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-tay-ninh-47",
+    "diem": 0.714
+   },
+   {
+    "id": 181,
+    "ten": "Cao Đẳng Sư Phạm Ninh Thuận",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-ninh-thuan-181",
+    "diem": 0.714
+   },
+   {
+    "id": 120,
+    "ten": "Cao Đẳng Sư Phạm Quảng Ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-quang-ninh-120",
+    "diem": 0.714
+   }
+  ]
+ },
+ "C23": {
+  "ten_ta": "Trường Cao đẳng Sư phạm Hòa Bình",
+  "id_vnexpress": 17,
+  "ten_vnexpress": "Cao Đẳng Sư Phạm Hòa Bình",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 17,
+    "ten": "Cao Đẳng Sư Phạm Hòa Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-hoa-binh-17",
+    "diem": 1.0
+   },
+   {
+    "id": 182,
+    "ten": "Cao Đẳng Sư Phạm Bình Phước",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-binh-phuoc-182",
+    "diem": 0.714
+   },
+   {
+    "id": 41,
+    "ten": "Cao Đẳng Sư Phạm Thái Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-thai-binh-41",
+    "diem": 0.714
+   },
+   {
+    "id": 95,
+    "ten": "Cao Đẳng Sư Phạm Cao Bằng",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-cao-bang-95",
+    "diem": 0.571
+   }
+  ]
+ },
+ "C25": {
+  "ten_ta": "Trường Cao đẳng Sư phạm Nam Định",
+  "id_vnexpress": 106,
+  "ten_vnexpress": "Cao Đẳng Sư Phạm Nam Định",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 106,
+    "ten": "Cao Đẳng Sư Phạm Nam Định",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-nam-dinh-106",
+    "diem": 1.0
+   },
+   {
+    "id": 113,
+    "ten": "Cao Đẳng Sư Phạm Hà Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-ha-nam-113",
+    "diem": 0.714
+   },
+   {
+    "id": 95,
+    "ten": "Cao Đẳng Sư Phạm Cao Bằng",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-su-pham-cao-bang-95",
+    "diem": 0.571
+   },
+   {
+    "id": 107,
+    "ten": "Cao Đẳng Công Nghiệp Nam Định",
+    "duong_dan": "/tra-cuu-dai-hoc/cao-dang-cong-nghiep-nam-dinh-107",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DBH": {
+  "ten_ta": "Trường Đại học Quốc tế Bắc Hà",
+  "id_vnexpress": 354,
+  "ten_vnexpress": "Đại Học Quốc Tế Bắc Hà",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 354,
+    "ten": "Đại Học Quốc Tế Bắc Hà",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quoc-te-bac-ha-354",
+    "diem": 1.0
+   },
+   {
+    "id": 417,
+    "ten": "Trường Quốc Tế - Đại học Quốc Gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-quoc-te-dai-hoc-quoc-gia-ha-noi-417",
+    "diem": 0.5
+   },
+   {
+    "id": 508,
+    "ten": "Học viện quốc tế",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-quoc-te-508",
+    "diem": 0.5
+   },
+   {
+    "id": 413,
+    "ten": "Đại học Kinh Tế - Đại học Quốc Gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-dai-hoc-quoc-gia-ha-noi-413",
+    "diem": 0.429
+   }
+  ]
+ },
+ "DBL": {
+  "ten_ta": "ĐH Bạc Liêu",
+  "id_vnexpress": 449,
+  "ten_vnexpress": "Đại học Bạc Liêu",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 449,
+    "ten": "Đại học Bạc Liêu",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-bac-lieu-449",
+    "diem": 1.0
+   },
+   {
+    "id": 459,
+    "ten": "Đại học Kinh Bắc",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-bac-459",
+    "diem": 0.333
+   },
+   {
+    "id": 250,
+    "ten": "Đại học Tây Bắc",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tay-bac-250",
+    "diem": 0.333
+   },
+   {
+    "id": 230,
+    "ten": "Đại học Việt Bắc",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-viet-bac-230",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DCL": {
+  "ten_ta": "ĐH Cửu Long",
+  "id_vnexpress": 342,
+  "ten_vnexpress": "Đại học Cửu Long",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 342,
+    "ten": "Đại học Cửu Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cuu-long-342",
+    "diem": 1.0
+   },
+   {
+    "id": 484,
+    "ten": "Đại học Hạ Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-long-484",
+    "diem": 0.333
+   },
+   {
+    "id": 373,
+    "ten": "Đại học Thăng Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thang-long-373",
+    "diem": 0.333
+   },
+   {
+    "id": 344,
+    "ten": "Đại học Sư phạm Kỹ thuật Vĩnh Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-vinh-long-344",
+    "diem": 0.143
+   }
+  ]
+ },
+ "DCN": {
+  "ten_ta": "ĐH Công nghiệp Hà Nội",
+  "id_vnexpress": 356,
+  "ten_vnexpress": "Đại học Công nghiệp Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 356,
+    "ten": "Đại học Công nghiệp Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-ha-noi-356",
+    "diem": 1.0
+   },
+   {
+    "id": 352,
+    "ten": "Đại học Công nghiệp và Thương mại Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-va-thuong-mai-ha-noi-352",
+    "diem": 0.667
+   },
+   {
+    "id": 515,
+    "ten": "Đại học Kinh tế Kỹ thuật Công nghiệp Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-ha-noi-515",
+    "diem": 0.5
+   },
+   {
+    "id": 391,
+    "ten": "Đại học Khoa Học Và Công Nghệ Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-va-cong-nghe-ha-noi-391",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DCT": {
+  "ten_ta": "Trường Đại học Công Thương TP.HCM",
+  "id_vnexpress": 255,
+  "ten_vnexpress": "Đại học Công Thương TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 255,
+    "ten": "Đại học Công Thương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-thuong-tp-hcm-255",
+    "diem": 1.0
+   },
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.5
+   },
+   {
+    "id": 271,
+    "ten": "Đại học Công nghiệp TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-tp-hcm-271",
+    "diem": 0.5
+   },
+   {
+    "id": 352,
+    "ten": "Đại học Công nghiệp và Thương mại Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-va-thuong-mai-ha-noi-352",
+    "diem": 0.286
+   }
+  ]
+ },
+ "DDF": {
+  "ten_ta": "ĐH Ngoại ngữ - ĐH Đà Nẵng",
+  "id_vnexpress": 307,
+  "ten_vnexpress": "Đại học Ngoại Ngữ - Đại học Đà Nẵng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 307,
+    "ten": "Đại học Ngoại Ngữ - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-da-nang-307",
+    "diem": 1.0
+   },
+   {
+    "id": 217,
+    "ten": "Đại học Ngoại Ngữ - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-hue-217",
+    "diem": 0.4
+   },
+   {
+    "id": 259,
+    "ten": "Đại học Ngoại ngữ - Tin học TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-tin-hoc-tp-hcm-259",
+    "diem": 0.333
+   },
+   {
+    "id": 314,
+    "ten": "Đại Học Thể Dục Thể Thao Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-the-duc-the-thao-da-nang-314",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DDK": {
+  "ten_ta": "ĐH Bách Khoa - ĐH Đà Nẵng",
+  "id_vnexpress": 308,
+  "ten_vnexpress": "Đại học Bách Khoa - Đại học Đà Nẵng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 308,
+    "ten": "Đại học Bách Khoa - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-bach-khoa-dai-hoc-da-nang-308",
+    "diem": 1.0
+   },
+   {
+    "id": 312,
+    "ten": "Khoa Y Dược - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-y-duoc-dai-hoc-da-nang-312",
+    "diem": 0.6
+   },
+   {
+    "id": 93,
+    "ten": "Khoa Công Nghệ – Đại Học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-cong-nghe-dai-hoc-da-nang-93",
+    "diem": 0.5
+   },
+   {
+    "id": 475,
+    "ten": "Khoa Giáo dục thể chất - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-giao-duc-the-chat-dai-hoc-da-nang-475",
+    "diem": 0.429
+   }
+  ]
+ },
+ "DDN": {
+  "ten_ta": "ĐH Đại Nam",
+  "id_vnexpress": 359,
+  "ten_vnexpress": "Đại học Đại Nam",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 359,
+    "ten": "Đại học Đại Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dai-nam-359",
+    "diem": 1.0
+   },
+   {
+    "id": 237,
+    "ten": "Đại học Quảng Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-nam-237",
+    "diem": 0.5
+   },
+   {
+    "id": 231,
+    "ten": "Đại học Nam Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nam-can-tho-231",
+    "diem": 0.333
+   },
+   {
+    "id": 403,
+    "ten": "Đại học Mỹ Thuật Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-my-thuat-viet-nam-403",
+    "diem": 0.25
+   }
+  ]
+ },
+ "DDP": {
+  "ten_ta": "ĐH Sư phạm Kỹ thuật - ĐH Đà Nẵng",
+  "id_vnexpress": 479,
+  "ten_vnexpress": "Đại học Sư phạm Kỹ thuật - Đại học Đà Nẵng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 479,
+    "ten": "Đại học Sư phạm Kỹ thuật - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-dai-hoc-da-nang-479",
+    "diem": 1.0
+   },
+   {
+    "id": 310,
+    "ten": "Đại học Sư Phạm - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-dai-hoc-da-nang-310",
+    "diem": 0.667
+   },
+   {
+    "id": 290,
+    "ten": "Đại học Sư phạm Kỹ thuật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-tp-hcm-290",
+    "diem": 0.571
+   },
+   {
+    "id": 245,
+    "ten": "Đại học Sư Phạm Kỹ Thuật Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-vinh-245",
+    "diem": 0.571
+   }
+  ]
+ },
+ "DDQ": {
+  "ten_ta": "ĐH Kinh tế - ĐH Đà Nẵng",
+  "id_vnexpress": 309,
+  "ten_vnexpress": "Đại học Kinh Tế - Đại học Đà Nẵng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 309,
+    "ten": "Đại học Kinh Tế - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-dai-hoc-da-nang-309",
+    "diem": 1.0
+   },
+   {
+    "id": 210,
+    "ten": "Đại học Kinh Tế - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-dai-hoc-hue-210",
+    "diem": 0.4
+   },
+   {
+    "id": 272,
+    "ten": "Đại học Kinh tế TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-tp-hcm-272",
+    "diem": 0.4
+   },
+   {
+    "id": 392,
+    "ten": "Đại học Kinh tế quốc dân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-quoc-dan-392",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DDS": {
+  "ten_ta": "ĐH Sư phạm - ĐH Đà Nẵng",
+  "id_vnexpress": 310,
+  "ten_vnexpress": "Đại học Sư Phạm - Đại học Đà Nẵng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 310,
+    "ten": "Đại học Sư Phạm - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-dai-hoc-da-nang-310",
+    "diem": 1.0
+   },
+   {
+    "id": 479,
+    "ten": "Đại học Sư phạm Kỹ thuật - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-dai-hoc-da-nang-479",
+    "diem": 0.667
+   },
+   {
+    "id": 213,
+    "ten": "Đại học Sư Phạm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-dai-hoc-hue-213",
+    "diem": 0.4
+   },
+   {
+    "id": 291,
+    "ten": "Đại học Sư phạm TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-tp-hcm-291",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DDT": {
+  "ten_ta": "ĐH Duy Tân",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 311,
+    "ten": "Đại học Dân Lập Duy Tân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dan-lap-duy-tan-311",
+    "diem": 0.5
+   },
+   {
+    "id": 452,
+    "ten": "Đại học Tân Tạo",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tan-tao-452",
+    "diem": 0.333
+   },
+   {
+    "id": 464,
+    "ten": "Đại học Tân Trào",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tan-trao-464",
+    "diem": 0.333
+   },
+   {
+    "id": 477,
+    "ten": "Đại học Hùng Vương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hung-vuong-tp-hcm-477",
+    "diem": 0.0
+   }
+  ]
+ },
+ "DDU": {
+  "ten_ta": "ĐH Đông Đô",
+  "id_vnexpress": 360,
+  "ten_vnexpress": "Đại Học Đông Đô",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 360,
+    "ten": "Đại Học Đông Đô",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-do-360",
+    "diem": 1.0
+   },
+   {
+    "id": 333,
+    "ten": "Đại Học Thành Đông",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thanh-dong-333",
+    "diem": 0.5
+   },
+   {
+    "id": 306,
+    "ten": "Đại Học Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-a-306",
+    "diem": 0.5
+   },
+   {
+    "id": 424,
+    "ten": "Đại học Thành Đô",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thanh-do-424",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DDY": {
+  "ten_ta": "Khoa Y Dược - ĐH Đà Nẵng",
+  "id_vnexpress": 312,
+  "ten_vnexpress": "Khoa Y Dược - Đại học Đà Nẵng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 312,
+    "ten": "Khoa Y Dược - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-y-duoc-dai-hoc-da-nang-312",
+    "diem": 1.0
+   },
+   {
+    "id": 308,
+    "ten": "Đại học Bách Khoa - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-bach-khoa-dai-hoc-da-nang-308",
+    "diem": 0.6
+   },
+   {
+    "id": 315,
+    "ten": "Đại học Kỹ thuật Y Dược Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ky-thuat-y-duoc-da-nang-315",
+    "diem": 0.5
+   },
+   {
+    "id": 93,
+    "ten": "Khoa Công Nghệ – Đại Học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-cong-nghe-dai-hoc-da-nang-93",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DHS": {
+  "ten_ta": "ĐH Sư phạm - ĐH Huế",
+  "id_vnexpress": 213,
+  "ten_vnexpress": "Đại học Sư Phạm - Đại học Huế",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 213,
+    "ten": "Đại học Sư Phạm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-dai-hoc-hue-213",
+    "diem": 1.0
+   },
+   {
+    "id": 291,
+    "ten": "Đại học Sư phạm TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-tp-hcm-291",
+    "diem": 0.5
+   },
+   {
+    "id": 462,
+    "ten": "Đại học Sư phạm Hà Nội 2",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ha-noi-2-462",
+    "diem": 0.4
+   },
+   {
+    "id": 227,
+    "ten": "Đại Học Sư Phạm - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai hoc-su-pham-dai-hoc-thai-nguyen-227",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DHY": {
+  "ten_ta": "ĐH Y Dược - ĐH Huế",
+  "id_vnexpress": 215,
+  "ten_vnexpress": "Đại học Y Dược - Đại học Huế",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 215,
+    "ten": "Đại học Y Dược - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-hue-215",
+    "diem": 1.0
+   },
+   {
+    "id": 298,
+    "ten": "Đại học Y Dược TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-tp-hcm-298",
+    "diem": 0.333
+   },
+   {
+    "id": 208,
+    "ten": "Đại học Luật - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-dai-hoc-hue-208",
+    "diem": 0.333
+   },
+   {
+    "id": 214,
+    "ten": "Đại học Khoa Học - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-dai-hoc-hue-214",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DKC": {
+  "ten_ta": "ĐH Công nghệ TP.HCM (HUTECH)",
+  "id_vnexpress": 256,
+  "ten_vnexpress": "Đại học Công nghệ TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 1.0
+   },
+   {
+    "id": 271,
+    "ten": "Đại học Công nghiệp TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-tp-hcm-271",
+    "diem": 0.5
+   },
+   {
+    "id": 255,
+    "ten": "Đại học Công Thương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-thuong-tp-hcm-255",
+    "diem": 0.5
+   },
+   {
+    "id": 455,
+    "ten": "Đại học Công Nghệ Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-dong-a-455",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DKH": {
+  "ten_ta": "ĐH Dược Hà Nội",
+  "id_vnexpress": 361,
+  "ten_vnexpress": "Đại học Dược Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 361,
+    "ten": "Đại học Dược Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-duoc-ha-noi-361",
+    "diem": 1.0
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.667
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 0.667
+   },
+   {
+    "id": 421,
+    "ten": "Đại học Y Dược - Đại học Quốc Gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-quoc-gia-ha-noi-421",
+    "diem": 0.6
+   }
+  ]
+ },
+ "DKK": {
+  "ten_ta": "ĐH Kinh tế - Kỹ thuật Công nghiệp",
+  "id_vnexpress": 362,
+  "ten_vnexpress": "Đại học Kinh Tế Kỹ Thuật Công Nghiệp",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 362,
+    "ten": "Đại học Kinh Tế Kỹ Thuật Công Nghiệp",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-362",
+    "diem": 1.0
+   },
+   {
+    "id": 515,
+    "ten": "Đại học Kinh tế Kỹ thuật Công nghiệp Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-ha-noi-515",
+    "diem": 0.75
+   },
+   {
+    "id": 510,
+    "ten": "Đại học Kinh tế Kỹ thuật công nghiệp Nam Định",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-nam-dinh-510",
+    "diem": 0.75
+   },
+   {
+    "id": 451,
+    "ten": "Đại học Kinh tế Công nghiệp Long An",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-cong-nghiep-long-an-451",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DLA": {
+  "ten_ta": "Trường Đại học Kinh tế Công nghiệp Long An",
+  "id_vnexpress": 451,
+  "ten_vnexpress": "Đại học Kinh tế Công nghiệp Long An",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 451,
+    "ten": "Đại học Kinh tế Công nghiệp Long An",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-cong-nghiep-long-an-451",
+    "diem": 1.0
+   },
+   {
+    "id": 362,
+    "ten": "Đại học Kinh Tế Kỹ Thuật Công Nghiệp",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-362",
+    "diem": 0.5
+   },
+   {
+    "id": 242,
+    "ten": "Đại học Kinh Tế Nghệ An",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-nghe-an-242",
+    "diem": 0.429
+   },
+   {
+    "id": 515,
+    "ten": "Đại học Kinh tế Kỹ thuật Công nghiệp Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-ha-noi-515",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DMT": {
+  "ten_ta": "ĐH Tài nguyên và Môi trường Hà Nội",
+  "id_vnexpress": 366,
+  "ten_vnexpress": "Đại học Tài nguyên và Môi trường Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 366,
+    "ten": "Đại học Tài nguyên và Môi trường Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tai-nguyen-va-moi-truong-ha-noi-366",
+    "diem": 1.0
+   },
+   {
+    "id": 262,
+    "ten": "Đại học Tài nguyên và Môi trường TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tai-nguyen-va-moi-truong-tp-hcm-262",
+    "diem": 0.5
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.4
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DNB": {
+  "ten_ta": "ĐH Hoa Lư",
+  "id_vnexpress": 241,
+  "ten_vnexpress": "Đại học Hoa Lư",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 241,
+    "ten": "Đại học Hoa Lư",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-lu-241",
+    "diem": 1.0
+   },
+   {
+    "id": 516,
+    "ten": "Đại học Hoa Sen",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-sen-516",
+    "diem": 0.333
+   },
+   {
+    "id": 517,
+    "ten": "Đại học Hoa Sen",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-sen-517",
+    "diem": 0.333
+   },
+   {
+    "id": 261,
+    "ten": "Đại học Hoa Sen",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-sen-261",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DNT": {
+  "ten_ta": "ĐH Ngoại ngữ - Tin học TP.HCM (HUFLIT)",
+  "id_vnexpress": 259,
+  "ten_vnexpress": "Đại học Ngoại ngữ - Tin học TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 259,
+    "ten": "Đại học Ngoại ngữ - Tin học TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-tin-hoc-tp-hcm-259",
+    "diem": 1.0
+   },
+   {
+    "id": 217,
+    "ten": "Đại học Ngoại Ngữ - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-hue-217",
+    "diem": 0.4
+   },
+   {
+    "id": 307,
+    "ten": "Đại học Ngoại Ngữ - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-da-nang-307",
+    "diem": 0.333
+   },
+   {
+    "id": 223,
+    "ten": "Khoa Ngoại Ngữ - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-ngoai-ngu-dai-hoc-thai-nguyen-223",
+    "diem": 0.286
+   }
+  ]
+ },
+ "DNU": {
+  "ten_ta": "ĐH Đồng Nai",
+  "id_vnexpress": 440,
+  "ten_vnexpress": "Đại học Đồng Nai",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 440,
+    "ten": "Đại học Đồng Nai",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-nai-440",
+    "diem": 1.0
+   },
+   {
+    "id": 438,
+    "ten": "Đại học Công nghệ Đồng Nai",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-dong-nai-438",
+    "diem": 0.5
+   },
+   {
+    "id": 333,
+    "ten": "Đại Học Thành Đông",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thanh-dong-333",
+    "diem": 0.5
+   },
+   {
+    "id": 306,
+    "ten": "Đại Học Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-a-306",
+    "diem": 0.5
+   }
+  ]
+ },
+ "DPQ": {
+  "ten_ta": "ĐH Phạm Văn Đồng",
+  "id_vnexpress": 346,
+  "ten_vnexpress": "Đại học Phạm Văn Đồng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 346,
+    "ten": "Đại học Phạm Văn Đồng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-pham-van-dong-346",
+    "diem": 1.0
+   },
+   {
+    "id": 333,
+    "ten": "Đại Học Thành Đông",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thanh-dong-333",
+    "diem": 0.333
+   },
+   {
+    "id": 306,
+    "ten": "Đại Học Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-a-306",
+    "diem": 0.333
+   },
+   {
+    "id": 369,
+    "ten": "Đại học Phương Đông",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-phuong-dong-369",
+    "diem": 0.25
+   }
+  ]
+ },
+ "DPY": {
+  "ten_ta": "ĐH Phú Yên",
+  "id_vnexpress": 199,
+  "ten_vnexpress": "Đại học Phú Yên",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 199,
+    "ten": "Đại học Phú Yên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-phu-yen-199",
+    "diem": 1.0
+   },
+   {
+    "id": 485,
+    "ten": "Học viện Phụ nữ Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-phu-nu-viet-nam-485",
+    "diem": 0.2
+   },
+   {
+    "id": 216,
+    "ten": "Đại học Dân Lập Phú Xuân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dan-lap-phu-xuan-216",
+    "diem": 0.2
+   },
+   {
+    "id": 205,
+    "ten": "Đại học Sư phạm Kỹ thuật Hưng Yên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-hung-yen-205",
+    "diem": 0.143
+   }
+  ]
+ },
+ "DQB": {
+  "ten_ta": "ĐH Quảng Bình",
+  "id_vnexpress": 339,
+  "ten_vnexpress": "Đại Học Quảng Bình",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 339,
+    "ten": "Đại Học Quảng Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-binh-339",
+    "diem": 1.0
+   },
+   {
+    "id": 466,
+    "ten": "Đại học Quang Trung",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-trung-466",
+    "diem": 0.333
+   },
+   {
+    "id": 237,
+    "ten": "Đại học Quảng Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-nam-237",
+    "diem": 0.333
+   },
+   {
+    "id": 443,
+    "ten": "Đại học Bình Dương",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-binh-duong-443",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DQH": {
+  "ten_ta": "ĐH Hồng Đức",
+  "id_vnexpress": 341,
+  "ten_vnexpress": "Đại học Hồng Đức",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 341,
+    "ten": "Đại học Hồng Đức",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hong-duc-341",
+    "diem": 1.0
+   },
+   {
+    "id": 439,
+    "ten": "Đại học Lạc Hồng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-lac-hong-439",
+    "diem": 0.333
+   },
+   {
+    "id": 295,
+    "ten": "Đại học Việt Đức",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-viet-duc-295",
+    "diem": 0.333
+   },
+   {
+    "id": 263,
+    "ten": "Đại học Tôn Đức Thắng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ton-duc-thang-263",
+    "diem": 0.25
+   }
+  ]
+ },
+ "DQK": {
+  "ten_ta": "ĐH Kinh doanh và Công nghệ Hà Nội",
+  "id_vnexpress": 371,
+  "ten_vnexpress": "Đại học Kinh doanh và Công nghệ Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 371,
+    "ten": "Đại học Kinh doanh và Công nghệ Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-doanh-va-cong-nghe-ha-noi-371",
+    "diem": 1.0
+   },
+   {
+    "id": 391,
+    "ten": "Đại học Khoa Học Và Công Nghệ Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-va-cong-nghe-ha-noi-391",
+    "diem": 0.571
+   },
+   {
+    "id": 415,
+    "ten": "Đại học Công nghệ - Đại học Quốc gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-dai-hoc-quoc-gia-ha-noi-415",
+    "diem": 0.5
+   },
+   {
+    "id": 356,
+    "ten": "Đại học Công nghiệp Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-ha-noi-356",
+    "diem": 0.429
+   }
+  ]
+ },
+ "DQN": {
+  "ten_ta": "ĐH Quy Nhơn",
+  "id_vnexpress": 465,
+  "ten_vnexpress": "Đại học Quy Nhơn",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 465,
+    "ten": "Đại học Quy Nhơn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quy-nhon-465",
+    "diem": 1.0
+   },
+   {
+    "id": 446,
+    "ten": "Trường Sĩ Quan Công Binh - Hệ Quân sự - Đại học Ngô Quyền",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-cong-binh-he-quan-su-dai-hoc-ngo-quyen-446",
+    "diem": 0.0
+   },
+   {
+    "id": 448,
+    "ten": "Trường Sĩ Quan Công Binh - Hệ Dân sự - Đại học Ngô Quyền",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-cong-binh-he-dan-su-dai-hoc-ngo-quyen-448",
+    "diem": 0.0
+   },
+   {
+    "id": 477,
+    "ten": "Đại học Hùng Vương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hung-vuong-tp-hcm-477",
+    "diem": 0.0
+   }
+  ]
+ },
+ "DQU": {
+  "ten_ta": "ĐH Quảng Nam",
+  "id_vnexpress": 237,
+  "ten_vnexpress": "Đại học Quảng Nam",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 237,
+    "ten": "Đại học Quảng Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-nam-237",
+    "diem": 1.0
+   },
+   {
+    "id": 359,
+    "ten": "Đại học Đại Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dai-nam-359",
+    "diem": 0.5
+   },
+   {
+    "id": 466,
+    "ten": "Đại học Quang Trung",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-trung-466",
+    "diem": 0.333
+   },
+   {
+    "id": 339,
+    "ten": "Đại Học Quảng Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-binh-339",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DSG": {
+  "ten_ta": "ĐH Công nghệ Sài Gòn",
+  "id_vnexpress": 260,
+  "ten_vnexpress": "Đại học Công nghệ Sài Gòn",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 260,
+    "ten": "Đại học Công nghệ Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-sai-gon-260",
+    "diem": 1.0
+   },
+   {
+    "id": 289,
+    "ten": "Đại học Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-sai-gon-289",
+    "diem": 0.5
+   },
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.4
+   },
+   {
+    "id": 455,
+    "ten": "Đại học Công Nghệ Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-dong-a-455",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DTF": {
+  "ten_ta": "Trường Ngoại ngữ - ĐH Thái Nguyên",
+  "id_vnexpress": 223,
+  "ten_vnexpress": "Khoa Ngoại Ngữ - Đại học Thái Nguyên",
+  "diem_khop": 0.8,
+  "ung_vien": [
+   {
+    "id": 223,
+    "ten": "Khoa Ngoại Ngữ - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-ngoai-ngu-dai-hoc-thai-nguyen-223",
+    "diem": 0.8
+   },
+   {
+    "id": 229,
+    "ten": "Đại học Khoa Học - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-dai-hoc-thai-nguyen-229",
+    "diem": 0.4
+   },
+   {
+    "id": 228,
+    "ten": "Đại học Y Dược - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-thai-nguyen-228",
+    "diem": 0.4
+   },
+   {
+    "id": 217,
+    "ten": "Đại học Ngoại Ngữ - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-hue-217",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DTL": {
+  "ten_ta": "ĐH Thăng Long",
+  "id_vnexpress": 373,
+  "ten_vnexpress": "Đại học Thăng Long",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 373,
+    "ten": "Đại học Thăng Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thang-long-373",
+    "diem": 1.0
+   },
+   {
+    "id": 484,
+    "ten": "Đại học Hạ Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-long-484",
+    "diem": 0.333
+   },
+   {
+    "id": 342,
+    "ten": "Đại học Cửu Long",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cuu-long-342",
+    "diem": 0.333
+   },
+   {
+    "id": 263,
+    "ten": "Đại học Tôn Đức Thắng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ton-duc-thang-263",
+    "diem": 0.25
+   }
+  ]
+ },
+ "DTN": {
+  "ten_ta": "ĐH Nông Lâm - ĐH Thái Nguyên",
+  "id_vnexpress": 225,
+  "ten_vnexpress": "Đại học Nông Lâm - Đại học Thái Nguyên",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 225,
+    "ten": "Đại học Nông Lâm - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-dai-hoc-thai-nguyen-225",
+    "diem": 1.0
+   },
+   {
+    "id": 211,
+    "ten": "Đại học Nông Lâm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-dai-hoc-hue-211",
+    "diem": 0.4
+   },
+   {
+    "id": 229,
+    "ten": "Đại học Khoa Học - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-dai-hoc-thai-nguyen-229",
+    "diem": 0.4
+   },
+   {
+    "id": 228,
+    "ten": "Đại học Y Dược - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-thai-nguyen-228",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DTS": {
+  "ten_ta": "Trường Đại học Sư phạm - Đại học Thái Nguyên",
+  "id_vnexpress": 227,
+  "ten_vnexpress": "Đại Học Sư Phạm - Đại học Thái Nguyên",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 227,
+    "ten": "Đại Học Sư Phạm - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai hoc-su-pham-dai-hoc-thai-nguyen-227",
+    "diem": 1.0
+   },
+   {
+    "id": 213,
+    "ten": "Đại học Sư Phạm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-dai-hoc-hue-213",
+    "diem": 0.4
+   },
+   {
+    "id": 291,
+    "ten": "Đại học Sư phạm TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-tp-hcm-291",
+    "diem": 0.4
+   },
+   {
+    "id": 229,
+    "ten": "Đại học Khoa Học - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-dai-hoc-thai-nguyen-229",
+    "diem": 0.4
+   }
+  ]
+ },
+ "DTV": {
+  "ten_ta": "ĐH Trà Vinh",
+  "id_vnexpress": 317,
+  "ten_vnexpress": "Đại học Trà Vinh",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 317,
+    "ten": "Đại học Trà Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tra-vinh-317",
+    "diem": 1.0
+   },
+   {
+    "id": 246,
+    "ten": "Đại học Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-vinh-246",
+    "diem": 0.5
+   },
+   {
+    "id": 322,
+    "ten": "Đại Học Lương Thế Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luong-the-vinh-322",
+    "diem": 0.333
+   },
+   {
+    "id": 247,
+    "ten": "Đại học Y Khoa Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-khoa-vinh-247",
+    "diem": 0.333
+   }
+  ]
+ },
+ "DVD": {
+  "ten_ta": "ĐH Văn hóa Thể thao và Du lịch Thanh Hóa",
+  "id_vnexpress": 340,
+  "ten_vnexpress": "Đại học Văn Hóa, Thể Thao Và Du Lịch Thanh Hóa",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 340,
+    "ten": "Đại học Văn Hóa, Thể Thao Và Du Lịch Thanh Hóa",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hoa-the-thao-va-du-lich-thanh-hoa-340",
+    "diem": 1.0
+   },
+   {
+    "id": 296,
+    "ten": "Đại học Văn hoá TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hoa-tp-hcm-296",
+    "diem": 0.333
+   },
+   {
+    "id": 209,
+    "ten": "Trường Du lịch - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-du-lich-dai-hoc-hue-209",
+    "diem": 0.333
+   },
+   {
+    "id": 428,
+    "ten": "Đại học Văn hóa Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hoa-ha-noi-428",
+    "diem": 0.286
+   }
+  ]
+ },
+ "DVL": {
+  "ten_ta": "ĐH Văn Lang",
+  "id_vnexpress": 265,
+  "ten_vnexpress": "Đại học Văn Lang",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 265,
+    "ten": "Đại học Văn Lang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-lang-265",
+    "diem": 1.0
+   },
+   {
+    "id": 264,
+    "ten": "Đại học Văn Hiến",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hien-264",
+    "diem": 0.333
+   },
+   {
+    "id": 296,
+    "ten": "Đại học Văn hoá TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hoa-tp-hcm-296",
+    "diem": 0.25
+   },
+   {
+    "id": 203,
+    "ten": "Đại học Chu Văn An",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-chu-van-an-203",
+    "diem": 0.25
+   }
+  ]
+ },
+ "DVX": {
+  "ten_ta": "Trường Đại học Công nghệ Vạn Xuân",
+  "id_vnexpress": 244,
+  "ten_vnexpress": "Đại học Công Nghệ Vạn Xuân",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 244,
+    "ten": "Đại học Công Nghệ Vạn Xuân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-van-xuan-244",
+    "diem": 1.0
+   },
+   {
+    "id": 380,
+    "ten": "Đại học Công nghệ Giao thông vận tải",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-giao-thong-van-tai-380",
+    "diem": 0.429
+   },
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.4
+   },
+   {
+    "id": 455,
+    "ten": "Đại học Công Nghệ Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-dong-a-455",
+    "diem": 0.4
+   }
+  ]
+ },
+ "FPT": {
+  "ten_ta": "ĐH FPT",
+  "id_vnexpress": 377,
+  "ten_vnexpress": "Đại Học FPT",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 377,
+    "ten": "Đại Học FPT",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-fpt-377",
+    "diem": 1.0
+   },
+   {
+    "id": 477,
+    "ten": "Đại học Hùng Vương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hung-vuong-tp-hcm-477",
+    "diem": 0.0
+   },
+   {
+    "id": 220,
+    "ten": "Khoa Giáo Dục Thể Chất - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-giao-duc-the-chat-dai-hoc-hue-220",
+    "diem": 0.0
+   },
+   {
+    "id": 218,
+    "ten": "Đại học Nghệ Thuật - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nghe-thuat-dai-hoc-hue-218",
+    "diem": 0.0
+   }
+  ]
+ },
+ "GHA": {
+  "ten_ta": "ĐH Giao thông Vận tải",
+  "id_vnexpress": 267,
+  "ten_vnexpress": "Đại học Giao thông vận tải TP HCM",
+  "diem_khop": 0.8,
+  "ung_vien": [
+   {
+    "id": 267,
+    "ten": "Đại học Giao thông vận tải TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-tp-hcm-267",
+    "diem": 0.8
+   },
+   {
+    "id": 380,
+    "ten": "Đại học Công nghệ Giao thông vận tải",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-giao-thong-van-tai-380",
+    "diem": 0.667
+   },
+   {
+    "id": 378,
+    "ten": "Đại học Giao thông Vận tải ( Cơ sở Phía Bắc )",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-co-so-phia-bac-378",
+    "diem": 0.5
+   },
+   {
+    "id": 266,
+    "ten": "Đại học Giao thông Vận tải ( Cơ sở Phía Nam)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-co-so-phia-nam-266",
+    "diem": 0.5
+   }
+  ]
+ },
+ "GSA": {
+  "ten_ta": "ĐH Giao thông Vận tải Cơ sở 2",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 378,
+    "ten": "Đại học Giao thông Vận tải ( Cơ sở Phía Bắc )",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-co-so-phia-bac-378",
+    "diem": 1.0
+   },
+   {
+    "id": 266,
+    "ten": "Đại học Giao thông Vận tải ( Cơ sở Phía Nam)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-co-so-phia-nam-266",
+    "diem": 1.0
+   },
+   {
+    "id": 267,
+    "ten": "Đại học Giao thông vận tải TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-tp-hcm-267",
+    "diem": 0.4
+   },
+   {
+    "id": 380,
+    "ten": "Đại học Công nghệ Giao thông vận tải",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-giao-thong-van-tai-380",
+    "diem": 0.333
+   }
+  ]
+ },
+ "GTA": {
+  "ten_ta": "ĐH Công nghệ Giao thông Vận tải",
+  "id_vnexpress": 380,
+  "ten_vnexpress": "Đại học Công nghệ Giao thông vận tải",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 380,
+    "ten": "Đại học Công nghệ Giao thông vận tải",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-giao-thong-van-tai-380",
+    "diem": 1.0
+   },
+   {
+    "id": 267,
+    "ten": "Đại học Giao thông vận tải TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-tp-hcm-267",
+    "diem": 0.571
+   },
+   {
+    "id": 244,
+    "ten": "Đại học Công Nghệ Vạn Xuân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-van-xuan-244",
+    "diem": 0.429
+   },
+   {
+    "id": 378,
+    "ten": "Đại học Giao thông Vận tải ( Cơ sở Phía Bắc )",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-thong-van-tai-co-so-phia-bac-378",
+    "diem": 0.333
+   }
+  ]
+ },
+ "HBT": {
+  "ten_ta": "Học viện Báo chí và Tuyên truyền",
+  "id_vnexpress": 381,
+  "ten_vnexpress": "Học viện Báo chí và Tuyên truyền",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 381,
+    "ten": "Học viện Báo chí và Tuyên truyền",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-bao-chi-va-tuyen-truyen-381",
+    "diem": 1.0
+   },
+   {
+    "id": 390,
+    "ten": "Học viện Y Dược học cổ truyền Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-y-duoc-hoc-co-truyen-viet-nam-390",
+    "diem": 0.143
+   },
+   {
+    "id": 500,
+    "ten": "Đại học Công nghệ Thông tin và Truyền thông Việt - Hàn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-thong-tin-va-truyen-thong-viet-han-500",
+    "diem": 0.1
+   },
+   {
+    "id": 221,
+    "ten": "Đại học Công Nghệ Thông Tin và Truyền Thông - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-thong-tin-va-truyen-thong-dai-hoc-thai-nguyen-221",
+    "diem": 0.1
+   }
+  ]
+ },
+ "HCS": {
+  "ten_ta": "Học viện Chính sách và Phát triển",
+  "id_vnexpress": 383,
+  "ten_vnexpress": "Học viện Chính sách và Phát triển",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 383,
+    "ten": "Học viện Chính sách và Phát triển",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-chinh-sach-va-phat-trien-383",
+    "diem": 1.0
+   },
+   {
+    "id": 387,
+    "ten": "Học viện Tài chính",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-tai-chinh-387",
+    "diem": 0.2
+   },
+   {
+    "id": 258,
+    "ten": "Đại học Tài chính Marketing",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tai-chinh-marketing-258",
+    "diem": 0.167
+   },
+   {
+    "id": 458,
+    "ten": "Trường Sĩ Quan Chính Trị - Đại học Chính Trị",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-chinh-tri-dai-hoc-chinh-tri-458",
+    "diem": 0.143
+   }
+  ]
+ },
+ "HHK": {
+  "ten_ta": "Học viện Hàng không Việt Nam",
+  "id_vnexpress": 269,
+  "ten_vnexpress": "Học viện Hàng không Việt Nam",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 269,
+    "ten": "Học viện Hàng không Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-hang-khong-viet-nam-269",
+    "diem": 1.0
+   },
+   {
+    "id": 319,
+    "ten": "Đại học Hàng hải Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hang-hai-viet-nam-319",
+    "diem": 0.6
+   },
+   {
+    "id": 390,
+    "ten": "Học viện Y Dược học cổ truyền Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-y-duoc-hoc-co-truyen-viet-nam-390",
+    "diem": 0.333
+   },
+   {
+    "id": 388,
+    "ten": "Học viện Thanh Thiếu Niên Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-thanh-thieu-nien-viet-nam-388",
+    "diem": 0.333
+   }
+  ]
+ },
+ "HIU": {
+  "ten_ta": "ĐH Quốc tế Hồng Bàng",
+  "id_vnexpress": 270,
+  "ten_vnexpress": "Đại học Quốc tế Hồng Bàng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 270,
+    "ten": "Đại học Quốc tế Hồng Bàng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quoc-te-hong-bang-270",
+    "diem": 1.0
+   },
+   {
+    "id": 508,
+    "ten": "Học viện quốc tế",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-quoc-te-508",
+    "diem": 0.5
+   },
+   {
+    "id": 502,
+    "ten": "Khoa Quốc Tế - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-quoc-te-dai-hoc-hue-502",
+    "diem": 0.333
+   },
+   {
+    "id": 354,
+    "ten": "Đại Học Quốc Tế Bắc Hà",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quoc-te-bac-ha-354",
+    "diem": 0.333
+   }
+  ]
+ },
+ "HNM": {
+  "ten_ta": "Trường Đại học Thủ Đô Hà Nội",
+  "id_vnexpress": 385,
+  "ten_vnexpress": "Đại học Thủ Đô Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 385,
+    "ten": "Đại học Thủ Đô Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thu-do-ha-noi-385",
+    "diem": 1.0
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.5
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 0.5
+   },
+   {
+    "id": 361,
+    "ten": "Đại học Dược Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-duoc-ha-noi-361",
+    "diem": 0.4
+   }
+  ]
+ },
+ "HPN": {
+  "ten_ta": "Học viện Phụ Nữ Việt Nam",
+  "id_vnexpress": 485,
+  "ten_vnexpress": "Học viện Phụ nữ Việt Nam",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 485,
+    "ten": "Học viện Phụ nữ Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-phu-nu-viet-nam-485",
+    "diem": 1.0
+   },
+   {
+    "id": 390,
+    "ten": "Học viện Y Dược học cổ truyền Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-y-duoc-hoc-co-truyen-viet-nam-390",
+    "diem": 0.333
+   },
+   {
+    "id": 388,
+    "ten": "Học viện Thanh Thiếu Niên Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-thanh-thieu-nien-viet-nam-388",
+    "diem": 0.333
+   },
+   {
+    "id": 269,
+    "ten": "Học viện Hàng không Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-hang-khong-viet-nam-269",
+    "diem": 0.333
+   }
+  ]
+ },
+ "HQT": {
+  "ten_ta": "Học viện Ngoại giao",
+  "id_vnexpress": 386,
+  "ten_vnexpress": "Học viện Ngoại giao",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 386,
+    "ten": "Học viện Ngoại giao",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngoai-giao-386",
+    "diem": 1.0
+   },
+   {
+    "id": 217,
+    "ten": "Đại học Ngoại Ngữ - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-hue-217",
+    "diem": 0.25
+   },
+   {
+    "id": 389,
+    "ten": "Học viện Quản Lý Giáo Dục",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-quan-ly-giao-duc-389",
+    "diem": 0.2
+   },
+   {
+    "id": 307,
+    "ten": "Đại học Ngoại Ngữ - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-da-nang-307",
+    "diem": 0.2
+   }
+  ]
+ },
+ "HSU": {
+  "ten_ta": "ĐH Hoa Sen",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 516,
+    "ten": "Đại học Hoa Sen",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-sen-516",
+    "diem": 1.0
+   },
+   {
+    "id": 517,
+    "ten": "Đại học Hoa Sen",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-sen-517",
+    "diem": 1.0
+   },
+   {
+    "id": 261,
+    "ten": "Đại học Hoa Sen",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-sen-261",
+    "diem": 1.0
+   },
+   {
+    "id": 241,
+    "ten": "Đại học Hoa Lư",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hoa-lu-241",
+    "diem": 0.333
+   }
+  ]
+ },
+ "HTC": {
+  "ten_ta": "Học viện Tài chính",
+  "id_vnexpress": 387,
+  "ten_vnexpress": "Học viện Tài chính",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 387,
+    "ten": "Học viện Tài chính",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-tai-chinh-387",
+    "diem": 1.0
+   },
+   {
+    "id": 258,
+    "ten": "Đại học Tài chính Marketing",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tai-chinh-marketing-258",
+    "diem": 0.667
+   },
+   {
+    "id": 345,
+    "ten": "Đại học Tài Chính Kế Toán",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tai-chinh-ke-toan-345",
+    "diem": 0.5
+   },
+   {
+    "id": 503,
+    "ten": "Đại học Tài Chính Kế Toán",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tai-chinh-ke-toan-503",
+    "diem": 0.5
+   }
+  ]
+ },
+ "HVN": {
+  "ten_ta": "Học viện Nông nghiệp Việt Nam",
+  "id_vnexpress": 488,
+  "ten_vnexpress": "Học viện Nông nghiệp Việt Nam",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 488,
+    "ten": "Học viện Nông nghiệp Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-nong-nghiep-viet-nam-488",
+    "diem": 1.0
+   },
+   {
+    "id": 390,
+    "ten": "Học viện Y Dược học cổ truyền Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-y-duoc-hoc-co-truyen-viet-nam-390",
+    "diem": 0.333
+   },
+   {
+    "id": 388,
+    "ten": "Học viện Thanh Thiếu Niên Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-thanh-thieu-nien-viet-nam-388",
+    "diem": 0.333
+   },
+   {
+    "id": 269,
+    "ten": "Học viện Hàng không Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-hang-khong-viet-nam-269",
+    "diem": 0.333
+   }
+  ]
+ },
+ "IUH": {
+  "ten_ta": "Trường Đại học Công nghiệp TP.HCM",
+  "id_vnexpress": 271,
+  "ten_vnexpress": "Đại học Công nghiệp TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 271,
+    "ten": "Đại học Công nghiệp TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-tp-hcm-271",
+    "diem": 1.0
+   },
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.5
+   },
+   {
+    "id": 255,
+    "ten": "Đại học Công Thương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-thuong-tp-hcm-255",
+    "diem": 0.5
+   },
+   {
+    "id": 243,
+    "ten": "Đại học Công nghiệp Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-vinh-243",
+    "diem": 0.5
+   }
+  ]
+ },
+ "KHA": {
+  "ten_ta": "Trường Đại học Kinh tế Quốc dân",
+  "id_vnexpress": 392,
+  "ten_vnexpress": "Đại học Kinh tế quốc dân",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 392,
+    "ten": "Đại học Kinh tế quốc dân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-quoc-dan-392",
+    "diem": 1.0
+   },
+   {
+    "id": 508,
+    "ten": "Học viện quốc tế",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-quoc-te-508",
+    "diem": 0.5
+   },
+   {
+    "id": 413,
+    "ten": "Đại học Kinh Tế - Đại học Quốc Gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-dai-hoc-quoc-gia-ha-noi-413",
+    "diem": 0.429
+   },
+   {
+    "id": 285,
+    "ten": "Đại học Kinh tế - Luật, Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-luat-dai-hoc-quoc-gia-tp-hcm-285",
+    "diem": 0.429
+   }
+  ]
+ },
+ "KMA": {
+  "ten_ta": "Học viện Kỹ thuật Mật mã",
+  "id_vnexpress": 393,
+  "ten_vnexpress": "Học viện Kỹ thuật mật mã",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 393,
+    "ten": "Học viện Kỹ thuật mật mã",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ky-thuat-mat-ma-393",
+    "diem": 1.0
+   },
+   {
+    "id": 335,
+    "ten": "Đại học Kỹ thuật Y tế Hải Dương",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ky-thuat-y-te-hai-duong-335",
+    "diem": 0.286
+   },
+   {
+    "id": 290,
+    "ten": "Đại học Sư phạm Kỹ thuật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-tp-hcm-290",
+    "diem": 0.286
+   },
+   {
+    "id": 245,
+    "ten": "Đại học Sư Phạm Kỹ Thuật Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-vinh-245",
+    "diem": 0.286
+   }
+  ]
+ },
+ "KTS": {
+  "ten_ta": "ĐH Kiến trúc TP.HCM",
+  "id_vnexpress": 273,
+  "ten_vnexpress": "Đại học Kiến trúc TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 273,
+    "ten": "Đại học Kiến trúc TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kien-truc-tp-hcm-273",
+    "diem": 1.0
+   },
+   {
+    "id": 395,
+    "ten": "Đại học Kiến trúc Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kien-truc-ha-noi-395",
+    "diem": 0.4
+   },
+   {
+    "id": 313,
+    "ten": "Đại học Kiến trúc Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kien-truc-da-nang-313",
+    "diem": 0.4
+   },
+   {
+    "id": 275,
+    "ten": "Đại học Mở TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-mo-tp-hcm-275",
+    "diem": 0.25
+   }
+  ]
+ },
+ "LNH": {
+  "ten_ta": "ĐH Lâm nghiệp",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 442,
+    "ten": "Đại học Lâm nghiệp (Cơ sở 2)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-lam-nghiep-co-so-2-442",
+    "diem": 0.5
+   },
+   {
+    "id": 398,
+    "ten": "Đại học Lâm nghiệp (Cơ sở 1)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-lam-nghiep-co-so-1-398",
+    "diem": 0.5
+   },
+   {
+    "id": 211,
+    "ten": "Đại học Nông Lâm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-dai-hoc-hue-211",
+    "diem": 0.25
+   },
+   {
+    "id": 271,
+    "ten": "Đại học Công nghiệp TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-tp-hcm-271",
+    "diem": 0.25
+   }
+  ]
+ },
+ "LPH": {
+  "ten_ta": "ĐH Luật Hà Nội",
+  "id_vnexpress": 399,
+  "ten_vnexpress": "Đại học Luật Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 399,
+    "ten": "Đại học Luật Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-ha-noi-399",
+    "diem": 1.0
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.667
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 0.667
+   },
+   {
+    "id": 416,
+    "ten": "Trường Luật - Đại học Quốc gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-luat-dai-hoc-quoc-gia-ha-noi-416",
+    "diem": 0.6
+   }
+  ]
+ },
+ "LPS": {
+  "ten_ta": "ĐH Luật TP.HCM",
+  "id_vnexpress": 274,
+  "ten_vnexpress": "Đại học Luật TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 274,
+    "ten": "Đại học Luật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-tp-hcm-274",
+    "diem": 1.0
+   },
+   {
+    "id": 285,
+    "ten": "Đại học Kinh tế - Luật, Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-luat-dai-hoc-quoc-gia-tp-hcm-285",
+    "diem": 0.333
+   },
+   {
+    "id": 275,
+    "ten": "Đại học Mở TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-mo-tp-hcm-275",
+    "diem": 0.333
+   },
+   {
+    "id": 302,
+    "ten": "Nhạc viện TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/nhac-vien-tp-hcm-302",
+    "diem": 0.333
+   }
+  ]
+ },
+ "MBS": {
+  "ten_ta": "ĐH Mở TP.HCM",
+  "id_vnexpress": 275,
+  "ten_vnexpress": "Đại học Mở TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 275,
+    "ten": "Đại học Mở TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-mo-tp-hcm-275",
+    "diem": 1.0
+   },
+   {
+    "id": 302,
+    "ten": "Nhạc viện TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/nhac-vien-tp-hcm-302",
+    "diem": 0.333
+   },
+   {
+    "id": 298,
+    "ten": "Đại học Y Dược TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-tp-hcm-298",
+    "diem": 0.333
+   },
+   {
+    "id": 274,
+    "ten": "Đại học Luật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-tp-hcm-274",
+    "diem": 0.333
+   }
+  ]
+ },
+ "NHF": {
+  "ten_ta": "Đại học Hà Nội",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 1.0
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 1.0
+   },
+   {
+    "id": 361,
+    "ten": "Đại học Dược Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-duoc-ha-noi-361",
+    "diem": 0.667
+   },
+   {
+    "id": 399,
+    "ten": "Đại học Luật Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-ha-noi-399",
+    "diem": 0.667
+   }
+  ]
+ },
+ "NHH": {
+  "ten_ta": "Học viện Ngân hàng",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 405,
+    "ten": "Học viện Ngân hàng",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngan-hang-405",
+    "diem": 1.0
+   },
+   {
+    "id": 200,
+    "ten": "Học Viên Ngân Hàng (Phân Viện Phú Yên)",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngan-hang-phan-vien-phu-yen-200",
+    "diem": 1.0
+   },
+   {
+    "id": 277,
+    "ten": "Đại học Ngân hàng TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngan-hang-tp-hcm-277",
+    "diem": 0.667
+   },
+   {
+    "id": 492,
+    "ten": "Học viện Ngân Hàng Phân Viện Bắc Ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngan-hang-phan-vien-bac-ninh-492",
+    "diem": 0.5
+   }
+  ]
+ },
+ "NHP": {
+  "ten_ta": "Học viện Ngân hàng (Phân viện Phú Yên)",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 405,
+    "ten": "Học viện Ngân hàng",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngan-hang-405",
+    "diem": 1.0
+   },
+   {
+    "id": 200,
+    "ten": "Học Viên Ngân Hàng (Phân Viện Phú Yên)",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngan-hang-phan-vien-phu-yen-200",
+    "diem": 1.0
+   },
+   {
+    "id": 277,
+    "ten": "Đại học Ngân hàng TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngan-hang-tp-hcm-277",
+    "diem": 0.667
+   },
+   {
+    "id": 492,
+    "ten": "Học viện Ngân Hàng Phân Viện Bắc Ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngan-hang-phan-vien-bac-ninh-492",
+    "diem": 0.5
+   }
+  ]
+ },
+ "NLS": {
+  "ten_ta": "ĐH Nông Lâm TP.HCM",
+  "id_vnexpress": 278,
+  "ten_vnexpress": "Đại học Nông Lâm TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 278,
+    "ten": "Đại học Nông Lâm TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-tp-hcm-278",
+    "diem": 1.0
+   },
+   {
+    "id": 211,
+    "ten": "Đại học Nông Lâm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-dai-hoc-hue-211",
+    "diem": 0.5
+   },
+   {
+    "id": 225,
+    "ten": "Đại học Nông Lâm - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-dai-hoc-thai-nguyen-225",
+    "diem": 0.4
+   },
+   {
+    "id": 316,
+    "ten": "Đại học Nông Lâm Bắc Giang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-bac-giang-316",
+    "diem": 0.4
+   }
+  ]
+ },
+ "NTH": {
+  "ten_ta": "Trường Đại học Ngoại thương",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 338,
+    "ten": "Đại học Ngoại thương (phía Bắc)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-thuong-phia-bac-338",
+    "diem": 0.5
+   },
+   {
+    "id": 279,
+    "ten": "Đại học Ngoại thương (phía Nam)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-thuong-phia-nam-279",
+    "diem": 0.5
+   },
+   {
+    "id": 426,
+    "ten": "Đại học Thương mại",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thuong-mai-426",
+    "diem": 0.333
+   },
+   {
+    "id": 255,
+    "ten": "Đại học Công Thương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-thuong-tp-hcm-255",
+    "diem": 0.25
+   }
+  ]
+ },
+ "NTS": {
+  "ten_ta": "ĐH Ngoại thương (Cơ sở TP.HCM)",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 338,
+    "ten": "Đại học Ngoại thương (phía Bắc)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-thuong-phia-bac-338",
+    "diem": 1.0
+   },
+   {
+    "id": 279,
+    "ten": "Đại học Ngoại thương (phía Nam)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-thuong-phia-nam-279",
+    "diem": 1.0
+   },
+   {
+    "id": 426,
+    "ten": "Đại học Thương mại",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thuong-mai-426",
+    "diem": 0.167
+   },
+   {
+    "id": 386,
+    "ten": "Học viện Ngoại giao",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ngoai-giao-386",
+    "diem": 0.167
+   }
+  ]
+ },
+ "NTT": {
+  "ten_ta": "ĐH Nguyễn Tất Thành",
+  "id_vnexpress": 280,
+  "ten_vnexpress": "Đại học Nguyễn Tất Thành",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 280,
+    "ten": "Đại học Nguyễn Tất Thành",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nguyen-tat-thanh-280",
+    "diem": 1.0
+   },
+   {
+    "id": 489,
+    "ten": "Đại học Nguyễn Huệ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nguyen-hue-489",
+    "diem": 0.333
+   },
+   {
+    "id": 453,
+    "ten": "Đại học Tây Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tay-nguyen-453",
+    "diem": 0.333
+   },
+   {
+    "id": 406,
+    "ten": "Đại học Nguyễn Trãi",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nguyen-trai-406",
+    "diem": 0.333
+   }
+  ]
+ },
+ "PKA": {
+  "ten_ta": "Trường Đại học Phenikaa",
+  "id_vnexpress": 372,
+  "ten_vnexpress": "Đại học Phenikaa",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 372,
+    "ten": "Đại học Phenikaa",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-phenikaa-372",
+    "diem": 1.0
+   },
+   {
+    "id": 458,
+    "ten": "Trường Sĩ Quan Chính Trị - Đại học Chính Trị",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-chinh-tri-dai-hoc-chinh-tri-458",
+    "diem": 0.0
+   },
+   {
+    "id": 446,
+    "ten": "Trường Sĩ Quan Công Binh - Hệ Quân sự - Đại học Ngô Quyền",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-cong-binh-he-quan-su-dai-hoc-ngo-quyen-446",
+    "diem": 0.0
+   },
+   {
+    "id": 299,
+    "ten": "Trường Sĩ Quan Kĩ Thuật Quân Sự - Hệ Dân sự - Đại Học Trần Đại Nghĩa",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-ki-thuat-quan-su-he-dan-su-dai-hoc-tran-dai-nghia-299",
+    "diem": 0.0
+   }
+  ]
+ },
+ "QHE": {
+  "ten_ta": "ĐH Kinh tế - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 210,
+    "ten": "Đại học Kinh Tế - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-dai-hoc-hue-210",
+    "diem": 0.5
+   },
+   {
+    "id": 272,
+    "ten": "Đại học Kinh tế TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-tp-hcm-272",
+    "diem": 0.5
+   },
+   {
+    "id": 309,
+    "ten": "Đại học Kinh Tế - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-dai-hoc-da-nang-309",
+    "diem": 0.4
+   },
+   {
+    "id": 392,
+    "ten": "Đại học Kinh tế quốc dân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-quoc-dan-392",
+    "diem": 0.4
+   }
+  ]
+ },
+ "QHF": {
+  "ten_ta": "Trường Đại học Ngoại ngữ - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 217,
+    "ten": "Đại học Ngoại Ngữ - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-hue-217",
+    "diem": 0.5
+   },
+   {
+    "id": 307,
+    "ten": "Đại học Ngoại Ngữ - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-da-nang-307",
+    "diem": 0.4
+   },
+   {
+    "id": 259,
+    "ten": "Đại học Ngoại ngữ - Tin học TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-tin-hoc-tp-hcm-259",
+    "diem": 0.4
+   },
+   {
+    "id": 223,
+    "ten": "Khoa Ngoại Ngữ - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-ngoai-ngu-dai-hoc-thai-nguyen-223",
+    "diem": 0.333
+   }
+  ]
+ },
+ "QHI": {
+  "ten_ta": "ĐH Công nghệ - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.5
+   },
+   {
+    "id": 455,
+    "ten": "Đại học Công Nghệ Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-dong-a-455",
+    "diem": 0.5
+   },
+   {
+    "id": 244,
+    "ten": "Đại học Công Nghệ Vạn Xuân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-van-xuan-244",
+    "diem": 0.4
+   },
+   {
+    "id": 260,
+    "ten": "Đại học Công nghệ Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-sai-gon-260",
+    "diem": 0.4
+   }
+  ]
+ },
+ "QHL": {
+  "ten_ta": "ĐH Luật - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 208,
+    "ten": "Đại học Luật - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-dai-hoc-hue-208",
+    "diem": 0.333
+   },
+   {
+    "id": 274,
+    "ten": "Đại học Luật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-tp-hcm-274",
+    "diem": 0.333
+   },
+   {
+    "id": 399,
+    "ten": "Đại học Luật Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-ha-noi-399",
+    "diem": 0.25
+   },
+   {
+    "id": 416,
+    "ten": "Trường Luật - Đại học Quốc gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-luat-dai-hoc-quoc-gia-ha-noi-416",
+    "diem": 0.167
+   }
+  ]
+ },
+ "QHQ": {
+  "ten_ta": "Trường Quản trị và Kinh doanh - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 222,
+    "ten": "Đại học Kinh Tế  & Quản Trị Kinh Doanh - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te -quan-tri-kinh-doanh-dai-hoc-thai-nguyen-222",
+    "diem": 0.5
+   },
+   {
+    "id": 499,
+    "ten": "Trường Quản trị và Kinh doanh - Đại học Quốc gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-quan-tri-va-kinh-doanh-dai-hoc-quoc-gia-ha-noi-499",
+    "diem": 0.444
+   },
+   {
+    "id": 458,
+    "ten": "Trường Sĩ Quan Chính Trị - Đại học Chính Trị",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-chinh-tri-dai-hoc-chinh-tri-458",
+    "diem": 0.286
+   },
+   {
+    "id": 490,
+    "ten": "Trường Sĩ quan Chính trị (hệ dân sự)",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-chinh-tri-he-dan-su-490",
+    "diem": 0.286
+   }
+  ]
+ },
+ "QHS": {
+  "ten_ta": "ĐH Giáo dục - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 389,
+    "ten": "Học viện Quản Lý Giáo Dục",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-quan-ly-giao-duc-389",
+    "diem": 0.4
+   },
+   {
+    "id": 220,
+    "ten": "Khoa Giáo Dục Thể Chất - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-giao-duc-the-chat-dai-hoc-hue-220",
+    "diem": 0.333
+   },
+   {
+    "id": 475,
+    "ten": "Khoa Giáo dục thể chất - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-giao-duc-the-chat-dai-hoc-da-nang-475",
+    "diem": 0.286
+   },
+   {
+    "id": 418,
+    "ten": "Đại học Giáo dục - Đại học Quốc gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-giao-duc-dai-hoc-quoc-gia-ha-noi-418",
+    "diem": 0.286
+   }
+  ]
+ },
+ "QHT": {
+  "ten_ta": "ĐH Khoa học Tự nhiên - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 287,
+    "ten": "Đại học Khoa học Tự nhiên - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-tp-hcm-287",
+    "diem": 0.429
+   },
+   {
+    "id": 419,
+    "ten": "Đại học Khoa học tự nhiên - Đại học Quốc Gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-ha-noi-419",
+    "diem": 0.375
+   },
+   {
+    "id": 214,
+    "ten": "Đại học Khoa Học - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-dai-hoc-hue-214",
+    "diem": 0.2
+   },
+   {
+    "id": 247,
+    "ten": "Đại học Y Khoa Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-khoa-vinh-247",
+    "diem": 0.2
+   }
+  ]
+ },
+ "QHX": {
+  "ten_ta": "ĐH Khoa học Xã hội & Nhân văn - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 288,
+    "ten": "Đại học Khoa học xã hội và Nhân văn - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-dai-hoc-quoc-gia-tp-hcm-288",
+    "diem": 0.556
+   },
+   {
+    "id": 420,
+    "ten": "Đại học Khoa học Xã hội và Nhân văn - Đại học Quốc gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-xa-hoi-va-nhan-van-dai-hoc-quoc-gia-ha-noi-420",
+    "diem": 0.5
+   },
+   {
+    "id": 214,
+    "ten": "Đại học Khoa Học - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-dai-hoc-hue-214",
+    "diem": 0.143
+   },
+   {
+    "id": 247,
+    "ten": "Đại học Y Khoa Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-khoa-vinh-247",
+    "diem": 0.143
+   }
+  ]
+ },
+ "QHY": {
+  "ten_ta": "ĐH Y Dược - ĐHQGHN",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 215,
+    "ten": "Đại học Y Dược - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-hue-215",
+    "diem": 0.333
+   },
+   {
+    "id": 298,
+    "ten": "Đại học Y Dược TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-tp-hcm-298",
+    "diem": 0.333
+   },
+   {
+    "id": 321,
+    "ten": "Đại học Y Dược Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-hai-phong-321",
+    "diem": 0.25
+   },
+   {
+    "id": 239,
+    "ten": "Đại học Y Dược Thái Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-thai-binh-239",
+    "diem": 0.25
+   }
+  ]
+ },
+ "QSC": {
+  "ten_ta": "ĐH Công nghệ Thông tin - ĐHQG TP.HCM",
+  "id_vnexpress": 284,
+  "ten_vnexpress": "Đại học Công nghệ Thông tin - Đại học Quốc gia TP HCM",
+  "diem_khop": 0.625,
+  "ung_vien": [
+   {
+    "id": 284,
+    "ten": "Đại học Công nghệ Thông tin - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-thong-tin-dai-hoc-quoc-gia-tp-hcm-284",
+    "diem": 0.625
+   },
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.5
+   },
+   {
+    "id": 500,
+    "ten": "Đại học Công nghệ Thông tin và Truyền thông Việt - Hàn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-thong-tin-va-truyen-thong-viet-han-500",
+    "diem": 0.444
+   },
+   {
+    "id": 221,
+    "ten": "Đại học Công Nghệ Thông Tin và Truyền Thông - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-thong-tin-va-truyen-thong-dai-hoc-thai-nguyen-221",
+    "diem": 0.444
+   }
+  ]
+ },
+ "QST": {
+  "ten_ta": "ĐH Khoa học Tự nhiên - ĐHQG TP.HCM",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 287,
+    "ten": "Đại học Khoa học Tự nhiên - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-tp-hcm-287",
+    "diem": 0.571
+   },
+   {
+    "id": 419,
+    "ten": "Đại học Khoa học tự nhiên - Đại học Quốc Gia Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-ha-noi-419",
+    "diem": 0.333
+   },
+   {
+    "id": 283,
+    "ten": "Đại học Bách khoa - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-bach-khoa-dai-hoc-quoc-gia-tp-hcm-283",
+    "diem": 0.25
+   },
+   {
+    "id": 506,
+    "ten": "Khoa Chính trị - Hành chính - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-chinh-tri-hanh-chinh-dai-hoc-quoc-gia-tp-hcm-506",
+    "diem": 0.2
+   }
+  ]
+ },
+ "QSX": {
+  "ten_ta": "ĐH KHXH&NV - ĐHQG TP.HCM",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 302,
+    "ten": "Nhạc viện TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/nhac-vien-tp-hcm-302",
+    "diem": 0.2
+   },
+   {
+    "id": 275,
+    "ten": "Đại học Mở TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-mo-tp-hcm-275",
+    "diem": 0.2
+   },
+   {
+    "id": 298,
+    "ten": "Đại học Y Dược TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-tp-hcm-298",
+    "diem": 0.2
+   },
+   {
+    "id": 274,
+    "ten": "Đại học Luật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-tp-hcm-274",
+    "diem": 0.2
+   }
+  ]
+ },
+ "QSY": {
+  "ten_ta": "Khoa Y - ĐHQG TP.HCM",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 283,
+    "ten": "Đại học Bách khoa - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-bach-khoa-dai-hoc-quoc-gia-tp-hcm-283",
+    "diem": 0.333
+   },
+   {
+    "id": 287,
+    "ten": "Đại học Khoa học Tự nhiên - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-khoa-hoc-tu-nhien-dai-hoc-quoc-gia-tp-hcm-287",
+    "diem": 0.286
+   },
+   {
+    "id": 298,
+    "ten": "Đại học Y Dược TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-tp-hcm-298",
+    "diem": 0.25
+   },
+   {
+    "id": 506,
+    "ten": "Khoa Chính trị - Hành chính - Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-chinh-tri-hanh-chinh-dai-hoc-quoc-gia-tp-hcm-506",
+    "diem": 0.25
+   }
+  ]
+ },
+ "SDU": {
+  "ten_ta": "ĐH Sao Đỏ",
+  "id_vnexpress": 336,
+  "ten_vnexpress": "Đại học Sao Đỏ",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 336,
+    "ten": "Đại học Sao Đỏ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-sao-do-336",
+    "diem": 1.0
+   },
+   {
+    "id": 424,
+    "ten": "Đại học Thành Đô",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thanh-do-424",
+    "diem": 0.5
+   },
+   {
+    "id": 232,
+    "ten": "Đại học Tây Đô",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tay-do-232",
+    "diem": 0.333
+   },
+   {
+    "id": 360,
+    "ten": "Đại Học Đông Đô",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-do-360",
+    "diem": 0.333
+   }
+  ]
+ },
+ "SGD": {
+  "ten_ta": "ĐH Sài Gòn",
+  "id_vnexpress": 289,
+  "ten_vnexpress": "Đại học Sài Gòn",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 289,
+    "ten": "Đại học Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-sai-gon-289",
+    "diem": 1.0
+   },
+   {
+    "id": 260,
+    "ten": "Đại học Công nghệ Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-sai-gon-260",
+    "diem": 0.5
+   },
+   {
+    "id": 293,
+    "ten": "Đại học Quốc tế Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quoc-te-sai-gon-293",
+    "diem": 0.5
+   },
+   {
+    "id": 477,
+    "ten": "Đại học Hùng Vương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hung-vuong-tp-hcm-477",
+    "diem": 0.0
+   }
+  ]
+ },
+ "SIU": {
+  "ten_ta": "ĐH Quốc tế Sài Gòn",
+  "id_vnexpress": 293,
+  "ten_vnexpress": "Đại học Quốc tế Sài Gòn",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 293,
+    "ten": "Đại học Quốc tế Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quoc-te-sai-gon-293",
+    "diem": 1.0
+   },
+   {
+    "id": 289,
+    "ten": "Đại học Sài Gòn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-sai-gon-289",
+    "diem": 0.5
+   },
+   {
+    "id": 508,
+    "ten": "Học viện quốc tế",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-quoc-te-508",
+    "diem": 0.5
+   },
+   {
+    "id": 502,
+    "ten": "Khoa Quốc Tế - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-quoc-te-dai-hoc-hue-502",
+    "diem": 0.333
+   }
+  ]
+ },
+ "SP2": {
+  "ten_ta": "ĐH Sư phạm Hà Nội 2",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 462,
+    "ten": "Đại học Sư phạm Hà Nội 2",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ha-noi-2-462",
+    "diem": 1.0
+   },
+   {
+    "id": 423,
+    "ten": "Đại học Sư phạm Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ha-noi-423",
+    "diem": 1.0
+   },
+   {
+    "id": 434,
+    "ten": "Đại Học Sư Phạm Thể Dục Thể Thao Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-the-duc-the-thao-ha-noi-434",
+    "diem": 0.667
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.5
+   }
+  ]
+ },
+ "SPD": {
+  "ten_ta": "ĐH Đồng Tháp",
+  "id_vnexpress": 248,
+  "ten_vnexpress": "Đại học Đồng Tháp",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 248,
+    "ten": "Đại học Đồng Tháp",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-thap-248",
+    "diem": 1.0
+   },
+   {
+    "id": 333,
+    "ten": "Đại Học Thành Đông",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thanh-dong-333",
+    "diem": 0.5
+   },
+   {
+    "id": 306,
+    "ten": "Đại Học Đông Á",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dong-a-306",
+    "diem": 0.5
+   },
+   {
+    "id": 369,
+    "ten": "Đại học Phương Đông",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-phuong-dong-369",
+    "diem": 0.333
+   }
+  ]
+ },
+ "SPH": {
+  "ten_ta": "ĐH Sư phạm Hà Nội",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 462,
+    "ten": "Đại học Sư phạm Hà Nội 2",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ha-noi-2-462",
+    "diem": 1.0
+   },
+   {
+    "id": 423,
+    "ten": "Đại học Sư phạm Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ha-noi-423",
+    "diem": 1.0
+   },
+   {
+    "id": 434,
+    "ten": "Đại Học Sư Phạm Thể Dục Thể Thao Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-the-duc-the-thao-ha-noi-434",
+    "diem": 0.667
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.5
+   }
+  ]
+ },
+ "SPK": {
+  "ten_ta": "ĐH Công nghệ Kỹ thuật TP.HCM",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 256,
+    "ten": "Đại học Công nghệ TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghe-tp-hcm-256",
+    "diem": 0.6
+   },
+   {
+    "id": 501,
+    "ten": "Khoa Kỹ thuật và Công Nghệ - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-ky-thuat-va-cong-nghe-dai-hoc-hue-501",
+    "diem": 0.571
+   },
+   {
+    "id": 233,
+    "ten": "Đại học Kỹ thuật Công nghệ Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ky-thuat-cong-nghe-can-tho-233",
+    "diem": 0.571
+   },
+   {
+    "id": 456,
+    "ten": "Học viện Kỹ thuật và Công nghệ an ninh",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-ky-thuat-va-cong-nghe-an-ninh-456",
+    "diem": 0.571
+   }
+  ]
+ },
+ "SPS": {
+  "ten_ta": "ĐH Sư phạm TP.HCM",
+  "id_vnexpress": 291,
+  "ten_vnexpress": "Đại học Sư phạm TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 291,
+    "ten": "Đại học Sư phạm TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-tp-hcm-291",
+    "diem": 1.0
+   },
+   {
+    "id": 304,
+    "ten": "Đại học Sư phạm Thể dục thể thao TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-the-duc-the-thao-tp-hcm-304",
+    "diem": 0.6
+   },
+   {
+    "id": 290,
+    "ten": "Đại học Sư phạm Kỹ thuật TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-ky-thuat-tp-hcm-290",
+    "diem": 0.6
+   },
+   {
+    "id": 213,
+    "ten": "Đại học Sư Phạm - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-su-pham-dai-hoc-hue-213",
+    "diem": 0.5
+   }
+  ]
+ },
+ "TCT": {
+  "ten_ta": "Trường Đại học Cần Thơ",
+  "id_vnexpress": 234,
+  "ten_vnexpress": "Đại học Cần Thơ",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 234,
+    "ten": "Đại học Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-can-tho-234",
+    "diem": 1.0
+   },
+   {
+    "id": 231,
+    "ten": "Đại học Nam Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nam-can-tho-231",
+    "diem": 0.667
+   },
+   {
+    "id": 235,
+    "ten": "Đại học Y Dược Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-can-tho-235",
+    "diem": 0.667
+   },
+   {
+    "id": 233,
+    "ten": "Đại học Kỹ thuật Công nghệ Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ky-thuat-cong-nghe-can-tho-233",
+    "diem": 0.333
+   }
+  ]
+ },
+ "TDL": {
+  "ten_ta": "ĐH Đà Lạt",
+  "id_vnexpress": 207,
+  "ten_vnexpress": "Đại học Đà Lạt",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 207,
+    "ten": "Đại học Đà Lạt",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-da-lat-207",
+    "diem": 1.0
+   },
+   {
+    "id": 206,
+    "ten": "Đại học Yersin Đà Lạt",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-yersin-da-lat-206",
+    "diem": 0.667
+   },
+   {
+    "id": 307,
+    "ten": "Đại học Ngoại Ngữ - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-ngu-dai-hoc-da-nang-307",
+    "diem": 0.2
+   },
+   {
+    "id": 314,
+    "ten": "Đại Học Thể Dục Thể Thao Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-the-duc-the-thao-da-nang-314",
+    "diem": 0.2
+   }
+  ]
+ },
+ "TDM": {
+  "ten_ta": "Trường Đại học Thủ Dầu Một",
+  "id_vnexpress": 447,
+  "ten_vnexpress": "Đại học Thủ Dầu Một",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 447,
+    "ten": "Đại học Thủ Dầu Một",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thu-dau-mot-447",
+    "diem": 1.0
+   },
+   {
+    "id": 385,
+    "ten": "Đại học Thủ Đô Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thu-do-ha-noi-385",
+    "diem": 0.167
+   },
+   {
+    "id": 412,
+    "ten": "Đại học Dầu khí Việt Nam",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dau-khi-viet-nam-412",
+    "diem": 0.167
+   },
+   {
+    "id": 299,
+    "ten": "Trường Sĩ Quan Kĩ Thuật Quân Sự - Hệ Dân sự - Đại Học Trần Đại Nghĩa",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-ki-thuat-quan-su-he-dan-su-dai-hoc-tran-dai-nghia-299",
+    "diem": 0.0
+   }
+  ]
+ },
+ "TDV": {
+  "ten_ta": "ĐH Vinh",
+  "id_vnexpress": 246,
+  "ten_vnexpress": "Đại học Vinh",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 246,
+    "ten": "Đại học Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-vinh-246",
+    "diem": 1.0
+   },
+   {
+    "id": 322,
+    "ten": "Đại Học Lương Thế Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luong-the-vinh-322",
+    "diem": 0.5
+   },
+   {
+    "id": 317,
+    "ten": "Đại học Trà Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tra-vinh-317",
+    "diem": 0.5
+   },
+   {
+    "id": 247,
+    "ten": "Đại học Y Khoa Vinh",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-khoa-vinh-247",
+    "diem": 0.5
+   }
+  ]
+ },
+ "THP": {
+  "ten_ta": "ĐH Hải Phòng",
+  "id_vnexpress": 320,
+  "ten_vnexpress": "Đại học Hải Phòng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 320,
+    "ten": "Đại học Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hai-phong-320",
+    "diem": 1.0
+   },
+   {
+    "id": 321,
+    "ten": "Đại học Y Dược Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-hai-phong-321",
+    "diem": 0.667
+   },
+   {
+    "id": 318,
+    "ten": "Đại học Quản lý và Công nghệ Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quan-ly-va-cong-nghe-hai-phong-318",
+    "diem": 0.333
+   },
+   {
+    "id": 519,
+    "ten": "Đại học Quản lý và Công nghệ Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quan-ly-va-cong-nghe-hai-phong-519",
+    "diem": 0.333
+   }
+  ]
+ },
+ "TLA": {
+  "ten_ta": "Trường Đại học Thủy Lợi",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 425,
+    "ten": "Đại học Thủy Lợi ( Cơ sở 1 )",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thuy-loi-co-so-1-425",
+    "diem": 0.5
+   },
+   {
+    "id": 292,
+    "ten": "Đại Học Thủy Lợi ( Cơ sở 2 )",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thuy-loi-co-so-2-292",
+    "diem": 0.5
+   },
+   {
+    "id": 458,
+    "ten": "Trường Sĩ Quan Chính Trị - Đại học Chính Trị",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-chinh-tri-dai-hoc-chinh-tri-458",
+    "diem": 0.0
+   },
+   {
+    "id": 446,
+    "ten": "Trường Sĩ Quan Công Binh - Hệ Quân sự - Đại học Ngô Quyền",
+    "duong_dan": "/tra-cuu-dai-hoc/truong-si-quan-cong-binh-he-quan-su-dai-hoc-ngo-quyen-446",
+    "diem": 0.0
+   }
+  ]
+ },
+ "TMU": {
+  "ten_ta": "Trường Đại học Thương mại",
+  "id_vnexpress": 426,
+  "ten_vnexpress": "Đại học Thương mại",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 426,
+    "ten": "Đại học Thương mại",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thuong-mai-426",
+    "diem": 1.0
+   },
+   {
+    "id": 352,
+    "ten": "Đại học Công nghiệp và Thương mại Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-nghiep-va-thuong-mai-ha-noi-352",
+    "diem": 0.333
+   },
+   {
+    "id": 255,
+    "ten": "Đại học Công Thương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-thuong-tp-hcm-255",
+    "diem": 0.25
+   },
+   {
+    "id": 338,
+    "ten": "Đại học Ngoại thương (phía Bắc)",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ngoai-thuong-phia-bac-338",
+    "diem": 0.167
+   }
+  ]
+ },
+ "TSN": {
+  "ten_ta": "ĐH Nha Trang",
+  "id_vnexpress": 330,
+  "ten_vnexpress": "Đại học Nha Trang",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 330,
+    "ten": "Đại học Nha Trang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nha-trang-330",
+    "diem": 1.0
+   },
+   {
+    "id": 477,
+    "ten": "Đại học Hùng Vương TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hung-vuong-tp-hcm-477",
+    "diem": 0.0
+   },
+   {
+    "id": 251,
+    "ten": "Đại học An Ninh Nhân Dân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-an-ninh-nhan-dan-251",
+    "diem": 0.0
+   },
+   {
+    "id": 220,
+    "ten": "Khoa Giáo Dục Thể Chất - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/khoa-giao-duc-the-chat-dai-hoc-hue-220",
+    "diem": 0.0
+   }
+  ]
+ },
+ "TTN": {
+  "ten_ta": "ĐH Tiền Giang",
+  "id_vnexpress": 347,
+  "ten_vnexpress": "Đại học Tiền Giang",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 347,
+    "ten": "Đại học Tiền Giang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tien-giang-347",
+    "diem": 1.0
+   },
+   {
+    "id": 496,
+    "ten": "Đại học Kiên Giang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kien-giang-496",
+    "diem": 0.333
+   },
+   {
+    "id": 332,
+    "ten": "Đại Học Hà Hoa Tiên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-hoa-tien-332",
+    "diem": 0.25
+   },
+   {
+    "id": 316,
+    "ten": "Đại học Nông Lâm Bắc Giang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nong-lam-bac-giang-316",
+    "diem": 0.2
+   }
+  ]
+ },
+ "TTU": {
+  "ten_ta": "ĐH Tân Tạo",
+  "id_vnexpress": 452,
+  "ten_vnexpress": "Đại học Tân Tạo",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 452,
+    "ten": "Đại học Tân Tạo",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tan-tao-452",
+    "diem": 1.0
+   },
+   {
+    "id": 464,
+    "ten": "Đại học Tân Trào",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-tan-trao-464",
+    "diem": 0.333
+   },
+   {
+    "id": 311,
+    "ten": "Đại học Dân Lập Duy Tân",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-dan-lap-duy-tan-311",
+    "diem": 0.2
+   },
+   {
+    "id": 476,
+    "ten": "Viện Nghiên cứu và Đào tạo Việt - Anh - Đại học Đà Nẵng",
+    "duong_dan": "/tra-cuu-dai-hoc/vien-nghien-cuu-va-dao-tao-viet-anh-dai-hoc-da-nang-476",
+    "diem": 0.111
+   }
+  ]
+ },
+ "TYS": {
+  "ten_ta": "ĐH Y tế Công cộng",
+  "id_vnexpress": 431,
+  "ten_vnexpress": "Đại học Y tế Công cộng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 431,
+    "ten": "Đại học Y tế Công cộng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-te-cong-cong-431",
+    "diem": 1.0
+   },
+   {
+    "id": 451,
+    "ten": "Đại học Kinh tế Công nghiệp Long An",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-cong-nghiep-long-an-451",
+    "diem": 0.333
+   },
+   {
+    "id": 362,
+    "ten": "Đại học Kinh Tế Kỹ Thuật Công Nghiệp",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-ky-thuat-cong-nghiep-362",
+    "diem": 0.333
+   },
+   {
+    "id": 397,
+    "ten": "Đại học Công đoàn",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-cong-doan-397",
+    "diem": 0.333
+   }
+  ]
+ },
+ "UEF": {
+  "ten_ta": "ĐH Kinh tế - Tài chính TP.HCM (UEF)",
+  "id_vnexpress": 294,
+  "ten_vnexpress": "Đại học Kinh tế - Tài chính TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 294,
+    "ten": "Đại học Kinh tế - Tài chính TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-tai-chinh-tp-hcm-294",
+    "diem": 1.0
+   },
+   {
+    "id": 272,
+    "ten": "Đại học Kinh tế TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-tp-hcm-272",
+    "diem": 0.6
+   },
+   {
+    "id": 387,
+    "ten": "Học viện Tài chính",
+    "duong_dan": "/tra-cuu-dai-hoc/hoc-vien-tai-chinh-387",
+    "diem": 0.4
+   },
+   {
+    "id": 285,
+    "ten": "Đại học Kinh tế - Luật, Đại học Quốc gia TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-kinh-te-luat-dai-hoc-quoc-gia-tp-hcm-285",
+    "diem": 0.375
+   }
+  ]
+ },
+ "VGU": {
+  "ten_ta": "ĐH Việt - Đức",
+  "id_vnexpress": 295,
+  "ten_vnexpress": "Đại học Việt Đức",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 295,
+    "ten": "Đại học Việt Đức",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-viet-duc-295",
+    "diem": 1.0
+   },
+   {
+    "id": 341,
+    "ten": "Đại học Hồng Đức",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hong-duc-341",
+    "diem": 0.333
+   },
+   {
+    "id": 230,
+    "ten": "Đại học Việt Bắc",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-viet-bac-230",
+    "diem": 0.333
+   },
+   {
+    "id": 263,
+    "ten": "Đại học Tôn Đức Thắng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ton-duc-thang-263",
+    "diem": 0.25
+   }
+  ]
+ },
+ "VHH": {
+  "ten_ta": "ĐH Văn Hiến",
+  "id_vnexpress": 264,
+  "ten_vnexpress": "Đại học Văn Hiến",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 264,
+    "ten": "Đại học Văn Hiến",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hien-264",
+    "diem": 1.0
+   },
+   {
+    "id": 265,
+    "ten": "Đại học Văn Lang",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-lang-265",
+    "diem": 0.333
+   },
+   {
+    "id": 296,
+    "ten": "Đại học Văn hoá TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-van-hoa-tp-hcm-296",
+    "diem": 0.25
+   },
+   {
+    "id": 203,
+    "ten": "Đại học Chu Văn An",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-chu-van-an-203",
+    "diem": 0.25
+   }
+  ]
+ },
+ "XDA": {
+  "ten_ta": "ĐH Xây dựng Hà Nội",
+  "id_vnexpress": 429,
+  "ten_vnexpress": "Đại học Xây dựng Hà Nội",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 429,
+    "ten": "Đại học Xây dựng Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-xay-dung-ha-noi-429",
+    "diem": 1.0
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 0.5
+   },
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 0.5
+   },
+   {
+    "id": 361,
+    "ten": "Đại học Dược Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-duoc-ha-noi-361",
+    "diem": 0.4
+   }
+  ]
+ },
+ "XDT": {
+  "ten_ta": "ĐH Xây dựng Miền Trung",
+  "id_vnexpress": 201,
+  "ten_vnexpress": "Đại học Xây dựng Miền Trung",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 201,
+    "ten": "Đại học Xây dựng Miền Trung",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-xay-dung-mien-trung-201",
+    "diem": 1.0
+   },
+   {
+    "id": 343,
+    "ten": "Đại học Xây dựng Miền Tây",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-xay-dung-mien-tay-343",
+    "diem": 0.6
+   },
+   {
+    "id": 429,
+    "ten": "Đại học Xây dựng Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-xay-dung-ha-noi-429",
+    "diem": 0.333
+   },
+   {
+    "id": 466,
+    "ten": "Đại học Quang Trung",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quang-trung-466",
+    "diem": 0.2
+   }
+  ]
+ },
+ "YCT": {
+  "ten_ta": "Trường Đại học Y Dược Cần Thơ",
+  "id_vnexpress": 235,
+  "ten_vnexpress": "Đại học Y Dược Cần Thơ",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 235,
+    "ten": "Đại học Y Dược Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-can-tho-235",
+    "diem": 1.0
+   },
+   {
+    "id": 234,
+    "ten": "Đại học Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-can-tho-234",
+    "diem": 0.667
+   },
+   {
+    "id": 231,
+    "ten": "Đại học Nam Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-nam-can-tho-231",
+    "diem": 0.5
+   },
+   {
+    "id": 233,
+    "ten": "Đại học Kỹ thuật Công nghệ Cần Thơ",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ky-thuat-cong-nghe-can-tho-233",
+    "diem": 0.286
+   }
+  ]
+ },
+ "YDS": {
+  "ten_ta": "ĐH Y Dược TP.HCM",
+  "id_vnexpress": 298,
+  "ten_vnexpress": "Đại học Y Dược TP HCM",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 298,
+    "ten": "Đại học Y Dược TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-tp-hcm-298",
+    "diem": 1.0
+   },
+   {
+    "id": 275,
+    "ten": "Đại học Mở TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-mo-tp-hcm-275",
+    "diem": 0.333
+   },
+   {
+    "id": 302,
+    "ten": "Nhạc viện TP HCM",
+    "duong_dan": "/tra-cuu-dai-hoc/nhac-vien-tp-hcm-302",
+    "diem": 0.333
+   },
+   {
+    "id": 215,
+    "ten": "Đại học Y Dược - Đại học Huế",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-hue-215",
+    "diem": 0.333
+   }
+  ]
+ },
+ "YHB": {
+  "ten_ta": "ĐH Y Hà Nội",
+  "id_vnexpress": null,
+  "ten_vnexpress": null,
+  "diem_khop": null,
+  "ung_vien": [
+   {
+    "id": 432,
+    "ten": "Đại học Y Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-ha-noi-432",
+    "diem": 1.0
+   },
+   {
+    "id": 404,
+    "ten": "Đại học Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-ha-noi-404",
+    "diem": 1.0
+   },
+   {
+    "id": 361,
+    "ten": "Đại học Dược Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-duoc-ha-noi-361",
+    "diem": 0.667
+   },
+   {
+    "id": 399,
+    "ten": "Đại học Luật Hà Nội",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-luat-ha-noi-399",
+    "diem": 0.667
+   }
+  ]
+ },
+ "YPB": {
+  "ten_ta": "Trường Đại học Y Dược Hải Phòng",
+  "id_vnexpress": 321,
+  "ten_vnexpress": "Đại học Y Dược Hải Phòng",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 321,
+    "ten": "Đại học Y Dược Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-hai-phong-321",
+    "diem": 1.0
+   },
+   {
+    "id": 320,
+    "ten": "Đại học Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-hai-phong-320",
+    "diem": 0.667
+   },
+   {
+    "id": 318,
+    "ten": "Đại học Quản lý và Công nghệ Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quan-ly-va-cong-nghe-hai-phong-318",
+    "diem": 0.286
+   },
+   {
+    "id": 519,
+    "ten": "Đại học Quản lý và Công nghệ Hải Phòng",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-quan-ly-va-cong-nghe-hai-phong-519",
+    "diem": 0.286
+   }
+  ]
+ },
+ "YTB": {
+  "ten_ta": "Trường Đại học Y Dược Thái Bình",
+  "id_vnexpress": 239,
+  "ten_vnexpress": "Đại học Y Dược Thái Bình",
+  "diem_khop": 1.0,
+  "ung_vien": [
+   {
+    "id": 239,
+    "ten": "Đại học Y Dược Thái Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-thai-binh-239",
+    "diem": 1.0
+   },
+   {
+    "id": 238,
+    "ten": "Đại học Thái Bình",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thai-binh-238",
+    "diem": 0.667
+   },
+   {
+    "id": 228,
+    "ten": "Đại học Y Dược - Đại học Thái Nguyên",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-y-duoc-dai-hoc-thai-nguyen-228",
+    "diem": 0.5
+   },
+   {
+    "id": 328,
+    "ten": "Đại học Thái Bình Dương",
+    "duong_dan": "/tra-cuu-dai-hoc/dai-hoc-thai-binh-duong-328",
+    "diem": 0.5
+   }
+  ]
+ }
+}

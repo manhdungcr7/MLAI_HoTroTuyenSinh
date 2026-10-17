@@ -17,12 +17,14 @@ Kết quả đã được huấn luyện lại trên dữ liệu sau khi áp d�
 | Mục | Số liệu |
 |---|---|
 | Chương trình xét điểm thi THPT trong dữ liệu | 3.320 chương trình |
-| Chỉ có mức sàn 15,0 (không có điểm chuẩn hợp lệ, **không đưa vào mô hình**) | 603 chương trình; 843 điểm bằng 15,0 bị loại |
-| Chương trình có điểm chuẩn hợp lệ | **2.717** |
-| Trong đó có điểm từ 2 năm trở lên | 904 (33,3%) |
-| Cặp huấn luyện (chương trình, năm đích) | 1.203: năm 2023: 337, 2024: 500, 2025: 346 (2022: 20) |
-| Năm điểm hợp lệ mới nhất của từng chương trình | 2026: 1.474, 2025: 533, 2024: 494, 2023: 206, 2022: 10 |
-| Chương trình được dự báo 2027 | **2.501** (có điểm hợp lệ từ 2024 trở lại đây) |
+| Chỉ có mức sàn 15,0 (không có điểm chuẩn hợp lệ, **không đưa vào mô hình**) | 578 chương trình; 843 điểm bằng 15,0 bị loại |
+| Chương trình có điểm chuẩn hợp lệ | **2.742** |
+| Trong đó có điểm từ 2 năm trở lên | 1.599 (58,3%) |
+| Cặp huấn luyện (chương trình, năm đích) | 2.373: năm 2023: 337, 2024: 500, 2025: 566, 2026: 950 (2022: 20) |
+| Năm điểm hợp lệ mới nhất của từng chương trình | 2026: 1.877, 2025: 403, 2024: 301, 2023: 154, 2022: 7 |
+| Chương trình được dự báo 2027 | **2.581** (có điểm hợp lệ từ 2024 trở lại đây) |
+
+**Bổ sung và đối chiếu nguồn thứ hai (VnExpress, `scripts/crawl-vnexpress.py`, `scripts/doi-chieu-vnexpress.py`):** nguồn gốc chỉ có điểm 2026 cho nhiều chương trình, nên bảng điểm 2025 và 2026 của 91/118 trường được lấy thêm từ VnExpress. Chỉ ghép khi tên ngành khớp duy nhất trong cùng trường. Ở các cặp có điểm ở cả hai nguồn, hai nguồn khớp (lệch tối đa 0,05 điểm) **88,6% năm 2025 (334/377)** và **92,9% năm 2026 (773/832)**; các cặp lệch chỉ được liệt kê (`docs/audits/doi-chieu-vnexpress.csv`), không tự sửa. Đã bổ sung 1.198 điểm còn thiếu (795 điểm 2025, 403 điểm 2026); điểm đúng 15,0 không bổ sung. Đây là nguồn thứ cấp: dùng để đối chiếu và nối chuỗi năm, không thay đề án gốc.
 
 Nguồn: đề án tuyển sinh chính thức của trường (PDF có số trang) và trang tổng hợp điểm chuẩn (gắn nhãn "chưa đối chiếu"). Không có số liệu giả lập. Pipeline thu thập và làm sạch: `scripts/` (phân nhóm ngành, chuẩn hóa tỉnh theo 34 tỉnh thành, loại dòng rác, đối chiếu mã trường).
 
@@ -74,7 +76,7 @@ Dự báo điểm (độ thay đổi trung vị, so với giữ nguyên):
 | Năm kiểm tra | MAE giữ nguyên | MAE mô hình | RMSE giữ nguyên | RMSE mô hình |
 |---|---|---|---|---|
 | 2024 (500 chương trình) | 1,207 | 1,251 | 1,804 | 1,734 |
-| 2025 (346 chương trình) | 1,780 | 1,732 | 2,395 | 2,349 |
+| 2025 (566 chương trình) | 1,977 | 1,911 | 2,656 | 2,556 |
 
 Kết luận trung thực: sai số bình phương giảm ở cả hai năm (4% và 2%); sai số tuyệt đối tăng 4% năm 2024 và giảm 3% năm 2025. Lợi thế về điểm trung tâm nhỏ và không đều, chưa đủ để khẳng định mô hình hơn rõ rệt cách giữ nguyên.
 
@@ -82,19 +84,19 @@ Dự báo khoảng 80%, ở **cùng độ phủ 80%** (so công bằng bằng c�
 
 | Phương án | Độ rộng trung bình | Điểm Winkler (thấp hơn là tốt hơn) |
 |---|---|---|
-| Heuristic cũ (phân vị toàn cục x 1,3 x căn số năm) | 4,42 | 7,99 |
-| Phân vị theo nhóm (không máy học) | 5,43 | 7,94 |
-| **LightGBM phân vị + hiệu chỉnh + ràng buộc (mô hình dùng trong app)** | 5,08 | **7,65** |
+| Heuristic cũ (phân vị toàn cục x 1,3 x căn số năm) | 5,38 | 8,76 |
+| Phân vị theo nhóm (không máy học) | 5,86 | 8,73 |
+| **LightGBM phân vị + hiệu chỉnh + ràng buộc (mô hình dùng trong app)** | 5,54 | **8,45** |
 
-Ở cùng độ phủ, điểm Winkler của mô hình học máy thấp hơn khoảng 4% so với heuristic cũ. Lợi thế có thật nhưng nhỏ: mô hình đặt khoảng đúng chỗ hơn (ngành điểm thấp hay tăng, ngành điểm cao ổn định) chứ không làm khoảng hẹp đi.
+Ở cùng độ phủ, điểm Winkler của mô hình học máy thấp hơn khoảng 3,5% so với heuristic cũ. Lợi thế có thật nhưng nhỏ: mô hình đặt khoảng đúng chỗ hơn (ngành điểm thấp hay tăng, ngành điểm cao ổn định) chứ không làm khoảng hẹp đi.
 
-Độ phủ theo từng năm sau hiệu chỉnh: 82,8% (2024), 75,7% (2025).
+Độ phủ theo từng năm sau hiệu chỉnh: 86,6% (2024), 74,0% (2025).
 
-**Phép thử ngoài mẫu trung thực:** hệ số co giãn chọn chỉ từ 2024, áp cho 2025: độ phủ **73,1%** (Winkler 9,22), thấp hơn mục tiêu 80% vì biến động 2025 lớn hơn mọi năm trước. Nói cách khác khoảng này đúng với các năm đã thấy; nếu biến động năm sau lớn bất thường, độ phủ có thể xuống khoảng 73%.
+**Phép thử ngoài mẫu trung thực:** hệ số co giãn chọn chỉ từ 2024, áp cho 2025: độ phủ **66,6%** (Winkler 10,10), thấp hơn mục tiêu 80% vì biến động 2025 lớn hơn mọi năm trước. Nói cách khác khoảng này đúng với các năm đã thấy; nếu biến động năm sau lớn bất thường, độ phủ có thể xuống khoảng 67%.
 
 ## 8. Triển khai
 
-- Huấn luyện lại trên toàn bộ 1.203 cặp, dự báo 2027 cho 2.501 chương trình, ghi vào `src/data/du-bao-2027.json` (mỗi chương trình: cận thấp, mức giữa, cận cao, năm điểm cơ sở).
+- Huấn luyện lại trên toàn bộ 2.373 cặp, dự báo 2027 cho 2.581 chương trình, ghi vào `src/data/du-bao-2027.json` (mỗi chương trình: cận thấp, mức giữa, cận cao, năm điểm cơ sở).
 - Ứng dụng nạp tệp một lần (không chạy mô hình trên trình duyệt). Hook `useTrangThaiDuLieu` thay khoảng thống kê cũ bằng khoảng của mô hình khi quy tắc dữ liệu cho phép dự báo (có điểm chuẩn hợp lệ, không quá cũ) và khi cùng năm điểm cơ sở; nên khối "Điểm chuẩn năm tới có thể ở đâu?", danh sách và bảng so sánh trong chat dùng cùng một số. Trang chi tiết ngành có dòng "Điểm chuẩn dự đoán 2027 (mô hình học máy)" ngay dưới "Điểm chuẩn 2026".
 - Kiểm thử: `tests/du-bao-ml.test.ts` (miền giá trị, thứ tự, sàn, ngành chỉ có mức sàn không có dự báo, khớp báo cáo huấn luyện, hàm áp dụng, Winkler thấp hơn heuristic cũ).
 
@@ -102,8 +104,8 @@ Dự báo khoảng 80%, ở **cùng độ phủ 80%** (so công bằng bằng c�
 
 - Chỉ 3 năm đích có cặp, và hai phần ba chương trình chỉ có một điểm: tín hiệu riêng của từng ngành yếu. Cải thiện chắc chắn nhất là thêm dữ liệu.
 - Thiếu các biến giải thích lớn nhất của điểm chuẩn: chỉ tiêu từng năm, số thí sinh đăng ký, phổ điểm thi do Bộ công bố, điểm chuẩn 2018 đến 2021. Nguồn công khai tổng hợp hiện chưa cung cấp chỉ tiêu theo ngành; đề án PDF có nhưng cần OCR từng trường.
-- Khoảng 80% chưa được bảo đảm khi biến động vĩ mô thay đổi (bằng chứng: 73,1% ngoài mẫu).
-- 603 chương trình chỉ có mức sàn 15 không được dự báo. Nếu về sau xác nhận được một số trường áp dụng điểm chuẩn phẳng, cần dữ liệu có cấu trúc từ đề án để đưa trở lại.
+- Khoảng 80% chưa được bảo đảm khi biến động vĩ mô thay đổi (bằng chứng: 66,6% ngoài mẫu).
+- 578 chương trình chỉ có mức sàn 15 không được dự báo. Nếu về sau xác nhận được một số trường áp dụng điểm chuẩn phẳng, cần dữ liệu có cấu trúc từ đề án để đưa trở lại.
 - Dữ liệu chưa được thẩm định độc lập toàn danh mục: nhiều điểm đến từ trang tổng hợp chưa đối chiếu đề án (xem `docs/audits/data-quality.md`).
 
 ## 10. Tái lập
@@ -121,8 +123,8 @@ python -I ml/huan-luyen-2027.py          # huấn luyện cuối, kiểm định
 ## Gợi ý 6 slide cho phần ML
 
 1. Bài toán và vì sao khó: dự đoán điểm chuẩn 2027 từng ngành; hai phần ba chương trình chỉ có một điểm.
-2. Dữ liệu: 2.717 chương trình có điểm chuẩn hợp lệ, 1.203 cặp huấn luyện, nguồn và làm sạch; vì sao loại mức sàn 15.
+2. Dữ liệu: 2.742 chương trình có điểm chuẩn hợp lệ, 2.373 cặp huấn luyện, nguồn và làm sạch; vì sao loại mức sàn 15.
 3. EDA và đặc trưng: biến động theo năm (độ lệch 1,6 lên 2,4), theo mức điểm; bảng đặc trưng.
 4. Mô hình và vòng lặp: bảng 6 vòng, nói thẳng điều gì thất bại.
-5. Kết quả: bảng Winkler ở cùng độ phủ 80% (7,65 so với 7,99); ngoài mẫu 73,1%.
+5. Kết quả: bảng Winkler ở cùng độ phủ 80% (8,45 so với 8,76); ngoài mẫu 66,6%.
 6. Triển khai và giá trị: dòng dự đoán 2027 trong app; giới hạn dữ liệu và lộ trình (chỉ tiêu, phổ điểm Bộ).

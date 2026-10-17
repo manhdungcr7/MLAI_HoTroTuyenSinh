@@ -43,6 +43,8 @@ export function tenGon(goc: string): { ten: string; them?: string } {
 type HocPhiTep = Record<string, HocPhiNguon>;
 type ViecMoiTep = Record<string, { phanTram: number; nam: string; trang: number; url: string }>;
 let HOC_PHI: HocPhiTep = {};
+// hoc-phi-vnexpress.json: học phí theo bảng VnExpress (nguồn thứ cấp, scripts/hoc-phi-vnexpress.py): [thấp, cao, năm, đường dẫn]; chỉ dùng khi chưa có học phí từ văn bản sơ cấp.
+let HOC_PHI_VN: Record<string, [number, number, string, string]> = {};
 let VIEC_MOI: ViecMoiTep = {};
 type ChiTieuTep = Record<string, { chiTieu: number; nam: string; url: string; trang: number }>;
 let CHI_TIEU: ChiTieuTep = {};
@@ -50,6 +52,7 @@ let CHI_TIEU: ChiTieuTep = {};
 function chuyen(d: Dong): LuaChon {
   const hpUngVien = HOC_PHI[d.id];
   const hp = laHocPhiDaKiemChung(hpUngVien) ? hpUngVien : undefined;
+  const hv = hp ? undefined : HOC_PHI_VN[d.id];
   const vm = d.viec === null ? VIEC_MOI[d.id] : undefined;
   const viec = d.viec ?? vm?.phanTram ?? null;
   const gon = tenGon(d.nganh);
@@ -88,6 +91,7 @@ function chuyen(d: Dong): LuaChon {
     daKiemChung: false,
     linkNguon: d.nguon ?? undefined,
     ...(hp ? { hocPhiMin: hp.trieuNam, hocPhiMax: hp.trieuNam, nguonHocPhi: { nam: hp.nam, url: hp.url, trang: hp.trang ?? 0 } } : {}),
+    ...(hv ? { hocPhiMin: hv[0], hocPhiMax: hv[1], nguonHocPhi: { nam: hv[2], url: `https://diemthi.vnexpress.net${hv[3]}`, trang: 0, thuCap: true } } : {}),
     ...(CHI_TIEU[d.id] ? { chiTieu: { so: CHI_TIEU[d.id].chiTieu, nam: CHI_TIEU[d.id].nam, url: CHI_TIEU[d.id].url, trang: CHI_TIEU[d.id].trang } } : {}),
     maTruong: d.ma,
     phuongThuc: d.pt,
@@ -110,10 +114,11 @@ export const daNapLuaChon = (): boolean => LUA_CHON.length > 0;
 /** Nạp danh mục gốc một lần (gọi nhiều lần vẫn một lần tải). Lỗi mạng thì lần gọi sau thử lại. */
 export function napLuaChon(): Promise<void> {
   dangNap ??= (async () => {
-    const [raw, viec, hp, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./chi-tieu.json")]);
+    const [raw, viec, hp, hpVn, ct] = await Promise.all([import("./du-lieu-that.json"), import("./viec-lam.json"), import("./hoc-phi.json"), import("./hoc-phi-vnexpress.json"), import("./chi-tieu.json")]);
     CHI_TIEU = ct.default as unknown as ChiTieuTep;
     VIEC_MOI = viec.default as unknown as ViecMoiTep;
     HOC_PHI = hp.default as unknown as HocPhiTep;
+    HOC_PHI_VN = hpVn.default as unknown as typeof HOC_PHI_VN;
     LUA_CHON.splice(0, LUA_CHON.length, ...(raw.default as unknown as Dong[]).map(chuyen));
     THEO_ID = new Map(LUA_CHON.map((l) => [l.id, l]));
   })().catch((e) => { dangNap = null; throw e; });

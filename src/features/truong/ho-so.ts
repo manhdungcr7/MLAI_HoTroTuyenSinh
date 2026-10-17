@@ -59,7 +59,7 @@ export const nhanNguonDiem = (cap?: LuaChon["nguonCap"]): { loai: DongChuongTrin
 export function hocPhiDayDu(l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "hocPhiUocTinh" | "nguonHocPhi">): string | null {
   if (!coHocPhi(l)) return null;
   const so = hocPhiChu(l).replace(/\./g, ",");
-  return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (đề án ${l.nguonHocPhi.nam})` : l.hocPhiUocTinh ? " (ước tính)" : ""}`;
+  return `${so} triệu đồng/năm${l.nguonHocPhi?.nam ? ` (${l.nguonHocPhi.thuCap ? "theo VnExpress" : "đề án"} ${l.nguonHocPhi.nam})` : l.hocPhiUocTinh ? " (ước tính)" : ""}`;
 }
 
 function dongTu(l: LuaChon): DongChuongTrinh {

@@ -69,7 +69,7 @@ const uit2025 = { "qsc-0dfcc28e": 26.27, "qsc-2064f6c3": 26.6, "qsc-d3b4cfb0": 2
   "qsc-81e88be7": 26, "qsc-255c8fcc": 24, "qsc-89da7ac2": 27, "qsc-cab2344d": 24.57, "qsc-670037f1": 29.6 };
 for (const [id, score] of Object.entries(uit2025)) {
   const l = timLuaChon(id)!;
-  assert.equal(l.diemMin, score); assert.equal(l.namDiem, 2025);
+  assert.equal(l.diemTheoNam?.["2025"], score); assert.ok(l.namDiem >= 2025);
   assert.equal(l.daKiemChung, false, "Đối chiếu bằng agent chưa phải thẩm định độc lập");
   const r = raw.find((r) => r.id === id)!;
   assert.equal(r.scoreEvidence?.["2025"].includesPriority, true);
