@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TheTienDo } from "./the-tien-do";
 import { Link, useNavigate } from "react-router-dom";
 import { CalendarCheck, Check, RotateCcw, Sparkles } from "lucide-react";
 import { gop } from "@/components/ui/nut-the";
@@ -77,6 +78,7 @@ export function TinMayChu({ t, laCuoi, dang, cauTruoc, onGui, onThuLai, onDi }: 
   return (
     <>
       {t.soSanh && <BangSoSanhThe ids={t.soSanh.ids} onDi={onDi} />}
+      {t.tienDo && <TheTienDo tienDo={t.tienDo} onDi={onDi} />}
       {t.nguonWeb && t.nguonWeb.length > 0 && (
         <div className="mt-2 text-[12px] text-chu-phu leading-snug">
           <p className="font-bold">Nguồn từ web (chưa kiểm chứng với đề án):</p>
