@@ -102,7 +102,7 @@ export function HangKeoTha<T>({ muc, khoa, onDoiCho, ten, veMuc, className }: Ha
           );
           return (
             <li key={khoa(m)} ref={(el) => { refs.current[i] = el; }}
-              className={gop("relative", dangKeo && "z-10 shadow-lg scale-[1.01]", keo && !dangKeo && keo.den === i && "outline-2 outline-dashed outline-xanh rounded-2xl")}
+              className={gop("relative", dangKeo && "z-10 shadow-lg scale-[1.01]", keo && !dangKeo && keo.den === i && "outline-2 outline-dashed outline-xanh rounded-xl")}
               style={dangKeo ? { transform: `translateY(${keo.dy}px)` } : undefined}>
               {veMuc(m, i, dieuKhien, boDieuKhien)}
             </li>

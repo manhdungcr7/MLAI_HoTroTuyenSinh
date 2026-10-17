@@ -157,38 +157,38 @@ function TheCaNhanHoaAI({ tuan, hienThongBao }: { tuan: string; hienThongBao: (c
 
   const tenGoi = ten ? (ten.split(/\s+/).length > 2 ? ten.split(/\s+/).slice(-2).join(" ") : ten) : null;
   const loiKhuyen = monThieu.length > 0
-    ? `Trọng tâm tuần này là kéo điểm môn ${monThieu[0].ten} (còn thiếu ${dinhDang(monThieu[0].thieu, 1)}đ).`
-    : "Điểm của bạn đã chạm mốc mục tiêu, hãy tập trung làm đề bấm giờ để duy trì phong độ.";
+    ? `Trọng tâm: kéo điểm môn ${monThieu[0].ten}, còn thiếu ${dinhDang(monThieu[0].thieu, 1)}đ.`
+    : "Điểm đã chạm mốc mục tiêu, tập trung làm đề bấm giờ.";
 
   const maToHop = s.mucTieu?.maToHop ?? "A00";
   const loiThe = ielts
-    ? `Có ${ielts}: Bạn có thể giảm tải môn Ngoại ngữ để dồn 80% thời gian tự học cho ${m.toHop.slice(0, 2).map((x) => TEN_MON_NGAN[x] ?? x).join(", ")}.`
+    ? `Có ${ielts}: giảm tải Ngoại ngữ, dồn giờ cho ${m.toHop.slice(0, 2).map((x) => TEN_MON_NGAN[x] ?? x).join(", ")}.`
     : dgnl
-    ? `Có ${dgnl}: Cơ hội xét tuyển sớm rất cao, giảm bớt áp lực thi THPT.`
+    ? `Có ${dgnl}: cơ hội xét tuyển sớm cao.`
     : null;
 
   return (
     <>
       <div className="rounded-2xl bg-gradient-to-br from-xanh-nhat/80 via-trang to-xanh-nhat/40 border border-xanh/30 p-3.5 shadow-xs space-y-2.5">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
           <div className="flex items-center gap-2 min-w-0">
             <span className="size-7 rounded-lg bg-xanh text-white grid place-items-center shrink-0 shadow-xs">
               <Sparkles size={16} />
             </span>
-            <span className="text-[13.5px] font-bold text-muc truncate">
+            <span className="min-w-0 break-words text-[13.5px] font-bold text-muc leading-snug text-balance">
               {tenGoi ? `Lộ trình riêng cho ${tenGoi}` : "Lộ trình học tập cá nhân"}
             </span>
           </div>
-          <span className="text-[11px] font-semibold text-xanh bg-white px-2 py-0.5 rounded-full border border-xanh/20 shrink-0">
-            Cá nhân hóa
+          <span className="text-[11px] font-semibold text-xanh bg-white px-2 py-0.5 rounded-full border border-xanh/20 shrink-0 whitespace-nowrap">
+            Cá nhân
           </span>
         </div>
 
         <div className="text-[13px] text-chu leading-snug space-y-1">
           <p className="font-medium">
-            Mục tiêu: <b className="text-muc">{m.lc.nganh} · {m.lc.truong}</b> (tổ hợp <b>{maToHop}</b>, cần <b>{dinhDang(m.mucTieuTho, 1)}đ</b>).
+            Mục tiêu <b className="text-muc">{dinhDang(m.mucTieuTho, 1)}đ</b> · tổ hợp <b>{maToHop}</b>
           </p>
-          <p className="text-chu-phu flex items-start gap-1.5"><Lightbulb size={14} className="shrink-0 mt-0.5 text-cam" /><span>{loiKhuyen} {loiThe}</span></p>
+          <p className="text-chu-phu line-clamp-3 break-words"><Lightbulb size={14} className="inline-block align-[-2px] mr-1 text-cam" />{loiKhuyen}{loiThe ? ` ${loiThe}` : ""}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
@@ -261,13 +261,13 @@ function DongViec({ v, ngays, ngayChon, quaKhu }: { v: ViecCanHoc; ngays: string
       <button type="button" onClick={() => nav(DUONG_DAN.viec(v.id))} className="flex-1 min-w-0 flex items-center gap-1 py-2.5 text-left">
         <span className="flex-1 min-w-0">
           <span className="flex items-start justify-between gap-2">
-            <b className={gop("text-[14.5px] text-muc leading-snug line-clamp-2", xong && "line-through")}>{v.tieuDe}</b>
+            <b className={gop("block min-w-0 break-words text-[14.5px] text-muc leading-snug line-clamp-2", xong && "line-through")}>{v.tieuDe}</b>
             {/* Mức ưu tiên đã là tên nhóm phía trên, không lặp nhãn ở từng dòng. */}
             {tt === "boQua" ? <Nhan tone="muc">Đã bỏ qua</Nhan> : xong ? <Nhan tone="luc">Xong</Nhan> : null}
           </span>
           <span className={gop("flex items-center gap-1 text-[13px] font-semibold mt-1", buoi ? "text-xanh" : "text-cam-chu")}>
             <Clock size={14} className="shrink-0" />
-            <span className="min-w-0">
+            <span className="min-w-0 truncate">
               {buoi
                 ? <>{tenNgay(buoi.ngay, hom, true)} · {buoi.batDau} – {buoi.ketThuc} · {thoiLuong(soPhut(buoi.batDau, buoi.ketThuc))}{khois.length > 1 && <span className="text-chu-phu font-normal"> · {khois.length} buổi</span>}</>
                 : <>Chưa xếp giờ · {thoiLuong(v.phut)}</>}

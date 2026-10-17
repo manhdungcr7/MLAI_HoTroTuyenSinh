@@ -3,8 +3,9 @@ import type { LuaChon } from "@/state/types";
 
 export const CHUA_CO_HOC_PHI = "Chưa có dữ liệu học phí";
 
-export const coHocPhi = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi">): boolean =>
-  typeof l.hocPhiMin === "number" && typeof l.hocPhiMax === "number" && (l.nguonHocPhi === undefined || !!l.nguonHocPhi?.url);
+/** Học phí ước tính (hocPhiUocTinh) không bao giờ được hiển thị, kể cả khi bản ghi không mang theo nguồn. */
+export const coHocPhi = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi"> & { hocPhiUocTinh?: boolean }): boolean =>
+  typeof l.hocPhiMin === "number" && typeof l.hocPhiMax === "number" && l.hocPhiUocTinh !== true && (l.nguonHocPhi === undefined || !!l.nguonHocPhi?.url);
 
 export const hocPhiChu = (l: Pick<LuaChon, "hocPhiMin" | "hocPhiMax" | "nguonHocPhi"> & { hocPhiUocTinh?: boolean }): string => {
   if (!coHocPhi(l)) return "chưa có";

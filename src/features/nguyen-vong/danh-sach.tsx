@@ -15,7 +15,7 @@ import { DUONG_DAN } from "@/duong-dan";
 import { dinhDang, dinhDangDiem } from "@/engine/dinh-dang";
 import { namTuyenSinhToi } from "@/engine/du-bao-diem-chuan";
 import { tomTatDiemChoNganh, type TomTatDiemNganh } from "@/engine/tom-tat-nganh";
-import { toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
+import { phanGiaiTenTruong, toAcademicDisplay } from "@/engine/trinh-bay-hoc-thuat";
 import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { thongKeChung } from "@/features/kham-pha/du-bao";
 import { HopChonLuaChon, kyHieu, khoangDiem } from "@/features/kham-pha/thanh-phan";
@@ -77,20 +77,19 @@ function BonONhom({ dem, tong, loc, onChon }: { dem: Record<NhanNguyenVong, numb
   const [ve, setVe] = useState(false);
   useEffect(() => { const r = requestAnimationFrame(() => setVe(true)); return () => cancelAnimationFrame(r); }, []);
   return (
-    <div className="grid grid-cols-4 gap-1 min-[360px]:gap-1.5" role="group" aria-label="Số nguyện vọng theo nhóm">
+    <div className="grid grid-cols-2 gap-2" role="group" aria-label="Số nguyện vọng theo nhóm">
       {THU_TU_NHAN_NV.map((n) => {
-        const m = MAU_NHAN_NV[n], c = dem[n];
+        const m = MAU_NHAN_NV[n], c = dem[n], Icon = m.icon;
         return (
           <button key={n} type="button" onClick={() => onChon(n)} aria-pressed={loc === n} aria-label={`${n}: ${c} trên ${tong} nguyện vọng`}
-            className={gop("rounded-xl border px-1.5 py-1 min-[360px]:p-2 text-left min-h-[48px] min-[360px]:min-h-[52px] cursor-pointer transition-all", m.nenNhe, m.vien, loc === n && "ring-2 ring-xanh")}>
-            <span className={gop("block text-[10.5px] min-[360px]:text-[11.5px] font-bold leading-tight whitespace-nowrap", m.chu)}>
-              {n}
-            </span>
-            <div className="mt-0.5 flex items-baseline justify-between gap-1">
-              <span className="so-lon text-[14px] min-[360px]:text-[15px] font-bold text-muc">{c}<span className="text-[11px] min-[360px]:text-[12px] font-normal text-chu-phu">/{tong}</span></span>
-            </div>
-            <span className="mt-1 block h-1 rounded-full bg-vien/70 overflow-hidden">
-              <span className={gop("block h-full rounded-full transition-[width] duration-700 ease-out", m.dam)} style={{ width: ve && tong > 0 ? `${(c / tong) * 100}%` : "0%" }} />
+            className={gop("rounded-xl border p-2.5 text-left min-h-[64px] min-w-0 flex items-center gap-2.5 cursor-pointer", m.nenNhe, m.vien, loc === n && "ring-2 ring-xanh")}>
+            {Icon && <Icon size={18} strokeWidth={2.4} className={gop("shrink-0", m.chu)} aria-hidden />}
+            <span className="min-w-0 flex-1">
+              <span className={gop("block text-[13px] font-bold leading-tight whitespace-nowrap", m.chu)}>{n}</span>
+              <span className="block so-lon text-[16px] font-bold leading-tight text-muc">{c}<span className="text-[13px] font-normal text-chu-phu">/{tong}</span></span>
+              <span className="mt-1 block h-1.5 rounded-full bg-vien/70 overflow-hidden">
+                <span className={gop("block h-full rounded-full transition-[width] duration-700 ease-out", m.dam)} style={{ width: ve && tong > 0 ? `${(c / tong) * 100}%` : "0%" }} />
+              </span>
             </span>
           </button>
         );
@@ -99,125 +98,78 @@ function BonONhom({ dem, tong, loc, onChon }: { dem: Record<NhanNguyenVong, numb
   );
 }
 
+/** Thanh nhỏ: khoảng dự báo (dải màu) và vị trí điểm của em (chấm). */
+function ThanhKhoang({ ts }: { ts: TomTatDiemNganh }) {
+  const d = ts.duBao;
+  if (!d) return null;
+  const lo = Math.min(d.thap, ts.tongEm ?? d.thap) - 1, hi = Math.max(d.cao, ts.tongEm ?? d.cao) + 1;
+  const pc = (x: number) => `${((x - lo) / (hi - lo)) * 100}%`;
+  return (
+    <div className="relative mt-1.5 h-2 rounded-full bg-vien/60" aria-hidden>
+      <span className="absolute inset-y-0 rounded-full bg-xanh/50" style={{ left: pc(d.thap), width: `calc(${pc(d.cao)} - ${pc(d.thap)})` }} />
+      {ts.tongEm !== null && <span className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-muc ring-2 ring-trang" style={{ left: pc(ts.tongEm) }} />}
+    </div>
+  );
+}
 
-function TheNguyenVong({ d, ts, boDieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiDoc }: {
-  d: DongNV; ts: TomTatDiemNganh | null; boDieuKhien?: import("@/components/ui/thiet-ke/keo-tha").BoDieuKhienKeoTha; vuaDoi: boolean; chuaDuDiem: boolean; onMo: () => void; onXoa: () => void; chiDoc?: boolean;
+function TheNguyenVong({ d, ts, dieuKhien, vuaDoi, chuaDuDiem, onMo, onXoa, chiDoc }: {
+  d: DongNV; ts: TomTatDiemNganh | null; dieuKhien: React.ReactNode; vuaDoi: boolean; chuaDuDiem: boolean; onMo: () => void; onXoa: () => void; chiDoc?: boolean;
 }) {
   const lc = d.lc;
   const m = d.nhan ? MAU_NHAN_NV[d.nhan] : null;
   const model = toAcademicDisplay(lc, d.nhan);
-  const nv = `Nguyện Vọng ${d.viTri + 1}`;
+  const truong = lc ? phanGiaiTenTruong(lc.maTruong || lc.truong, lc.tenTruong) : null;
   return (
-    <article
-      aria-label={`${nv}: ${model?.majorNameDisplay ?? lc?.nganh ?? "Lựa chọn"}`}
-      className={gop(
-        "relative overflow-hidden rounded-2xl border bg-trang p-3 pl-3.5 transition-all shadow-xs hover:border-xanh/40",
-        m ? m.vien : "border-vien",
-        vuaDoi && "vao-len"
-      )}
-    >
-      {/* Vạch màu định danh nhóm bên mép trái */}
-      {m && <span aria-hidden className={gop("absolute inset-y-0 left-0 w-1", m.dam)} />}
-
-      {/* Hàng 1: Badge NV + Nhãn phù hợp + Nút điều khiển nhanh bên phải */}
-      <div className="flex items-center justify-between gap-1.5 mb-1.5">
-        <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-          <span className={gop(
-            "px-1.5 py-0.5 rounded text-[11px] font-extrabold tracking-wide uppercase shrink-0 border",
-            m ? `${m.nenNhe} ${m.chu} ${m.vien}` : "bg-nen text-muc border-vien"
-          )}>
-            NV {String(d.viTri + 1).padStart(2, "0")}
+    <div className={gop("relative overflow-hidden rounded-2xl border flex items-stretch", m ? `${m.nenNhe} ${m.vien}` : "bg-trang border-vien", vuaDoi && "vao-len")}>
+      {m && <span aria-hidden className={gop("absolute inset-y-0 left-0 w-1.5", m.dam)} />}
+      <div className={gop("min-w-0 flex-1 py-3 pr-2", chiDoc ? "pl-4" : "pl-3")}>
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="so-lon text-[15px] font-bold text-muc shrink-0">{d.viTri + 1}</span>
+          <span className="min-w-0">
+            {m
+              ? <PillTrangThai tong={m.tong} icon={m.icon}>{d.nhan}</PillTrangThai>
+              : <PillTrangThai tong="trung">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa so được"}</PillTrangThai>}
           </span>
-          {m ? (
-            <PillTrangThai tong={m.tong} icon={m.icon}>{d.nhan}</PillTrangThai>
-          ) : (
-            <PillTrangThai tong="trung">{chuaDuDiem ? "Chưa đủ điểm" : "Chưa so được"}</PillTrangThai>
-          )}
-          {d.toHop && (
-            <span className="text-[11.5px] font-semibold text-chu-phu hidden min-[360px]:inline">
-              {d.toHop}{d.suyRa ? " (suy ra)" : ""}
-            </span>
+          <span className="ml-auto text-[13px] font-semibold text-chu-phu shrink-0">NV{String(d.viTri + 1).padStart(2, "0")}</span>
+          {!chiDoc && (
+            <button type="button" onClick={onXoa} aria-label="Xóa nguyện vọng" title="Xóa nguyện vọng"
+              className="-my-1 -mr-1 size-11 shrink-0 rounded-xl grid place-items-center text-do-chu active:bg-do-nhat cursor-pointer">
+              <Trash2 size={18} aria-hidden />
+            </button>
           )}
         </div>
-
-        {/* Nút điều khiển sắp xếp + xóa gom lên góc trên bên phải, không chiếm hàng dưới */}
-        <div className="flex items-center -mr-1 shrink-0" role="group" aria-label={`Thao tác ${nv}`}>
-          {!chiDoc && boDieuKhien && (
-            <>
-              {boDieuKhien.nutLen("size-8 grid place-items-center rounded-lg text-chu-phu hover:text-muc hover:bg-nen active:bg-xanh-nhat disabled:opacity-20 cursor-pointer transition-colors")}
-              {boDieuKhien.nutXuong("size-8 grid place-items-center rounded-lg text-chu-phu hover:text-muc hover:bg-nen active:bg-xanh-nhat disabled:opacity-20 cursor-pointer transition-colors")}
-              {boDieuKhien.tayNam("size-8 grid place-items-center rounded-lg text-chu-phu hover:text-xanh hover:bg-nen active:bg-xanh-nhat cursor-grab touch-none transition-colors")}
-            </>
-          )}
-          <button
-            type="button"
-            onClick={onXoa}
-            aria-label={`Xóa ${nv}`}
-            className="size-8 grid place-items-center rounded-lg text-chu-phu hover:text-do-chu hover:bg-do-nhat active:bg-do-nhat cursor-pointer transition-colors ml-0.5"
-          >
-            <Trash2 size={15} aria-hidden />
+        {lc && model ? (
+          <button type="button" onClick={onMo} aria-label={`Mở chi tiết ${model.majorNameDisplay} tại ${model.universityNameDisplay}`}
+            className="mt-1.5 w-full min-w-0 text-left flex items-start gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer">
+            <HuyHieuTruong ten={kyHieu(model.universityCode || lc.truong)} tone={lc.tone} kichThuoc={36} />
+            <span className="min-w-0 flex-1">
+              <b className="text-[16px] leading-snug text-muc line-clamp-2 break-words">{model.majorNameDisplay}</b>
+              <span className="text-[13px] text-chu-phu leading-snug line-clamp-1 break-words">
+                {model.universityNameDisplay}{!truong?.daXacMinh && " (chưa xác minh tên trường)"}{model.programVariant && ` · ${model.programVariant}`}
+              </span>
+            </span>
+            <ChevronRight size={18} className="mt-1 shrink-0 text-chu-phu" aria-hidden />
           </button>
-        </div>
-      </div>
-
-      {/* Hàng 2: Tên ngành, Trường (click mở chi tiết) */}
-      {lc && model ? (
-        <button
-          type="button"
-          onClick={onMo}
-          aria-label={`Mở chi tiết ${model.majorNameDisplay} tại ${model.universityNameDisplay}`}
-          className="w-full text-left flex items-start gap-2.5 rounded-lg py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-xanh cursor-pointer group"
-        >
-          <HuyHieuTruong ten={kyHieu(model.universityCode || lc.truong)} tone={lc.tone} kichThuoc={34} />
-          <span className="min-w-0 flex-1">
-            <span className="flex items-center gap-1.5 flex-wrap">
-              <b className="text-[15px] font-bold text-muc leading-snug group-hover:text-xanh transition-colors truncate">
-                {model.majorNameDisplay}
-              </b>
-              {model.programVariant && (
-                <span className="text-[10.5px] font-semibold text-xanh bg-xanh-nhat px-1.5 py-0.2 rounded shrink-0">
-                  {model.programVariant}
-                </span>
-              )}
-            </span>
-            <span className="block text-[12.5px] text-chu-phu leading-snug truncate mt-0.5">
-              <b className="text-chu font-semibold">{lc.maTruong || lc.truong}</b> · {model.universityNameDisplay}
-            </span>
-          </span>
-          <ChevronRight size={16} className="mt-1 shrink-0 text-chu-phu group-hover:text-xanh transition-colors" aria-hidden />
-        </button>
-      ) : (
-        <p className="mt-1 text-[13.5px] text-chu">
-          <b>Chưa có dữ liệu</b>
-          <span className="block text-[12px] text-chu-phu">Lựa chọn này không còn trong danh mục. Bạn có thể xóa đi.</span>
-        </p>
-      )}
-
-      {/* Hàng 3: Dải thông số đối chiếu điểm gọn gàng (Compact Metrics Bar) */}
-      {lc && (
-        <div className="mt-2 px-2.5 py-1.5 rounded-xl bg-nen/60 border border-vien/60 flex flex-wrap items-center justify-between gap-x-2.5 gap-y-1 text-[12px] leading-snug">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {ts?.diemChuan ? (
-              <span className="text-chu">
-                Chuẩn {ts.diemChuan.nam}: <b className="text-muc font-bold">{dinhDangDiem(ts.diemChuan.diem)}</b>
-              </span>
-            ) : (
-              <span className="text-chu-phu">{d.lyDoKhongNhan ?? ts?.lyDoKhongSo ?? `Tham khảo ${khoangDiem(lc)}`}</span>
-            )}
-            {d.chenh !== null && (
-              <span className={gop("font-bold px-1.5 py-0.2 rounded text-[11px]", d.chenh < 0 ? "bg-cam-nhat text-cam-chu" : "bg-luc-nhat text-luc-chu")}>
-                {d.chenh < 0 ? `Thiếu ${dinhDang(Math.abs(d.chenh), 1)}` : `Hơn ${dinhDang(d.chenh, 1)}`}
-              </span>
+        ) : (
+          <p className="mt-1.5 text-[14px] text-chu"><b>Chưa có dữ liệu</b><span className="block text-[13px] text-chu-phu">Lựa chọn này không còn trong danh mục. Bạn có thể xóa đi.</span></p>
+        )}
+        {lc && (
+          <div className="mt-2 text-[13px] text-chu space-y-0.5">
+            {ts?.diemChuan
+              ? <p className="leading-snug">Điểm chuẩn {ts.diemChuan.nam}: <b>{dinhDangDiem(ts.diemChuan.diem)}</b>
+                  {d.chenh !== null && <> · <span className={d.chenh < 0 ? "text-cam-chu font-semibold" : "text-luc-chu font-semibold"}>Bạn {d.chenh < 0 ? "thiếu" : "hơn"} {dinhDang(Math.abs(d.chenh), 1)} điểm</span></>}</p>
+              : <p className="text-chu-phu leading-snug">{d.lyDoKhongNhan ?? ts?.lyDoKhongSo ?? `Điểm tham khảo ${khoangDiem(lc)}`}</p>}
+            {ts?.duBao && (
+              <>
+                <p>Dự kiến {ts.duBao.namDuBao}: <b>{dinhDang(ts.duBao.thap, 1)}–{dinhDang(ts.duBao.cao, 1)}</b></p>
+                <ThanhKhoang ts={ts} />
+              </>
             )}
           </div>
-          {ts?.duBao && (
-            <span className="text-chu-phu text-[11.5px] ml-auto">
-              Dự kiến {ts.duBao.namDuBao}: <b className="text-muc font-semibold">{dinhDang(ts.duBao.thap, 1)}–{dinhDang(ts.duBao.cao, 1)}</b>
-            </span>
-          )}
-        </div>
-      )}
-    </article>
+        )}
+      </div>
+      {!chiDoc && <div className="shrink-0 pr-1.5 py-2 flex items-center">{dieuKhien}</div>}
+    </div>
   );
 }
 
@@ -285,9 +237,9 @@ export default function DanhSachNguyenVong() {
   }, [themNguyenVong, datNguyenVong, bao, s.nguyenVong]);
 
   const dsHien = loc === "tat-ca" ? ds : ds.filter((d) => d.nhan === loc);
-  const veThe = (d: DongNV, _dieuKhien: React.ReactNode, boDieuKhien?: import("@/components/ui/thiet-ke/keo-tha").BoDieuKhienKeoTha, chiDoc?: boolean) => (
+  const veThe = (d: DongNV, dieuKhien: React.ReactNode, chiDoc?: boolean) => (
     <div key={vuaDoi?.id === d.id ? vuaDoi.k : d.id} className="hien-dan da-hien" style={{ "--i": 0 } as React.CSSProperties}>
-      <TheNguyenVong d={d} ts={tomTat.get(d.id) ?? null} boDieuKhien={boDieuKhien} vuaDoi={vuaDoi?.id === d.id} chuaDuDiem={tong === null} chiDoc={chiDoc}
+      <TheNguyenVong d={d} ts={tomTat.get(d.id) ?? null} dieuKhien={dieuKhien} vuaDoi={vuaDoi?.id === d.id} chuaDuDiem={tong === null} chiDoc={chiDoc}
         onMo={() => d.lc && nav(DUONG_DAN.chiTiet(d.id))} onXoa={() => setHoiXoa(d.id)} />
     </div>
   );
@@ -305,30 +257,25 @@ export default function DanhSachNguyenVong() {
           )
         ) : (
           <>
-            <TheNen tong={coCau.chuaDuCanCu > 0 ? undefined : kl.onDinh ? "luc" : kl.tone === "do" ? "do" : "cam"} className="space-y-2.5 p-3.5" aria-label="Tổng quan danh sách">
+            <TheNen tong={coCau.chuaDuCanCu > 0 ? undefined : kl.onDinh ? "luc" : kl.tone === "do" ? "do" : "cam"} className="space-y-3" aria-label="Tổng quan danh sách">
               <div className="flex items-center gap-3">
-                <VongDiem value={coCau.n === 0 ? null : soNhomCo} max={4} size={68} nhanGiua="nhóm" dinhDang={(n) => `${Math.round(n)}/4`}
+                <VongDiem value={coCau.n === 0 ? null : soNhomCo} max={4} size={108} nhanGiua="nhóm" dinhDang={(n) => `${Math.round(n)}/4`}
                   tong={soNhomCo >= 4 ? "luc" : soNhomCo >= 3 ? "xanh" : "cam"} aria={`Danh sách có ${soNhomCo} trên 4 nhóm`} />
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[13px] font-bold text-muc">Đã có {soNhomCo}/4 nhóm</span>
-                    <PillTrangThai tong={TONG_KET_LUAN[kl.tone]}>{kl.onDinh ? "Cơ cấu đủ nhóm" : coCau.chuaDuCanCu > 0 ? "Chưa đủ căn cứ" : "Cần bổ sung"}</PillTrangThai>
-                  </div>
-                  <p className="mt-1 text-[13px] text-chu leading-snug line-clamp-2">{kl.hienTrang}</p>
-                  <button type="button" onClick={() => nav(DUONG_DAN.nguyenVongAnToan())} className="mt-0.5 inline-flex items-center gap-1 text-[13px] font-semibold text-xanh hover:underline cursor-pointer">
-                    Xem phân tích chi tiết<ChevronRight size={14} aria-hidden />
+                  <p className="text-[13px] text-chu-phu">Đã có {soNhomCo}/4 nhóm</p>
+                  <div className="mt-1"><PillTrangThai tong={TONG_KET_LUAN[kl.tone]}>{kl.onDinh ? "Cơ cấu đủ nhóm" : coCau.chuaDuCanCu > 0 ? "Chưa đủ căn cứ" : "Cần bổ sung"}</PillTrangThai></div>
+                  <p className="mt-1.5 text-[14px] text-chu leading-snug">{kl.hienTrang}</p>
+                  <button type="button" onClick={() => nav(DUONG_DAN.nguyenVongAnToan())} className="mt-1 min-h-11 inline-flex items-center gap-1 text-[14px] font-semibold text-xanh cursor-pointer">
+                    Xem phân tích chi tiết<ChevronRight size={16} aria-hidden />
                   </button>
                 </div>
               </div>
               <BonONhom dem={dem} tong={ds.length} loc={loc} onChon={(n) => setLoc((c) => (c === n ? "tat-ca" : n))} />
               {(kl.nenLam || kl.lyDo) && (
-                <button type="button" onClick={() => setMoGoiY(true)} className="w-full flex items-center gap-2 rounded-xl bg-xanh-nhat px-3 py-2 text-left cursor-pointer active:brightness-95 transition-all">
-                  <Lightbulb size={18} className="shrink-0 text-xanh" aria-hidden />
-                  <span className="flex-1 text-[12.5px] text-chu leading-snug truncate">
-                    <b className="text-xanh-dam">{kl.nenLam ? "Gợi ý" : "Nhận xét"}: </b>
-                    {kl.nenLam ? `${kl.nenLam}${kl.lyDo ? `, ${kl.lyDo}` : ""}` : kl.lyDo}
-                  </span>
-                  <ChevronRight size={16} className="shrink-0 text-chu-phu" aria-hidden />
+                <button type="button" onClick={() => setMoGoiY(true)} className="w-full flex items-center gap-2.5 rounded-xl bg-xanh-nhat px-3 py-2.5 text-left cursor-pointer">
+                  <Lightbulb size={20} className="shrink-0 text-xanh" aria-hidden />
+                  <span className="flex-1 text-[14px] text-chu leading-snug"><b className="text-xanh-dam">{kl.nenLam ? "Gợi ý" : "Nhận xét"}: </b>{kl.nenLam ? `${kl.nenLam}${kl.lyDo ? `, ${kl.lyDo}` : ""}` : kl.lyDo}</span>
+                  <ChevronRight size={18} className="shrink-0 text-chu-phu" aria-hidden />
                 </button>
               )}
             </TheNen>
@@ -340,27 +287,30 @@ export default function DanhSachNguyenVong() {
             )}
 
             <div className="flex items-center gap-2">
-              <h2 className="text-[16px] font-bold text-muc flex-1 min-w-0 truncate">{ds.length} nguyện vọng</h2>
+              <h2 className="text-[17px] font-bold text-muc flex-1 min-w-0 truncate">{ds.length} nguyện vọng</h2>
               <button type="button" onClick={() => (daHopLy ? bao("Thứ tự hiện tại đã hợp lý, không cần đổi") : setHoiXep(true))}
-                className="min-h-10 px-3 rounded-xl bg-xanh-nhat text-xanh font-bold text-[13.5px] inline-flex items-center gap-1.5 shrink-0 cursor-pointer hover:bg-xanh/15 active:scale-98 transition-all">
-                <Wand2 size={16} aria-hidden />Sắp xếp đề xuất
+                className="min-h-11 px-3 rounded-xl bg-xanh-nhat text-xanh font-bold text-[14px] inline-flex items-center gap-1.5 shrink-0 cursor-pointer">
+                <Wand2 size={17} aria-hidden />Sắp xếp đề xuất
               </button>
             </div>
 
             <div className="flex gap-2">
               <button type="button" onClick={() => setMoTim(true)} aria-label="Tìm ngành, trường để thêm vào danh sách"
-                className="flex-1 min-w-0 min-h-10 flex items-center gap-2 rounded-xl o-mem px-3 text-left text-[13.5px] text-chu-phu cursor-pointer">
-                <Search size={17} className="shrink-0" aria-hidden /><span className="truncate">Tìm ngành, trường để thêm</span>
+                className="flex-1 min-w-0 min-h-11 flex items-center gap-2 rounded-xl o-mem px-3 text-left text-[14px] text-chu-phu cursor-pointer">
+                <Search size={18} className="shrink-0" aria-hidden /><span className="truncate">Tìm ngành, trường</span>
               </button>
-              <button type="button" onClick={() => setMoTim(true)} className="min-h-10 px-3.5 rounded-xl gd-chip-chon font-bold text-[13.5px] inline-flex items-center gap-1 shrink-0 cursor-pointer">
-                <Plus size={16} aria-hidden />Thêm
+              <button type="button" onClick={() => setMoTim(true)} className="min-h-11 px-4 rounded-xl gd-chip-chon font-bold text-[14px] inline-flex items-center gap-1 shrink-0 cursor-pointer">
+                <Plus size={17} aria-hidden />Thêm
               </button>
             </div>
 
-            <HangChipLoc nhan="Lọc theo nhóm">
-              <ChipLoc chon={loc === "tat-ca"} onClick={() => setLoc("tat-ca")} dem={ds.length}>Tất cả</ChipLoc>
-              {THU_TU_NHAN_NV.map((n) => <ChipLoc key={n} chon={loc === n} onClick={() => setLoc(n)} icon={MAU_NHAN_NV[n].icon} dem={dem[n]}>{n}</ChipLoc>)}
-            </HangChipLoc>
+            <div className="relative">
+              <HangChipLoc nhan="Lọc theo nhóm">
+                <ChipLoc chon={loc === "tat-ca"} onClick={() => setLoc("tat-ca")} dem={ds.length}>Tất cả</ChipLoc>
+                {THU_TU_NHAN_NV.map((n) => <ChipLoc key={n} chon={loc === n} onClick={() => setLoc(n)} icon={MAU_NHAN_NV[n].icon} dem={dem[n]}>{n}</ChipLoc>)}
+              </HangChipLoc>
+              <span aria-hidden className="pointer-events-none absolute inset-y-0 -right-4 w-10 bg-linear-to-l from-nen to-transparent" />
+            </div>
 
             {dsYeuThich.some((l) => !s.nguyenVong.includes(l.id)) && (
               <TheDanhSachYeuThich dsYeuThich={dsYeuThich} nguyenVong={s.nguyenVong} onThemTatCa={themTatCaYeuThich} onThemMot={themNganh}
@@ -372,13 +322,13 @@ export default function DanhSachNguyenVong() {
             <CanhBaoThuTuThe ds={canhBao} onDua={(c) => chuyen(c.sau.viTri, c.truoc.viTri)} />
 
             {loc === "tat-ca" ? (
-              <HangKeoTha muc={ds} khoa={(d) => d.id} onDoiCho={chuyen} ten={tenNgan} veMuc={(d, _i, dk, bdk) => veThe(d, dk, bdk)} />
+              <HangKeoTha muc={ds} khoa={(d) => d.id} onDoiCho={chuyen} ten={tenNgan} veMuc={(d, _i, dk) => veThe(d, dk)} />
             ) : (
               <>
                 <p className="text-[13px] text-chu-phu">Đang lọc nhóm {loc}. Chọn Tất cả để kéo thả đổi thứ tự.</p>
                 {dsHien.length === 0
                   ? <p className="rounded-2xl o-mem p-4 text-[14px] text-chu">Chưa có nguyện vọng nhóm {loc}. Bạn có thể thêm bằng nút Thêm ở trên.</p>
-                  : <ol className="space-y-2">{dsHien.map((d) => <li key={d.id}>{veThe(d, null, undefined, true)}</li>)}</ol>}
+                  : <ol className="space-y-2">{dsHien.map((d) => <li key={d.id}>{veThe(d, null, true)}</li>)}</ol>}
               </>
             )}
           </>
@@ -450,7 +400,7 @@ function TheDanhSachYeuThich({
             <h2 className="text-[15px] font-extrabold text-muc leading-tight">
               Ngành đã lưu ({dsYeuThich.length})
             </h2>
-            <p className="text-[12px] text-chu-phu mt-0.5">
+            <p className="text-[13px] text-chu-phu mt-0.5 leading-snug">
               {yeuThichChuaThem.length > 0
                 ? (soDaThem > 0
                     ? `Đã thêm ${soDaThem}/${dsYeuThich.length} · Còn ${yeuThichChuaThem.length} ngành`
@@ -465,7 +415,7 @@ function TheDanhSachYeuThich({
             <button
               type="button"
               onClick={onThemTatCa}
-              className="min-h-8.5 px-2.5 rounded-lg bg-xanh text-white text-[12px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
+              className="min-h-11 px-2.5 rounded-lg bg-xanh text-white text-[13px] font-bold active:brightness-95 cursor-pointer shadow-sm shrink-0"
             >
               + Thêm tất cả {soDaThem > 0 ? `(${yeuThichChuaThem.length})` : ""}
             </button>
@@ -475,7 +425,7 @@ function TheDanhSachYeuThich({
               type="button"
               onClick={() => setThuGon((t) => !t)}
               aria-label={thuGon ? "Mở rộng danh sách đã lưu" : "Thu gọn danh sách đã lưu"}
-              className="size-8.5 rounded-lg border border-vien bg-nen hover:bg-vien/40 grid place-items-center text-chu-phu shrink-0 transition-colors"
+              className="size-11 rounded-lg border border-vien bg-nen hover:bg-vien/40 grid place-items-center text-chu-phu shrink-0 transition-colors"
             >
               {thuGon ? <ChevronDown size={17} /> : <ChevronUp size={17} />}
             </button>
@@ -500,11 +450,11 @@ function TheDanhSachYeuThich({
                     <HuyHieuTruong ten={kyHieu(model?.universityCode || l.truong)} tone={l.tone} kichThuoc={38} />
                     <div className="min-w-0 flex-1">
                       <b className="block text-[14px] text-muc leading-tight truncate">{model?.majorNameDisplay ?? l.nganh}</b>
-                      <span className="block text-[12px] text-chu-phu truncate mt-0.5">
+                      <span className="block text-[13px] text-chu-phu truncate mt-0.5">
                         {model?.universityNameDisplay ?? l.truong} · {l.khuVuc} · {khoangDiem(l)} điểm
                       </span>
                       {model?.programVariant && (
-                        <span className="inline-block mt-0.5 text-[11px] font-semibold text-xanh bg-xanh-nhat px-1.5 py-0.2 rounded">
+                        <span className="inline-block mt-0.5 text-[13px] font-semibold text-xanh bg-xanh-nhat px-1.5 py-0.5 rounded">
                           {model.programVariant}
                         </span>
                       )}
@@ -513,7 +463,7 @@ function TheDanhSachYeuThich({
                   {daThem ? (
                     <span
                       title={`Đã ở vị trí Nguyện Vọng ${viTriNV + 1} trong danh sách`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-luc-nhat text-luc-chu text-[12px] font-bold shrink-0 border border-luc/30"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-luc-nhat text-luc-chu text-[13px] font-bold shrink-0 border border-luc/30"
                     >
                       <Check size={13} className="stroke-[2.5]" /> Nguyện Vọng {viTriNV + 1}
                     </span>
@@ -521,7 +471,7 @@ function TheDanhSachYeuThich({
                     <button
                       type="button"
                       onClick={() => onThemMot(l.id, l.nganh, l.truong)}
-                      className="min-h-9 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[12px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
+                      className="min-h-11 px-2.5 rounded-lg bg-xanh-nhat text-xanh text-[13px] font-bold shrink-0 active:bg-xanh/20 cursor-pointer"
                     >
                       + Thêm vào Nguyện Vọng
                     </button>

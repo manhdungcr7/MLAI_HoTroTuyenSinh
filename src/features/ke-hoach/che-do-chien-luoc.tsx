@@ -7,6 +7,8 @@ import { mucTieuDayDu, khoangCachCuaToi, tuanHienTai } from "@/state/chon";
 import { CAC_MON, TEN_MON, TEN_MON_NGAN, type MonId, type ToneTen, type ViecCanHoc } from "@/state/types";
 import { NOI_DUNG_ON, nganSachPhut } from "@/engine/tao-viec";
 import { HO_SO_MON, khungBuoi } from "@/engine/ho-so-mon";
+import { chuDeConHoc, coTienDoMon } from "@/engine/tien-do-chu-de";
+import { timChuDeTheoTen } from "@/data/chuong-trinh-lop12";
 import { uocLuongGioTuHoc } from "@/features/tu-hoc/tinh-tien-do";
 import { diemCacLanGanNhat, doDocXuHuong } from "@/features/muc-tieu/tinh-toan";
 import { dinhDang } from "@/engine/dinh-dang";
@@ -84,7 +86,8 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
       const hs = HO_SO_MON[pb.mon];
       const soBuoi = Math.max(1, Math.round(phutTong / hs.buoiToiUuPhut));
       const moi = Math.max(15, Math.round(phutTong / soBuoi / 15) * 15);
-      const dsChuDe = NOI_DUNG_ON[pb.mon] ?? [];
+      // Đã có tiến độ: học chủ đề theo thứ tự ưu tiên; chưa có: xoay danh sách chủ đề lớp 12.
+      const dsChuDe = coTienDoMon(pb.mon, s.hoSo.tienDoKienThuc) ? chuDeConHoc(pb.mon, s.hoSo.tienDoKienThuc).map((x) => x.chuDe.ten) : (NOI_DUNG_ON[pb.mon] ?? []);
       return Array.from({ length: soBuoi }, (_, k) => {
         const chuDe = k === 0 && hs.kieu === "giaiBai" ? undefined : dsChuDe[(k + i) % Math.max(1, dsChuDe.length)];
         const khung = khungBuoi(hs.kieu, moi, { chuDe, dauTuan: k === 0 });
@@ -93,7 +96,7 @@ export function CheDoChienLuoc({ hienThongBao }: { hienThongBao: (c: string) => 
           tuan,
           mon: pb.mon,
           tieuDe: `${pb.tenMon} – ${khung.tieuDe}`,
-          chiTiet: khung.chiTiet,
+          chiTiet: `${khung.chiTiet}${chuDe && timChuDeTheoTen(chuDe) ? ` Cần nắm: ${timChuDeTheoTen(chuDe)!.canNam.join("; ")}.` : ""}`,
           phut: moi,
           mucUuTien: pb.diemCanTang >= 1.0 ? "cao" : "vua",
           lyDo: pb.diemCanTang > 0 ? `${pb.tenMon} nhận ${String(pb.soGioMoiTuan).replace(".", ",")} giờ/tuần vì mỗi giờ ở đây ước tăng thêm khoảng ${String(pb.diemMoiGioDau).replace(".", ",")} điểm.` : "Giữ nhịp ôn.",

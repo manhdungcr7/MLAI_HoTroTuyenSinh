@@ -95,7 +95,7 @@ export function ChanDoanDanhMucCard({
                 </b>
                 <span
                   className={gop(
-                    "text-[11px] font-extrabold px-2 py-0.5 rounded-full border",
+                    "text-[13px] font-extrabold px-2 py-0.5 rounded-full border",
                     coNghichDao
                       ? "bg-do text-white border-do"
                       : "bg-cam-nhat text-cam-chu border-cam/30"
@@ -108,7 +108,7 @@ export function ChanDoanDanhMucCard({
             </div>
           </div>
 
-          <div className="text-right text-[11px] font-semibold text-chu-phu shrink-0">{chanDoan.soLuong} nguyện vọng</div>
+          <div className="text-right text-[13px] font-semibold text-chu-phu shrink-0">{chanDoan.soLuong} nguyện vọng</div>
         </div>
 
         {/* Cảnh báo nghịch đảo hoặc dồn rủi ro nếu có */}
@@ -125,14 +125,14 @@ export function ChanDoanDanhMucCard({
                       : "Kiểm tra ngân sách hoặc dữ liệu điểm"}
                 </b>
                 {chanDoan.canhBaoNghiemTrong.map((cb, idx) => (
-                  <p key={idx} className="mt-1 text-[12px] text-do-chu">
+                  <p key={idx} className="mt-1 text-[13px] text-do-chu">
                     • {cb}
                   </p>
                 ))}
               </div>
             </div>
             <div className="pt-1">
-              <p className="text-[12px] text-chu-phu">
+              <p className="text-[13px] text-chu-phu">
                 Thứ tự nguyện vọng theo sở thích của em. Nếu có lỗi ngược vị thế hoặc danh mục toàn thử sức, em nên điều chỉnh lại danh mục để tránh mất cơ hội xét tuyển.
               </p>
             </div>
@@ -141,7 +141,7 @@ export function ChanDoanDanhMucCard({
 
         {/* Điểm mạnh & Khuyến nghị */}
         {!coCanhBao && (
-          <div className="space-y-1.5 text-[12px] text-chu">
+          <div className="space-y-1.5 text-[13px] text-chu">
             {chanDoan.diemManh.map((dm, idx) => (
               <p key={idx} className="flex items-start gap-1.5 leading-snug">
                 <CheckCircle2 size={15} className="text-luc shrink-0 mt-0.5" />
@@ -158,12 +158,12 @@ export function ChanDoanDanhMucCard({
         )}
 
         {/* Minh bạch độ tin cậy kiểm thử quá khứ (Leave-one-year-out Backtesting) */}
-        <div className="rounded-xl bg-nen p-2.5 border border-vien/70 space-y-1.5 text-[11px]">
+        <div className="rounded-xl bg-nen p-2.5 border border-vien/70 space-y-1.5 text-[13px]">
           <div className="flex items-center justify-between text-chu-phu">
             <span className="font-bold text-muc flex items-center gap-1">
               <ShieldCheck size={14} className="text-xanh" /> Độ phủ kiểm thử 3 mùa thi (Backtesting)
             </span>
-            <span className="font-semibold text-[10px] text-chu-phu">Bỏ-một-năm</span>
+            <span className="font-semibold text-[13px] text-chu-phu">Bỏ-một-năm</span>
           </div>
           <div className="grid grid-cols-3 gap-1.5 text-center">
             {KET_QUA_BACKTESTING_3_NAM.map((kq) => (
@@ -176,7 +176,7 @@ export function ChanDoanDanhMucCard({
                     : "bg-trang border-vien text-muc"
                 )}
               >
-                <div className="font-bold text-[10px] text-chu-phu">Mùa {kq.nam}</div>
+                <div className="font-bold text-[13px] text-chu-phu">Mùa {kq.nam}</div>
                 <div className="text-[13px] font-black">{Math.round(kq.tyLeBaoHam * 100)}%</div>
                 <div className="text-[9px] text-chu-phu leading-tight truncate">
                   {kq.bienDongBatThuong ? "Lệch phổ A01" : `Sai số ~${kq.saiSoTrungBinh}đ`}
@@ -184,7 +184,7 @@ export function ChanDoanDanhMucCard({
               </div>
             ))}
           </div>
-          <p className="text-[10px] text-chu-phu italic leading-snug">
+          <p className="text-[13px] text-chu-phu italic leading-snug">
             Minh bạch khoa học: Năm 2025 độ phủ 64% do phổ điểm A01 biến động mạnh (độ lệch chuẩn 2,6 so với 1,8); hệ thống chủ động cảnh báo sai số.
           </p>
         </div>
@@ -229,7 +229,7 @@ export function ChanDoanDanhMucCard({
                 type="button"
                 onClick={() => setChienLuoc("can_bang")}
                 className={gop(
-                  "p-2.5 rounded-xl border text-center text-[12px] font-bold cursor-pointer transition-colors",
+                  "p-2.5 rounded-xl border text-center text-[13px] font-bold cursor-pointer transition-colors",
                   chienLuoc === "can_bang"
                     ? "bg-xanh text-white border-xanh"
                     : "bg-trang border-vien text-chu hover:bg-xanh-nhat"
@@ -241,7 +241,7 @@ export function ChanDoanDanhMucCard({
                 type="button"
                 onClick={() => setChienLuoc("than_trong")}
                 className={gop(
-                  "p-2.5 rounded-xl border text-center text-[12px] font-bold cursor-pointer transition-colors",
+                  "p-2.5 rounded-xl border text-center text-[13px] font-bold cursor-pointer transition-colors",
                   chienLuoc === "than_trong"
                     ? "bg-luc text-white border-luc"
                     : "bg-trang border-vien text-chu hover:bg-luc-nhat"
@@ -253,7 +253,7 @@ export function ChanDoanDanhMucCard({
                 type="button"
                 onClick={() => setChienLuoc("but_pha")}
                 className={gop(
-                  "p-2.5 rounded-xl border text-center text-[12px] font-bold cursor-pointer transition-colors",
+                  "p-2.5 rounded-xl border text-center text-[13px] font-bold cursor-pointer transition-colors",
                   chienLuoc === "but_pha"
                     ? "bg-cam text-white border-cam"
                     : "bg-trang border-vien text-chu hover:bg-cam-nhat"
@@ -272,7 +272,7 @@ export function ChanDoanDanhMucCard({
             <ul className="divide-y divide-vien border border-vien rounded-xl overflow-hidden bg-trang">
               {danhMucGoiY.map((l, index) => (
                 <li key={l.id} className="p-2.5 flex items-center gap-2.5">
-                  <span className="size-6 rounded-md bg-xanh-nhat text-xanh font-black text-[12px] grid place-items-center shrink-0">
+                  <span className="size-6 rounded-md bg-xanh-nhat text-xanh font-black text-[13px] grid place-items-center shrink-0">
                     {index + 1}
                   </span>
                   <HuyHieuTruong ten={kyHieu(l.truong)} tone={l.tone} kichThuoc={34} />
@@ -280,7 +280,7 @@ export function ChanDoanDanhMucCard({
                     <b className="block text-[13px] text-muc leading-tight truncate">
                       {l.nganh}
                     </b>
-                    <span className="block text-[11px] text-chu-phu truncate mt-0.5">
+                    <span className="block text-[13px] text-chu-phu truncate mt-0.5">
                       {l.truong} · Điểm chuẩn: {l.diemMin} · {l.khuVuc}
                     </span>
                   </div>

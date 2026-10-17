@@ -4,7 +4,7 @@ import type { DuBaoDiemChuan } from "@/engine/du-bao-diem-chuan";
 import { dinhDangDiem } from "@/engine/dinh-dang";
 import { MAU_CHUA_CO_DIEM, type MauKetLuan } from "./mau-ket-luan";
 
-const R = 300, C = 170, LE_TRAI = 30, LE_PHAI = 14, TREN = 14, DUOI = 26;
+const R = 300, C = 170, LE_TRAI = 30, LE_PHAI = 26, TREN = 14, DUOI = 26; // LE_PHAI chừa chỗ cho nhãn điểm/năm căn phải không bị cắt
 
 export function BieuDoLichSu({ diem, d, diemEm, mau = MAU_CHUA_CO_DIEM }: { diem: [number, number][]; d: DuBaoDiemChuan | null; diemEm?: number | null; mau?: MauKetLuan }) {
   const id = useId();

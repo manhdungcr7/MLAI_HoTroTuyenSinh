@@ -116,9 +116,9 @@ export function chuoiNgayHoc(lichSu: LichSuHoanThanh[], bayGio: Date): number {
 export function loiGhiNhan(s: Pick<AppState, "lichSu" | "tamTrang" | "viec" | "trangThaiViec">, bayGio: Date): string | null {
   const chuoi = chuoiNgayHoc(s.lichSu, bayGio);
   const td = demTienDo({ ...s, khoiHoc: [] }, bayGio);
-  if (td.tong > 0 && td.xong === td.tong) return "Bạn đã xong hết việc của tuần này. Làm tốt lắm, nhớ nghỉ ngơi nhé!";
-  if (chuoi >= 3) return `Bạn đã học đều ${chuoi} ngày liền. Giữ nhịp này nhé!`;
-  if (s.tamTrang === "met") return "Hôm nay bạn hơi mệt nên lịch đã được làm nhẹ. Biết nghỉ đúng lúc cũng là học tốt.";
+  if (td.tong > 0 && td.xong === td.tong) return "Xong hết việc tuần này. Làm tốt lắm, nhớ nghỉ nhé!";
+  if (chuoi >= 3) return `Học đều ${chuoi} ngày liền. Giữ nhịp này nhé!`;
+  if (s.tamTrang === "met") return "Hôm nay mệt nên lịch đã làm nhẹ. Biết nghỉ cũng là học tốt.";
   const homNayXong = s.lichSu.filter((l) => l.trangThai === "xong" && isoNgay(new Date(l.luc)) === isoNgay(bayGio)).length;
   if (homNayXong >= 1) return `Hôm nay bạn đã xong ${homNayXong} việc. Cố gắng phát huy nhé!`;
   return null;

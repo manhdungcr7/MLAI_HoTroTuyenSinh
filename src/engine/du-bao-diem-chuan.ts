@@ -20,6 +20,8 @@ export interface ThongKeBienDong {
 }
 
 export interface DuBaoDiemChuan {
+  /** "hoc-may" khi khoảng đến từ mô hình LightGBM (src/data/du-bao-ml.ts); không có nghĩa là cách thống kê. */
+  moHinh?: "hoc-may";
   namDuBao: number;
   namCuoi: number;
   diemCuoi: number;

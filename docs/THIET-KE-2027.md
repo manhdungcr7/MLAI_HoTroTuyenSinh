@@ -1,6 +1,7 @@
 # Thiết kế 2027: nền dùng chung
 
-Xem thử: chạy `npm run dev`, mở `/#/thiet-ke` (chỉ dev). Mockup đích: `docs/mockup-2027/`.
+Xem thử: chạy `npm run dev`, mở `/#/thiet-ke` (chỉ dev). Mockup đích (ảnh, không commit): `D:
+v-artifactsmockup-2027`; hỏi người giữ nếu cần bản sao.
 Nhập: `import { ... } from "@/components/ui/thiet-ke"`. (Không `export *` vào `ui/index.ts` vì trùng tên `ThanhTienDo` cũ ở `hien-thi.tsx`.)
 
 Luật chung: màu chỉ qua token Tailwind và class `gd-*`/`the-*` dưới đây. Không hex, không `linear-gradient` trong TSX. Nút >= 44px, chữ >= 13px, không kính mờ. Mọi nhãn màu đều kèm icon + chữ.

@@ -44,7 +44,7 @@ function CongDong({ ds }: { ds: SnapshotCongDong[] }) {
   if (!ktx.length && !review.length && !luuY.length) return null;
   return (
     <div className="rounded-xl bg-nen p-3 space-y-3" aria-label="Thông tin cộng đồng">
-      <p className="flex items-start gap-1.5 text-[12px] font-semibold text-cam-chu leading-snug"><Users size={14} className="shrink-0 mt-px" />{NHAN_CONG_DONG}</p>
+      <p className="flex items-start gap-1.5 text-[13px] font-semibold text-cam-chu leading-snug"><Users size={14} className="shrink-0 mt-px" />{NHAN_CONG_DONG}</p>
       {ktx.length > 0 && (
         <div>
           <Tieu icon={Home}>Nơi ở quanh trường <span className="font-semibold text-chu-phu">(do sinh viên cung cấp)</span></Tieu>
@@ -58,7 +58,7 @@ function CongDong({ ds }: { ds: SnapshotCongDong[] }) {
             <li key={c.id} className="py-2">
               <b className="text-[14px] text-muc">{chu(c.noiDung.tieuDe, 120)}</b>
               <p className="text-[13px] text-chu leading-snug">{chu(c.noiDung.noiDung)}</p>
-              <p className="text-[12px] text-chu-phu">{TEN_NGUOI_VIET[String(c.noiDung.nguoiVietLa)] ? `Người viết: ${TEN_NGUOI_VIET[String(c.noiDung.nguoiVietLa)]}. ` : ""}Là ý kiến cá nhân.</p>
+              <p className="text-[13px] text-chu-phu">{TEN_NGUOI_VIET[String(c.noiDung.nguoiVietLa)] ? `Người viết: ${TEN_NGUOI_VIET[String(c.noiDung.nguoiVietLa)]}. ` : ""}Là ý kiến cá nhân.</p>
               <Nguon n={c.nguon} />
             </li>))}</ul>
         </div>

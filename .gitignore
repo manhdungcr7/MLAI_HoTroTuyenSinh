@@ -42,3 +42,13 @@ slides/screenshots/
 scratch/
 
 .codex/
+
+# Ảnh chụp màn hình tạm, mockup tham chiếu và log dev server: KHÔNG commit (luật repo), lưu ngoài repo, ví dụ D:
+v-artifacts\.
+# Bằng chứng đã chọn lọc (evidence/before-after, evidence/admissions, evidence/ai-evaluation...) vẫn được theo dõi như cũ.
+evidence/ui-2027/
+evidence/*.png
+slides/screenshots/agent-browser/
+docs/mockup-2027/
+.vite-*.log
+scripts/.tmp-*

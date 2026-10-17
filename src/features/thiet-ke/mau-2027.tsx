@@ -5,6 +5,7 @@ import {
   ChipLoc, HangChipLoc, NenTrangTroi, HangKeoTha, HienDan, HuyHieuTruong, MAU_NHAN_NV, MAU_VI_TRI, ONhom, PillTrangThai, TabPhan, TheNen, ThanhTienDo,
   THU_TU_NHAN_NV, THU_TU_TONG_NHOM, ToastNho, VongDiem, type TongNhom,
 } from "@/components/ui/thiet-ke";
+import { MauChuyenDong } from "@/components/ui/thiet-ke/mau-chuyen-dong";
 import type { ViTriSoVoiDuBao } from "@/engine/du-bao-diem-chuan";
 import type { ToneTen } from "@/state/types";
 
@@ -43,6 +44,7 @@ export function Mau2027() {
         )} />
       <HienDan className="space-y-2">{["Thẻ một", "Thẻ hai", "Thẻ ba"].map((t) => <TheNen key={t}>{t} (hiện dần, so le)</TheNen>)}</HienDan>
       <ToastNho mo={toast} noiDung="Đã đổi thứ tự nguyện vọng" hoanTac={() => setDs(["Luật Kinh tế", "Quản trị kinh doanh", "Công nghệ thông tin"])} dong={() => setToast(false)} />
+      <MauChuyenDong />
     </section>
   );
 }

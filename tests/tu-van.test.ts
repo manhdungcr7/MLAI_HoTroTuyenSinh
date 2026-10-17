@@ -77,7 +77,7 @@ assert.equal((await xuLy(yc({ cauHoi: "xin chào bạn" }), { OPENAI_API_KEY: "k
 
 // 4) Tìm ngành trong dữ liệu thật
 const khop = timNganhKhop("điểm chuẩn Khoa học máy tính UIT");
-assert.ok(khop.length > 0 && khop.some((x) => /khoa học máy tính/i.test(x.nganh) && (x.maTruong === "QSC" || x.truong === "QSC")), "phải tìm ra Khoa học máy tính của UIT (QSC)");
+assert.ok(khop.length > 0 && khop.some((x) => /khoa học máy tính/i.test(x.nganh) && x.maTruong === "QSC"), "phải tìm ra Khoa học máy tính của UIT (QSC)");
 assert.deepEqual(timNganhKhop("em muốn hỏi"), [], "câu không có tên ngành thì không khớp bừa");
 assert.ok(timNganhKhop("y khoa").every((x) => /y khoa|khoa y|y hoc/i.test(x.nganh) || true));
 
@@ -122,7 +122,8 @@ assert.ok(dl.length > 0 && !JSON.stringify(dl).includes(mau.hoSo.hoTen));
   assert.ok(r.ok && r.v.nguCanh === undefined);
   const n = kiemTraYeuCau({ cauHoi: "Câu hỏi bình thường", nguCanh: 5, duLieu: [] });
   assert.ok(n.ok && n.v.nguCanh === undefined);
-  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 4, "đủ 4 quy tắc (4: NV1 làm gốc và hỏi lại đúng một câu)");
+  assert.equal(NHAC_HE_THONG.split("\n").filter((d) => /^\d+\. /.test(d)).length, 5, "đủ 5 quy tắc (4: NV1 làm gốc và hỏi lại đúng một câu; 5: không tự nêu nội dung chương trình học phổ thông từ trí nhớ)");
+assert.ok(NHAC_HE_THONG.includes("Không tự nêu nội dung chương trình học phổ thông"), "AI không được tự kể chương/bài từ trí nhớ");
 }
 // 6) Trả lời tự động hiểu địa danh và tên trường (chi tiết ở tests/tu-van-chat.test.ts)
 {

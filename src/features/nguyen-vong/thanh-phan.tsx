@@ -32,7 +32,7 @@ export function CoCauMini({ dem }: { dem: Record<NhanNguyenVong, number> }) {
         {CAC_NHAN.filter((n) => dem[n] > 0).map((n) => <span key={n} className={TONE_GD[TONE_NHAN[n]]} style={{ flex: dem[n] }} />)}
         {tong === 0 && <span className="flex-1 bg-vien" />}
       </div>
-      <ul className="mt-2 grid grid-cols-4 gap-1 text-[12px] text-chu">
+      <ul className="mt-2 grid grid-cols-4 gap-1 text-[13px] text-chu">
         {CAC_NHAN.map((n) => (
           <li key={n} className="flex items-center gap-1 min-w-0">
             <span aria-hidden className={gop("size-2 rounded-full shrink-0", NEN_DAM[TONE_NHAN[n]])} />

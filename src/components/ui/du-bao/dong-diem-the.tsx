@@ -24,7 +24,7 @@ export function DongDiemThe({ lc, diemEm, giaiThich }: { lc: LuaChon; diemEm: nu
           </span>
         ) : <NhanTrangThaiDuLieu tt={tt} moi={laChuongTrinhMoi(lc, tt)} />}
         {tt.loai === "motNam" && <NhanTrangThaiDuLieu tt={tt} />}
-        {mau && <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[12px] font-bold ${mau.nen} ${mau.chu}`}><mau.icon size={13} aria-hidden />{mau.ngan}</span>}
+        {mau && <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[13px] font-bold ${mau.nen} ${mau.chu}`}><mau.icon size={13} aria-hidden />{mau.ngan}</span>}
       </span>
       {d && (
         <span className="flex items-center gap-2 text-[13px] text-chu-phu">

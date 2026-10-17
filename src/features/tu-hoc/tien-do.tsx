@@ -48,7 +48,7 @@ export default function TienDo() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Tiến độ & điều chỉnh" moTa={`Tuần này · ${ngayThang(thuHai)} – ${ngayThang(congNgay(thuHai, 6))}`} />
+      <DauTrangChinh tieuDe="Tiến độ & điều chỉnh" bienThe="luc" moTa={`Tuần này · ${ngayThang(thuHai)} – ${ngayThang(congNgay(thuHai, 6))}`} />
       <ThanhTabKeHoach />
       <NoiDung>
         {trongHet ? (
@@ -77,7 +77,7 @@ export default function TienDo() {
               </TieuDeMuc>
               <KetQuaHocTap xuHuong={xuHuong} nhapDiem={() => nav(DUONG_DAN.diemThiThu())} />
               {s.diemThi.length > 0 && (
-                <div className="mt-2.5"><HangBam bieuTuong={NotebookPen} tone="xanh" tieuDe="Nhập điểm thi thử" phu="Cập nhật kết quả để theo dõi tiến độ" onClick={() => nav(DUONG_DAN.diemThiThu())} /></div>
+                <div className="mt-2.5"><HangBam bieuTuong={NotebookPen} tone="xanh" tieuDe="Nhập điểm thi thử" phu="Cập nhật để theo dõi tiến độ" onClick={() => nav(DUONG_DAN.diemThiThu())} /></div>
               )}
             </section>
 

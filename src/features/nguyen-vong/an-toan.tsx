@@ -215,7 +215,7 @@ function TheGoiY({ g, so, nav }: { g: GoiY; so: number; nav: ReturnType<typeof u
       <div className="flex items-start gap-3">
         <span className="relative shrink-0">
           <BieuTuongTron icon={k.icon} tone={k.tone} kichThuoc={40} />
-          <span className="absolute -top-1 -left-1 size-5 rounded-full bg-trang text-[11px] font-extrabold text-muc grid place-items-center shadow-the">{so}</span>
+          <span className="absolute -top-1 -left-1 size-5 rounded-full bg-trang text-[13px] font-extrabold text-muc grid place-items-center shadow-the">{so}</span>
         </span>
         <div className="flex-1 min-w-0">
           <p className={gop("font-extrabold text-[15px] leading-snug", TONE_CHU[k.tone])}>{g.tieuDe}</p>
@@ -257,7 +257,7 @@ function DongTruong({ truong, tone, ten, phu, nhan, onClick }: { truong: string;
           <b className="text-[14px] text-muc leading-snug">{ten}</b>
           {nhan}
         </span>
-        <span className="block text-[12.5px] text-chu-phu leading-snug">{phu}</span>
+        <span className="block text-[13px] text-chu-phu leading-snug">{phu}</span>
       </span>
       <ChevronRight size={16} className="text-chu-phu shrink-0" />
     </button>

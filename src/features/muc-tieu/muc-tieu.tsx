@@ -6,7 +6,7 @@ import { DauTrangChinh, NoiDung } from "@/components/layout/khung";
 import { ThanhTabKeHoach } from "@/features/ke-hoach/thanh-tab";
 import { BieuTuongTron } from "@/components/ui/hinh-nen";
 import { TrangThaiTrong } from "@/components/ui/hien-thi";
-import { ChipLoc, HangChipLoc, HuyHieuTruong, PillTrangThai, TheNen, ThanhTienDo } from "@/components/ui/thiet-ke";
+import { ChipLoc, HangChipLoc, HuyHieuTruong, PillTrangThai, TheNen } from "@/components/ui/thiet-ke";
 import { lyDoKhongSoDuoc } from "@/engine/trang-thai-du-lieu";
 import { useTrangThaiDuLieu } from "@/components/ui/du-bao/dung-trang-thai";
 import { Nut } from "@/components/ui/nut-the";
@@ -17,6 +17,7 @@ import { useApp } from "@/state/store";
 import { TEN_MON, TO_HOP, type MaToHop, type MucTieuChinh } from "@/state/types";
 import { docMucTieu, type DuLieuMucTieu } from "./du-lieu";
 import { SuaMucTieu } from "./sua-muc-tieu";
+import { ThanhMucTieu } from "./thanh-phan";
 import { diem1, ngayVN, nhanDinhMucTieu, tenToHop } from "./tinh-toan";
 
 type PhuongThuc = MucTieuChinh["phuongThuc"];
@@ -41,7 +42,7 @@ export default function MucTieu() {
     const mucTieuCu = !!s.mucTieu; // có mục tiêu nhưng lựa chọn không còn trong danh sách
     return (
       <>
-        <DauTrangChinh tieuDe="Mục tiêu chính" />
+        <DauTrangChinh tieuDe="Mục tiêu chính" bienThe="am" />
         <ThanhTabKeHoach />
         <NoiDung>
           <TrangThaiTrong bieuTuong={<Target size={28} />}
@@ -61,11 +62,11 @@ export default function MucTieu() {
   }
 
   const doiToHop = (ma: MaToHop) => datMucTieu({ ...d.goc, maToHop: ma, toHop: TO_HOP[ma] });
-  const pt = CAC_PHUONG_THUC.find((p) => p.gia === phuongThuc)!;
+  const pt = CAC_PHUONG_THUC.find((p) => p.gia === phuongThuc) ?? { gia: phuongThuc, nhan: phuongThuc === "DGNL" ? "ĐGNL" : "Học bạ", day: phuongThuc === "DGNL" ? "Đánh giá năng lực" : "học bạ" };
 
   return (
     <>
-      <DauTrangChinh tieuDe="Mục tiêu chính" />
+      <DauTrangChinh tieuDe="Mục tiêu chính" bienThe="am" />
       <ThanhTabKeHoach />
       <NoiDung>
         <button type="button" onClick={() => nav(DUONG_DAN.chiTiet(d.lc.id))}
@@ -73,8 +74,8 @@ export default function MucTieu() {
           <HuyHieuTruong ten={d.lc.maTruong ?? d.lc.truong} tone={d.lc.tone} kichThuoc={60} />
           <span className="flex-1 min-w-0">
             <span className="block text-[13px] font-bold text-xanh">Nguyện vọng chính</span>
-            <b className="block text-[17px] text-muc leading-snug">{d.lc.truong} · {d.lc.nganh}</b>
-            <span className="block text-[13px] text-chu-phu leading-snug">{d.lc.tenTruong}</span>
+            <b className="text-[17px] text-muc leading-snug line-clamp-2 break-words">{d.lc.nganh}</b>
+            <span className="text-[13px] text-chu-phu leading-snug line-clamp-1 break-words">{d.lc.tenTruong || d.lc.truong}</span>
             <span className="mt-1.5 flex flex-wrap gap-1.5">
               {d.lc.khuVuc && <PillTrangThai tong="trung" icon={MapPin}>{d.lc.khuVuc}</PillTrangThai>}
               {d.lc.toHopXet && d.lc.toHopXet.length > 0 && <PillTrangThai tong="xanh">{d.lc.toHopXet.slice(0, 3).join(", ")}</PillTrangThai>}
@@ -151,7 +152,7 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
           </div>
         </div>
         {duDiem
-          ? <ThanhTienDo phanTram={phanTram} tong={d.conThieu > 0 ? "xanh" : "luc"} nhan="Điểm hiện tại so với mục tiêu" nhanNoi={`Đạt ${Math.min(100, Math.floor(phanTram))}%`} />
+          ? <ThanhMucTieu phanTram={phanTram} tong={d.conThieu > 0 ? "xanh" : "luc"} nhan="Điểm hiện tại so với mục tiêu" nhanNoi={`Đạt ${Math.min(100, Math.floor(phanTram))}%`} />
           : <p className="text-[13px] text-chu-phu">Chưa đủ điểm để tính phần trăm đạt mục tiêu.</p>}
         <div className="flex items-center justify-between gap-2 pt-2 border-t border-vien">
           <p className="text-[13px] text-chu-phu min-w-0">
@@ -218,10 +219,10 @@ function KhoiTHPT({ d, doiToHop, moSua }: { d: DuLieuMucTieu; doiToHop: (m: MaTo
               </li>
             ))}
           </ul>
-          <p className="text-[13px] text-chu-phu">{daQua || d.anDemNguoc ? "" : `Còn ${d.soNgayCon} ngày. `}Dồn sức vào môn còn thiếu nhiều nhất thay vì học dàn trải.</p>
+          <p className="text-[13px] text-chu-phu leading-snug">{daQua || d.anDemNguoc ? "" : `Còn ${d.soNgayCon} ngày. `}Dồn sức vào môn thiếu nhiều nhất.</p>
           <div className="grid grid-cols-2 gap-2">
-            <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}>Môn ưu tiên</Nut>
-            <Nut onClick={() => nav(DUONG_DAN.tuan())}>Xem kế hoạch</Nut>
+            <Nut kieu="vien" onClick={() => nav(DUONG_DAN.monKeoDiem())}><span className="whitespace-normal leading-tight">Môn ưu tiên</span></Nut>
+            <Nut onClick={() => nav(DUONG_DAN.tuan())}><span className="whitespace-normal leading-tight">Xem kế hoạch</span></Nut>
           </div>
         </TheNen>
       ) : (

@@ -156,14 +156,14 @@ export function nhanDinhMucTieu(ds: KhoangCachMon[], conThieu: number, hienTai: 
   if (nhi && nhat.thieu - nhi.thieu < 0.15) {
     return {
       datRoi: false,
-      tieuDe: `Phần còn thiếu khá đều giữa các môn ${maToHop}`,
-      moTa: `Nên bắt đầu từ môn ${nhat.ten} (còn thiếu ${diem1(nhat.thieu)} điểm), rồi tới ${nhi.ten}.`,
+      tieuDe: `Thiếu đều các môn ${maToHop}`,
+      moTa: `Nên bắt đầu từ ${nhat.ten} (thiếu ${diem1(nhat.thieu)} điểm), rồi tới ${nhi.ten}.`,
     };
   }
   return {
     datRoi: false,
-    tieuDe: `Bạn đang thiếu chủ yếu ở môn ${nhat.ten}`,
-    moTa: `${nhat.ten} còn thiếu ${diem1(nhat.thieu)} điểm, nhiều nhất trong tổ hợp ${maToHop}. Tập trung môn này sẽ thu hẹp khoảng cách nhanh hơn.`,
+    tieuDe: `Thiếu chủ yếu ở môn ${nhat.ten}`,
+    moTa: `${nhat.ten} thiếu ${diem1(nhat.thieu)} điểm, nhiều nhất trong ${maToHop}. Tập trung môn này để thu hẹp nhanh hơn.`,
   };
 }
 

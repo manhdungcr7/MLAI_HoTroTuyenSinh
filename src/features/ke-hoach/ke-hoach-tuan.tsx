@@ -112,7 +112,7 @@ export default function KeHoachTuan() {
 
   return (
     <>
-      <DauTrangChinh tieuDe="Kế hoạch tuần" phai={
+      <DauTrangChinh tieuDe="Kế hoạch tuần" bienThe="am" phai={
         <button type="button" aria-label="Cài đặt tự học" onClick={() => nav(DUONG_DAN.caiDatTuHoc())}
           className="size-11 shrink-0 grid place-items-center rounded-full bg-trang border border-vien text-chu active:bg-xanh-nhat">
           <Settings size={20} />
