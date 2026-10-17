@@ -174,7 +174,7 @@ export function goiYDanhSach(diem: DiemDayDu, hoSo: DauVao, daCo: string[] = [],
 
     // Lớp 2: đúng ngành ở trường khác, đi từ Vừa sức xuống An toàn.
     choTang("cung-nganh", () => {
-      const giuNganh = `Giữ đúng ngành ${neo.lc.nganh} bạn thích, giảm rủi ro trượt Nguyện Vọng 1`;
+      const giuNganh = `Giữ đúng ngành ${neo.lc.nganh} bạn thích, thêm một phương án cho Nguyện Vọng 1`;
       for (const nhan of ["Vừa sức", "An toàn"] as const) {
         if (chon.length >= choToiDaChon) break;
         const x = ungVien

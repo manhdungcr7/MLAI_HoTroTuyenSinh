@@ -66,16 +66,23 @@ export function khoangCachTheoMon(diem: Record<MonId, number | null>, toHop: Mon
   });
 }
 
+/** Ngưỡng chênh điểm (điểm em trừ điểm chuẩn) cho nhãn: < 0 Thử sức, < 1,5 Vừa sức, < 4 An toàn, còn lại Dự phòng. Nguồn duy nhất. */
+export const NGUONG_NHAN = { vuaSuc: 0, anToan: 1.5, duPhong: 4 } as const;
+
+/** Nhãn theo chênh điểm đã tính sẵn. Làm tròn 2 chữ số: điểm chuẩn có 2 số lẻ, phép trừ số thực có thể lệch 1e-15 và xếp sai nhãn ở đúng ngưỡng. */
+export function nhanTheoChenhDiem(chenhDiem: number): NhanNguyenVong {
+  const x = Math.round((Number.isFinite(chenhDiem) ? chenhDiem : 0) * 100) / 100;
+  if (x < NGUONG_NHAN.vuaSuc) return "Thử sức";
+  if (x < NGUONG_NHAN.anToan) return "Vừa sức";
+  if (x < NGUONG_NHAN.duPhong) return "An toàn";
+  return "Dự phòng";
+}
+
 /** Chỉ gọi khi `tong` là số hữu hạn và `lc` là điểm THPT. Màn hình nên gọi `nhanChoLuaChon` (trả null khi không so được). */
 export function nhanNguyenVong(lc: LuaChon, tong: number): NhanNguyenVong {
   const dMin = typeof lc.diemMin === "number" && Number.isFinite(lc.diemMin) ? lc.diemMin : 0;
   const t = typeof tong === "number" && Number.isFinite(tong) ? tong : 0;
-  // Làm tròn 2 chữ số: điểm chuẩn có 2 số lẻ, phép trừ số thực có thể lệch 1e-15 và xếp sai nhãn ở đúng ngưỡng.
-  const x = Math.round((t - dMin) * 100) / 100;
-  if (x < 0) return "Thử sức";
-  if (x < 1.5) return "Vừa sức";
-  if (x < 4) return "An toàn";
-  return "Dự phòng";
+  return nhanTheoChenhDiem(t - dMin);
 }
 
 /** Nhãn nếu so được; null khi điểm khác phương thức THPT hoặc tổng điểm không phải số. Không bao giờ đoán. */

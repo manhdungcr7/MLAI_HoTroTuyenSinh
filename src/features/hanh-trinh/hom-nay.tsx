@@ -12,7 +12,7 @@ import { diemDayDu } from "@/features/kham-pha/to-hop";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
 import { boCongDuLieu } from "@/components/layout/cong-du-lieu";
-import { chonNguyenVongLamMucTieu, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
+import { chonNguyenVongLamMucTieu, coHoSoDeHienThi, homNay, mucTieuDayDu, tenGoi, tienDoTuan, tuanHienTai, viecConLai, viecCuaTuan } from "@/state/chon";
 import { TEN_MON_NGAN } from "@/state/types";
 import { CauNoiDongLuc, TamTrangHomNay } from "@/features/tu-hoc/widgets";
 import { goiYChoEm, lichSapToi, loiChaoTheoChang, monThieuDiem, ngayDayDu, nhanNgay, viecTrongNgay, type ViecTrongNgay } from "./tinh-toan";
@@ -26,7 +26,7 @@ function HomNayDayDu() {
   const nav = useNavigate();
   const nv = chonNguyenVongLamMucTieu(s);
   // Chưa có hồ sơ (lần đầu mở ứng dụng): đưa tới màn Chào mừng.
-  const daCoDuLieu = Boolean(s.hoSo.hoanTat || s.hoSo.hoTen.trim() || s.hoSo.khoi || s.hoSo.tinh || s.hoSo.nganhQuanTam.length || Object.values(s.hoSo.diem).some((d) => d !== null));
+  const daCoDuLieu = coHoSoDeHienThi(s);
   if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
 
   const m = mucTieuDayDu(s);
@@ -335,7 +335,7 @@ const HomNayCoDanhMuc = boCongDuLieu(HomNayDayDu);
 /** Lần đầu mở app (chưa có hồ sơ): chuyển sang Chào mừng ngay, không chờ danh mục. Có hồ sơ thì chờ danh mục rồi mới dựng. */
 export default function HomNay() {
   const { s } = useApp();
-  const daCoDuLieu = Boolean(s.hoSo.hoanTat || s.hoSo.hoTen.trim() || s.hoSo.khoi || s.hoSo.tinh || s.hoSo.nganhQuanTam.length || Object.values(s.hoSo.diem).some((d) => d !== null));
+  const daCoDuLieu = coHoSoDeHienThi(s);
   if (!daCoDuLieu) return <Navigate to={DUONG_DAN.chao()} replace />;
   return <HomNayCoDanhMuc />;
 }

@@ -129,3 +129,30 @@ export function chonNguyenVongLamMucTieu(
   }
   return { ok: false, lyDo: lyDoDau ?? "Danh sách nguyện vọng chưa có ngành nào để chọn làm mục tiêu." };
 }
+
+const coSo = (o: Record<string, unknown> | null | undefined) => !!o && Object.values(o).some((v) => typeof v === "number" && Number.isFinite(v));
+
+/**
+ * Trên máy có thứ gì do chính em nhập chưa (hồ sơ, điểm, mục tiêu, nguyện vọng, lịch...)? Một định nghĩa duy nhất cho mọi nơi
+ * cần hỏi trước khi ghi đè hoặc xóa. Hồ sơ mẫu (`laMau`) không phải dữ liệu của em: chỉ tính những gì em thêm hẳn vào (lời nhắn, tình huống).
+ * Sửa một trường của hồ sơ mẫu sẽ bỏ `laMau` (store.capNhatHoSo), từ đó mọi thứ đều được tính.
+ */
+export function coDuLieuNguoiDung(s: AppState): boolean {
+  if (s.loiNhan.length > 0 || s.tinhHuong.length > 0) return true;
+  const h = s.hoSo;
+  if (h.laMau) return false;
+  return !!h.hoTen.trim() || h.hoanTat || h.khoi !== null || !!h.tinh.trim() || !!h.giaiDoan
+    || h.nganhQuanTam.length > 0 || h.diemManh.length > 0 || h.canCaiThien.length > 0 || h.khuVuc.length > 0
+    || h.nganSach !== null || h.choO !== null || h.hocXaNha !== null || h.quanTamViecLam !== null
+    || coSo(h.diem) || coSo(h.diemThem) || coSo(h.diemThiThat) || coSo(h.diemMucTieuMon) || coSo(h.diemDgnl)
+    || (!!h.uuTienTuyenSinh && (!!h.uuTienTuyenSinh.khuVuc || (!!h.uuTienTuyenSinh.doiTuong && h.uuTienTuyenSinh.doiTuong !== "khong")))
+    || !!h.chungChiNgoaiNgu || !!h.giaiThuongHsg || !!h.soThich
+    || (!!h.hocBa && (coSo(h.hocBa) || !!h.hocBa.hocLuc || !!h.hocBa.hanhKiem || typeof h.hocBa.truongChuyen === "boolean"))
+    || (!!h.tienDoKienThuc && Object.keys(h.tienDoKienThuc).length > 0)
+    || s.mucTieu !== null || s.nguyenVong.length > 0 || s.yeuThich.length > 0 || s.soSanh.length > 0
+    || s.diemThi.length > 0 || s.coDinh.length > 0 || s.viec.length > 0 || s.khoiHoc.length > 0
+    || Object.keys(s.trangThaiViec).length > 0 || s.lichSu.length > 0 || s.nhacNho.bat;
+}
+
+/** Có gì để hiện ở Hôm nay / Hồ sơ: dữ liệu của em hoặc hồ sơ mẫu em chủ động nạp. Chưa có thì đưa về màn Chào. */
+export const coHoSoDeHienThi = (s: AppState): boolean => s.hoSo.laMau === true || coDuLieuNguoiDung(s);

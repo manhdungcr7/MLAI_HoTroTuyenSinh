@@ -7,6 +7,7 @@ import { TieuDeMuc, TrangThaiTrong } from "@/components/ui/hien-thi";
 import { HienDan, TheNen, VongDiem } from "@/components/ui/thiet-ke";
 import { DUONG_DAN } from "@/duong-dan";
 import { useApp } from "@/state/store";
+import { coHoSoDeHienThi } from "@/state/chon";
 import { diemTheoLoai } from "@/state/diem-hien-tai";
 import { nhanLop } from "@/state/chang";
 import { CAC_MON, TEN_MON } from "@/state/types";
@@ -101,7 +102,7 @@ export default function HoSo() {
     </button>
   );
 
-  const daCoDuLieu = Boolean(h.hoanTat || h.hoTen.trim() || h.khoi || h.tinh || h.nganhQuanTam.length || Object.values(h.diem).some((d) => d !== null));
+  const daCoDuLieu = coHoSoDeHienThi(s);
   if (!daCoDuLieu) {
     return (
       <>

@@ -62,7 +62,7 @@ export default function MucTieu() {
   }
 
   const doiToHop = (ma: MaToHop) => datMucTieu({ ...d.goc, maToHop: ma, toHop: TO_HOP[ma] });
-  const pt = CAC_PHUONG_THUC.find((p) => p.gia === phuongThuc)!;
+  const pt = CAC_PHUONG_THUC.find((p) => p.gia === phuongThuc) ?? { gia: phuongThuc, nhan: phuongThuc === "DGNL" ? "ĐGNL" : "Học bạ", day: phuongThuc === "DGNL" ? "Đánh giá năng lực" : "học bạ" };
 
   return (
     <>
