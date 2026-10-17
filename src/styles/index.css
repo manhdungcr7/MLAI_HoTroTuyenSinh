@@ -436,8 +436,7 @@ body {
 @keyframes truot-vao { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
 .vao-len { animation: vao-len var(--tg-vua) var(--ease-ra) both; }
 /* Phần tử chờ vào màn: ẩn tới khi có .da-hien (hook useHienKhiVaoMan). --i là thứ tự để so le. */
-.hien-dan { opacity: 0; }
-.hien-dan.da-hien { animation: hien-dan var(--tg-vua) var(--ease-ra) both; animation-delay: calc(var(--i, 0) * 55ms); }
+.hien-dan { animation: hien-dan .2s var(--ease-ra) both; animation-delay: min(calc(var(--i, 0) * 30ms), 150ms); }
 .nhip-nhe { animation: nhip-nhe 2.4s ease-in-out infinite; }
 .nay-nhe { transition: transform var(--tg-nhanh) var(--ease-ra); }
 .nay-nhe:active { transform: scale(.97); }
@@ -448,7 +447,7 @@ body {
 .tg-thanh { transition: width var(--tg-cham) var(--ease-ra); }
 .cuon-snap-x { scroll-snap-type: x proximity; } .cuon-snap-x > * { scroll-snap-align: start; }
 @media (prefers-reduced-motion: reduce) {
-  .vao-len, .hien-dan.da-hien, .nhip-nhe, .shimmer::after, .toast-vao { animation: none !important; }
+  .vao-len, .hien-dan, .nhip-nhe, .shimmer::after, .toast-vao { animation: none !important; }
   .hien-dan { opacity: 1; }
   .nay-nhe:active { transform: none; }
   .vd-cung, .tg-thanh, .chip-truot { transition: none !important; }
@@ -457,7 +456,7 @@ body {
 /* ===== chuyển động 2027 đợt 2 ===== */
 /* Chuyển trang: nội dung tab mới vào bằng fade + trượt 10px (ChuyenTrang, khóa theo pathname). */
 @keyframes chuyen-vao { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.chuyen-trang { animation: chuyen-vao .22s var(--ease-ra) both; }
+.chuyen-trang { animation: chuyen-vao .16s var(--ease-ra) backwards; }
 
 /* Thanh tab: MỘT viên chỉ báo trượt giữa 5 tab (--i = chỉ số tab đang mở). */
 .nav-chi-bao { position: absolute; top: .75rem; left: .25rem; height: 2rem; width: calc((100% - .5rem) / 5); transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .28s cubic-bezier(.34, 1.25, .64, 1), opacity .2s ease; pointer-events: none; }

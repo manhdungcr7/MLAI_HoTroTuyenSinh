@@ -1,7 +1,7 @@
 // Hội thoại "hỏi tiến độ học" của chatbot: chạy bằng quy tắc và dữ liệu chương trình lớp 12 (bộ Kết nối tri thức), KHÔNG gọi AI.
 // Vì không đi qua mô hình ngôn ngữ nên không thể bịa chương hay bài: chỉ nói những gì có trong src/data/chuong-trinh-lop12.ts, và khi
 // không có dữ liệu phù hợp (chủ đề lớp 11, bộ sách khác, câu không khớp chủ đề nào) thì nói rõ là chưa có. TypeScript thuần.
-import { NGUON_CHUONG_TRINH, chuDeCuaMon } from "@/data/chuong-trinh-lop12";
+import { CHU_DE_LOP12, NGUON_CHUONG_TRINH, chuDeCuaMon } from "@/data/chuong-trinh-lop12";
 import {
   NHAN_MUC_DO, chuDeConHoc, coTienDoMon, hieuTienDoTuCau, monTuCau, tenMon, type MucDoChuDe,
 } from "@/engine/tien-do-chu-de";
@@ -75,6 +75,24 @@ function lietKeChuongTrinh(mon: MonId): KetQuaTienDoChat {
   };
 }
 
+/** Học sinh hỏi "kế hoạch/chương trình này dựa vào nguồn dữ liệu nào": trả lời tất định, nói đúng nguồn và giới hạn, không để AI tự kể. */
+function nguonKeHoach(s: AppState): KetQuaTienDoChat {
+  const mons = monCuaEm(s);
+  return {
+    traLoi: [
+      "Kế hoạch học này dựa trên 4 thứ, và mình nói rõ cái nào đã kiểm chứng, cái nào chưa:",
+      `• **Chương trình học:** ${CHU_DE_LOP12.length} chủ đề lớp 12 của 6 môn, bộ ${NGUON_CHUONG_TRINH.boSach}. Tên chương và bài lấy từ mục lục sách giáo khoa (trang loigiaihay.com, lấy ngày 17/10/2026). Phần "cần nắm" do nhóm viết dựa trên tên bài. Chưa đối chiếu sách in và chưa có người học môn đó duyệt, nên bạn đối chiếu giúp mình.`,
+      "• **Tiến độ của bạn:** những chủ đề bạn chọn hoặc nói với mình, lưu ngay trên máy bạn, không gửi đi đâu.",
+      "• **Thứ tự học:** chủ đề chưa học đứng đầu, rồi cần ôn, rồi đã học chưa chắc, cuối cùng là đã vững; chủ đề nền (tiên quyết) học trước chủ đề phụ thuộc. Mình chưa có số liệu mức quan trọng của từng chủ đề trong đề thi nên chưa tính đến.",
+      "• **Số giờ mỗi môn:** tính từ điểm hiện tại, điểm mục tiêu, số ngày còn tới kỳ thi và giờ trống trong tuần. Công thức dùng tham số giả định theo cách ôn thông thường, chưa đo trên học sinh thật.",
+      `Mọi nội dung về chương trình đều lấy từ dữ liệu trên, mình không tự nhớ từ AI. Chủ đề lớp 10–11 và bộ sách khác thì mình chưa có.`,
+    ].join("\n"),
+    luaChon: [{ nhan: "Xem kế hoạch gợi ý", cau: "Gợi ý kế hoạch học theo tiến độ của mình" }, ...LUA_CHON_MON(mons).slice(0, 1)],
+  };
+}
+
+const MAU_NGUON = /\b(nguon|dua vao|dua tren|can cu|lay tu dau|lay o dau|tu dau ra|co so nao)\b/;
+const MAU_VE_KE_HOACH = /\b(ke hoach|chuong trinh hoc|chu de|de xuat|goi y)\b/;
 const MAU_HOI_CT = /\b(chuong trinh|gom nhung gi|gom gi|hoc nhung gi|hoc gi|co nhung chuong|cac chuong)\b/;
 const MAU_LAP_KE_HOACH = /\b(lap|len|goi y|de xuat|xep)\b.*\bke hoach\b|\bke hoach\b.*\b(tien do|theo tien do)\b|\bnen on gi\b|\bnen hoc gi\b|\bon gi\b.*\b(bay gio|tuan nay|truoc)\b/;
 const MAU_HOI_TIEN_DO = /\b(hoi tien do|tien do hoc|tien do mon|em da hoc|minh da hoc|da hoc duoc|hoc den dau|hoc toi dau|da hoc nhung gi)\b/;
@@ -89,6 +107,9 @@ export function traLoiTienDoChat(cauGoc: string, s: AppState): KetQuaTienDoChat 
   if (!q || q.length > 400) return null;
   const mons = monTuCau(cauGoc);
   const mon1 = mons[0] as MonId | undefined;
+
+  // Hỏi nguồn dữ liệu của kế hoạch/chương trình được đề xuất (không đụng câu hỏi về điểm chuẩn, trường, ngành).
+  if (MAU_NGUON.test(q) && MAU_VE_KE_HOACH.test(q) && !MAU_TUYEN_SINH.test(q)) return nguonKeHoach(s);
 
   // Hỏi môn nào đó: "Hỏi tiến độ môn Hóa học"
   if (MAU_HOI_TIEN_DO.test(q) || /\bhoi tien do mon\b/.test(q)) return moDauHoiTienDo(mon1 ?? monCuaEm(s)[0], s);

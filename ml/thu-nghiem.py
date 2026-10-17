@@ -6,6 +6,7 @@
 Biến đích: độ thay đổi so với điểm năm gần nhất (dich = diem_t - diem_gan). Mọi thống kê tổng hợp (trung bình nhóm, xu hướng nhóm)
 chỉ tính từ các dòng có năm đích NHỎ HƠN năm kiểm tra, nên không rò rỉ tương lai.
 """
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -25,9 +26,43 @@ SAN = 15.0
 LOC_SAN = True
 
 
+def bam_lf(duong_dan: Path) -> str:
+    """sha256 của nội dung đã chuẩn hóa đuôi dòng về LF (Windows có thể có CRLF)."""
+    return hashlib.sha256(duong_dan.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def dau_van_tay_du_lieu() -> str:
+    """Dấu vân tay dữ liệu mà app hiển thị: sha256(băm LF của du-lieu-that.json + băm LF của hieu-chinh-diem.json).
+    Đổi một trong hai tệp thì dự báo cũ bị chặn. Cách tính phải trùng tests/du-bao-ml.test.ts."""
+    d = ROOT / "src" / "data"
+    return hashlib.sha256((bam_lf(d / "du-lieu-that.json") + bam_lf(d / "hieu-chinh-diem.json")).encode("utf-8")).hexdigest()
+
+
+def doc_tho_da_sua() -> list[dict]:
+    """Dòng thô của du-lieu-that.json sau khi áp src/data/hieu-chinh-diem.json lên cột diem, giống app (apDungHieuChinh).
+    `diem: null` = gỡ năm đó; năm không có trong dữ liệu thì bỏ qua. Không ghi đè tệp gốc."""
+    d = ROOT / "src" / "data"
+    hc = json.loads((d / "hieu-chinh-diem.json").read_text(encoding="utf-8"))
+    ra = []
+    for x in json.loads((d / "du-lieu-that.json").read_text(encoding="utf-8")):
+        h = hc.get(x["id"])
+        if h:
+            diem = dict(x["diem"])
+            for nam, m in h.items():
+                if nam not in diem:
+                    continue
+                if m["diem"] is None:
+                    del diem[nam]
+                else:
+                    diem[nam] = m["diem"]
+            x = {**x, "diem": diem}
+        ra.append(x)
+    return ra
+
+
 def doc_du_lieu() -> list[dict]:
     ra = []
-    for x in json.loads((ROOT / "src" / "data" / "du-lieu-that.json").read_text(encoding="utf-8")):
+    for x in doc_tho_da_sua():
         if x["pt"] != "THPT" or not x["diem"]:
             continue
         diem = {n: d for n, d in x["diem"].items() if not (LOC_SAN and abs(d - SAN) < 1e-9)}

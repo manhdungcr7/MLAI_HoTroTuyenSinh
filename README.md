@@ -19,13 +19,13 @@
 
 Số liệu lấy từ đề án tuyển sinh của các trường và bảng điểm chuẩn công bố. Không có số nào được sinh ra để "lấp chỗ trống": chỗ nào là ước tính thì app ghi rõ.
 
-- **3.652 chương trình** của **118 trường** (đếm lại 15/10/2026).
-- **Điểm chuẩn:** mọi chương trình có ít nhất một năm điểm thật; **1.292** chương trình có từ 2 năm trở lên. **1.551** lấy từ đề án PDF của trường, phần còn lại từ trang tổng hợp và được ghi "chưa kiểm chứng".
-- **Tổ hợp xét tuyển:** **2.994** chương trình ghi rõ tổ hợp; còn lại app tự suy ra và ghi "suy ra".
-- **Học phí:** **602** chương trình có học phí trong văn bản của trường (có link + số trang). Các chương trình khác có **học phí ước tính** theo trường và khối ngành, hiện dạng "≈ … (ước tính)", **không gắn link**, chỉ để lọc theo ngân sách.
-- **Tỷ lệ có việc làm:** **121** chương trình có số từ đề án; còn lại ghi "chưa có dữ liệu".
+- **3.648 chương trình** của **118 trường** (đo 17/10/2026 bằng `npx tsx scripts/so-lieu-nop-bai.mts`; số chốt cho cả đội ở `docs/SO-LIEU-CHOT-NOP-BAI.md`).
+- **Điểm chuẩn:** 1.721 chương trình có điểm từ 2 năm trở lên, 1.599 chỉ một năm, 328 xét phương thức khác thi THPT (không so với điểm THPT). 1.492 chương trình gắn nguồn đề án PDF của trường; 2.156 gắn nguồn trang tổng hợp (nguồn thứ cấp, ghi "chưa đối chiếu đề án"). Điểm 2026 có ở 2.082 chương trình, chủ yếu từ trang tổng hợp và VnExpress.
+- **Độ chính xác đã đo:** điểm có phần lẻ khớp PDF nguồn ở 201/201 dòng đã kiểm; điểm số nguyên chưa kiểm hết (có lỗi chỉ tiêu bị ghi thành điểm); 146 mục điểm đã sửa có bằng chứng. Xem `docs/audits/do-chinh-xac-du-lieu.md`.
+- **Học phí:** 662 chương trình có học phí, toàn bộ theo VnExpress (nguồn thứ cấp, có link). Chương trình khác ghi "Chưa có học phí riêng ngành"; không hiển thị số ước tính.
+- **Tỷ lệ có việc làm:** **121** chương trình có số từ đề án; còn lại ghi "chưa có dữ liệu". **Chỉ tiêu theo ngành:** 421 bản ghi của 10 trường.
 - **Ngành Sư phạm:** được hỗ trợ học phí và sinh hoạt phí theo Nghị định 116/2020/NĐ-CP nếu cam kết làm việc trong ngành (không thực hiện thì phải bồi hoàn).
-- **Dự báo khoảng điểm chuẩn năm tới:** kiểm định bỏ-một-năm trên dữ liệu thật (xem `tests/du-bao-diem-chuan.test.ts`; số liệu in ra khi chạy `npm test`).
+- **Dự báo điểm chuẩn 2027:** khoảng thống kê cho mọi chương trình và mô hình học máy LightGBM cho 2.580 chương trình có điểm từ 2024 (chỉ cải thiện nhẹ; thử ngoài mẫu phủ 63,8%). Kiểm định bỏ-một-năm của khoảng thống kê (17/10): phủ 91,1% (2023), 93,2% (2024), 76,6% (2025); cả 2.812 dự báo ở mức tin cậy thấp. Chạy lại: `npx tsx tests/du-bao-diem-chuan.test.ts`.
 - **Quy tắc:** không chạy script sinh số. Mọi bổ sung đi qua CMS (bắt buộc link nguồn) hoặc script trích từ PDF. Link hỏng ghi ở `scripts/link-hong.txt`; `scripts/danh-dau-uoc-tinh.py` tách số có nguồn khỏi số ước tính.
 
 ---
@@ -44,14 +44,14 @@ graph TD
 ```
 
 1. **Chiến lược Xếp nguyện vọng 3 tầng thông minh**:
-   - Tối ưu hóa xác suất trúng tuyển theo quy chế tuyển sinh của Bộ GD&ĐT: Tầng 1 (Thử sức/Vươn tới ở NV1–NV2), Tầng 2 (Vừa sức ở NV3–NV4), Tầng 3 (An toàn/Dự phòng ở NV5+).
+   - Cân bằng danh sách theo chênh điểm so với điểm chuẩn năm gần nhất (không phải xác suất đậu): Tầng 1 (Thử sức/Vươn tới ở NV1–NV2), Tầng 2 (Vừa sức ở NV3–NV4), Tầng 3 (An toàn/Dự phòng ở NV5+).
    - Tự động phát hiện và cảnh báo rủi ro (đặt ngành điểm thấp lên trước ngành điểm cao, thiếu ngành an toàn dẫn đến nguy cơ trượt sạch).
 2. **Định vị khoảng cách mục tiêu & Thuật toán chọn môn kéo điểm**:
-   - Đo lường chính xác số điểm còn thiếu giữa năng lực hiện tại và điểm chuẩn trường mục tiêu.
+   - Đo số điểm còn thiếu giữa năng lực hiện tại và điểm chuẩn trường mục tiêu.
    - Phân tích độ dốc nỗ lực (effort-to-score slope) để gợi ý môn có biên độ tăng điểm dễ nhất (ví dụ: kéo môn Anh từ 6.5 lên 7.5 tốn ít công sức hơn kéo môn Toán từ 8.5 lên 9.5).
 3. **Kế hoạch học tập tuần & Lịch học Pomodoro tự động**:
    - Không chỉ đưa ra lời khuyên định tính, hệ thống tự động nhận diện lịch học trường, học thêm và thời gian nghỉ của thí sinh để xếp các phiên ôn tập môn thiếu điểm vào đúng khung giờ tự học còn trống.
-4. **Bộ máy Tư vấn chuyên sâu chống ảo giác (Hallucination-free Advisory)**:
+4. **Bộ máy Tư vấn có căn cứ (giảm ảo giác, không loại bỏ hoàn toàn)**:
    - Tự động nhận diện mã trường, đối chiếu số liệu đa chiều (học phí, việc làm, điểm chuẩn 3 năm).
    - Tích hợp bài test trắc nghiệm tính cách sở thích RIASEC (Holland Code) giúp học sinh chọn đúng ngành nghề phù hợp với bản thân.
 
@@ -117,7 +117,7 @@ npx tsc --noEmit
 # 2. Kiểm tra đồng nhất (Route, token màu, kiểm tra xưng hô)
 npm run kiem-tra
 
-# 3. Chạy toàn bộ 40 Test Suite (Xếp lịch, Mục tiêu, Tuyển sinh, CMS, Dữ liệu toàn quốc)
+# 3. Chạy toàn bộ test (hơn 80 bộ: xếp lịch, mục tiêu, tuyển sinh, CMS, dữ liệu, MCP, AI)
 npm test
 
 # 4. Kiểm tra Build Production Web & CMS
@@ -129,7 +129,7 @@ npm run cms:build
 
 ## 🚀 Hướng Dẫn Triển Khai (Deployment Guide)
 
-Dự án được triển khai lên **Cloudflare Pages** thông qua **Wrangler CLI**.
+Dự án chạy trên **Cloudflare Pages**. **Push lên `main` thì GitHub Actions tự kiểm tra (tsc, kiem-tra, build) và deploy app** (`.github/workflows/deploy.yml`); CMS chỉ tự deploy khi đặt biến Repository `DEPLOY_CMS=true`. Trước khi push, cổng `scripts/cong-kiem-tra.mjs` chạy qua hook git (không dùng `--no-verify`). Các lệnh thủ công dưới đây chỉ dùng khi CI hỏng.
 
 ### 1. Triển khai Ứng dụng Học sinh (Web App & Landing Page)
 - **Tên project Cloudflare Pages:** `nguyenvongai`
@@ -157,4 +157,4 @@ npx wrangler pages deploy cms/dist --project-name=nguyenvongai-cms
 
 - **Giao diện thân thiện, hiện đại:** Sử dụng đại từ xưng hô chuẩn mực **"bạn"** xuyên suốt toàn bộ ứng dụng.
 - **Tối ưu trải nghiệm (Declutter):** Loại bỏ các dòng mô tả xám rườm rà, tập trung trực tiếp vào số liệu thực tế và hành động cốt lõi.
-- **Nguồn sự thật dữ liệu:** điểm chuẩn từ đề án/bảng điểm công bố (có link); học phí có link ở 602 chương trình, còn lại là ước tính có nhãn; tỷ lệ việc làm chỉ hiện khi có trong đề án.
+- **Nguồn sự thật dữ liệu:** điểm chuẩn từ đề án/bảng điểm công bố (có link); học phí có link (nguồn VnExpress) ở 662 chương trình, còn lại ghi "chưa có"; tỷ lệ việc làm chỉ hiện khi có trong đề án.

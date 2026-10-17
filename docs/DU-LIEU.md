@@ -1,6 +1,6 @@
 # Dữ liệu ngành và trường: nguồn, cách sinh lại, giới hạn
 
-Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.648 chương trình** của 118 trường, lấy từ đề án tuyển sinh chính thức và trang tổng hợp điểm chuẩn. Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
+Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.648 chương trình** của 118 trường, lấy từ đề án tuyển sinh chính thức (1.492 chương trình gắn nguồn đề án PDF) và trang tổng hợp điểm chuẩn, gồm cả VnExpress (2.156 chương trình gắn nguồn thứ cấp). Số chốt và nguồn đo: `docs/SO-LIEU-CHOT-NOP-BAI.md` (lệnh `npx tsx scripts/so-lieu-nop-bai.mts`). Đường ống thu thập nằm trong `legacy/` (Python). Các tệp JSON dưới đây là kết quả, **đừng sửa tay**: chạy lại script.
 
 ## Các tệp dữ liệu (`src/data/`)
 | Tệp | Nội dung | Sinh bởi |
@@ -10,7 +10,11 @@ Danh mục trong app (`LUA_CHON_MAU` ở `src/data/lua-chon-mau.ts`) là **3.648
 | `de-an-truong.json` | Mỗi trường: danh sách đề án PDF các năm, và trang nói về học phí | `scripts/sinh-de-an-truong.py` |
 | `chuong-trinh.json` | Trang giới thiệu ngành trên website của trường (đã mở thử, tiêu đề trùng tên ngành) | `scripts/tim-chuong-trinh.py`, `tim-chuong-trinh-sitemap.py`, rồi `gop-chuong-trinh.py` |
 | `nguon-nam-thu-cap.json`, `de-an-truong-thu-cap.json` | Như hai tệp trên nhưng cho các trường chỉ có điểm từ trang tổng hợp: toàn văn đề án của trường, và những điểm tìm thấy đúng số trong đề án | `scripts/doi-chieu-thu-cap.py` |
-| `hoc-phi.json` | Học phí theo năm của vài chục ngành, trích từ trang học phí của đề án (tên ngành đứng ngay trước số tiền theo năm; không đổi từ tín chỉ/tháng) | `scripts/trich-hoc-phi.py` |
+| `hoc-phi.json` | Học phí theo năm trích từ trang học phí của đề án (tên ngành đứng ngay trước số tiền theo năm; không đổi từ tín chỉ/tháng). Link PDF ở tên miền tổng hợp (tuyensinh247) chưa có dấu đã đối chiếu tài liệu gốc nên **không hiển thị** (`hoc-phi-kiem-chung.ts`) | `scripts/trich-hoc-phi.py` |
+| `hoc-phi-vnexpress.json` | Học phí theo ngành lấy từ VnExpress (nguồn thứ cấp). Đây là nguồn của **toàn bộ 662 học phí đang hiển thị**, nhãn "Theo VnExpress" kèm link | `scripts/hoc-phi-vnexpress.py` |
+| `hieu-chinh-diem.json` | Ghi đè điểm chuẩn đã đối chiếu PDF nguồn, mỗi mục có trang và hai lần đọc (146 mục năm, 70 chương trình, 8 mục gỡ năm); nạp ở `napLuaChon()` qua `hieu-chinh-diem.ts`; chương trình đã sửa không dùng dự báo ML cũ | `scripts/gop-hieu-chinh.py`, báo cáo `docs/audits/` |
+| `chi-tieu.json` | Chỉ tiêu theo ngành của 10 trường, đọc đúng ô "Chỉ tiêu" trong đề án, kèm năm, URL, trang (421 bản ghi). Chỉ tiêu cả ngành, thường gộp mọi phương thức; hiện ở dòng Chỉ tiêu trên trang ngành | `scripts/trich-chi-tieu.py`, `docs/audits/chi-tieu-10-truong.md` |
+| `du-bao-2027.json`, `du-bao-ml.ts` | Dự báo học máy (LightGBM p10/p50/p90) cho 2.580 chương trình, **đang áp dụng** (huấn luyện lại 17/10 trên điểm đã gồm bản sửa); app chỉ nạp khi `catalogSha256` khớp `du-lieu-fingerprint.json`, nên đổi điểm là phải huấn luyện lại | `ml/huan-luyen-2027.py` |
 | `viec-lam.json` | Tỷ lệ có việc làm bổ sung (hàng có đúng một số %), chỉ dùng cho ngành chưa có số liệu cũ | `scripts/trich-viec-lam.py` |
 | `trang-nganh-truong.json` | Trang danh sách ngành/chương trình đào tạo của từng trường (đã mở thử), dùng khi chưa có trang riêng của ngành | `scripts/trang-nganh-truong.py` (danh sách ứng viên tìm bằng tìm kiếm giới hạn tên miền trường) |
 | `to-hop-chinh-thuc.ts` | 73 tổ hợp xét tuyển chính thức (ba môn mỗi tổ hợp) từ `legacy/common/data/shared_rules.json` | tạo từ tệp trên |
@@ -32,17 +36,19 @@ npm test
 ```
 
 ## Quy tắc đã áp dụng
-- **Không bịa số.** Học phí, việc làm, môi trường học chỉ hiện khi dữ liệu có. Thiếu thì ghi "Chưa có dữ liệu" (`coHocPhi()` ở `data/lua-chon-phu.ts`). Chỉ 6 chương trình có học phí riêng; còn lại app dẫn tới **trang học phí trong đề án** thay vì tự điền số.
+- **Không bịa số.** Học phí, việc làm, môi trường học chỉ hiện khi dữ liệu có. Thiếu thì ghi "Chưa có dữ liệu" (`coHocPhi()` ở `data/lua-chon-phu.ts`). Hiện 662 chương trình có học phí (toàn bộ theo VnExpress, nguồn thứ cấp), 0 chương trình đạt mức đã đối chiếu văn bản của trường; học phí ước tính bị cấm hiển thị. Chương trình còn lại ghi "Chưa có học phí riêng ngành" và dẫn tới trang học phí của trường khi có.
 - **Điểm chuẩn tính theo đúng tổ hợp của ngành** (`features/kham-pha/to-hop.ts`). Đề án chưa ghi tổ hợp (khoảng một nửa số ngành) thì lấy tổ hợp cao nhất của em và báo rõ. Ngành chỉ xét tổ hợp có Sử, Địa, Tin... thì ghi "chưa so được" vì hồ sơ chỉ có 6 môn.
 - **Link nguồn chỉ nhận khi có bằng chứng**: PDF phải có đúng tên ngành và điểm ở trang được ghi; trang ngành của trường phải mở được và tiêu đề trùng tên ngành (`scripts/gop-chuong-trinh.py` lọc chặt, bỏ bài tin tức, quyết định, trang điểm chuẩn).
 - Điểm của phương thức khác thi THPT (học bạ, ĐGNL, kết hợp) xếp sau điểm thi THPT, và có ghi chú.
 
 ## Giới hạn đã biết
-- 962 chương trình chỉ có nguồn thứ cấp (trang tổng hợp `tuyensinh247`), chưa có PDF chính thức.
+- 2.156 chương trình mang nhãn nguồn trang tổng hợp (`tuyensinh247`, bổ sung VnExpress), chưa đối chiếu đề án; điểm 2026 (2.082 chương trình) phần lớn thuộc nhóm này. Kiểm 20 chương trình: 17/20 khớp trang tổng hợp, 0/20 đối chiếu được với bảng chính thức (`docs/audits/kiem-tra-nhan-nam-2026.md`).
+- **Điểm số nguyên chưa kiểm hết.** Điểm có phần lẻ khớp PDF nguồn ở 201/201 dòng đã kiểm; điểm số nguyên (khoảng 45% ô điểm 2022 đến 2025) là nơi có lỗi chỉ tiêu bị ghi thành điểm (mẫu con 28 dòng: 10 khớp, 5 sai, 2 nghi sai, 11 không xác định). Xem mục "Số đo chất lượng" bên dưới.
+- **5 trường nghi sai mã hoặc tên** trong dữ liệu gốc: DQH, TTN, DTV, TYS, DDP (PDF khớp mã nhưng tên hoặc tỉnh trường trong dữ liệu khác), và HCS có dữ liệu thực chất của Học viện Hành chính và Quản trị công. Danh sách: `docs/audits/lien-ket-pdf-sai-truong.csv`, `docs/audits/xung-dot-con-lai-ket-qua.md`. Chưa sửa.
 - Link trang riêng của ngành trên website trường: khoảng một phần tư số chương trình; thêm 26 trường có trang danh sách ngành chung (`trang-nganh-truong.json`). Còn lại do website trường không quét được hoặc tên ngành trên web khác đề án.
 - Khung chương trình học chi tiết (môn từng học kỳ) **chưa có dữ liệu**; trang chi tiết dẫn tới trang ngành của trường nếu có, không thì nói thẳng và cho đường tìm kiếm.
 - Hồ sơ có 6 môn chính + 5 môn thêm không bắt buộc (Sử, Địa, GDKT&PL, Tin, Công nghệ; `HoSo.diemThem`). Tổ hợp có môn năng khiếu / vẽ (V00, T00, M01...) và ngoại ngữ khác (D02-D06...) không tính được từ điểm hồ sơ nên app ghi 'chưa so được'.
-- Học phí: chỉ khoảng 30 ngành có số theo năm; các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai (thay vào đó dẫn tới đúng trang học phí).
+- Học phí: các bảng theo tín chỉ/tháng/nhóm ngành không được đổi sang năm vì dễ sai; số ở nguồn thứ cấp VnExpress là khoảng (thấp đến cao) nên cần đối chiếu đề án trước khi quyết định.
 - Điểm luôn gắn đúng năm và phương thức. Dữ liệu 2026 từ nguồn tổng hợp chỉ là tham chiếu chưa kiểm chứng; không suy ra điểm sàn, điểm chuẩn hay điểm dự kiến chỉ từ trị số, năm hoặc nhãn nguồn. `scoreEvidence` phải khớp ô điểm và có nguồn, thời điểm, người kiểm mới phân loại được. Điểm sàn hoặc dự kiến đã có bằng chứng bị loại khỏi lịch sử dùng để so sánh và dự báo; dữ liệu thiếu chứng cứ vẫn là tham chiếu chưa kiểm chứng và bị audit strict chặn phát hành. Nhãn `official_pdf` không tự tạo độ tin cậy cao. Xem [audit 2026-10-17](audits/data-quality-2026-10-17.md) và `phanLoaiDuLieu` ở `src/engine/trang-thai-du-lieu.ts`.
 
 ## Lớp dữ liệu từ CMS (bản xuất bản)
@@ -58,10 +64,29 @@ npm test
 ## Chỗ còn thiếu (chưa có nguồn thật, không điền)
 - Ký túc xá, học bổng, kênh Zalo/fanpage, thông báo, đánh giá của sinh viên: chưa có bản ghi nào được xác minh. Bản xuất bản hiện chứa 100 bản ghi trường sinh bằng `scripts/khoi-tao-d1-that.ts` với website, fanpage và giá ký túc xá do script tự dựng (chung một giá cho mọi trường) và mức học phí cao bằng 1,2 lần mức thấp. App bỏ các bản ghi này vì không có nguồn; cần sửa script, không dựng số thay cho dữ liệu chưa có.
 - Thư mục thô `../nguyen-vong` không có trong máy này nên không bổ sung được dữ liệu mới; mọi số liệu trong app vẫn là kết quả đã sinh sẵn ở `src/data/`.
-- Học phí riêng của ngành: 721 chương trình ở 20 trường (KHA/NEU, PKA, QSX, BKA, DCN, GHA, XDA, HTC, NTH, YDS, NHH, YHB, QHT, QHI, QSC, HQT, DDY, LPH, QHE, QSY). Quy tắc: chỉ giữ học phí đã đối chiếu được với văn bản đúng trường; 12/10 đã gỡ 337 dòng của 11 trường vì link 404 hoặc PDF là của trường khác — xem `scripts/lam-day-hoc-phi.py` (BO_QUA). Việc làm, học phí, khung chương trình: xem mục "Giới hạn đã biết" ở trên.
+- Học phí riêng của ngành: số cũ "721 chương trình ở 20 trường" và "602 ở 18 trường" **không còn đúng**. Học phí văn bản của trường bị bỏ khỏi màn hình vì link PDF ở tên miền tổng hợp chưa có dấu đối chiếu tài liệu gốc (`laHocPhiDaKiemChung`); hiện chỉ nguồn VnExpress được hiển thị (662). Muốn có học phí "đã đối chiếu": người đối chiếu mở văn bản đúng trường và đặt `nguonSoCap` kèm `kiemChungLuc`. Xem `scripts/lam-day-hoc-phi.py` (BO_QUA) cho các dòng đã gỡ vì link 404 hoặc PDF của trường khác.
 
 ## Dự báo điểm chuẩn năm tới
-`src/engine/du-bao-diem-chuan.ts`. Khoảng = điểm năm gần nhất cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, hơn 1.300 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Kiểm định bỏ-một-năm: khoảng "80%" phủ 89% (2023), 95% (2024), 64% (2025) — đo 15/10/2026; sai số trung bình 1,0 đến 1,9 điểm. Năm 2025 biến động mạnh bất thường. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Chạy lại khi có dữ liệu mới: `npx tsx tests/du-bao-diem-chuan.test.ts` (in mức phủ từng năm; test thất bại nếu khoảng không còn phủ đúng).
+`src/engine/du-bao-diem-chuan.ts`. Điểm dự đoán 2027 giữ điểm năm gần nhất; khoảng = điểm đó cộng phân vị 10 và 90 của biến động giữa hai năm liền nhau (từ 2023, 2.526 cặp) nhân hệ số 1,3, nở theo căn bậc hai số năm xa. Chỉ cho điểm thi THPT; không bù thay đổi quy chế, đề thi, chỉ tiêu. Số đo 17/10/2026 (kiểm định bỏ-một-năm, trong mẫu của cùng dữ liệu): khoảng "80%" phủ 91,1% (2023, 393 chương trình), 93,2% (2024, 601), 76,6% (2025, 589); trung bình 86,9%; sai số trung bình 1,04 / 1,15 / 1,74 điểm. Chạy lại: `npx tsx tests/du-bao-diem-chuan.test.ts`.
+- Có 2.812 dự báo, **tất cả độ tin cậy "thấp"** vì điểm mới nhất của chúng là 2026 từ trang tổng hợp chưa đối chiếu đề án; 272 dự báo chạm trần 30 điểm.
+- Mô hình học máy (LightGBM, `ml/`) **đang áp dụng** cho 2.580 chương trình. Số đo (`ml/ket-qua-du-bao-2027.json`, 17/10): MAE 1,16 so với 1,20 (giữ nguyên điểm, 2024) và 1,81 so với 1,84 (2025); khoảng 80% phủ 80,0% gộp (trong mẫu), 87,1% (2024), 73,3% (2025); **ngoài mẫu (hệ số chọn từ 2024, áp 2025) 63,8%**; Winkler 8,21 so với 8,19 của khoảng thống kê cũ ở cùng độ phủ, tức không tốt hơn. `docs/ML-DU-BAO-DIEM-CHUAN-2027.md` còn lời mở đầu và số của lần huấn luyện trước.
+- Hằng số `KET_QUA_BACKTESTING_3_NAM` trong mã (hiện ở màn Chẩn đoán danh mục) còn số đo 15/10 (89% / 95% / 64%), cũ so với số trên: cần cập nhật trong mã.
+
+## Số đo chất lượng (17/10/2026)
+Chi tiết và phương pháp: các báo cáo trong `docs/audits/`.
+| Phép đo | Kết quả | Báo cáo |
+|---|---|---|
+| Điểm có phần lẻ so với PDF nguồn | 201/201 khớp (93/93 mẫu ngẫu nhiên phân tầng, 108/108 mẫu điểm nhảy) | `do-chinh-xac-du-lieu.md` |
+| Điểm số nguyên (mẫu con đọc tay, 28 dòng) | 10 khớp, 5 sai, 2 nghi sai, 11 không xác định; số nguyên chiếm 45,5% ô điểm 2022 đến 2025 | như trên |
+| Ô số nguyên nghi sai đã kiểm | 52 ô: 36 đúng, 13 sai, 3 không xác định | `so-nguyen-nhay-ket-qua.md` |
+| Bản sửa có bằng chứng, sau gộp | 146 mục năm, 70 chương trình; 17 chương trình đổi điểm gần nhất, 6 đổi nhãn (hồ sơ thử 24,0), 0 đổi loại dữ liệu | `gop-hieu-chinh-tac-dong.md` |
+| Mở rộng năm điểm từ PDF | tìm thêm 19 chương trình (31 cặp năm), **chưa nối vào app**; phát hiện ĐH Đà Lạt từng dùng nhầm cột ĐGNL | `nang-do-phu-nam-diem.md` |
+| Nhãn năm 2026 (20 chương trình) | 0/20 đối chiếu được với bảng chính thức; 17/20 khớp trang tổng hợp | `kiem-tra-nhan-nam-2026.md` |
+| Chỉ tiêu 10 trường | 421 bản ghi, phủ 54% chương trình của 10 trường; 30/30 bản ghi kiểm lại đúng | `chi-tieu-10-truong.md` |
+| Liên kết PDF với trường | 5 trường nghi sai mã hoặc tên (DQH, TTN, DTV, TYS, DDP), HCS là dữ liệu của HCH | `lien-ket-pdf-sai-truong.csv`, `xung-dot-con-lai-ket-qua.md` |
+| Đối chiếu VnExpress | khớp 88,6% (2025) và 92,9% (2026) ở các cặp có cả hai nguồn; 1.198 điểm còn thiếu được bổ sung | `doi-chieu-vnexpress.csv`, `docs/ML-DU-BAO-DIEM-CHUAN-2027.md` |
+
+Giới hạn của các phép đo: chỉ chứng minh dữ liệu khớp PDF nguồn đã gắn, không chứng minh PDF đúng; mẫu kiểm có thiên lệch (link nguồn từng chỉ được sinh khi tìm thấy điểm); bộ khớp không xác định cột năm; việc đọc bằng mắt do một người thực hiện.
 
 ## Điểm ưu tiên khu vực và đối tượng
 `src/engine/diem-uu-tien.ts`. KV1 +0,75; KV2-NT +0,5; KV2 +0,25; KV3 0; UT1 +2; UT2 +1; từ 22,5 điểm giảm dần theo [(30 − tổng)/7,5] × mức. Học sinh khai ở Bước 2; `diemDayDu(s).uuTien` mang mức vào `tongChoLuaChon`, tính riêng cho từng tổ hợp. Mục tiêu hiển thị vẫn là điểm chuẩn của ngành; phần còn thiếu đã trừ ưu tiên (`mucTieuTho`). Mức cộng có thể đổi theo quy chế từng năm: cần đối chiếu mỗi mùa tuyển sinh.

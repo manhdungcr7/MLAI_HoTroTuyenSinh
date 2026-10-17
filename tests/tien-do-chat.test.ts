@@ -73,4 +73,13 @@ if (viecLy.ok) {
 // Không có tiến độ: chủ đề vẫn lấy từ chương trình lớp 12 hiện hành, không còn "số phức"
 const viecKhong = viecChoTuan(sTrong, tuNay, undefined, new Date(), false);
 if (viecKhong.ok) assert.ok(!viecKhong.viec.some((v) => /số phức|logarit/i.test(`${v.tieuDe} ${v.chiTiet}`)), "không gợi ý chương trình cũ");
+
+// 9) Hỏi "kế hoạch/chương trình đề xuất dựa vào nguồn dữ liệu nào": trả lời tất định, nói đúng nguồn và giới hạn, không gọi AI
+for (const c of ["Kế hoạch học tập với các chương trình được đề xuất dựa vào nguồn dữ liệu nào?", "Gợi ý này lấy từ đâu vậy", "chủ đề được đề xuất căn cứ vào đâu"]) {
+  const r = traLoiTienDoChat(c, sTrong);
+  assert.ok(r && /Kết nối tri thức/.test(r.traLoi) && /loigiaihay/.test(r.traLoi) && /chưa đối chiếu sách in/i.test(r.traLoi) && /giả định/.test(r.traLoi), `nêu nguồn và giới hạn: ${c}`);
+}
+for (const c of ["nguồn dữ liệu điểm chuẩn ngành CNTT lấy từ đâu", "dựa vào đâu để xếp nhãn nguyện vọng"]) assert.equal(traLoiTienDoChat(c, sTrong), null, `không nuốt câu về tuyển sinh: ${c}`);
+const tinNguon = await layTinTraLoi({ cau: "Kế hoạch học tập được đề xuất dựa vào nguồn dữ liệu nào?", truoc: [], s: sTrong, nguon: null, dungHoSo: true, manHinh: "/tu-van", phien: { cheDo: "ai", idHoSo: "x", luot: null } });
+assert.equal(tinNguon.cheDo, "tuDong", "câu về nguồn dữ liệu không đi qua AI kể cả khi bật chế độ AI");
 console.log("tien-do-chat.test.ts: tất cả kiểm tra đều qua");
