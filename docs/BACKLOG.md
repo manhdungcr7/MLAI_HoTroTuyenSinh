@@ -190,3 +190,15 @@
 - **Cần làm trước khi tuyên bố production-ready:** chạy lại `npm test` + `npm run kiem-tra` trên máy/CI ổn định (lượt xác nhận cuối bị Node 24 dừng trước test với `uv_os_get_passwd ENOMEM`); kiểm tra secrets/bindings/migrations/email/AI trên Cloudflare; thử tải, backup/restore và thiết bị thật.
 - **Theo dõi:** tách chunk `chuan-hoa` (1.55 MB), xác nhận nguồn và độ mới dữ liệu tuyển sinh, thay email cá nhân bằng email chung nhóm.
 - Chi tiết: `docs/BAO-CAO-KIEM-THU-BAN-GIAO-2026-10-15.md`.
+
+---
+
+## 🚀 SPRINT 4 GIỜ — MLAI HACKATHON 2026 (4 ISSUES GITHUB ĐÃ TẠO)
+
+| Issue | Tiêu đề & Trọng tâm | Người phụ trách | Tiêu chí MLAI | Link GitHub |
+|---|---|---|---|---|
+| **#12** | **[Tuấn] Hoàn thiện luồng nhập hồ sơ học sinh, Form trắng & Bảo mật Local-First 100%** | Tuấn (`khoi-dau`, `hanh-trinh`) | UX/UI (25%) & Privacy-by-Design | [#12](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/12) |
+| **#13** | **[Dũng] Chu trình Grounded AI 3 bước, 5 rào chắn an toàn & Thẻ hành động có xác nhận** | Dũng (`kham-pha`, `tu-van`) | AI Reliability & Hallucination Prevention (30%) | [#13](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/13) |
+| **#14** | **[Kiệt] Động cơ chẩn đoán danh mục, bắt lỗi ngược vị thế/dồn rủi ro & Dữ liệu Backtesting** | Kiệt (`nguyen-vong`, `thu-tinh-huong`) | Algorithmic Rigor & Innovation (25%) | [#14](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/14) |
+| **#15** | **[Hưng] Minh bạch nguồn dữ liệu 3 tầng, phân định mã tuyển sinh & Đồng bộ lịch Google Calendar/.ICS** | Hưng (`ke-hoach`, `tu-hoc`, `cms`) | Completeness & Data Provenance (20%) | [#15](https://github.com/manhdungcr7/MLAI_HoTroTuyenSinh/issues/15) |
+
